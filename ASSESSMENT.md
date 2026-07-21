@@ -26,6 +26,39 @@ _Prepared as the starting point for our redesign work. The **dead-code cleanup b
 
 ---
 
+## ✅ Round 2 — fixes applied (build passes at every step)
+
+> ⚠️ **Two new DB migrations must be applied** (`supabase db push` / Lovable) for the admin fix and the newsletter to work live:
+> `20260721120000_fix_admin_access.sql` and `20260721120100_newsletter_subscribers.sql`. Until then the admin check and newsletter behave as before.
+
+**Broke → fixed**
+- **Admin lockout** — `useIsAdmin` now reads `user_roles` directly (not the revoked `has_role` RPC); migration re-grants `has_role` execute (RLS policies need it) and adds the missing "admins read all profiles" policy → the CMS people-screens will list everyone, not just you.
+- **Dead lead-drop links** — the two fake `972000000000` WhatsApp buttons (Sofa Designer, Fabric Configurator) now use the real number; footer's dead `href="#"` socials hide until real URLs are set.
+- **Address contradiction** — Story now says Yatzitz like every other page; all contact facts now live in one `src/config/site.ts`.
+- **Google OAuth** — now returns you to the intended page (e.g. `/club/dashboard`), not the homepage.
+- **False 404s** — CollectionDetail shows a retry state on a fetch error instead of a permanent-looking 404; Account + favorites now surface real errors instead of silently looking empty.
+- **AdminDashboard** — the "total views" card shows the real all-time count (was a duplicate); removed the broken "custom" range pill.
+
+**Privacy / honesty**
+- **Meta Pixel no longer fires before consent.** It loads at runtime only after opt-in; the cookie banner is now authoritative and gates both the pixel and first-party analytics.
+- **Newsletter is real** — writes to a `newsletter_subscribers` table instead of faking success.
+- **Removed the fabricated 5-star testimonials** from the homepage (component kept + marked, for real reviews later).
+
+**Design tokens (honesty, ~no visual change)**
+- Removed the dead dark-mode palette and all unused/mislabeled tokens; the "green shadow under a terracotta box" and the lying `--gold`/`--espresso` aliases are gone.
+
+**Perf / SEO**
+- Vendor code-splitting dropped the initial JS bundle **651 kB → 204 kB**.
+- Fixed the JSON-LD logo (`favicon.ico`→`.png`), added real phone/address to LocalBusiness, replaced the invalid `price:"0"`/InStock Offer with PreOrder, removed the mislabeling static canonical, and made `robots.txt` disallow `/admin`,`/account`,`/auth`,`/club/dashboard`.
+
+**Still needs YOU (can't fake it) / deferred to our design pass**
+- Real project photography + genuine before/after photos (both are currently recycled catalog renders — flagged, not shipped as new fabrication).
+- Real social URLs (wire into `src/config/site.ts`) and real testimonials.
+- The subjective visual redesign (typography, palette direction, spacing) — that's our next conversation.
+- Pre-existing lint debt (~51 `no-explicit-any` in generated admin code) and no real test suite — left as-is; not visible, and a mass retype is risky.
+
+---
+
 ## What's actually good (so this is balanced)
 
 - **The Supabase backend is the strongest part.** It uses the *correct* secure pattern: a separate `user_roles` table + a `SECURITY DEFINER has_role()` function, with RLS on every sensitive table. **A user cannot make themselves an admin.** That's better than most hand‑built apps.
