@@ -3,6 +3,7 @@ import heroImage from "@/assets/hero-salon.jpg";
 import alumaLogo from "@/assets/aluma-logo.png";
 import { supabase } from "@/integrations/supabase/client";
 import { Link } from "react-router-dom";
+import { ChevronDown } from "lucide-react";
 
 type HeroSettings = {
   title_he?: string;
@@ -91,7 +92,7 @@ const Hero = () => {
           className="w-[58%] sm:w-[68%] max-w-[320px] sm:max-w-[560px] md:max-w-[760px] lg:max-w-[980px] h-auto mb-5 sm:mb-8 animate-fade-in-up drop-shadow-md"
         />
         <p
-          className="text-[10px] sm:text-sm md:text-base tracking-[0.22em] sm:tracking-[0.4em] uppercase text-primary font-semibold animate-fade-in-up mb-6 px-2 whitespace-nowrap drop-shadow-sm"
+          className="text-[11px] sm:text-sm md:text-base tracking-[0.22em] sm:tracking-[0.4em] uppercase text-foreground font-semibold animate-fade-in-up mb-6 px-2 whitespace-nowrap"
           style={{ animationDelay: "0.2s" }}
         >
           {subtitle}
@@ -99,13 +100,27 @@ const Hero = () => {
         {settings.cta_text && settings.cta_link && (
           <Link
             to={settings.cta_link}
-            className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-sm tracking-wider hover:bg-primary/90 transition-smooth animate-fade-in-up"
+            className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-sm tracking-wider hover:bg-accent transition-smooth animate-fade-in-up"
             style={{ animationDelay: "0.3s" }}
           >
             {settings.cta_text}
           </Link>
         )}
       </div>
+
+      {/* Scroll cue — three chevrons fade in after the hero text, gently nudging down */}
+      <button
+        type="button"
+        onClick={() =>
+          window.scrollTo({ top: window.innerHeight * 0.9, behavior: "smooth" })
+        }
+        aria-label="גלול למטה"
+        className="scroll-cue absolute bottom-6 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center text-foreground/70 hover:text-primary transition-smooth"
+      >
+        <ChevronDown className="w-6 h-6 -mb-3.5 animate-rise-in" style={{ animationDelay: "0.9s" }} strokeWidth={1.5} />
+        <ChevronDown className="w-6 h-6 -mb-3.5 animate-rise-in" style={{ animationDelay: "1.05s" }} strokeWidth={1.5} />
+        <ChevronDown className="w-6 h-6 animate-rise-in" style={{ animationDelay: "1.2s" }} strokeWidth={1.5} />
+      </button>
     </section>
   );
 };

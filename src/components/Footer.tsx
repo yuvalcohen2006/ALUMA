@@ -16,17 +16,17 @@ const WhatsAppIcon = ({ className = "" }: { className?: string }) => (
 
 const Footer = () => {
   const iconBox =
-    "w-10 h-10 rounded-sm border border-primary-foreground/30 flex items-center justify-center hover:bg-primary-foreground hover:text-primary hover:border-primary-foreground transition-smooth";
+    "w-10 h-10 rounded-sm border border-background/30 flex items-center justify-center hover:bg-background hover:text-primary hover:border-background transition-smooth";
 
   return (
-    <footer dir="rtl" className="bg-footer text-primary-foreground">
+    <footer dir="rtl" className="bg-footer text-background">
       <div className="container-luxury py-16">
         <div dir="rtl" className="grid gap-y-10 md:grid-cols-2 lg:grid-cols-4 lg:gap-y-0 lg:gap-x-8 lg:items-stretch">
 
           {/* Column 1 (rightmost in RTL), Logo + about + socials */}
           <div className="w-full text-center md:text-right lg:max-w-[320px] lg:pl-8">
             <img src={alumaLogo} alt="Aluma" loading="lazy" decoding="async" width={400} height={100} className="h-10 w-auto mb-5 mx-auto md:ml-auto brightness-0 invert opacity-90" />
-            <p className="text-primary-foreground/75 text-sm leading-relaxed mb-6">
+            <p className="text-background/75 text-sm leading-relaxed mb-6">
               אנחנו יוצרים מערכות חוץ שמרגישות כמו סלון יוקרתי תחת כיפת השמיים —
               מקום לארח, להירגע, ולחיות את הרגעים היפים באמת.
             </p>
@@ -60,9 +60,9 @@ const Footer = () => {
           </div>
 
           {/* Column 2, Quick navigation */}
-          <div className="w-full text-center md:text-right lg:max-w-[220px] lg:justify-self-center lg:px-8 lg:border-r lg:border-primary-foreground/15">
+          <div className="w-full text-center md:text-right lg:max-w-[220px] lg:justify-self-center lg:px-8 lg:border-r lg:border-background/15">
             <h4 className="font-display text-xl mb-6">מעבר מהיר</h4>
-            <ul className="space-y-3 text-sm text-primary-foreground/85">
+            <ul className="space-y-3 text-sm text-background/85">
               <li>
                 <Link to="/" className="link-underline inline-block hover:text-accent transition-smooth">
                   דף הבית
@@ -117,9 +117,9 @@ const Footer = () => {
           </div>
 
           {/* Column 3, Materials */}
-          <div className="w-full text-center md:text-right lg:max-w-[220px] lg:justify-self-center lg:px-8 lg:border-r lg:border-primary-foreground/15">
+          <div className="w-full text-center md:text-right lg:max-w-[220px] lg:justify-self-center lg:px-8 lg:border-r lg:border-background/15">
             <h4 className="font-display text-xl mb-6">החומרים שלנו</h4>
-            <ul className="space-y-3 text-sm text-primary-foreground/85">
+            <ul className="space-y-3 text-sm text-background/85">
               <li>
                 <Link to="/materials" className="link-underline inline-block hover:text-accent transition-smooth">
                   בד Sunbrella
@@ -144,9 +144,9 @@ const Footer = () => {
           </div>
 
           {/* Column 4 (leftmost in RTL), Contact */}
-          <div className="w-full text-center md:text-right lg:max-w-[240px] lg:justify-self-start lg:pr-8 lg:border-r lg:border-primary-foreground/15">
+          <div className="w-full text-center md:text-right lg:max-w-[240px] lg:justify-self-start lg:pr-8 lg:border-r lg:border-background/15">
             <h4 className="font-display text-xl mb-6">יצירת קשר</h4>
-            <ul className="space-y-4 text-sm text-primary-foreground/85">
+            <ul className="space-y-4 text-sm text-background/85">
               <li>
                 <a
                   href="tel:+972504519062"
@@ -182,7 +182,7 @@ const Footer = () => {
               </li>
             </ul>
 
-            <div className="mt-8 pt-6 border-t border-primary-foreground/20 max-w-[240px] mx-auto md:mx-0 md:max-w-none">
+            <div className="mt-8 pt-6 border-t border-background/20 max-w-[240px] mx-auto md:mx-0 md:max-w-none">
               <div className="text-sm font-semibold mb-2">שעות פעילות</div>
               <div className="text-sm space-y-1 font-normal">
                 <div className="flex justify-center md:justify-between gap-4">
@@ -194,14 +194,14 @@ const Footer = () => {
                   <span dir="ltr">08:30 – 12:00</span>
                 </div>
               </div>
-              <div className="text-xs text-primary-foreground/70 mt-3">
+              <div className="text-xs text-background/70 mt-3">
                 ניתן להגיע לאולם התצוגה בתיאום מראש
               </div>
             </div>
           </div>
         </div>
 
-        <div dir="rtl" className="mt-14 pt-8 border-t border-primary-foreground/15 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-primary-foreground/60 text-center md:text-right">
+        <div dir="rtl" className="mt-14 pt-8 border-t border-background/15 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-background/60 text-center md:text-right">
           <div>© {new Date().getFullYear()} Aluma. כל הזכויות שמורות.</div>
           <div className="flex flex-wrap justify-center gap-5">
             <Link to="/accessibility" className="link-underline inline-block hover:text-accent transition-smooth">

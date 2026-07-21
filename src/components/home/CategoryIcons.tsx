@@ -23,41 +23,37 @@ const categories = [
 
 const CategoryIcons = () => {
   return (
-    <section className="py-16 md:py-24 bg-secondary/40">
+    <section className="py-16 md:py-24 bg-secondary">
       <div className="container-luxury">
         <Reveal className="text-center max-w-2xl mx-auto mb-14">
           <SectionLabel
             as="h2"
             he="גלו את הריהוט שלנו לפי קטגוריה"
-            en="Discover by Category"
-            className="text-sm md:text-base font-light mb-6"
+            className="text-sm md:text-base mb-6"
           />
-          <div className="flex items-center justify-center gap-3" aria-hidden="true">
-            <span className="h-px w-16 bg-primary/30" />
-            <span className="w-1.5 h-1.5 rotate-45 bg-primary" />
-            <span className="h-px w-16 bg-primary/30" />
-          </div>
+          <div className="w-16 h-px bg-primary/50 mx-auto" aria-hidden="true" />
         </Reveal>
 
         <Reveal>
-          <ul className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-4 lg:grid-cols-8 gap-6 md:gap-8">
+          <ul className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-4 md:gap-5">
             {categories.map((c) => (
               <li key={c.slug}>
                 <Link
                   to={`/collections#${c.slug}`}
-                  className="group flex flex-col items-center text-center gap-3 p-3 rounded-lg transition-smooth hover:-translate-y-1"
+                  className="group flex flex-col items-center text-center gap-3"
                 >
-                  <div className="w-24 h-24 md:w-28 md:h-28 flex items-center justify-center transition-transform duration-500 group-hover:scale-110">
+                  {/* Clean tile instead of a floating PNG — lifts the icon off the sand */}
+                  <div className="w-full aspect-square rounded-sm bg-card border border-border/70 flex items-center justify-center p-4 transition-smooth group-hover:border-primary/50 group-hover:shadow-soft group-hover:-translate-y-1">
                     <img
                       src={c.icon}
                       alt={c.label}
                       loading="lazy"
                       width={256}
                       height={256}
-                      className="w-full h-full object-contain drop-shadow-[0_10px_18px_rgba(0,0,0,0.08)]"
+                      className="w-4/5 h-4/5 object-contain transition-transform duration-500 group-hover:scale-[1.06]"
                     />
                   </div>
-                  <span className="text-primary text-sm md:text-base font-light group-hover:text-accent transition-smooth">
+                  <span className="text-foreground text-xs md:text-sm font-normal group-hover:text-primary transition-smooth">
                     {c.label}
                   </span>
                 </Link>

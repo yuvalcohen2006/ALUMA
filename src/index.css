@@ -6,52 +6,55 @@
 
 @layer base {
   :root {
-    /* Cream background #f3eee9 */
-    --background: 30 29% 93%;
-    --foreground: 12 44% 20%;
+    /* ===== Aluma palette ===== */
+    /* Warm white #F8F6F2 — main background */
+    --background: 40 30% 96%;
+    /* Charcoal #2F2F2F — all running text & headings (great contrast on every bg) */
+    --foreground: 0 0% 18%;
 
     --card: 0 0% 100%;
-    --card-foreground: 12 44% 20%;
+    --card-foreground: 0 0% 18%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 12 44% 20%;
+    --popover-foreground: 0 0% 18%;
 
-    /* Terracotta primary #b56a55 — main text/buttons */
-    --primary: 13 39% 46%;
-    --primary-foreground: 0 0% 100%;
+    /* Terracotta #C77962 — buttons, large display titles (on light), accents, dividers, icons */
+    --primary: 14 47% 58%;
+    --primary-foreground: 0 0% 18%; /* charcoal text on terracotta buttons */
 
-    --secondary: 30 25% 88%;
-    --secondary-foreground: 12 44% 25%;
+    /* Sand beige #E9DFD2 — secondary backgrounds / panels / subtle fills */
+    --secondary: 34 34% 87%;
+    --secondary-foreground: 0 0% 18%;
 
-    --muted: 30 22% 90%;
-    --muted-foreground: 12 25% 30%;
+    --muted: 34 34% 87%;
+    --muted-foreground: 0 0% 34%; /* softened charcoal for secondary text, still readable */
 
-    /* Deep green accent #0a6b4a — small headings, highlights */
-    --accent: 160 83% 23%;
-    --accent-foreground: 0 0% 100%;
+    /* Accent = deeper terracotta for hover/press states (olive-grey / teal dropped entirely) */
+    --accent: 14 47% 50%;
+    --accent-foreground: 40 30% 96%;
 
     --destructive: 0 60% 45%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 30 20% 82%;
-    --input: 30 20% 82%;
-    --ring: 13 39% 46%;
+    --border: 32 18% 82%;
+    --input: 32 18% 82%;
+    --ring: 14 47% 58%;
 
-    /* Deep espresso for footer / mobile bar — white text reads ~15:1 (was terracotta at ~4:1) */
-    --footer: 12 40% 15%;
+    /* Charcoal footer / mobile bar — warm-white text reads ~12:1 */
+    --footer: 0 0% 18%;
 
-    /* Typography — two faces only. Swap the display face here in one place. */
-    --font-display: 'Frank Ruhl Libre', 'Heebo', Georgia, serif;
-    --font-body: 'Heebo', system-ui, sans-serif;
+    /* Typography — two faces only. Titles: Heebo (light). Running text: Assistant. */
+    --font-display: 'Heebo', system-ui, sans-serif;
+    --font-body: 'Assistant', system-ui, sans-serif;
 
     --radius: 0.25rem;
 
-    /* Gradients & shadows */
-    --gradient-cream: linear-gradient(180deg, hsl(30 29% 95%), hsl(30 25% 88%));
+    /* Solid sand — NEVER a gradient between the neutral backgrounds (clean lines only) */
+    --gradient-cream: hsl(34 34% 87%);
 
-    --shadow-luxury: 0 20px 60px -20px hsl(12 44% 20% / 0.25);
-    --shadow-soft: 0 4px 20px -4px hsl(12 44% 20% / 0.1);
-    --shadow-accent: 0 10px 40px -10px hsl(160 83% 23% / 0.35);
+    --shadow-luxury: 0 20px 60px -20px hsl(0 0% 18% / 0.22);
+    --shadow-soft: 0 4px 20px -4px hsl(0 0% 18% / 0.10);
+    --shadow-accent: 0 10px 40px -10px hsl(14 47% 40% / 0.30);
 
     --transition-smooth: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   }
@@ -73,15 +76,15 @@
 
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-display);
-    font-weight: 600;
-    letter-spacing: -0.01em;
+    font-weight: 400;
+    letter-spacing: -0.005em;
     line-height: 1.2;
-    font-style: normal;
   }
 
-  h1 { line-height: 1.15; font-weight: 700; }
-  h2 { line-height: 1.2; font-weight: 600; }
-  h3 { line-height: 1.3; font-weight: 600; }
+  /* Titles are large + light (Heebo). Size carries the presence, not weight. */
+  h1 { line-height: 1.12; font-weight: 300; }
+  h2 { line-height: 1.18; font-weight: 300; }
+  h3 { line-height: 1.3; font-weight: 400; }
 
   p { line-height: 1.75; }
 
@@ -113,15 +116,8 @@
 @layer utilities {
   .font-display {
     font-family: var(--font-display);
-    font-weight: 600;
-    letter-spacing: -0.01em;
-  }
-
-  /* Neutralize any italic emphasis so Hebrew text never appears slanted */
-  .italic,
-  i,
-  em {
-    font-style: normal !important;
+    font-weight: 400;
+    letter-spacing: -0.005em;
   }
 
   .text-balance {
@@ -185,6 +181,18 @@
   @media (prefers-reduced-motion: reduce) {
     .animate-rise-in { animation: none; }
   }
+
+  /* Gentle down-nudge for the hero scroll cue (keeps horizontal centering) */
+  @keyframes scroll-nudge {
+    0%, 100% { transform: translate(-50%, 0); }
+    50% { transform: translate(-50%, 8px); }
+  }
+  .scroll-cue {
+    animation: scroll-nudge 2s ease-in-out 1.6s infinite;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .scroll-cue { animation: none; }
+  }
 }
 
 /* Global focus-visible ring + tactile press for interactive elements */
@@ -224,11 +232,21 @@
 html {
   font-size: calc(16px * var(--a11y-font-scale));
 }
+/* Real high-contrast mode: push tokens to maximum contrast (not a blunt filter) */
 html.a11y-high-contrast {
-  filter: contrast(1.25) saturate(0.85);
-}
-html.a11y-high-contrast body {
-  background: #fff;
+  --background: 0 0% 100%;
+  --foreground: 0 0% 0%;
+  --card: 0 0% 100%;
+  --card-foreground: 0 0% 0%;
+  --secondary: 0 0% 95%;
+  --secondary-foreground: 0 0% 0%;
+  --muted: 0 0% 93%;
+  --muted-foreground: 0 0% 15%;
+  --primary: 14 55% 36%;
+  --primary-foreground: 0 0% 100%;
+  --accent: 14 55% 30%;
+  --border: 0 0% 35%;
+  --input: 0 0% 35%;
 }
 html.a11y-highlight-links a,
 html.a11y-highlight-links button {

@@ -23,7 +23,7 @@ const MobileActionBar = () => {
       <nav
         dir="rtl"
         aria-label="פעולות מהירות"
-        className="md:hidden fixed bottom-0 inset-x-0 z-40 bg-footer/95 backdrop-blur-md border-t border-primary-foreground/15 shadow-luxury"
+        className="md:hidden fixed bottom-0 inset-x-0 z-40 bg-footer/95 backdrop-blur-md border-t border-background/15 shadow-luxury"
         style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
       >
         <div className="grid grid-cols-3 items-stretch h-16">
@@ -32,7 +32,7 @@ const MobileActionBar = () => {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="שליחת הודעה בוואטסאפ"
-            className="flex flex-col items-center justify-center gap-1 text-primary-foreground active:bg-primary-foreground/10 transition-smooth"
+            className="flex flex-col items-center justify-center gap-1 text-background active:bg-background/10 transition-smooth"
           >
             <WhatsAppIcon className="w-5 h-5 text-[#25D366]" />
             <span className="text-[11px] font-medium">WhatsApp</span>
@@ -40,7 +40,7 @@ const MobileActionBar = () => {
           <a
             href="tel:+972504519062"
             aria-label="חיוג טלפוני"
-            className="flex flex-col items-center justify-center gap-1 text-primary-foreground border-x border-primary-foreground/15 active:bg-primary-foreground/10 transition-smooth"
+            className="flex flex-col items-center justify-center gap-1 text-background border-x border-background/15 active:bg-background/10 transition-smooth"
           >
             <Phone className="w-5 h-5 text-accent" />
             <span className="text-[11px] font-medium">חיוג</span>
@@ -49,7 +49,7 @@ const MobileActionBar = () => {
             type="button"
             onClick={() => window.dispatchEvent(new CustomEvent("open-a11y-panel"))}
             aria-label="פתיחת תפריט נגישות"
-            className="flex flex-col items-center justify-center gap-1 text-primary-foreground active:bg-primary-foreground/10 transition-smooth"
+            className="flex flex-col items-center justify-center gap-1 text-background active:bg-background/10 transition-smooth"
           >
             <Accessibility className="w-5 h-5" />
             <span className="text-[11px] font-medium">נגישות</span>

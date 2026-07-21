@@ -14,12 +14,8 @@ const AboutBrief = () => {
             className="text-sm md:text-base font-light mb-8"
           />
 
-          <div className="flex items-center justify-center gap-3 mb-10" aria-hidden="true">
-            <span className="h-px w-16 bg-primary/30" />
-            <span className="w-1.5 h-1.5 rotate-45 bg-primary" />
-            <span className="h-px w-16 bg-primary/30" />
-          </div>
-          <p className="text-primary text-base md:text-xl leading-relaxed font-light">
+          <div className="w-16 h-px bg-primary/50 mx-auto mb-10" aria-hidden="true" />
+          <p className="text-foreground text-lg md:text-2xl leading-relaxed font-normal">
             <img
               src={alumaLogo}
               alt="Aluma"
