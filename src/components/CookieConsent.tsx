@@ -2,32 +2,24 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { X } from "lucide-react";
-
-const STORAGE_KEY = "aluma_cookie_consent_v1";
-
-type ConsentValue = "accepted" | "declined";
+import { getConsent, setConsent, type ConsentValue } from "@/lib/consent";
+import { loadPixel } from "@/lib/pixel";
 
 const CookieConsent = () => {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     const t = setTimeout(() => {
-      try {
-        const v = localStorage.getItem(STORAGE_KEY);
-        if (!v) setVisible(true);
-      } catch {
-        setVisible(true);
-      }
+      if (!getConsent()) setVisible(true);
     }, 800);
     return () => clearTimeout(t);
   }, []);
 
   const decide = (value: ConsentValue) => {
-    try {
-      localStorage.setItem(STORAGE_KEY, value);
-    } catch {
-      // ignore
-    }
+    setConsent(value);
+    // Accepting activates the pixel immediately; useSiteTracking picks up the
+    // consent change and begins first-party analytics + fires PageView.
+    if (value === "accepted") loadPixel();
     setVisible(false);
   };
 

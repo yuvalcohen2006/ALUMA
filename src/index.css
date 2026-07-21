@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Luxury outdoor furniture design system. All colors HSL. */
+/* Aluma design tokens — all colors HSL. Terracotta primary + deep-green accent on cream. */
 
 @layer base {
   :root {
@@ -39,53 +39,14 @@
 
     --radius: 0.25rem;
 
-    /* Custom luxury tokens */
-    --gold: 13 39% 52%;
-    --gold-soft: 13 35% 65%;
-    --cream: 30 29% 93%;
-    --sand: 30 25% 88%;
-    --espresso: 13 39% 52%;
-
-    --gradient-hero: linear-gradient(135deg, hsl(13 39% 52% / 0.85), hsl(12 44% 28% / 0.7));
-    --gradient-gold: linear-gradient(135deg, hsl(13 39% 52%), hsl(13 45% 62%));
+    /* Gradients & shadows */
     --gradient-cream: linear-gradient(180deg, hsl(30 29% 95%), hsl(30 25% 88%));
 
     --shadow-luxury: 0 20px 60px -20px hsl(12 44% 20% / 0.25);
     --shadow-soft: 0 4px 20px -4px hsl(12 44% 20% / 0.1);
-    --shadow-gold: 0 10px 40px -10px hsl(160 83% 23% / 0.35);
+    --shadow-accent: 0 10px 40px -10px hsl(160 83% 23% / 0.35);
 
     --transition-smooth: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
-  }
-
-  .dark {
-    --background: 25 25% 10%;
-    --foreground: 38 30% 95%;
-    --card: 25 25% 12%;
-    --card-foreground: 38 30% 95%;
-    --popover: 25 25% 10%;
-    --popover-foreground: 38 30% 95%;
-    --primary: 38 45% 60%;
-    --primary-foreground: 25 35% 12%;
-    --secondary: 25 20% 18%;
-    --secondary-foreground: 38 30% 95%;
-    --muted: 25 20% 18%;
-    --muted-foreground: 35 15% 65%;
-    --accent: 38 45% 55%;
-    --accent-foreground: 25 35% 12%;
-    --destructive: 0 60% 45%;
-    --destructive-foreground: 38 30% 95%;
-    --border: 25 20% 20%;
-    --input: 25 20% 20%;
-    --ring: 38 45% 55%;
   }
 }
 
@@ -160,14 +121,6 @@
     text-wrap: balance;
   }
 
-  .gradient-hero {
-    background: var(--gradient-hero);
-  }
-
-  .gradient-gold {
-    background: var(--gradient-gold);
-  }
-
   .gradient-cream {
     background: var(--gradient-cream);
   }
@@ -180,8 +133,8 @@
     box-shadow: var(--shadow-soft);
   }
 
-  .shadow-gold {
-    box-shadow: var(--shadow-gold);
+  .shadow-accent {
+    box-shadow: var(--shadow-accent);
   }
 
   .transition-smooth {

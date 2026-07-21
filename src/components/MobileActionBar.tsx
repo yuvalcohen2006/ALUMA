@@ -23,7 +23,7 @@ const MobileActionBar = () => {
       <nav
         dir="rtl"
         aria-label="פעולות מהירות"
-        className="md:hidden fixed bottom-0 inset-x-0 z-40 bg-espresso/95 backdrop-blur-md border-t border-primary-foreground/15 shadow-luxury"
+        className="md:hidden fixed bottom-0 inset-x-0 z-40 bg-primary/95 backdrop-blur-md border-t border-primary-foreground/15 shadow-luxury"
         style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
       >
         <div className="grid grid-cols-3 items-stretch h-16">

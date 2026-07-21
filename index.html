@@ -11,7 +11,8 @@
     <meta name="referrer" content="strict-origin-when-cross-origin" />
     <meta name="format-detection" content="telephone=no" />
     <meta http-equiv="X-Content-Type-Options" content="nosniff" />
-    <link rel="canonical" href="https://alumaoutdoor.com/" />
+    <!-- Per-page canonical is set at runtime by react-helmet (src/components/SEO.tsx).
+         No static canonical here — a hardcoded href="/" would mislabel every subpage as the homepage. -->
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -44,7 +45,7 @@
       "name": "Aluma",
       "alternateName": "אלומה",
       "url": "https://alumaoutdoor.com/",
-      "logo": "https://alumaoutdoor.com/favicon.ico",
+      "logo": "https://alumaoutdoor.com/favicon.png",
       "description": "סלוני חוץ ושולחנות חוץ יוקרתיים בעיצוב אישי — אלומיניום פרימיום, בדי Sunbrella ושיש גרניט פורצלן.",
       "sameAs": []
     }
@@ -68,7 +69,8 @@
       "url": "https://alumaoutdoor.com/",
       "priceRange": "$$$",
       "areaServed": "IL",
-      "address": { "@type": "PostalAddress", "addressCountry": "IL" },
+      "telephone": "+972-50-451-9062",
+      "address": { "@type": "PostalAddress", "streetAddress": "התמר 78", "addressLocality": "יציץ", "addressCountry": "IL" },
       "makesOffer": [
         { "@type": "Offer", "itemOffered": { "@type": "Product", "name": "סלוני חוץ אלומיניום" } },
         { "@type": "Offer", "itemOffered": { "@type": "Product", "name": "שולחנות גן ופינות אוכל" } },
@@ -77,35 +79,11 @@
     }
     </script>
 
-    <!-- Meta Pixel Code -->
-    <script>
-      !function(f,b,e,v,n,t,s)
-      {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-      n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-      n.queue=[];t=b.createElement(e);t.async=!0;
-      t.src=v;s=b.getElementsByTagName(e)[0];
-      s.parentNode.insertBefore(t,s)}(window, document,'script',
-      'https://connect.facebook.net/en_US/fbevents.js');
-      fbq('init', '4514362492184862');
-      fbq('track', 'PageView');
-    </script>
-    <!-- End Meta Pixel Code -->
+    <!-- Meta Pixel is loaded at runtime AFTER cookie consent — see src/lib/pixel.ts + src/lib/consent.ts -->
   </head>
 
   <body>
     <div id="root"></div>
-
-    <!-- Meta Pixel noscript fallback -->
-    <noscript>
-      <img
-        height="1"
-        width="1"
-        style="display:none"
-        src="https://www.facebook.com/tr?id=4514362492184862&ev=PageView&noscript=1"
-        alt="Facebook Pixel"
-      />
-    </noscript>
 
     <script type="module" src="/src/main.tsx"></script>
   </body>

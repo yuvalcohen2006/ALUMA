@@ -1,6 +1,8 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { hasAnalyticsConsent, onConsentChange } from "@/lib/consent";
+import { loadPixel, trackPixel } from "@/lib/pixel";
 
 const SID_KEY = "aluma_sid";
 
@@ -19,9 +21,19 @@ function getSessionId() {
 
 export function useSiteTracking() {
   const location = useLocation();
+  const [consented, setConsented] = useState(hasAnalyticsConsent);
+
+  // Re-run tracking as soon as the visitor accepts, without a page reload.
+  useEffect(() => onConsentChange((v) => setConsented(v === "accepted")), []);
 
   useEffect(() => {
+    if (!consented) return;
     if (location.pathname.startsWith("/admin")) return;
+
+    // Consent given: activate the pixel (idempotent) and fire this route's PageView.
+    loadPixel();
+    trackPixel("PageView");
+
     const sid = getSessionId();
     const path = location.pathname;
     const projectMatch = path.match(/^\/projects\/([^/]+)/);
@@ -47,5 +59,5 @@ export function useSiteTracking() {
     beat();
     const id = window.setInterval(beat, 45_000);
     return () => window.clearInterval(id);
-  }, [location.pathname]);
+  }, [location.pathname, consented]);
 }

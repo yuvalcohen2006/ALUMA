@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { SITE } from "@/config/site";
 import SEO from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { SOFA_UNITS, getUnit, type SofaUnit } from "@/data/sofaUnits";
@@ -238,7 +239,7 @@ const SofaDesigner = () => {
                 </Button>
                 <Button asChild size="sm" className="flex-1" disabled={!placed.length}>
                   <a
-                    href={`https://wa.me/972000000000?text=${waMessage}`}
+                    href={`${SITE.whatsapp.href}?text=${waMessage}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={() =>

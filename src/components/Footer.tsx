@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { Phone, Mail, MapPin, Instagram, Facebook } from "lucide-react";
 import alumaLogo from "@/assets/aluma-logo.png";
+import { SITE } from "@/config/site";
 
 const WhatsAppIcon = ({ className = "" }: { className?: string }) => (
   <svg
@@ -18,7 +19,7 @@ const Footer = () => {
     "w-10 h-10 rounded-sm border border-primary-foreground/30 flex items-center justify-center hover:bg-primary-foreground hover:text-primary hover:border-primary-foreground transition-smooth";
 
   return (
-    <footer dir="rtl" className="bg-espresso text-primary-foreground">
+    <footer dir="rtl" className="bg-primary text-primary-foreground">
       <div className="container-luxury py-16">
         <div dir="rtl" className="grid gap-y-10 md:grid-cols-2 lg:grid-cols-4 lg:gap-y-0 lg:gap-x-8 lg:items-stretch">
 
@@ -45,12 +46,16 @@ const Footer = () => {
               >
                 <WhatsAppIcon className="w-4 h-4" />
               </a>
-              <a href="#" aria-label="Instagram" className={iconBox}>
-                <Instagram className="w-4 h-4" />
-              </a>
-              <a href="#" aria-label="Facebook" className={iconBox}>
-                <Facebook className="w-4 h-4" />
-              </a>
+              {SITE.social.instagram && (
+                <a href={SITE.social.instagram} target="_blank" rel="noopener noreferrer" aria-label="Instagram" className={iconBox}>
+                  <Instagram className="w-4 h-4" />
+                </a>
+              )}
+              {SITE.social.facebook && (
+                <a href={SITE.social.facebook} target="_blank" rel="noopener noreferrer" aria-label="Facebook" className={iconBox}>
+                  <Facebook className="w-4 h-4" />
+                </a>
+              )}
             </div>
           </div>
 

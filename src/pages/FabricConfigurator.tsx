@@ -5,6 +5,7 @@ import SEO from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { Check, MessageCircle, Sparkles } from "lucide-react";
 import sofaAsset from "@/assets/modular-sofa-fabric.png.asset.json";
+import { SITE } from "@/config/site";
 import {
   sunbrellaFabrics,
   families,
@@ -33,7 +34,7 @@ const FabricConfigurator = () => {
   const waText = encodeURIComponent(
     `שלום Aluma, הייתי רוצה הצעת מחיר לספה עם בד Sunbrella: ${selected.nameHe} (${selected.code}).`
   );
-  const whatsappUrl = `https://wa.me/972000000000?text=${waText}`;
+  const whatsappUrl = `${SITE.whatsapp.href}?text=${waText}`;
 
   // Approximate cushion regions for 3-section modular sofa
   const cushionRegions = [

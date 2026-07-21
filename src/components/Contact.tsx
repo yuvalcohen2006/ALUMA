@@ -240,7 +240,7 @@ const Contact = () => {
                     type="submit"
                     size="lg"
                     disabled={submitting}
-                    className="bg-accent hover:bg-accent/90 text-accent-foreground h-12 px-10 rounded-sm tracking-wide shadow-gold disabled:opacity-60"
+                    className="bg-accent hover:bg-accent/90 text-accent-foreground h-12 px-10 rounded-sm tracking-wide shadow-accent disabled:opacity-60"
                   >
                     {submitting ? "שולח..." : "שליחת הודעה"}
                   </Button>

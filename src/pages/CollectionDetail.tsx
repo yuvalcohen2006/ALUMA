@@ -102,9 +102,9 @@ const CollectionDetailPage = () => {
     material: item.materials.join(", "),
     offers: {
       "@type": "Offer",
-      availability: "https://schema.org/InStock",
-      priceCurrency: "ILS",
-      price: "0",
+      // Made-to-order / quote-based: no fixed price. A fake "0" + InStock is
+      // invalid structured data, so we signal pre-order and omit the price.
+      availability: "https://schema.org/PreOrder",
       url: `${SITE}/contact`,
       description: "מחיר לפי הצעת מחיר אישית",
     },

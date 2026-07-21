@@ -20,17 +20,19 @@ export function useIsAdmin() {
     (async () => {
       setLoading(true);
 
-      const { data, error } = await supabase.rpc("has_role", {
-        _user_id: user.id,
-        _role: "admin",
-      });
+      // Query the caller's own role directly instead of the has_role() RPC.
+      // The "Users view own roles" RLS policy permits this, and it does NOT
+      // depend on EXECUTE on has_role() (which is revoked from clients), so the
+      // admin check keeps working regardless of that grant.
+      const { data, error } = await supabase
+        .from("user_roles")
+        .select("role")
+        .eq("user_id", user.id)
+        .eq("role", "admin")
+        .maybeSingle();
 
       if (!cancelled) {
-        if (error) {
-          setIsAdmin(false);
-        } else {
-          setIsAdmin(Boolean(data));
-        }
+        setIsAdmin(!error && Boolean(data));
         setLoading(false);
       }
     })();
