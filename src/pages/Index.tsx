@@ -4,7 +4,6 @@ import AboutBrief from "@/components/home/AboutBrief";
 import CategoryIcons from "@/components/home/CategoryIcons";
 import ProjectsGrid from "@/components/home/ProjectsGrid";
 import MaterialsBrief from "@/components/home/MaterialsBrief";
-import Testimonials from "@/components/home/Testimonials";
 import Newsletter from "@/components/home/Newsletter";
 import SEO from "@/components/SEO";
 
@@ -75,7 +74,8 @@ const Index = () => {
       <CategoryIcons />
       <ProjectsGrid />
       <MaterialsBrief />
-      <Testimonials />
+      {/* Testimonials section removed: it shipped fabricated named 5-star reviews.
+          Re-add <Testimonials /> once real, attributed customer quotes exist. */}
       <Newsletter />
     </Layout>
   );

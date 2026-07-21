@@ -21,7 +21,6 @@ const RANGES = [
   { key: "90d", label: "90 יום", days: 90 },
   { key: "month", label: "החודש", days: -1 },
   { key: "prev", label: "חודש קודם", days: -2 },
-  { key: "custom", label: "טווח מותאם", days: -3 },
 ] as const;
 
 type RangeKey = (typeof RANGES)[number]["key"];
@@ -179,7 +178,7 @@ const AdminDashboard = () => {
         pageViews,
         uniqueVisitors,
         viewsPerVisitor: uniqueVisitors ? +(pageViews / uniqueVisitors).toFixed(2) : 0,
-        total: pageViews,
+        total: totalC.count ?? pageViews, // all-time page views (distinct from the range-scoped card)
         live: (liveRows.data || []).length,
         prevPageViews: prevRows.count || 0,
         prevUniqueVisitors: prevSessions.size,

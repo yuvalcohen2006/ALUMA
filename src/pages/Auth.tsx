@@ -89,7 +89,9 @@ const AuthPage = () => {
     setGoogleBusy(true);
     try {
       const result = await lovable.auth.signInWithOAuth("google", {
-        redirect_uri: window.location.origin,
+        // Honor the same ?redirect target the email flow uses (e.g. /club/dashboard),
+        // instead of always dumping the user on the homepage.
+        redirect_uri: `${window.location.origin}${redirectTo}`,
       });
       if (result.error) {
         toast.error(result.error.message ?? "כניסה עם Google נכשלה");

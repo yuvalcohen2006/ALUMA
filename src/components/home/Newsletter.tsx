@@ -3,6 +3,7 @@ import { Mail, Check } from "lucide-react";
 import { toast } from "sonner";
 import Reveal from "@/components/Reveal";
 import SectionLabel from "@/components/SectionLabel";
+import { supabase } from "@/integrations/supabase/client";
 
 const Newsletter = () => {
   const [email, setEmail] = useState("");
@@ -17,14 +18,25 @@ const Newsletter = () => {
     if (!email || submitting) return;
     setSubmitting(true);
     try {
-      await new Promise((r) => setTimeout(r, 500));
-      localStorage.setItem("aluma_newsletter", "1");
-      localStorage.setItem(
-        "aluma_newsletter_data",
-        JSON.stringify({ name, email, at: new Date().toISOString() }),
-      );
+      const { error } = await supabase
+        .from("newsletter_subscribers")
+        .insert({ email: email.trim().toLowerCase(), name: name.trim() || null });
+
+      // 23505 = unique violation = already subscribed; treat that as success.
+      if (error && error.code !== "23505") {
+        toast.error("משהו השתבש בהרשמה. נסו שוב או פנו אלינו ישירות.");
+        return;
+      }
+
+      try {
+        localStorage.setItem("aluma_newsletter", "1");
+      } catch {
+        // ignore storage failures
+      }
       setSubscribed(true);
       toast.success("נרשמת בהצלחה! נשלח אליך השראה ועדכונים על קולקציות חדשות.");
+    } catch {
+      toast.error("משהו השתבש בהרשמה. נסו שוב מאוחר יותר.");
     } finally {
       setSubmitting(false);
     }

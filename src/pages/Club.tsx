@@ -259,9 +259,6 @@ const Club = () => {
                         {s.text}
                       </p>
                     </div>
-                    {i < steps.length - 1 && (
-                      <div className="hidden md:block absolute" aria-hidden />
-                    )}
                   </div>
                 ))}
               </div>

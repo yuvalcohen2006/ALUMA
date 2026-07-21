@@ -1,4 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, ReactNode } from "react";
+import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -81,13 +82,23 @@ export const FavoritesProvider = ({ children }: { children: ReactNode }) => {
         writeLS(Array.from(next));
         return;
       }
-      if (has) {
-        await supabase.from("product_favorites").delete().eq("user_id", user.id).eq("product_id", productId);
-      } else {
-        await supabase.from("product_favorites").upsert(
-          { user_id: user.id, product_id: productId, collection_slug: collectionSlug ?? null },
-          { onConflict: "user_id,product_id", ignoreDuplicates: true }
-        );
+
+      const { error } = has
+        ? await supabase.from("product_favorites").delete().eq("user_id", user.id).eq("product_id", productId)
+        : await supabase.from("product_favorites").upsert(
+            { user_id: user.id, product_id: productId, collection_slug: collectionSlug ?? null },
+            { onConflict: "user_id,product_id", ignoreDuplicates: true }
+          );
+
+      // On failure, roll the optimistic change back so the heart reflects reality.
+      if (error) {
+        setIds((cur) => {
+          const revert = new Set(cur);
+          if (has) revert.add(productId);
+          else revert.delete(productId);
+          return revert;
+        });
+        toast.error("לא הצלחנו לשמור את המועדף. נסו שוב.");
       }
     },
     [ids, user]

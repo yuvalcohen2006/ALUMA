@@ -2,6 +2,9 @@ import Reveal from "@/components/Reveal";
 import SectionLabel from "@/components/SectionLabel";
 import { Quote, Star } from "lucide-react";
 
+// ⚠️ PLACEHOLDER / FABRICATED DATA — these names and quotes are NOT real customers.
+// This component is currently NOT rendered anywhere (removed from the homepage).
+// Replace this array with real, attributed testimonials before re-enabling it.
 const testimonials = [
   {
     name: "מיכל ואסף לוי",

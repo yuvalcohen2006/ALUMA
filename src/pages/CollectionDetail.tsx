@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import Layout from "@/components/Layout";
 import SEO from "@/components/SEO";
@@ -19,43 +19,54 @@ const CollectionDetailPage = () => {
   const [item, setItem] = useState<DBProduct | null>(null);
   const [related, setRelated] = useState<DBProduct[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
   const [activeImage, setActiveImage] = useState(0);
 
-  useEffect(() => {
+  const load = useCallback(async () => {
     if (!slug) return;
-    (async () => {
-      setLoading(true);
-      const { data } = await supabase
-        .from("site_collection_products")
-        .select(
-          "id, collection_id, slug, name, tag, tagline, description, highlights, materials, dimensions, cover_url, gallery"
-        )
-        .eq("slug", slug)
-        .eq("published", true)
-        .maybeSingle();
-      if (data) {
-        const p: DBProduct = {
-          ...(data as any),
-          description: Array.isArray((data as any).description) ? (data as any).description : [],
-          highlights: Array.isArray((data as any).highlights) ? (data as any).highlights : [],
-          materials: Array.isArray((data as any).materials) ? (data as any).materials : [],
-          gallery: Array.isArray((data as any).gallery) ? (data as any).gallery : [],
-        };
-        setItem(p);
-        const { data: rel } = await supabase
-          .from("site_collection_products")
-          .select("id, collection_id, slug, name, tag, tagline, description, highlights, materials, dimensions, cover_url, gallery")
-          .eq("collection_id", p.collection_id)
-          .eq("published", true)
-          .neq("id", p.id)
-          .limit(3);
-        setRelated(((rel as any[]) || []) as DBProduct[]);
-      } else {
-        setItem(null);
-      }
+    setLoading(true);
+    setLoadError(false);
+    const { data, error } = await supabase
+      .from("site_collection_products")
+      .select(
+        "id, collection_id, slug, name, tag, tagline, description, highlights, materials, dimensions, cover_url, gallery"
+      )
+      .eq("slug", slug)
+      .eq("published", true)
+      .maybeSingle();
+    // A query error is NOT a missing product — don't render a false 404.
+    if (error) {
+      setLoadError(true);
+      setItem(null);
       setLoading(false);
-    })();
+      return;
+    }
+    if (data) {
+      const p: DBProduct = {
+        ...(data as any),
+        description: Array.isArray((data as any).description) ? (data as any).description : [],
+        highlights: Array.isArray((data as any).highlights) ? (data as any).highlights : [],
+        materials: Array.isArray((data as any).materials) ? (data as any).materials : [],
+        gallery: Array.isArray((data as any).gallery) ? (data as any).gallery : [],
+      };
+      setItem(p);
+      const { data: rel } = await supabase
+        .from("site_collection_products")
+        .select("id, collection_id, slug, name, tag, tagline, description, highlights, materials, dimensions, cover_url, gallery")
+        .eq("collection_id", p.collection_id)
+        .eq("published", true)
+        .neq("id", p.id)
+        .limit(3);
+      setRelated(((rel as any[]) || []) as DBProduct[]);
+    } else {
+      setItem(null);
+    }
+    setLoading(false);
   }, [slug]);
+
+  useEffect(() => {
+    load();
+  }, [load]);
 
   useEffect(() => {
     if (!item) return;
@@ -72,6 +83,19 @@ const CollectionDetailPage = () => {
       <Layout>
         <div className="min-h-[60vh] flex items-center justify-center text-muted-foreground">
           טוען…
+        </div>
+      </Layout>
+    );
+  }
+
+  if (loadError) {
+    return (
+      <Layout>
+        <div className="min-h-[60vh] flex flex-col items-center justify-center gap-4 text-center px-6">
+          <p className="text-muted-foreground">אירעה שגיאה בטעינת הפריט. בדקו את החיבור ונסו שוב.</p>
+          <Button onClick={load} variant="outline">
+            נסו שוב
+          </Button>
         </div>
       </Layout>
     );

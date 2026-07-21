@@ -62,7 +62,7 @@ const Account = () => {
   useEffect(() => {
     if (!user) return;
     (async () => {
-      const [{ data: p }, { data: pr }] = await Promise.all([
+      const [{ data: p, error: pErr }, { data: pr, error: prErr }] = await Promise.all([
         supabase.from("profiles").select("full_name, phone").eq("id", user.id).maybeSingle(),
         supabase
           .from("customer_projects")
@@ -70,6 +70,10 @@ const Account = () => {
           .eq("user_id", user.id)
           .order("updated_at", { ascending: false }),
       ]);
+      // Surface a real failure instead of silently rendering an empty dashboard.
+      if (pErr || prErr) {
+        toast.error("שגיאה בטעינת הנתונים. רעננו את הדף או נסו שוב מאוחר יותר.");
+      }
       setProfile({ full_name: p?.full_name ?? "", phone: p?.phone ?? "" });
       setProjects((pr as Project[]) ?? []);
       setBusy(false);
