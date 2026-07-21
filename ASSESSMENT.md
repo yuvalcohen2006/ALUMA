@@ -1,6 +1,18 @@
 # Aluma — Project Assessment & Cleanup Plan
 
-_Prepared as the starting point for our redesign work. No code has been changed yet — this is the "here's what you have and here's what I'd do" pass._
+_Prepared as the starting point for our redesign work. The **dead-code cleanup below (step 7) has been executed and build-verified**; everything else is still "here's what you have and here's what I'd do."_
+
+## ✅ Done this session — cleanup (build passes)
+
+- **`git init` + safety snapshot** committed first (this wasn't a git repo — now it is, so everything's revertible).
+- **Removed 59 dead files**: 32 unused shadcn/ui components, the unused Radix toast system, orphaned components (`BackToTop`, `Breadcrumbs`, `FeatureIcons`, `TrustBar`, stale `Collections/FAQ/Materials/Story` duplicates), the dead `AdminCustomers` twin, legacy `data/collections.ts`, the Vite-starter `App.css`, and unused assets.
+- **Removed 27 unused npm packages** (9 libs + 18 `@radix-ui`) from `package.json`.
+- **Renamed** `vite_react_shadcn_ts@0.0.0` → `aluma-outdoor@0.1.0`; detached `sonner` from the dead `next-themes`; `.gitignore`'d `.env`.
+- **`npm run build` passes** (`✓ built in 7.1s`). `src/` went 172 → 133 files.
+- _Note:_ lockfiles were stale after the dep removal — a fresh `npm install` was run to reconcile.
+
+---
+
 
 ---
 
@@ -71,9 +83,9 @@ These are the things that read as templated/auto‑generated rather than authore
 
 ---
 
-## Dead code to discard (verified by grep)
+## Dead code to discard (verified by grep) — ✅ removed & build-verified
 
-> ⚠️ **This is not a git repo** — there's no undo. I recommend `git init` before any deletion so we can revert freely.
+> This list has been executed (see "Done this session" above). Kept here as the record of what was removed.
 
 - **33 of 49 shadcn `ui/` components are never used** (~67%): alert, alert-dialog, aspect-ratio, avatar, breadcrumb, calendar, carousel, chart, checkbox, collapsible, command, context-menu, drawer, dropdown-menu, form, hover-card, input-otp, menubar, navigation-menu, pagination, popover, radio-group, resizable, scroll-area, separator, sheet, sidebar, skeleton, slider, table, toggle, toggle-group (+ `ui/use-toast.ts`).
 - **~9 top‑level deps + ~15 Radix packages** exist only to feed those dead components: `@hookform/resolvers`, `react-hook-form`, `react-day-picker`, `date-fns`, `cmdk`, `vaul`, `input-otp`, `react-resizable-panels`, `next-themes`.
@@ -128,7 +140,7 @@ This is where you said you'll drive with prompts, so treating it lightly for now
 
 ## Suggested order of work
 
-1. **Unblock:** fix admin lockout (#1) + profiles RLS (#2) + error handling (#3). _(This is the "make it actually work" step.)_
-2. **De‑risk:** pull/replace fabricated content (#4), fix the dead phone numbers (#5), make consent real (#6).
-3. **Clean:** `git init`, then delete dead code/deps/assets (#7).
+1. ✅ **Clean:** `git init` + delete dead code/deps/assets (#7). — **done, build passes.**
+2. **Unblock:** fix admin lockout (#1) + profiles RLS (#2) + error handling (#3). _(This is the "make it actually work" step.)_
+3. **De‑risk:** pull/replace fabricated content (#4), fix the dead phone numbers (#5), make consent real (#6).
 4. **Redesign:** rebuild the design‑system foundation, then iterate on visuals with your prompts.
