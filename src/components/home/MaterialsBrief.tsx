@@ -47,9 +47,9 @@ const MaterialsBrief = () => {
           <SectionLabel
             he="החומרים שלנו"
             en="Our Materials"
-            className="text-xs text-primary justify-center mb-3 md:mb-4"
+            className="text-xs text-foreground justify-center mb-3 md:mb-4"
           />
-          <h2 className="font-display text-xl sm:text-3xl md:text-5xl font-light sm:font-semibold leading-tight">
+          <h2 className="font-display text-xl sm:text-3xl md:text-5xl font-light leading-tight">
             רק החומרים
             <span className="italic"> הטובים בעולם</span>
           </h2>
@@ -83,7 +83,7 @@ const MaterialsBrief = () => {
                       </div>
                     </div>
                     <div className="p-6 group-hover:opacity-0 transition-smooth">
-                      <h3 className="font-display text-lg md:text-2xl text-primary">
+                      <h3 className="font-display text-lg md:text-2xl text-foreground">
                         {m.name}
                       </h3>
                     </div>
@@ -98,7 +98,7 @@ const MaterialsBrief = () => {
             onClick={() => emblaApi?.scrollPrev()}
             disabled={!canPrev}
             aria-label="הקודם"
-            className="hidden md:flex absolute right-3 lg:right-6 top-1/2 -translate-y-1/2 z-10 h-12 w-12 lg:h-14 lg:w-14 rounded-full bg-background/90 backdrop-blur border border-primary/30 items-center justify-center text-primary hover:bg-primary hover:text-primary-foreground disabled:opacity-30 disabled:cursor-not-allowed transition-smooth shadow-soft"
+            className="hidden md:flex absolute right-3 lg:right-6 top-1/2 -translate-y-1/2 z-10 h-12 w-12 lg:h-14 lg:w-14 rounded-sm bg-background/90 backdrop-blur border border-primary/30 items-center justify-center text-primary hover:bg-primary hover:text-primary-foreground disabled:opacity-30 disabled:cursor-not-allowed transition-smooth shadow-soft"
           >
             <ArrowRight className="w-5 h-5" />
           </button>
@@ -106,7 +106,7 @@ const MaterialsBrief = () => {
             onClick={() => emblaApi?.scrollNext()}
             disabled={!canNext}
             aria-label="הבא"
-            className="hidden md:flex absolute left-3 lg:left-6 top-1/2 -translate-y-1/2 z-10 h-12 w-12 lg:h-14 lg:w-14 rounded-full bg-background/90 backdrop-blur border border-primary/30 items-center justify-center text-primary hover:bg-primary hover:text-primary-foreground disabled:opacity-30 disabled:cursor-not-allowed transition-smooth shadow-soft"
+            className="hidden md:flex absolute left-3 lg:left-6 top-1/2 -translate-y-1/2 z-10 h-12 w-12 lg:h-14 lg:w-14 rounded-sm bg-background/90 backdrop-blur border border-primary/30 items-center justify-center text-primary hover:bg-primary hover:text-primary-foreground disabled:opacity-30 disabled:cursor-not-allowed transition-smooth shadow-soft"
           >
             <ArrowLeft className="w-5 h-5" />
           </button>

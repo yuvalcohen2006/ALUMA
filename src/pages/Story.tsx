@@ -50,7 +50,7 @@ const StoryPage = () => {
                 </div>
               </div>
 
-              <div className="space-y-3.5 text-primary/85 text-sm md:text-base leading-[1.75]">
+              <div className="space-y-3.5 text-foreground text-sm md:text-base leading-[1.75]">
                 <p>אלומה נולדה מתוך חיבור בין חומר לאור.</p>
 
                 <p>
@@ -74,7 +74,7 @@ const StoryPage = () => {
                   שיגיע ולתת לו לחוות את אלומה כמו שהיא באמת.
                 </p>
 
-                <p className="text-primary tracking-wide pt-1">
+                <p className="text-foreground tracking-wide pt-1">
                   זו לא רק חוויה, זו איכות חיים.
                 </p>
               </div>

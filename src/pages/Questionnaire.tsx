@@ -117,10 +117,10 @@ const Questionnaire = () => {
       <section className="pt-32 pb-12 md:pt-40 md:pb-16 gradient-cream">
         <div className="container-luxury text-center max-w-2xl">
           <SectionLabel he="שאלון חכם" en="Smart Match" className="text-xs mb-5" />
-          <h1 className="font-display text-3xl md:text-5xl text-primary mb-4">
+          <h1 className="font-display text-3xl md:text-5xl text-foreground mb-4">
             נמצא לך את הקולקציה המושלמת
           </h1>
-          <p className="text-primary/70">
+          <p className="text-foreground">
             4 צעדים קצרים. בסוף תקבלו המלצה אישית והצעת פגישת אפיון ללא עלות.
           </p>
         </div>
@@ -130,12 +130,12 @@ const Questionnaire = () => {
         <div className="container-luxury max-w-2xl">
           {done ? (
             <div className="bg-background border border-border rounded-sm p-10 text-center shadow-luxury">
-              <div className="w-14 h-14 bg-accent/10 rounded-full flex items-center justify-center mx-auto mb-6">
+              <div className="w-14 h-14 bg-accent/10 rounded-sm flex items-center justify-center mx-auto mb-6">
                 <Check className="h-7 w-7 text-accent" />
               </div>
               <h2 className="font-display text-2xl text-primary mb-4">ההמלצה שלנו עבורך</h2>
-              <p className="text-primary/80 text-lg mb-8 leading-relaxed">{done}</p>
-              <p className="text-sm text-primary/60 mb-6">
+              <p className="text-foreground text-lg mb-8 leading-relaxed">{done}</p>
+              <p className="text-sm text-muted-foreground mb-6">
                 נחזור אליך תוך 24 שעות לתאם פגישת אפיון ללא עלות.
               </p>
               <a href="/collections">
@@ -145,7 +145,7 @@ const Questionnaire = () => {
           ) : (
             <div className="bg-background border border-border rounded-sm p-8 md:p-10 shadow-soft">
               <div className="mb-8">
-                <div className="flex justify-between text-xs text-primary/60 mb-2">
+                <div className="flex justify-between text-xs text-muted-foreground mb-2">
                   <span>שלב {step + 1} מתוך {steps.length}</span>
                   <span>{steps[step]}</span>
                 </div>
@@ -168,7 +168,7 @@ const Questionnaire = () => {
 
               {step === 2 && (
                 <div>
-                  <Label className="block mb-4 text-primary">מה חשוב לכלול? (אופציונלי)</Label>
+                  <Label className="block mb-4 text-foreground">מה חשוב לכלול? (אופציונלי)</Label>
                   <div className="flex flex-wrap gap-2">
                     {featureOptions.map((f) => {
                       const active = a.features.includes(f);
@@ -180,7 +180,7 @@ const Questionnaire = () => {
                           className={`px-4 py-2 rounded-sm border text-sm transition-smooth ${
                             active
                               ? "bg-accent text-accent-foreground border-accent"
-                              : "bg-background border-border text-primary/80 hover:border-accent"
+                              : "bg-background border-border text-foreground hover:border-accent"
                           }`}
                         >
                           {f}
@@ -246,7 +246,7 @@ const FieldChoice = ({
   onChange: (v: string) => void;
 }) => (
   <div>
-    <Label className="block mb-3 text-primary">{label}</Label>
+    <Label className="block mb-3 text-foreground">{label}</Label>
     <div className="grid grid-cols-2 gap-2">
       {options.map((opt) => {
         const active = value === opt;
@@ -258,7 +258,7 @@ const FieldChoice = ({
             className={`px-4 py-3 rounded-sm border text-sm text-right transition-smooth ${
               active
                 ? "bg-accent text-accent-foreground border-accent"
-                : "bg-background border-border text-primary/80 hover:border-accent"
+                : "bg-background border-border text-foreground hover:border-accent"
             }`}
           >
             {opt}

@@ -5,7 +5,7 @@ const WhatsAppButton = () => {
       target="_blank"
       rel="noopener noreferrer"
       aria-label="צרו קשר בוואטסאפ"
-      className="hidden md:flex fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-[#25D366] text-white items-center justify-center shadow-luxury hover:scale-110 transition-smooth"
+      className="hidden md:flex fixed bottom-6 right-6 z-50 w-14 h-14 rounded-sm bg-[#25D366] text-white items-center justify-center shadow-luxury hover:scale-110 transition-smooth"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"

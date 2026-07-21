@@ -95,7 +95,7 @@ const ARPreview = () => {
             <h1 className="font-display text-4xl md:text-6xl text-primary mt-3 mb-4">
               תראו את הרהיט במרחב שלכם
             </h1>
-            <p className="text-primary/70 max-w-2xl mx-auto leading-relaxed">
+            <p className="text-foreground max-w-2xl mx-auto leading-relaxed">
               בחרו פריט, לחצו על כפתור ה-AR בפינת התצוגה,
               וכוונו את המצלמה לרצפה במרפסת או בגינה, הרהיט יופיע בגודל אמיתי.
               עובד על iPhone (iOS 12+) ועל אנדרואיד תומך ARCore.
@@ -111,7 +111,7 @@ const ARPreview = () => {
                 className={`px-5 py-2.5 rounded-sm text-sm font-medium transition-smooth border ${
                   active.id === p.id
                     ? "bg-primary text-primary-foreground border-primary"
-                    : "bg-background text-primary border-border hover:border-primary/60"
+                    : "bg-background text-foreground border-border hover:border-primary/60"
                 }`}
               >
                 {p.name}
@@ -121,7 +121,7 @@ const ARPreview = () => {
 
           {/* Model viewer */}
           <div className="bg-secondary/30 border border-border rounded-sm overflow-hidden shadow-soft">
-            <div className="aspect-[4/3] md:aspect-[16/10] w-full bg-gradient-to-b from-background to-secondary/50">
+            <div className="aspect-[4/3] md:aspect-[16/10] w-full bg-secondary">
               {ready ? (
                 <model-viewer
                   key={active.id}
@@ -154,15 +154,15 @@ const ARPreview = () => {
                   </button>
                 </model-viewer>
               ) : (
-                <div className="w-full h-full flex items-center justify-center text-primary/50 text-sm">
+                <div className="w-full h-full flex items-center justify-center text-muted-foreground text-sm">
                   טוען תצוגת 3D…
                 </div>
               )}
             </div>
             <div className="p-6 border-t border-border flex flex-col md:flex-row md:items-center md:justify-between gap-4">
               <div>
-                <h2 className="font-display text-2xl text-primary">{active.name}</h2>
-                <p className="text-primary/70 text-sm mt-1">{active.desc}</p>
+                <h2 className="font-display text-2xl text-foreground">{active.name}</h2>
+                <p className="text-muted-foreground text-sm mt-1">{active.desc}</p>
               </div>
               <Button asChild variant="default">
                 <a href="/contact">לפרטים על הפריט</a>
@@ -194,10 +194,10 @@ const ARPreview = () => {
                 className="bg-background border border-border rounded-sm p-6"
               >
                 <step.icon className="h-6 w-6 text-accent mb-3" />
-                <h3 className="font-display text-lg text-primary mb-1">
+                <h3 className="font-display text-lg text-foreground mb-1">
                   {step.title}
                 </h3>
-                <p className="text-sm text-primary/70 leading-relaxed">
+                <p className="text-sm text-muted-foreground leading-relaxed">
                   {step.text}
                 </p>
               </div>
@@ -206,8 +206,8 @@ const ARPreview = () => {
 
           <div className="mt-10 flex items-start gap-3 bg-secondary/40 border border-border rounded-sm p-5">
             <Info className="h-5 w-5 text-accent shrink-0 mt-0.5" />
-            <p className="text-sm text-primary/75 leading-relaxed">
-              <strong className="text-primary">הערה:</strong> המודלים הנוכחיים
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              <strong className="text-foreground">הערה:</strong> המודלים הנוכחיים
               הם דגמים גנריים לצורכי הדגמה. בשבועות הקרובים נחליף אותם בסריקות
               3D של הקולקציות של Aluma עצמן, כך תוכלו לראות בדיוק את הבד, הגוון
               והמידות הסופיות במרפסת שלכם.

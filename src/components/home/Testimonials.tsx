@@ -34,9 +34,9 @@ const Testimonials = () => {
           <SectionLabel
             he="לקוחות מספרים"
             en="Testimonials"
-            className="text-xs text-primary mb-3 md:mb-4"
+            className="text-xs text-foreground mb-3 md:mb-4"
           />
-          <h2 className="font-display text-3xl sm:text-3xl sm:text-4xl md:text-5xl text-primary leading-tight">
+          <h2 className="font-display text-3xl sm:text-3xl sm:text-4xl md:text-5xl text-foreground leading-tight">
             אנשים שכבר חיים
             <br />
             <span className="italic">את ה־Outdoor שלהם</span>
@@ -48,7 +48,7 @@ const Testimonials = () => {
             <Reveal key={t.name} delay={i * 100}>
               <article className="h-full bg-card border border-border/60 rounded-sm p-6 md:p-8 shadow-soft hover:shadow-luxury hover:-translate-y-1 transition-smooth flex flex-col">
                 <Quote className="w-7 h-7 text-accent mb-5" aria-hidden="true" />
-                <p className="text-primary/90 leading-relaxed text-base md:text-[17px] flex-1">
+                <p className="text-foreground leading-relaxed text-base md:text-[17px] flex-1">
                   {t.quote}
                 </p>
                 <div className="mt-6 pt-5 border-t border-border/60">
@@ -57,7 +57,7 @@ const Testimonials = () => {
                       <Star key={k} className="w-4 h-4 fill-accent text-accent" />
                     ))}
                   </div>
-                  <div className="font-display text-lg text-primary font-semibold">
+                  <div className="font-display text-lg text-foreground font-semibold">
                     {t.name}
                   </div>
                   <div className="text-sm text-muted-foreground">{t.role}</div>

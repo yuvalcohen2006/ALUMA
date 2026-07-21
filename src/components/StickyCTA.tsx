@@ -39,12 +39,12 @@ const StickyCTA = () => {
       aria-label="הצעה ליצירת קשר"
     >
       <div className="container-luxury pb-4 md:pb-6 px-24 md:px-24">
-        <div className="relative overflow-hidden rounded-full border border-border shadow-luxury px-3 md:px-4 py-2 md:py-3 flex items-center justify-between gap-2 md:gap-6 bg-background/95 backdrop-blur-md max-w-md md:max-w-none mx-auto">
+        <div className="relative overflow-hidden rounded-sm border border-border shadow-luxury px-3 md:px-4 py-2 md:py-3 flex items-center justify-between gap-2 md:gap-6 bg-background/95 backdrop-blur-md max-w-md md:max-w-none mx-auto">
             <button
               type="button"
               onClick={handleDismiss}
               aria-label="סגירה"
-              className="relative z-10 w-7 h-7 md:w-8 md:h-8 shrink-0 rounded-full flex items-center justify-center text-foreground/70 hover:text-foreground hover:bg-white/30 transition-smooth"
+              className="relative z-10 w-7 h-7 md:w-8 md:h-8 shrink-0 rounded-sm flex items-center justify-center text-foreground/70 hover:text-foreground hover:bg-foreground/10 transition-smooth"
             >
               <X className="w-3.5 h-3.5 md:w-4 md:h-4" />
             </button>
@@ -60,7 +60,7 @@ const StickyCTA = () => {
 
             <Link
               to="/contact"
-              className="relative z-10 shrink-0 inline-flex items-center gap-1.5 md:gap-2 bg-accent/90 hover:bg-accent text-accent-foreground px-3 md:px-6 py-1.5 md:py-2.5 rounded-full text-xs md:text-base font-medium tracking-wide transition-smooth shadow-soft backdrop-blur-sm"
+              className="relative z-10 shrink-0 inline-flex items-center gap-1.5 md:gap-2 bg-accent/90 hover:bg-accent text-accent-foreground px-3 md:px-6 py-1.5 md:py-2.5 rounded-sm text-xs md:text-base font-medium tracking-wide transition-smooth shadow-soft backdrop-blur-sm"
             >
               השאירו פרטים
               <ArrowLeft className="w-3.5 h-3.5 md:w-4 md:h-4" />

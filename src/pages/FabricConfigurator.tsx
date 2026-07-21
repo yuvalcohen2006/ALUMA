@@ -65,7 +65,7 @@ const FabricConfigurator = () => {
             <h1 className="font-display text-4xl md:text-6xl text-primary mt-3 mb-4">
               בחרו את הבד למניפה שלכם
             </h1>
-            <p className="text-primary/70 max-w-2xl mx-auto leading-relaxed">
+            <p className="text-foreground max-w-2xl mx-auto leading-relaxed">
               כל הבדים מתוך מניפת Sunbrella המקורית, עמידים ב-UV, דוחי מים,
               אחריות 5 שנים. בחרו משפחה, לחצו על דגימה, וראו מיד איך הספה תיראה
               עם הבד שבחרתם.
@@ -75,7 +75,7 @@ const FabricConfigurator = () => {
           <div className="grid lg:grid-cols-5 gap-8">
             {/* LEFT: Live preview */}
             <div className="lg:col-span-3 lg:sticky lg:top-28 self-start">
-              <div className="relative bg-gradient-to-b from-secondary/40 to-background border border-border rounded-sm overflow-hidden shadow-soft">
+              <div className="relative bg-secondary border border-border rounded-sm overflow-hidden shadow-soft">
                 <div className="relative">
                   <img
                     src={sofaAsset.url}
@@ -120,10 +120,10 @@ const FabricConfigurator = () => {
                     <div className="text-[10px] tracking-[0.25em] uppercase text-accent">
                       Sunbrella · {selected.family}
                     </div>
-                    <div className="font-display text-xl text-primary mt-1">
+                    <div className="font-display text-xl text-foreground mt-1">
                       {selected.nameHe}
                     </div>
-                    <div className="text-xs text-primary/60 mt-0.5" dir="ltr">
+                    <div className="text-xs text-muted-foreground mt-0.5" dir="ltr">
                       {selected.name} · {selected.code}
                     </div>
                   </div>
@@ -157,7 +157,7 @@ const FabricConfigurator = () => {
                 ].map((s) => (
                   <div
                     key={s}
-                    className="bg-secondary/40 border border-border rounded-sm p-3 text-center text-xs text-primary/80"
+                    className="bg-secondary/40 border border-border rounded-sm p-3 text-center text-xs text-muted-foreground"
                   >
                     <Sparkles className="h-3.5 w-3.5 inline text-accent mr-1" />
                     {s}
@@ -177,7 +177,7 @@ const FabricConfigurator = () => {
                     className={`px-4 py-2 rounded-sm text-sm font-medium transition-smooth border ${
                       family === fam
                         ? "bg-primary text-primary-foreground border-primary"
-                        : "bg-background text-primary border-border hover:border-primary/60"
+                        : "bg-background text-foreground border-border hover:border-primary/60"
                     }`}
                   >
                     {familyLabelsHe[fam]}
@@ -185,7 +185,7 @@ const FabricConfigurator = () => {
                 ))}
               </div>
 
-              <div className="text-xs text-primary/60 mb-3">
+              <div className="text-xs text-muted-foreground mb-3">
                 {filtered.length} דגימות במשפחה זו
               </div>
 
@@ -210,11 +210,11 @@ const FabricConfigurator = () => {
                         style={{ background: f.background }}
                       />
                       {isActive && (
-                        <span className="absolute top-1.5 right-1.5 bg-accent text-accent-foreground rounded-full p-1">
+                        <span className="absolute top-1.5 right-1.5 bg-accent text-accent-foreground rounded-sm p-1">
                           <Check className="h-3 w-3" />
                         </span>
                       )}
-                      <span className="absolute inset-x-0 bottom-0 bg-background/85 backdrop-blur-sm text-[10px] text-primary text-center py-1 leading-tight">
+                      <span className="absolute inset-x-0 bottom-0 bg-background/85 backdrop-blur-sm text-[10px] text-foreground text-center py-1 leading-tight">
                         {f.nameHe}
                       </span>
                     </button>
@@ -222,7 +222,7 @@ const FabricConfigurator = () => {
                 })}
               </div>
 
-              <p className="text-[11px] text-primary/55 mt-5 leading-relaxed">
+              <p className="text-[11px] text-muted-foreground mt-5 leading-relaxed">
                 * הצבעים על המסך הם קירוב חזותי. הגוון, המרקם והמשקל הסופיים
                 נקבעים מול המניפה הפיזית, נשמח להביא אליכם אותה בפגישה.
               </p>

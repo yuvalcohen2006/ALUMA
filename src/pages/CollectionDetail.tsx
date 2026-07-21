@@ -160,7 +160,7 @@ const CollectionDetailPage = () => {
       <section className="pb-8 md:pb-12 bg-background">
         <div className="container-luxury text-center">
           {item.tag && (
-            <div className="inline-block px-3 py-1 mb-4 bg-secondary text-primary text-[11px] tracking-[0.35em] uppercase rounded-full">
+            <div className="inline-block px-3 py-1 mb-4 bg-secondary text-foreground text-[11px] tracking-[0.35em] uppercase rounded-sm">
               {item.tag}
             </div>
           )}
@@ -177,7 +177,7 @@ const CollectionDetailPage = () => {
             />
           </div>
           {item.tagline && (
-            <p className="text-base md:text-lg italic font-light text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-base md:text-lg italic font-normal text-muted-foreground max-w-2xl mx-auto">
               {item.tagline}
             </p>
           )}
@@ -194,7 +194,7 @@ const CollectionDetailPage = () => {
                 <SectionLabel he="על המוצר" en="The Piece" className="text-xs justify-start mb-5" />
                 <div className="space-y-5">
                   {item.description.map((p, i) => (
-                    <p key={i} className="text-foreground/85 font-light leading-loose text-[16px]">
+                    <p key={i} className="text-foreground/85 font-normal leading-loose text-[16px]">
                       {p}
                     </p>
                   ))}
@@ -211,7 +211,7 @@ const CollectionDetailPage = () => {
                   {item.highlights.map((h) => (
                     <li key={h.title} className="flex gap-3">
                       <Check className="w-4 h-4 text-accent mt-1 shrink-0" />
-                      <div className="text-primary font-light text-[15px] leading-relaxed">
+                      <div className="text-foreground font-normal text-[15px] leading-relaxed">
                         {h.title}{h.desc && <span className="text-muted-foreground">, {h.desc}</span>}
                       </div>
                     </li>
@@ -229,10 +229,10 @@ const CollectionDetailPage = () => {
                       <div className="text-[11px] tracking-[0.3em] uppercase text-muted-foreground mb-2">
                         חומרים
                       </div>
-                      <div className="text-primary font-light text-[15px] leading-relaxed space-y-1">
+                      <div className="text-foreground font-normal text-[15px] leading-relaxed space-y-1">
                         {item.materials.map((m, i) => (
                           <div key={i} className="flex items-center gap-2">
-                            <span className="w-1 h-1 rounded-full bg-accent shrink-0" />
+                            <span className="w-1 h-1 rounded-sm bg-accent shrink-0" />
                             <span>{m}</span>
                           </div>
                         ))}
@@ -247,7 +247,7 @@ const CollectionDetailPage = () => {
                       <div className="text-[11px] tracking-[0.3em] uppercase text-muted-foreground mb-2">
                         מידות בסיס
                       </div>
-                      <div className="text-primary font-light text-[15px] leading-relaxed">
+                      <div className="text-foreground font-normal text-[15px] leading-relaxed">
                         {item.dimensions}
                       </div>
                     </div>
@@ -337,10 +337,10 @@ const CollectionDetailPage = () => {
       <section className="py-20 md:py-24 gradient-cream">
         <div className="container-luxury text-center">
           <SectionLabel he="מגשימים חלום" en="Your Space" className="text-xs mb-6" />
-          <h2 className="font-display text-3xl md:text-5xl text-primary font-light mb-5 leading-tight">
+          <h2 className="font-display text-3xl md:text-5xl text-foreground font-light mb-5 leading-tight">
             השאירו פרטים
           </h2>
-          <p className="text-muted-foreground font-light max-w-xl mx-auto mb-10 leading-relaxed">
+          <p className="text-muted-foreground font-normal max-w-xl mx-auto mb-10 leading-relaxed">
             כל פרויקט מתוכנן ומיוצר בהתאם לאופי המרחב עד לפרטים הקטנים ביותר.
           </p>
           <Button asChild size="lg" className="rounded-sm tracking-wider">
@@ -375,12 +375,12 @@ const CollectionDetailPage = () => {
                       />
                     )}
                     {c.tag && (
-                      <div className="absolute top-4 right-4 px-3 py-1 bg-background/90 backdrop-blur-sm rounded-full text-xs tracking-wider text-primary font-medium">
+                      <div className="absolute top-4 right-4 px-3 py-1 bg-background/90 backdrop-blur-sm rounded-sm text-xs tracking-wider text-foreground font-medium">
                         {c.tag}
                       </div>
                     )}
                   </div>
-                  <h3 className="font-display text-xl text-primary group-hover:text-accent transition-smooth flex items-center gap-2">
+                  <h3 className="font-display text-xl text-foreground group-hover:text-accent transition-smooth flex items-center gap-2">
                     {c.name}
                     <ArrowLeft className="w-4 h-4" />
                   </h3>

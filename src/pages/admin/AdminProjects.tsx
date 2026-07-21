@@ -152,7 +152,7 @@ const AdminProjects = () => {
     <AdminLayout>
       <header className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="font-display text-3xl text-primary">פרויקטים</h1>
+          <h1 className="font-display text-3xl text-foreground">פרויקטים</h1>
           <p className="text-muted-foreground mt-1">ניהול הפרויקטים שמוצגים באתר</p>
         </div>
         <Button onClick={() => setEditing({ ...empty })}>
@@ -277,7 +277,7 @@ const AdminProjects = () => {
                             gallery: (editing.gallery as string[]).filter((_, idx) => idx !== i),
                           })
                         }
-                        className="absolute top-1 left-1 bg-destructive text-destructive-foreground rounded-full p-1"
+                        className="absolute top-1 left-1 bg-destructive text-destructive-foreground rounded-sm p-1"
                       >
                         <X className="w-3 h-3" />
                       </button>

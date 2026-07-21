@@ -35,7 +35,7 @@ const CategoryRow = ({
             {col.name_he}
           </h2>
           {col.intro && (
-            <p className="text-muted-foreground font-light leading-relaxed mt-4">{col.intro}</p>
+            <p className="text-muted-foreground font-normal leading-relaxed mt-4">{col.intro}</p>
           )}
         </div>
 
@@ -66,7 +66,7 @@ const CategoryRow = ({
                         />
                       )}
                       {p.tag && (
-                        <div className="absolute top-4 right-4 px-3 py-1 bg-background/90 backdrop-blur-sm rounded-full text-xs tracking-wider text-primary font-medium">
+                        <div className="absolute top-4 right-4 px-3 py-1 bg-background/90 backdrop-blur-sm rounded-sm text-xs tracking-wider text-foreground font-medium">
                           {p.tag}
                         </div>
                       )}
@@ -76,7 +76,7 @@ const CategoryRow = ({
                         {p.name}
                       </h3>
                       {p.tagline && (
-                        <p className="text-muted-foreground text-sm font-light mt-2 leading-relaxed">
+                        <p className="text-muted-foreground text-sm font-normal mt-2 leading-relaxed">
                           {p.tagline}
                         </p>
                       )}
@@ -95,7 +95,7 @@ const CategoryRow = ({
               <button
                 onClick={() => scrollBy(1)}
                 aria-label="הקודם"
-                className="inline-flex items-center gap-2 h-11 px-5 rounded-full border border-primary/30 text-primary hover:bg-primary hover:text-primary-foreground transition-smooth text-sm tracking-wider"
+                className="inline-flex items-center gap-2 h-11 px-5 rounded-sm border border-primary/30 text-primary hover:bg-primary hover:text-primary-foreground transition-smooth text-sm tracking-wider"
               >
                 <ArrowRight className="w-4 h-4" />
                 <span>הקודם</span>
@@ -103,7 +103,7 @@ const CategoryRow = ({
               <button
                 onClick={() => scrollBy(-1)}
                 aria-label="הבא"
-                className="inline-flex items-center gap-2 h-11 px-5 rounded-full border border-primary/30 text-primary hover:bg-primary hover:text-primary-foreground transition-smooth text-sm tracking-wider"
+                className="inline-flex items-center gap-2 h-11 px-5 rounded-sm border border-primary/30 text-primary hover:bg-primary hover:text-primary-foreground transition-smooth text-sm tracking-wider"
               >
                 <span>הבא</span>
                 <ArrowLeft className="w-4 h-4" />
@@ -159,7 +159,7 @@ const CollectionsPage = () => {
       <section className="pt-32 pb-12 md:pt-40 md:pb-16 gradient-cream">
         <div className="container-luxury text-center">
           <SectionLabel he="קולקציות" en="Collections" className="text-xs mb-5" />
-          <h1 className="font-display text-3xl md:text-5xl text-primary font-light tracking-wide mb-6">
+          <h1 className="font-display text-3xl md:text-5xl text-foreground font-light tracking-wide mb-6">
             {visible.length === 1 ? visible[0].name_he : "כל הקולקציות במקום אחד"}
           </h1>
           <div className="w-16 h-px bg-primary/30 mx-auto mb-6" />
@@ -172,7 +172,7 @@ const CollectionsPage = () => {
                   className={`font-display text-lg md:text-xl transition-smooth border-b pb-1 ${
                     activeHash === c.slug
                       ? "text-accent border-accent"
-                      : "text-primary hover:text-accent border-primary/30 hover:border-accent"
+                      : "text-foreground hover:text-accent border-primary/30 hover:border-accent"
                   }`}
                 >
                   {c.name_he}

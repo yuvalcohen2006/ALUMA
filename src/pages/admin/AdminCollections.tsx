@@ -509,7 +509,7 @@ const AdminCollections = () => {
     <AdminLayout>
       <header className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="font-display text-3xl text-primary">קולקציות ומוצרים</h1>
+          <h1 className="font-display text-3xl text-foreground">קולקציות ומוצרים</h1>
           <p className="text-muted-foreground mt-1">
             גררו בעזרת החצים כדי לשנות סדר. כתובת ה-URL נוצרת אוטומטית מהשם.
           </p>
@@ -809,7 +809,7 @@ const AdminCollections = () => {
                             gallery: (editProd.gallery as string[]).filter((_, idx) => idx !== i),
                           })
                         }
-                        className="absolute top-1 left-1 bg-destructive text-destructive-foreground rounded-full p-1"
+                        className="absolute top-1 left-1 bg-destructive text-destructive-foreground rounded-sm p-1"
                       >
                         <X className="w-3 h-3" />
                       </button>

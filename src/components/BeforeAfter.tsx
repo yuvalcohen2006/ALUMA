@@ -91,10 +91,10 @@ const BeforeAfter = ({
       </div>
 
       {/* Labels */}
-      <div className="absolute top-4 left-4 px-3 py-1 bg-background/85 backdrop-blur-sm rounded-full text-[11px] tracking-[0.2em] uppercase text-primary font-medium pointer-events-none">
+      <div className="absolute top-4 left-4 px-3 py-1 bg-background/85 backdrop-blur-sm rounded-sm text-[11px] tracking-[0.2em] uppercase text-foreground font-medium pointer-events-none">
         {beforeAlt}
       </div>
-      <div className="absolute top-4 right-4 px-3 py-1 bg-primary/90 text-primary-foreground rounded-full text-[11px] tracking-[0.2em] uppercase font-medium pointer-events-none">
+      <div className="absolute top-4 right-4 px-3 py-1 bg-primary/90 text-primary-foreground rounded-sm text-[11px] tracking-[0.2em] uppercase font-medium pointer-events-none">
         {afterAlt}
       </div>
 
@@ -120,7 +120,7 @@ const BeforeAfter = ({
           e.stopPropagation();
           setDragging(true);
         }}
-        className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-12 h-12 rounded-full bg-background shadow-luxury border border-primary/30 flex items-center justify-center cursor-ew-resize hover:scale-110 transition-transform focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+        className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-12 h-12 rounded-sm bg-background shadow-luxury border border-primary/30 flex items-center justify-center cursor-ew-resize hover:scale-110 transition-transform focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
         style={{ left: `${pos}%` }}
       >
         <ChevronLeft className="w-4 h-4 text-primary" />

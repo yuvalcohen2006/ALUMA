@@ -123,7 +123,7 @@ const AdminOrders = () => {
     <AdminLayout>
       <header className="flex items-center justify-between flex-wrap gap-4 mb-8">
         <div>
-          <p className="text-[10px] tracking-[0.3em] text-primary uppercase mb-1">Orders</p>
+          <p className="text-[10px] tracking-[0.3em] text-foreground uppercase mb-1">Orders</p>
           <h1 className="font-display text-3xl">הזמנות לקוחות</h1>
           <p className="text-sm text-muted-foreground mt-1">כאן הלקוח רואה את סטטוס ההזמנה שלו באזור האישי</p>
         </div>
@@ -152,7 +152,7 @@ const AdminOrders = () => {
                   </p>
                 </div>
                 <div className="flex gap-2">
-                  <span className="text-xs px-2 py-1 rounded-full bg-accent/10 text-accent">
+                  <span className="text-xs px-2 py-1 rounded-sm bg-accent/10 text-accent">
                     {statusOptions.find((s) => s.value === o.status)?.label}
                   </span>
                   <Button size="sm" variant="ghost" onClick={() => setEditing(o)}>
@@ -173,7 +173,7 @@ const AdminOrders = () => {
               {o.next_milestone && (
                 <p className="mt-3 text-sm flex items-center gap-2 text-muted-foreground">
                   <Calendar className="w-4 h-4 text-accent" />
-                  אבן דרך: <strong className="text-primary">{o.next_milestone}</strong>
+                  אבן דרך: <strong className="text-foreground">{o.next_milestone}</strong>
                   {o.next_milestone_date && (
                     <span className="text-xs">({new Date(o.next_milestone_date).toLocaleDateString("he-IL")})</span>
                   )}

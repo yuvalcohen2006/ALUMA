@@ -48,7 +48,7 @@ const ProjectsGrid = () => {
           <SectionLabel
             he="עבודות נבחרות"
             en="Selected Works"
-            className="text-xs text-primary justify-center"
+            className="text-xs text-foreground justify-center"
           />
         </div>
       </div>
@@ -87,7 +87,7 @@ const ProjectsGrid = () => {
                       <div className="text-[11px] tracking-[0.25em] uppercase text-muted-foreground mb-1">
                         {p.location}
                       </div>
-                      <h3 className="font-display text-lg md:text-xl lg:text-2xl font-light text-primary/90">
+                      <h3 className="font-display text-lg md:text-xl lg:text-2xl font-light text-foreground">
                         {p.name}
                       </h3>
                     </div>
@@ -102,7 +102,7 @@ const ProjectsGrid = () => {
             onClick={() => emblaApi?.scrollPrev()}
             disabled={!canPrev}
             aria-label="הקודם"
-            className="hidden md:flex absolute right-3 lg:right-6 top-1/2 -translate-y-1/2 z-10 h-12 w-12 lg:h-14 lg:w-14 rounded-full bg-background/90 backdrop-blur border border-primary/30 items-center justify-center text-primary hover:bg-primary hover:text-primary-foreground disabled:opacity-30 disabled:cursor-not-allowed transition-smooth shadow-soft"
+            className="hidden md:flex absolute right-3 lg:right-6 top-1/2 -translate-y-1/2 z-10 h-12 w-12 lg:h-14 lg:w-14 rounded-sm bg-background/90 backdrop-blur border border-primary/30 items-center justify-center text-primary hover:bg-primary hover:text-primary-foreground disabled:opacity-30 disabled:cursor-not-allowed transition-smooth shadow-soft"
           >
             <ArrowRight className="w-5 h-5" />
           </button>
@@ -110,7 +110,7 @@ const ProjectsGrid = () => {
             onClick={() => emblaApi?.scrollNext()}
             disabled={!canNext}
             aria-label="הבא"
-            className="hidden md:flex absolute left-3 lg:left-6 top-1/2 -translate-y-1/2 z-10 h-12 w-12 lg:h-14 lg:w-14 rounded-full bg-background/90 backdrop-blur border border-primary/30 items-center justify-center text-primary hover:bg-primary hover:text-primary-foreground disabled:opacity-30 disabled:cursor-not-allowed transition-smooth shadow-soft"
+            className="hidden md:flex absolute left-3 lg:left-6 top-1/2 -translate-y-1/2 z-10 h-12 w-12 lg:h-14 lg:w-14 rounded-sm bg-background/90 backdrop-blur border border-primary/30 items-center justify-center text-primary hover:bg-primary hover:text-primary-foreground disabled:opacity-30 disabled:cursor-not-allowed transition-smooth shadow-soft"
           >
             <ArrowLeft className="w-5 h-5" />
           </button>
@@ -125,14 +125,14 @@ const ProjectsGrid = () => {
             onClick={() => emblaApi?.scrollPrev()}
             disabled={!canPrev}
             aria-label="הקודם"
-            className="md:hidden h-10 w-10 shrink-0 rounded-full border border-primary/30 flex items-center justify-center text-primary disabled:opacity-30 transition-smooth"
+            className="md:hidden h-10 w-10 shrink-0 rounded-sm border border-primary/30 flex items-center justify-center text-primary disabled:opacity-30 transition-smooth"
           >
             <ArrowRight className="w-4 h-4" />
           </button>
 
           {/* Progress bar */}
           <div
-            className="relative flex-1 h-[2px] bg-primary/15 rounded-full overflow-hidden"
+            className="relative flex-1 h-[2px] bg-primary/15 rounded-sm overflow-hidden"
             role="progressbar"
             aria-valuemin={0}
             aria-valuemax={100}
@@ -140,14 +140,14 @@ const ProjectsGrid = () => {
             aria-label="מיקום בקרוסלה"
           >
             <div
-              className="absolute top-0 right-0 h-full bg-primary rounded-full transition-[width] duration-300"
+              className="absolute top-0 right-0 h-full bg-primary rounded-sm transition-[width] duration-300"
               style={{ width: `${Math.max(8, progress * 100)}%` }}
             />
           </div>
 
           {/* Count */}
           <div
-            className="text-xs tracking-[0.25em] text-primary tabular-nums shrink-0"
+            className="text-xs tracking-[0.25em] text-foreground tabular-nums shrink-0"
             dir="ltr"
             aria-live="polite"
           >
@@ -160,7 +160,7 @@ const ProjectsGrid = () => {
             onClick={() => emblaApi?.scrollNext()}
             disabled={!canNext}
             aria-label="הבא"
-            className="md:hidden h-10 w-10 shrink-0 rounded-full border border-primary/30 flex items-center justify-center text-primary disabled:opacity-30 transition-smooth"
+            className="md:hidden h-10 w-10 shrink-0 rounded-sm border border-primary/30 flex items-center justify-center text-primary disabled:opacity-30 transition-smooth"
           >
             <ArrowLeft className="w-4 h-4" />
           </button>

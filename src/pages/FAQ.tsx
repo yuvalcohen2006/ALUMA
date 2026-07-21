@@ -96,11 +96,11 @@ const FAQPage = () => {
               <div key={i} className="py-7 first:pt-0 last:pb-0">
                 <div className="flex items-center gap-3 mb-3">
                   <faq.Icon className="h-5 w-5 shrink-0 text-accent" strokeWidth={1.5} />
-                  <h3 className="font-display text-lg md:text-xl text-primary font-medium tracking-tight">
+                  <h3 className="font-display text-lg md:text-xl text-foreground font-medium tracking-tight">
                     {faq.title}
                   </h3>
                 </div>
-                <p className="text-muted-foreground leading-relaxed text-[15px] font-light">
+                <p className="text-muted-foreground leading-relaxed text-[15px] font-normal">
                   {faq.a}
                 </p>
               </div>

@@ -40,13 +40,13 @@ const CookieConsent = () => {
         >
           <X className="w-4 h-4" />
         </button>
-        <h3 className="font-display text-base md:text-lg text-primary mb-1">
+        <h3 className="font-display text-base md:text-lg text-foreground mb-1">
           העדפות פרטיות
         </h3>
         <p className="text-xs md:text-sm text-muted-foreground leading-relaxed mb-3">
           האתר משתמש בעוגיות לשיפור החוויה ולניתוח תעבורה.
           לפרטים נוספים ראו{" "}
-          <Link to="/privacy" className="text-primary underline underline-offset-2">
+          <Link to="/privacy" className="text-foreground underline underline-offset-2">
             מדיניות הפרטיות
           </Link>
           .

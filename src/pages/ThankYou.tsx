@@ -31,7 +31,7 @@ const ThankYou = () => {
       <Header />
       <main className="min-h-[80vh] flex items-center justify-center px-5 py-20 bg-background">
         <div className="max-w-xl w-full text-center">
-          <div className="mx-auto w-16 h-16 rounded-full bg-accent/15 border border-accent/40 flex items-center justify-center mb-6">
+          <div className="mx-auto w-16 h-16 rounded-sm bg-accent/15 border border-accent/40 flex items-center justify-center mb-6">
             <Check className="w-8 h-8 text-accent" strokeWidth={2.5} />
           </div>
 
@@ -43,7 +43,7 @@ const ThankYou = () => {
           <p className="text-muted-foreground text-base md:text-lg leading-relaxed mb-2">
             קיבלנו את ההודעה ונחזור אליכם בהקדם, בדרך כלל תוך 24 שעות בימי עסקים.
           </p>
-          <p className="text-sm text-primary/70 mb-10">
+          <p className="text-sm text-muted-foreground mb-10">
             בינתיים, אתם מוזמנים להתרשם מהפרויקטים שלנו או לכתוב לנו ישירות בוואטסאפ.
           </p>
 
@@ -69,7 +69,7 @@ const ThankYou = () => {
           <div className="border-t border-border/60 pt-6 flex flex-col sm:flex-row items-center justify-center gap-4 text-sm">
             <Link
               to="/projects"
-              className="text-primary hover:text-accent transition-smooth inline-flex items-center gap-1.5"
+              className="text-foreground hover:text-accent transition-smooth inline-flex items-center gap-1.5"
             >
               צפו בפרויקטים שלנו
               <ArrowLeft className="w-3.5 h-3.5" />

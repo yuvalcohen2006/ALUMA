@@ -141,15 +141,15 @@ const Contact = () => {
                <p className="text-muted-foreground text-base md:text-lg">
                  ספרו לנו מה החלום שלכם ואנחנו נדאג להגשים לכם אותו.
                </p>
-               <div className="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-xs text-primary/80">
+               <div className="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-xs text-foreground">
                  <span className="inline-flex items-center gap-1.5">
-                   <span className="w-1.5 h-1.5 rounded-full bg-accent" /> מענה תוך 24 שעות בימי עסקים
+מענה תוך 24 שעות בימי עסקים
                  </span>
                  <span className="inline-flex items-center gap-1.5">
-                   <span className="w-1.5 h-1.5 rounded-full bg-accent" /> ייעוץ ללא עלות וללא התחייבות
+ייעוץ ללא עלות וללא התחייבות
                  </span>
                  <span className="inline-flex items-center gap-1.5">
-                   <span className="w-1.5 h-1.5 rounded-full bg-accent" /> פרטיכם נשמרים אצלנו בלבד
+פרטיכם נשמרים אצלנו בלבד
                  </span>
                </div>
              </div>
@@ -165,7 +165,7 @@ const Contact = () => {
 
                 <div className="grid sm:grid-cols-3 gap-4">
                   <div>
-                    <label className="block font-display text-lg font-bold text-primary mb-2">
+                    <label className="block font-display text-lg font-bold text-foreground mb-2">
                       שם <span className="text-accent">*</span>
                     </label>
                     <Input
@@ -181,7 +181,7 @@ const Contact = () => {
                     {errors.name && <p className="text-xs text-destructive mt-1">{errors.name}</p>}
                   </div>
                   <div>
-                    <label className="block font-display text-lg font-bold text-primary mb-2">
+                    <label className="block font-display text-lg font-bold text-foreground mb-2">
                       טלפון <span className="text-accent">*</span>
                     </label>
                     <Input
@@ -199,7 +199,7 @@ const Contact = () => {
                     {errors.phone && <p className="text-xs text-destructive mt-1">{errors.phone}</p>}
                   </div>
                   <div>
-                    <label className="block font-display text-lg font-bold text-primary mb-2">מייל</label>
+                    <label className="block font-display text-lg font-bold text-foreground mb-2">מייל</label>
                     <Input
                       name="email"
                       type="email"
@@ -215,7 +215,7 @@ const Contact = () => {
                 </div>
 
                 <div>
-                  <label className="block font-display text-lg font-bold text-primary mb-2">
+                  <label className="block font-display text-lg font-bold text-foreground mb-2">
                     ספרו לנו על הפרויקט שלכם
                   </label>
                   <Textarea
@@ -267,7 +267,7 @@ const Contact = () => {
                    <div className={`flex items-center gap-3 py-3 ${idx !== contactItems.length - 1 ? 'border-b border-border/40' : ''}`}>
                      <Icon className={`w-4 h-4 shrink-0 ${item.accent ? 'text-[#25D366]' : 'text-primary/60'}`} />
                      <div className="text-right flex-1 min-w-0">
-                       <div className="text-sm text-primary leading-snug truncate">
+                       <div className="text-sm text-foreground leading-snug truncate">
                          {item.title}
                        </div>
                        <div className="text-xs text-muted-foreground truncate">
@@ -287,13 +287,13 @@ const Contact = () => {
              </div>
 
              <div className="mt-6 pt-5 border-t border-border/40 text-right">
-               <div className="flex items-center justify-start gap-2 text-primary mb-2">
+               <div className="flex items-center justify-start gap-2 text-foreground mb-2">
                  <span className="font-display text-sm font-normal">
                    שעות פעילות
                  </span>
                  <Clock className="w-3.5 h-3.5 text-primary/50" />
                </div>
-               <div className="space-y-1 text-primary">
+               <div className="space-y-1 text-foreground">
                  <div className="flex justify-between gap-4 text-xs text-muted-foreground">
                    <span>א׳ – ה׳</span>
                    <span dir="ltr">08:30 – 18:00</span>

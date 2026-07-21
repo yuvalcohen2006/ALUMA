@@ -154,8 +154,8 @@ const AuthPage = () => {
                 <div className="w-16 h-px bg-primary-foreground/40 mb-6" />
                 <ul className="space-y-4">
                   {sidePerks.map(({ icon: Icon, text }) => (
-                    <li key={text} className="flex items-start gap-3 text-sm opacity-95 font-light leading-relaxed">
-                      <span className="mt-0.5 inline-flex items-center justify-center w-8 h-8 rounded-full bg-primary-foreground/10 backdrop-blur border border-primary-foreground/20 shrink-0">
+                    <li key={text} className="flex items-start gap-3 text-sm opacity-95 font-normal leading-relaxed">
+                      <span className="mt-0.5 inline-flex items-center justify-center w-8 h-8 rounded-sm bg-primary-foreground/10 backdrop-blur border border-primary-foreground/20 shrink-0">
                         <Icon className="w-4 h-4" />
                       </span>
                       <span>{text}</span>
@@ -175,20 +175,20 @@ const AuthPage = () => {
                 {/* Mobile logo */}
                 <div className="lg:hidden text-center mb-8">
                   <img src={alumaLogo} alt="Aluma" className="h-12 w-auto mx-auto mb-2" />
-                  <p className="text-[10px] tracking-[0.4em] uppercase text-primary/60">
+                  <p className="text-[10px] tracking-[0.4em] uppercase text-foreground">
                     Aluma Private Club
                   </p>
                 </div>
 
                 {/* Mode toggle pills */}
-                <div className="inline-flex w-full rounded-full bg-secondary/60 p-1 mb-8 border border-border">
+                <div className="inline-flex w-full rounded-sm bg-secondary/60 p-1 mb-8 border border-border">
                   <button
                     type="button"
                     onClick={() => setMode("signup")}
-                    className={`flex-1 py-2.5 text-sm rounded-full transition-smooth ${
+                    className={`flex-1 py-2.5 text-sm rounded-sm transition-smooth ${
                       isSignup
-                        ? "bg-background shadow-soft text-primary font-medium"
-                        : "text-primary/60 hover:text-primary"
+                        ? "bg-background shadow-soft text-foreground font-medium"
+                        : "text-muted-foreground hover:text-foreground"
                     }`}
                   >
                     הצטרפות
@@ -196,10 +196,10 @@ const AuthPage = () => {
                   <button
                     type="button"
                     onClick={() => setMode("signin")}
-                    className={`flex-1 py-2.5 text-sm rounded-full transition-smooth ${
+                    className={`flex-1 py-2.5 text-sm rounded-sm transition-smooth ${
                       !isSignup
-                        ? "bg-background shadow-soft text-primary font-medium"
-                        : "text-primary/60 hover:text-primary"
+                        ? "bg-background shadow-soft text-foreground font-medium"
+                        : "text-muted-foreground hover:text-foreground"
                     }`}
                   >
                     התחברות
@@ -209,7 +209,7 @@ const AuthPage = () => {
                 <h1 className="font-display text-3xl md:text-4xl text-primary mb-2 leading-tight">
                   {isSignup ? "ברוכים הבאים למועדון" : "ברוכים השבים"}
                 </h1>
-                <p className="text-sm text-muted-foreground mb-8 font-light leading-relaxed">
+                <p className="text-sm text-muted-foreground mb-8 font-normal leading-relaxed">
                   {isSignup
                     ? "דקה אחת, ואתם בפנים. חינם, ללא התחייבות."
                     : "טוב לראות אתכם שוב. התחברו כדי להמשיך."}
@@ -220,7 +220,7 @@ const AuthPage = () => {
                   variant="outline"
                   onClick={onGoogle}
                   disabled={googleBusy}
-                  className="w-full h-11 rounded-full flex items-center justify-center gap-3 border-primary/25 hover:border-primary hover:bg-secondary/40"
+                  className="w-full h-11 rounded-sm flex items-center justify-center gap-3 border-primary/25 hover:border-primary hover:bg-secondary/40"
                 >
                   <GoogleIcon />
                   <span className="text-sm">
@@ -238,7 +238,7 @@ const AuthPage = () => {
                   {isSignup && (
                     <>
                       <div className="space-y-1.5">
-                        <Label htmlFor="fullName" className="text-xs text-primary/70">שם מלא</Label>
+                        <Label htmlFor="fullName" className="text-xs text-foreground">שם מלא</Label>
                         <Input
                           id="fullName"
                           value={fullName}
@@ -249,7 +249,7 @@ const AuthPage = () => {
                         />
                       </div>
                       <div className="space-y-1.5">
-                        <Label htmlFor="phone" className="text-xs text-primary/70">טלפון</Label>
+                        <Label htmlFor="phone" className="text-xs text-foreground">טלפון</Label>
                         <Input
                           id="phone"
                           type="tel"
@@ -263,7 +263,7 @@ const AuthPage = () => {
                     </>
                   )}
                   <div className="space-y-1.5">
-                    <Label htmlFor="email" className="text-xs text-primary/70">אימייל</Label>
+                    <Label htmlFor="email" className="text-xs text-foreground">אימייל</Label>
                     <Input
                       id="email"
                       type="email"
@@ -276,7 +276,7 @@ const AuthPage = () => {
                     />
                   </div>
                   <div className="space-y-1.5">
-                    <Label htmlFor="password" className="text-xs text-primary/70">סיסמה</Label>
+                    <Label htmlFor="password" className="text-xs text-foreground">סיסמה</Label>
                     <Input
                       id="password"
                       type="password"
@@ -292,7 +292,7 @@ const AuthPage = () => {
                   <Button
                     type="submit"
                     disabled={busy}
-                    className="w-full h-11 rounded-full shadow-luxury group"
+                    className="w-full h-11 rounded-sm shadow-luxury group"
                   >
                     {busy ? "רגע..." : isSignup ? "להצטרפות למועדון" : "התחברות"}
                     {!busy && (
@@ -303,11 +303,11 @@ const AuthPage = () => {
 
                 <p className="text-[11px] text-muted-foreground text-center mt-6 leading-relaxed">
                   בהצטרפות אתם מאשרים את{" "}
-                  <Link to="/terms" className="text-primary hover:text-accent underline underline-offset-2">
+                  <Link to="/terms" className="text-foreground hover:text-accent underline underline-offset-2">
                     תנאי השימוש
                   </Link>{" "}
                   ואת{" "}
-                  <Link to="/privacy" className="text-primary hover:text-accent underline underline-offset-2">
+                  <Link to="/privacy" className="text-foreground hover:text-accent underline underline-offset-2">
                     מדיניות הפרטיות
                   </Link>
                   .
@@ -315,7 +315,7 @@ const AuthPage = () => {
 
                 <Link
                   to="/club"
-                  className="mt-6 block text-center text-xs text-primary/60 hover:text-accent tracking-[0.15em] uppercase"
+                  className="mt-6 block text-center text-xs text-muted-foreground hover:text-accent tracking-[0.15em] uppercase"
                 >
                   ← על המועדון
                 </Link>

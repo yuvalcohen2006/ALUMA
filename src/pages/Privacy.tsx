@@ -13,7 +13,7 @@ const PrivacyPage = () => {
       <section className="pt-32 pb-12 md:pt-40 gradient-cream">
         <div className="container-luxury text-center">
           <SectionLabel he="פרטיות" en="Privacy" className="text-xs mb-5" />
-          <h1 className="font-display text-3xl sm:text-4xl md:text-5xl text-primary leading-tight">
+          <h1 className="font-display text-3xl sm:text-4xl md:text-5xl text-foreground leading-tight">
             מדיניות <span className="italic">פרטיות</span>
           </h1>
           <div className="w-16 h-px bg-primary/30 mx-auto mt-8" />
@@ -80,7 +80,7 @@ const PrivacyPage = () => {
               בהתאם לחוק הגנת הפרטיות, התשמ״א-1981, עומדת לכם הזכות לעיין במידע
               האישי שמוחזק עליכם, לבקש את תיקונו או מחיקתו, ולהסיר עצמכם מרשימת
               דיוור. לפניות בנושא:{" "}
-              <a href="mailto:info@aluma.co.il" className="text-primary hover:text-accent" dir="ltr">
+              <a href="mailto:info@aluma.co.il" className="text-foreground underline hover:text-accent" dir="ltr">
                 info@aluma.co.il
               </a>
               .

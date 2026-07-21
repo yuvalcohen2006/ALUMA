@@ -51,7 +51,7 @@ const BlogPost = () => {
     return (
       <Layout>
         <section className="pt-40 pb-20 text-center">
-          <p className="text-primary/70 mb-6">המאמר לא נמצא.</p>
+          <p className="text-foreground mb-6">המאמר לא נמצא.</p>
           <button onClick={() => nav("/blog")} className="text-primary underline">
             חזרה למגזין
           </button>
@@ -86,7 +86,7 @@ const BlogPost = () => {
             </div>
           )}
           <div
-            className="prose prose-lg max-w-none text-center text-primary/90 leading-relaxed [&>h2]:font-display [&>h2]:text-2xl [&>h2]:mt-10 [&>h2]:mb-4 [&>h2]:text-primary [&>h2]:text-center [&>h3]:text-center [&>p]:mb-5 [&>p]:text-center [&>ul]:list-none [&>ul]:p-0 [&>ul]:mb-5 [&>ul>li]:mb-2 [&>ul>li]:text-center"
+            className="prose prose-lg max-w-none text-center text-foreground leading-relaxed [&>h2]:font-display [&>h2]:text-2xl [&>h2]:mt-10 [&>h2]:mb-4 [&>h2]:text-primary [&>h2]:text-center [&>h3]:text-center [&>p]:mb-5 [&>p]:text-center [&>ul]:list-none [&>ul]:p-0 [&>ul]:mb-5 [&>ul>li]:mb-2 [&>ul>li]:text-center"
             dangerouslySetInnerHTML={{
               __html: DOMPurify.sanitize(
                 /<\/?[a-z][\s\S]*>/i.test(post.content)

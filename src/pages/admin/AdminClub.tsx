@@ -102,7 +102,7 @@ const AdminClub = () => {
     <AdminLayout>
       <header className="flex items-center justify-between flex-wrap gap-4 mb-8">
         <div>
-          <p className="text-[10px] tracking-[0.3em] text-primary uppercase mb-1">Aluma Club</p>
+          <p className="text-[10px] tracking-[0.3em] text-foreground uppercase mb-1">Aluma Club</p>
           <h1 className="font-display text-3xl flex items-center gap-3">
             <Crown className="w-7 h-7 text-primary" />
             ניהול מועדון

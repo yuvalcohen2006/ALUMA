@@ -51,7 +51,7 @@ const FavoriteButton = ({ productId, collectionSlug, className, size = "md", var
         aria-label={active ? "הסר מהמועדפים" : "הוסף למועדפים"}
         aria-pressed={active}
         className={cn(
-          "inline-flex items-center justify-center rounded-full transition-all",
+          "inline-flex items-center justify-center rounded-sm transition-all",
           variant === "floating"
             ? "bg-background/90 backdrop-blur-sm shadow-soft hover:bg-background hover:scale-110"
             : "border border-border hover:border-accent",

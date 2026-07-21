@@ -55,19 +55,19 @@ const Club = () => {
   const ctaBlock = (
     <div className="flex flex-col sm:flex-row gap-3 justify-center">
       {user ? (
-        <Button asChild size="lg" className="rounded-full px-8 shadow-luxury">
+        <Button asChild size="lg" className="rounded-sm px-8 shadow-luxury">
           <Link to="/club/dashboard">לאזור האישי שלי</Link>
         </Button>
       ) : (
         <>
-          <Button asChild size="lg" className="rounded-full px-8 shadow-luxury">
+          <Button asChild size="lg" className="rounded-sm px-8 shadow-luxury">
             <Link to="/club/auth?mode=signup">הצטרפות חינם למועדון</Link>
           </Button>
           <Button
             asChild
             size="lg"
             variant="outline"
-            className="rounded-full px-8 border-primary/40"
+            className="rounded-sm px-8 border-primary/40"
           >
             <Link to="/club/auth">כבר חבר? התחברות</Link>
           </Button>
@@ -90,9 +90,8 @@ const Club = () => {
           <div className="max-w-3xl mx-auto text-center animate-rise-in">
             <h1 className="sr-only">מועדון אלומה</h1>
 
-            <div className="inline-flex items-center gap-3 bg-background/80 backdrop-blur border border-primary/15 rounded-full px-5 py-2 mb-8 shadow-soft">
-              <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
-              <span className="text-[11px] tracking-[0.35em] uppercase text-primary/70">
+            <div className="inline-flex items-center gap-3 bg-background/80 backdrop-blur border border-primary/15 rounded-sm px-5 py-2 mb-8 shadow-soft">
+              <span className="text-[11px] tracking-[0.35em] uppercase text-foreground">
                 Aluma Private Club · הצטרפות חינם
               </span>
             </div>
@@ -103,7 +102,7 @@ const Club = () => {
               className="h-16 md:h-20 w-auto mx-auto mb-6"
             />
 
-            <h2 className="font-display text-4xl md:text-6xl leading-[1.05] text-primary mb-6 text-balance">
+            <h2 className="font-display text-4xl md:text-6xl leading-[1.05] text-foreground mb-6 text-balance">
               עולם שקט של שירות,
               <br />
               <span className="text-accent">שנתפר במידה שלכם.</span>
@@ -111,7 +110,7 @@ const Club = () => {
 
             <div className="w-24 h-px bg-primary/30 mx-auto mb-6" />
 
-            <p className="text-lg md:text-xl text-muted-foreground font-light leading-relaxed max-w-2xl mx-auto mb-10">
+            <p className="text-lg md:text-xl text-muted-foreground font-normal leading-relaxed max-w-2xl mx-auto mb-10">
               מועדון אלומה הוא לא תוכנית נקודות. זו דלת אחורית לעולם של מעצבים,
               קולקציות מוקדמות ושירות אישי, למי שרואה את החוץ של הבית כמו את הפנים.
             </p>
@@ -125,7 +124,7 @@ const Club = () => {
                   key={s.v}
                   className="border-t border-primary/20 pt-4 text-center"
                 >
-                  <div className="font-display text-2xl md:text-4xl text-primary mb-1">
+                  <div className="font-display text-2xl md:text-4xl text-foreground mb-1">
                     {s.k}
                   </div>
                   <div className="text-[11px] md:text-xs uppercase tracking-[0.2em] text-muted-foreground">
@@ -148,7 +147,7 @@ const Club = () => {
             <h2 className="font-display text-3xl md:text-5xl text-primary mb-4">
               מה מקבלים כשמצטרפים
             </h2>
-            <p className="text-muted-foreground font-light leading-relaxed">
+            <p className="text-muted-foreground font-normal leading-relaxed">
               ארבע הטבות שנבנו סביב איך שלקוחות אלומה באמת עובדים איתנו, מהרגע
               שבחרתם דגם ועד שנים אחרי המסירה.
             </p>
@@ -166,13 +165,13 @@ const Club = () => {
                     0{i + 1}
                   </div>
                   <div className="relative">
-                    <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-accent/10 text-accent mb-6 group-hover:bg-accent group-hover:text-accent-foreground transition-smooth">
+                    <div className="inline-flex items-center justify-center w-14 h-14 rounded-sm bg-accent/10 text-accent mb-6 group-hover:bg-accent group-hover:text-accent-foreground transition-smooth">
                       <Icon className="w-6 h-6" />
                     </div>
-                    <h3 className="font-display text-xl text-primary mb-3">
+                    <h3 className="font-display text-xl text-foreground mb-3">
                       {p.title}
                     </h3>
-                    <p className="text-sm text-muted-foreground leading-relaxed font-light">
+                    <p className="text-sm text-muted-foreground leading-relaxed font-normal">
                       {p.text}
                     </p>
                   </div>
@@ -191,14 +190,14 @@ const Club = () => {
               <p className="text-[11px] tracking-[0.4em] uppercase text-accent mb-4">
                 איך מצטרפים
               </p>
-              <h2 className="font-display text-3xl md:text-5xl text-primary mb-6 leading-tight">
+              <h2 className="font-display text-3xl md:text-5xl text-foreground mb-6 leading-tight">
                 שלוש דקות.
                 <br />
                 בלי טפסים,
                 <br />
                 בלי התחייבות.
               </h2>
-              <p className="text-muted-foreground font-light leading-relaxed mb-8">
+              <p className="text-muted-foreground font-normal leading-relaxed mb-8">
                 החברות במועדון אלומה חינמית לחלוטין ואישית, לא נשלח לכם ספאם,
                 לא נמכור את הנתונים ולא נציק לכם בטלפון.
               </p>
@@ -206,7 +205,7 @@ const Club = () => {
                 <Button
                   asChild
                   size="lg"
-                  className="rounded-full px-8 shadow-luxury group"
+                  className="rounded-sm px-8 shadow-luxury group"
                 >
                   <Link to="/club/auth?mode=signup">
                     להצטרפות מיידית
@@ -227,10 +226,10 @@ const Club = () => {
                       {s.n}
                     </div>
                     <div className="flex-1 border-r border-border/60 pr-6 md:pr-8">
-                      <h3 className="font-display text-lg md:text-xl text-primary mb-2">
+                      <h3 className="font-display text-lg md:text-xl text-foreground mb-2">
                         {s.title}
                       </h3>
-                      <p className="text-sm text-muted-foreground font-light leading-relaxed">
+                      <p className="text-sm text-muted-foreground font-normal leading-relaxed">
                         {s.text}
                       </p>
                     </div>
@@ -281,10 +280,10 @@ const Club = () => {
               alt="Aluma"
               className="h-12 w-auto mx-auto mb-6 opacity-90"
             />
-            <h2 className="font-display text-3xl md:text-5xl text-primary mb-4 leading-tight text-balance">
+            <h2 className="font-display text-3xl md:text-5xl text-foreground mb-4 leading-tight text-balance">
               {user ? "טוב לראות אתכם שוב." : "הבית שלכם ראוי לזה."}
             </h2>
-            <p className="text-muted-foreground font-light leading-relaxed mb-10 max-w-xl mx-auto">
+            <p className="text-muted-foreground font-normal leading-relaxed mb-10 max-w-xl mx-auto">
               {user
                 ? "אזור החברים שלכם מחכה, מועדפים, סטטוסים והזמנות במקום אחד."
                 : "הצטרפות חינם, בלי התחייבות. בכל רגע אפשר לצאת."}

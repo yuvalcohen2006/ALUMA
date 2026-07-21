@@ -68,7 +68,7 @@ const ProjectDetailPage = () => {
               <h1 className="font-display text-3xl md:text-4xl lg:text-5xl font-light leading-tight mb-4 text-primary">
                 {project.name}
               </h1>
-              <p className="text-base md:text-lg italic font-light text-muted-foreground mb-6">
+              <p className="text-base md:text-lg italic font-normal text-muted-foreground mb-6">
                 {project.intro}
               </p>
               <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
@@ -90,7 +90,7 @@ const ProjectDetailPage = () => {
             <div className="border border-primary/40 rounded-sm p-6 md:p-8 mb-6 md:mb-8">
               <SectionLabel he="על הפרויקט" en="About The Project" className="text-xs justify-start mb-5" />
               {project.story.map((p, i) => (
-                <p key={i} className="text-foreground/85 font-light leading-loose text-[16px]">
+                <p key={i} className="text-foreground/85 font-normal leading-loose text-[16px]">
                   {p}
                 </p>
               ))}
@@ -104,7 +104,7 @@ const ProjectDetailPage = () => {
                 {project.scope.map((s) => (
                   <li key={s} className="flex gap-3">
                     <Check className="w-4 h-4 text-accent mt-1 shrink-0" />
-                    <span className="text-primary font-light text-[15px]">{s}</span>
+                    <span className="text-foreground font-light text-[15px]">{s}</span>
                   </li>
                 ))}
               </ul>
@@ -112,10 +112,10 @@ const ProjectDetailPage = () => {
                 <div className="text-[11px] tracking-[0.3em] uppercase text-muted-foreground mb-3">
                   חומרים
                 </div>
-                <div className="text-primary font-light text-[15px] leading-relaxed space-y-1">
+                <div className="text-foreground font-light text-[15px] leading-relaxed space-y-1">
                   {project.materials.map((m, i) => (
                     <div key={i} className="flex items-center gap-2">
-                      <span className="w-1 h-1 rounded-full bg-accent shrink-0" />
+                      <span className="w-1 h-1 rounded-sm bg-accent shrink-0" />
                       <span>{m}</span>
                     </div>
                   ))}
@@ -152,10 +152,10 @@ const ProjectDetailPage = () => {
       <section className="py-20 md:py-24 gradient-cream">
         <div className="container-luxury text-center">
           <SectionLabel he="מגשימים חלום" en="Your Space" className="text-xs mb-6" />
-          <h2 className="font-display text-3xl md:text-5xl text-primary font-light mb-5 leading-tight">
+          <h2 className="font-display text-3xl md:text-5xl text-foreground font-light mb-5 leading-tight">
             השאירו פרטים
           </h2>
-          <p className="text-muted-foreground font-light max-w-xl mx-auto mb-10 leading-relaxed">
+          <p className="text-muted-foreground font-normal max-w-xl mx-auto mb-10 leading-relaxed">
             כל פרויקט מתוכנן ומיוצר בהתאם לאופי המרחב עד לפרטים הקטנים ביותר.
           </p>
           <Button asChild size="lg" className="rounded-sm tracking-wider">
@@ -185,7 +185,7 @@ const ProjectDetailPage = () => {
                     className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
                 </div>
-                <h3 className="font-display text-xl text-primary group-hover:text-accent transition-smooth flex items-center gap-2">
+                <h3 className="font-display text-xl text-foreground group-hover:text-accent transition-smooth flex items-center gap-2">
                   {p.name}
                   <ArrowLeft className="w-4 h-4" />
                 </h3>

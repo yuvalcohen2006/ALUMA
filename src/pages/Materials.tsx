@@ -17,11 +17,11 @@ const MaterialsPage = () => {
       <section className="pt-32 pb-12 md:pt-40 md:pb-16 gradient-cream">
         <div className="container-luxury text-center">
           <SectionLabel he="חומרים" en="Materials" className="text-xs mb-5" />
-          <h1 className="font-display text-3xl md:text-5xl text-primary font-light tracking-wide mb-6">
+          <h1 className="font-display text-3xl md:text-5xl text-foreground font-light tracking-wide mb-6">
             החומרים שבונים את האיכות
           </h1>
           <div className="w-16 h-px bg-primary/30 mx-auto mb-6" />
-          <p className="max-w-2xl mx-auto text-muted-foreground font-light leading-relaxed">
+          <p className="max-w-2xl mx-auto text-muted-foreground font-normal leading-relaxed">
             כל מוצר של Aluma מתחיל בבחירה קפדנית של חומר, שמרגיש יוקרתי במגע, ונשאר יפה גם אחרי שנים בחוץ.
           </p>
         </div>
@@ -64,10 +64,10 @@ const MaterialsPage = () => {
                   <div className="text-accent font-light italic mb-6">
                     {m.tagline}
                   </div>
-                  <p className="text-muted-foreground font-light leading-relaxed mb-8 text-[15px]">
+                  <p className="text-muted-foreground font-normal leading-relaxed mb-8 text-[15px]">
                     {m.shortDesc}
                   </p>
-                  <span className="inline-flex items-center gap-2 text-primary text-sm tracking-[0.2em] uppercase border-b border-primary/40 pb-1 group-hover:border-primary group-hover:text-primary transition-smooth">
+                  <span className="inline-flex items-center gap-2 text-foreground text-sm tracking-[0.2em] uppercase border-b border-primary/40 pb-1 group-hover:border-primary group-hover:text-primary transition-smooth">
                     גלו את החומר
                     <ArrowLeft className="w-4 h-4" />
                   </span>

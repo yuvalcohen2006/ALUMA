@@ -34,11 +34,11 @@ const NotFound = () => {
 
       <section className="pt-32 pb-20 md:pt-40 md:pb-28 gradient-cream min-h-[70vh] flex items-center">
         <div className="container-luxury text-center max-w-2xl mx-auto">
-          <div className="font-display text-7xl md:text-9xl text-primary/20 leading-none mb-4">
+          <div className="font-display text-7xl md:text-9xl text-foreground/20 leading-none mb-4">
             404
           </div>
           <SectionLabel he="הדף לא נמצא" en="Page Not Found" className="text-xs mb-5" />
-          <h1 className="font-display text-3xl md:text-5xl text-primary leading-tight mb-5">
+          <h1 className="font-display text-3xl md:text-5xl text-foreground leading-tight mb-5">
             נראה שהלכתם <span className="italic">לאיבוד</span>
           </h1>
           <p className="text-muted-foreground text-base md:text-lg leading-relaxed mb-10">
@@ -54,7 +54,7 @@ const NotFound = () => {
                 className="group flex items-center justify-between gap-3 bg-card border border-border hover:border-primary/50 hover:shadow-soft rounded-sm px-5 py-3.5 text-right transition-smooth"
               >
                 <ArrowLeft className="w-4 h-4 text-primary opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0 transition-all" />
-                <span className="font-display text-base text-primary">{p.label}</span>
+                <span className="font-display text-base text-foreground">{p.label}</span>
               </Link>
             ))}
           </div>

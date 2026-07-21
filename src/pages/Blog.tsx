@@ -43,8 +43,8 @@ const Blog = () => {
       <section className="pt-32 pb-12 md:pt-40 md:pb-16 gradient-cream">
         <div className="container-luxury text-center">
           <SectionLabel he="המגזין" en="Magazine" className="text-xs mb-5" />
-          <h1 className="font-display text-3xl sm:text-4xl md:text-5xl text-primary mb-4">סיפורים, חומרים והשראה</h1>
-          <p className="text-primary/70 max-w-2xl mx-auto">
+          <h1 className="font-display text-3xl sm:text-4xl md:text-5xl text-foreground mb-4">סיפורים, חומרים והשראה</h1>
+          <p className="text-muted-foreground max-w-2xl mx-auto">
             מאמרי עומק על תכנון חללי חוץ, בחירת בדים, אלומיניום בגזרה ישראלית, ועקרונות הסטיילינג של Aluma.
           </p>
           <div className="w-16 h-px bg-primary/30 mx-auto mt-8" />
@@ -54,9 +54,9 @@ const Blog = () => {
       <section className="py-16 md:py-24">
         <div className="w-full px-3 md:px-4">
           {loading ? (
-            <div className="text-primary/60 text-center">טוען...</div>
+            <div className="text-muted-foreground text-center">טוען...</div>
           ) : posts.length === 0 ? (
-            <div className="text-center text-primary/60">
+            <div className="text-center text-muted-foreground">
               עדיין אין מאמרים מפורסמים. חוזרים בקרוב עם תכנים חדשים.
             </div>
           ) : (
@@ -81,10 +81,10 @@ const Blog = () => {
                     <div className="flex justify-center">
                       <img src={logo} alt="Aluma" className="h-4 w-auto object-contain opacity-80" />
                     </div>
-                    <h2 className="font-display text-xl text-primary mt-2 mb-3 group-hover:text-accent transition-smooth text-center">
+                    <h2 className="font-display text-xl text-foreground mt-2 mb-3 group-hover:text-accent transition-smooth text-center">
                       {p.title}
                     </h2>
-                    {p.excerpt && <p className="text-sm text-primary/70 line-clamp-3 text-center">{p.excerpt}</p>}
+                    {p.excerpt && <p className="text-sm text-muted-foreground line-clamp-3 text-center">{p.excerpt}</p>}
                   </div>
                 </Link>
               ))}

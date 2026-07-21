@@ -94,7 +94,7 @@ const AdminLayout = ({ children }: { children: ReactNode }) => {
         end={item.end}
         className={({ isActive }) =>
           mobile
-            ? `flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs whitespace-nowrap transition-colors ${
+            ? `flex items-center gap-1.5 px-3 py-1.5 rounded-sm text-xs whitespace-nowrap transition-colors ${
                 isActive ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"
               }`
             : `flex items-center gap-3 px-3 py-2.5 rounded-md text-sm transition-colors ${
@@ -107,7 +107,7 @@ const AdminLayout = ({ children }: { children: ReactNode }) => {
         <Icon className={mobile ? "w-3.5 h-3.5" : "w-4 h-4 shrink-0"} />
         <span>{item.label}</span>
         <span
-          className={`mr-auto inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full text-[10px] font-semibold bg-accent text-accent-foreground transition-opacity ${
+          className={`mr-auto inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-sm text-[10px] font-semibold bg-accent text-accent-foreground transition-opacity ${
             showBadge ? "opacity-100" : "opacity-0"
           } ${mobile ? "ml-1" : ""}`}
           aria-label={`${newLeads} פניות חדשות`}
@@ -125,7 +125,7 @@ const AdminLayout = ({ children }: { children: ReactNode }) => {
         {/* Sidebar */}
         <aside className="hidden md:flex w-64 shrink-0 flex-col border-l border-border bg-card">
           <div className="px-6 py-7 border-b border-border">
-            <p className="text-[10px] tracking-[0.3em] text-primary uppercase mb-1">
+            <p className="text-[10px] tracking-[0.3em] text-foreground uppercase mb-1">
               Aluma Admin
             </p>
             <h2 className="font-display text-2xl text-foreground">לוח בקרה</h2>

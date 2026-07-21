@@ -42,11 +42,11 @@ const ProjectsPage = () => {
       <section className="pt-32 pb-12 md:pt-40 md:pb-16 gradient-cream">
         <div className="container-luxury text-center">
           <SectionLabel he="פרויקטים" en="Projects" className="text-xs mb-5" />
-          <h1 className="font-display text-3xl md:text-5xl text-primary font-light tracking-wide mb-6">
+          <h1 className="font-display text-3xl md:text-5xl text-foreground font-light tracking-wide mb-6">
             מבחר מרחבים שבנינו
           </h1>
           <div className="w-16 h-px bg-primary/30 mx-auto mb-6" />
-          <p className="max-w-2xl mx-auto text-muted-foreground font-light leading-relaxed">
+          <p className="max-w-2xl mx-auto text-muted-foreground font-normal leading-relaxed">
             כל פרויקט הוא סיפור של מרחב, של אנשים ושל דרך חיים. הציצו פנימה, וכל אחד פותח עולם משלו.
           </p>
         </div>

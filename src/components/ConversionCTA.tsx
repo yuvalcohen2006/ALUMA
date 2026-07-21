@@ -38,7 +38,7 @@ const ConversionCTA = ({
       />
       <div className="container-luxury relative">
         <div className="max-w-4xl mx-auto text-center">
-          <div className="inline-flex items-center gap-2 border border-primary-foreground/25 rounded-full px-4 py-1.5 mb-6">
+          <div className="inline-flex items-center gap-2 border border-primary-foreground/25 rounded-sm px-4 py-1.5 mb-6">
             <Sparkles className="h-3.5 w-3.5 text-accent" />
             <span className="text-[11px] tracking-[0.35em] uppercase opacity-90">
               {eyebrow}
@@ -48,7 +48,7 @@ const ConversionCTA = ({
           <h2 className="font-display text-3xl md:text-5xl leading-tight mb-4 text-balance">
             {title}
           </h2>
-          <p className="text-base md:text-lg font-light opacity-85 leading-relaxed max-w-2xl mx-auto mb-10">
+          <p className="text-base md:text-lg font-normal opacity-85 leading-relaxed max-w-2xl mx-auto mb-10">
             {subtitle}
           </p>
 
@@ -57,7 +57,7 @@ const ConversionCTA = ({
               asChild
               size="lg"
               variant="secondary"
-              className="rounded-full px-8 shadow-luxury group bg-background text-primary hover:bg-background/90"
+              className="rounded-sm px-8 shadow-luxury group bg-background text-primary hover:bg-background/90"
             >
               <Link to={primaryHref}>
                 {primaryLabel}
@@ -68,7 +68,7 @@ const ConversionCTA = ({
               asChild
               size="lg"
               variant="outline"
-              className="rounded-full px-8 bg-transparent border-primary-foreground/40 text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground"
+              className="rounded-sm px-8 bg-transparent border-primary-foreground/40 text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground"
             >
               <a href={wa} target="_blank" rel="noopener noreferrer">
                 <MessageCircle className="ml-2 h-4 w-4" />
@@ -79,7 +79,7 @@ const ConversionCTA = ({
               asChild
               size="lg"
               variant="outline"
-              className="rounded-full px-8 bg-transparent border-primary-foreground/40 text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground"
+              className="rounded-sm px-8 bg-transparent border-primary-foreground/40 text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground"
             >
               <a href="tel:+972504519062">
                 <Phone className="ml-2 h-4 w-4" />

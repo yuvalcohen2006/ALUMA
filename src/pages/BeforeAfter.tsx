@@ -18,11 +18,11 @@ const BeforeAfterPage = () => {
       <section className="pt-32 pb-12 md:pt-40 md:pb-16 gradient-cream">
         <div className="container-luxury text-center">
           <SectionLabel he="לפני ואחרי" en="Before & After" className="text-xs mb-5" />
-          <h1 className="font-display text-3xl md:text-5xl text-primary font-light tracking-wide mb-6">
+          <h1 className="font-display text-3xl md:text-5xl text-foreground font-light tracking-wide mb-6">
             החליקו לראות את השינוי
           </h1>
           <div className="w-16 h-px bg-primary/30 mx-auto mb-6" />
-          <p className="max-w-2xl mx-auto text-muted-foreground font-light leading-relaxed">
+          <p className="max-w-2xl mx-auto text-muted-foreground font-normal leading-relaxed">
             כל פרויקט מתחיל בחלל ריק, ונגמר במרחב חיים. גררו את הידית בכל תמונה כדי לראות את המסע.
           </p>
         </div>
@@ -47,7 +47,7 @@ const BeforeAfterPage = () => {
                   <h2 className="font-display text-2xl md:text-3xl text-primary font-light mb-3">
                     {item.title}
                   </h2>
-                  <p className="text-muted-foreground font-light leading-relaxed">
+                  <p className="text-muted-foreground font-normal leading-relaxed">
                     {item.description}
                   </p>
                 </div>

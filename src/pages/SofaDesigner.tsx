@@ -171,7 +171,7 @@ const SofaDesigner = () => {
             <h1 className="font-display text-3xl sm:text-4xl md:text-5xl text-primary mt-3 mb-4">
               עצבו את הסלון שלכם
             </h1>
-            <p className="text-primary/70 text-lg leading-relaxed">
+            <p className="text-foreground text-lg leading-relaxed">
               כל הסלונים שלנו מודולריים. חברו פינה, יחידות אמצע והדומים, ובנו את הקומפוזיציה
               שמתאימה בדיוק למרפסת או לגינה שלכם. האורך והתצורה מתעדכנים בזמן אמת.
             </p>
@@ -180,7 +180,7 @@ const SofaDesigner = () => {
           <div className="grid lg:grid-cols-[280px_1fr] gap-8">
             {/* Palette */}
             <aside className="space-y-4">
-              <h2 className="text-sm tracking-[0.2em] uppercase text-primary/60 font-medium">
+              <h2 className="text-sm tracking-[0.2em] uppercase text-muted-foreground font-medium">
                 יחידות זמינות
               </h2>
               <div className="space-y-3">
@@ -199,14 +199,14 @@ const SofaDesigner = () => {
                           style={{ transform: u.mirrored ? "scaleX(-1)" : undefined }}
                         />
                       ) : (
-                        <span className="text-[10px] text-primary/60">
+                        <span className="text-[10px] text-muted-foreground">
                           {u.widthCm}×{u.depthCm}
                         </span>
                       )}
                     </div>
                     <div className="flex-1">
-                      <div className="font-semibold text-primary">{u.nameHe}</div>
-                      <div className="text-xs text-primary/60">1×1 מ׳</div>
+                      <div className="font-semibold text-foreground">{u.nameHe}</div>
+                      <div className="text-xs text-muted-foreground">1×1 מ׳</div>
                     </div>
                     <Plus className="h-5 w-5 text-primary/40 group-hover:text-accent transition-smooth" />
                   </button>
@@ -215,12 +215,12 @@ const SofaDesigner = () => {
 
               <div className="pt-4 border-t border-border space-y-3">
                 <div className="flex justify-between text-sm">
-                  <span className="text-primary/60">סה״כ יחידות</span>
-                  <span className="font-semibold text-primary">{placed.length}</span>
+                  <span className="text-muted-foreground">סה״כ יחידות</span>
+                  <span className="font-semibold text-foreground">{placed.length}</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-primary/60">אורך כולל</span>
-                  <span className="font-semibold text-primary">
+                  <span className="text-muted-foreground">אורך כולל</span>
+                  <span className="font-semibold text-foreground">
                     {summary.totalCm} ס״מ
                   </span>
                 </div>
@@ -266,7 +266,7 @@ const SofaDesigner = () => {
                     onClick={() => scrollByAmount(-1)}
                     disabled={!canScrollLeft}
                     aria-label="גלול שמאלה"
-                    className="absolute left-2 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-primary text-primary-foreground shadow-soft flex items-center justify-center transition-smooth hover:bg-accent disabled:opacity-30 disabled:cursor-not-allowed"
+                    className="absolute left-2 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-sm bg-primary text-primary-foreground shadow-soft flex items-center justify-center transition-smooth hover:bg-accent disabled:opacity-30 disabled:cursor-not-allowed"
                   >
                     <ChevronLeft className="h-5 w-5" />
                   </button>
@@ -275,7 +275,7 @@ const SofaDesigner = () => {
                     onClick={() => scrollByAmount(1)}
                     disabled={!canScrollRight}
                     aria-label="גלול ימינה"
-                    className="absolute right-2 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-primary text-primary-foreground shadow-soft flex items-center justify-center transition-smooth hover:bg-accent disabled:opacity-30 disabled:cursor-not-allowed"
+                    className="absolute right-2 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-sm bg-primary text-primary-foreground shadow-soft flex items-center justify-center transition-smooth hover:bg-accent disabled:opacity-30 disabled:cursor-not-allowed"
                   >
                     <ChevronRight className="h-5 w-5" />
                   </button>
@@ -288,7 +288,7 @@ const SofaDesigner = () => {
                 style={{ WebkitOverflowScrolling: "touch" }}
               >
                 {placed.length === 0 ? (
-                  <div className="h-[400px] flex items-center justify-center text-primary/40 text-sm">
+                  <div className="h-[400px] flex items-center justify-center text-muted-foreground text-sm">
                     הוסיפו יחידות מהצד כדי להתחיל
                   </div>
                 ) : (
@@ -332,7 +332,7 @@ const SofaDesigner = () => {
                             <button
                               onClick={() => shift(i, -1)}
                               disabled={i === 0}
-                              className="w-8 h-8 rounded-full bg-primary/90 text-primary-foreground flex items-center justify-center shadow-soft hover:bg-accent transition-smooth disabled:opacity-30"
+                              className="w-8 h-8 rounded-sm bg-primary/90 text-primary-foreground flex items-center justify-center shadow-soft hover:bg-accent transition-smooth disabled:opacity-30"
                               aria-label="הזז שמאלה"
                             >
                               <ChevronLeft className="h-4 w-4" />
@@ -340,7 +340,7 @@ const SofaDesigner = () => {
                             <button
                               onClick={() => shift(i, 1)}
                               disabled={i === placed.length - 1}
-                              className="w-8 h-8 rounded-full bg-primary/90 text-primary-foreground flex items-center justify-center shadow-soft hover:bg-accent transition-smooth disabled:opacity-30"
+                              className="w-8 h-8 rounded-sm bg-primary/90 text-primary-foreground flex items-center justify-center shadow-soft hover:bg-accent transition-smooth disabled:opacity-30"
                               aria-label="הזז ימינה"
                             >
                               <ChevronRight className="h-4 w-4" />
@@ -350,7 +350,7 @@ const SofaDesigner = () => {
                           <div className="absolute -top-2 -right-2 flex gap-1 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-smooth z-10">
                             <button
                               onClick={() => remove(p.key)}
-                              className="w-7 h-7 rounded-full bg-destructive text-destructive-foreground flex items-center justify-center shadow-soft hover:opacity-90 transition-smooth"
+                              className="w-7 h-7 rounded-sm bg-destructive text-destructive-foreground flex items-center justify-center shadow-soft hover:opacity-90 transition-smooth"
                               aria-label="הסר יחידה"
                             >
                               <Trash2 className="h-3.5 w-3.5" />
@@ -363,7 +363,7 @@ const SofaDesigner = () => {
                 )}
               </div>
 
-              <p className="text-xs text-primary/60 mt-4 text-center flex items-center justify-center gap-2 flex-wrap">
+              <p className="text-xs text-muted-foreground mt-4 text-center flex items-center justify-center gap-2 flex-wrap">
                 <MoveHorizontal className="h-3.5 w-3.5" />
                 <span>
                   החליקו את התצוגה עם האצבע או השתמשו בחיצים לגלילה. סדרו את היחידות עם כפתורי{" "}

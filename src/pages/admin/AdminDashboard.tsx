@@ -251,11 +251,7 @@ const AdminDashboard = () => {
       <section className="rounded-2xl border border-primary/20 bg-gradient-to-l from-primary/5 via-primary/10 to-primary/5 px-8 py-6 mb-8">
         <div className="flex items-center justify-between gap-6 flex-wrap">
           <div className="text-right">
-            <div className="flex items-center justify-end gap-2 text-primary text-sm mb-1">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
-              </span>
+            <div className="flex items-center justify-end gap-2 text-foreground text-sm mb-1">
               באתר עכשיו
             </div>
             <div className="font-display text-5xl text-foreground tabular-nums">{stats.live.toLocaleString("en-US")}</div>
@@ -265,7 +261,7 @@ const AdminDashboard = () => {
             <p className="text-sm text-muted-foreground mb-1">עמודים פעילים כעת</p>
             <p className="text-lg text-foreground">{livePath ? pathLabel(livePath) : "—"}</p>
           </div>
-          <div className="flex items-center justify-center w-14 h-14 rounded-full bg-primary/15 text-primary">
+          <div className="flex items-center justify-center w-14 h-14 rounded-sm bg-primary/15 text-primary">
             <Activity className="w-6 h-6" />
           </div>
         </div>
@@ -275,7 +271,7 @@ const AdminDashboard = () => {
       <div className="rounded-2xl border border-border bg-card px-4 py-3 mb-8 flex items-center justify-between gap-4 flex-wrap">
         <button
           onClick={() => setRefreshKey((k) => k + 1)}
-          className="inline-flex items-center gap-2 text-sm border border-border rounded-full px-4 py-2 hover:bg-muted"
+          className="inline-flex items-center gap-2 text-sm border border-border rounded-sm px-4 py-2 hover:bg-muted"
         >
           <RefreshCw className="w-3.5 h-3.5" />
           רענן
@@ -287,7 +283,7 @@ const AdminDashboard = () => {
               <button
                 key={r.key}
                 onClick={() => setRange(r.key)}
-                className={`text-sm px-4 py-1.5 rounded-full transition-colors ${
+                className={`text-sm px-4 py-1.5 rounded-sm transition-colors ${
                   active
                     ? "bg-foreground text-background"
                     : "text-muted-foreground hover:text-foreground hover:bg-muted"
@@ -325,11 +321,11 @@ const AdminDashboard = () => {
         <div className="flex items-start justify-between mb-6">
           <div className="flex items-center gap-4 text-xs text-muted-foreground">
             <span className="flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-primary" />
+              <span className="w-2 h-2 rounded-sm bg-primary" />
               צפיות
             </span>
             <span className="flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-muted-foreground/50" />
+              <span className="w-2 h-2 rounded-sm bg-muted-foreground/50" />
               מבקרים
             </span>
           </div>
@@ -387,7 +383,7 @@ const AdminDashboard = () => {
                       </span>
                       <span className="text-foreground truncate max-w-[60%]">{pathLabel(p.path)}</span>
                     </div>
-                    <div className="h-1 bg-muted rounded-full overflow-hidden" dir="ltr">
+                    <div className="h-1 bg-muted rounded-sm overflow-hidden" dir="ltr">
                       <div className="h-full bg-foreground/80 float-right" style={{ width: `${w}%` }} />
                     </div>
                   </li>
@@ -414,7 +410,7 @@ const AdminDashboard = () => {
                       <span className="text-foreground font-medium">{s.count}</span>
                       <span className="text-foreground truncate max-w-[70%]">{s.source}</span>
                     </div>
-                    <div className="h-1 bg-muted rounded-full overflow-hidden" dir="ltr">
+                    <div className="h-1 bg-muted rounded-sm overflow-hidden" dir="ltr">
                       <div className="h-full bg-primary float-right" style={{ width: `${w}%` }} />
                     </div>
                   </li>
@@ -454,12 +450,12 @@ const AdminDashboard = () => {
                       ללא תמונה
                     </div>
                   )}
-                  <span className="absolute bottom-3 left-3 bg-background/95 text-foreground text-xs font-medium px-3 py-1 rounded-full">
+                  <span className="absolute bottom-3 left-3 bg-background/95 text-foreground text-xs font-medium px-3 py-1 rounded-sm">
                     #{p.rank}
                   </span>
                 </div>
                 <div className="px-4 py-3 flex items-center justify-between">
-                  <span className="text-primary font-medium tabular-nums">{p.views}</span>
+                  <span className="text-foreground font-medium tabular-nums">{p.views}</span>
                   <span className="text-foreground truncate">{p.title}</span>
                 </div>
               </Link>
@@ -501,8 +497,8 @@ function StatCard({
         <div className="font-display text-4xl text-foreground tracking-tight">{display}</div>
         {typeof delta === "number" && !loading && (
           <div
-            className={`inline-flex items-center gap-1 mt-2 text-xs px-2 py-0.5 rounded-full ${
-              delta >= 0 ? "bg-emerald-100 text-emerald-700" : "bg-red-100 text-red-700"
+            className={`inline-flex items-center gap-1 mt-2 text-xs px-2 py-0.5 rounded-sm ${
+              delta >= 0 ? "bg-primary/10 text-foreground" : "bg-red-100 text-red-700"
             }`}
           >
             <TrendingUp className={`w-3 h-3 ${delta < 0 ? "rotate-180" : ""}`} />

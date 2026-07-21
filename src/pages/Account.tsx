@@ -132,7 +132,7 @@ const Account = () => {
           <div className="flex items-start justify-between flex-wrap gap-4">
             <div>
               <SectionLabel he="מועדון אלומה" en="My Club" className="text-xs mb-4" />
-              <h1 className="font-display text-3xl md:text-5xl text-primary">
+              <h1 className="font-display text-3xl md:text-5xl text-foreground">
                 שלום {profile.full_name || "חבר יקר"}
               </h1>
               <p className="text-muted-foreground mt-2">{user.email}</p>
@@ -188,7 +188,7 @@ const Account = () => {
                             </p>
                           )}
                         </div>
-                        <span className="text-xs tracking-wider uppercase px-3 py-1 rounded-full bg-accent/10 text-accent">
+                        <span className="text-xs tracking-wider uppercase px-3 py-1 rounded-sm bg-accent/10 text-accent">
                           {statusLabels[p.status] || p.status}
                         </span>
                       </div>
@@ -204,7 +204,7 @@ const Account = () => {
                         <div className="mt-4 pt-4 border-t border-border flex items-center gap-2 text-sm">
                           <Calendar className="w-4 h-4 text-accent" />
                           <span className="text-muted-foreground">אבן דרך הבאה:</span>
-                          <span className="text-primary font-medium">{p.next_milestone}</span>
+                          <span className="text-foreground font-medium">{p.next_milestone}</span>
                           {p.next_milestone_date && (
                             <span className="text-xs text-muted-foreground mr-auto">
                               {new Date(p.next_milestone_date).toLocaleDateString("he-IL")}
@@ -242,7 +242,7 @@ const Account = () => {
                         )}
                       </div>
                       <div className="p-4">
-                        <h3 className="font-display text-base text-primary group-hover:text-accent transition-smooth">{p.name}</h3>
+                        <h3 className="font-display text-base text-foreground group-hover:text-accent transition-smooth">{p.name}</h3>
                         {p.tagline && <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{p.tagline}</p>}
                       </div>
                     </Link>

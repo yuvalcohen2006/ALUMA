@@ -22,13 +22,13 @@ const H3 = ({ children }: { children: React.ReactNode }) => (
 );
 
 const P = ({ children }: { children: React.ReactNode }) => (
-  <p className="text-primary/85 text-base md:text-lg leading-[1.9] mb-4">
+  <p className="text-foreground text-base md:text-lg leading-[1.9] mb-4">
     {children}
   </p>
 );
 
 const UL = ({ children }: { children: React.ReactNode }) => (
-  <ul className="list-disc pr-6 space-y-3 text-primary/85 text-base md:text-lg leading-[1.9] mb-6 marker:text-primary/50">
+  <ul className="list-disc pr-6 space-y-3 text-foreground text-base md:text-lg leading-[1.9] mb-6 marker:text-primary/50">
     {children}
   </ul>
 );
@@ -45,10 +45,10 @@ const TermsPage = () => {
       <section className="pt-32 pb-10 md:pt-40 gradient-cream">
         <div className="container-luxury text-center">
           <SectionLabel he="תקנון ומדיניות" en="Terms & Policies" className="text-xs mb-5" />
-          <h1 className="font-display text-3xl sm:text-4xl md:text-5xl text-primary leading-tight">
+          <h1 className="font-display text-3xl sm:text-4xl md:text-5xl text-foreground leading-tight">
             תקנון ומדיניות
           </h1>
-          <p className="text-primary/70 max-w-2xl mx-auto mt-5 text-base md:text-lg leading-relaxed">
+          <p className="text-foreground max-w-2xl mx-auto mt-5 text-base md:text-lg leading-relaxed">
             תקנון האתר, מדיניות משלוחים, ביטול עסקאות ותנאי האחריות, הכל במקום אחד, מסודר לפי לשוניות לנוחיותכם.
           </p>
           <div className="w-16 h-px bg-primary/30 mx-auto mt-8" />
@@ -305,7 +305,7 @@ const TermsPage = () => {
             </TabsContent>
           </Tabs>
 
-          <div className="pt-10 mt-12 border-t border-border text-sm text-primary/60 text-center">
+          <div className="pt-10 mt-12 border-t border-border text-sm text-muted-foreground text-center">
             עודכן לאחרונה: {new Date().toLocaleDateString("he-IL")}
           </div>
         </div>

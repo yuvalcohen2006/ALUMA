@@ -13,7 +13,7 @@ const AccessibilityPage = () => {
       <section className="pt-32 pb-12 md:pt-40 gradient-cream">
         <div className="container-luxury text-center">
           <SectionLabel he="נגישות" en="Accessibility" className="text-xs mb-5" />
-          <h1 className="font-display text-3xl sm:text-4xl md:text-5xl text-primary leading-tight">
+          <h1 className="font-display text-3xl sm:text-4xl md:text-5xl text-foreground leading-tight">
             הצהרת <span className="italic">נגישות</span>
           </h1>
           <div className="w-16 h-px bg-primary/30 mx-auto mt-8" />
@@ -64,8 +64,8 @@ const AccessibilityPage = () => {
               לשירותכם:
             </p>
             <ul className="mt-3 space-y-1 text-foreground">
-              <li>טלפון: <a href="tel:0504519062" className="text-primary hover:text-accent" dir="ltr">050-451-9062</a></li>
-              <li>דוא״ל: <a href="mailto:info@aluma.co.il" className="text-primary hover:text-accent" dir="ltr">info@aluma.co.il</a></li>
+              <li>טלפון: <a href="tel:0504519062" className="text-foreground underline hover:text-accent" dir="ltr">050-451-9062</a></li>
+              <li>דוא״ל: <a href="mailto:info@aluma.co.il" className="text-foreground underline hover:text-accent" dir="ltr">info@aluma.co.il</a></li>
               <li>כתובת: התמר 78, יציץ</li>
             </ul>
           </div>

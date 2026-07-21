@@ -60,7 +60,7 @@ const AdminHero = () => {
   return (
     <AdminLayout>
       <header className="mb-8">
-        <h1 className="font-display text-3xl text-primary">הירו ראשי</h1>
+        <h1 className="font-display text-3xl text-foreground">הירו ראשי</h1>
         <p className="text-muted-foreground mt-1">
           תמונה ותוכן הבאנר הראשי בדף הבית. אפשר להגדיר תמונה נפרדת לדסקטופ ולמובייל.
         </p>

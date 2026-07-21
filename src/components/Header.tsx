@@ -104,7 +104,7 @@ const Header = () => {
             <div key={link.to} className="relative group/item">
               {link.noLink ? (
                 <span
-                  className="text-[13px] xl:text-sm 2xl:text-base font-semibold tracking-wide text-primary hover:text-accent transition-smooth relative inline-flex items-center group cursor-default select-none"
+                  className="text-[13px] xl:text-sm 2xl:text-base font-semibold tracking-wide text-foreground hover:text-accent transition-smooth relative inline-flex items-center group cursor-default select-none"
                 >
                   {link.label}
                   <span className="absolute -bottom-1.5 right-0 h-0.5 bg-accent transition-all duration-300 w-0 group-hover:w-full" />
@@ -115,7 +115,7 @@ const Header = () => {
                   end={link.to === "/"}
                   className={({ isActive }) =>
                     `text-[13px] xl:text-sm 2xl:text-base font-semibold tracking-wide transition-smooth relative inline-flex items-center group ${
-                      isActive ? "text-accent" : "text-primary hover:text-accent"
+                      isActive ? "text-accent" : "text-foreground hover:text-accent"
                     }`
                   }
                 >
@@ -139,7 +139,7 @@ const Header = () => {
                       <Link
                         key={sub.to}
                         to={sub.to}
-                        className="block px-5 py-2.5 text-sm text-primary hover:text-accent hover:bg-secondary/40 transition-smooth text-right"
+                        className="block px-5 py-2.5 text-sm text-foreground hover:text-accent hover:bg-secondary/40 transition-smooth text-right"
                       >
                         {sub.label}
                       </Link>
@@ -155,7 +155,7 @@ const Header = () => {
         <div className="hidden 2xl:flex items-center gap-4 shrink-0">
           <span className="block w-px h-8 bg-primary/50 shadow-[3px_0_0_0_hsl(var(--primary)/0.5)]" />
           <div dir="ltr">
-            <span className="text-[10px] tracking-[0.2em] uppercase text-primary font-medium border border-primary/70 rounded-sm px-3 py-1.5 whitespace-nowrap">
+            <span className="text-[10px] tracking-[0.2em] uppercase text-foreground font-medium border border-primary/70 rounded-sm px-3 py-1.5 whitespace-nowrap">
               Where outdoor becomes lifestyle
             </span>
           </div>
@@ -226,7 +226,7 @@ const Header = () => {
                       <button
                         type="button"
                         onClick={() => setExpanded(isOpen ? null : link.to)}
-                        className="flex-1 font-display text-xl text-right py-3 text-primary hover:text-accent"
+                        className="flex-1 font-display text-xl text-right py-3 text-foreground hover:text-accent"
                       >
                         {link.label}
                       </button>
@@ -237,7 +237,7 @@ const Header = () => {
                         onClick={() => setOpen(false)}
                         className={({ isActive }) =>
                           `flex-1 font-display text-xl text-right py-3 ${
-                            isActive ? "text-accent" : "text-primary hover:text-accent"
+                            isActive ? "text-accent" : "text-foreground hover:text-accent"
                           }`
                         }
                       >
@@ -270,7 +270,7 @@ const Header = () => {
                           onClick={() => setOpen(false)}
                           className={({ isActive }) =>
                             `text-sm tracking-wide text-right py-1.5 ${
-                              isActive ? "text-accent" : "text-primary/70 hover:text-accent"
+                              isActive ? "text-accent" : "text-foreground hover:text-accent"
                             }`
                           }
                         >
@@ -294,7 +294,7 @@ const Header = () => {
             >
               <span className="h-px flex-1 bg-primary/30" />
               <span
-                className="text-[9px] tracking-[0.2em] uppercase text-primary/70 whitespace-nowrap"
+                className="text-[9px] tracking-[0.2em] uppercase text-foreground whitespace-nowrap"
                 dir="ltr"
               >
                 Where outdoor becomes lifestyle

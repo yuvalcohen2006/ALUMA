@@ -75,7 +75,7 @@ const MaterialDetailPage = () => {
           <div className="md:col-span-3 border border-primary/40 rounded-sm p-8 flex flex-col">
             <div className="space-y-6">
               {material.longDesc.map((p, i) => (
-                <p key={i} className="text-foreground/85 font-light leading-loose text-[16px]">
+                <p key={i} className="text-foreground/85 font-normal leading-loose text-[16px]">
                   {p}
                 </p>
               ))}
@@ -89,7 +89,7 @@ const MaterialDetailPage = () => {
               {material.features.map((f) => (
                 <li key={f.title} className="flex gap-3">
                   <Check className="w-4 h-4 text-accent mt-1 shrink-0" />
-                  <div className="text-primary font-light text-[15px] leading-relaxed">
+                  <div className="text-foreground font-normal text-[15px] leading-relaxed">
                     {f.title}{f.desc && <span className="text-muted-foreground">, {f.desc}</span>}
                   </div>
                 </li>
@@ -106,7 +106,7 @@ const MaterialDetailPage = () => {
               <p className="text-[11px] tracking-[0.4em] uppercase text-accent mb-4">
                 שאלות ותשובות
               </p>
-              <h2 className="font-display text-3xl md:text-4xl text-primary mb-3">
+              <h2 className="font-display text-3xl md:text-4xl text-foreground mb-3">
                 מה שחשוב לדעת על {material.name}
               </h2>
               <div className="w-16 h-px bg-primary/30 mx-auto" />
@@ -117,13 +117,13 @@ const MaterialDetailPage = () => {
                   key={i}
                   className="group bg-background border border-border rounded-sm p-6 open:shadow-soft transition-smooth"
                 >
-                  <summary className="cursor-pointer flex items-start justify-between gap-4 font-display text-lg text-primary list-none [&::-webkit-details-marker]:hidden">
+                  <summary className="cursor-pointer flex items-start justify-between gap-4 font-display text-lg text-foreground list-none [&::-webkit-details-marker]:hidden">
                     <span className="flex-1">{f.q}</span>
-                    <span className="shrink-0 w-6 h-6 rounded-full border border-primary/40 flex items-center justify-center text-primary text-lg leading-none transition-smooth group-open:rotate-45 group-open:bg-accent group-open:border-accent group-open:text-accent-foreground">
+                    <span className="shrink-0 w-6 h-6 rounded-sm border border-primary/40 flex items-center justify-center text-foreground text-lg leading-none transition-smooth group-open:rotate-45 group-open:bg-accent group-open:border-accent group-open:text-accent-foreground">
                       +
                     </span>
                   </summary>
-                  <p className="mt-4 text-[15px] leading-loose text-muted-foreground font-light">
+                  <p className="mt-4 text-[15px] leading-loose text-muted-foreground font-normal">
                     {f.a}
                   </p>
                 </details>
@@ -137,7 +137,7 @@ const MaterialDetailPage = () => {
       <div className="pb-16 flex justify-center">
         <Link
           to="/materials"
-          className="inline-flex items-center gap-2 text-sm font-medium text-primary border border-primary hover:bg-primary hover:text-primary-foreground transition-smooth rounded-full px-8 py-3"
+          className="inline-flex items-center gap-2 text-sm font-medium text-primary border border-primary hover:bg-primary hover:text-primary-foreground transition-smooth rounded-sm px-8 py-3"
         >
           <ArrowRight className="w-4 h-4" />
           חזרה לחומרים
