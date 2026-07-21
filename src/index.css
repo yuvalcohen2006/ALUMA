@@ -1,0 +1,249 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Luxury outdoor furniture design system. All colors HSL. */
+
+@layer base {
+  :root {
+    /* Cream background #f3eee9 */
+    --background: 30 29% 93%;
+    --foreground: 12 44% 20%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 12 44% 20%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 12 44% 20%;
+
+    /* Terracotta primary #b56a55 — main text/buttons */
+    --primary: 13 39% 52%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 30 25% 88%;
+    --secondary-foreground: 12 44% 25%;
+
+    --muted: 30 22% 90%;
+    --muted-foreground: 12 25% 30%;
+
+    /* Deep green accent #0a6b4a — small headings, highlights */
+    --accent: 160 83% 23%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 60% 45%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 30 20% 82%;
+    --input: 30 20% 82%;
+    --ring: 13 39% 52%;
+
+    --radius: 0.25rem;
+
+    /* Custom luxury tokens */
+    --gold: 13 39% 52%;
+    --gold-soft: 13 35% 65%;
+    --cream: 30 29% 93%;
+    --sand: 30 25% 88%;
+    --espresso: 13 39% 52%;
+
+    --gradient-hero: linear-gradient(135deg, hsl(13 39% 52% / 0.85), hsl(12 44% 28% / 0.7));
+    --gradient-gold: linear-gradient(135deg, hsl(13 39% 52%), hsl(13 45% 62%));
+    --gradient-cream: linear-gradient(180deg, hsl(30 29% 95%), hsl(30 25% 88%));
+
+    --shadow-luxury: 0 20px 60px -20px hsl(12 44% 20% / 0.25);
+    --shadow-soft: 0 4px 20px -4px hsl(12 44% 20% / 0.1);
+    --shadow-gold: 0 10px 40px -10px hsl(160 83% 23% / 0.35);
+
+    --transition-smooth: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 25 25% 10%;
+    --foreground: 38 30% 95%;
+    --card: 25 25% 12%;
+    --card-foreground: 38 30% 95%;
+    --popover: 25 25% 10%;
+    --popover-foreground: 38 30% 95%;
+    --primary: 38 45% 60%;
+    --primary-foreground: 25 35% 12%;
+    --secondary: 25 20% 18%;
+    --secondary-foreground: 38 30% 95%;
+    --muted: 25 20% 18%;
+    --muted-foreground: 35 15% 65%;
+    --accent: 38 45% 55%;
+    --accent-foreground: 25 35% 12%;
+    --destructive: 0 60% 45%;
+    --destructive-foreground: 38 30% 95%;
+    --border: 25 20% 20%;
+    --input: 25 20% 20%;
+    --ring: 38 45% 55%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-family: 'Heebo', system-ui, sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Heebo', system-ui, sans-serif;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    line-height: 1.2;
+    font-style: normal;
+  }
+
+  h1 { line-height: 1.15; font-weight: 700; }
+  h2 { line-height: 1.2; font-weight: 600; }
+  h3 { line-height: 1.3; font-weight: 600; }
+
+  p { line-height: 1.75; }
+
+}
+
+/* Scroll-reveal utility (paired with useReveal hook) */
+@layer utilities {
+  .reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition:
+      opacity 0.9s cubic-bezier(0.4, 0, 0.2, 1),
+      transform 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: opacity, transform;
+  }
+  .reveal[data-revealed="true"] {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .reveal {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+  }
+}
+
+@layer utilities {
+  .font-display {
+    font-family: 'Heebo', system-ui, sans-serif;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+  }
+
+  /* Neutralize any italic emphasis so Hebrew text never appears slanted */
+  .italic,
+  i,
+  em {
+    font-style: normal !important;
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .gradient-hero {
+    background: var(--gradient-hero);
+  }
+
+  .gradient-gold {
+    background: var(--gradient-gold);
+  }
+
+  .gradient-cream {
+    background: var(--gradient-cream);
+  }
+
+  .shadow-luxury {
+    box-shadow: var(--shadow-luxury);
+  }
+
+  .shadow-soft {
+    box-shadow: var(--shadow-soft);
+  }
+
+  .shadow-gold {
+    box-shadow: var(--shadow-gold);
+  }
+
+  .transition-smooth {
+    transition: var(--transition-smooth);
+  }
+}
+
+/* Global focus-visible ring + tactile press for interactive elements */
+@layer base {
+  a:focus-visible,
+  button:focus-visible,
+  [role="button"]:focus-visible,
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible {
+    outline: 2px solid hsl(var(--accent));
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+  button:not(:disabled):active,
+  a:active {
+    transform: scale(0.985);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    button:not(:disabled):active,
+    a:active {
+      transform: none;
+    }
+  }
+}
+
+@layer components {
+  .container-luxury {
+    @apply container mx-auto px-5 sm:px-6 lg:px-12;
+  }
+}
+
+/* ===== Accessibility widget overrides ===== */
+:root {
+  --a11y-font-scale: 1;
+}
+html {
+  font-size: calc(16px * var(--a11y-font-scale));
+}
+html.a11y-high-contrast {
+  filter: contrast(1.25) saturate(0.85);
+}
+html.a11y-high-contrast body {
+  background: #fff;
+}
+html.a11y-highlight-links a,
+html.a11y-highlight-links button {
+  outline: 2px solid hsl(var(--accent));
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+html.a11y-underline-links a {
+  text-decoration: underline !important;
+  text-underline-offset: 3px;
+}
+html.a11y-readable-font,
+html.a11y-readable-font * {
+  font-family: Arial, "Heebo", system-ui, sans-serif !important;
+  letter-spacing: 0.01em;
+}

@@ -1,0 +1,1 @@
+UPDATE public.blog_posts SET cover_image_url = 'https://yvxynsonjmcppaxflmvz.supabase.co/storage/v1/object/public/blog-images/aluminum-profiles.jpg' WHERE slug = 'aluminum-frames';
