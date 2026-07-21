@@ -42,7 +42,7 @@ const ProjectsGrid = () => {
 
   return (
     <section className="relative py-8 md:py-32 bg-background overflow-hidden">
-      {/* Header — kept inside the constrained container */}
+      {/* Header, kept inside the constrained container */}
       <div className="container-luxury relative z-10">
         <div className="text-center mb-5 md:mb-14">
           <SectionLabel
@@ -97,7 +97,7 @@ const ProjectsGrid = () => {
             </div>
           </div>
 
-          {/* Side arrows — floating on the edges (desktop) */}
+          {/* Side arrows, floating on the edges (desktop) */}
           <button
             onClick={() => emblaApi?.scrollPrev()}
             disabled={!canPrev}

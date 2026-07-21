@@ -90,7 +90,7 @@ const MaterialDetailPage = () => {
                 <li key={f.title} className="flex gap-3">
                   <Check className="w-4 h-4 text-accent mt-1 shrink-0" />
                   <div className="text-primary font-light text-[15px] leading-relaxed">
-                    {f.title}{f.desc && <span className="text-muted-foreground"> — {f.desc}</span>}
+                    {f.title}{f.desc && <span className="text-muted-foreground">, {f.desc}</span>}
                   </div>
                 </li>
               ))}

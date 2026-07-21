@@ -19,11 +19,11 @@ const Footer = () => {
     "w-10 h-10 rounded-sm border border-primary-foreground/30 flex items-center justify-center hover:bg-primary-foreground hover:text-primary hover:border-primary-foreground transition-smooth";
 
   return (
-    <footer dir="rtl" className="bg-primary text-primary-foreground">
+    <footer dir="rtl" className="bg-footer text-primary-foreground">
       <div className="container-luxury py-16">
         <div dir="rtl" className="grid gap-y-10 md:grid-cols-2 lg:grid-cols-4 lg:gap-y-0 lg:gap-x-8 lg:items-stretch">
 
-          {/* Column 1 (rightmost in RTL) — Logo + about + socials */}
+          {/* Column 1 (rightmost in RTL), Logo + about + socials */}
           <div className="w-full text-center md:text-right lg:max-w-[320px] lg:pl-8">
             <img src={alumaLogo} alt="Aluma" loading="lazy" decoding="async" width={400} height={100} className="h-10 w-auto mb-5 mx-auto md:ml-auto brightness-0 invert opacity-90" />
             <p className="text-primary-foreground/75 text-sm leading-relaxed mb-6">
@@ -59,91 +59,91 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* Column 2 — Quick navigation */}
+          {/* Column 2, Quick navigation */}
           <div className="w-full text-center md:text-right lg:max-w-[220px] lg:justify-self-center lg:px-8 lg:border-r lg:border-primary-foreground/15">
             <h4 className="font-display text-xl mb-6">מעבר מהיר</h4>
             <ul className="space-y-3 text-sm text-primary-foreground/85">
               <li>
-                <Link to="/" className="hover:text-accent transition-smooth">
+                <Link to="/" className="link-underline inline-block hover:text-accent transition-smooth">
                   דף הבית
                 </Link>
               </li>
               <li>
-                <Link to="/story" className="hover:text-accent transition-smooth">
+                <Link to="/story" className="link-underline inline-block hover:text-accent transition-smooth">
                   הסיפור שלנו
                 </Link>
               </li>
               <li>
-                <Link to="/collections" className="hover:text-accent transition-smooth">
+                <Link to="/collections" className="link-underline inline-block hover:text-accent transition-smooth">
                   קולקציות
                 </Link>
               </li>
               <li>
-                <Link to="/materials" className="hover:text-accent transition-smooth">
+                <Link to="/materials" className="link-underline inline-block hover:text-accent transition-smooth">
                   חומרים
                 </Link>
               </li>
               <li>
-                <Link to="/projects" className="hover:text-accent transition-smooth">
+                <Link to="/projects" className="link-underline inline-block hover:text-accent transition-smooth">
                   פרויקטים
                 </Link>
               </li>
               <li>
-                <Link to="/blog" className="hover:text-accent transition-smooth">
+                <Link to="/blog" className="link-underline inline-block hover:text-accent transition-smooth">
                   מגזין
                 </Link>
               </li>
               <li>
-                <Link to="/questionnaire" className="hover:text-accent transition-smooth">
+                <Link to="/questionnaire" className="link-underline inline-block hover:text-accent transition-smooth">
                   שאלון חכם
                 </Link>
               </li>
               <li>
-                <Link to="/account" className="hover:text-accent transition-smooth">
+                <Link to="/account" className="link-underline inline-block hover:text-accent transition-smooth">
                   אזור לקוחות
                 </Link>
               </li>
               <li>
-                <Link to="/faq" className="hover:text-accent transition-smooth">
+                <Link to="/faq" className="link-underline inline-block hover:text-accent transition-smooth">
                   שאלות ותשובות
                 </Link>
               </li>
               <li>
-                <Link to="/contact" className="hover:text-accent transition-smooth">
+                <Link to="/contact" className="link-underline inline-block hover:text-accent transition-smooth">
                   צרו קשר
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Column 3 — Materials */}
+          {/* Column 3, Materials */}
           <div className="w-full text-center md:text-right lg:max-w-[220px] lg:justify-self-center lg:px-8 lg:border-r lg:border-primary-foreground/15">
             <h4 className="font-display text-xl mb-6">החומרים שלנו</h4>
             <ul className="space-y-3 text-sm text-primary-foreground/85">
               <li>
-                <Link to="/materials" className="hover:text-accent transition-smooth">
+                <Link to="/materials" className="link-underline inline-block hover:text-accent transition-smooth">
                   בד Sunbrella
                 </Link>
               </li>
               <li>
-                <Link to="/materials" className="hover:text-accent transition-smooth">
+                <Link to="/materials" className="link-underline inline-block hover:text-accent transition-smooth">
                   אלומיניום
                 </Link>
               </li>
               <li>
-                <Link to="/materials" className="hover:text-accent transition-smooth">
+                <Link to="/materials" className="link-underline inline-block hover:text-accent transition-smooth">
                   שיש גרניט פורצלן
                 </Link>
               </li>
               <li>
-                <Link to="/materials/polystone" className="hover:text-accent transition-smooth">
+                <Link to="/materials/polystone" className="link-underline inline-block hover:text-accent transition-smooth">
                   PolyStone
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Column 4 (leftmost in RTL) — Contact */}
+          {/* Column 4 (leftmost in RTL), Contact */}
           <div className="w-full text-center md:text-right lg:max-w-[240px] lg:justify-self-start lg:pr-8 lg:border-r lg:border-primary-foreground/15">
             <h4 className="font-display text-xl mb-6">יצירת קשר</h4>
             <ul className="space-y-4 text-sm text-primary-foreground/85">
@@ -204,13 +204,13 @@ const Footer = () => {
         <div dir="rtl" className="mt-14 pt-8 border-t border-primary-foreground/15 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-primary-foreground/60 text-center md:text-right">
           <div>© {new Date().getFullYear()} Aluma. כל הזכויות שמורות.</div>
           <div className="flex flex-wrap justify-center gap-5">
-            <Link to="/accessibility" className="hover:text-accent transition-smooth">
+            <Link to="/accessibility" className="link-underline inline-block hover:text-accent transition-smooth">
               הצהרת נגישות
             </Link>
-            <Link to="/terms" className="hover:text-accent transition-smooth">
+            <Link to="/terms" className="link-underline inline-block hover:text-accent transition-smooth">
               תקנון ומדיניות
             </Link>
-            <Link to="/privacy" className="hover:text-accent transition-smooth">
+            <Link to="/privacy" className="link-underline inline-block hover:text-accent transition-smooth">
               מדיניות פרטיות
             </Link>
           </div>

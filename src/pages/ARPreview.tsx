@@ -6,13 +6,13 @@ import { Button } from "@/components/ui/button";
 import { Smartphone, Box, ScanLine, Info } from "lucide-react";
 import modularSofaPoster from "@/assets/modular-sofa-3m.jpeg.asset.json";
 
-// Demo products — placeholder GLB/USDZ models hosted on modelviewer.dev.
+// Demo products, placeholder GLB/USDZ models hosted on modelviewer.dev.
 // Replace `glb` / `usdz` URLs later with Aluma's own scanned models.
 const products = [
   {
     id: "modular-sofa-3m",
     name: "ספה מודולרית 3×1 מ׳",
-    desc: "ספה מודולרית 3 יחידות — רוחב 3 מטר, עומק 1 מטר. תצוגת AR בגודל אמיתי.",
+    desc: "ספה מודולרית 3 יחידות, רוחב 3 מטר, עומק 1 מטר. תצוגת AR בגודל אמיתי.",
     glb: "https://modelviewer.dev/shared-assets/models/glTF-Sample-Assets/Models/Sofa/glTF-Binary/Sofa.glb",
     usdz: "",
     poster: modularSofaPoster.url,
@@ -30,7 +30,7 @@ const products = [
   {
     id: "sofa",
     name: "ספת Skyline",
-    desc: "ספה מודולרית 3 מושבים — קולקציית Skyline.",
+    desc: "ספה מודולרית 3 מושבים, קולקציית Skyline.",
     glb: "https://modelviewer.dev/shared-assets/models/glTF-Sample-Assets/Models/Sofa/glTF-Binary/Sofa.glb",
     usdz: "",
     poster: "",
@@ -52,12 +52,12 @@ const ARPreview = () => {
   const [active, setActive] = useState(products[0]);
 
   useEffect(() => {
-    document.title = "AR Preview — נסו את הרהיט במרחב שלכם | Aluma";
+    document.title = "AR Preview, נסו את הרהיט במרחב שלכם | Aluma";
     const meta =
       document.querySelector('meta[name="description"]') ||
       Object.assign(document.createElement("meta"), { name: "description" });
     (meta as HTMLMetaElement).content =
-      "תצוגת מציאות רבודה — מקמו רהיטי חוץ של Aluma במרפסת או בגינה שלכם דרך הסמארטפון.";
+      "תצוגת מציאות רבודה, מקמו רהיטי חוץ של Aluma במרפסת או בגינה שלכם דרך הסמארטפון.";
     if (!meta.parentNode) document.head.appendChild(meta);
 
     // Lazy-load Google's <model-viewer> web component
@@ -80,7 +80,7 @@ const ARPreview = () => {
   return (
     <div className="min-h-screen bg-background">
       <SEO
-        title="תצוגת AR — ראו ריהוט חוץ במציאות רבודה | Aluma"
+        title="תצוגת AR, ראו ריהוט חוץ במציאות רבודה | Aluma"
         description="הציבו ספות, כורסאות ושולחנות חוץ של Aluma בגינה או במרפסת שלכם בעזרת תצוגת AR ישירות מהדפדפן בטלפון."
         path="/ar"
       />
@@ -97,7 +97,7 @@ const ARPreview = () => {
             </h1>
             <p className="text-primary/70 max-w-2xl mx-auto leading-relaxed">
               בחרו פריט, לחצו על כפתור ה-AR בפינת התצוגה,
-              וכוונו את המצלמה לרצפה במרפסת או בגינה — הרהיט יופיע בגודל אמיתי.
+              וכוונו את המצלמה לרצפה במרפסת או בגינה, הרהיט יופיע בגודל אמיתי.
               עובד על iPhone (iOS 12+) ועל אנדרואיד תומך ARCore.
             </p>
           </div>
@@ -176,7 +176,7 @@ const ARPreview = () => {
               {
                 icon: Smartphone,
                 title: "1 · פתחו במובייל",
-                text: "iPhone או אנדרואיד — דפדפן Safari / Chrome.",
+                text: "iPhone או אנדרואיד, דפדפן Safari / Chrome.",
               },
               {
                 icon: ScanLine,
@@ -209,7 +209,7 @@ const ARPreview = () => {
             <p className="text-sm text-primary/75 leading-relaxed">
               <strong className="text-primary">הערה:</strong> המודלים הנוכחיים
               הם דגמים גנריים לצורכי הדגמה. בשבועות הקרובים נחליף אותם בסריקות
-              3D של הקולקציות של Aluma עצמן — כך תוכלו לראות בדיוק את הבד, הגוון
+              3D של הקולקציות של Aluma עצמן, כך תוכלו לראות בדיוק את הבד, הגוון
               והמידות הסופיות במרפסת שלכם.
             </p>
           </div>

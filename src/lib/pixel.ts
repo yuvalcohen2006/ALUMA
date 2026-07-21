@@ -1,5 +1,5 @@
 /**
- * Meta Pixel helpers. The pixel is NOT loaded on page load — call loadPixel()
+ * Meta Pixel helpers. The pixel is NOT loaded on page load, call loadPixel()
  * only after the visitor has consented (see src/lib/consent.ts). trackPixel()
  * is a no-op until then.
  */

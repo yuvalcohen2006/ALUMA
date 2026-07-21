@@ -62,7 +62,7 @@ const ProjectDetailPage = () => {
       {/* MAIN 2-COLUMN */}
       <section className="pb-16 md:pb-24 bg-background">
         <div className="container-luxury grid md:grid-cols-5 gap-8 md:gap-12 items-start">
-          {/* RIGHT COLUMN — text */}
+          {/* RIGHT COLUMN, text */}
           <div className="md:col-span-2 order-2 md:order-1">
             <div className="mb-8 md:mb-10">
               <h1 className="font-display text-3xl md:text-4xl lg:text-5xl font-light leading-tight mb-4 text-primary">
@@ -124,7 +124,7 @@ const ProjectDetailPage = () => {
             </div>
           </div>
 
-          {/* LEFT COLUMN — images */}
+          {/* LEFT COLUMN, images */}
           <div className="md:col-span-3 order-1 md:order-2">
             <div className="flex md:flex-col overflow-x-auto md:overflow-visible gap-4 snap-x md:snap-none -mx-6 px-6 md:mx-0 md:px-0 pb-2 md:pb-0">
               {project.gallery.map((img, i) => (
@@ -135,7 +135,7 @@ const ProjectDetailPage = () => {
                   <div className="relative overflow-hidden rounded-sm shadow-soft aspect-[4/3]">
                     <img
                       src={img}
-                      alt={`${project.name} — תמונה ${i + 1}`}
+                      alt={`${project.name}, תמונה ${i + 1}`}
                       loading={i === 0 ? "eager" : "lazy"}
                       decoding="async"
                       className="absolute inset-0 w-full h-full object-cover hover:scale-[1.03] transition-transform duration-[1200ms]"

@@ -42,9 +42,6 @@ const MaterialsBrief = () => {
 
   return (
     <section className="relative py-8 md:py-32 bg-background text-foreground overflow-hidden">
-      <div className="pointer-events-none absolute top-0 right-0 w-[28rem] h-[28rem] rounded-full bg-primary/5 blur-3xl" />
-      <div className="pointer-events-none absolute bottom-0 left-0 w-[28rem] h-[28rem] rounded-full bg-primary/5 blur-3xl" />
-
       <div className="container-luxury relative z-10">
         <div className="text-center mb-5 md:mb-14">
           <SectionLabel
@@ -75,7 +72,7 @@ const MaterialsBrief = () => {
                     <div className="aspect-[4/5] relative overflow-hidden">
                       <img
                         src={m.image}
-                        alt={`${m.name} — ${m.tagline} | Aluma`}
+                        alt={`${m.name}, ${m.tagline} | Aluma`}
                         loading={i < 4 ? "eager" : "lazy"}
                         decoding="async"
                         className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"

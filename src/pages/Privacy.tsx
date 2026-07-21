@@ -7,7 +7,7 @@ const PrivacyPage = () => {
     <Layout>
       <SEO
         title="מדיניות פרטיות | Aluma"
-        description="מדיניות הפרטיות של אתר Aluma — איזה מידע נאסף, איך הוא מאוחסן, מי נחשף אליו וזכויות המשתמשים."
+        description="מדיניות הפרטיות של אתר Aluma, איזה מידע נאסף, איך הוא מאוחסן, מי נחשף אליו וזכויות המשתמשים."
         path="/privacy"
       />
       <section className="pt-32 pb-12 md:pt-40 gradient-cream">
@@ -41,7 +41,7 @@ const PrivacyPage = () => {
             <ul className="list-disc pr-6 space-y-2 text-muted-foreground">
               <li>יצירת קשר חוזר לצורך מתן הצעת מחיר ושירות.</li>
               <li>שיפור האתר, הקולקציות והשירות.</li>
-              <li>שליחת עדכונים שיווקיים — רק אם נתתם לכך הסכמה מפורשת.</li>
+              <li>שליחת עדכונים שיווקיים, רק אם נתתם לכך הסכמה מפורשת.</li>
               <li>עמידה בדרישות חוקיות.</li>
             </ul>
           </div>

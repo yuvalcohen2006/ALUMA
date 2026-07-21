@@ -42,7 +42,7 @@ class ErrorBoundary extends Component<Props, State> {
           </h1>
           <p className="text-muted-foreground text-sm md:text-base leading-relaxed mb-8">
             התרחשה שגיאה לא צפויה. אפשר לרענן את הדף או לחזור לדף הבית.
-            אם זה חוזר על עצמו — נשמח שתיצרו קשר.
+            אם זה חוזר על עצמו, נשמח שתיצרו קשר.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <button

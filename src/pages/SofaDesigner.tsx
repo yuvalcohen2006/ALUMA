@@ -156,8 +156,8 @@ const SofaDesigner = () => {
   return (
     <div dir="rtl" className="min-h-screen bg-background">
       <SEO
-        title="עצבו סלון מודולרי לחוץ — יחידות אמצע, פינה והדום | Aluma"
-        description="הרכיבו סלון חוץ מודולרי לפי המידות שלכם — חברו יחידות אמצע, פינה והדום, וקבלו הצעת מחיר מותאמת אישית מ-Aluma."
+        title="עצבו סלון מודולרי לחוץ, יחידות אמצע, פינה והדום | Aluma"
+        description="הרכיבו סלון חוץ מודולרי לפי המידות שלכם, חברו יחידות אמצע, פינה והדום, וקבלו הצעת מחיר מותאמת אישית מ-Aluma."
         path="/designer"
       />
       <Header />
@@ -172,7 +172,7 @@ const SofaDesigner = () => {
               עצבו את הסלון שלכם
             </h1>
             <p className="text-primary/70 text-lg leading-relaxed">
-              כל הסלונים שלנו מודולריים. חברו פינה, יחידות אמצע והדומים — ובנו את הקומפוזיציה
+              כל הסלונים שלנו מודולריים. חברו פינה, יחידות אמצע והדומים, ובנו את הקומפוזיציה
               שמתאימה בדיוק למרפסת או לגינה שלכם. האורך והתצורה מתעדכנים בזמן אמת.
             </p>
           </div>
@@ -258,7 +258,7 @@ const SofaDesigner = () => {
 
             {/* Canvas */}
             <div className="relative rounded-lg border border-border bg-card p-6 min-h-[480px] min-w-0 overflow-hidden">
-              {/* Scroll arrows — always visible, disabled when nothing to scroll */}
+              {/* Scroll arrows, always visible, disabled when nothing to scroll */}
               {placed.length > 0 && (
                 <>
                   <button
@@ -378,7 +378,7 @@ const SofaDesigner = () => {
 
       <ConversionCTA
         title="הרכבתם את הספה. עכשיו נהפוך אותה למציאות."
-        subtitle="נבנה יחד את הצעת המחיר המדויקת — כולל בדים, גוונים ומידות אמת. תשובה תוך יום עסקים."
+        subtitle="נבנה יחד את הצעת המחיר המדויקת, כולל בדים, גוונים ומידות אמת. תשובה תוך יום עסקים."
         whatsappMessage="היי, הרכבתי ספה בסטודיו של אלומה ואשמח לתמחור."
       />
 

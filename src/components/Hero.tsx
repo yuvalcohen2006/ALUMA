@@ -60,7 +60,7 @@ const Hero = () => {
   const mobileBg = settings.mobile_image || desktopBg;
   const bg = isMobile ? mobileBg : desktopBg;
   const subtitle = settings.subtitle || "Where Outdoor Becomes Lifestyle";
-  const srTitle = settings.title_he || "Aluma — סלוני חוץ ופרגולות בעיצוב אישי";
+  const srTitle = settings.title_he || "Aluma, סלוני חוץ ופרגולות בעיצוב אישי";
 
   return (
     <section

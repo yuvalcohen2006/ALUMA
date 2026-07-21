@@ -15,7 +15,7 @@ const materialsSub = [
 const diySub = [
   { label: "עצבו סלון", to: "/designer" },
   { label: "בחרו את הבד", to: "/fabric" },
-  { label: "AR — תצוגה במרחב", to: "/ar" },
+  { label: "AR, תצוגה במרחב", to: "/ar" },
   { label: "שאלון חכם", to: "/questionnaire" },
 ];
 
@@ -175,7 +175,7 @@ const Header = () => {
         </div>
       </div>
 
-      {/* Mobile menu — slide-in from right */}
+      {/* Mobile menu, slide-in from right */}
       <div
         className={`lg:hidden fixed inset-0 z-40 transition-opacity duration-300 ${
           open ? "opacity-100 visible" : "opacity-0 invisible pointer-events-none"

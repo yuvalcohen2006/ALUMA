@@ -7,7 +7,7 @@ const AccessibilityPage = () => {
     <Layout>
       <SEO
         title="הצהרת נגישות | Aluma"
-        description="הצהרת הנגישות של אתר Aluma — התאמות, אמצעי סיוע, יצירת קשר עם רכז הנגישות וטיפול בתקלות."
+        description="הצהרת הנגישות של אתר Aluma, התאמות, אמצעי סיוע, יצירת קשר עם רכז הנגישות וטיפול בתקלות."
         path="/accessibility"
       />
       <section className="pt-32 pb-12 md:pt-40 gradient-cream">
@@ -51,7 +51,7 @@ const AccessibilityPage = () => {
           <div>
             <h2 className="font-display text-2xl text-primary mb-3">מגבלות ידועות</h2>
             <p className="text-muted-foreground">
-              למרות מאמצינו, ייתכן ובאתר קיימים תכנים שטרם הונגשו במלואם — בעיקר
+              למרות מאמצינו, ייתכן ובאתר קיימים תכנים שטרם הונגשו במלואם, בעיקר
               תכנים שעודכנו לאחרונה או תוכן שמקורו בצד שלישי. אנו עובדים באופן
               שוטף על שיפור הנגישות ומתחייבים לטפל בכל פנייה תוך זמן סביר.
             </p>

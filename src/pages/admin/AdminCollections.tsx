@@ -76,7 +76,7 @@ type Product = {
 
 /**
  * Buffered text field: keeps raw typing (spaces, empty lines) in local state
- * and only calls onCommit(parsed) on blur — so parsing/trimming never
+ * and only calls onCommit(parsed) on blur, so parsing/trimming never
  * clobbers the user's in-progress input.
  */
 function BufferedTextarea({
@@ -722,7 +722,7 @@ const AdminCollections = () => {
                 />
               </div>
               <div>
-                <Label>נקודות עיצוב (שורה לכל נקודה — בפורמט: כותרת | תיאור)</Label>
+                <Label>נקודות עיצוב (שורה לכל נקודה, בפורמט: כותרת | תיאור)</Label>
                 <BufferedTextarea
                   rows={4}
                   initial={((editProd.highlights as any[]) || [])

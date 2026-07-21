@@ -4,8 +4,6 @@ import SEO from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import alumaLogo from "@/assets/aluma-logo.png";
-import heroSalon from "@/assets/hero-salon.jpg";
-import sunlightSofa from "@/assets/story-sunlight-sofa.jpg";
 import {
   Heart,
   ClipboardCheck,
@@ -20,7 +18,7 @@ const perks = [
   {
     icon: ClipboardCheck,
     title: "מעקב פרויקט חי",
-    text: "צפו בסטטוס ההזמנה, אבני דרך והתקדמות בזמן אמת — בלי להרים טלפון.",
+    text: "צפו בסטטוס ההזמנה, אבני דרך והתקדמות בזמן אמת, בלי להרים טלפון.",
   },
   {
     icon: Heart,
@@ -30,7 +28,7 @@ const perks = [
   {
     icon: Sparkles,
     title: "גישה מוקדמת",
-    text: "קולקציות חדשות, גוונים בלעדיים והזמנות לאירועי לונץ׳ פרטיים — לפני כולם.",
+    text: "קולקציות חדשות, גוונים בלעדיים והזמנות לאירועי לונץ׳ פרטיים, לפני כולם.",
   },
   {
     icon: ShieldCheck,
@@ -40,7 +38,7 @@ const perks = [
 ];
 
 const steps = [
-  { n: "01", title: "הרשמה", text: "דקה אחת — שם, מייל וטלפון. בלי טפסים ארוכים." },
+  { n: "01", title: "הרשמה", text: "דקה אחת, שם, מייל וטלפון. בלי טפסים ארוכים." },
   { n: "02", title: "אימות מהיר", text: "מאמתים את החשבון ומעצבים את הפרופיל האישי שלכם." },
   { n: "03", title: "עולם שלם נפתח", text: "מועדפים, מעקב פרויקט, הטבות והזמנות פרטיות." },
 ];
@@ -82,37 +80,14 @@ const Club = () => {
     <Layout>
       <SEO
         title="מועדון אלומה | Aluma Club"
-        description="הצטרפו למועדון הלקוחות של Aluma — מעקב הזמנה, מועדפים, גישה מוקדמת לקולקציות והטבות בלעדיות."
+        description="הצטרפו למועדון הלקוחות של Aluma, מעקב הזמנה, מועדפים, גישה מוקדמת לקולקציות והטבות בלעדיות."
         path="/club"
       />
 
-      {/* HERO — editorial split */}
+      {/* HERO, editorial split */}
       <section className="relative pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden gradient-cream">
-        {/* Ornamental corner image */}
-        <div
-          aria-hidden
-          className="hidden md:block absolute -top-10 -left-24 w-[520px] h-[520px] rounded-full opacity-25"
-          style={{
-            backgroundImage: `url(${heroSalon})`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            filter: "blur(2px)",
-            maskImage: "radial-gradient(circle at center, black 45%, transparent 70%)",
-          }}
-        />
-        <div
-          aria-hidden
-          className="hidden md:block absolute -bottom-24 -right-24 w-[420px] h-[420px] rounded-full opacity-20"
-          style={{
-            backgroundImage: `url(${sunlightSofa})`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            maskImage: "radial-gradient(circle at center, black 45%, transparent 70%)",
-          }}
-        />
-
         <div className="container-luxury relative">
-          <div className="max-w-3xl mx-auto text-center">
+          <div className="max-w-3xl mx-auto text-center animate-rise-in">
             <h1 className="sr-only">מועדון אלומה</h1>
 
             <div className="inline-flex items-center gap-3 bg-background/80 backdrop-blur border border-primary/15 rounded-full px-5 py-2 mb-8 shadow-soft">
@@ -138,7 +113,7 @@ const Club = () => {
 
             <p className="text-lg md:text-xl text-muted-foreground font-light leading-relaxed max-w-2xl mx-auto mb-10">
               מועדון אלומה הוא לא תוכנית נקודות. זו דלת אחורית לעולם של מעצבים,
-              קולקציות מוקדמות ושירות אישי — למי שרואה את החוץ של הבית כמו את הפנים.
+              קולקציות מוקדמות ושירות אישי, למי שרואה את החוץ של הבית כמו את הפנים.
             </p>
 
             {ctaBlock}
@@ -163,7 +138,7 @@ const Club = () => {
         </div>
       </section>
 
-      {/* PERKS — editorial bento */}
+      {/* PERKS, editorial bento */}
       <section className="py-20 md:py-28 bg-background">
         <div className="container-luxury">
           <div className="text-center max-w-2xl mx-auto mb-16">
@@ -174,7 +149,7 @@ const Club = () => {
               מה מקבלים כשמצטרפים
             </h2>
             <p className="text-muted-foreground font-light leading-relaxed">
-              ארבע הטבות שנבנו סביב איך שלקוחות אלומה באמת עובדים איתנו — מהרגע
+              ארבע הטבות שנבנו סביב איך שלקוחות אלומה באמת עובדים איתנו, מהרגע
               שבחרתם דגם ועד שנים אחרי המסירה.
             </p>
           </div>
@@ -208,7 +183,7 @@ const Club = () => {
         </div>
       </section>
 
-      {/* STEPS — how to join */}
+      {/* STEPS, how to join */}
       <section className="py-20 md:py-28 gradient-cream">
         <div className="container-luxury">
           <div className="grid lg:grid-cols-5 gap-12 lg:gap-20 items-center">
@@ -224,7 +199,7 @@ const Club = () => {
                 בלי התחייבות.
               </h2>
               <p className="text-muted-foreground font-light leading-relaxed mb-8">
-                החברות במועדון אלומה חינמית לחלוטין ואישית — לא נשלח לכם ספאם,
+                החברות במועדון אלומה חינמית לחלוטין ואישית, לא נשלח לכם ספאם,
                 לא נמכור את הנתונים ולא נציק לכם בטלפון.
               </p>
               {!user && (
@@ -287,7 +262,7 @@ const Club = () => {
             </div>
             <blockquote className="font-display text-2xl md:text-4xl leading-relaxed mb-8 text-balance font-light">
               „החברות במועדון אלומה זה מה שהופך פרויקט לחוויה. יש מישהו שמכיר את
-              הבית, את הגוונים, את מה שאהבנו — ופשוט זוכר.”
+              הבית, את הגוונים, את מה שאהבנו, ופשוט זוכר.”
             </blockquote>
             <div className="flex items-center justify-center gap-3 text-sm opacity-90">
               <Users className="h-4 w-4" />
@@ -311,7 +286,7 @@ const Club = () => {
             </h2>
             <p className="text-muted-foreground font-light leading-relaxed mb-10 max-w-xl mx-auto">
               {user
-                ? "אזור החברים שלכם מחכה — מועדפים, סטטוסים והזמנות במקום אחד."
+                ? "אזור החברים שלכם מחכה, מועדפים, סטטוסים והזמנות במקום אחד."
                 : "הצטרפות חינם, בלי התחייבות. בכל רגע אפשר לצאת."}
             </p>
             {ctaBlock}

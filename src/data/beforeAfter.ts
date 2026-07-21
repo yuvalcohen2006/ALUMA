@@ -11,7 +11,7 @@ export interface BeforeAfterItem {
   location: string;
   tag: string;
   description: string;
-  /** Real before photo URL — when available */
+  /** Real before photo URL, when available */
   before: string;
   /** Final after photo URL */
   after: string;
@@ -59,7 +59,7 @@ export const beforeAfterItems: BeforeAfterItem[] = [
     location: "קיסריה",
     tag: "פינת אירוח",
     description:
-      "פינה מול הים, עם רהיטים ישנים — הפכה לפינת אירוח אינטימית במונוליט גרפיט.",
+      "פינה מול הים, עם רהיטים ישנים, הפכה לפינת אירוח אינטימית במונוליט גרפיט.",
     before: salonMarina,
     after: tableGranite,
   },

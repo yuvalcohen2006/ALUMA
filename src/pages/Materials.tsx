@@ -10,7 +10,7 @@ const MaterialsPage = () => {
     <Layout>
       <SEO
         title="חומרים | בדי Sunbrella, אלומיניום ושיש גרניט פורצלן | Aluma"
-        description="החומרים שמהם עשויים מוצרי Aluma: בדי Sunbrella עמידים ל-UV, אלומיניום פרימיום בציפוי אבקה ושיש גרניט פורצלן בעיבוד יד — לעמידות יוקרה לאורך שנים."
+        description="החומרים שמהם עשויים מוצרי Aluma: בדי Sunbrella עמידים ל-UV, אלומיניום פרימיום בציפוי אבקה ושיש גרניט פורצלן בעיבוד יד, לעמידות יוקרה לאורך שנים."
         path="/materials"
       />
 
@@ -22,7 +22,7 @@ const MaterialsPage = () => {
           </h1>
           <div className="w-16 h-px bg-primary/30 mx-auto mb-6" />
           <p className="max-w-2xl mx-auto text-muted-foreground font-light leading-relaxed">
-            כל מוצר של Aluma מתחיל בבחירה קפדנית של חומר — שמרגיש יוקרתי במגע, ונשאר יפה גם אחרי שנים בחוץ.
+            כל מוצר של Aluma מתחיל בבחירה קפדנית של חומר, שמרגיש יוקרתי במגע, ונשאר יפה גם אחרי שנים בחוץ.
           </p>
         </div>
       </section>
@@ -56,7 +56,7 @@ const MaterialsPage = () => {
 
                 <div className={reverse ? "md:order-1" : ""}>
                   <div className="text-[11px] tracking-[0.4em] uppercase text-accent mb-4">
-                    {String(i + 1).padStart(2, "0")} — Material
+                    {String(i + 1).padStart(2, "0")}, Material
                   </div>
                   <h2 className="font-display text-3xl md:text-4xl text-primary font-light mb-3 leading-tight">
                     {m.name}

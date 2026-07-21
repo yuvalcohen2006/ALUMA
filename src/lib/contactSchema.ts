@@ -32,7 +32,7 @@ export const contactSchema = z.object({
     .max(1000, { message: "הודעה ארוכה מדי (עד 1000 תווים)" })
     .optional()
     .or(z.literal("")),
-  // honeypot — must remain empty
+  // honeypot, must remain empty
   website: z.string().max(0).optional().or(z.literal("")),
 });
 

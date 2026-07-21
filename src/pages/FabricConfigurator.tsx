@@ -49,7 +49,7 @@ const FabricConfigurator = () => {
   return (
     <div className="min-h-screen bg-background">
       <SEO
-        title="בחרו את הבד — קונפיגורטור בדי Sunbrella לסלוני חוץ | Aluma"
+        title="בחרו את הבד, קונפיגורטור בדי Sunbrella לסלוני חוץ | Aluma"
         description="בחרו צבע ומרקם של בד Sunbrella וראו תצוגה מקדימה מיידית על ספת חוץ של Aluma. עשרות גוונים, עמיד UV, חיוני לריהוט גן ומרפסת."
         path="/fabric"
       />
@@ -66,7 +66,7 @@ const FabricConfigurator = () => {
               בחרו את הבד למניפה שלכם
             </h1>
             <p className="text-primary/70 max-w-2xl mx-auto leading-relaxed">
-              כל הבדים מתוך מניפת Sunbrella המקורית — עמידים ב-UV, דוחי מים,
+              כל הבדים מתוך מניפת Sunbrella המקורית, עמידים ב-UV, דוחי מים,
               אחריות 5 שנים. בחרו משפחה, לחצו על דגימה, וראו מיד איך הספה תיראה
               עם הבד שבחרתם.
             </p>
@@ -79,7 +79,7 @@ const FabricConfigurator = () => {
                 <div className="relative">
                   <img
                     src={sofaAsset.url}
-                    alt="ספה מודולרית — תצוגה מקדימה לבחירת בד"
+                    alt="ספה מודולרית, תצוגה מקדימה לבחירת בד"
                     width={1280}
                     height={960}
                     loading="eager"
@@ -134,7 +134,7 @@ const FabricConfigurator = () => {
                     rel="noopener noreferrer"
                     onClick={() =>
                       trackPixel("InitiateCheckout", {
-                        content_name: `בד Sunbrella — ${selected.nameHe}`,
+                        content_name: `בד Sunbrella, ${selected.nameHe}`,
                         content_category: "Fabric Configurator",
                         content_ids: [selected.code],
                       })
@@ -224,7 +224,7 @@ const FabricConfigurator = () => {
 
               <p className="text-[11px] text-primary/55 mt-5 leading-relaxed">
                 * הצבעים על המסך הם קירוב חזותי. הגוון, המרקם והמשקל הסופיים
-                נקבעים מול המניפה הפיזית — נשמח להביא אליכם אותה בפגישה.
+                נקבעים מול המניפה הפיזית, נשמח להביא אליכם אותה בפגישה.
               </p>
             </div>
           </div>
@@ -233,7 +233,7 @@ const FabricConfigurator = () => {
 
       <ConversionCTA
         title="מצאתם את הבד. עכשיו נביא לכם את המניפה."
-        subtitle="נשלח אליכם דגימות פיזיות ונרכיב הצעה סגורה — כדי שתראו ותרגישו לפני שמחליטים."
+        subtitle="נשלח אליכם דגימות פיזיות ונרכיב הצעה סגורה, כדי שתראו ותרגישו לפני שמחליטים."
         whatsappMessage="היי, בחרתי בד בסטודיו של אלומה ואשמח לקבל דגימות והצעת מחיר."
       />
 

@@ -34,7 +34,7 @@ const CollectionDetailPage = () => {
       .eq("slug", slug)
       .eq("published", true)
       .maybeSingle();
-    // A query error is NOT a missing product — don't render a false 404.
+    // A query error is NOT a missing product, don't render a false 404.
     if (error) {
       setLoadError(true);
       setItem(null);
@@ -138,7 +138,7 @@ const CollectionDetailPage = () => {
     <Layout>
       <SEO
         title={`${item.name} | קולקציות | Aluma`}
-        description={`${item.name} — ${item.tagline ?? ""}. ${item.description[0] ?? ""}`}
+        description={`${item.name}, ${item.tagline ?? ""}. ${item.description[0] ?? ""}`}
         path={`/collections/${item.slug}`}
         jsonLd={productJsonLd}
       />
@@ -156,7 +156,7 @@ const CollectionDetailPage = () => {
         </div>
       </section>
 
-      {/* TITLE — centered */}
+      {/* TITLE, centered */}
       <section className="pb-8 md:pb-12 bg-background">
         <div className="container-luxury text-center">
           {item.tag && (
@@ -187,7 +187,7 @@ const CollectionDetailPage = () => {
       {/* MAIN 2-COLUMN */}
       <section className="pb-16 md:pb-24 bg-background">
         <div className="container-luxury grid md:grid-cols-5 gap-8 md:gap-12 items-stretch">
-          {/* RIGHT COLUMN — text */}
+          {/* RIGHT COLUMN, text */}
           <div className="md:col-span-2 order-2 md:order-1 flex flex-col gap-6 md:gap-8">
             {item.description.length > 0 && (
               <div className="border border-primary/40 rounded-sm p-6 md:p-8">
@@ -212,7 +212,7 @@ const CollectionDetailPage = () => {
                     <li key={h.title} className="flex gap-3">
                       <Check className="w-4 h-4 text-accent mt-1 shrink-0" />
                       <div className="text-primary font-light text-[15px] leading-relaxed">
-                        {h.title}{h.desc && <span className="text-muted-foreground"> — {h.desc}</span>}
+                        {h.title}{h.desc && <span className="text-muted-foreground">, {h.desc}</span>}
                       </div>
                     </li>
                   ))}
@@ -263,7 +263,7 @@ const CollectionDetailPage = () => {
             )}
           </div>
 
-          {/* LEFT COLUMN — gallery (main + thumbs) */}
+          {/* LEFT COLUMN, gallery (main + thumbs) */}
           <div className="md:col-span-3 order-1 md:order-2">
             {/* Mobile: horizontal carousel */}
             <div className="md:hidden flex overflow-x-auto gap-4 snap-x -mx-6 px-6 pb-2">
@@ -272,7 +272,7 @@ const CollectionDetailPage = () => {
                   <div className="relative overflow-hidden rounded-sm shadow-soft aspect-[4/3]">
                     <img
                       src={img}
-                      alt={`${item.name} — תמונה ${i + 1}`}
+                      alt={`${item.name}, תמונה ${i + 1}`}
                       loading={i === 0 ? "eager" : "lazy"}
                       decoding="async"
                       className="absolute inset-0 w-full h-full object-cover"
@@ -290,7 +290,7 @@ const CollectionDetailPage = () => {
                   {galleryImages[activeImage] && (
                     <img
                       src={galleryImages[activeImage]}
-                      alt={`${item.name} — תמונה ${activeImage + 1}`}
+                      alt={`${item.name}, תמונה ${activeImage + 1}`}
                       loading="eager"
                       decoding="async"
                       className="absolute inset-0 w-full h-full object-cover transition-opacity duration-500"

@@ -46,10 +46,11 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        footer: "hsl(var(--footer))",
       },
       fontFamily: {
-        display: ['Heebo', 'system-ui', 'sans-serif'],
-        sans: ['Heebo', 'system-ui', 'sans-serif'],
+        display: ['var(--font-display)'],
+        sans: ['var(--font-body)'],
       },
       borderRadius: {
         lg: "var(--radius)",

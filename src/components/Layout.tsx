@@ -10,7 +10,7 @@ import { ReactNode } from "react";
 const Layout = ({ children }: { children: ReactNode }) => {
   return (
     <div className="min-h-dvh bg-background flex flex-col">
-      {/* Skip to main content — keyboard a11y */}
+      {/* Skip to main content, keyboard a11y */}
       <a
         href="#main-content"
         className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:right-3 focus:z-[100] focus:bg-primary focus:text-primary-foreground focus:px-4 focus:py-2 focus:rounded-sm focus:shadow-luxury"

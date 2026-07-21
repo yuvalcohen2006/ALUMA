@@ -19,7 +19,7 @@ const StoryPage = () => {
   return (
     <Layout>
       <SEO
-        title="הסיפור שלנו | Aluma — ריהוט חוץ בעיצוב אישי"
+        title="הסיפור שלנו | Aluma, ריהוט חוץ בעיצוב אישי"
         description="Aluma נולדה מתוך חיבור בין חומר לאור. סיפור המותג, הערכים והגישה לעיצוב סלוני חוץ יוקרתיים בייצור אישי לתנאי החוץ של ישראל."
         path="/story"
         jsonLd={breadcrumbs}
@@ -54,7 +54,7 @@ const StoryPage = () => {
                 <p>אלומה נולדה מתוך חיבור בין חומר לאור.</p>
 
                 <p>
-                  השם מגיע מהשורש של אלומיניום — חומר חזק, נקי ועמיד, כזה שנועד
+                  השם מגיע מהשורש של אלומיניום, חומר חזק, נקי ועמיד, כזה שנועד
                   לחיות בחוץ בלי לחשוש מהשמש, מהגשם או ממעבר הזמן. ומעבר לחומר,
                   יש בו גם צליל של אור, אותו אור שמגדיר את חוויית החוץ.
                 </p>
@@ -75,7 +75,7 @@ const StoryPage = () => {
                 </p>
 
                 <p className="text-primary tracking-wide pt-1">
-                  זו לא רק חוויה — זו איכות חיים.
+                  זו לא רק חוויה, זו איכות חיים.
                 </p>
               </div>
             </div>
@@ -85,9 +85,9 @@ const StoryPage = () => {
               <div className="hidden md:block absolute right-0 top-1/2 -translate-y-1/2 w-px h-4/5 bg-primary/20" />
               <div className="flex items-end justify-center gap-[19px] w-full mx-auto">
                 {[
-                  { src: storyPortraitIdan, alt: "דיוקן קווי — עידן", name: "idan" },
-                  { src: storyPortraitRoy, alt: "דיוקן קווי — רועי", name: "roy" },
-                  { src: storyPortrait, alt: "דיוקן קווי — בן", name: "ben" },
+                  { src: storyPortraitIdan, alt: "דיוקן קווי, עידן", name: "idan" },
+                  { src: storyPortraitRoy, alt: "דיוקן קווי, רועי", name: "roy" },
+                  { src: storyPortrait, alt: "דיוקן קווי, בן", name: "ben" },
                 ].map((p) => (
                   <img
                     key={p.name}

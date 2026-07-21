@@ -2,7 +2,7 @@ import Reveal from "@/components/Reveal";
 import SectionLabel from "@/components/SectionLabel";
 import { Quote, Star } from "lucide-react";
 
-// ⚠️ PLACEHOLDER / FABRICATED DATA — these names and quotes are NOT real customers.
+// ⚠️ PLACEHOLDER / FABRICATED DATA, these names and quotes are NOT real customers.
 // This component is currently NOT rendered anywhere (removed from the homepage).
 // Replace this array with real, attributed testimonials before re-enabling it.
 const testimonials = [
@@ -10,7 +10,7 @@ const testimonials = [
     name: "מיכל ואסף לוי",
     role: "וילה בכפר שמריהו",
     quote:
-      "קיבלנו בדיוק את מה שחלמנו עליו — מערכת ישיבה שמרגישה כמו רהיט יוקרה בסלון, רק בחוץ. אחרי שנתיים מלאות של שמש וגשם הכל נראה כמו ביום הראשון. ליווי מקצועי מהשרטוט הראשון ועד ההתקנה.",
+      "קיבלנו בדיוק את מה שחלמנו עליו, מערכת ישיבה שמרגישה כמו רהיט יוקרה בסלון, רק בחוץ. אחרי שנתיים מלאות של שמש וגשם הכל נראה כמו ביום הראשון. ליווי מקצועי מהשרטוט הראשון ועד ההתקנה.",
   },
   {
     name: "רוני ברק",

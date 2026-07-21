@@ -42,7 +42,7 @@ const NotFound = () => {
             נראה שהלכתם <span className="italic">לאיבוד</span>
           </h1>
           <p className="text-muted-foreground text-base md:text-lg leading-relaxed mb-10">
-            הדף שחיפשתם הוסר או שהקישור שגוי. אבל אל דאגה — הנה כמה מהדפים
+            הדף שחיפשתם הוסר או שהקישור שגוי. אבל אל דאגה, הנה כמה מהדפים
             הפופולריים שלנו שיכולים לעניין אתכם:
           </p>
 

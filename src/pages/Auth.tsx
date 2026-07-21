@@ -24,7 +24,7 @@ const GoogleIcon = () => (
 );
 
 const sidePerks = [
-  { icon: ClipboardCheck, text: "מעקב פרויקט חי — סטטוס ואבני דרך בזמן אמת" },
+  { icon: ClipboardCheck, text: "מעקב פרויקט חי, סטטוס ואבני דרך בזמן אמת" },
   { icon: Heart, text: "מועדפים שנשמרים בין המכשירים" },
   { icon: Sparkles, text: "גישה מוקדמת לקולקציות והזמנות פרטיות" },
   { icon: ShieldCheck, text: "מעצב אישי ושירות VIP מלווה" },
@@ -112,13 +112,13 @@ const AuthPage = () => {
     <Layout>
       <SEO
         title={isSignup ? "הצטרפות למועדון | Aluma" : "התחברות למועדון | Aluma"}
-        description="מועדון אלומה — מעקב הזמנה, מועדפים והטבות בלעדיות."
+        description="מועדון אלומה, מעקב הזמנה, מועדפים והטבות בלעדיות."
         path="/club/auth"
       />
       <section className="pt-24 md:pt-28 pb-16 md:pb-24 gradient-cream">
         <div className="container-luxury">
           <div className="max-w-6xl mx-auto grid lg:grid-cols-2 rounded-sm overflow-hidden shadow-luxury border border-primary/15 bg-background">
-            {/* LEFT — brand panel */}
+            {/* LEFT, brand panel */}
             <aside className="relative hidden lg:flex flex-col justify-between p-12 text-primary-foreground overflow-hidden min-h-[640px]">
               <div
                 aria-hidden
@@ -169,7 +169,7 @@ const AuthPage = () => {
               </div>
             </aside>
 
-            {/* RIGHT — form */}
+            {/* RIGHT, form */}
             <div className="p-8 md:p-12 lg:p-14 bg-background">
               <div className="max-w-sm mx-auto">
                 {/* Mobile logo */}

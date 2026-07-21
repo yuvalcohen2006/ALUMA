@@ -7,19 +7,11 @@ import { useEffect } from "react";
 const RoutePrefetcher = () => {
   useEffect(() => {
     const prefetch = () => {
-      // Order matters loosely — most likely next pages first
+      // Only the few most-likely next routes. Prefetching every page on load
+      // just pulls the whole app back down and defeats the code-splitting.
       import("@/pages/Collections.tsx");
       import("@/pages/CollectionDetail.tsx");
-      import("@/pages/Materials.tsx");
-      import("@/pages/MaterialDetail.tsx");
-      import("@/pages/Projects.tsx");
-      import("@/pages/ProjectDetail.tsx");
-      import("@/pages/Blog.tsx");
-      import("@/pages/BlogPost.tsx");
       import("@/pages/Contact.tsx");
-      import("@/pages/FAQ.tsx");
-      import("@/pages/Story.tsx");
-      import("@/pages/BeforeAfter.tsx");
     };
 
     const w = window as Window & {

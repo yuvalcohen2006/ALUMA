@@ -12,7 +12,7 @@ const collectionSchema = {
   "@type": "CollectionPage",
   name: "פרויקטים של Aluma",
   description:
-    "גלריית פרויקטים נבחרים של Aluma — סלוני חוץ ומרחבי חוץ יוקרתיים בוילות, פנטהאוזים ובתי יוקרה בישראל.",
+    "גלריית פרויקטים נבחרים של Aluma, סלוני חוץ ומרחבי חוץ יוקרתיים בוילות, פנטהאוזים ובתי יוקרה בישראל.",
   url: `${SITE}/projects`,
   inLanguage: "he-IL",
   mainEntity: {
@@ -35,7 +35,7 @@ const ProjectsPage = () => {
     <Layout>
       <SEO
         title="פרויקטים | סלוני חוץ בוילות, פנטהאוזים ובתי יוקרה | Aluma"
-        description="מבחר פרויקטים נבחרים של Aluma — סלוני חוץ, מרפסות פנורמיות, מתחמי בריכה ופינות אירוח בעיצוב אישי. עבודות בוילות, פנטהאוזים ובתים פרטיים בישראל."
+        description="מבחר פרויקטים נבחרים של Aluma, סלוני חוץ, מרפסות פנורמיות, מתחמי בריכה ופינות אירוח בעיצוב אישי. עבודות בוילות, פנטהאוזים ובתים פרטיים בישראל."
         path="/projects"
         jsonLd={collectionSchema}
       />
@@ -47,7 +47,7 @@ const ProjectsPage = () => {
           </h1>
           <div className="w-16 h-px bg-primary/30 mx-auto mb-6" />
           <p className="max-w-2xl mx-auto text-muted-foreground font-light leading-relaxed">
-            כל פרויקט הוא סיפור של מרחב, של אנשים ושל דרך חיים. הציצו פנימה — וכל אחד פותח עולם משלו.
+            כל פרויקט הוא סיפור של מרחב, של אנשים ושל דרך חיים. הציצו פנימה, וכל אחד פותח עולם משלו.
           </p>
         </div>
       </section>

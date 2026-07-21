@@ -49,7 +49,7 @@ const AdminHero = () => {
     try {
       const { url } = await uploadFile("site-hero", file);
       setHero((h) => ({ ...h, [which]: url }));
-      toast.success("הועלה — לחצו שמירה לעדכון בדף הבית");
+      toast.success("הועלה, לחצו שמירה לעדכון בדף הבית");
     } catch (e: any) {
       toast.error(e.message);
     }
@@ -69,7 +69,7 @@ const AdminHero = () => {
       <div className="grid lg:grid-cols-2 gap-6">
         <Card>
           <CardHeader>
-            <CardTitle>תמונת רקע — דסקטופ</CardTitle>
+            <CardTitle>תמונת רקע, דסקטופ</CardTitle>
           </CardHeader>
           <CardContent>
             {hero.desktop_image ? (
@@ -98,7 +98,7 @@ const AdminHero = () => {
 
         <Card>
           <CardHeader>
-            <CardTitle>תמונת רקע — מובייל</CardTitle>
+            <CardTitle>תמונת רקע, מובייל</CardTitle>
           </CardHeader>
           <CardContent>
             {hero.mobile_image ? (

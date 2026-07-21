@@ -50,11 +50,11 @@ const featureOptions = [
 ];
 
 const recommendFor = (a: Answers) => {
-  if (a.space_type === "אזור בריכה") return "קולקציית Pool — סטים עמידים בכלור עם בדי Sunbrella ושלדת אלומיניום מוקצף.";
-  if (a.style.includes("מינימליסטי")) return "קולקציית Soft Lines — סלוני חוץ נקיים בגווני אבן ולבן שמנת.";
-  if (a.style.includes("ים-תיכוני")) return "קולקציית Mediterranean — טראקוטה, פשתן וגוונים חמים.";
-  if (a.space_type.includes("גג")) return "קולקציית Skyline — מודולים גמישים לפנטהאוזים עם דגש על נוף.";
-  return "קולקציית Signature — סלוני חוץ בהתאמה אישית עם בדי Sunbrella ושלדת אלומיניום.";
+  if (a.space_type === "אזור בריכה") return "קולקציית Pool, סטים עמידים בכלור עם בדי Sunbrella ושלדת אלומיניום מוקצף.";
+  if (a.style.includes("מינימליסטי")) return "קולקציית Soft Lines, סלוני חוץ נקיים בגווני אבן ולבן שמנת.";
+  if (a.style.includes("ים-תיכוני")) return "קולקציית Mediterranean, טראקוטה, פשתן וגוונים חמים.";
+  if (a.space_type.includes("גג")) return "קולקציית Skyline, מודולים גמישים לפנטהאוזים עם דגש על נוף.";
+  return "קולקציית Signature, סלוני חוץ בהתאמה אישית עם בדי Sunbrella ושלדת אלומיניום.";
 };
 
 const steps = ["מרחב", "סגנון ולוח זמנים", "פיצ׳רים", "פרטי קשר"];

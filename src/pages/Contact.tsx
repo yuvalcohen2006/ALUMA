@@ -7,8 +7,8 @@ const ContactPage = () => {
   return (
     <Layout>
       <SEO
-        title="צרו קשר | Aluma — סלוני חוץ בעיצוב אישי"
-        description="ספרו לנו על הפרויקט שלכם — צוות Aluma חוזר אליכם להתאמה אישית מלאה. טלפון 050-451-9062, מייל info@aluma.co.il, אולם תצוגה ביציץ."
+        title="צרו קשר | Aluma, סלוני חוץ בעיצוב אישי"
+        description="ספרו לנו על הפרויקט שלכם, צוות Aluma חוזר אליכם להתאמה אישית מלאה. טלפון 050-451-9062, מייל info@aluma.co.il, אולם תצוגה ביציץ."
         path="/contact"
       />
       <section className="pt-32 pb-16 md:pt-40 md:pb-20 gradient-cream">

@@ -57,7 +57,7 @@ const Contact = () => {
     }
     if (now - lastSubmitAt.current < COOLDOWN_MS) {
       const secs = Math.ceil((COOLDOWN_MS - (now - lastSubmitAt.current)) / 1000);
-      toast.error(`נשלחה הודעה לאחרונה — נסו שוב בעוד ${secs} שניות`);
+      toast.error(`נשלחה הודעה לאחרונה, נסו שוב בעוד ${secs} שניות`);
       return;
     }
 
@@ -132,7 +132,7 @@ const Contact = () => {
       <div className="container-luxury">
        <div className="border border-primary/50 rounded-sm p-6 md:p-10 bg-background">
          <div className="grid grid-cols-1 lg:grid-cols-[1fr_1px_1fr] gap-10 lg:gap-0 items-stretch">
-           {/* Right column (RTL first) — Form */}
+           {/* Right column (RTL first), Form */}
            <div className="lg:pl-16 order-1">
              <div className="mb-8">
                <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-normal text-primary leading-tight mb-3">
@@ -155,7 +155,7 @@ const Contact = () => {
              </div>
 
              <form onSubmit={handleSubmit} className="space-y-6" noValidate>
-                {/* Honeypot — hidden from real users */}
+                {/* Honeypot, hidden from real users */}
                 <div aria-hidden="true" className="absolute -left-[9999px] w-px h-px overflow-hidden" style={{ position: "absolute" }}>
                   <label>
                     Website
@@ -256,7 +256,7 @@ const Contact = () => {
            {/* Divider */}
            <div className="hidden lg:block w-px bg-primary/20 self-stretch order-2" />
 
-           {/* Left column — Contact info */}
+           {/* Left column, Contact info */}
            <div className="lg:pr-16 order-3">
 
 

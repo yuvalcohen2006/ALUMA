@@ -17,7 +17,7 @@
     --popover-foreground: 12 44% 20%;
 
     /* Terracotta primary #b56a55 — main text/buttons */
-    --primary: 13 39% 52%;
+    --primary: 13 39% 46%;
     --primary-foreground: 0 0% 100%;
 
     --secondary: 30 25% 88%;
@@ -35,7 +35,14 @@
 
     --border: 30 20% 82%;
     --input: 30 20% 82%;
-    --ring: 13 39% 52%;
+    --ring: 13 39% 46%;
+
+    /* Deep espresso for footer / mobile bar — white text reads ~15:1 (was terracotta at ~4:1) */
+    --footer: 12 40% 15%;
+
+    /* Typography — two faces only. Swap the display face here in one place. */
+    --font-display: 'Frank Ruhl Libre', 'Heebo', Georgia, serif;
+    --font-body: 'Heebo', system-ui, sans-serif;
 
     --radius: 0.25rem;
 
@@ -61,13 +68,13 @@
 
   body {
     @apply bg-background text-foreground font-sans antialiased;
-    font-family: 'Heebo', system-ui, sans-serif;
+    font-family: var(--font-body);
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Heebo', system-ui, sans-serif;
+    font-family: var(--font-display);
     font-weight: 600;
-    letter-spacing: -0.015em;
+    letter-spacing: -0.01em;
     line-height: 1.2;
     font-style: normal;
   }
@@ -105,9 +112,9 @@
 
 @layer utilities {
   .font-display {
-    font-family: 'Heebo', system-ui, sans-serif;
+    font-family: var(--font-display);
     font-weight: 600;
-    letter-spacing: -0.015em;
+    letter-spacing: -0.01em;
   }
 
   /* Neutralize any italic emphasis so Hebrew text never appears slanted */
@@ -139,6 +146,44 @@
 
   .transition-smooth {
     transition: var(--transition-smooth);
+  }
+
+  /* Animated underline for text links — grows from the right (RTL start) on hover/focus */
+  .link-underline {
+    position: relative;
+  }
+  .link-underline::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    bottom: -2px;
+    height: 1px;
+    width: 0;
+    background: currentColor;
+    transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .link-underline:hover::after,
+  .link-underline:focus-visible::after {
+    width: 100%;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .link-underline::after {
+      transition: none;
+    }
+  }
+}
+
+/* Gentle one-shot entrance for hero content on load */
+@layer utilities {
+  @keyframes rise-in {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .animate-rise-in {
+    animation: rise-in 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .animate-rise-in { animation: none; }
   }
 }
 

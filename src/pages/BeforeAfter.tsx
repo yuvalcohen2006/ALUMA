@@ -11,7 +11,7 @@ const BeforeAfterPage = () => {
     <Layout>
       <SEO
         title="לפני ואחרי | טרנספורמציות חוץ של Aluma"
-        description="גלריית לפני ואחרי — מרפסות, חצרות וגגות שהפכנו לסלוני חוץ יוקרתיים. החליקו לראות את השינוי."
+        description="גלריית לפני ואחרי, מרפסות, חצרות וגגות שהפכנו לסלוני חוץ יוקרתיים. החליקו לראות את השינוי."
         path="/before-after"
       />
 
@@ -23,7 +23,7 @@ const BeforeAfterPage = () => {
           </h1>
           <div className="w-16 h-px bg-primary/30 mx-auto mb-6" />
           <p className="max-w-2xl mx-auto text-muted-foreground font-light leading-relaxed">
-            כל פרויקט מתחיל בחלל ריק — ונגמר במרחב חיים. גררו את הידית בכל תמונה כדי לראות את המסע.
+            כל פרויקט מתחיל בחלל ריק, ונגמר במרחב חיים. גררו את הידית בכל תמונה כדי לראות את המסע.
           </p>
         </div>
       </section>

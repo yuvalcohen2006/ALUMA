@@ -40,7 +40,7 @@ const CategoryRow = ({
         </div>
 
         {products.length === 0 ? (
-          <p className="text-center text-muted-foreground py-12">בקרוב — מוצרים חדשים בקולקציה זו.</p>
+          <p className="text-center text-muted-foreground py-12">בקרוב, מוצרים חדשים בקולקציה זו.</p>
         ) : (
           <>
             <div
@@ -59,7 +59,7 @@ const CategoryRow = ({
                       {p.cover_url && (
                         <img
                           src={p.cover_url}
-                          alt={`${p.name} — ${p.tag ?? ""} | Aluma`}
+                          alt={`${p.name}, ${p.tag ?? ""} | Aluma`}
                           loading={i < 2 ? "eager" : "lazy"}
                           decoding="async"
                           className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
@@ -152,7 +152,7 @@ const CollectionsPage = () => {
     <Layout>
       <SEO
         title="קולקציות | Aluma"
-        description="גלו את הקולקציות של Aluma — סלוני חוץ, שולחנות חוץ ועוד. עיצוב אישי לכל מרחב חוץ."
+        description="גלו את הקולקציות של Aluma, סלוני חוץ, שולחנות חוץ ועוד. עיצוב אישי לכל מרחב חוץ."
         path="/collections"
         jsonLd={itemList}
       />

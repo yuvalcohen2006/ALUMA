@@ -39,37 +39,7 @@ const StickyCTA = () => {
       aria-label="הצעה ליצירת קשר"
     >
       <div className="container-luxury pb-4 md:pb-6 px-24 md:px-24">
-        <div className="relative overflow-hidden rounded-full border border-white/25 shadow-luxury px-3 md:px-4 py-2 md:py-3 flex items-center justify-between gap-2 md:gap-6 backdrop-blur-3xl backdrop-saturate-150 bg-white/10 supports-[backdrop-filter]:bg-white/5 max-w-md md:max-w-none mx-auto">
-            {/* Liquid glow blobs — soft, slow */}
-            <span
-              aria-hidden="true"
-              className="pointer-events-none absolute -top-16 -right-12 w-56 h-56 rounded-full bg-accent/25 blur-3xl"
-              style={{ animation: "pulse 7s ease-in-out infinite" }}
-            />
-            <span
-              aria-hidden="true"
-              className="pointer-events-none absolute -bottom-20 left-1/4 w-64 h-64 rounded-full bg-primary/20 blur-3xl"
-              style={{ animation: "pulse 9s ease-in-out infinite" }}
-            />
-            <span
-              aria-hidden="true"
-              className="pointer-events-none absolute -top-12 left-0 w-44 h-44 rounded-full bg-accent/20 blur-3xl"
-              style={{ animation: "pulse 11s ease-in-out infinite" }}
-            />
-            {/* Glass sheen */}
-            <span
-              aria-hidden="true"
-              className="pointer-events-none absolute inset-0 rounded-full bg-gradient-to-b from-white/25 via-white/5 to-transparent"
-            />
-            <span
-              aria-hidden="true"
-              className="pointer-events-none absolute inset-x-8 top-px h-px bg-gradient-to-r from-transparent via-white/50 to-transparent"
-            />
-            <span
-              aria-hidden="true"
-              className="pointer-events-none absolute inset-x-10 bottom-px h-px bg-gradient-to-r from-transparent via-white/15 to-transparent"
-            />
-
+        <div className="relative overflow-hidden rounded-full border border-border shadow-luxury px-3 md:px-4 py-2 md:py-3 flex items-center justify-between gap-2 md:gap-6 bg-background/95 backdrop-blur-md max-w-md md:max-w-none mx-auto">
             <button
               type="button"
               onClick={handleDismiss}

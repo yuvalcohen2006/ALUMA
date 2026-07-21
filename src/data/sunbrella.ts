@@ -1,4 +1,4 @@
-// Sunbrella fabric library — שמות אמיתיים מהמניפה של Sunbrella.
+// Sunbrella fabric library, שמות אמיתיים מהמניפה של Sunbrella.
 // הצבעים הם קירוב חזותי לתצוגה מקדימה; הגוון הסופי תמיד נקבע מול הדגימה הפיזית.
 
 export type SunbrellaFabric = {
@@ -6,7 +6,7 @@ export type SunbrellaFabric = {
   name: string;
   nameHe: string;
   family: "Canvas" | "Heritage" | "Patterns";
-  // CSS background — אפשר צבע אחיד או gradient לדמות מרקם/פס
+  // CSS background, אפשר צבע אחיד או gradient לדמות מרקם/פס
   background: string;
   // צבע ההצללה שמוכפל מעל הספה הבסיסית בתצוגה המקדימה
   overlay: string;
@@ -14,7 +14,7 @@ export type SunbrellaFabric = {
 };
 
 export const sunbrellaFabrics: SunbrellaFabric[] = [
-  // ===== CANVAS — צבעי בסיס אחידים =====
+  // ===== CANVAS, צבעי בסיס אחידים =====
   {
     code: "5422-0000",
     name: "Canvas Natural",
@@ -88,7 +88,7 @@ export const sunbrellaFabrics: SunbrellaFabric[] = [
     overlay: "#b25a3e",
   },
 
-  // ===== HERITAGE — מרקם עדין =====
+  // ===== HERITAGE, מרקם עדין =====
   {
     code: "18012-0000",
     name: "Heritage Granite",
@@ -117,7 +117,7 @@ export const sunbrellaFabrics: SunbrellaFabric[] = [
     overlay: "#69734f",
   },
 
-  // ===== PATTERNS — דוגמאות ופסים =====
+  // ===== PATTERNS, דוגמאות ופסים =====
   {
     code: "56000-0000",
     name: "Milano Char",
