@@ -2,7 +2,6 @@ import { lazy, Suspense } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
-import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import Index from "./pages/Index.tsx";
 import RouteFallback from "@/components/RouteFallback";
@@ -46,7 +45,6 @@ const AdminHero = lazy(() => import("./pages/admin/AdminHero.tsx"));
 const AdminBlog = lazy(() => import("./pages/admin/AdminBlog.tsx"));
 const AdminLeads = lazy(() => import("./pages/admin/AdminLeads.tsx"));
 const AdminSettings = lazy(() => import("./pages/admin/AdminSettings.tsx"));
-const AdminCustomers = lazy(() => import("./pages/admin/AdminCustomers.tsx"));
 const AdminClub = lazy(() => import("./pages/admin/AdminClub.tsx"));
 const AdminOrders = lazy(() => import("./pages/admin/AdminOrders.tsx"));
 const AdminTeam = lazy(() => import("./pages/admin/AdminTeam.tsx"));
@@ -59,7 +57,6 @@ const App = () => (
   <ErrorBoundary>
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <Toaster />
         <Sonner />
         <AuthProvider>
           <FavoritesProvider>
