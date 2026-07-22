@@ -19,7 +19,7 @@ const Footer = () => {
     "w-10 h-10 rounded-sm border border-background/30 flex items-center justify-center hover:bg-background hover:text-primary hover:border-background transition-smooth";
 
   return (
-    <footer dir="rtl" className="bg-footer text-background">
+    <footer dir="rtl" className="bg-footer text-background [&_svg]:[stroke-width:1.25]">
       <div className="container-luxury py-16">
         <div dir="rtl" className="grid gap-y-10 md:grid-cols-2 lg:grid-cols-4 lg:gap-y-0 lg:gap-x-8 lg:items-stretch">
 
@@ -176,7 +176,7 @@ const Footer = () => {
                   rel="noopener noreferrer"
                   className="flex items-center gap-3 justify-center md:justify-start hover:text-accent transition-smooth"
                 >
-                  <WhatsAppIcon className="w-4 h-4 shrink-0 text-[#25D366]" />
+                  <WhatsAppIcon className="w-4 h-4 shrink-0" />
                   <span>צ'אט באמצעות WhatsApp</span>
                 </a>
               </li>

@@ -1,11 +1,15 @@
+import { lazy, Suspense } from "react";
 import Layout from "@/components/Layout";
 import Hero from "@/components/Hero";
 import AboutBrief from "@/components/home/AboutBrief";
 import CategoryIcons from "@/components/home/CategoryIcons";
 import ProjectsGrid from "@/components/home/ProjectsGrid";
-import MaterialsBrief from "@/components/home/MaterialsBrief";
 import Newsletter from "@/components/home/Newsletter";
 import SEO from "@/components/SEO";
+
+// Below-the-fold + pulls in framer-motion, so load it lazily to keep the
+// initial bundle light. Fixed-height fallback avoids layout shift.
+const MaterialsBrief = lazy(() => import("@/components/home/MaterialsBrief"));
 
 const localBusiness = {
   "@context": "https://schema.org",
@@ -16,7 +20,7 @@ const localBusiness = {
   url: "https://alumaoutdoor.com/",
   telephone: "+972-50-451-9062",
   email: "info@aluma.co.il",
-  image: "https://alumaoutdoor.com/favicon.ico",
+  image: "https://alumaoutdoor.com/og-image.jpg",
   address: {
     "@type": "PostalAddress",
     streetAddress: "התמר 78",
@@ -73,7 +77,9 @@ const Index = () => {
       <AboutBrief />
       <CategoryIcons />
       <ProjectsGrid />
-      <MaterialsBrief />
+      <Suspense fallback={<div className="h-[540px] md:h-[620px] bg-foreground" />}>
+        <MaterialsBrief />
+      </Suspense>
       {/* Testimonials section removed: it shipped fabricated named 5-star reviews.
           Re-add <Testimonials /> once real, attributed customer quotes exist. */}
       <Newsletter />
