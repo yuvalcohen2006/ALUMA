@@ -2,7 +2,7 @@ import { FormEvent, useState } from "react";
 import { Mail, Check } from "lucide-react";
 import { toast } from "sonner";
 import Reveal from "@/components/Reveal";
-import SectionLabel from "@/components/SectionLabel";
+import SectionHeading from "@/components/SectionHeading";
 import { supabase } from "@/integrations/supabase/client";
 
 const Newsletter = () => {
@@ -43,23 +43,18 @@ const Newsletter = () => {
   };
 
   return (
-    <section className="py-16 md:py-24 bg-background border-t border-border/60">
+    <section className="py-16 md:py-24 bg-secondary">
       <div className="container-luxury">
         <Reveal>
-          <div className="relative max-w-4xl mx-auto bg-secondary rounded-sm overflow-hidden p-8 md:p-14 text-center border border-border/60">
-            <SectionLabel
-              he="הצטרפו למועדון"
-              en="Aluma Insider"
-              className="text-xs text-foreground mb-4 justify-center"
-            />
-            <h2 className="font-display text-2xl sm:text-3xl md:text-4xl text-foreground leading-tight mb-3">
-              השראה לחוץ שלך,
-              <span className="italic"> ישירות למייל</span>
-            </h2>
-            <p className="text-muted-foreground text-sm md:text-base max-w-xl mx-auto mb-8 leading-relaxed">
-              טיפים לעיצוב מרפסות וגינות, הצצה לקולקציות חדשות לפני כולם,
-              ותוכן השראה שבועי ישירות לאינבוקס.
-            </p>
+          <div className="relative max-w-4xl mx-auto bg-background rounded-sm overflow-hidden p-8 md:p-14 text-center border border-border/60 shadow-soft">
+            <div className="flex flex-col items-center mb-8">
+              <SectionHeading
+                align="center"
+                subtitle="טיפים לעיצוב מרפסות וגינות, הצצה לקולקציות חדשות לפני כולם, ותוכן השראה שבועי ישירות לאינבוקס."
+              >
+                הצטרפו למועדון
+              </SectionHeading>
+            </div>
 
             {subscribed ? (
               <div

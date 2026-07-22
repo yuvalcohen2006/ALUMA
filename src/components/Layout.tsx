@@ -18,7 +18,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
         דלגו לתוכן הראשי
       </a>
       <Header />
-      <main id="main-content" tabIndex={-1} className="flex-1 focus:outline-none">
+      <main id="main-content" dir="rtl" tabIndex={-1} className="flex-1 focus:outline-none">
         {children}
       </main>
       <Footer />

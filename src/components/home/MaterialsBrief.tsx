@@ -4,6 +4,7 @@ import { ChevronLeft, ChevronRight, ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { materials } from "@/data/materials";
+import SectionHeading from "@/components/SectionHeading";
 
 const items = materials.map((m) => ({
   id: m.slug,
@@ -97,13 +98,8 @@ const MaterialsBrief = () => {
       </div>
 
       <div className="relative z-10 flex flex-1 flex-col justify-center px-4 md:px-8 pt-10">
-        <div className="text-center mb-4">
-          <p className="text-[11px] md:text-xs tracking-[0.4em] uppercase text-secondary mb-2">
-            החומרים שלנו
-          </p>
-          <h2 className="font-display text-2xl md:text-4xl font-light text-background">
-            רק החומרים הטובים בעולם
-          </h2>
+        <div className="mb-4 flex flex-col items-center">
+          <SectionHeading light>החומרים שלנו</SectionHeading>
         </div>
 
         {/* 3D rail */}
@@ -168,10 +164,10 @@ const MaterialsBrief = () => {
                 <span className="block text-[11px] font-medium uppercase tracking-[0.25em] text-secondary">
                   {activeItem.meta}
                 </span>
-                <h3 className="font-display text-2xl md:text-3xl font-light text-background">
+                <h3 className="font-display font-bold text-2xl text-background leading-snug">
                   {activeItem.title}
                 </h3>
-                <p className="max-w-md text-sm text-background/70 leading-relaxed">
+                <p className="max-w-md text-lg text-background/75 leading-relaxed">
                   {activeItem.description}
                 </p>
               </motion.div>

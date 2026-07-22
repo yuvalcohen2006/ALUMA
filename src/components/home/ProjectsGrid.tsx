@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import Reveal from "@/components/Reveal";
-import SectionLabel from "@/components/SectionLabel";
+import SectionHeading from "@/components/SectionHeading";
 import { projects } from "@/data/projects";
 
 const SLIDE_MS = 6000;
@@ -54,6 +54,7 @@ const ProjectsGrid = () => {
 
   return (
     <section
+      dir="rtl"
       className="py-16 md:py-28 bg-background overflow-hidden"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
@@ -61,8 +62,8 @@ const ProjectsGrid = () => {
       onTouchEnd={onTouchEnd}
     >
       <div className="container-luxury">
-        <Reveal className="text-center mb-10 md:mb-16">
-          <SectionLabel he="עבודות נבחרות" className="text-xs md:text-sm justify-center" />
+        <Reveal className="mb-10 md:mb-16 flex flex-col items-center">
+          <SectionHeading>עבודות נבחרות</SectionHeading>
         </Reveal>
 
         <div className="grid md:grid-cols-2 gap-8 md:gap-14 items-center max-w-6xl mx-auto">
@@ -76,15 +77,17 @@ const ProjectsGrid = () => {
                 </span>
               </div>
 
-              <h3 className="font-display text-3xl md:text-5xl font-light text-primary leading-tight mb-3">
+              <h3 className="font-display font-bold text-2xl text-primary leading-snug mb-2">
                 {p.name}
               </h3>
 
-              <div className="text-xs md:text-sm tracking-[0.28em] uppercase text-muted-foreground mb-6">
+              <div className="text-xs tracking-[0.28em] uppercase text-muted-foreground mb-4">
                 {p.location} · {p.tag} · {p.year}
               </div>
 
-              <p className="text-foreground leading-relaxed max-w-md mx-auto md:mx-0 mb-8">
+              <div className="w-12 h-px bg-cream mb-4 mx-auto md:mx-0" aria-hidden="true" />
+
+              <p className="text-lg text-foreground leading-relaxed max-w-md mx-auto md:mx-0 mb-8">
                 {p.intro}
               </p>
 

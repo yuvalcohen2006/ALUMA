@@ -91,12 +91,16 @@ const Hero = () => {
           fetchPriority="high"
           className="w-[58%] sm:w-[68%] max-w-[320px] sm:max-w-[560px] md:max-w-[760px] lg:max-w-[980px] h-auto mb-5 sm:mb-8 animate-fade-in-up drop-shadow-md"
         />
-        <p
-          className="text-[11px] sm:text-sm md:text-base tracking-[0.22em] sm:tracking-[0.4em] uppercase text-foreground font-semibold animate-fade-in-up mb-6 px-2 whitespace-nowrap"
-          style={{ animationDelay: "0.2s" }}
-        >
-          {subtitle}
-        </p>
+        <div className="relative mb-6 animate-fade-in-up" style={{ animationDelay: "0.2s" }}>
+          {/* Soft feathered light pool so the slogan stays readable over the busy hero image */}
+          <span
+            aria-hidden="true"
+            className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[135%] h-[320%] rounded-[50%] bg-background/50 blur-2xl"
+          />
+          <p className="relative z-10 text-[11px] sm:text-sm md:text-base tracking-[0.22em] sm:tracking-[0.4em] uppercase text-foreground font-semibold px-2 whitespace-nowrap">
+            {subtitle}
+          </p>
+        </div>
         {settings.cta_text && settings.cta_link && (
           <Link
             to={settings.cta_link}

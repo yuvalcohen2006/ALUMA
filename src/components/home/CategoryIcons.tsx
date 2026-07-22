@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import SectionLabel from "@/components/SectionLabel";
+import SectionHeading from "@/components/SectionHeading";
 import Reveal from "@/components/Reveal";
 import loungeSet from "@/assets/categories/lounge-set.jpg";
 import sunbed from "@/assets/categories/sunbed.jpg";
@@ -23,19 +23,19 @@ const categories = [
 
 const CategoryIcons = () => {
   return (
-    <section className="py-16 md:py-24 bg-secondary">
+    <section className="py-16 md:py-24 bg-background">
       <div className="container-luxury">
-        <Reveal className="text-center max-w-2xl mx-auto mb-12 md:mb-14">
-          <SectionLabel as="h2" he="גלו את הריהוט שלנו לפי קטגוריה" className="text-sm md:text-base mb-6" />
-          <div className="w-16 h-px bg-primary/50 mx-auto" aria-hidden="true" />
+        <Reveal className="mb-10 md:mb-14 flex flex-col items-center">
+          <SectionHeading>גלו את הריהוט שלנו לפי קטגוריה</SectionHeading>
+          <div className="w-12 h-px bg-cream mt-4" aria-hidden="true" />
         </Reveal>
 
         <Reveal>
-          <ul className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+          <ul className="grid grid-cols-3 sm:grid-cols-4 gap-3 md:gap-5 max-w-3xl mx-auto">
             {categories.map((c) => (
               <li key={c.slug}>
                 <Link to={`/collections#${c.slug}`} className="group block">
-                  <div className="relative w-full aspect-square rounded-sm bg-card border border-border/70 overflow-hidden transition-smooth group-hover:border-primary/60 group-hover:shadow-luxury group-hover:-translate-y-1">
+                  <div className="relative w-full aspect-square rounded-sm bg-secondary/40 border border-border/70 overflow-hidden transition-smooth group-hover:border-primary/60 group-hover:shadow-luxury group-hover:-translate-y-1">
                     <img
                       src={c.img}
                       alt={c.label}
@@ -45,11 +45,10 @@ const CategoryIcons = () => {
                       height={1536}
                       className="absolute inset-0 w-full h-full object-cover transition-transform duration-[600ms] ease-out group-hover:scale-[1.05]"
                     />
-                    {/* subtle warm wash on hover */}
                     <div className="absolute inset-0 bg-primary/0 group-hover:bg-primary/[0.05] transition-smooth" />
                   </div>
-                  <div className="mt-3 text-center">
-                    <span className="text-foreground text-sm md:text-base font-normal group-hover:text-primary transition-smooth">
+                  <div className="mt-2.5 text-center">
+                    <span className="text-foreground text-xs md:text-sm font-normal group-hover:text-primary transition-smooth">
                       {c.label}
                     </span>
                   </div>
