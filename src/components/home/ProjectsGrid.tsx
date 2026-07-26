@@ -122,16 +122,19 @@ const ProjectsGrid = () => {
                         }`}
                       >
                         {/* Active bar is also taller ("bolder"). Passed bars stay full,
-                            upcoming bars stay empty. The fill width has NO transition, so
-                            switching/looping snaps cleanly instead of draining every bar
-                            at once; the 50ms progress ticks keep the active fill smooth. */}
+                            upcoming bars stay empty. On swap, the inactive bars ease their
+                            fill (passed bars top up, upcoming bars drain) so the change
+                            reads as a clean glide; the active bar has NO transition so its
+                            50ms progress ticks stay crisp instead of lagging behind. */}
                         <span
                           className={`block w-full overflow-hidden rounded-full bg-primary/20 transition-[height] duration-300 ease-out ${
                             isActive ? "h-[6px]" : "h-[3px]"
                           }`}
                         >
                           <span
-                            className="block h-full rounded-full bg-primary"
+                            className={`block h-full rounded-full bg-primary ${
+                              isActive ? "" : "transition-[width] duration-500 ease-out"
+                            }`}
                             style={{ width: isActive ? `${progress}%` : isBefore ? "100%" : "0%" }}
                           />
                         </span>

@@ -53,7 +53,10 @@
     --font-display: 'Heebo', system-ui, sans-serif;
     --font-body: 'Assistant', system-ui, sans-serif;
 
-    --radius: 0.25rem;
+    /* One middle-ground corner radius for the whole site (was 0.25rem, which made
+       the most-used rounded-sm collapse to 0px — hence the boxiness). At 14px the
+       scale lands sm:10 / md:12 / lg:14, matching the materials-photo corners. */
+    --radius: 0.875rem;
 
     /* Solid sand — NEVER a gradient between the neutral backgrounds (clean lines only) */
     --gradient-cream: hsl(34 34% 87%);
@@ -267,6 +270,12 @@
   width: 11px;
   height: 11px;
 }
+/* Kill the little increment/decrement arrow buttons at the scrollbar's ends */
+::-webkit-scrollbar-button {
+  display: none;
+  width: 0;
+  height: 0;
+}
 ::-webkit-scrollbar-track {
   background: hsl(var(--secondary) / 0.4);
 }
@@ -330,6 +339,9 @@
    button width. */
 .btn-shine {
   --shine-ink: hsl(var(--foreground-soft));
+  /* Border rides lighter than the ink so the outline reads soft, then firms up on hover. */
+  --shine-border: hsl(var(--foreground-soft) / 0.4);
+  --shine-border-hover: hsl(var(--foreground-soft) / 0.7);
   --shine-rgb: 47, 47, 47;
   /* Brighter-than-palette terracotta — colours the sweeping band on hover. */
   --shine-glow: 14 66% 62%;
@@ -344,9 +356,10 @@
   line-height: 1.4em;
   letter-spacing: 0.06em;
   padding: 0.85em 3.2em;
+  /* ~10px — the boxy end of the site's middle radius band, so it sits with the rest */
   border-radius: 0.6em;
   overflow: hidden;
-  border: 1.5px solid var(--shine-ink);
+  border: 1.5px solid var(--shine-border);
   color: var(--shine-ink);
   background: linear-gradient(
     to right,
@@ -356,7 +369,7 @@
     rgba(var(--shine-rgb), 0.05) 100%
   );
   box-shadow: inset 0 0 10px rgba(var(--shine-rgb), 0.05);
-  transition: color 0.3s, border-color 0.3s, box-shadow 0.3s;
+  transition: color 0.3s, border-color 0.3s, box-shadow 0.3s, transform 0.3s;
 }
 .btn-shine::before {
   content: "";
@@ -376,8 +389,10 @@
 }
 .btn-shine:hover {
   color: hsl(var(--foreground));
-  border-color: hsl(var(--foreground));
-  box-shadow: inset 0 0 10px rgba(var(--shine-rgb), 0.1);
+  border-color: var(--shine-border-hover);
+  /* Small lift: nudge up and float a soft shadow underneath. */
+  transform: translateY(-2px);
+  box-shadow: inset 0 0 10px rgba(var(--shine-rgb), 0.1), 0 8px 18px -8px rgba(var(--shine-rgb), 0.35);
 }
 .btn-shine:hover::before {
   transform: translateX(var(--shine-sweep));
@@ -385,11 +400,13 @@
 /* Inverted — sits on the charcoal materials rail */
 .btn-shine-invert {
   --shine-ink: hsl(40 30% 86%);
+  --shine-border: hsl(40 30% 86% / 0.4);
+  --shine-border-hover: hsl(40 30% 86% / 0.75);
   --shine-rgb: 248, 246, 242;
 }
 .btn-shine-invert:hover {
   color: hsl(var(--background));
-  border-color: hsl(var(--background));
+  border-color: var(--shine-border-hover);
 }
 @media (prefers-reduced-motion: reduce) {
   .btn-shine::before,

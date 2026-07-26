@@ -1,6 +1,5 @@
 import Layout from "@/components/Layout";
 import SEO from "@/components/SEO";
-import SectionLabel from "@/components/SectionLabel";
 import alumaLogo from "@/assets/aluma-logo.png";
 import storyPortrait from "@/assets/story-portrait.png";
 import storyPortraitRoy from "@/assets/story-portrait-roy.png";
@@ -25,32 +24,31 @@ const StoryPage = () => {
         jsonLd={breadcrumbs}
       />
 
-      <section className="pt-32 pb-10 md:pt-40 gradient-cream">
-        <div className="container-luxury text-center">
-          <SectionLabel he="הסיפור שלנו" en="Our Story" className="text-xs mb-5" />
-          <div className="w-16 h-px bg-primary/30 mx-auto mb-10" />
+      {/* pt-24 clears the fixed header (h-24); the flex band below it is the part
+          that shrank by 20px, with the title centred inside that band. */}
+      <section className="pt-24 gradient-cream">
+        <div className="container-luxury flex items-center justify-center h-[129px] md:h-[145px] text-center">
+          {/* Heebo's glyphs sit at ~0.72em of the font-size, so 36px font-size
+              renders roughly a 26px average character height. */}
+          <h1 className="text-[36px] font-normal text-foreground-soft tracking-normal">
+            הסיפור שלנו
+          </h1>
         </div>
       </section>
 
-      <section className="pt-8 pb-24 md:pt-12 md:pb-32 bg-background">
+      <section className="pt-[28px] pb-[28px] md:pt-[32px] md:pb-[32px] bg-background">
         <div className="container-luxury">
-          <div className="grid md:grid-cols-2 gap-10 md:gap-14 items-center max-w-7xl mx-auto">
-            {/* Text column (right in RTL) */}
-            <div className="order-1 md:order-1 md:pl-8 lg:pl-12 text-right relative">
-              {/* Single small logo at top */}
-              <div className="flex justify-end mb-6">
-                <div className="inline-flex items-center gap-3">
-                  <span className="block w-8 h-px bg-primary/30" />
-                  <img
-                    src={alumaLogo}
-                    alt="Aluma"
-                    className="h-7 md:h-8 w-auto opacity-90"
-                  />
-                  <span className="block w-8 h-px bg-primary/30" />
-                </div>
-              </div>
+          {/* White section split down the middle into two equal squares */}
+          <div className="relative grid md:grid-cols-2 gap-10 md:gap-14 max-w-7xl mx-auto">
+            {/* Center split line */}
+            <div
+              className="hidden md:block absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-px h-4/5 bg-primary/20"
+              aria-hidden="true"
+            />
 
-              <div className="space-y-3.5 text-foreground text-sm md:text-base leading-[1.75]">
+            {/* Right square (RTL first): the paragraph, centred */}
+            <div className="order-1 flex items-center justify-center md:aspect-square">
+              <div className="space-y-3.5 text-foreground text-[18px] leading-[1.75] text-right max-w-md mx-auto">
                 <p>אלומה נולדה מתוך חיבור בין חומר לאור.</p>
 
                 <p>
@@ -80,9 +78,16 @@ const StoryPage = () => {
               </div>
             </div>
 
-            {/* Portraits column (left in RTL) */}
-            <div className="order-2 md:order-2 relative md:pr-8 lg:pr-12">
-              <div className="hidden md:block absolute right-0 top-1/2 -translate-y-1/2 w-px h-4/5 bg-primary/20" />
+            {/* Left square: picture with the logo above it */}
+            <div className="order-2 flex flex-col items-center justify-center md:aspect-square">
+              {/* Logo crest, centred above the portraits with 1.5× the gap */}
+              <div className="flex justify-center mb-12 md:mb-[60px]">
+                <img
+                  src={alumaLogo}
+                  alt="Aluma"
+                  className="h-12 md:h-16 w-auto opacity-90"
+                />
+              </div>
               <div className="flex items-end justify-center gap-[19px] w-full mx-auto">
                 {[
                   { src: storyPortraitIdan, alt: "דיוקן קווי, עידן", name: "idan" },

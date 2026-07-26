@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { ChevronDown, Menu, X } from "lucide-react";
 import { NavLink, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -23,7 +23,7 @@ const diySub = [
 // Desktop nav link: a barely-rounded light-grey pill that fades in on hover, with
 // the label sitting in soft charcoal and deepening as it fills.
 const navItem =
-  "inline-flex items-center rounded-[6px] px-2.5 xl:px-3.5 py-2 text-sm xl:text-[15px] 2xl:text-base font-medium tracking-wide transition-colors duration-300";
+  "inline-flex items-center rounded-[10px] px-2.5 xl:px-3.5 py-2 text-sm xl:text-[15px] 2xl:text-base font-medium tracking-wide transition-colors duration-300";
 const navRest = "text-foreground-soft hover:bg-foreground/[0.07] hover:text-foreground";
 const navActive = "bg-foreground/[0.09] text-foreground";
 
@@ -31,6 +31,11 @@ const Header = () => {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [expanded, setExpanded] = useState<string | null>(null);
+  // Desktop dropdowns: `hovered` opens on pointer-over; `pinned` is a click-locked
+  // menu that stays open after the pointer leaves (until re-click / outside / Esc).
+  const [hovered, setHovered] = useState<string | null>(null);
+  const [pinned, setPinned] = useState<string | null>(null);
+  const navRef = useRef<HTMLElement | null>(null);
   const { collections } = useCollections();
 
   const collectionsSub = useMemo(
@@ -82,6 +87,23 @@ const Header = () => {
     };
   }, [open]);
 
+  // A click-pinned desktop dropdown closes on outside click or Escape.
+  useEffect(() => {
+    if (!pinned) return;
+    const onPointerDown = (e: PointerEvent) => {
+      if (navRef.current && !navRef.current.contains(e.target as Node)) setPinned(null);
+    };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setPinned(null);
+    };
+    document.addEventListener("pointerdown", onPointerDown);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("pointerdown", onPointerDown);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [pinned]);
+
   return (
     <header
       dir="rtl"
@@ -107,42 +129,84 @@ const Header = () => {
         </Link>
 
         {/* Desktop nav */}
-        <nav className="hidden lg:flex flex-1 items-center justify-center gap-0.5 xl:gap-1 2xl:gap-1.5 whitespace-nowrap">
-          {navLinks.map((link) => (
-            <div key={link.to} className="relative group/item">
-              {link.noLink ? (
-                <span className={`${navItem} ${navRest} cursor-default select-none group-hover/item:bg-foreground/[0.07] group-hover/item:text-foreground`}>
-                  {link.label}
-                </span>
-              ) : (
-                <NavLink
-                  to={link.to}
-                  end={link.to === "/"}
-                  className={({ isActive }) =>
-                    `${navItem} ${isActive ? navActive : navRest}`
-                  }
-                >
-                  {link.label}
-                </NavLink>
-              )}
+        <nav
+          ref={navRef}
+          className="hidden lg:flex flex-1 items-center justify-center gap-0.5 xl:gap-1 2xl:gap-1.5 whitespace-nowrap"
+        >
+          {navLinks.map((link) => {
+            // While a menu is pinned open, only that one shows; otherwise hover rules.
+            const isOpen = pinned ? pinned === link.to : hovered === link.to;
+            const chevron = link.submenu ? (
+              <ChevronDown
+                className={`ms-1 h-3.5 w-3.5 opacity-70 transition-transform duration-300 ${
+                  isOpen ? "rotate-180" : ""
+                }`}
+                aria-hidden="true"
+              />
+            ) : null;
+            return (
+              <div
+                key={link.to}
+                className="relative"
+                onMouseEnter={() => setHovered(link.to)}
+                onMouseLeave={() => setHovered((h) => (h === link.to ? null : h))}
+              >
+                {link.noLink ? (
+                  <button
+                    type="button"
+                    onClick={() => setPinned((p) => (p === link.to ? null : link.to))}
+                    aria-haspopup="menu"
+                    aria-expanded={isOpen}
+                    className={`${navItem} ${isOpen ? navActive : navRest} cursor-pointer select-none`}
+                  >
+                    {link.label}
+                    {chevron}
+                  </button>
+                ) : (
+                  <NavLink
+                    to={link.to}
+                    end={link.to === "/"}
+                    className={({ isActive }) =>
+                      `${navItem} ${isActive || isOpen ? navActive : navRest}`
+                    }
+                  >
+                    {link.label}
+                    {chevron}
+                  </NavLink>
+                )}
 
-              {link.submenu && (
-                <div className="absolute top-full right-1/2 translate-x-1/2 pt-4 opacity-0 invisible group-hover/item:opacity-100 group-hover/item:visible transition-smooth z-50">
-                  <div className="bg-background border border-border shadow-luxury rounded-sm min-w-[220px] py-2">
-                    {link.submenu.map((sub) => (
-                      <Link
-                        key={sub.to}
-                        to={sub.to}
-                        className="block px-5 py-2.5 text-sm text-foreground hover:text-accent hover:bg-secondary/40 transition-smooth text-right"
-                      >
-                        {sub.label}
-                      </Link>
-                    ))}
+                {link.submenu && (
+                  <div
+                    className={`absolute top-full right-1/2 translate-x-1/2 pt-3 z-50 transition-all duration-200 ease-out ${
+                      isOpen
+                        ? "opacity-100 visible translate-y-0"
+                        : "opacity-0 invisible -translate-y-1 pointer-events-none"
+                    }`}
+                  >
+                    <div
+                      role="menu"
+                      className="min-w-[240px] rounded-xl border border-border bg-popover p-1.5 shadow-luxury"
+                    >
+                      {link.submenu.map((sub) => (
+                        <Link
+                          key={sub.to}
+                          to={sub.to}
+                          role="menuitem"
+                          onClick={() => {
+                            setPinned(null);
+                            setHovered(null);
+                          }}
+                          className="block rounded-lg px-4 py-2.5 text-sm text-right text-foreground transition-colors duration-200 hover:bg-secondary/70 hover:text-accent"
+                        >
+                          {sub.label}
+                        </Link>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              )}
-            </div>
-          ))}
+                )}
+              </div>
+            );
+          })}
         </nav>
 
         {/* WhatsApp — last child, so RTL places it at the far left of the bar */}
