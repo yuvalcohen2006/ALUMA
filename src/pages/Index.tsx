@@ -7,9 +7,10 @@ import ProjectsGrid from "@/components/home/ProjectsGrid";
 import Newsletter from "@/components/home/Newsletter";
 import SEO from "@/components/SEO";
 
-// Below-the-fold + pulls in framer-motion, so load it lazily to keep the
-// initial bundle light. Fixed-height fallback avoids layout shift.
+// Below-the-fold + pulls in framer-motion, so load them lazily to keep the
+// initial bundle light. Fixed-height fallbacks avoid layout shift.
 const MaterialsBrief = lazy(() => import("@/components/home/MaterialsBrief"));
+const Testimonials = lazy(() => import("@/components/home/Testimonials"));
 
 const localBusiness = {
   "@context": "https://schema.org",
@@ -77,11 +78,15 @@ const Index = () => {
       <AboutBrief />
       <CategoryIcons />
       <ProjectsGrid />
-      <Suspense fallback={<div className="h-[540px] md:h-[620px] bg-foreground" />}>
+      <Suspense fallback={<div className="min-h-[820px] md:min-h-[900px] bg-foreground" />}>
         <MaterialsBrief />
       </Suspense>
-      {/* Testimonials section removed: it shipped fabricated named 5-star reviews.
-          Re-add <Testimonials /> once real, attributed customer quotes exist. */}
+      {/* ⚠️ Placeholder testimonials — fabricated demo content for preview only.
+          Swap in real, attributed customer quotes before launch. See the banner
+          in src/data/testimonials.ts. */}
+      <Suspense fallback={<div className="min-h-[700px] bg-background" />}>
+        <Testimonials />
+      </Suspense>
       <Newsletter />
     </Layout>
   );

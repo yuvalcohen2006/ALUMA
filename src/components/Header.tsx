@@ -4,6 +4,7 @@ import { NavLink, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import alumaLogo from "@/assets/aluma-logo.png";
 import { useCollections } from "@/hooks/useCollectionsData";
+import { WhatsAppIcon } from "@/components/WhatsAppButton";
 
 const materialsSub = [
   { label: "בד Sunbrella", to: "/materials/sunbrella" },
@@ -18,6 +19,13 @@ const diySub = [
   { label: "AR, תצוגה במרחב", to: "/ar" },
   { label: "שאלון חכם", to: "/questionnaire" },
 ];
+
+// Desktop nav link: a barely-rounded light-grey pill that fades in on hover, with
+// the label sitting in soft charcoal and deepening as it fills.
+const navItem =
+  "inline-flex items-center rounded-[6px] px-2.5 xl:px-3.5 py-2 text-sm xl:text-[15px] 2xl:text-base font-medium tracking-wide transition-colors duration-300";
+const navRest = "text-foreground-soft hover:bg-foreground/[0.07] hover:text-foreground";
+const navActive = "bg-foreground/[0.09] text-foreground";
 
 const Header = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -99,36 +107,22 @@ const Header = () => {
         </Link>
 
         {/* Desktop nav */}
-        <nav className="hidden lg:flex flex-1 items-center justify-center gap-3 xl:gap-5 2xl:gap-7 whitespace-nowrap">
+        <nav className="hidden lg:flex flex-1 items-center justify-center gap-0.5 xl:gap-1 2xl:gap-1.5 whitespace-nowrap">
           {navLinks.map((link) => (
             <div key={link.to} className="relative group/item">
               {link.noLink ? (
-                <span
-                  className="text-[13px] xl:text-sm 2xl:text-base font-semibold tracking-wide text-foreground hover:text-accent transition-smooth relative inline-flex items-center group cursor-default select-none"
-                >
+                <span className={`${navItem} ${navRest} cursor-default select-none group-hover/item:bg-foreground/[0.07] group-hover/item:text-foreground`}>
                   {link.label}
-                  <span className="absolute -bottom-1.5 right-0 h-0.5 bg-accent transition-all duration-300 w-0 group-hover:w-full" />
                 </span>
               ) : (
                 <NavLink
                   to={link.to}
                   end={link.to === "/"}
                   className={({ isActive }) =>
-                    `text-[13px] xl:text-sm 2xl:text-base font-semibold tracking-wide transition-smooth relative inline-flex items-center group ${
-                      isActive ? "text-accent" : "text-foreground hover:text-accent"
-                    }`
+                    `${navItem} ${isActive ? navActive : navRest}`
                   }
                 >
-                  {({ isActive }) => (
-                    <>
-                      {link.label}
-                      <span
-                        className={`absolute -bottom-1.5 right-0 h-0.5 bg-accent transition-all duration-300 ${
-                          isActive ? "w-full" : "w-0 group-hover:w-full"
-                        }`}
-                      />
-                    </>
-                  )}
+                  {link.label}
                 </NavLink>
               )}
 
@@ -151,15 +145,16 @@ const Header = () => {
           ))}
         </nav>
 
-        {/* Tagline (only on wide screens) */}
-        <div className="hidden 2xl:flex items-center gap-4 shrink-0">
-          <span className="block w-px h-8 bg-primary/50 shadow-[3px_0_0_0_hsl(var(--primary)/0.5)]" />
-          <div dir="ltr">
-            <span className="text-[10px] tracking-[0.2em] uppercase text-foreground font-medium border border-primary/70 rounded-sm px-3 py-1.5 whitespace-nowrap">
-              Where outdoor becomes lifestyle
-            </span>
-          </div>
-        </div>
+        {/* WhatsApp — last child, so RTL places it at the far left of the bar */}
+        <a
+          href="https://wa.me/972504519062"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="צרו קשר בוואטסאפ"
+          className="hidden lg:flex shrink-0 w-11 h-11 rounded-full bg-[#25D366] text-white items-center justify-center shadow-soft hover:scale-110 transition-smooth"
+        >
+          <WhatsAppIcon className="w-6 h-6" />
+        </a>
 
         {/* Mobile menu button */}
         <div className="lg:hidden relative z-50 order-first me-auto">

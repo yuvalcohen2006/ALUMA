@@ -23,41 +23,52 @@ const categories = [
 
 const CategoryIcons = () => {
   return (
-    <section className="py-16 md:py-24 bg-background">
+    <section className="py-24 md:py-32 bg-secondary">
       <div className="container-luxury">
         <Reveal className="mb-10 md:mb-14 flex flex-col items-center">
-          <SectionHeading>גלו את הריהוט שלנו לפי קטגוריה</SectionHeading>
-          <div className="w-12 h-px bg-cream mt-4" aria-hidden="true" />
-        </Reveal>
-
-        <Reveal>
-          <ul className="grid grid-cols-3 sm:grid-cols-4 gap-3 md:gap-5 max-w-3xl mx-auto">
-            {categories.map((c) => (
-              <li key={c.slug}>
-                <Link to={`/collections#${c.slug}`} className="group block">
-                  <div className="relative w-full aspect-square rounded-sm bg-secondary/40 border border-border/70 overflow-hidden transition-smooth group-hover:border-primary/60 group-hover:shadow-luxury group-hover:-translate-y-1">
-                    <img
-                      src={c.img}
-                      alt={c.label}
-                      loading="lazy"
-                      decoding="async"
-                      width={1536}
-                      height={1536}
-                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-[600ms] ease-out group-hover:scale-[1.05]"
-                    />
-                    <div className="absolute inset-0 bg-primary/0 group-hover:bg-primary/[0.05] transition-smooth" />
-                  </div>
-                  <div className="mt-2.5 text-center">
-                    <span className="text-foreground text-xs md:text-sm font-normal group-hover:text-primary transition-smooth">
-                      {c.label}
-                    </span>
-                  </div>
-                </Link>
-              </li>
-            ))}
-          </ul>
+          {/* Charcoal, not terracotta: this heading sits on sand beige. */}
+          <SectionHeading tone="charcoal">גלו את הריהוט שלנו לפי קטגוריה</SectionHeading>
+          <div className="w-20 h-[2px] bg-primary/55 mt-5" aria-hidden="true" />
         </Reveal>
       </div>
+
+      <Reveal>
+        {/* Desktop: all eight share one row inside a 150px inset — no scrolling, so
+            no scrollbar renders either. Below lg it becomes a rail you swipe
+            natively; that native touch scroll is the drag, so no JS drag needed. */}
+        <ul className="rail-scroll flex gap-4 lg:gap-5 overflow-x-auto lg:overflow-x-visible px-5 sm:px-6 lg:px-[150px] pb-5 lg:pb-0">
+          {categories.map((c) => (
+            <li key={c.slug} className="shrink-0 w-[152px] sm:w-[180px] lg:flex-1">
+              <Link to={`/collections#${c.slug}`} className="group block">
+                <div className="relative w-full aspect-square rounded-[14px] bg-background/50 border border-foreground/15 overflow-hidden transition-all duration-300 group-hover:border-primary/60 group-hover:shadow-luxury group-hover:-translate-y-1">
+                  <img
+                    src={c.img}
+                    alt={c.label}
+                    loading="lazy"
+                    decoding="async"
+                    draggable={false}
+                    width={1536}
+                    height={1536}
+                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-[600ms] ease-out group-hover:scale-[1.06]"
+                  />
+                  {/* A light terracotta wash rises from the base on hover — just a
+                      breath of warmth, nothing heavy. */}
+                  <span
+                    aria-hidden="true"
+                    className="absolute inset-0 bg-gradient-to-t from-primary/20 via-primary/5 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                  />
+                </div>
+                <div className="mt-3 text-center">
+                  {/* Label stays charcoal on hover — the tile lift + wash carry it. */}
+                  <span className="inline-block text-foreground text-sm md:text-[15px] font-normal">
+                    {c.label}
+                  </span>
+                </div>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </Reveal>
     </section>
   );
 };

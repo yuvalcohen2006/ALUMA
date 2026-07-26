@@ -117,7 +117,7 @@ const AccessibilityWidget = () => {
         aria-label="פתיחת תפריט נגישות"
         aria-haspopup="dialog"
         aria-expanded={open}
-        className="hidden md:flex fixed bottom-24 md:bottom-6 left-6 z-50 w-14 h-14 rounded-sm bg-primary text-primary-foreground items-center justify-center shadow-luxury hover:bg-accent transition-smooth focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+        className="hidden md:flex fixed bottom-24 md:bottom-6 left-6 z-50 w-14 h-14 rounded-full bg-primary text-background items-center justify-center shadow-luxury hover:bg-accent transition-smooth focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
       >
         <Accessibility className="w-7 h-7" />
       </button>

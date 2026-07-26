@@ -11,6 +11,9 @@
     --background: 40 30% 96%;
     /* Charcoal #2F2F2F — all running text & headings (great contrast on every bg) */
     --foreground: 0 0% 18%;
+    /* Softer charcoal — hero slogan, nav links at rest, outlined buttons.
+       Lighter than the workhorse charcoal without ever going near pure black. */
+    --foreground-soft: 0 0% 32%;
 
     --card: 0 0% 100%;
     --card-foreground: 0 0% 18%;
@@ -70,6 +73,9 @@
 
   html {
     scroll-behavior: smooth;
+    /* Firefox: thin terracotta thumb on an invisible track */
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--primary) / 0.55) transparent;
   }
 
   body {
@@ -196,6 +202,31 @@
   @media (prefers-reduced-motion: reduce) {
     .scroll-cue { animation: none; }
   }
+
+  /* Hero logo: a soft left→right reveal. A wide gradient mask slides across the
+     logo so its left edge appears first and the reveal wipes rightward with a
+     feathered edge (a fade, not a hard wipe). */
+  @keyframes logo-reveal {
+    from { -webkit-mask-position: 100% 0; mask-position: 100% 0; opacity: 0; }
+    to   { -webkit-mask-position: 0% 0;   mask-position: 0% 0;   opacity: 1; }
+  }
+  .animate-logo-reveal {
+    -webkit-mask-image: linear-gradient(to right, #000 0%, #000 50%, transparent 78%);
+    mask-image: linear-gradient(to right, #000 0%, #000 50%, transparent 78%);
+    -webkit-mask-size: 250% 100%;
+    mask-size: 250% 100%;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    animation: logo-reveal 2.8s cubic-bezier(0.33, 1, 0.68, 1) both;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .animate-logo-reveal {
+      animation: none;
+      -webkit-mask-image: none;
+      mask-image: none;
+      opacity: 1;
+    }
+  }
 }
 
 /* Global focus-visible ring + tactile press for interactive elements */
@@ -225,6 +256,146 @@
 @layer components {
   .container-luxury {
     @apply container mx-auto px-5 sm:px-6 lg:px-12;
+  }
+}
+
+/* ===== Custom scrollbars ===== */
+/* Page scrollbar: a thin terracotta thumb floating on a barely-there sand track.
+   The transparent border + content-box clip is what makes the visible thumb thin
+   while keeping a comfortable grab area. It deepens and thickens on hover. */
+::-webkit-scrollbar {
+  width: 11px;
+  height: 11px;
+}
+::-webkit-scrollbar-track {
+  background: hsl(var(--secondary) / 0.4);
+}
+::-webkit-scrollbar-thumb {
+  background-color: hsl(var(--primary) / 0.55);
+  background-clip: content-box;
+  border: 4px solid transparent;
+  border-radius: 99px;
+  transition: background-color 0.35s ease, border-width 0.25s ease;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: hsl(var(--primary) / 0.95);
+  border-width: 3px;
+}
+::-webkit-scrollbar-thumb:active {
+  background-color: hsl(var(--accent));
+  border-width: 2px;
+}
+
+/* Horizontal rails (category rail): deliberately near-invisible so the tiles lead.
+   Charcoal at 15%, lifting to 28% only while the rail is hovered. */
+.rail-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: hsl(var(--foreground) / 0.16) transparent;
+}
+.rail-scroll::-webkit-scrollbar {
+  height: 6px;
+}
+.rail-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.rail-scroll::-webkit-scrollbar-thumb {
+  background-color: hsl(var(--foreground) / 0.15);
+  background-clip: content-box;
+  border: 2px solid transparent;
+  border-radius: 99px;
+  transition: background-color 0.3s ease;
+}
+.rail-scroll:hover::-webkit-scrollbar-thumb {
+  background-color: hsl(var(--foreground) / 0.3);
+}
+
+@layer utilities {
+  /* Hero scroll cue: each chevron pulses in turn via staggered animation-delay */
+  @keyframes chevron-blink {
+    0%, 70%, 100% { opacity: 0.22; }
+    35% { opacity: 1; }
+  }
+  .animate-chevron-blink {
+    animation: chevron-blink 1.8s ease-in-out infinite;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .animate-chevron-blink { animation: none; opacity: 0.7; }
+  }
+}
+
+/* ===== Shine button =====
+   Adapted from the Uiverse sweep button: soft-charcoal ink and border with a
+   whisper of inset fill. On hover a warm terracotta band sweeps across — only the
+   sweep is coloured; the border/ink stay monochrome. --shine-sweep must clear the
+   button width. */
+.btn-shine {
+  --shine-ink: hsl(var(--foreground-soft));
+  --shine-rgb: 47, 47, 47;
+  /* Brighter-than-palette terracotta — colours the sweeping band on hover. */
+  --shine-glow: 14 66% 62%;
+  --shine-sweep: 22em;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55em;
+  font-family: inherit;
+  font-size: 17px;
+  line-height: 1.4em;
+  letter-spacing: 0.06em;
+  padding: 0.85em 3.2em;
+  border-radius: 0.6em;
+  overflow: hidden;
+  border: 1.5px solid var(--shine-ink);
+  color: var(--shine-ink);
+  background: linear-gradient(
+    to right,
+    rgba(var(--shine-rgb), 0.05) 1%,
+    transparent 40%,
+    transparent 60%,
+    rgba(var(--shine-rgb), 0.05) 100%
+  );
+  box-shadow: inset 0 0 10px rgba(var(--shine-rgb), 0.05);
+  transition: color 0.3s, border-color 0.3s, box-shadow 0.3s;
+}
+.btn-shine::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -4em;
+  width: 4em;
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    transparent 1%,
+    hsl(var(--shine-glow) / 0.55) 40%,
+    hsl(var(--shine-glow) / 0.55) 60%,
+    transparent 100%
+  );
+  transition: transform 0.45s ease-in-out;
+}
+.btn-shine:hover {
+  color: hsl(var(--foreground));
+  border-color: hsl(var(--foreground));
+  box-shadow: inset 0 0 10px rgba(var(--shine-rgb), 0.1);
+}
+.btn-shine:hover::before {
+  transform: translateX(var(--shine-sweep));
+}
+/* Inverted — sits on the charcoal materials rail */
+.btn-shine-invert {
+  --shine-ink: hsl(40 30% 86%);
+  --shine-rgb: 248, 246, 242;
+}
+.btn-shine-invert:hover {
+  color: hsl(var(--background));
+  border-color: hsl(var(--background));
+}
+@media (prefers-reduced-motion: reduce) {
+  .btn-shine::before,
+  .btn-shine:hover::before {
+    transition: none;
+    transform: none;
   }
 }
 

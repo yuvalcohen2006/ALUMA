@@ -16,6 +16,7 @@ type HeroSettings = {
 
 const Hero = () => {
   const [offset, setOffset] = useState(0);
+  const [showCue, setShowCue] = useState(true);
   const [settings, setSettings] = useState<HeroSettings>({});
   const [isMobile, setIsMobile] = useState(
     typeof window !== "undefined" ? window.matchMedia("(max-width: 768px)").matches : false,
@@ -39,6 +40,15 @@ const Hero = () => {
     return () => mq.removeEventListener("change", onChange);
   }, []);
 
+  // Scroll cue visibility. Kept separate from the parallax listener below, which
+  // bails out under reduced-motion — the cue must still hide for those users.
+  useEffect(() => {
+    const onScroll = () => setShowCue(window.scrollY < 40);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   useEffect(() => {
     const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (prefersReduced) return;
@@ -60,7 +70,6 @@ const Hero = () => {
   const desktopBg = settings.desktop_image || heroImage;
   const mobileBg = settings.mobile_image || desktopBg;
   const bg = isMobile ? mobileBg : desktopBg;
-  const subtitle = settings.subtitle || "Where Outdoor Becomes Lifestyle";
   const srTitle = settings.title_he || "Aluma, סלוני חוץ ופרגולות בעיצוב אישי";
 
   return (
@@ -86,21 +95,11 @@ const Hero = () => {
         <img
           src={alumaLogo}
           alt="Aluma"
-          width={980}
-          height={260}
+          width={2026}
+          height={492}
           fetchPriority="high"
-          className="w-[58%] sm:w-[68%] max-w-[320px] sm:max-w-[560px] md:max-w-[760px] lg:max-w-[980px] h-auto mb-5 sm:mb-8 animate-fade-in-up drop-shadow-md"
+          className="w-[58%] sm:w-[68%] max-w-[320px] sm:max-w-[560px] md:max-w-[760px] lg:max-w-[980px] h-auto mb-5 sm:mb-8 animate-logo-reveal drop-shadow-md"
         />
-        <div className="relative mb-6 animate-fade-in-up" style={{ animationDelay: "0.2s" }}>
-          {/* Soft feathered light pool so the slogan stays readable over the busy hero image */}
-          <span
-            aria-hidden="true"
-            className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[135%] h-[320%] rounded-[50%] bg-background/50 blur-2xl"
-          />
-          <p className="relative z-10 text-[11px] sm:text-sm md:text-base tracking-[0.22em] sm:tracking-[0.4em] uppercase text-foreground font-semibold px-2 whitespace-nowrap">
-            {subtitle}
-          </p>
-        </div>
         {settings.cta_text && settings.cta_link && (
           <Link
             to={settings.cta_link}
@@ -112,18 +111,22 @@ const Hero = () => {
         )}
       </div>
 
-      {/* Scroll cue — three chevrons fade in after the hero text, gently nudging down */}
+      {/* Scroll cue — three chevrons pulse in sequence, then clear out on scroll */}
       <button
         type="button"
         onClick={() =>
           window.scrollTo({ top: window.innerHeight * 0.9, behavior: "smooth" })
         }
         aria-label="גלול למטה"
-        className="scroll-cue absolute bottom-6 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center text-foreground/70 hover:text-primary transition-smooth"
+        aria-hidden={!showCue}
+        tabIndex={showCue ? 0 : -1}
+        className={`absolute bottom-6 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center text-foreground-soft hover:text-primary transition-opacity duration-500 ${
+          showCue ? "opacity-100" : "opacity-0 pointer-events-none"
+        }`}
       >
-        <ChevronDown className="w-6 h-6 -mb-3.5 animate-rise-in" style={{ animationDelay: "0.9s" }} strokeWidth={1.5} />
-        <ChevronDown className="w-6 h-6 -mb-3.5 animate-rise-in" style={{ animationDelay: "1.05s" }} strokeWidth={1.5} />
-        <ChevronDown className="w-6 h-6 animate-rise-in" style={{ animationDelay: "1.2s" }} strokeWidth={1.5} />
+        <ChevronDown className="w-9 h-9 -mb-5 animate-chevron-blink" style={{ animationDelay: "0s" }} strokeWidth={1.75} />
+        <ChevronDown className="w-9 h-9 -mb-5 animate-chevron-blink" style={{ animationDelay: "0.2s" }} strokeWidth={1.75} />
+        <ChevronDown className="w-9 h-9 animate-chevron-blink" style={{ animationDelay: "0.4s" }} strokeWidth={1.75} />
       </button>
     </section>
   );

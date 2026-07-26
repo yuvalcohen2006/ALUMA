@@ -7,6 +7,11 @@ interface SectionHeadingProps {
   subtitle?: ReactNode;
   /** White title/text for dark sections (e.g. the materials rail). */
   light?: boolean;
+  /**
+   * Title colour on light backgrounds. Terracotta only carries enough contrast on
+   * warm-white — any title sitting on sand beige must use "charcoal".
+   */
+  tone?: "primary" | "charcoal";
   /** Horizontal alignment. */
   align?: "center" | "start";
   as?: "h2" | "h3";
@@ -19,26 +24,30 @@ const SectionHeading = ({
   children,
   subtitle,
   light = false,
+  tone = "primary",
   align = "center",
   as: Tag = "h2",
   className = "",
 }: SectionHeadingProps) => {
   const alignCls = align === "center" ? "items-center text-center" : "items-start text-right";
+  const titleColor = light
+    ? "text-background"
+    : tone === "charcoal"
+      ? "text-foreground"
+      : "text-primary";
   return (
     <div className={`flex flex-col ${alignCls} ${className}`}>
-      <Tag
-        className={`font-display font-bold text-2xl leading-snug ${light ? "text-background" : "text-primary"}`}
-      >
+      <Tag className={`font-display font-bold text-[26px] leading-snug ${titleColor}`}>
         {children}
       </Tag>
       {subtitle != null && subtitle !== "" && (
         <>
           <div
-            className={`w-12 h-px my-4 ${light ? "bg-background/25" : "bg-cream"}`}
+            className={`w-20 h-[2px] my-5 ${light ? "bg-background/40" : "bg-primary/55"}`}
             aria-hidden="true"
           />
           <p
-            className={`text-lg font-normal leading-relaxed max-w-2xl ${
+            className={`text-[20px] font-normal leading-relaxed max-w-2xl text-pretty ${
               light ? "text-background/75" : "text-foreground"
             }`}
           >

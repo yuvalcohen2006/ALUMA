@@ -5,6 +5,16 @@ import type { Database } from './types';
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const SUPABASE_PUBLISHABLE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
 
+// Guard: this module is imported at startup, so a missing key would otherwise make
+// createClient() throw a cryptic "supabaseUrl is required" and the app never mounts
+// (blank white screen). Fail loudly with instructions instead. See .env.example.
+if (!SUPABASE_URL || !SUPABASE_PUBLISHABLE_KEY) {
+  throw new Error(
+    "Missing Supabase env vars. Copy .env.example to .env and set VITE_SUPABASE_URL " +
+      "and VITE_SUPABASE_PUBLISHABLE_KEY (Supabase dashboard → Settings → API), then restart the dev server."
+  );
+}
+
 // Import the supabase client like this:
 // import { supabase } from "@/integrations/supabase/client";
 

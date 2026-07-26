@@ -1,19 +1,24 @@
 import { useState, useEffect, useRef, useCallback } from "react";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
 import Reveal from "@/components/Reveal";
 import SectionHeading from "@/components/SectionHeading";
+import ShineButton from "@/components/ui/shine-button";
+import CarouselArrow from "@/components/ui/carousel-arrow";
 import { projects } from "@/data/projects";
 
-const SLIDE_MS = 6000;
+const SLIDE_MS = 20000;
 
-// One project at a time: editorial split — text on the right (RTL), image on the left.
+// One project at a time: editorial split — image on the right (RTL start), text on the left.
 const ProjectsGrid = () => {
   const count = projects.length;
   const [active, setActive] = useState(0);
   const [progress, setProgress] = useState(0);
   const [paused, setPaused] = useState(false);
   const touchStart = useRef(0);
+  // ms already elapsed on the current slide — survives a pause so hovering freezes
+  // the strip instead of wiping it.
+  const elapsedRef = useRef(0);
 
   const step = useCallback(
     (dir: number) => setActive((prev) => (prev + dir + count) % count),
@@ -22,15 +27,21 @@ const ProjectsGrid = () => {
   const next = useCallback(() => step(1), [step]);
   const prev = useCallback(() => step(-1), [step]);
 
-  // Auto-advance + progress, restarts whenever the slide changes; pauses on hover.
+  // Reset the timer only when the slide itself changes — NOT on pause.
   useEffect(() => {
+    elapsedRef.current = 0;
     setProgress(0);
+  }, [active]);
+
+  // Advance while not paused. Hovering pauses and freezes progress (elapsedRef
+  // holds it); leaving resumes from exactly where it stopped rather than from 0.
+  useEffect(() => {
     if (paused) return;
-    const start =
-      typeof performance !== "undefined" ? performance.now() : 0;
+    const now = () => (typeof performance !== "undefined" ? performance.now() : 0);
+    const start = now() - elapsedRef.current;
     const id = window.setInterval(() => {
-      const elapsed =
-        (typeof performance !== "undefined" ? performance.now() : start) - start;
+      const elapsed = now() - start;
+      elapsedRef.current = elapsed;
       const pct = Math.min(100, (elapsed / SLIDE_MS) * 100);
       setProgress(pct);
       if (pct >= 100) {
@@ -46,8 +57,9 @@ const ProjectsGrid = () => {
   };
   const onTouchEnd = (e: React.TouchEvent) => {
     const diff = touchStart.current - e.changedTouches[0].clientX;
-    // RTL: swipe left (diff > 0) → previous, swipe right → next
-    if (Math.abs(diff) > 50) (diff > 0 ? prev : next)();
+    // RTL: forward moves leftward, so a leftward swipe (diff > 0) advances —
+    // matching the left-pointing "next" arrow and the RTL progress strip.
+    if (Math.abs(diff) > 50) (diff > 0 ? next : prev)();
   };
 
   const p = projects[active];
@@ -55,7 +67,7 @@ const ProjectsGrid = () => {
   return (
     <section
       dir="rtl"
-      className="py-16 md:py-28 bg-background overflow-hidden"
+      className="py-24 md:py-32 bg-background overflow-hidden"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       onTouchStart={onTouchStart}
@@ -64,110 +76,104 @@ const ProjectsGrid = () => {
       <div className="container-luxury">
         <Reveal className="mb-10 md:mb-16 flex flex-col items-center">
           <SectionHeading>עבודות נבחרות</SectionHeading>
+          <div className="w-20 h-[2px] bg-primary/55 mt-5" aria-hidden="true" />
         </Reveal>
 
-        <div className="grid md:grid-cols-2 gap-8 md:gap-14 items-center max-w-6xl mx-auto">
-          {/* TEXT — right column in RTL */}
-          <div className="order-2 md:order-1 text-center md:text-right">
-            <div key={`t-${active}`} className="animate-rise-in">
-              <div className="flex items-center gap-3 justify-center md:justify-start mb-5 text-primary">
-                <span className="h-px w-8 bg-primary/60" />
-                <span className="text-sm tracking-[0.3em] tabular-nums" dir="ltr">
-                  {String(active + 1).padStart(2, "0")} / {String(count).padStart(2, "0")}
-                </span>
-              </div>
+        <div className="grid md:grid-cols-2 gap-10 md:gap-14 items-start max-w-6xl mx-auto">
+          {/* IMAGE — right column in RTL, with its controls directly beneath it */}
+          <div className="order-1">
+            <div className="w-full max-w-[384px] mx-auto">
+              <Link
+                to={`/projects/${p.slug}`}
+                className="block relative aspect-[4/5] rounded-[14px] overflow-hidden border border-border shadow-luxury group"
+              >
+                <img
+                  key={`i-${active}`}
+                  src={p.cover}
+                  alt={p.name}
+                  loading="lazy"
+                  decoding="async"
+                  className="absolute inset-0 w-full h-full object-cover animate-rise-in transition-transform duration-700 group-hover:scale-105"
+                />
+                {/* Same 14px radius as the photo it sits on */}
+                <div className="absolute top-4 right-4 bg-background/90 backdrop-blur-sm px-3.5 py-1.5 rounded-[14px] text-[16px] tracking-[0.12em] text-foreground">
+                  {p.area}
+                </div>
+              </Link>
 
-              <h3 className="font-display font-bold text-2xl text-primary leading-snug mb-2">
-                {p.name}
-              </h3>
-
-              <div className="text-xs tracking-[0.28em] uppercase text-muted-foreground mb-4">
-                {p.location} · {p.tag} · {p.year}
-              </div>
-
-              <div className="w-12 h-px bg-cream mb-4 mx-auto md:mx-0" aria-hidden="true" />
-
-              <p className="text-lg text-foreground leading-relaxed max-w-md mx-auto md:mx-0 mb-8">
-                {p.intro}
-              </p>
-
-              <div className="flex items-center gap-3 justify-center md:justify-start">
-                <Link
-                  to={`/projects/${p.slug}`}
-                  className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-sm text-sm font-medium tracking-wide hover:bg-accent transition-smooth"
-                >
-                  צפו בפרויקט
-                  <ArrowLeft className="w-4 h-4" />
-                </Link>
-                <button
-                  type="button"
-                  onClick={prev}
-                  aria-label="הקודם"
-                  className="h-11 w-11 rounded-sm border border-border flex items-center justify-center text-foreground hover:border-primary hover:text-primary transition-smooth"
-                >
-                  <ArrowRight className="w-4 h-4" />
-                </button>
-                <button
-                  type="button"
-                  onClick={next}
-                  aria-label="הבא"
-                  className="h-11 w-11 rounded-sm border border-border flex items-center justify-center text-foreground hover:border-primary hover:text-primary transition-smooth"
-                >
-                  <ArrowLeft className="w-4 h-4" />
-                </button>
+              {/* Controls sit under the photo: prev on the right, next on the left,
+                  with the progress strip running RTL so "forward" reads leftward. */}
+              <div className="mt-5 flex items-center gap-2">
+                <CarouselArrow direction="prev" onClick={prev} />
+                <div className="flex flex-1 items-center gap-2">
+                  {projects.map((proj, i) => {
+                    const isActive = i === active;
+                    const isBefore = i < active;
+                    return (
+                      <button
+                        key={proj.slug}
+                        type="button"
+                        onClick={() => setActive(i)}
+                        aria-label={`מעבר לפרויקט ${i + 1}`}
+                        aria-current={isActive ? "step" : undefined}
+                        // Active bar grows wider; the rest share the remaining space.
+                        className={`py-2 transition-[flex-grow] duration-500 ease-out ${
+                          isActive ? "flex-[1.8]" : "flex-1"
+                        }`}
+                      >
+                        {/* Active bar is also taller ("bolder"). Passed bars stay full,
+                            upcoming bars stay empty. The fill width has NO transition, so
+                            switching/looping snaps cleanly instead of draining every bar
+                            at once; the 50ms progress ticks keep the active fill smooth. */}
+                        <span
+                          className={`block w-full overflow-hidden rounded-full bg-primary/20 transition-[height] duration-300 ease-out ${
+                            isActive ? "h-[6px]" : "h-[3px]"
+                          }`}
+                        >
+                          <span
+                            className="block h-full rounded-full bg-primary"
+                            style={{ width: isActive ? `${progress}%` : isBefore ? "100%" : "0%" }}
+                          />
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+                <CarouselArrow direction="next" onClick={next} />
               </div>
             </div>
           </div>
 
-          {/* IMAGE — left column in RTL */}
-          <div className="order-1 md:order-2">
-            <Link
-              to={`/projects/${p.slug}`}
-              className="block relative aspect-[4/5] rounded-sm overflow-hidden border border-border shadow-luxury group"
-            >
-              <img
-                key={`i-${active}`}
-                src={p.cover}
-                alt={p.name}
-                loading="lazy"
-                decoding="async"
-                className="absolute inset-0 w-full h-full object-cover animate-rise-in transition-transform duration-700 group-hover:scale-105"
-              />
-              <div className="absolute top-4 right-4 bg-background/90 backdrop-blur-sm px-3 py-1 rounded-sm text-[11px] tracking-[0.2em] uppercase text-foreground">
-                {p.area}
+          {/* TEXT — left column in RTL, top-aligned with the photo */}
+          <div className="order-2 text-center md:text-right">
+            {/* min-height matches the photo (384px × 4:5 = 480px) so mt-auto drops
+                the CTA level with the bottom of the image on wide screens. */}
+            <div key={`t-${active}`} className="animate-rise-in flex flex-col lg:min-h-[480px]">
+              {/* Even rhythm: title → tags → paragraph all separated by the same gap. */}
+              <h3 className="font-display font-normal text-[22px] text-foreground leading-snug mb-5">
+                {p.name}
+              </h3>
+
+              <div className="flex items-center gap-3 justify-center md:justify-start text-[18px] text-muted-foreground tracking-wide mb-5">
+                <span>{p.location}</span>
+                <span className="w-px h-4 bg-primary/45" aria-hidden="true" />
+                <span>{p.tag}</span>
+                <span className="w-px h-4 bg-primary/45" aria-hidden="true" />
+                <span>{p.year}</span>
               </div>
-            </Link>
+
+              <p className="text-[20px] text-foreground leading-relaxed max-w-xl mx-auto md:mx-0 mb-8 text-pretty">
+                {p.intro}
+              </p>
+
+              <div className="flex justify-center md:justify-start lg:mt-auto">
+                <ShineButton to={`/projects/${p.slug}`}>
+                  צפו בפרויקט
+                  <ArrowLeft className="w-4 h-4" />
+                </ShineButton>
+              </div>
+            </div>
           </div>
-        </div>
-
-        {/* Progress segments — one per project */}
-        <div className="flex items-center gap-2 justify-center mt-10 max-w-md mx-auto" dir="ltr">
-          {projects.map((proj, i) => (
-            <button
-              key={proj.slug}
-              type="button"
-              onClick={() => setActive(i)}
-              aria-label={`מעבר לפרויקט ${i + 1}`}
-              className="group flex-1 py-2"
-            >
-              <span className="block h-[3px] w-full bg-primary/20 overflow-hidden rounded-sm">
-                <span
-                  className="block h-full bg-primary transition-[width] duration-100 ease-linear"
-                  style={{ width: i === active ? `${progress}%` : i < active ? "100%" : "0%" }}
-                />
-              </span>
-            </button>
-          ))}
-        </div>
-
-        <div className="text-center mt-10">
-          <Link
-            to="/projects"
-            className="inline-flex items-center gap-2 px-6 py-3 border border-primary/50 rounded-sm text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary transition-smooth font-medium tracking-wide"
-          >
-            לכל הפרויקטים
-            <ArrowLeft className="w-4 h-4" />
-          </Link>
         </div>
       </div>
     </section>
