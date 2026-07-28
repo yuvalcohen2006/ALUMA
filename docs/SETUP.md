@@ -47,9 +47,48 @@ list. Transactional email for a site this size stays comfortably free.
 Four blocks. They're independent — do them in any order. Everything else is code
 and is being handled separately.
 
+> ## ⚠️ Current status: the domain is not available to us yet
+>
+> `alumaoutdoor.com` was bought **through Lovable**, and its DNS panel isn't
+> reachable from the account we have. Two hard facts from the registry:
+>
+> ```
+> Registrar:   Name.com, Inc.
+> Registered:  2026-06-12
+> Status:      client transfer prohibited
+> ```
+>
+> ICANN blocks any transfer for **60 days** after registration, so the earliest
+> the domain can move is **≈ 11 August 2026**. Nothing about the domain can be
+> resolved before then.
+>
+> **So we're running in test mode.** Resend sends from its shared
+> `onboarding@resend.dev` address, which needs no DNS at all. The catch is that
+> it only delivers to the address the Resend account was created with. The
+> sender is an environment variable (`RESEND_FROM`), so switching to the real
+> domain later is one command and no code change.
+>
+> Everything below about verifying `notify.alumaoutdoor.com` is what to do
+> **once the domain is under our control** — skip it for now.
+
 ### Block A — Resend (email)
 
-**Goal: an API key starting `re_`, and alumaoutdoor.com verified as a sender.**
+**For now: just create an account and an API key. Skip the domain steps.**
+
+1. Sign up at **resend.com** with **yuval.cohen006@gmail.com** (test emails can
+   only be delivered to that address until a domain is verified).
+2. Sidebar → **API Keys** → **Create API Key**, name it `aluma-dev`,
+   permission **Sending access**.
+3. Copy the key (starts `re_`, shown once) and send it to me.
+
+That's the whole of Block A while we're in test mode. The rest of this section
+is for later.
+
+---
+
+**Later, once the domain is ours: verify it as a sender.**
+
+**Goal: an API key starting `re_`, and notify.alumaoutdoor.com verified.**
 
 1. Go to **resend.com** → **Sign up** (GitHub / Google / email — any is fine).
 2. When asked to pick a **region**, choose **EU (Ireland)** — closest to Israel,
@@ -126,9 +165,15 @@ The function is **already deployed** — you can do this now.
 
 ### Block C — Cloudflare Pages (hosting)
 
-**Goal: the site building automatically from GitHub and served at alumaoutdoor.com.**
+**Goal for now: a free `*.pages.dev` preview URL. No domain needed.**
 
-Do this once I've confirmed the code changes are committed and pushed.
+Cloudflare Pages hands you a real, live, HTTPS URL like `aluma-xyz.pages.dev`
+without any domain involved — which is exactly what we need while
+`alumaoutdoor.com` is stuck inside Lovable. The current live site keeps running
+on Lovable's hosting, completely untouched, the whole time.
+
+**The code is already committed and pushed to `main`**, so you can do this now.
+Skip step 7 (custom domain) until the domain situation is resolved.
 
 1. Sign in at **dash.cloudflare.com** (create a free account if needed).
 2. Left sidebar → **Workers & Pages** → **Create** → **Pages** tab →
@@ -165,12 +210,28 @@ Do this once I've confirmed the code changes are committed and pushed.
 
 ---
 
-### Block D — where the old site is served from
+### Block D — where the old site is served from — ✅ answered
 
-Nobody currently knows where alumaoutdoor.com points (there's no deploy config
-in this repo). Before pointing the domain at Cloudflare, check what's serving it
-today so you don't take the live site down mid-switch. If it turns out to be
-Lovable's hosting, that's the last Lovable dependency and this migration removes it.
+`alumaoutdoor.com` resolves to `lovable-app-cd-1-4.p.l5e.io` behind Cloudflare:
+**the live site runs on Lovable's hosting.** It is serving customers right now,
+so nothing about it should be touched until the Pages deploy is reviewed and the
+domain is under our control.
+
+### The domain, after 11 August
+
+Two routes, in order of preference:
+
+1. **Transfer to a registrar you control** (Name.com directly, Cloudflare
+   Registrar, wherever). Needs the transfer lock lifted and an EPP auth code
+   from whoever administers the Lovable workspace. Cleanest outcome — the
+   domain stops depending on a third party's account.
+2. **Point it at custom nameservers.** Lovable lets workspace admins delegate
+   DNS elsewhere. Aim it at Cloudflare and all DNS lives in one panel alongside
+   Pages. Faster, reversible, but Lovable still holds the registration.
+
+Either way the sequence afterwards is: verify `notify.alumaoutdoor.com` in
+Resend (Block A), swap `RESEND_FROM` to the real address, then attach the domain
+to the Pages project (Block C step 7).
 
 ---
 
@@ -259,12 +320,23 @@ its dynamic import in `src/hooks/useCollectionsData.ts` to remove it entirely.
 
 **Edge function secrets** (set via `npx supabase secrets set KEY=value`):
 
-| Secret | Purpose |
-|---|---|
-| `RESEND_API_KEY` | Sending email |
-| `SEND_EMAIL_HOOK_SECRET` | Verifying auth-hook requests really came from Supabase |
+| Secret | Purpose | Status |
+|---|---|---|
+| `RESEND_API_KEY` | Sending email | ⏳ waiting on the key |
+| `SEND_EMAIL_HOOK_SECRET` | Verifying auth-hook requests really came from Supabase | ⏳ waiting (Block B3) |
+| `RESEND_FROM` | Sender address | ✅ set to `Aluma <onboarding@resend.dev>` for testing |
+| `OWNER_EMAIL` | Where studio notifications land | ✅ set to `yuval.cohen006@gmail.com` for testing |
 
 All `SUPABASE_*` secrets are auto-provisioned by the platform — you don't set those.
+
+**Going live later**, once `notify.alumaoutdoor.com` is verified in Resend:
+
+```bash
+npx supabase secrets set RESEND_FROM="Aluma <noreply@notify.alumaoutdoor.com>"
+npx supabase secrets unset OWNER_EMAIL    # falls back to outdooraluma@gmail.com
+```
+
+No code change and no redeploy of logic — both are read at runtime.
 
 **Migrations:** `supabase/migrations/`, applied with `npx supabase db push`.
 **Edge functions:** `supabase/functions/`, deployed with
