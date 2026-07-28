@@ -28,7 +28,8 @@ const CategoryIcons = () => {
         <Reveal className="mb-10 md:mb-14 flex flex-col items-center">
           {/* Charcoal, not terracotta: this heading sits on sand beige. */}
           <SectionHeading tone="charcoal">גלו את הריהוט שלנו לפי קטגוריה</SectionHeading>
-          <div className="w-20 h-[2px] bg-primary/55 mt-5" aria-hidden="true" />
+          {/* Charcoal to match the heading — terracotta doesn't carry on sand. */}
+          <div className="w-20 h-[2px] bg-foreground/55 mt-5" aria-hidden="true" />
         </Reveal>
       </div>
 
@@ -36,11 +37,21 @@ const CategoryIcons = () => {
         {/* Desktop: all eight share one row inside a 150px inset — no scrolling, so
             no scrollbar renders either. Below lg it becomes a rail you swipe
             natively; that native touch scroll is the drag, so no JS drag needed. */}
-        <ul className="rail-scroll flex gap-4 lg:gap-5 overflow-x-auto lg:overflow-x-visible px-5 sm:px-6 lg:px-[150px] pb-5 lg:pb-0">
+        {/* Focus behaviour: hovering one tile blurs and fades the other seven and
+            scales the hovered one up, so attention lands on a single category
+            instead of the whole row competing. Driven by `group/rail` on the list
+            plus `peer`-less sibling dimming — each tile reacts to the rail being
+            hovered, then overrides itself on its own hover. */}
+        <ul className="group/rail rail-scroll flex gap-4 lg:gap-5 overflow-x-auto lg:overflow-x-visible px-5 sm:px-6 lg:px-[150px] pb-5 lg:pb-0">
           {categories.map((c) => (
-            <li key={c.slug} className="shrink-0 w-[152px] sm:w-[180px] lg:flex-1">
+            <li
+              key={c.slug}
+              className="shrink-0 w-[152px] sm:w-[180px] lg:flex-1 transition-all duration-300 ease-out
+                         group-hover/rail:opacity-45 group-hover/rail:blur-[2px]
+                         hover:!opacity-100 hover:!blur-0 hover:scale-[1.08] hover:z-10 relative"
+            >
               <Link to={`/collections#${c.slug}`} className="group block">
-                <div className="relative w-full aspect-square rounded-[14px] bg-background/50 border border-foreground/15 overflow-hidden transition-all duration-300 group-hover:border-primary/60 group-hover:shadow-luxury group-hover:-translate-y-1">
+                <div className="relative w-full aspect-square rounded-[14px] bg-background/50 border border-foreground/15 overflow-hidden transition-all duration-300 group-hover:border-foreground/35 group-hover:shadow-luxury">
                   <img
                     src={c.img}
                     alt={c.label}
@@ -51,16 +62,9 @@ const CategoryIcons = () => {
                     height={1536}
                     className="absolute inset-0 w-full h-full object-cover transition-transform duration-[600ms] ease-out group-hover:scale-[1.06]"
                   />
-                  {/* A light terracotta wash rises from the base on hover — just a
-                      breath of warmth, nothing heavy. */}
-                  <span
-                    aria-hidden="true"
-                    className="absolute inset-0 bg-gradient-to-t from-primary/20 via-primary/5 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-                  />
                 </div>
                 <div className="mt-3 text-center">
-                  {/* Label stays charcoal on hover — the tile lift + wash carry it. */}
-                  <span className="inline-block text-foreground text-sm md:text-[15px] font-normal">
+                  <span className="inline-block text-foreground text-[18px] font-normal">
                     {c.label}
                   </span>
                 </div>

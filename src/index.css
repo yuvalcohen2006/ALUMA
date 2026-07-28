@@ -340,89 +340,109 @@
   }
 }
 
-/* ===== Shine button =====
-   Adapted from the Uiverse sweep button: soft-charcoal ink and border with a
-   whisper of inset fill. On hover a warm terracotta band sweeps across — only the
-   sweep is coloured; the border/ink stay monochrome. --shine-sweep must clear the
-   button width. */
+/* ===== Primary button =====
+   Adapted from the Uiverse "button2" pattern: a soft neumorphic tablet at rest,
+   with two offset circles that rise from beneath on hover and flood it in
+   terracotta.
+
+   The hover ink is charcoal rather than white on purpose. White on this
+   terracotta measures roughly 2.9:1 — well under the 4.5:1 AA floor — while
+   charcoal reads about 5.9:1. That is exactly why --primary-foreground was
+   defined as charcoal, and this honours it. */
 .btn-shine {
-  --shine-ink: hsl(var(--foreground-soft));
-  /* Border rides lighter than the ink so the outline reads soft, then firms up on hover. */
-  --shine-border: hsl(var(--foreground-soft) / 0.4);
-  --shine-border-hover: hsl(var(--foreground-soft) / 0.7);
-  --shine-rgb: 47, 47, 47;
-  /* Brighter-than-palette terracotta — colours the sweeping band on hover. */
-  --shine-glow: 14 66% 62%;
-  --shine-sweep: 22em;
+  --btn-surface: hsl(40 30% 93%);
+  --btn-shadow-dark: hsl(36 18% 80%);
+  --btn-shadow-light: hsl(0 0% 100%);
+  --btn-ink: hsl(var(--foreground));
+  --btn-fill: hsl(var(--primary));
+  --btn-ink-hover: hsl(var(--primary-foreground));
+
   position: relative;
+  z-index: 1;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.55em;
-  font-family: inherit;
-  font-size: 17px;
-  line-height: 1.4em;
-  letter-spacing: 0.06em;
-  padding: 0.85em 3.2em;
-  /* ~10px — the boxy end of the site's middle radius band, so it sits with the rest */
-  border-radius: 0.6em;
   overflow: hidden;
-  border: 1.5px solid var(--shine-border);
-  color: var(--shine-ink);
-  background: linear-gradient(
-    to right,
-    rgba(var(--shine-rgb), 0.05) 1%,
-    transparent 40%,
-    transparent 60%,
-    rgba(var(--shine-rgb), 0.05) 100%
-  );
-  box-shadow: inset 0 0 10px rgba(var(--shine-rgb), 0.05);
-  transition: color 0.3s, border-color 0.3s, box-shadow 0.3s, transform 0.3s;
+
+  font-family: inherit;
+  font-size: 18px;
+  line-height: 1.4em;
+  letter-spacing: 0.02em;
+  color: var(--btn-ink);
+  padding: 0.7em 1.7em;
+  cursor: pointer;
+
+  border-radius: 0.5em;
+  background: var(--btn-surface);
+  border: 1px solid var(--btn-surface);
+  box-shadow: 6px 6px 12px var(--btn-shadow-dark), -6px -6px 12px var(--btn-shadow-light);
+  transition: color 0.2s ease-in, border-color 0.2s ease-in, box-shadow 0.2s ease-in;
 }
-.btn-shine::before {
+
+/* The two rising circles. Sitting at a negative z-index inside the button's own
+   stacking context puts them over its background but under its label. */
+.btn-shine::before,
+.btn-shine::after {
   content: "";
   position: absolute;
-  top: 0;
-  left: -4em;
-  width: 4em;
-  height: 100%;
-  background: linear-gradient(
-    to right,
-    transparent 1%,
-    hsl(var(--shine-glow) / 0.55) 40%,
-    hsl(var(--shine-glow) / 0.55) 60%,
-    transparent 100%
-  );
-  transition: transform 0.45s ease-in-out;
+  display: block;
+  z-index: -1;
+  border-radius: 50%;
+  background-color: var(--btn-fill);
+  transition: all 0.5s 0.1s cubic-bezier(0.55, 0, 0.1, 1);
 }
+.btn-shine::before {
+  left: 50%;
+  top: 100%;
+  width: 140%;
+  height: 180%;
+  transform: translateX(-50%) scaleY(1) scaleX(1.25);
+  background-color: hsl(var(--primary) / 0.25);
+}
+.btn-shine::after {
+  left: 55%;
+  top: 180%;
+  width: 160%;
+  height: 190%;
+  transform: translateX(-50%) scaleY(1) scaleX(1.45);
+}
+
 .btn-shine:hover {
-  color: hsl(var(--foreground));
-  border-color: var(--shine-border-hover);
-  /* Small lift: nudge up and float a soft shadow underneath. */
-  transform: translateY(-2px);
-  box-shadow: inset 0 0 10px rgba(var(--shine-rgb), 0.1), 0 8px 18px -8px rgba(var(--shine-rgb), 0.35);
+  color: var(--btn-ink-hover);
+  border-color: var(--btn-fill);
 }
-.btn-shine:hover::before {
-  transform: translateX(var(--shine-sweep));
+.btn-shine:hover::before,
+.btn-shine:hover::after {
+  background-color: var(--btn-fill);
+  transform: translateX(-50%) scaleY(1.3) scaleX(0.8);
 }
-/* Inverted — sits on the charcoal materials rail */
+.btn-shine:hover::before { top: -35%; }
+.btn-shine:hover::after { top: -45%; }
+
+/* Pressed: the tablet sinks into the surface. */
+.btn-shine:active {
+  box-shadow: inset 4px 4px 12px var(--btn-shadow-dark),
+    inset -4px -4px 12px var(--btn-shadow-light);
+}
+
+/* Inverted — sits on the charcoal materials rail. */
 .btn-shine-invert {
-  --shine-ink: hsl(40 30% 86%);
-  --shine-border: hsl(40 30% 86% / 0.4);
-  --shine-border-hover: hsl(40 30% 86% / 0.75);
-  --shine-rgb: 248, 246, 242;
+  --btn-surface: hsl(0 0% 24%);
+  --btn-shadow-dark: hsl(0 0% 11%);
+  --btn-shadow-light: hsl(0 0% 33%);
+  --btn-ink: hsl(40 30% 92%);
 }
-.btn-shine-invert:hover {
-  color: hsl(var(--background));
-  border-color: var(--shine-border-hover);
-}
+
 @media (prefers-reduced-motion: reduce) {
   .btn-shine::before,
-  .btn-shine:hover::before {
+  .btn-shine::after,
+  .btn-shine:hover::before,
+  .btn-shine:hover::after {
     transition: none;
-    transform: none;
   }
 }
+
 
 /* ===== Accessibility widget overrides ===== */
 :root {

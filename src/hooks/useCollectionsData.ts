@@ -56,19 +56,18 @@ export function useCollections() {
         gallery: Array.isArray(p.gallery) ? p.gallery : [],
       })) as DBProduct[];
 
-      // An empty database in development means a fresh project, not an empty
-      // shop — fall back to the placeholder catalogue so the collections page
-      // and its filter can actually be looked at. Real rows always win, and
-      // production shows the honest empty state.
+      // While the site is being designed, development runs on the placeholder
+      // catalogue — 20 products across 5 categories — rather than whatever few
+      // rows happen to be in the database. There is no point judging a grid,
+      // a carousel or a filter against two records.
       //
-      // `?demo=1` forces it on even when the database does have rows, so the
-      // 20-item placeholder catalogue can be viewed against a populated
-      // project without touching any data. Development only.
-      const forceDemo =
+      // Production is never affected. Add `?live=1` to see the real database
+      // contents in development when reconnecting the CMS.
+      const wantsLive =
         typeof window !== "undefined" &&
-        new URLSearchParams(window.location.search).has("demo");
+        new URLSearchParams(window.location.search).has("live");
 
-      if (import.meta.env.DEV && (forceDemo || loadedCollections.length === 0)) {
+      if (import.meta.env.DEV && !wantsLive) {
         const { demoCollections, demoProducts } = await import("@/data/demoCollections");
         setCollections(demoCollections);
         setProducts(demoProducts);

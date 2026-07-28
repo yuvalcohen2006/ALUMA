@@ -1,4 +1,3 @@
-import alumaLogo from "@/assets/aluma-logo.png";
 import SectionHeading from "@/components/SectionHeading";
 import Reveal from "@/components/Reveal";
 
@@ -14,14 +13,10 @@ const AboutBrief = () => {
             align="center"
             subtitle={
               <>
-                {/* Baseline-aligned, nudged down 2px to settle onto the line and
-                    5px to the left. Height is 3px shorter than 1.05em; sitting on
-                    the baseline, the bottom stays put and the trim comes off the top. */}
-                <img
-                  src={alumaLogo}
-                  alt="Aluma"
-                  className="inline-block h-[calc(1.05em_-_3px)] w-auto align-baseline mx-1.5 -translate-x-[5px] translate-y-[2px]"
-                />{" "}
+                {/* The name set as Hebrew type rather than the logo mark. The
+                    shuruk on the ו fixes the reading as a-LU-ma — without it the
+                    word is ambiguous in unvocalised Hebrew. */}
+                <span className="font-display text-primary">אלוּמה</span>{" "}
                 נולדה מתוך החיבור שבין חומר לאור. כל פריט נבנה בהתאמה אישית, בקווים
                 נקיים ומדויקים, מתוך מחשבה על עיצוב, על נוחות ועל עמידות מלאה בתנאי
                 חוץ. שלדת אלומיניום מתקדמת נפגשת בבדים שנבחרים אחד־אחד, והתוצאה היא

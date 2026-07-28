@@ -116,24 +116,20 @@ const ProjectsGrid = () => {
                         onClick={() => setActive(i)}
                         aria-label={`מעבר לפרויקט ${i + 1}`}
                         aria-current={isActive ? "step" : undefined}
-                        // Active bar grows wider; the rest share the remaining space.
-                        className={`py-2 transition-[flex-grow] duration-500 ease-out ${
-                          isActive ? "flex-[1.8]" : "flex-1"
-                        }`}
+                        // Every bar the same width and height now — the active one
+                        // is marked by colour alone, not by growing.
+                        className="py-2 flex-1"
                       >
-                        {/* Active bar is also taller ("bolder"). Passed bars stay full,
-                            upcoming bars stay empty. On swap, the inactive bars ease their
-                            fill (passed bars top up, upcoming bars drain) so the change
-                            reads as a clean glide; the active bar has NO transition so its
-                            50ms progress ticks stay crisp instead of lagging behind. */}
-                        <span
-                          className={`block w-full overflow-hidden rounded-full bg-primary/20 transition-[height] duration-300 ease-out ${
-                            isActive ? "h-[6px]" : "h-[3px]"
-                          }`}
-                        >
+                        {/* Passed bars stay full, upcoming bars stay empty. On swap the
+                            inactive bars ease their fill so the change reads as a clean
+                            glide; the active bar has NO transition so its 50ms progress
+                            ticks stay crisp instead of lagging behind. */}
+                        <span className="block w-full h-[3px] overflow-hidden rounded-full bg-foreground/15">
                           <span
-                            className={`block h-full rounded-full bg-primary ${
-                              isActive ? "" : "transition-[width] duration-500 ease-out"
+                            className={`block h-full rounded-full ${
+                              isActive
+                                ? "bg-primary"
+                                : "bg-foreground/35 transition-[width] duration-500 ease-out"
                             }`}
                             style={{ width: isActive ? `${progress}%` : isBefore ? "100%" : "0%" }}
                           />

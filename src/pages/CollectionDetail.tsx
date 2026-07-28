@@ -24,6 +24,29 @@ const CollectionDetailPage = () => {
     if (!slug) return;
     setLoading(true);
     setLoadError(false);
+
+    // The collections page runs on the placeholder catalogue in development, so
+    // detail pages have to resolve from it too — otherwise every one of those
+    // products 404s the moment you click it. `?live=1` opts back into the
+    // database, and production never takes this path.
+    const wantsLive =
+      typeof window !== "undefined" &&
+      new URLSearchParams(window.location.search).has("live");
+    if (import.meta.env.DEV && !wantsLive) {
+      const { demoProducts } = await import("@/data/demoCollections");
+      const found = demoProducts.find((p) => p.slug === slug) ?? null;
+      setItem(found);
+      setRelated(
+        found
+          ? demoProducts
+              .filter((p) => p.collection_id === found.collection_id && p.id !== found.id)
+              .slice(0, 3)
+          : []
+      );
+      setLoading(false);
+      return;
+    }
+
     const { data, error } = await supabase
       .from("site_collection_products")
       .select(

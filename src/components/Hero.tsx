@@ -120,7 +120,10 @@ const Hero = () => {
         aria-label="גלול למטה"
         aria-hidden={!showCue}
         tabIndex={showCue ? 0 : -1}
-        className={`absolute bottom-6 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center text-foreground-soft hover:text-primary transition-opacity duration-500 ${
+        // White, not charcoal: these sit on a photograph, and only white holds
+        // up across every frame of it. The drop shadow keeps them legible if a
+        // pale area of the image scrolls underneath.
+        className={`absolute bottom-6 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center text-white transition-opacity duration-500 [filter:drop-shadow(0_1px_3px_rgb(0_0_0/0.45))] ${
           showCue ? "opacity-100" : "opacity-0 pointer-events-none"
         }`}
       >

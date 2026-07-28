@@ -54,8 +54,9 @@ const MaterialsBrief = () => {
 
   const onDragEnd = (_e: unknown, { offset, velocity }: PanInfo) => {
     const swipe = Math.abs(offset.x) * velocity.x;
-    if (swipe < -8000) next();
-    else if (swipe > 8000) prev();
+    // Next now sits to the left, so dragging rightward is what pulls it in.
+    if (swipe > 8000) next();
+    else if (swipe < -8000) prev();
   };
 
   const visible = [-1, 0, 1];
@@ -90,6 +91,9 @@ const MaterialsBrief = () => {
       <div className="relative z-10 flex flex-1 flex-col justify-center px-4 md:px-8">
         <div className="mb-6 flex flex-col items-center">
           <SectionHeading light>החומרים שלנו</SectionHeading>
+          {/* White rule — the charcoal band's counterpart to the terracotta one
+              every section on a light background carries. */}
+          <div className="w-20 h-[2px] bg-background/70 mt-5" aria-hidden="true" />
         </div>
 
         {/* 3D rail */}
@@ -115,10 +119,14 @@ const MaterialsBrief = () => {
                 )}
                 initial={false}
                 animate={{
-                  x: offset * CARD_OFFSET,
+                  // Negated for RTL. CSS transforms don't flip with direction,
+                  // so without this the *next* material sat to the right — the
+                  // side a Hebrew reader expects the *previous* one on, making
+                  // the arrows feel backwards.
+                  x: -offset * CARD_OFFSET,
                   z: -dist * 180,
                   scale: isCenter ? 1 : 0.85,
-                  rotateY: offset * -22,
+                  rotateY: offset * 22,
                   opacity: isCenter ? 1 : 0.35,
                   filter: `blur(${isCenter ? 0 : dist * 4}px) brightness(${isCenter ? 1 : 0.5})`,
                 }}
