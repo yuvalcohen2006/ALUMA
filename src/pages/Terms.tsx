@@ -1,6 +1,6 @@
 import Layout from "@/components/Layout";
 import SEO from "@/components/SEO";
-import SectionLabel from "@/components/SectionLabel";
+import PageHero from "@/components/PageHero";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 /* ============================================================
@@ -22,13 +22,13 @@ const H3 = ({ children }: { children: React.ReactNode }) => (
 );
 
 const P = ({ children }: { children: React.ReactNode }) => (
-  <p className="text-foreground text-base md:text-lg leading-[1.9] mb-4">
+  <p className="text-foreground text-body mb-4">
     {children}
   </p>
 );
 
 const UL = ({ children }: { children: React.ReactNode }) => (
-  <ul className="list-disc pr-6 space-y-3 text-foreground text-base md:text-lg leading-[1.9] mb-6 marker:text-primary/50">
+  <ul className="list-disc pr-6 space-y-3 text-foreground text-body mb-6 marker:text-primary/50">
     {children}
   </ul>
 );
@@ -42,18 +42,7 @@ const TermsPage = () => {
         path="/terms"
       />
 
-      <section className="pt-32 pb-10 md:pt-40 gradient-cream">
-        <div className="container-luxury text-center">
-          <SectionLabel he="תקנון ומדיניות" en="Terms & Policies" className="text-xs mb-5" />
-          <h1 className="font-display text-3xl sm:text-4xl md:text-5xl text-foreground leading-tight">
-            תקנון ומדיניות
-          </h1>
-          <p className="text-foreground max-w-2xl mx-auto mt-5 text-base md:text-lg leading-relaxed">
-            תקנון האתר, מדיניות משלוחים, ביטול עסקאות ותנאי האחריות, הכל במקום אחד, מסודר לפי לשוניות לנוחיותכם.
-          </p>
-          <div className="w-16 h-px bg-primary/30 mx-auto mt-8" />
-        </div>
-      </section>
+      <PageHero title="תקנון ומדיניות" />
 
       <section className="py-14 md:py-20 bg-background">
         <div className="container-luxury max-w-4xl">
@@ -305,7 +294,7 @@ const TermsPage = () => {
             </TabsContent>
           </Tabs>
 
-          <div className="pt-10 mt-12 border-t border-border text-sm text-muted-foreground text-center">
+          <div className="pt-10 mt-12 border-t border-border text-[18px] text-muted-foreground text-center">
             עודכן לאחרונה: {new Date().toLocaleDateString("he-IL")}
           </div>
         </div>

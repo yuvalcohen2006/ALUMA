@@ -136,6 +136,14 @@
     text-wrap: balance;
   }
 
+  /* Running text. One size for every paragraph a visitor actually reads —
+     page intros, article and legal prose, FAQ answers. Card titles, captions,
+     prices and labels are not running text and keep their own scale. */
+  .text-body {
+    font-size: 18px;
+    line-height: 1.75;
+  }
+
   .gradient-cream {
     background: var(--gradient-cream);
   }

@@ -2,7 +2,6 @@ import { Link, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import Layout from "@/components/Layout";
-import SectionLabel from "@/components/SectionLabel";
 import { ArrowLeft } from "lucide-react";
 
 const popular = [
@@ -32,16 +31,18 @@ const NotFound = () => {
         <meta name="robots" content="noindex,follow" />
       </Helmet>
 
-      <section className="pt-32 pb-20 md:pt-40 md:pb-28 gradient-cream min-h-[70vh] flex items-center">
+      {/* Centred full-screen state rather than a content page, so it keeps its
+          own composition — but the sand band is gone and the title carries the
+          site-wide token like everywhere else. */}
+      <section className="pt-32 pb-20 md:pt-40 md:pb-28 bg-background min-h-[70vh] flex items-center">
         <div className="container-luxury text-center max-w-2xl mx-auto">
-          <div className="font-display text-7xl md:text-9xl text-foreground/20 leading-none mb-4">
+          <div className="font-display text-7xl md:text-9xl text-primary/20 leading-none mb-4">
             404
           </div>
-          <SectionLabel he="הדף לא נמצא" en="Page Not Found" className="text-xs mb-5" />
-          <h1 className="font-display text-3xl md:text-5xl text-foreground leading-tight mb-5">
+          <h1 className="font-display text-3xl sm:text-4xl md:text-5xl text-primary leading-tight mb-5">
             נראה שהלכתם <span className="italic">לאיבוד</span>
           </h1>
-          <p className="text-muted-foreground text-base md:text-lg leading-relaxed mb-10">
+          <p className="text-body text-foreground mb-10">
             הדף שחיפשתם הוסר או שהקישור שגוי. אבל אל דאגה, הנה כמה מהדפים
             הפופולריים שלנו שיכולים לעניין אתכם:
           </p>

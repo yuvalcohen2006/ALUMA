@@ -55,13 +55,16 @@ const MaterialDetailPage = () => {
             decoding="async"
             className="absolute inset-0 w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-primary/80 via-primary/30 to-transparent" />
+          {/* Charcoal scrim, not the old terracotta wash: --primary-foreground
+              is charcoal, so dark type was sitting on a dark warm ground. This
+              is the same gradient the materials rail uses on the home screen. */}
+          <div className="absolute inset-0 bg-gradient-to-t from-foreground via-foreground/65 to-foreground/20" />
           <div className="absolute inset-x-0 bottom-0 p-8 md:p-16">
-            <div className="container-luxury text-primary-foreground">
-              <h1 className="font-display text-4xl md:text-6xl font-light leading-tight mb-4 max-w-3xl">
+            <div className="container-luxury text-background">
+              <h1 className="font-display text-3xl sm:text-4xl md:text-5xl leading-tight mb-4 max-w-3xl">
                 {material.name}
               </h1>
-              <p className="text-base md:text-lg font-light opacity-95 max-w-2xl">
+              <p className="text-[20px] leading-relaxed text-background/85 max-w-2xl">
                 {material.tagline}
               </p>
             </div>
@@ -71,26 +74,41 @@ const MaterialDetailPage = () => {
 
 
       <section className="py-16 md:py-24 bg-background">
-        <div className="container-luxury grid md:grid-cols-5 gap-12 items-stretch">
-          <div className="md:col-span-3 border border-primary/40 rounded-sm p-8 flex flex-col">
+        <div className="container-luxury grid md:grid-cols-5 gap-6 md:gap-8 items-stretch">
+          <div className="md:col-span-3 rounded-[14px] border border-border bg-background shadow-soft p-8 md:p-10 flex flex-col">
             <div className="space-y-6">
               {material.longDesc.map((p, i) => (
-                <p key={i} className="text-foreground/85 font-normal leading-loose text-[16px]">
+                <p key={i} className="text-foreground text-body">
                   {p}
                 </p>
               ))}
             </div>
           </div>
-          <aside className="md:col-span-2 border border-primary/40 rounded-sm p-8 flex flex-col">
-            <div className="text-[11px] tracking-[0.4em] uppercase text-accent mb-6">
+          <aside className="md:col-span-2 rounded-[14px] border border-border bg-background shadow-soft p-8 md:p-10 flex flex-col">
+            <h2 className="font-display font-bold text-[26px] leading-snug text-foreground">
               מאפיינים
-            </div>
-            <ul className="space-y-3">
+            </h2>
+            <div className="w-20 h-[2px] bg-primary/55 mt-5" aria-hidden="true" />
+            {/* Title and explanation on their own lines, the way the materials
+                index sets them — the old comma-joined run was what forced the
+                whole list down to 15px. */}
+            <ul className="mt-7 space-y-5">
               {material.features.map((f) => (
                 <li key={f.title} className="flex gap-3">
-                  <Check className="w-4 h-4 text-accent mt-1 shrink-0" />
-                  <div className="text-foreground font-normal text-[15px] leading-relaxed">
-                    {f.title}{f.desc && <span className="text-muted-foreground">, {f.desc}</span>}
+                  <Check
+                    className="w-5 h-5 text-primary mt-0.5 shrink-0"
+                    strokeWidth={2.5}
+                    aria-hidden="true"
+                  />
+                  <div>
+                    <p className="text-[20px] font-normal leading-snug text-foreground">
+                      {f.title}
+                    </p>
+                    {f.desc && (
+                      <p className="text-[18px] leading-snug text-muted-foreground mt-1.5">
+                        {f.desc}
+                      </p>
+                    )}
                   </div>
                 </li>
               ))}
@@ -102,28 +120,35 @@ const MaterialDetailPage = () => {
       {material.faq && material.faq.length > 0 && (
         <section className="py-16 md:py-24 gradient-cream">
           <div className="container-luxury max-w-3xl">
-            <div className="text-center mb-12">
-              <p className="text-[11px] tracking-[0.4em] uppercase text-accent mb-4">
+            {/* Right-anchored like every other header on the site now, with the
+                standard divider. The old centred micro-eyebrow is kept as a
+                plain 18px label — charcoal, not terracotta, because this band
+                is sand. */}
+            <div className="text-right mb-10">
+              <p className="text-[18px] text-foreground-soft mb-2">
                 שאלות ותשובות
               </p>
-              <h2 className="font-display text-3xl md:text-4xl text-foreground mb-3">
+              <h2 className="font-display font-bold text-[26px] leading-snug text-foreground">
                 מה שחשוב לדעת על {material.name}
               </h2>
-              <div className="w-16 h-px bg-primary/30 mx-auto" />
+              <div className="w-20 h-[2px] bg-primary/55 mt-5" aria-hidden="true" />
             </div>
             <div className="space-y-4">
               {material.faq.map((f, i) => (
                 <details
                   key={i}
-                  className="group bg-background border border-border rounded-sm p-6 open:shadow-soft transition-smooth"
+                  className="group bg-background border border-border rounded-[14px] p-6 md:p-7 open:shadow-soft transition-smooth"
                 >
-                  <summary className="cursor-pointer flex items-start justify-between gap-4 font-display text-lg text-foreground list-none [&::-webkit-details-marker]:hidden">
+                  <summary className="cursor-pointer flex items-start justify-between gap-4 font-display font-normal text-[22px] leading-snug text-foreground list-none [&::-webkit-details-marker]:hidden">
                     <span className="flex-1">{f.q}</span>
-                    <span className="shrink-0 w-6 h-6 rounded-sm border border-primary/40 flex items-center justify-center text-foreground text-lg leading-none transition-smooth group-open:rotate-45 group-open:bg-accent group-open:border-accent group-open:text-accent-foreground">
+                    <span
+                      className="shrink-0 w-8 h-8 rounded-[10px] border border-primary/50 flex items-center justify-center text-foreground text-[20px] leading-none transition-smooth group-open:rotate-45 group-open:bg-accent group-open:border-accent group-open:text-accent-foreground"
+                      aria-hidden="true"
+                    >
                       +
                     </span>
                   </summary>
-                  <p className="mt-4 text-[15px] leading-loose text-muted-foreground font-normal">
+                  <p className="mt-4 text-[20px] leading-relaxed text-foreground-soft">
                     {f.a}
                   </p>
                 </details>
@@ -134,12 +159,12 @@ const MaterialDetailPage = () => {
       )}
 
 
-      <div className="pb-16 flex justify-center">
+      <div className="py-16 md:py-20 bg-background flex justify-center">
         <Link
           to="/materials"
-          className="inline-flex items-center gap-2 text-sm font-medium text-primary border border-primary hover:bg-primary hover:text-primary-foreground transition-smooth rounded-sm px-8 py-3"
+          className="inline-flex items-center gap-2.5 text-[18px] font-normal text-primary border border-primary/60 hover:bg-primary hover:text-primary-foreground hover:border-primary transition-smooth rounded-[10px] px-8 py-3.5"
         >
-          <ArrowRight className="w-4 h-4" />
+          <ArrowRight className="w-5 h-5" aria-hidden="true" />
           חזרה לחומרים
         </Link>
       </div>

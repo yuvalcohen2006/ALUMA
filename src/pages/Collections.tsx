@@ -1,8 +1,10 @@
-import { useEffect, useRef } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { useEffect, useMemo, useRef } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import Layout from "@/components/Layout";
 import SEO from "@/components/SEO";
-import SectionLabel from "@/components/SectionLabel";
+import PageHero from "@/components/PageHero";
+import FilterSidebar, { type FilterGroup } from "@/components/FilterSidebar";
+import { useFilterParams } from "@/hooks/useFilterParams";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { useCollections, type DBCollection, type DBProduct } from "@/hooks/useCollectionsData";
 import FavoriteButton from "@/components/FavoriteButton";
@@ -31,11 +33,11 @@ const CategoryRow = ({
     >
       <div className="container-luxury">
         <div className="text-center mb-10 max-w-2xl mx-auto">
-          <h2 className="font-display text-3xl md:text-5xl text-primary font-light leading-tight">
+          <h2 className="font-display text-3xl md:text-4xl text-primary font-normal leading-tight">
             {col.name_he}
           </h2>
           {col.intro && (
-            <p className="text-muted-foreground font-normal leading-relaxed mt-4">{col.intro}</p>
+            <p className="text-body text-foreground-soft mt-4">{col.intro}</p>
           )}
         </div>
 
@@ -66,7 +68,7 @@ const CategoryRow = ({
                         />
                       )}
                       {p.tag && (
-                        <div className="absolute top-4 right-4 px-3 py-1 bg-background/90 backdrop-blur-sm rounded-sm text-xs tracking-wider text-foreground font-medium">
+                        <div className="absolute top-4 right-4 px-3.5 py-1.5 bg-background/90 backdrop-blur-sm rounded-[10px] text-[18px] text-foreground">
                           {p.tag}
                         </div>
                       )}
@@ -76,7 +78,7 @@ const CategoryRow = ({
                         {p.name}
                       </h3>
                       {p.tagline && (
-                        <p className="text-muted-foreground text-sm font-normal mt-2 leading-relaxed">
+                        <p className="text-muted-foreground text-[18px] font-normal mt-2 leading-relaxed">
                           {p.tagline}
                         </p>
                       )}
@@ -95,7 +97,7 @@ const CategoryRow = ({
               <button
                 onClick={() => scrollBy(1)}
                 aria-label="הקודם"
-                className="inline-flex items-center gap-2 h-11 px-5 rounded-sm border border-primary/30 text-primary hover:bg-primary hover:text-primary-foreground transition-smooth text-sm tracking-wider"
+                className="inline-flex items-center gap-2 h-11 px-5 rounded-sm border border-primary/30 text-primary hover:bg-primary hover:text-primary-foreground transition-smooth text-[18px]"
               >
                 <ArrowRight className="w-4 h-4" />
                 <span>הקודם</span>
@@ -103,7 +105,7 @@ const CategoryRow = ({
               <button
                 onClick={() => scrollBy(-1)}
                 aria-label="הבא"
-                className="inline-flex items-center gap-2 h-11 px-5 rounded-sm border border-primary/30 text-primary hover:bg-primary hover:text-primary-foreground transition-smooth text-sm tracking-wider"
+                className="inline-flex items-center gap-2 h-11 px-5 rounded-sm border border-primary/30 text-primary hover:bg-primary hover:text-primary-foreground transition-smooth text-[18px]"
               >
                 <span>הבא</span>
                 <ArrowLeft className="w-4 h-4" />
@@ -118,17 +120,69 @@ const CategoryRow = ({
 
 const CollectionsPage = () => {
   const { collections, products, loading } = useCollections();
-  const { hash } = useLocation();
-  const activeHash = decodeURIComponent(hash.replace("#", ""));
-  const visible = activeHash
-    ? collections.filter((c) => c.slug === activeHash)
-    : collections;
+  const { hash, pathname, search } = useLocation();
+  const navigate = useNavigate();
+  const { value, setValue, activeCount } = useFilterParams(["cat", "type"]);
 
+  // Back-compat: the header's קולקציות dropdown still links to /collections#slug.
+  // Fold an incoming hash into the filter state and drop it from the URL.
   useEffect(() => {
     if (!hash) return;
-    const el = document.getElementById(decodeURIComponent(hash.replace("#", "")));
-    if (el) setTimeout(() => el.scrollIntoView({ behavior: "smooth", block: "start" }), 100);
-  }, [hash]);
+    const slug = decodeURIComponent(hash.replace("#", ""));
+    const params = new URLSearchParams(search);
+    params.set("cat", slug);
+    navigate({ pathname, search: params.toString() }, { replace: true });
+  }, [hash, pathname, search, navigate]);
+
+  const selectedCats = value.cat;
+  const selectedTypes = value.type;
+
+  const visible = useMemo(() => {
+    const byCat = selectedCats.length
+      ? collections.filter((c) => selectedCats.includes(c.slug))
+      : collections;
+    if (!selectedTypes.length) return byCat;
+    // A collection stays on the page only while it still has a product of a
+    // selected type — an empty carousel is worse than a hidden row.
+    return byCat.filter((c) =>
+      products.some(
+        (p) => p.collection_id === c.id && p.tag && selectedTypes.includes(p.tag)
+      )
+    );
+  }, [collections, products, selectedCats, selectedTypes]);
+
+  const productsFor = (collectionId: string) =>
+    products.filter(
+      (p) =>
+        p.collection_id === collectionId &&
+        (!selectedTypes.length || (p.tag && selectedTypes.includes(p.tag)))
+    );
+
+  const filterGroups: FilterGroup[] = useMemo(() => {
+    const tags = Array.from(
+      new Set(products.map((p) => p.tag).filter((t): t is string => !!t))
+    ).sort((a, b) => a.localeCompare(b, "he"));
+    return [
+      {
+        key: "cat",
+        label: "קטגוריה",
+        options: collections.map((c) => ({
+          value: c.slug,
+          label: c.name_he,
+          count: products.filter((p) => p.collection_id === c.id).length,
+        })),
+      },
+      {
+        key: "type",
+        label: "סוג מוצר",
+        options: tags.map((tag) => ({
+          value: tag,
+          label: tag,
+          count: products.filter((p) => p.tag === tag).length,
+        })),
+      },
+    ];
+  }, [collections, products]);
 
   const itemList = {
     "@context": "https://schema.org",
@@ -156,32 +210,18 @@ const CollectionsPage = () => {
         path="/collections"
         jsonLd={itemList}
       />
-      <section className="pt-32 pb-12 md:pt-40 md:pb-16 gradient-cream">
-        <div className="container-luxury text-center">
-          <SectionLabel he="קולקציות" en="Collections" className="text-xs mb-5" />
-          <h1 className="font-display text-3xl md:text-5xl text-foreground font-light tracking-wide mb-6">
-            {visible.length === 1 ? visible[0].name_he : "כל הקולקציות במקום אחד"}
-          </h1>
-          <div className="w-16 h-px bg-primary/30 mx-auto mb-6" />
-          {collections.length > 1 && (
-            <div className="flex flex-wrap items-center justify-center gap-6 md:gap-10 mt-8">
-              {collections.map((c) => (
-                <a
-                  key={c.id}
-                  href={`#${c.slug}`}
-                  className={`font-display text-lg md:text-xl transition-smooth border-b pb-1 ${
-                    activeHash === c.slug
-                      ? "text-accent border-accent"
-                      : "text-foreground hover:text-accent border-primary/30 hover:border-accent"
-                  }`}
-                >
-                  {c.name_he}
-                </a>
-              ))}
-            </div>
-          )}
-        </div>
-      </section>
+      <PageHero
+        title={visible.length === 1 ? visible[0].name_he : "קולקציות"}
+        filterSlot={
+          <FilterSidebar
+            groups={filterGroups}
+            value={value}
+            onChange={setValue}
+            activeCount={activeCount}
+            resultCount={visible.length}
+          />
+        }
+      />
 
       <div className="bg-background">
         {loading ? (
@@ -190,13 +230,22 @@ const CollectionsPage = () => {
           <p className="text-center text-muted-foreground py-24">
             עדיין לא הועלו קולקציות. חזרו בקרוב.
           </p>
+        ) : visible.length === 0 ? (
+          <div className="text-center py-24">
+            <p className="text-body text-foreground-soft">
+              אין קולקציות שמתאימות לסינון שבחרתם.
+            </p>
+            <button
+              type="button"
+              onClick={() => setValue({ cat: [], type: [] })}
+              className="mt-4 text-primary hover:opacity-80 transition-smooth"
+            >
+              נקה את הסינון
+            </button>
+          </div>
         ) : (
           visible.map((c) => (
-            <CategoryRow
-              key={c.id}
-              col={c}
-              products={products.filter((p) => p.collection_id === c.id)}
-            />
+            <CategoryRow key={c.id} col={c} products={productsFor(c.id)} />
           ))
         )}
       </div>

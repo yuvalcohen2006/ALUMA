@@ -47,16 +47,37 @@ export function useCollections() {
           .eq("published", true)
           .order("sort_order"),
       ]);
-      setCollections((cols as DBCollection[]) || []);
-      setProducts(
-        ((prods as any[]) || []).map((p) => ({
-          ...p,
-          description: Array.isArray(p.description) ? p.description : [],
-          highlights: Array.isArray(p.highlights) ? p.highlights : [],
-          materials: Array.isArray(p.materials) ? p.materials : [],
-          gallery: Array.isArray(p.gallery) ? p.gallery : [],
-        })) as DBProduct[]
-      );
+      const loadedCollections = (cols as DBCollection[]) || [];
+      const loadedProducts = ((prods as any[]) || []).map((p) => ({
+        ...p,
+        description: Array.isArray(p.description) ? p.description : [],
+        highlights: Array.isArray(p.highlights) ? p.highlights : [],
+        materials: Array.isArray(p.materials) ? p.materials : [],
+        gallery: Array.isArray(p.gallery) ? p.gallery : [],
+      })) as DBProduct[];
+
+      // An empty database in development means a fresh project, not an empty
+      // shop — fall back to the placeholder catalogue so the collections page
+      // and its filter can actually be looked at. Real rows always win, and
+      // production shows the honest empty state.
+      //
+      // `?demo=1` forces it on even when the database does have rows, so the
+      // 20-item placeholder catalogue can be viewed against a populated
+      // project without touching any data. Development only.
+      const forceDemo =
+        typeof window !== "undefined" &&
+        new URLSearchParams(window.location.search).has("demo");
+
+      if (import.meta.env.DEV && (forceDemo || loadedCollections.length === 0)) {
+        const { demoCollections, demoProducts } = await import("@/data/demoCollections");
+        setCollections(demoCollections);
+        setProducts(demoProducts);
+        setLoading(false);
+        return;
+      }
+
+      setCollections(loadedCollections);
+      setProducts(loadedProducts);
       setLoading(false);
     })();
   }, []);

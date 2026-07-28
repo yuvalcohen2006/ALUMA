@@ -35,6 +35,7 @@ const Questionnaire = lazy(() => import("./pages/Questionnaire.tsx"));
 const ARPreview = lazy(() => import("./pages/ARPreview.tsx"));
 const FabricConfigurator = lazy(() => import("./pages/FabricConfigurator.tsx"));
 const SofaDesigner = lazy(() => import("./pages/SofaDesigner.tsx"));
+const DIY = lazy(() => import("./pages/DIY.tsx"));
 const NotFound = lazy(() => import("./pages/NotFound.tsx"));
 const ThankYou = lazy(() => import("./pages/ThankYou.tsx"));
 
@@ -91,6 +92,7 @@ const App = () => (
                 <Route path="/questionnaire" element={<Questionnaire />} />
                 <Route path="/ar" element={<ARPreview />} />
                 <Route path="/fabric" element={<FabricConfigurator />} />
+                <Route path="/diy" element={<DIY />} />
                 <Route path="/designer" element={<SofaDesigner />} />
                 <Route path="/club" element={<Club />} />
                 <Route path="/club/auth" element={<Auth />} />

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Layout from "@/components/Layout";
 import SEO from "@/components/SEO";
-import SectionLabel from "@/components/SectionLabel";
+import PageHero from "@/components/PageHero";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -114,17 +114,7 @@ const Questionnaire = () => {
         description="ענו על 4 שאלות קצרות וקבלו המלצה אישית על קולקציית סלוני החוץ המתאימה למרחב שלכם."
         path="/questionnaire"
       />
-      <section className="pt-32 pb-12 md:pt-40 md:pb-16 gradient-cream">
-        <div className="container-luxury text-center max-w-2xl">
-          <SectionLabel he="שאלון חכם" en="Smart Match" className="text-xs mb-5" />
-          <h1 className="font-display text-3xl md:text-5xl text-foreground mb-4">
-            נמצא לך את הקולקציה המושלמת
-          </h1>
-          <p className="text-foreground">
-            4 צעדים קצרים. בסוף תקבלו המלצה אישית והצעת פגישת אפיון ללא עלות.
-          </p>
-        </div>
-      </section>
+      <PageHero title="שאלון חכם" />
 
       <section className="py-16 md:py-20">
         <div className="container-luxury max-w-2xl">

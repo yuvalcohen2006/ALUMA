@@ -9,6 +9,12 @@ export interface Material {
   tagline: string;
   shortDesc: string;
   image: string;
+  /**
+   * Colour sampled off the material itself in its photo — the sand of the
+   * weave, the graphite of the frame, the grey of the stone. Drives the card
+   * border and check marks so each card is tinted by its own material.
+   */
+  accent: string;
   origin: string;
   longDesc: string[];
   features: { title: string; desc: string }[];
@@ -23,6 +29,7 @@ export const materials: Material[] = [
     shortDesc:
       "בדי Sunbrella איכותיים, עמידים ל-UV, לדהייה ולמים. נוחות ויוקרה שנשארות שנים בחוץ.",
     image: sunbrellaImg,
+    accent: "hsl(38 44% 64%)",
     origin: "ארה״ב, תקן Sunbrella® מקורי",
     longDesc: [
       "בדי Sunbrella הם תקן הזהב העולמי לבדי חוץ. נארגים מסיבים אקריליים שנצבעים בצבע מלא, כך שהצבע חלק מהסיב עצמו ולא נשטף, לא דוהה ולא מתעייף עם השנים.",
@@ -60,6 +67,7 @@ export const materials: Material[] = [
     shortDesc:
       "מסגרות אלומיניום בציפוי אבקה איכותי, עמידות לחלודה וללחות. אסתטיקה אדריכלית טהורה ומשקל קל.",
     image: aluminumImg,
+    accent: "hsl(210 11% 34%)",
     origin: "פרופילים אדריכליים בציפוי אבקה תרמי",
     longDesc: [
       "האלומיניום שלנו עובר ציפוי אבקה תרמי בתנור בטמפרטורה גבוהה, תהליך שיוצר שכבה אחידה, עמוקה ועמידה הרבה יותר מצבע רגיל. התוצאה: מסגרת שנשארת חלקה ומדויקת שנים, גם מול הים, הגשם והשמש.",
@@ -97,6 +105,7 @@ export const materials: Material[] = [
     shortDesc:
       "משטחים בעיבוד יד, כל לוח ייחודי בטקסטורה ובדגם. עמידים, יוקרתיים ויפים לנצח.",
     image: graniteImg,
+    accent: "hsl(208 8% 47%)",
     origin: "לוחות פורצלן בעיבוד יד, חיתוך לפי מידה",
     longDesc: [
       "גרניט פורצלן הוא החומר היוקרתי ביותר למשטחי חוץ, קשה כאבן, עמיד בפני שריטות, חום, כתמים וקרינת UV. בניגוד לשיש טבעי, הוא לא סופג נוזלים ולא דורש איטום מחדש.",
@@ -134,6 +143,7 @@ export const materials: Material[] = [
     shortDesc:
       "חומר מרוכב יוקרתי בגימור אבן, קל משמעותית מבטון, עמיד לכל מזג אוויר ומתאים לעיצוב פיסולי ייחודי.",
     image: polystoneImg,
+    accent: "hsl(36 20% 58%)",
     origin: "חומר מרוכב מבוסס שרף ואבן מינרלית, יציקה לפי תבנית",
     longDesc: [
       "PolyStone הוא חומר מרוכב מתקדם המשלב שרף פולימרי עם אבקת אבן טבעית, מקבל מראה ומגע של אבן יוקרתית, אך במשקל נמוך משמעותית ובעמידות גבוהה לכל תנאי החוץ.",

@@ -1,5 +1,6 @@
 import Layout from "@/components/Layout";
 import SEO from "@/components/SEO";
+import PageHero from "@/components/PageHero";
 import alumaLogo from "@/assets/aluma-logo.png";
 import storyPortrait from "@/assets/story-portrait.png";
 import storyPortraitRoy from "@/assets/story-portrait-roy.png";
@@ -24,31 +25,18 @@ const StoryPage = () => {
         jsonLd={breadcrumbs}
       />
 
-      {/* pt-24 clears the fixed header (h-24); the flex band below it is the part
-          that shrank by 20px, with the title centred inside that band. */}
-      <section className="pt-24 gradient-cream">
-        <div className="container-luxury flex items-center justify-center h-[129px] md:h-[145px] text-center">
-          {/* Heebo's glyphs sit at ~0.72em of the font-size, so 36px font-size
-              renders roughly a 26px average character height. */}
-          <h1 className="text-[36px] font-normal text-foreground-soft tracking-normal">
-            הסיפור שלנו
-          </h1>
-        </div>
-      </section>
+      <PageHero title="הסיפור שלנו" />
 
-      <section className="pt-[28px] pb-[28px] md:pt-[32px] md:pb-[32px] bg-background">
-        <div className="container-luxury">
+      {/* Fills what's left of the viewport under the hero and centres its
+          content in it, so the paragraph and the portraits both sit on the
+          vertical middle of the screen. Horizontal placement is untouched. */}
+      <section className="flex items-center min-h-[calc(100dvh-13rem)] py-8 md:py-10 bg-background">
+        <div className="container-luxury w-full">
           {/* White section split down the middle into two equal squares */}
-          <div className="relative grid md:grid-cols-2 gap-10 md:gap-14 max-w-7xl mx-auto">
-            {/* Center split line */}
-            <div
-              className="hidden md:block absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-px h-4/5 bg-primary/20"
-              aria-hidden="true"
-            />
-
+          <div className="grid md:grid-cols-2 gap-10 md:gap-14 max-w-7xl mx-auto">
             {/* Right square (RTL first): the paragraph, centred */}
             <div className="order-1 flex items-center justify-center md:aspect-square">
-              <div className="space-y-3.5 text-foreground text-[18px] leading-[1.75] text-right max-w-md mx-auto">
+              <div className="space-y-3.5 text-foreground text-body text-right max-w-md mx-auto pb-[15px]">
                 <p>אלומה נולדה מתוך חיבור בין חומר לאור.</p>
 
                 <p>
@@ -80,15 +68,16 @@ const StoryPage = () => {
 
             {/* Left square: picture with the logo above it */}
             <div className="order-2 flex flex-col items-center justify-center md:aspect-square">
-              {/* Logo crest, centred above the portraits with 1.5× the gap */}
+              {/* Logo — +10%, centred */}
               <div className="flex justify-center mb-12 md:mb-[60px]">
                 <img
                   src={alumaLogo}
                   alt="Aluma"
-                  className="h-12 md:h-16 w-auto opacity-90"
+                  className="h-[58px] md:h-[77px] w-auto opacity-90"
                 />
               </div>
-              <div className="flex items-end justify-center gap-[19px] w-full mx-auto">
+              {/* Portraits — +10% again (wider max-width than the logo) */}
+              <div className="flex items-end justify-center gap-[26px] w-full max-w-[813px] mx-auto">
                 {[
                   { src: storyPortraitIdan, alt: "דיוקן קווי, עידן", name: "idan" },
                   { src: storyPortraitRoy, alt: "דיוקן קווי, רועי", name: "roy" },

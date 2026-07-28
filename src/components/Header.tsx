@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ChevronDown, Menu, X } from "lucide-react";
-import { NavLink, Link } from "react-router-dom";
+import { NavLink, Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import alumaLogo from "@/assets/aluma-logo.png";
 import { useCollections } from "@/hooks/useCollectionsData";
@@ -29,6 +29,11 @@ const navActive = "bg-foreground/[0.09] text-foreground";
 
 const Header = () => {
   const [scrolled, setScrolled] = useState(false);
+  const { pathname } = useLocation();
+  // Interior pages open straight onto the background with no sand band, so the
+  // header needs its border immediately. Only the home page, whose hero image
+  // separates it on its own, waits for scroll.
+  const forceBorder = pathname !== "/";
   const [open, setOpen] = useState(false);
   const [expanded, setExpanded] = useState<string | null>(null);
   // Desktop dropdowns: `hovered` opens on pointer-over; `pinned` is a click-locked
@@ -38,11 +43,10 @@ const Header = () => {
   const navRef = useRef<HTMLElement | null>(null);
   const { collections } = useCollections();
 
+  // No "all collections" entry — the קולקציות button itself goes to the
+  // unfiltered page, and filtering happens there in the sidebar.
   const collectionsSub = useMemo(
-    () => [
-      ...collections.map((c) => ({ label: c.name_he, to: `/collections#${c.slug}` })),
-      { label: "כל הקולקציות", to: "/collections" },
-    ],
+    () => collections.map((c) => ({ label: c.name_he, to: `/collections#${c.slug}` })),
     [collections]
   );
 
@@ -50,7 +54,7 @@ const Header = () => {
     () => [
       { label: "דף הבית", to: "/" },
       { label: "הסיפור שלנו", to: "/story" },
-      { label: "קולקציות", to: "/collections", submenu: collectionsSub, noLink: true },
+      { label: "קולקציות", to: "/collections", submenu: collectionsSub },
       { label: "חומרים", to: "/materials", submenu: materialsSub },
       {
         label: "פרויקטים",
@@ -60,7 +64,7 @@ const Header = () => {
           { label: "לפני ואחרי", to: "/before-after" },
         ],
       },
-      { label: "עשה זאת בעצמך", to: "/designer", submenu: diySub },
+      { label: "עשה זאת בעצמך", to: "/diy", submenu: diySub },
       { label: "מגזין", to: "/blog" },
       { label: "שאלות ותשובות", to: "/faq" },
       { label: "מועדון", to: "/club" },
@@ -110,6 +114,8 @@ const Header = () => {
       className={`fixed top-0 inset-x-0 z-40 transition-smooth ${
         scrolled
           ? "bg-background/90 backdrop-blur-md shadow-soft border-b border-border"
+          : forceBorder
+          ? "bg-background/60 backdrop-blur-sm border-b border-border"
           : "bg-background/60 backdrop-blur-sm"
       }`}
     >
@@ -151,29 +157,19 @@ const Header = () => {
                 onMouseEnter={() => setHovered(link.to)}
                 onMouseLeave={() => setHovered((h) => (h === link.to ? null : h))}
               >
-                {link.noLink ? (
-                  <button
-                    type="button"
-                    onClick={() => setPinned((p) => (p === link.to ? null : link.to))}
-                    aria-haspopup="menu"
-                    aria-expanded={isOpen}
-                    className={`${navItem} ${isOpen ? navActive : navRest} cursor-pointer select-none`}
-                  >
-                    {link.label}
-                    {chevron}
-                  </button>
-                ) : (
-                  <NavLink
-                    to={link.to}
-                    end={link.to === "/"}
-                    className={({ isActive }) =>
-                      `${navItem} ${isActive || isOpen ? navActive : navRest}`
-                    }
-                  >
-                    {link.label}
-                    {chevron}
-                  </NavLink>
-                )}
+                {/* Every top-level item navigates. Submenus open on hover (and
+                    stay pinned on click of the chevron area) but never swallow
+                    the click — קולקציות goes to the unfiltered page. */}
+                <NavLink
+                  to={link.to}
+                  end={link.to === "/"}
+                  className={({ isActive }) =>
+                    `${navItem} ${isActive || isOpen ? navActive : navRest}`
+                  }
+                >
+                  {link.label}
+                  {chevron}
+                </NavLink>
 
                 {link.submenu && (
                   <div
@@ -281,28 +277,18 @@ const Header = () => {
                   }`}
                 >
                   <div className="flex items-center justify-between gap-2 border-b border-border/40">
-                    {link.noLink ? (
-                      <button
-                        type="button"
-                        onClick={() => setExpanded(isOpen ? null : link.to)}
-                        className="flex-1 font-display text-xl text-right py-3 text-foreground hover:text-accent"
-                      >
-                        {link.label}
-                      </button>
-                    ) : (
-                      <NavLink
-                        to={link.to}
-                        end={link.to === "/"}
-                        onClick={() => setOpen(false)}
-                        className={({ isActive }) =>
-                          `flex-1 font-display text-xl text-right py-3 ${
-                            isActive ? "text-accent" : "text-foreground hover:text-accent"
-                          }`
-                        }
-                      >
-                        {link.label}
-                      </NavLink>
-                    )}
+                    <NavLink
+                      to={link.to}
+                      end={link.to === "/"}
+                      onClick={() => setOpen(false)}
+                      className={({ isActive }) =>
+                        `flex-1 font-display text-xl text-right py-3 ${
+                          isActive ? "text-accent" : "text-foreground hover:text-accent"
+                        }`
+                      }
+                    >
+                      {link.label}
+                    </NavLink>
                     {hasSub && (
                       <button
                         type="button"

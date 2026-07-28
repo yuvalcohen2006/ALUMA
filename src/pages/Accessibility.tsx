@@ -1,6 +1,6 @@
 import Layout from "@/components/Layout";
 import SEO from "@/components/SEO";
-import SectionLabel from "@/components/SectionLabel";
+import PageHero from "@/components/PageHero";
 
 const AccessibilityPage = () => {
   return (
@@ -10,21 +10,13 @@ const AccessibilityPage = () => {
         description="הצהרת הנגישות של אתר Aluma, התאמות, אמצעי סיוע, יצירת קשר עם רכז הנגישות וטיפול בתקלות."
         path="/accessibility"
       />
-      <section className="pt-32 pb-12 md:pt-40 gradient-cream">
-        <div className="container-luxury text-center">
-          <SectionLabel he="נגישות" en="Accessibility" className="text-xs mb-5" />
-          <h1 className="font-display text-3xl sm:text-4xl md:text-5xl text-foreground leading-tight">
-            הצהרת <span className="italic">נגישות</span>
-          </h1>
-          <div className="w-16 h-px bg-primary/30 mx-auto mt-8" />
-        </div>
-      </section>
+      <PageHero title="נגישות" />
 
       <section className="py-12 md:py-20 bg-background">
-        <div className="container-luxury max-w-3xl prose-luxury text-foreground space-y-8 leading-relaxed text-right">
+        <div className="container-luxury max-w-3xl prose-luxury text-foreground space-y-8 text-body text-right">
           <div>
             <h2 className="font-display text-2xl text-primary mb-3">המחויבות שלנו</h2>
-            <p className="text-muted-foreground">
+            <p>
               Aluma רואה בנגישות האתר ערך עליון. אנו פועלים על מנת שאתר זה יהיה
               נגיש לאנשים עם מוגבלות, בהתאם לתקנות שוויון זכויות לאנשים עם
               מוגבלות (התאמות נגישות לשירות), התשע״ג-2013, ובהתאם לתקן הישראלי
@@ -34,7 +26,7 @@ const AccessibilityPage = () => {
 
           <div>
             <h2 className="font-display text-2xl text-primary mb-3">התאמות הנגישות באתר</h2>
-            <ul className="list-disc pr-6 space-y-2 text-muted-foreground">
+            <ul className="list-disc pr-6 space-y-2 marker:text-primary/50">
               <li>תפריט נגישות צף בפינה השמאלית התחתונה בכל עמוד.</li>
               <li>אפשרות להגדלה והקטנה של גודל הטקסט.</li>
               <li>מצב ניגודיות גבוהה לקריאה נוחה יותר.</li>
@@ -50,7 +42,7 @@ const AccessibilityPage = () => {
 
           <div>
             <h2 className="font-display text-2xl text-primary mb-3">מגבלות ידועות</h2>
-            <p className="text-muted-foreground">
+            <p>
               למרות מאמצינו, ייתכן ובאתר קיימים תכנים שטרם הונגשו במלואם, בעיקר
               תכנים שעודכנו לאחרונה או תוכן שמקורו בצד שלישי. אנו עובדים באופן
               שוטף על שיפור הנגישות ומתחייבים לטפל בכל פנייה תוך זמן סביר.
@@ -59,7 +51,7 @@ const AccessibilityPage = () => {
 
           <div>
             <h2 className="font-display text-2xl text-primary mb-3">רכז הנגישות</h2>
-            <p className="text-muted-foreground">
+            <p>
               נתקלתם בתקלת נגישות? יש לכם בקשה או הצעה לשיפור? נשמח לעמוד
               לשירותכם:
             </p>
@@ -70,7 +62,7 @@ const AccessibilityPage = () => {
             </ul>
           </div>
 
-          <div className="pt-4 border-t border-border text-sm text-muted-foreground">
+          <div className="pt-4 border-t border-border text-[18px] text-muted-foreground">
             הצהרה זו עודכנה לאחרונה ב־{new Date().toLocaleDateString("he-IL")}.
           </div>
         </div>
