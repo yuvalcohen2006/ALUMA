@@ -32,6 +32,15 @@ API). Without it the Supabase client can't be created and the app won't mount.
 
 ## Everything else
 
-**[docs/SETUP.md](docs/SETUP.md)** — architecture, running costs, the full
-service setup walkthrough (Resend, Supabase, Cloudflare Pages), migrations,
-edge functions and deployment. One document, everything in it.
+- **[docs/NEXT-STEPS.md](docs/NEXT-STEPS.md)** — start here. Click-by-click
+  walkthrough of the outstanding setup (Resend, Supabase keys, Cloudflare
+  Pages) and what to do about the domain after 11 August.
+- **[docs/SETUP.md](docs/SETUP.md)** — the reference: architecture, running
+  costs, secrets, migrations, edge functions, deployment.
+
+### Note on local development
+
+`npm run dev` renders a 20-product **placeholder catalogue** on the collections
+pages instead of the database, so layouts and filters can be judged against a
+realistic amount of stock. It is development-only and never reaches production.
+Append `?live=1` to any collections URL to see the real database instead.
