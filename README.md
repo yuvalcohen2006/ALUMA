@@ -1,7 +1,9 @@
 # Aluma — outdoor furniture site
 
 Luxury outdoor-furniture marketing site, customer club, and admin CMS.
-**Stack:** React + Vite + TypeScript + Tailwind + Supabase.
+
+**Stack:** React + TypeScript + Vite + Tailwind · Supabase (database, auth,
+photo storage) · Resend (email) · Cloudflare Pages (hosting).
 
 ## Local setup
 
@@ -14,11 +16,9 @@ cp .env.example .env      # (Windows PowerShell: copy .env.example .env)
 npm run dev               # → http://localhost:8080
 ```
 
-The app needs three Supabase env vars (see `.env.example`). `VITE_SUPABASE_URL`
-and `VITE_SUPABASE_PROJECT_ID` are already filled in; you only need to add the
-**anon / public key** from your Supabase dashboard (Project Settings → API).
-Without a valid key the app still loads, but auth, the newsletter, the admin
-panel, and any database call will fail.
+The app needs all three `VITE_SUPABASE_*` vars from `.env.example`. The
+**anon / public** key comes from the Supabase dashboard (Project Settings →
+API). Without it the Supabase client can't be created and the app won't mount.
 
 ## Scripts
 
@@ -30,7 +30,8 @@ panel, and any database call will fail.
 | `npm run lint` | ESLint |
 | `npm test` | Run the test suite once (Vitest) |
 
-## Deploying & database setup
+## Everything else
 
-See [GUIDE.md](GUIDE.md) for going live, applying Supabase migrations, and
-making yourself an admin.
+**[docs/SETUP.md](docs/SETUP.md)** — architecture, running costs, the full
+service setup walkthrough (Resend, Supabase, Cloudflare Pages), migrations,
+edge functions and deployment. One document, everything in it.

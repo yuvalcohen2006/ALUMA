@@ -6,8 +6,20 @@ REVOKE EXECUTE ON FUNCTION public.move_to_dlq(text, text, bigint, jsonb) FROM an
 REVOKE EXECUTE ON FUNCTION public.enqueue_email(text, jsonb) FROM anon, authenticated, PUBLIC;
 REVOKE EXECUTE ON FUNCTION public.read_email_batch(text, integer, integer) FROM anon, authenticated, PUBLIC;
 REVOKE EXECUTE ON FUNCTION public.delete_email(text, bigint) FROM anon, authenticated, PUBLIC;
-REVOKE EXECUTE ON FUNCTION public.email_queue_wake() FROM anon, authenticated, PUBLIC;
-REVOKE EXECUTE ON FUNCTION public.email_queue_dispatch() FROM anon, authenticated, PUBLIC;
+
+-- email_queue_wake/email_queue_dispatch are created out-of-band by the cron
+-- setup tool (Management API, not a migration — see the note at the bottom of
+-- email_infra.sql), so they don't exist on a fresh project until that setup
+-- runs there too. Guarded so `db push` doesn't die on a project that hasn't
+-- had the cron job wired up yet.
+DO $$ BEGIN
+  REVOKE EXECUTE ON FUNCTION public.email_queue_wake() FROM anon, authenticated, PUBLIC;
+EXCEPTION WHEN undefined_function THEN NULL;
+END $$;
+DO $$ BEGIN
+  REVOKE EXECUTE ON FUNCTION public.email_queue_dispatch() FROM anon, authenticated, PUBLIC;
+EXCEPTION WHEN undefined_function THEN NULL;
+END $$;
 
 -- has_role is called by RLS policies via SECURITY DEFINER — clients don't need direct execute
 REVOKE EXECUTE ON FUNCTION public.has_role(uuid, app_role) FROM anon, authenticated, PUBLIC;

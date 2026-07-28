@@ -1,7 +1,20 @@
 // Edge function: submit-contact
-// Server-side validation, IP-based rate limiting, and lead persistence.
+// Server-side validation, IP-based rate limiting, lead persistence, and a
+// notification to the studio so an enquiry can't sit unseen in the database.
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { z } from "npm:zod@3";
+import { sendEmail } from "../_shared/resend.ts";
+
+// Where studio notifications land. Overridable so testing can point them at a
+// developer's inbox while the real sending domain is still unverified.
+const OWNER_EMAIL = Deno.env.get("OWNER_EMAIL") ?? "outdooraluma@gmail.com";
+
+const escapeHtml = (value: string) =>
+  value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -114,6 +127,44 @@ Deno.serve(async (req) => {
         status: 500,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
+    }
+
+    // Notify the studio. Deliberately after the lead is safely stored and fully
+    // swallowed on failure — a mail outage must never make a customer think
+    // their enquiry didn't go through. The lead is in the database either way.
+    try {
+      const rows: Array<[string, string]> = [
+        ["שם", data.name],
+        ["טלפון", data.phone],
+        ["מייל", data.email || "לא צוין"],
+        ["מקור", data.source || "website"],
+        ["הודעה", data.message || "ללא הודעה"],
+      ];
+
+      const html = `
+        <div style="font-family:Arial,sans-serif;direction:rtl;text-align:right;color:#2F2F2F;max-width:560px;margin:0 auto;padding:24px;background:#F8F6F2;border-radius:14px">
+          <h2 style="margin:0 0 16px;color:#2F2F2F">פנייה חדשה מהאתר</h2>
+          ${rows
+            .map(
+              ([label, value]) =>
+                `<p style="margin:0 0 8px"><strong>${label}:</strong> ${escapeHtml(value)}</p>`
+            )
+            .join("")}
+          <p style="margin:20px 0 0;font-size:14px;color:#5A5A5A">הפנייה נשמרה גם בלוח האדמין באתר.</p>
+        </div>`;
+
+      const text = rows.map(([label, value]) => `${label}: ${value}`).join("\n");
+
+      await sendEmail({
+        to: OWNER_EMAIL,
+        subject: `פנייה חדשה מהאתר — ${data.name}`,
+        html,
+        text,
+        // Replying in the mail client goes straight back to the customer.
+        replyTo: data.email || undefined,
+      });
+    } catch (notifyErr) {
+      console.error("contact notification failed (lead was saved)", notifyErr);
     }
 
     return new Response(JSON.stringify({ ok: true }), {

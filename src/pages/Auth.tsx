@@ -6,7 +6,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
-import { lovable } from "@/integrations/lovable/index";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
 import { trackPixel } from "@/lib/pixel";
@@ -88,18 +87,19 @@ const AuthPage = () => {
   const onGoogle = async () => {
     setGoogleBusy(true);
     try {
-      const result = await lovable.auth.signInWithOAuth("google", {
-        // Honor the same ?redirect target the email flow uses (e.g. /club/dashboard),
-        // instead of always dumping the user on the homepage.
-        redirect_uri: `${window.location.origin}${redirectTo}`,
+      // Supabase's own OAuth. On success the browser navigates away to Google,
+      // so there is nothing to do afterwards — Supabase brings the user back to
+      // `redirectTo` with a session already established. Only reset the busy
+      // flag on failure, otherwise the button flickers during the hand-off.
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          // Honor the same ?redirect target the email flow uses (e.g.
+          // /club/dashboard) instead of always dumping the user on the homepage.
+          redirectTo: `${window.location.origin}${redirectTo}`,
+        },
       });
-      if (result.error) {
-        toast.error(result.error.message ?? "כניסה עם Google נכשלה");
-        setGoogleBusy(false);
-        return;
-      }
-      if (result.redirected) return;
-      nav(redirectTo);
+      if (error) throw error;
     } catch (err: any) {
       toast.error(err?.message ?? "כניסה עם Google נכשלה");
       setGoogleBusy(false);

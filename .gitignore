@@ -30,3 +30,6 @@ dist-ssr
 
 # Brainstorming visual companion (local only)
 .superpowers/
+
+# Supabase CLI local state (project ref, pooler connection string)
+supabase/.temp/
