@@ -43,7 +43,12 @@ const Hero = () => {
   // Scroll cue visibility. Kept separate from the parallax listener below, which
   // bails out under reduced-motion — the cue must still hide for those users.
   useEffect(() => {
-    const onScroll = () => setShowCue(window.scrollY < 40);
+    // One-way latch: the cue is an invitation to start scrolling, so once it has
+    // been acted on it has done its job. Bringing it back when the user returns
+    // to the top would nag.
+    const onScroll = () => {
+      if (window.scrollY >= 40) setShowCue(false);
+    };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
@@ -120,16 +125,13 @@ const Hero = () => {
         aria-label="גלול למטה"
         aria-hidden={!showCue}
         tabIndex={showCue ? 0 : -1}
-        // White, not charcoal: these sit on a photograph, and only white holds
-        // up across every frame of it. The drop shadow keeps them legible if a
-        // pale area of the image scrolls underneath.
-        className={`absolute bottom-6 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center text-white transition-opacity duration-500 [filter:drop-shadow(0_1px_3px_rgb(0_0_0/0.45))] ${
+        className={`absolute bottom-6 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center text-foreground-soft hover:text-primary transition-opacity duration-500 ${
           showCue ? "opacity-100" : "opacity-0 pointer-events-none"
         }`}
       >
-        <ChevronDown className="w-9 h-9 -mb-5 animate-chevron-blink" style={{ animationDelay: "0s" }} strokeWidth={1.75} />
-        <ChevronDown className="w-9 h-9 -mb-5 animate-chevron-blink" style={{ animationDelay: "0.2s" }} strokeWidth={1.75} />
-        <ChevronDown className="w-9 h-9 animate-chevron-blink" style={{ animationDelay: "0.4s" }} strokeWidth={1.75} />
+        <ChevronDown className="w-12 h-12 -mb-7 animate-chevron-blink" style={{ animationDelay: "0s" }} strokeWidth={1.75} />
+        <ChevronDown className="w-12 h-12 -mb-7 animate-chevron-blink" style={{ animationDelay: "0.2s" }} strokeWidth={1.75} />
+        <ChevronDown className="w-12 h-12 animate-chevron-blink" style={{ animationDelay: "0.4s" }} strokeWidth={1.75} />
       </button>
     </section>
   );

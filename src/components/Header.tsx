@@ -122,11 +122,10 @@ const Header = () => {
       <div dir="rtl" className="w-full px-4 lg:px-6 flex items-center h-24 gap-4">
 
         {/* Logo (right side in RTL) */}
-        <div className="hidden lg:flex items-center gap-4 shrink-0">
+        <div className="hidden lg:flex items-center shrink-0">
           <Link to="/" aria-label="Aluma">
             <img src={alumaLogo} alt="Aluma" className="h-7 xl:h-8 w-auto" />
           </Link>
-          <span className="block w-px h-8 bg-primary/50 shadow-[3px_0_0_0_hsl(var(--primary)/0.5)]" />
         </div>
 
         {/* Mobile logo */}

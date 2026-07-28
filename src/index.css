@@ -341,9 +341,10 @@
 }
 
 /* ===== Primary button =====
-   Adapted from the Uiverse "button2" pattern: a soft neumorphic tablet at rest,
-   with two offset circles that rise from beneath on hover and flood it in
-   terracotta.
+   Adapted from the Uiverse "button2" pattern: a flat, hairline-bordered tablet
+   at rest, with two offset circles that rise from beneath on hover and flood it
+   in terracotta. The pattern's neumorphic drop shadow is dropped — it read as
+   heavy against a page that is otherwise uniformly flat.
 
    The hover ink is charcoal rather than white on purpose. White on this
    terracotta measures roughly 2.9:1 — well under the 4.5:1 AA floor — while
@@ -351,8 +352,6 @@
    defined as charcoal, and this honours it. */
 .btn-shine {
   --btn-surface: hsl(40 30% 93%);
-  --btn-shadow-dark: hsl(36 18% 80%);
-  --btn-shadow-light: hsl(0 0% 100%);
   --btn-ink: hsl(var(--foreground));
   --btn-fill: hsl(var(--primary));
   --btn-ink-hover: hsl(var(--primary-foreground));
@@ -375,8 +374,9 @@
 
   border-radius: 0.5em;
   background: var(--btn-surface);
-  border: 1px solid var(--btn-surface);
-  box-shadow: 6px 6px 12px var(--btn-shadow-dark), -6px -6px 12px var(--btn-shadow-light);
+  /* Flat — the border alone defines the edge. A raised shadow read as heavy
+     against the rest of the page, which is uniformly flat. */
+  border: 1px solid hsl(var(--foreground) / 0.18);
   transition: color 0.2s ease-in, border-color 0.2s ease-in, box-shadow 0.2s ease-in;
 }
 
@@ -420,18 +420,16 @@
 .btn-shine:hover::before { top: -35%; }
 .btn-shine:hover::after { top: -45%; }
 
-/* Pressed: the tablet sinks into the surface. */
+/* Pressed: a shallow inset, no outer shadow. */
 .btn-shine:active {
-  box-shadow: inset 4px 4px 12px var(--btn-shadow-dark),
-    inset -4px -4px 12px var(--btn-shadow-light);
+  box-shadow: inset 0 2px 6px hsl(var(--foreground) / 0.14);
 }
 
 /* Inverted — sits on the charcoal materials rail. */
 .btn-shine-invert {
   --btn-surface: hsl(0 0% 24%);
-  --btn-shadow-dark: hsl(0 0% 11%);
-  --btn-shadow-light: hsl(0 0% 33%);
   --btn-ink: hsl(40 30% 92%);
+  border-color: hsl(40 30% 92% / 0.28);
 }
 
 @media (prefers-reduced-motion: reduce) {

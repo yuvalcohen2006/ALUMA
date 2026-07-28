@@ -18,8 +18,8 @@ interface SectionHeadingProps {
   className?: string;
 }
 
-// Shared home-screen heading: terracotta (or white) 24px bold Heebo title,
-// cream divider, 18px normal Assistant running text.
+// Shared section heading: terracotta (or white) 30px bold Heebo title,
+// cream divider, 20px normal running text.
 const SectionHeading = ({
   children,
   subtitle,
@@ -37,7 +37,7 @@ const SectionHeading = ({
       : "text-primary";
   return (
     <div className={`flex flex-col ${alignCls} ${className}`}>
-      <Tag className={`font-display font-bold text-[26px] leading-snug ${titleColor}`}>
+      <Tag className={`font-display font-bold text-[30px] leading-snug ${titleColor}`}>
         {children}
       </Tag>
       {subtitle != null && subtitle !== "" && (

@@ -124,7 +124,14 @@ const ProjectsGrid = () => {
                             inactive bars ease their fill so the change reads as a clean
                             glide; the active bar has NO transition so its 50ms progress
                             ticks stay crisp instead of lagging behind. */}
-                        <span className="block w-full h-[3px] overflow-hidden rounded-full bg-foreground/15">
+                        {/* The active track is tinted terracotta from the outset,
+                            so you can see which slide you're on before any colour
+                            has accumulated in it. */}
+                        <span
+                          className={`block w-full h-[3px] overflow-hidden rounded-full transition-colors duration-300 ${
+                            isActive ? "bg-primary/30" : "bg-foreground/15"
+                          }`}
+                        >
                           <span
                             className={`block h-full rounded-full ${
                               isActive

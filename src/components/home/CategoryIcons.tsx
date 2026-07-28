@@ -46,9 +46,13 @@ const CategoryIcons = () => {
           {categories.map((c) => (
             <li
               key={c.slug}
-              className="shrink-0 w-[152px] sm:w-[180px] lg:flex-1 transition-all duration-300 ease-out
-                         group-hover/rail:opacity-45 group-hover/rail:blur-[2px]
-                         hover:!opacity-100 hover:!blur-0 hover:scale-[1.08] hover:z-10 relative"
+              // The siblings' blur waits 300ms — the length of the scale — so the
+              // recede only happens once the hovered tile has finished growing,
+              // rather than the whole row dimming the instant the pointer lands.
+              // The hovered tile resets that delay so its own growth is immediate.
+              className="shrink-0 w-[152px] sm:w-[180px] lg:flex-1 relative transition-all duration-300 ease-out delay-0
+                         group-hover/rail:opacity-45 group-hover/rail:blur-[2px] group-hover/rail:delay-300
+                         hover:!opacity-100 hover:!blur-0 hover:!delay-0 hover:scale-[1.08] hover:z-10"
             >
               <Link to={`/collections#${c.slug}`} className="group block">
                 <div className="relative w-full aspect-square rounded-[14px] bg-background/50 border border-foreground/15 overflow-hidden transition-all duration-300 group-hover:border-foreground/35 group-hover:shadow-luxury">
