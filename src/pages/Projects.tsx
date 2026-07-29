@@ -88,13 +88,11 @@ const MetaRule = ({ className }: { className?: string }) => (
  * readable instead of busy: same folio numeral, same meta rules, same hairline.
  *
  * The whole band is one link and one tab stop. Hovering anywhere in it warms
- * the numeral, lifts the photo and cross-fades a second frame from the
- * project's gallery, hinting that there is more inside without adding a
- * thumbnail strip that would break the calm.
+ * the numeral and lifts the photo — the photo itself never changes, so the row
+ * stays calm rather than flickering to a different image under the cursor.
  */
 const ProjectEntry = ({ project: p, index }: { project: Project; index: number }) => {
   const photoRight = index % 2 === 0;
-  const secondFrame = p.gallery?.find((g) => g !== p.cover) ?? p.cover;
   const meta = [p.location, p.tag, p.year, p.area].filter(Boolean);
 
   return (
@@ -131,8 +129,6 @@ const ProjectEntry = ({ project: p, index }: { project: Project; index: number }
             className={cn("min-w-0", photoRight ? "lg:order-1" : "lg:order-2")}
           >
             <div className="relative aspect-[4/3] overflow-hidden rounded-[14px] border border-border shadow-soft transition-all duration-500 ease-out group-hover:-translate-y-1 group-hover:shadow-luxury group-hover:border-primary/60">
-              {/* Both frames share one scaling wrapper so the cross-fade and the
-                  zoom stay locked together. */}
               <div className="absolute inset-0 transition-transform duration-[600ms] ease-out group-hover:scale-[1.06]">
                 <img
                   src={p.cover}
@@ -142,19 +138,6 @@ const ProjectEntry = ({ project: p, index }: { project: Project; index: number }
                   loading={index < 2 ? "eager" : "lazy"}
                   decoding="async"
                   className="absolute inset-0 w-full h-full object-cover"
-                />
-                {/* Hidden below lg: there is no hover on touch, so on phones
-                    this frame could never be seen and would only cost a second
-                    image download per row. */}
-                <img
-                  src={secondFrame}
-                  alt=""
-                  aria-hidden="true"
-                  width={1024}
-                  height={768}
-                  loading="lazy"
-                  decoding="async"
-                  className="hidden lg:block absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-700 ease-out group-hover:opacity-100"
                 />
               </div>
             </div>

@@ -24,28 +24,46 @@ const SheetOverlay = React.forwardRef<
 ));
 SheetOverlay.displayName = SheetPrimitive.Overlay.displayName;
 
+interface SheetContentProps
+  extends React.ComponentPropsWithoutRef<typeof SheetPrimitive.Content> {
+  /** Which edge the panel enters from. Defaults to the right. */
+  side?: "left" | "right";
+}
+
 /**
- * Side panel. Enters from the right with the same chrome and easing as the
- * mobile nav drawer in Header.tsx, so the site only ever has one drawer motion.
+ * Side panel. Shares the chrome and easing of the mobile nav drawer in
+ * Header.tsx so the site only ever has one drawer motion.
+ *
+ * The side is a prop because a drawer should open on the edge its trigger sits
+ * on — a button on the left that summons a panel from the right makes the eye
+ * cross the whole screen to find what it just opened.
  */
 const SheetContent = React.forwardRef<
   React.ElementRef<typeof SheetPrimitive.Content>,
-  React.ComponentPropsWithoutRef<typeof SheetPrimitive.Content>
->(({ className, children, ...props }, ref) => (
+  SheetContentProps
+>(({ className, children, side = "right", ...props }, ref) => (
   <SheetPortal>
     <SheetOverlay />
     <SheetPrimitive.Content
       ref={ref}
       className={cn(
-        "fixed inset-y-0 right-0 z-50 flex h-dvh w-full sm:w-[380px] flex-col bg-background shadow-luxury border-l border-border",
+        "fixed inset-y-0 z-50 flex h-dvh w-full sm:w-[380px] flex-col bg-background shadow-luxury",
         "transition ease-out data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:duration-300 data-[state=open]:duration-500",
-        "data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right",
+        side === "right"
+          ? "right-0 border-l border-border data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right"
+          : "left-0 border-r border-border data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left",
         className
       )}
       {...props}
     >
       {children}
-      <SheetPrimitive.Close className="absolute left-5 top-5 rounded-sm text-foreground-soft opacity-70 transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2">
+      <SheetPrimitive.Close
+        className={cn(
+          "absolute top-5 rounded-sm text-foreground-soft opacity-70 transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
+          // Always on the inner edge, away from the screen border.
+          side === "right" ? "left-5" : "right-5"
+        )}
+      >
         <X className="h-5 w-5" />
         <span className="sr-only">סגירה</span>
       </SheetPrimitive.Close>

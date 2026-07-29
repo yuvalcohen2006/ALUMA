@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import SectionHeading from "@/components/SectionHeading";
 import Reveal from "@/components/Reveal";
@@ -21,8 +22,40 @@ const categories = [
   { slug: "akssvryz", label: "אקססוריז", img: umbrella },
 ];
 
+/** How long the pointer must rest on one tile before the row recedes. */
+const DWELL_MS = 300;
+/** How long the others take to fade and blur once it does. */
+const RECEDE_MS = 400;
+
 const CategoryIcons = () => {
-  return (
+  // Tracked in state rather than with CSS :hover on the list, because the list
+  // includes the gaps between tiles — hovering the gap was dimming everything
+  // while nothing was actually selected.
+  const [focused, setFocused] = useState<string | null>(null);
+  const dwellTimer = useRef<number | null>(null);
+
+  const clearDwell = () => {
+    if (dwellTimer.current !== null) {
+      window.clearTimeout(dwellTimer.current);
+      dwellTimer.current = null;
+    }
+  };
+
+  const onEnter = (slug: string) => {
+    clearDwell();
+    // Only commit after the pointer has genuinely settled, so sweeping across
+    // the row on the way somewhere else never triggers the effect.
+    dwellTimer.current = window.setTimeout(() => setFocused(slug), DWELL_MS);
+  };
+
+  const onLeave = () => {
+    clearDwell();
+    setFocused(null);
+  };
+
+  useEffect(() => clearDwell, []);
+
+  return(
     <section className="py-24 md:py-32 bg-secondary">
       <div className="container-luxury">
         <Reveal className="mb-10 md:mb-14 flex flex-col items-center">
@@ -37,44 +70,50 @@ const CategoryIcons = () => {
         {/* Desktop: all eight share one row inside a 150px inset — no scrolling, so
             no scrollbar renders either. Below lg it becomes a rail you swipe
             natively; that native touch scroll is the drag, so no JS drag needed. */}
-        {/* Focus behaviour: hovering one tile blurs and fades the other seven and
-            scales the hovered one up, so attention lands on a single category
-            instead of the whole row competing. Driven by `group/rail` on the list
-            plus `peer`-less sibling dimming — each tile reacts to the rail being
-            hovered, then overrides itself on its own hover. */}
-        <ul className="group/rail rail-scroll flex gap-4 lg:gap-5 overflow-x-auto lg:overflow-x-visible px-5 sm:px-6 lg:px-[150px] pb-5 lg:pb-0">
-          {categories.map((c) => (
-            <li
-              key={c.slug}
-              // The siblings' blur waits 300ms — the length of the scale — so the
-              // recede only happens once the hovered tile has finished growing,
-              // rather than the whole row dimming the instant the pointer lands.
-              // The hovered tile resets that delay so its own growth is immediate.
-              className="shrink-0 w-[152px] sm:w-[180px] lg:flex-1 relative transition-all duration-300 ease-out delay-0
-                         group-hover/rail:opacity-45 group-hover/rail:blur-[2px] group-hover/rail:delay-300
-                         hover:!opacity-100 hover:!blur-0 hover:!delay-0 hover:scale-[1.08] hover:z-10"
-            >
-              <Link to={`/collections#${c.slug}`} className="group block">
-                <div className="relative w-full aspect-square rounded-[14px] bg-background/50 border border-foreground/15 overflow-hidden transition-all duration-300 group-hover:border-foreground/35 group-hover:shadow-luxury">
-                  <img
-                    src={c.img}
-                    alt={c.label}
-                    loading="lazy"
-                    decoding="async"
-                    draggable={false}
-                    width={1536}
-                    height={1536}
-                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-[600ms] ease-out group-hover:scale-[1.06]"
-                  />
-                </div>
-                <div className="mt-3 text-center">
-                  <span className="inline-block text-foreground text-[18px] font-normal">
-                    {c.label}
-                  </span>
-                </div>
-              </Link>
-            </li>
-          ))}
+        {/* Focus behaviour: once the pointer has rested on one tile for
+            DWELL_MS, that tile scales up and the other seven blur and fade away
+            over RECEDE_MS. Nothing happens while the pointer is merely passing
+            over the row or sitting in a gap between tiles. */}
+        <ul className="rail-scroll flex gap-4 lg:gap-5 overflow-x-auto lg:overflow-x-visible px-5 sm:px-6 lg:px-[150px] pb-5 lg:pb-0">
+          {categories.map((c) => {
+            const isFocused = focused === c.slug;
+            const isReceded = focused !== null && !isFocused;
+            return (
+              <li
+                key={c.slug}
+                onMouseEnter={() => onEnter(c.slug)}
+                onMouseLeave={onLeave}
+                className={`shrink-0 w-[152px] sm:w-[180px] lg:flex-1 relative ease-out ${
+                  isFocused ? "scale-[1.08] z-10" : ""
+                } ${isReceded ? "opacity-45 blur-[2px]" : "opacity-100 blur-0"}`}
+                style={{
+                  // The recede is the slow part; the tile's own growth stays
+                  // brisk so the one you picked responds immediately.
+                  transition: `opacity ${RECEDE_MS}ms ease-out, filter ${RECEDE_MS}ms ease-out, transform 300ms ease-out`,
+                }}
+              >
+                <Link to={`/collections#${c.slug}`} className="group block">
+                  <div className="relative w-full aspect-square rounded-[14px] bg-background/50 border border-foreground/15 overflow-hidden transition-all duration-300 group-hover:border-foreground/35 group-hover:shadow-luxury">
+                    <img
+                      src={c.img}
+                      alt={c.label}
+                      loading="lazy"
+                      decoding="async"
+                      draggable={false}
+                      width={1536}
+                      height={1536}
+                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-[600ms] ease-out group-hover:scale-[1.06]"
+                    />
+                  </div>
+                  <div className="mt-3 text-center">
+                    <span className="inline-block text-foreground text-[18px] font-normal">
+                      {c.label}
+                    </span>
+                  </div>
+                </Link>
+              </li>
+            );
+          })}
         </ul>
       </Reveal>
     </section>

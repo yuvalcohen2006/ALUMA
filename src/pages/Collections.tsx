@@ -14,9 +14,13 @@ const SITE = "https://alumaoutdoor.com";
 const CategoryRow = ({
   col,
   products,
+  showHeading = true,
 }: {
   col: DBCollection;
   products: DBProduct[];
+  /** Hidden when this is the only collection on screen — the page title
+   *  already names it, and repeating it twice reads as a mistake. */
+  showHeading?: boolean;
 }) => {
   const scrollerRef = useRef<HTMLDivElement>(null);
 
@@ -32,12 +36,16 @@ const CategoryRow = ({
       className="py-16 md:py-24 first:pt-8 scroll-mt-28 border-t border-border/60 first:border-t-0"
     >
       <div className="container-luxury">
-        <div className="text-center mb-10 max-w-2xl mx-auto">
-          <h2 className="font-display text-3xl md:text-4xl text-primary font-normal leading-tight">
-            {col.name_he}
-          </h2>
+<div className="text-center mb-10 max-w-2xl mx-auto">
+          {showHeading && (
+            <h2 className="font-display text-3xl md:text-4xl text-primary font-normal leading-tight">
+              {col.name_he}
+            </h2>
+          )}
           {col.intro && (
-            <p className="text-body text-foreground-soft mt-4">{col.intro}</p>
+            <p className={`text-body text-foreground-soft ${showHeading ? "mt-4" : ""}`}>
+              {col.intro}
+            </p>
           )}
         </div>
 
@@ -211,7 +219,13 @@ const CollectionsPage = () => {
         jsonLd={itemList}
       />
       <PageHero
-        title={visible.length === 1 ? visible[0].name_he : "קולקציות"}
+        title={
+          // One collection in view (picked from the nav or the filter) names
+          // itself; otherwise this is the whole catalogue.
+          visible.length === 1
+            ? `קולקציית ${visible[0].name_he}`
+            : "כל הקולקציות שלנו"
+        }
         filterSlot={
           <FilterSidebar
             groups={filterGroups}
@@ -245,7 +259,12 @@ const CollectionsPage = () => {
           </div>
         ) : (
           visible.map((c) => (
-            <CategoryRow key={c.id} col={c} products={productsFor(c.id)} />
+            <CategoryRow
+              key={c.id}
+              col={c}
+              products={productsFor(c.id)}
+              showHeading={visible.length > 1}
+            />
           ))
         )}
       </div>

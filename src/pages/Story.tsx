@@ -31,7 +31,9 @@ const StoryPage = () => {
           content in it, so the paragraph and the portraits both sit on the
           vertical middle of the screen. Horizontal placement is untouched. */}
       <section className="flex items-center min-h-[calc(100dvh-13rem)] py-8 md:py-10 bg-background">
-        <div className="container-luxury w-full">
+        {/* Lifted 70px off the optical centre — centred exactly, the pair sat
+            lower than it reads, because the hero above is visually heavier. */}
+        <div className="container-luxury w-full -translate-y-[70px]">
           {/* White section split down the middle into two equal squares */}
           <div className="grid md:grid-cols-2 gap-10 md:gap-14 max-w-7xl mx-auto">
             {/* Right square (RTL first): the paragraph, centred */}

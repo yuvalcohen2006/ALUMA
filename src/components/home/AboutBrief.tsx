@@ -13,10 +13,10 @@ const AboutBrief = () => {
             align="center"
             subtitle={
               <>
-                {/* Set in the running text's own face — no styling. The only
-                    addition is the shuruk on the ו, which fixes the reading as
-                    a-LU-ma; unvocalised, the word is ambiguous. */}
-                אלוּמה נולדה מתוך החיבור שבין חומר לאור. כל פריט נבנה בהתאמה אישית, בקווים
+                {/* The running text's own face — only the colour marks it as the
+                    brand name. The shuruk on the ו fixes the reading as a-LU-ma;
+                    unvocalised, the word is ambiguous. */}
+                <span className="text-primary">אלוּמה</span> נולדה מתוך החיבור שבין חומר לאור. כל פריט נבנה בהתאמה אישית, בקווים
                 נקיים ומדויקים, מתוך מחשבה על עיצוב, על נוחות ועל עמידות מלאה בתנאי
                 חוץ. שלדת אלומיניום מתקדמת נפגשת בבדים שנבחרים אחד־אחד, והתוצאה היא
                 ריהוט ששומר על היופי שלו גם אחרי שנים של שמש, גשם ומלח.
