@@ -74,7 +74,7 @@ const ProjectsGrid = () => {
       onTouchEnd={onTouchEnd}
     >
       <div className="container-luxury">
-        <Reveal className="mb-10 md:mb-16 flex flex-col items-center">
+        <Reveal className="mb-16 md:mb-24 flex flex-col items-center">
           <SectionHeading>עבודות נבחרות</SectionHeading>
         </Reveal>
 

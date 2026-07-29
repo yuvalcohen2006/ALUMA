@@ -403,7 +403,7 @@ const CollectionDetailPage = () => {
                         height={600}
                         loading="lazy"
                         decoding="async"
-                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-[600ms] ease-out group-hover:scale-[1.06]"
+                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-600 ease-out group-hover:scale-[1.06]"
                       />
                     )}
                     {c.tag && (

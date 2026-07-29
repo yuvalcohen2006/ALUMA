@@ -79,20 +79,17 @@ const StoryPage = () => {
                 />
               </div>
               {/* Portraits — +10% again (wider max-width than the logo).
-                  The drawing is cropped hard at its baseline. The mask softens
-                  only the last few pixels of that edge, plus a touch more at the
-                  two bottom corners, so the hard cut disappears without eating
-                  into the illustration itself. Measured in px, not percent, so
-                  the softening stays the same depth at every screen size. */}
+                  One gradient, 10px deep, along the bottom edge only — which is
+                  exactly the two lower corners and the line between them. The
+                  earlier version also intersected a radial, and that was what
+                  clipped the drawing itself. Nothing here crops the image. */}
               <div
                 className="flex items-end justify-center gap-[26px] w-full max-w-[813px] mx-auto"
                 style={{
                   maskImage:
-                    "linear-gradient(to bottom, #000 calc(100% - 18px), transparent 100%), radial-gradient(150% 130% at 50% 30%, #000 88%, transparent 100%)",
+                    "linear-gradient(to bottom, #000 calc(100% - 10px), transparent 100%)",
                   WebkitMaskImage:
-                    "linear-gradient(to bottom, #000 calc(100% - 18px), transparent 100%), radial-gradient(150% 130% at 50% 30%, #000 88%, transparent 100%)",
-                  maskComposite: "intersect",
-                  WebkitMaskComposite: "source-in",
+                    "linear-gradient(to bottom, #000 calc(100% - 10px), transparent 100%)",
                 }}
               >
                 {[

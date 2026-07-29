@@ -141,7 +141,7 @@ const Cover = ({
         loading={eager ? "eager" : "lazy"}
         decoding="async"
         fetchPriority={eager ? "high" : undefined}
-        className="absolute inset-0 h-full w-full object-cover transition-transform duration-[600ms] ease-out group-hover:scale-[1.06]"
+        className="absolute inset-0 h-full w-full object-cover transition-transform duration-600 ease-out group-hover:scale-[1.06]"
       />
     ) : (
       <span className="absolute inset-0 flex items-center justify-center">
@@ -316,12 +316,23 @@ const Band = ({ post, flip }: { post: Post; flip: boolean }) => (
   </Link>
 );
 
+/**
+ * Warm white between the hero and the charcoal cover story. Filtering lives
+ * entirely in the drawer now, so nothing else stands between them, and the
+ * hero's hairline must not run straight into the dark edge.
+ *
+ * Both the skeleton and the loaded page render it, so the cover story does not
+ * jump down the page the moment the posts land.
+ */
+const HeroGap = () => <div className="h-8 md:h-12 bg-background" aria-hidden="true" />;
+
 /** Layout stand-in while the table loads — same shapes, no copy to read. */
 const MagazineSkeleton = () => (
   <>
     <span className="sr-only" role="status">
       טוען מאמרים…
     </span>
+    <HeroGap />
     <section className="bg-foreground py-14 md:py-20" aria-hidden="true">
       <div className="container-luxury">
         <div className="grid lg:grid-cols-12 gap-8 lg:gap-14 items-center animate-pulse motion-reduce:animate-none">
@@ -370,7 +381,21 @@ const Blog = () => {
           .select("id, slug, title, excerpt, cover_image_url, tag, read_minutes, published_at")
           .eq("published", true)
           .order("published_at", { ascending: false });
-        if (!cancelled) setPosts((data as Post[]) ?? []);
+        const rows = (data as Post[]) ?? [];
+        if (cancelled) return;
+        // The blog table is empty, so in development fall back to the
+        // placeholder magazine — the page has nothing to lay out otherwise, and
+        // no cover images at all. Real rows always win; production never takes
+        // this path. `?live=1` forces the database.
+        const wantsLive =
+          typeof window !== "undefined" &&
+          new URLSearchParams(window.location.search).has("live");
+        if (import.meta.env.DEV && !wantsLive && rows.length === 0) {
+          const { demoPosts } = await import("@/data/demoBlog");
+          setPosts(demoPosts as Post[]);
+          return;
+        }
+        setPosts(rows);
       } catch {
         // A thrown query (offline, CORS) must still end the load, or the page
         // sits on the skeleton forever. Empty list → the "no posts yet" state.
@@ -395,6 +420,8 @@ const Blog = () => {
     [posts, selectedTopics]
   );
 
+  // Topic list for the drawer, counted off the posts themselves — a new tag in
+  // the table shows up as a filter option without a code change.
   const topics = useMemo(() => {
     const counts = new Map<string, number>();
     for (const p of posts) if (p.tag) counts.set(p.tag, (counts.get(p.tag) ?? 0) + 1);
@@ -413,13 +440,6 @@ const Blog = () => {
     ],
     [topics]
   );
-
-  const toggleTopic = (tag: string) =>
-    setValue({
-      topic: selectedTopics.includes(tag)
-        ? selectedTopics.filter((t) => t !== tag)
-        : [...selectedTopics, tag],
-    });
 
   /**
    * Blog schema for the index, matching how the other collection pages describe
@@ -494,6 +514,13 @@ const Blog = () => {
       />
       <PageHero
         title="המגזין"
+        subtitle={
+          <>
+            כל מה שחדש בעיצוב החוץ: מגמות, חומרים ובדים, לצד השראה למרפסת, לגג ולחצר.
+            <br />
+            כאן אנחנו כותבים על מה שהופך מרחב פתוח לחלק מהבית.
+          </>
+        }
         filterSlot={
           <FilterSidebar
             groups={filterGroups}
@@ -518,133 +545,76 @@ const Blog = () => {
             </div>
           </div>
         </section>
+      ) : visible.length === 0 || !lead ? (
+        <section className="py-16 md:py-24 bg-background">
+          <div className="container-luxury text-center">
+            <p className="text-[20px] leading-relaxed text-foreground-soft">
+              אין מאמרים בנושא שבחרתם.
+            </p>
+            <button
+              type="button"
+              onClick={() => setValue({ topic: [] })}
+              className="mt-5 text-[18px] text-accent link-underline transition-smooth"
+            >
+              נקה את הסינון
+            </button>
+          </div>
+        </section>
       ) : (
         <>
-          {/* Section bar — the magazine's own table of topics. Writes to the same
-              URL state the filter drawer does, so the two never disagree. */}
-          {topics.length > 1 ? (
-            <div
-              role="group"
-              aria-label="נושאי המגזין"
-              className="bg-background pt-4 pb-6 md:pt-6 md:pb-8"
-            >
+          <HeroGap />
+
+          <CoverStory post={lead} />
+
+          {blocks.length > 0 ? (
+            <section className="py-14 md:py-20 bg-background">
               <div className="container-luxury">
-                <div className="rail-scroll flex items-center gap-6 md:gap-9 overflow-x-auto pb-1">
-                  <button
-                    type="button"
-                    onClick={() => setValue({ topic: [] })}
-                    aria-pressed={selectedTopics.length === 0}
-                    className={cn(
-                      "shrink-0 whitespace-nowrap py-2 text-[18px] border-b-2 transition-smooth",
-                      selectedTopics.length === 0
-                        ? "border-primary text-foreground"
-                        : "border-transparent text-muted-foreground hover:text-foreground hover:border-primary/40"
-                    )}
-                  >
-                    הכל
-                    <span className="ms-2 text-muted-foreground tabular-nums">{posts.length}</span>
-                  </button>
+                <Reveal className="mb-10 md:mb-14">
+                  <SectionHeading align="start">עוד במגזין</SectionHeading>
+                  <div className="w-20 h-[2px] bg-primary/55 mt-5" aria-hidden="true" />
+                </Reveal>
 
-                  {topics.map((t) => {
-                    const on = selectedTopics.includes(t.value);
-                    return (
-                      <button
-                        key={t.value}
-                        type="button"
-                        onClick={() => toggleTopic(t.value)}
-                        aria-pressed={on}
-                        className={cn(
-                          "shrink-0 whitespace-nowrap py-2 text-[18px] border-b-2 transition-smooth",
-                          on
-                            ? "border-primary text-foreground"
-                            : "border-transparent text-muted-foreground hover:text-foreground hover:border-primary/40"
-                        )}
-                      >
-                        {t.value}
-                        <span className="ms-2 text-muted-foreground tabular-nums">{t.count}</span>
-                      </button>
-                    );
-                  })}
+                <div className="space-y-12 md:space-y-16">
+                  {blocks.map((block) =>
+                    block.kind === "spread" ? (
+                      <div key={block.key} className="grid sm:grid-cols-2 gap-8 md:gap-10">
+                        {block.posts.map((p, i) => (
+                          <Reveal key={p.id} delay={i * 90}>
+                            <HalfPage post={p} />
+                          </Reveal>
+                        ))}
+                      </div>
+                    ) : (
+                      <Reveal key={block.key}>
+                        <Band post={block.post} flip={block.flip} />
+                      </Reveal>
+                    )
+                  )}
                 </div>
-              </div>
-            </div>
-          ) : (
-            /* With one topic or none there is no bar to draw, but the charcoal
-               cover story still needs warm white above it — the hero's hairline
-               must not run straight into the dark edge. */
-            <div className="h-6 md:h-10 bg-background" aria-hidden="true" />
-          )}
-
-          {visible.length === 0 || !lead ? (
-            <section className="py-16 md:py-24 bg-background">
-              <div className="container-luxury text-center">
-                <p className="text-[20px] leading-relaxed text-foreground-soft">
-                  אין מאמרים בנושא שבחרתם.
-                </p>
-                <button
-                  type="button"
-                  onClick={() => setValue({ topic: [] })}
-                  className="mt-5 text-[18px] text-accent link-underline transition-smooth"
-                >
-                  נקה את הסינון
-                </button>
               </div>
             </section>
           ) : (
-            <>
-              <CoverStory post={lead} />
-
-              {blocks.length > 0 ? (
-                <section className="py-14 md:py-20 bg-background">
-                  <div className="container-luxury">
-                    <Reveal className="mb-10 md:mb-14">
-                      <SectionHeading align="start">עוד במגזין</SectionHeading>
-                      <div className="w-20 h-[2px] bg-primary/55 mt-5" aria-hidden="true" />
-                    </Reveal>
-
-                    <div className="space-y-12 md:space-y-16">
-                      {blocks.map((block) =>
-                        block.kind === "spread" ? (
-                          <div key={block.key} className="grid sm:grid-cols-2 gap-8 md:gap-10">
-                            {block.posts.map((p, i) => (
-                              <Reveal key={p.id} delay={i * 90}>
-                                <HalfPage post={p} />
-                              </Reveal>
-                            ))}
-                          </div>
-                        ) : (
-                          <Reveal key={block.key}>
-                            <Band post={block.post} flip={block.flip} />
-                          </Reveal>
-                        )
-                      )}
-                    </div>
-                  </div>
-                </section>
-              ) : (
-                /* Only the cover story survived this view. The footer is the same
-                   charcoal as the spread, so without a warm-white band here the
-                   two dark blocks merge into one and the page loses its floor. */
-                <section className="py-14 md:py-20 bg-background">
-                  <div className="container-luxury text-right">
-                    <p className="text-[20px] leading-relaxed text-foreground-soft">
-                      {selectedTopics.length
-                        ? "זו הכתבה היחידה בנושא שבחרתם."
-                        : "זו הכתבה האחרונה שפורסמה במגזין."}
-                    </p>
-                    {selectedTopics.length > 0 && (
-                      <button
-                        type="button"
-                        onClick={() => setValue({ topic: [] })}
-                        className="mt-5 text-[18px] text-accent link-underline transition-smooth"
-                      >
-                        להצגת כל הכתבות
-                      </button>
-                    )}
-                  </div>
-                </section>
-              )}
-            </>
+            /* Only the cover story survived this view. The footer is the same
+               charcoal as the spread, so without a warm-white band here the
+               two dark blocks merge into one and the page loses its floor. */
+            <section className="py-14 md:py-20 bg-background">
+              <div className="container-luxury text-right">
+                <p className="text-[20px] leading-relaxed text-foreground-soft">
+                  {selectedTopics.length
+                    ? "זו הכתבה היחידה בנושא שבחרתם."
+                    : "זו הכתבה האחרונה שפורסמה במגזין."}
+                </p>
+                {selectedTopics.length > 0 && (
+                  <button
+                    type="button"
+                    onClick={() => setValue({ topic: [] })}
+                    className="mt-5 text-[18px] text-accent link-underline transition-smooth"
+                  >
+                    להצגת כל הכתבות
+                  </button>
+                )}
+              </div>
+            </section>
           )}
         </>
       )}

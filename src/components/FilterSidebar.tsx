@@ -74,8 +74,8 @@ const FilterSidebar = ({
         )}
       </SheetTrigger>
 
-      {/* Left, matching the trigger's position in the page hero. */}
-      <SheetContent side="left" aria-describedby={undefined}>
+      {/* Right, matching the trigger's position in the page hero. */}
+      <SheetContent side="right" aria-describedby={undefined}>
         <div className="px-6 pt-6 pb-5 border-b border-border text-right">
           <SheetTitle>סינון</SheetTitle>
           <SheetDescription className="mt-1">

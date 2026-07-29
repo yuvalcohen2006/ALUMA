@@ -53,8 +53,10 @@ const SectionHeading = ({
           )}
           <p
             className={`text-[20px] font-normal leading-relaxed max-w-2xl text-pretty ${
-              light ? "text-background/75" : "text-foreground"
-            }`}
+              // With the rule gone the subtitle would sit right under the title,
+              // so it carries the gap itself.
+              divider ? "" : "mt-7"
+            } ${light ? "text-background/75" : "text-foreground"}`}
           >
             {subtitle}
           </p>

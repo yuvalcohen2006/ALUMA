@@ -89,7 +89,7 @@ const MaterialsBrief = () => {
       </div>
 
       <div className="relative z-10 flex flex-1 flex-col justify-center px-4 md:px-8">
-        <div className="mb-6 flex flex-col items-center">
+        <div className="mb-14 md:mb-16 flex flex-col items-center">
           <SectionHeading light>רק החומרים הטובים בעולם</SectionHeading>
         </div>
 

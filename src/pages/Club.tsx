@@ -32,6 +32,12 @@ import alumaLogo from "@/assets/aluma-logo.png";
  * Structure runs on one strong contrast beat, the way the home screen does:
  * warm-white explanation → a single charcoal band carrying the four benefits as
  * a hairline-separated ledger row → sand-beige joining spine → warm-white close.
+ *
+ * Vertical rhythm is one scale, `py-14 md:py-20`, on every band — the colour
+ * change at each seam is what separates the sections, so the padding only has
+ * to hold content off the edge rather than announce the break. Blocks keep
+ * their own air; the space that isn't there is the empty screen between them.
+ * Matches the density the Blog page runs at.
  */
 
 const perks = [
@@ -159,19 +165,25 @@ const Club = () => {
         subtitle="עולם שקט של שירות, שנתפר במידה שלכם."
       />
 
-      {/* ── 1. What the club is — copy on the right, membership panel on the left ── */}
-      <section className="pt-14 pb-20 md:pt-20 md:pb-28 bg-background">
+      {/* ── 1. What the club is — copy on the right, membership panel on the left ──
+          Opens tight under the hero: the hero band is the same warm white as this
+          section, so a generous top padding here would read as one continuous
+          empty screen rather than as breathing room. */}
+      <section className="pt-8 pb-14 md:pt-10 md:pb-20 bg-background">
         <div className="container-luxury">
-          <div className="grid lg:grid-cols-12 gap-12 lg:gap-16 items-center max-w-6xl mx-auto">
+          {/* 7xl rather than a narrower cap: the grid then measures to the
+              container on every screen a visitor actually has, and only
+              ultra-wide displays ever see the cap engage. */}
+          <div className="grid lg:grid-cols-12 gap-10 lg:gap-14 items-center max-w-7xl mx-auto">
             {/* RTL: first child sits at the right edge */}
             <Reveal className="lg:col-span-7">
               <div className="text-right">
-                <h2 className="font-display font-bold text-[26px] leading-snug text-primary">
+                <h2 className="font-display font-bold text-[30px] leading-snug text-primary">
                   מה זה מועדון אלומה
                 </h2>
                 <div className="w-20 h-[2px] bg-primary/55 mt-5" aria-hidden="true" />
 
-                <p className="text-[20px] leading-relaxed text-foreground mt-7 text-pretty">
+                <p className="text-[20px] leading-relaxed text-foreground mt-6 text-pretty">
                   מועדון אלומה הוא לא תוכנית נקודות. זו דלת אחורית לעולם של מעצבים,
                   קולקציות מוקדמות ושירות אישי, למי שרואה את החוץ של הבית כמו את הפנים.
                 </p>
@@ -185,18 +197,21 @@ const Club = () => {
             <Reveal className="lg:col-span-5" delay={120}>
               {/* No hover state: the panel is a container, not a link, and the
                   house rule is that only things you can click react to the
-                  pointer. Padding eases back on narrow screens so the
-                  fixed-width ShineButton never overflows it at 375px. */}
-              <div className="rounded-[14px] border border-border bg-secondary/50 shadow-soft p-6 sm:p-8 md:p-10 text-right">
+                  pointer. Padding tops out at p-8 — this is the tallest thing
+                  in the row, so every millimetre it carries is a millimetre of
+                  empty column the copy beside it gets centred against. It eases
+                  back to p-6 on narrow screens so the fixed-width ShineButton
+                  never overflows it at 375px. */}
+              <div className="rounded-[14px] border border-border bg-secondary/50 shadow-soft p-6 sm:p-7 md:p-8 text-right">
                 <img
                   src={alumaLogo}
                   alt="Aluma"
-                  className="h-11 w-auto opacity-90"
+                  className="h-10 w-auto opacity-90"
                   loading="lazy"
                   decoding="async"
                 />
 
-                <AuthGate loading={loading} className="mt-6">
+                <AuthGate loading={loading} className="mt-5">
                   <h3 className="font-display font-normal text-[22px] text-foreground">
                     {user ? "אתם כבר בפנים" : "החברות פתוחה, ובחינם"}
                   </h3>
@@ -218,11 +233,11 @@ const Club = () => {
                       )}
                     </>
                   ) : (
-                    <ul className="mt-6 space-y-4">
+                    <ul className="mt-5 space-y-3">
                       {terms.map((t) => (
                         <li
                           key={t}
-                          className="flex items-start gap-3 border-t border-border/70 pt-4 first:border-t-0 first:pt-0"
+                          className="flex items-start gap-3 border-t border-border/70 pt-3 first:border-t-0 first:pt-0"
                         >
                           <Check
                             className="w-[18px] h-[18px] mt-1.5 shrink-0 text-primary"
@@ -237,7 +252,7 @@ const Club = () => {
                     </ul>
                   )}
 
-                  <div className="mt-8">{cta("start")}</div>
+                  <div className="mt-7">{cta("start")}</div>
                 </AuthGate>
               </div>
             </Reveal>
@@ -246,9 +261,9 @@ const Club = () => {
       </section>
 
       {/* ── 2. The one dark band: benefits as a hairline-separated ledger row ── */}
-      <section className="py-20 md:py-28 bg-foreground text-background">
+      <section className="py-14 md:py-20 bg-foreground text-background">
         <div className="container-luxury">
-          <Reveal className="flex flex-col items-center mb-14 md:mb-16">
+          <Reveal className="flex flex-col items-center mb-10 md:mb-14">
             <SectionHeading
               light
               align="center"
@@ -259,8 +274,11 @@ const Club = () => {
           </Reveal>
 
           {/* Below lg the row breaks into a plain grid with real gaps; at lg the
-              gap collapses and the separation is carried by hairlines instead. */}
-          <ul className="grid gap-x-10 gap-y-12 sm:grid-cols-2 lg:grid-cols-4 lg:gap-x-0 max-w-6xl mx-auto">
+              gap collapses and the separation is carried by hairlines instead.
+              Runs to the container (7xl): four columns of short text is the one
+              block on the page that gets straightforwardly better with width,
+              since every extra pixel lands in the copy rather than in margins. */}
+          <ul className="grid gap-x-10 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 lg:gap-x-0 max-w-7xl mx-auto">
             {perks.map((perk, i) => {
               const Icon = perk.icon;
               return (
@@ -285,7 +303,7 @@ const Club = () => {
                     <Icon className="w-6 h-6" aria-hidden="true" />
                   </span>
 
-                  <h3 className="font-display font-normal text-[22px] text-background mt-6 leading-snug">
+                  <h3 className="font-display font-normal text-[22px] text-background mt-5 leading-snug">
                     {perk.title}
                   </h3>
                   <p className="text-[20px] leading-relaxed text-background/75 mt-3 text-pretty">
@@ -299,9 +317,9 @@ const Club = () => {
       </section>
 
       {/* ── 3. Joining — a numbered spine, with the pitch alongside it ── */}
-      <section className="py-20 md:py-28 bg-secondary">
+      <section className="py-14 md:py-20 bg-secondary">
         <div className="container-luxury">
-          <div className="grid lg:grid-cols-12 gap-12 lg:gap-16 items-start max-w-6xl mx-auto">
+          <div className="grid lg:grid-cols-12 gap-10 lg:gap-14 items-start max-w-7xl mx-auto">
             <Reveal className="lg:col-span-5">
               <div className="text-right">
                 {/* Charcoal, not terracotta: this heading sits on sand beige. */}
@@ -310,13 +328,13 @@ const Club = () => {
                 </SectionHeading>
                 <div className="w-20 h-[2px] bg-primary/55 mt-5" aria-hidden="true" />
 
-                <p className="text-[20px] leading-relaxed text-foreground mt-7 text-pretty">
+                <p className="text-[20px] leading-relaxed text-foreground mt-6 text-pretty">
                   ההרשמה נעשית פעם אחת, ומשם החשבון פשוט זוכר אתכם, את מה שאהבתם
                   ואת הפרויקט שפתחתם איתנו.
                 </p>
 
                 {!user && (
-                  <AuthGate loading={loading} className="mt-8">
+                  <AuthGate loading={loading} className="mt-7">
                     <ShineButton to="/club/auth?mode=signup">
                       להצטרפות מיידית
                       <ArrowLeft className="w-4 h-4" aria-hidden="true" />
@@ -328,12 +346,15 @@ const Club = () => {
 
             <Reveal className="lg:col-span-7" delay={120}>
               {/* Block-level with a max-width: in RTL it settles against the
-                  right (start) edge of its column on its own. role="list" is
-                  not redundant — Tailwind's preflight sets list-style:none,
-                  which makes VoiceOver drop list semantics entirely, and the
-                  visible 01/02/03 is aria-hidden, so this is what carries the
-                  ordering to a screen reader. */}
-              <ol role="list" className="max-w-xl">
+                  right (start) edge of its column on its own. 2xl rather than
+                  anything narrower — each step is one line at any of these
+                  widths, so a tighter cap would only be trimming bare sand off
+                  the left of the column.
+                  role="list" is not redundant — Tailwind's preflight sets
+                  list-style:none, which makes VoiceOver drop list semantics
+                  entirely, and the visible 01/02/03 is aria-hidden, so this is
+                  what carries the ordering to a screen reader. */}
+              <ol role="list" className="max-w-2xl">
                 {steps.map((step, i) => (
                   <li key={step.n} className="flex gap-6 md:gap-8">
                     {/* Badge column, right in RTL, with the spine dropping to the next step.
@@ -354,7 +375,7 @@ const Club = () => {
                       )}
                     </div>
 
-                    <div className={`text-right pt-2.5 ${i < steps.length - 1 ? "pb-10" : ""}`}>
+                    <div className={`text-right pt-2.5 ${i < steps.length - 1 ? "pb-8" : ""}`}>
                       <h3 className="font-display font-normal text-[22px] text-foreground leading-snug">
                         {step.title}
                       </h3>
@@ -371,7 +392,7 @@ const Club = () => {
       </section>
 
       {/* ── 4. Close ── */}
-      <section className="py-20 md:py-28 bg-background">
+      <section className="py-14 md:py-20 bg-background">
         <div className="container-luxury">
           <Reveal>
             <div className="max-w-2xl mx-auto flex flex-col items-center text-center">
@@ -387,7 +408,7 @@ const Club = () => {
                 decoding="async"
               />
 
-              <AuthGate loading={loading} className="mt-8 flex flex-col items-center">
+              <AuthGate loading={loading} className="mt-6 flex flex-col items-center">
                 <SectionHeading
                   align="center"
                   subtitle={
@@ -399,7 +420,7 @@ const Club = () => {
                   {user ? "טוב לראות אתכם שוב." : "הבית שלכם ראוי לזה."}
                 </SectionHeading>
 
-                <div className="mt-9">{cta("center")}</div>
+                <div className="mt-7">{cta("center")}</div>
               </AuthGate>
             </div>
           </Reveal>

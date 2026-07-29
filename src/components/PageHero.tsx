@@ -27,12 +27,15 @@ const PageHero = ({ title, subtitle, filterSlot, dark = false }: PageHeroProps) 
   return (
     <section className={`pt-[127px] pb-4 md:pb-6 ${dark ? "bg-foreground" : "bg-background"}`}>
       <div className="container-luxury">
-        {/* The page is dir="rtl", so the first flex child sits at the RIGHT
-            edge — title first, filter button pushed to the far left. */}
-        <div className="flex items-end justify-between gap-6">
-          {/* Shrink-to-fit, so the divider (w-full of this wrapper) measures
+        {/* Everything is right-aligned: the page is dir="rtl", so the title,
+            its rule and the filter trigger all sit against the same edge. The
+            trigger is stacked under the title rather than opposite it, so it
+            stays on the right without crowding the heading — and on the same
+            side as the drawer it opens. */}
+        <div className="flex flex-col items-end">
+          {/* Shrink-to-fit, so the rule (w-full of this wrapper) measures
               exactly as wide as the title. A title too long for the row wraps
-              and the divider follows it rather than overflowing the page. */}
+              and the rule follows it rather than overflowing the page. */}
           <div className="min-w-0 text-right">
             <h1
               className={`animate-rise-in font-display text-3xl sm:text-4xl md:text-5xl ${
@@ -47,7 +50,7 @@ const PageHero = ({ title, subtitle, filterSlot, dark = false }: PageHeroProps) 
             />
           </div>
 
-          {filterSlot && <div className="shrink-0">{filterSlot}</div>}
+          {filterSlot && <div className="shrink-0 mt-5">{filterSlot}</div>}
         </div>
 
         {subtitle && (

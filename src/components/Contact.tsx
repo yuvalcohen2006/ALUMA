@@ -4,6 +4,7 @@ import {
   AlertCircle,
   ArrowLeft,
   Check,
+  ChevronDown,
   ChevronLeft,
   Loader2,
   Mail,
@@ -31,6 +32,12 @@ type Channel = {
   Icon: React.ComponentType<{ className?: string }>;
   /** Warm terracotta wash by default; WhatsApp keeps its own brand green. */
   iconClass: string;
+  /**
+   * Optical size correction for the glyph inside the 48px chip. Lucide icons
+   * are 2px strokes and sit right at 24px; the WhatsApp mark is a solid fill,
+   * which reads noticeably heavier at the same measure — so it is set smaller.
+   */
+  glyphClass?: string;
   title: string;
   /** Latin-only titles (phone, mail) must render LTR inside the RTL block. */
   ltr?: boolean;
@@ -44,6 +51,7 @@ const channels: Channel[] = [
     key: "whatsapp",
     Icon: WhatsAppIcon,
     iconClass: "bg-[#25D366]/10 text-[#25D366]",
+    glyphClass: "w-[22px] h-[22px]",
     title: "שליחת הודעת וואטסאפ",
     line: "מענה אנושי מהיר, גם לתמונות מהחצר",
     href: SITE.whatsapp.link("היי, אשמח לשמוע על סלון חוץ בהתאמה אישית"),
@@ -64,7 +72,10 @@ const channels: Channel[] = [
     iconClass: "bg-primary/10 text-accent",
     title: SITE.email,
     ltr: true,
-    line: "מענה תוך 24 שעות בימי עסקים",
+    // Deliberately not the 24-hour promise: that line already sits, word for
+    // word, in the assurances beside the form — two identical sentences a few
+    // centimetres apart read as a copy-paste slip.
+    line: "נוח לשליחת מידות, תוכניות וקבצים",
     href: `mailto:${SITE.email}`,
   },
   {
@@ -72,6 +83,9 @@ const channels: Channel[] = [
     Icon: MapPin,
     iconClass: "bg-primary/10 text-accent",
     title: `אולם התצוגה ב${SITE.address.city}`,
+    // The street stays on the tile. This is the one channel whose whole subject
+    // is "where", and a visitor scanning the four tiles should get the answer
+    // without a click — the band a screen below is the detail, not the source.
     line: `${SITE.address.street}, ביקור בתיאום מראש`,
   },
 ];
@@ -84,10 +98,15 @@ const scrollToShowroom = () => {
 };
 
 const tileClass =
-  "group flex w-full items-center gap-4 rounded-[14px] border border-border bg-background p-5 text-right shadow-soft transition-all duration-300 hover:-translate-y-1 hover:border-primary/60 hover:shadow-luxury";
+  "group flex w-full items-center gap-4 rounded-[14px] border border-border bg-background p-5 text-right shadow-soft transition-all duration-300 ease-out hover:-translate-y-1 hover:border-primary/60 hover:shadow-luxury";
 
 const ChannelTile = ({ channel }: { channel: Channel }) => {
   const { Icon } = channel;
+  // The showroom tile is the only one that stays on the page. Its cue points
+  // down, where it actually goes, instead of promising a departure it never
+  // makes — same weight, same slot, so the four tiles still read as a set.
+  const jumps = !channel.href;
+  const Cue = jumps ? ChevronDown : ChevronLeft;
 
   const inner = (
     <>
@@ -97,7 +116,7 @@ const ChannelTile = ({ channel }: { channel: Channel }) => {
           channel.iconClass,
         )}
       >
-        <Icon className="w-6 h-6" />
+        <Icon className={channel.glyphClass ?? "w-6 h-6"} />
       </span>
 
       <span className="min-w-0 flex-1">
@@ -118,8 +137,11 @@ const ChannelTile = ({ channel }: { channel: Channel }) => {
       </span>
 
       {/* RTL: forward points left */}
-      <ChevronLeft
-        className="w-5 h-5 shrink-0 text-primary/60 transition-transform duration-300 group-hover:-translate-x-1"
+      <Cue
+        className={cn(
+          "w-5 h-5 shrink-0 text-primary/60 transition-all duration-300 group-hover:text-primary",
+          jumps ? "group-hover:translate-y-0.5" : "group-hover:-translate-x-1",
+        )}
         aria-hidden="true"
       />
     </>
@@ -161,11 +183,13 @@ const assurances = [
   "פרטיכם נשמרים אצלנו בלבד",
 ];
 
-// Tall, generously padded fields. Deliberately no `outline-none`: the global
-// focus-visible ring in index.css is what keyboard users navigate by.
+// Tall, generously padded fields. Radius is the site's control radius (10px,
+// the same tablet the buttons and pills use) rather than the 14px reserved for
+// cards and panels. Deliberately no `outline-none`: the global focus-visible
+// ring in index.css is what keyboard users navigate by.
 const fieldClass = (invalid: boolean) =>
   cn(
-    "w-full rounded-[14px] border bg-background px-4 text-[18px] text-foreground text-right",
+    "w-full rounded-[10px] border bg-background px-5 text-[18px] text-foreground text-right",
     "placeholder:text-muted-foreground/70 transition-smooth focus:ring-4 focus:ring-primary/15",
     invalid ? "border-destructive/70 focus:border-destructive" : "border-border focus:border-primary",
   );
@@ -173,8 +197,10 @@ const fieldClass = (invalid: boolean) =>
 const labelClass = "block font-display text-[18px] font-medium text-foreground mb-2.5";
 
 const FieldError = ({ id, message }: { id: string; message: string }) => (
-  <p id={id} className="mt-2 flex items-start gap-2 text-[18px] leading-snug text-destructive">
-    <AlertCircle className="w-4 h-4 mt-1.5 shrink-0" aria-hidden="true" />
+  <p id={id} className="mt-2.5 flex items-start gap-2.5 text-[18px] leading-snug text-destructive">
+    {/* 18px at leading-snug is a ~25px line box; a 18px glyph centres on it at
+        3px, not at the 6px a plain spacing step would give. */}
+    <AlertCircle className="w-[18px] h-[18px] mt-[3px] shrink-0" aria-hidden="true" />
     {message}
   </p>
 );
@@ -278,14 +304,21 @@ const Contact = () => {
   const errorList = Object.entries(errors);
 
   return (
-    <section id="contact" dir="rtl" className="py-16 md:py-24 bg-secondary">
+    // The top margin is what keeps the sand edge off the hero: PageHero closes
+    // on 24px of its own padding, so without it the colour change lands almost
+    // on the subtitle's last line.
+    <section id="contact" dir="rtl" className="mt-10 md:mt-12 py-16 md:py-24 bg-secondary">
       <div className="container-luxury">
         {/* The split: the form takes the wider right column (first child in RTL),
             the direct channels ride alongside it on the left and stay put while
             the form scrolls. */}
-        <div className="grid gap-12 lg:gap-14 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)] items-start max-w-6xl mx-auto">
+        <div className="grid gap-12 lg:gap-16 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)] items-start max-w-6xl mx-auto">
           {/* ===== FORM ===== */}
-          <Reveal className="order-1 min-w-0">
+          {/* Stacked on a phone the form runs ~1000px, so putting it first
+              meant scrolling past all of it to reach a phone number. The
+              channels lead on mobile; from lg the two sit side by side and the
+              form takes the right (RTL start) column again. */}
+          <Reveal className="order-2 lg:order-1 min-w-0">
             <SectionHeading
               align="start"
               tone="charcoal"
@@ -294,16 +327,26 @@ const Contact = () => {
               כתבו לנו
             </SectionHeading>
 
-            <ul className="mt-6 flex flex-col gap-2.5 text-[18px] text-foreground-soft">
+            {/* Close to the heading (24px) because it belongs to it, and a full
+                36px clear of the form below — related things near, the change
+                of gear far. */}
+            <ul className="mt-6 flex flex-col gap-3 text-[18px] text-foreground-soft">
               {assurances.map((a) => (
-                <li key={a} className="flex items-center gap-2.5">
-                  <Check className="w-4 h-4 shrink-0 text-primary" strokeWidth={2.5} aria-hidden="true" />
+                <li key={a} className="flex items-center gap-3">
+                  {/* Deeper terracotta, not primary: this band is sand, where
+                      primary measures ~2.5:1 — under the 3:1 floor even for a
+                      decorative glyph. text-accent clears it at ~3.3:1. */}
+                  <Check
+                    className="w-[18px] h-[18px] shrink-0 text-accent"
+                    strokeWidth={2.5}
+                    aria-hidden="true"
+                  />
                   {a}
                 </li>
               ))}
             </ul>
 
-            <form onSubmit={handleSubmit} className="mt-8 space-y-6" noValidate>
+            <form onSubmit={handleSubmit} className="mt-9" noValidate>
               {/* Honeypot, hidden from real users. Deliberately NOT parked at
                   left:-9999px like the classic recipe: this document is
                   dir="rtl", where the left side is the scrollable overflow
@@ -324,13 +367,13 @@ const Contact = () => {
               {errorList.length > 0 && (
                 <div
                   role="alert"
-                  className="rounded-[14px] border border-destructive/40 bg-destructive/5 p-5 text-right"
+                  className="mb-7 rounded-[14px] border border-destructive/40 bg-destructive/5 p-5 text-right"
                 >
                   <p className="flex items-center gap-2.5 text-[18px] font-medium text-destructive">
                     <AlertCircle className="w-5 h-5 shrink-0" aria-hidden="true" />
                     לא הצלחנו לשלוח, יש לתקן את השדות המסומנים
                   </p>
-                  <ul className="mt-3 space-y-1.5 text-[18px] leading-snug text-destructive/90">
+                  <ul className="mt-3 space-y-1.5 text-[18px] leading-snug text-destructive">
                     {errorList.map(([key, message]) => (
                       <li key={key}>
                         {FIELD_LABELS[key] ?? key}: {message}
@@ -340,92 +383,112 @@ const Contact = () => {
                 </div>
               )}
 
-              <div className="grid gap-6 sm:grid-cols-2">
-                <div>
-                  <label htmlFor="contact-name" className={labelClass}>
-                    שם מלא <span className="text-accent">*</span>
-                  </label>
-                  <input
-                    id="contact-name"
-                    name="name"
-                    required
-                    maxLength={100}
-                    autoComplete="name"
-                    placeholder="השם שלכם"
-                    dir="rtl"
-                    aria-invalid={!!errors.name}
-                    aria-describedby={errors.name ? "contact-name-error" : undefined}
-                    className={cn(fieldClass(!!errors.name), "h-14")}
-                  />
-                  {errors.name && <FieldError id="contact-name-error" message={errors.name} />}
+              {/* One vertical step for the whole field stack. The asterisk key
+                  is stated before the first asterisk is met, not after the
+                  last — a note that explains a convention has to precede it. */}
+              <div className="space-y-6">
+                {/* Charcoal asterisk, not terracotta. This whole section sits
+                    on sand, where text-accent measures ~3.3:1 — under AA for
+                    18px. On sand the ink is charcoal and the terracotta stays
+                    in the rules, exactly as the projects index does it. */}
+                <p className="text-[18px] leading-snug text-muted-foreground">
+                  השדות המסומנים ב־<span className="font-medium text-foreground">*</span> הם שדות
+                  חובה
+                </p>
+
+                <div className="grid gap-6 sm:grid-cols-2">
+                  <div>
+                    <label htmlFor="contact-name" className={labelClass}>
+                      שם מלא *
+                    </label>
+                    <input
+                      id="contact-name"
+                      name="name"
+                      required
+                      maxLength={100}
+                      autoComplete="name"
+                      placeholder="השם שלכם"
+                      dir="rtl"
+                      aria-invalid={!!errors.name}
+                      aria-describedby={errors.name ? "contact-name-error" : undefined}
+                      className={cn(fieldClass(!!errors.name), "h-14")}
+                    />
+                    {errors.name && <FieldError id="contact-name-error" message={errors.name} />}
+                  </div>
+
+                  <div>
+                    <label htmlFor="contact-phone" className={labelClass}>
+                      טלפון *
+                    </label>
+                    <input
+                      id="contact-phone"
+                      name="phone"
+                      required
+                      type="tel"
+                      maxLength={20}
+                      autoComplete="tel"
+                      inputMode="tel"
+                      placeholder="טלפון נייד לחזרה"
+                      dir="rtl"
+                      aria-invalid={!!errors.phone}
+                      aria-describedby={errors.phone ? "contact-phone-error" : undefined}
+                      className={cn(fieldClass(!!errors.phone), "h-14")}
+                    />
+                    {errors.phone && <FieldError id="contact-phone-error" message={errors.phone} />}
+                  </div>
                 </div>
 
                 <div>
-                  <label htmlFor="contact-phone" className={labelClass}>
-                    טלפון <span className="text-accent">*</span>
+                  <label htmlFor="contact-email" className={labelClass}>
+                    מייל <span className="font-normal text-muted-foreground">(לא חובה)</span>
                   </label>
                   <input
-                    id="contact-phone"
-                    name="phone"
-                    required
-                    type="tel"
-                    maxLength={20}
-                    autoComplete="tel"
-                    inputMode="tel"
-                    placeholder="טלפון נייד לחזרה"
+                    id="contact-email"
+                    name="email"
+                    type="email"
+                    maxLength={255}
+                    autoComplete="email"
+                    placeholder="כתובת מייל"
                     dir="rtl"
-                    aria-invalid={!!errors.phone}
-                    aria-describedby={errors.phone ? "contact-phone-error" : undefined}
-                    className={cn(fieldClass(!!errors.phone), "h-14")}
+                    aria-invalid={!!errors.email}
+                    aria-describedby={errors.email ? "contact-email-error" : undefined}
+                    className={cn(fieldClass(!!errors.email), "h-14")}
                   />
-                  {errors.phone && <FieldError id="contact-phone-error" message={errors.phone} />}
+                  {errors.email && <FieldError id="contact-email-error" message={errors.email} />}
+                </div>
+
+                <div>
+                  <label htmlFor="contact-message" className={labelClass}>
+                    ספרו לנו על הפרויקט שלכם{" "}
+                    <span className="font-normal text-muted-foreground">(לא חובה)</span>
+                  </label>
+                  <textarea
+                    id="contact-message"
+                    name="message"
+                    maxLength={1000}
+                    rows={7}
+                    dir="rtl"
+                    placeholder="גודל המרפסת או החצר, כמה אנשים יושבים, סגנון שאהבתם, לוח זמנים — כל פרט עוזר לנו להתאים."
+                    aria-invalid={!!errors.message}
+                    aria-describedby={errors.message ? "contact-message-error" : undefined}
+                    className={cn(fieldClass(!!errors.message), "py-4 leading-relaxed resize-none")}
+                  />
+                  {errors.message && <FieldError id="contact-message-error" message={errors.message} />}
                 </div>
               </div>
 
-              <div>
-                <label htmlFor="contact-email" className={labelClass}>
-                  מייל <span className="font-normal text-muted-foreground">(לא חובה)</span>
-                </label>
-                <input
-                  id="contact-email"
-                  name="email"
-                  type="email"
-                  maxLength={255}
-                  autoComplete="email"
-                  placeholder="כתובת מייל"
-                  dir="rtl"
-                  aria-invalid={!!errors.email}
-                  aria-describedby={errors.email ? "contact-email-error" : undefined}
-                  className={cn(fieldClass(!!errors.email), "h-14")}
-                />
-                {errors.email && <FieldError id="contact-email-error" message={errors.email} />}
-              </div>
-
-              <div>
-                <label htmlFor="contact-message" className={labelClass}>
-                  ספרו לנו על הפרויקט שלכם{" "}
-                  <span className="font-normal text-muted-foreground">(לא חובה)</span>
-                </label>
-                <textarea
-                  id="contact-message"
-                  name="message"
-                  maxLength={1000}
-                  rows={7}
-                  dir="rtl"
-                  placeholder="גודל המרפסת או החצר, כמה אנשים יושבים, סגנון שאהבתם, לוח זמנים — כל פרט עוזר לנו להתאים."
-                  aria-invalid={!!errors.message}
-                  aria-describedby={errors.message ? "contact-message-error" : undefined}
-                  className={cn(fieldClass(!!errors.message), "min-h-[170px] py-4 leading-relaxed resize-none")}
-                />
-                {errors.message && <FieldError id="contact-message-error" message={errors.message} />}
-              </div>
-
-              <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+              {/* The closing bar. A hairline turns the last stretch of the form
+                  into its own footer, so the send button reads as an act rather
+                  than as one more field, and the privacy line sits with the
+                  action it actually describes. */}
+              <div className="mt-7 border-t border-border pt-7 flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
                 <button
                   type="submit"
                   disabled={submitting}
                   aria-busy={submitting}
-                  className="group inline-flex h-14 w-full sm:w-auto items-center justify-center gap-3 rounded-[14px] bg-accent px-10 text-[20px] font-medium text-accent-foreground shadow-accent transition-all duration-300 hover:bg-accent/90 hover:-translate-y-0.5 hover:shadow-luxury disabled:cursor-not-allowed disabled:opacity-60 disabled:translate-y-0"
+                  // min-w holds the width across the label swap, so the row
+                  // does not jump the moment you press send.
+                  className="group inline-flex h-14 w-full sm:w-auto sm:min-w-[15rem] items-center justify-center gap-3 rounded-[10px] bg-accent px-10 text-[20px] font-medium text-accent-foreground shadow-accent transition-all duration-300 hover:bg-accent/90 hover:-translate-y-0.5 hover:shadow-luxury disabled:cursor-not-allowed disabled:opacity-60 disabled:translate-y-0"
                 >
                   {submitting ? (
                     <>
@@ -443,8 +506,18 @@ const Contact = () => {
                   )}
                 </button>
 
-                <p className="text-[18px] leading-snug text-muted-foreground sm:max-w-[15rem]">
-                  השדות המסומנים ב־<span className="text-accent">*</span> הם שדות חובה
+                <p className="text-[18px] leading-relaxed text-muted-foreground sm:max-w-[22rem]">
+                  בשליחת הטופס הינכם מאשרים את{" "}
+                  {/* Sand again: charcoal ink, and a standing underline rather
+                      than the hover-grown one, because this is a link buried
+                      inside a sentence — colour alone can't carry it. */}
+                  <Link
+                    to="/privacy"
+                    className="font-medium text-foreground underline underline-offset-4 decoration-foreground/40 transition-colors hover:decoration-foreground"
+                  >
+                    מדיניות הפרטיות
+                  </Link>{" "}
+                  שלנו. הפרטים נשמרים לצורך חזרה אליכם בלבד ולא מועברים לצד שלישי.
                 </p>
               </div>
 
@@ -453,27 +526,19 @@ const Contact = () => {
               <p className="sr-only" role="status" aria-live="polite">
                 {submitting ? "שולחים את ההודעה, רגע אחד" : ""}
               </p>
-
-              <p className="text-[18px] leading-relaxed text-muted-foreground">
-                בשליחת הטופס הינכם מאשרים את{" "}
-                <Link to="/privacy" className="link-underline text-accent">
-                  מדיניות הפרטיות
-                </Link>{" "}
-                שלנו. הפרטים נשמרים לצורך חזרה אליכם בלבד ולא מועברים לצד שלישי.
-              </p>
             </form>
           </Reveal>
 
           {/* ===== DIRECT CHANNELS =====
-              Pinned beside the long form. It carries a bare title + divider
-              rather than a SectionHeading with running text on purpose: the
-              stack has to clear the header (top-28) AND still fit a 768px-tall
-              laptop viewport, or the bottom tile becomes unreachable for as
-              long as the column is stuck. */}
-          <Reveal delay={120} className="order-2 min-w-0 lg:sticky lg:top-28">
-            <h2 className="font-display font-bold text-[26px] leading-snug text-foreground text-right">
+              Pinned beside the long form, and set at the same 30px as "כתבו
+              לנו" so the two column heads read as peers. Deliberately no
+              running text under the rule: the stack has to clear the header
+              (top-28) AND still fit a short laptop viewport, or the bottom tile
+              becomes unreachable for as long as the column is stuck. */}
+          <Reveal delay={120} className="order-1 lg:order-2 min-w-0 lg:sticky lg:top-28 lg:max-h-[calc(100dvh-8rem)] lg:overflow-y-auto rail-scroll">
+            <SectionHeading align="start" tone="charcoal">
               מעדיפים לדבר ישירות?
-            </h2>
+            </SectionHeading>
             <div className="w-20 h-[2px] bg-primary/55 mt-5" aria-hidden="true" />
 
             <div className="mt-7 flex flex-col gap-4">

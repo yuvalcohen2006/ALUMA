@@ -129,7 +129,7 @@ const ProjectEntry = ({ project: p, index }: { project: Project; index: number }
             className={cn("min-w-0", photoRight ? "lg:order-1" : "lg:order-2")}
           >
             <div className="relative aspect-[4/3] overflow-hidden rounded-[14px] border border-border shadow-soft transition-all duration-500 ease-out group-hover:-translate-y-1 group-hover:shadow-luxury group-hover:border-primary/60">
-              <div className="absolute inset-0 transition-transform duration-[600ms] ease-out group-hover:scale-[1.06]">
+              <div className="absolute inset-0 transition-transform duration-600 ease-out group-hover:scale-[1.06]">
                 <img
                   src={p.cover}
                   alt={`${p.name} | Aluma`}

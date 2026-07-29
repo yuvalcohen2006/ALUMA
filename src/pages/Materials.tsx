@@ -1,73 +1,24 @@
-import { Link } from "react-router-dom";
-import { Check } from "lucide-react";
 import Layout from "@/components/Layout";
 import SEO from "@/components/SEO";
 import PageHero from "@/components/PageHero";
 import Reveal from "@/components/Reveal";
-import { materials, type Material } from "@/data/materials";
+import SectionHeading from "@/components/SectionHeading";
+import MaterialBand from "@/components/materials/MaterialBand";
+import { materials } from "@/data/materials";
 
 /**
- * One material, one compact card.
+ * The materials index.
  *
- * The page runs charcoal end to end — the same inversion the materials rail
- * uses on the home screen, where the one dark section is what makes the whole
- * page feel expensive. Cards are deliberately small: a short photo, the name,
- * a line of explanation and the four qualities, nothing else. The whole card is
- * the link, so there is no button to carry.
+ * Charcoal end to end — the same inversion the materials rail uses on the home
+ * screen, where the one dark section is what makes the whole page feel
+ * expensive. What used to be a 2-up grid of small cards is now one full-width
+ * band per material, photograph alternating sides down the page, each band lit
+ * from behind by its own colour so the dark canvas has depth rather than four
+ * panels floating on it.
  *
- * At rest each card is tinted by the colour of its own material. On hover it
- * lifts a little and desaturates towards grey, so the one you're pointing at
- * reads as picked up and the rest stay put.
+ * The page ends on a hairline: charcoal content running into a charcoal footer
+ * had no seam at all, and the rule is what tells you the page finished.
  */
-const MaterialCard = ({ material }: { material: Material }) => (
-  <Link
-    to={`/materials/${material.slug}`}
-    className="group block rounded-[14px] border overflow-hidden bg-background/[0.04] transition-all duration-300 hover:-translate-y-1 hover:border-background/25 hover:bg-background/[0.07] hover:shadow-luxury"
-    style={{ borderColor: material.accent }}
-  >
-    {/* Deliberately a short banner, not a big square — the card has to stay
-        small, and the four qualities below already carry the height. */}
-    <div className="relative aspect-[2/1] overflow-hidden">
-      <img
-        src={material.image}
-        alt={material.name}
-        loading="lazy"
-        decoding="async"
-        className="absolute inset-0 w-full h-full object-cover transition-all duration-500 group-hover:saturate-[0.35] group-hover:brightness-[0.85]"
-      />
-    </div>
-
-    <div className="p-5 text-right">
-      <h2 className="font-display text-[26px] leading-snug text-background">
-        {material.name}
-      </h2>
-      <p className="text-[20px] leading-relaxed text-background/70 mt-1.5">
-        {material.shortDesc}
-      </p>
-
-      <ul className="mt-4 space-y-2.5">
-        {material.features.map((f) => (
-          <li key={f.title} className="flex flex-row gap-3 items-start">
-            <Check
-              className="w-4 h-4 mt-1.5 shrink-0 transition-colors duration-300 group-hover:text-background/50"
-              style={{ color: material.accent }}
-              strokeWidth={2.5}
-            />
-            <div>
-              <p className="text-[18px] font-normal text-background leading-snug">
-                {f.title}
-              </p>
-              <p className="text-[18px] italic text-background/55 leading-snug">
-                {f.desc}
-              </p>
-            </div>
-          </li>
-        ))}
-      </ul>
-    </div>
-  </Link>
-);
-
 const MaterialsPage = () => {
   return (
     <Layout>
@@ -79,15 +30,71 @@ const MaterialsPage = () => {
 
       <PageHero title="חומרים" dark />
 
-      <section className="pt-12 pb-20 md:pt-16 md:pb-28 bg-foreground">
+      <section className="pt-10 pb-16 md:pt-14 md:pb-24 bg-foreground border-b border-background/15">
         <div className="container-luxury">
+          {/* INTRO — heading right-anchored, then the argument in columns
+              underneath.
+
+              The obvious layout here was heading on the right, prose beside it
+              on the left. It left a 500px column of nothing under a two-line
+              heading, which is precisely the dead space the client keeps
+              rejecting. Running the prose across the full width in columns
+              fills the opening instead, and in RTL the first paragraph lands in
+              the RIGHT column, so it still reads in order. At md the closing
+              paragraph spans both columns rather than leaving half a row
+              empty. */}
           <Reveal>
-            <div className="grid gap-6 sm:grid-cols-2 max-w-4xl mx-auto">
-              {materials.map((m) => (
-                <MaterialCard key={m.slug} material={m} />
-              ))}
+            <div className="text-right">
+              <SectionHeading light align="start">
+                איך אנחנו בוחרים חומרים
+              </SectionHeading>
+              <div
+                className="w-20 h-[2px] bg-background/40 mt-5"
+                aria-hidden="true"
+              />
+
+              <div className="grid gap-x-10 gap-y-6 lg:gap-x-14 md:grid-cols-2 lg:grid-cols-3 mt-8 md:mt-10">
+                <p className="text-[20px] leading-relaxed text-background/80 text-pretty">
+                  רהיט חוץ לא נמדד ביום שהוא מגיע לחצר, אלא בעונות שבאות אחריו.
+                  השמש, הלחות, רסס המלח והגשם פועלים עליו כל השנה בלי הפסקה,
+                  ולכן ההחלטה הראשונה בכל פריט שאנחנו מייצרים היא לא הצורה, אלא
+                  החומר.
+                </p>
+                <p className="text-[20px] leading-relaxed text-background/80 text-pretty">
+                  אנחנו עובדים עם מספר מצומצם של חומרים שהוכיחו את עצמם בתנאי
+                  חוץ: פרופילי אלומיניום בציפוי אבקה תרמי, שלא מחלידים ולא
+                  דורשים תחזוקה; בדי Sunbrella אקריליים שנצבעים בצבע מלא, כך
+                  שהגוון הוא חלק מהסיב; לוחות גרניט פורצלן שלא סופגים נוזלים ולא
+                  דורשים איטום; ו-PolyStone, חומר מרוכב בגימור אבן שמאפשר צורות
+                  פיסוליות במשקל נמוך.
+                </p>
+                <p className="text-[20px] leading-relaxed text-background/80 text-pretty md:col-span-2 lg:col-span-1">
+                  אף חומר לא נכנס לכאן במקרה, והצירוף ביניהם הוא מה שמאפשר לרהיט
+                  להישאר בחוץ כל השנה: בלי לפרק, בלי לאחסן ובלי לחדש. התחזוקה
+                  מסתכמת בשטיפה מדי פעם, והמראה כמעט לא משתנה עם השנים.
+                </p>
+              </div>
             </div>
           </Reveal>
+
+          <div
+            className="h-px bg-background/10 mt-12 md:mt-14"
+            aria-hidden="true"
+          />
+
+          {/* THE BANDS
+              Held to roughly 70% of the container's width rather than scaled
+              down: the type on these cards is pinned at 26/20/18 and shrinking
+              the whole band would drag it under the site's 18px floor. Narrowing
+              the column makes the cards read as compact while the text stays
+              exactly where it was set. */}
+          <div className="mt-12 md:mt-16 space-y-14 md:space-y-20 max-w-[920px] mx-auto">
+            {materials.map((m, i) => (
+              <Reveal key={m.slug}>
+                <MaterialBand material={m} index={i} />
+              </Reveal>
+            ))}
+          </div>
         </div>
       </section>
     </Layout>

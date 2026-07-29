@@ -155,7 +155,7 @@ const ProjectDetailPage = () => {
                       alt={`${project.name}, תמונה ${i + 1}`}
                       loading={i === 0 ? "eager" : "lazy"}
                       decoding="async"
-                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-[600ms] ease-out group-hover:scale-[1.06]"
+                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-600 ease-out group-hover:scale-[1.06]"
                     />
                   </div>
                 </div>
@@ -204,7 +204,7 @@ const ProjectDetailPage = () => {
                     alt={p.name}
                     loading="lazy"
                     decoding="async"
-                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-[600ms] ease-out group-hover:scale-[1.06]"
+                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-600 ease-out group-hover:scale-[1.06]"
                   />
                 </div>
                 <h3 className="font-display font-normal text-[22px] text-foreground group-hover:text-accent transition-smooth flex items-center gap-2">

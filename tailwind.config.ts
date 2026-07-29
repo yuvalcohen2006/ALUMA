@@ -59,6 +59,13 @@ export default {
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
+      // Tailwind's default scale jumps 500 -> 700. Without 600 here the site's
+      // standard image-zoom reached for `duration-[600ms]`, which Tailwind drops
+      // entirely as ambiguous (transition- or animation-duration?) — so those
+      // hovers silently ran at the 150ms default.
+      transitionDuration: {
+        600: "600ms",
+      },
       keyframes: {
         "accordion-down": {
           from: { height: "0" },

@@ -17,13 +17,13 @@ import PageHero from "@/components/PageHero";
 import Reveal from "@/components/Reveal";
 import SectionHeading from "@/components/SectionHeading";
 import ShineButton from "@/components/ui/shine-button";
+import TopicIndex from "@/components/faq/TopicIndex";
 import {
   Accordion,
   AccordionItem,
   AccordionTrigger,
   AccordionContent,
 } from "@/components/ui/accordion";
-import { cn } from "@/lib/utils";
 
 interface FaqItem {
   /** Stable ASCII id — used as the accordion value. */
@@ -142,6 +142,13 @@ const faqSchema = {
 
 const totalQuestions = categories.reduce((n, c) => n + c.items.length, 0);
 
+// The index reads the same array, so a new topic appears in it for free.
+const indexEntries = categories.map((c) => ({
+  id: c.id,
+  label: c.label,
+  count: c.items.length,
+}));
+
 // Hebrew counts the noun, not the digit — so the footnote spells the number of
 // topics out instead of hard-coding "שלושה" and drifting the day a topic is added.
 const HE_TOPIC_COUNT = [
@@ -201,6 +208,11 @@ const FAQPage = () => {
       typeof window.matchMedia === "function" &&
       window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     el.scrollIntoView({ behavior: reduce ? "instant" : "smooth", block: "start" });
+    // Focus follows the jump (each group carries tabIndex={-1} as a programmatic
+    // focus target), so a keyboard user carries on tabbing from the group they
+    // picked instead of from the index. preventScroll keeps this call from
+    // re-scrolling and cancelling the smooth animation above.
+    el.focus({ preventScroll: true });
     setActiveCat(id);
   };
 
@@ -221,127 +233,110 @@ const FAQPage = () => {
       {/* ===== Index on the right, answers on the left ===== */}
       <section className="pt-10 pb-16 md:pt-14 md:pb-24 bg-background">
         <div className="container-luxury">
-          <div className="grid gap-8 lg:gap-14 lg:grid-cols-[minmax(0,17rem)_minmax(0,1fr)] max-w-6xl mx-auto">
-            {/* First DOM child → right column in RTL. Sticky from lg up; on
-                narrow screens it collapses into a swipeable row of chips. */}
+          {/* 17rem index track. The gutter rule below is centred by gap-12 +
+              ps-12 on the answers column, which is independent of this width —
+              the extra rem goes to the index leaders so they read as rules
+              rather than as 28px stubs behind the longest topic label. */}
+          <div className="grid gap-8 lg:gap-12 lg:grid-cols-[minmax(0,17rem)_minmax(0,1fr)] max-w-6xl mx-auto">
+            {/* First DOM child → right column in RTL. Sticky from lg up; below
+                that it simply sits above the answers as the same index column.
+                No closing border here — the last index line already ends in a
+                hairline, and a second one 28px under it just looked doubled. */}
             <aside className="lg:sticky lg:top-28 lg:self-start">
-              <div className="rounded-[14px] border border-border bg-secondary/30 p-5 md:p-6">
-                <h2 className="font-display font-normal text-[22px] text-foreground text-right">
-                  נושאים
-                </h2>
-                <div className="w-16 h-[2px] bg-primary/55 mt-4" aria-hidden="true" />
-
-                <nav
-                  aria-label="ניווט בין נושאי השאלות"
-                  className="rail-scroll mt-5 -mx-5 flex gap-3 overflow-x-auto px-5 pb-2 md:-mx-6 md:px-6 lg:mx-0 lg:mt-6 lg:flex-col lg:gap-2 lg:overflow-x-visible lg:px-0 lg:pb-0"
-                >
-                  {categories.map((cat) => {
-                    const isActive = activeCat === cat.id;
-                    return (
-                      <button
-                        key={cat.id}
-                        type="button"
-                        onClick={() => goToCategory(cat.id)}
-                        aria-current={isActive ? "location" : undefined}
-                        className={cn(
-                          "shrink-0 lg:shrink flex items-center gap-3 rounded-[10px] border px-4 py-3 text-right transition-all duration-300",
-                          isActive
-                            ? "border-primary/60 bg-background shadow-soft text-foreground"
-                            : "border-transparent text-foreground-soft hover:border-border hover:bg-background/70 hover:text-foreground",
-                        )}
-                      >
-                        <cat.Icon
-                          className={cn(
-                            "h-5 w-5 shrink-0 transition-colors duration-300",
-                            isActive ? "text-accent" : "text-primary/70",
-                          )}
-                          strokeWidth={1.5}
-                          aria-hidden="true"
-                        />
-                        <span className="text-[18px] whitespace-nowrap lg:whitespace-normal">
-                          {cat.label}
-                        </span>
-                        <span className="ms-auto hidden lg:block text-[18px] text-muted-foreground">
-                          {cat.items.length}
-                        </span>
-                      </button>
-                    );
-                  })}
-                </nav>
-
-                <p className="hidden lg:block mt-6 pt-5 border-t border-border/70 text-[18px] text-muted-foreground text-right">
-                  {totalQuestions} שאלות, {topicsLabel}.
-                </p>
-              </div>
+              <TopicIndex
+                entries={indexEntries}
+                activeId={activeCat}
+                onSelect={goToCategory}
+                footnote={`${totalQuestions} שאלות, ${topicsLabel}.`}
+              />
             </aside>
 
-            {/* Answers column */}
-            <div className="space-y-14 md:space-y-20">
-              {categories.map((cat, ci) => (
-                <section
-                  key={cat.id}
-                  id={cat.id}
-                  aria-labelledby={`${cat.id}-title`}
-                  className="scroll-mt-32"
-                >
-                  <Reveal>
-                    <div className="flex items-start gap-4">
-                      <span
-                        className="shrink-0 mt-1 flex h-12 w-12 items-center justify-center rounded-[10px] border border-primary/25 bg-secondary/60 text-accent"
-                        aria-hidden="true"
-                      >
-                        <cat.Icon className="h-6 w-6" strokeWidth={1.5} />
-                      </span>
-                      <SectionHeading
-                        align="start"
-                        className="min-w-0"
-                        subtitle={cat.blurb}
-                      >
-                        <span id={`${cat.id}-title`}>{cat.label}</span>
-                      </SectionHeading>
-                    </div>
-                  </Reveal>
+            {/* Answers column. The gutter rule sits on this column rather than
+                between the grid tracks so it runs the full height of the
+                answers, the way the gutter rule on a printed index page does.
+                It fades out near the bottom instead of stopping dead under the
+                last accordion. */}
+            <div className="relative lg:ps-12">
+              <span
+                aria-hidden="true"
+                className="absolute inset-y-0 start-0 hidden w-px lg:block"
+                style={{
+                  backgroundImage:
+                    "linear-gradient(to bottom, hsl(var(--border)) 0%, hsl(var(--border)) 62%, transparent 100%)",
+                }}
+              />
 
-                  <Reveal delay={90}>
-                    <Accordion
-                      type="single"
-                      collapsible
-                      defaultValue={ci === 0 ? cat.items[0].id : undefined}
-                      className="mt-7 space-y-3"
-                    >
-                      {cat.items.map((item) => (
-                        <AccordionItem
-                          key={item.id}
-                          value={item.id}
-                          className="rounded-[14px] border border-border bg-secondary/20 px-5 md:px-6 transition-all duration-300 hover:border-primary/60 data-[state=open]:border-primary/60 data-[state=open]:bg-secondary/40 data-[state=open]:shadow-soft"
+              <div className="space-y-14 md:space-y-20">
+                {categories.map((cat, ci) => (
+                  <section
+                    key={cat.id}
+                    id={cat.id}
+                    aria-labelledby={`${cat.id}-title`}
+                    // tabIndex/-1 + focus:outline-none: a landing target for
+                    // goToCategory's focus move, never a tab stop of its own
+                    // and never a stray focus ring.
+                    tabIndex={-1}
+                    className="scroll-mt-32 focus:outline-none"
+                  >
+                    <Reveal>
+                      <div className="flex items-start gap-4">
+                        <span
+                          className="shrink-0 mt-1 flex h-12 w-12 items-center justify-center rounded-[10px] border border-primary/25 bg-secondary/60 text-accent"
+                          aria-hidden="true"
                         >
-                          {/* RTL: the trigger's children sit at the right edge and
-                              justify-between pushes the chevron to the far left.
-                              items-start + the 5px nudge keep the topic mark and
-                              the chevron on the FIRST line — every question wraps
-                              to two lines at 375px, and items-center would leave
-                              both floating in the middle of the block. */}
-                          <AccordionTrigger className="items-start gap-4 md:gap-6 py-5 md:py-6 text-[22px] font-display font-normal leading-snug text-right text-foreground hover:no-underline hover:text-accent [&>svg]:mt-[5px] [&>svg]:h-5 [&>svg]:w-5 [&>svg]:text-accent">
-                            <span className="flex min-w-0 items-start gap-3">
-                              <item.Icon
-                                className="mt-[5px] h-5 w-5 shrink-0 text-accent"
-                                strokeWidth={1.5}
-                                aria-hidden="true"
-                              />
-                              {item.q}
-                            </span>
-                          </AccordionTrigger>
-                          <AccordionContent className="ps-8 pb-6 pt-0 text-[20px] leading-relaxed text-right">
-                            <p className="text-[20px] leading-relaxed text-foreground text-pretty">
-                              {item.a}
-                            </p>
-                          </AccordionContent>
-                        </AccordionItem>
-                      ))}
-                    </Accordion>
-                  </Reveal>
-                </section>
-              ))}
+                          <cat.Icon className="h-6 w-6" strokeWidth={1.5} />
+                        </span>
+                        <SectionHeading
+                          align="start"
+                          className="min-w-0"
+                          subtitle={cat.blurb}
+                        >
+                          <span id={`${cat.id}-title`}>{cat.label}</span>
+                        </SectionHeading>
+                      </div>
+                    </Reveal>
+
+                    <Reveal delay={90}>
+                      <Accordion
+                        type="single"
+                        collapsible
+                        defaultValue={ci === 0 ? cat.items[0].id : undefined}
+                        className="mt-7 space-y-3"
+                      >
+                        {cat.items.map((item) => (
+                          <AccordionItem
+                            key={item.id}
+                            value={item.id}
+                            className="rounded-[14px] border border-border bg-secondary/20 px-5 md:px-6 transition-all duration-300 hover:border-primary/60 data-[state=open]:border-primary/60 data-[state=open]:bg-secondary/40 data-[state=open]:shadow-soft"
+                          >
+                            {/* RTL: the trigger's children sit at the right edge and
+                                justify-between pushes the chevron to the far left.
+                                items-start + the 5px nudge keep the topic mark and
+                                the chevron on the FIRST line — every question wraps
+                                to two lines at 375px, and items-center would leave
+                                both floating in the middle of the block. */}
+                            <AccordionTrigger className="items-start gap-4 md:gap-6 py-5 md:py-6 text-[22px] font-display font-normal leading-snug text-right text-foreground hover:no-underline hover:text-accent [&>svg]:mt-[5px] [&>svg]:h-5 [&>svg]:w-5 [&>svg]:text-accent">
+                              <span className="flex min-w-0 items-start gap-3">
+                                <item.Icon
+                                  className="mt-[5px] h-5 w-5 shrink-0 text-accent"
+                                  strokeWidth={1.5}
+                                  aria-hidden="true"
+                                />
+                                {item.q}
+                              </span>
+                            </AccordionTrigger>
+                            <AccordionContent className="ps-8 pb-6 pt-0 text-[20px] leading-relaxed text-right">
+                              <p className="text-[20px] leading-relaxed text-foreground text-pretty">
+                                {item.a}
+                              </p>
+                            </AccordionContent>
+                          </AccordionItem>
+                        ))}
+                      </Accordion>
+                    </Reveal>
+                  </section>
+                ))}
+              </div>
             </div>
           </div>
         </div>

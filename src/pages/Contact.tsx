@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import Layout from "@/components/Layout";
 import Contact from "@/components/Contact";
@@ -78,20 +79,29 @@ const ContactPage = () => {
               </SectionHeading>
             </Reveal>
 
-            {/* The rail: numerals threaded on one hairline. In RTL it reads
-                from the right, so 01 sits at the right edge. */}
-            <div className="relative mt-10 md:mt-14">
-              <div
-                className="hidden md:block absolute top-7 inset-x-0 h-px bg-border"
-                aria-hidden="true"
-              />
-              <ol className="relative grid gap-10 md:grid-cols-3 md:gap-12">
+            {/* The rail: numerals threaded on a hairline. In RTL it reads from
+                the right, so 01 sits at the right edge.
+
+                The connector belongs to each numeral rather than to the row: a
+                single line across the whole width carried on past 03 and died
+                at the container edge, a tail pointing at nothing. Each segment
+                now runs from its own circle (start-14 = the circle's width) to
+                exactly the right edge of the next one (end -3rem = the md
+                column gap), so the rail stops where the steps stop. */}
+            <div className="mt-10 md:mt-14">
+              <ol className="grid gap-10 md:grid-cols-3 md:gap-12">
                 {nextSteps.map((step, i) => (
-                  <li key={step.n} className="min-w-0">
+                  <li key={step.n} className="relative min-w-0">
                     <Reveal delay={i * 110} className="flex flex-col items-start text-right">
+                      {i < nextSteps.length - 1 && (
+                        <span
+                          aria-hidden="true"
+                          className="hidden md:block absolute top-7 start-14 end-[-3rem] h-px bg-border"
+                        />
+                      )}
                       <span
                         aria-hidden="true"
-                        className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full border border-primary/45 bg-background font-display text-[22px] text-primary"
+                        className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full border border-primary/45 bg-background font-display text-[22px] leading-none tabular-nums text-primary"
                       >
                         {step.n}
                       </span>
@@ -113,15 +123,30 @@ const ContactPage = () => {
                 לשיחה עם רעיונות מתאימים.
               </p>
 
-              <div className="flex flex-wrap gap-4 sm:shrink-0">
+              {/* Two identical buttons gave the row no hierarchy, and only one
+                  of them answers the sentence beside it. The questionnaire
+                  keeps the button; browsing the collections steps back to the
+                  quiet link grammar the rest of the site uses, with the rule
+                  growing from the right — the RTL start. */}
+              <div className="flex flex-wrap items-center gap-x-8 gap-y-5 sm:shrink-0">
                 <ShineButton to="/questionnaire">
                   לשאלון החכם
                   <ArrowLeft className="w-4 h-4" aria-hidden="true" />
                 </ShineButton>
-                <ShineButton to="/collections">
-                  לצפייה בקולקציות
-                  <ArrowLeft className="w-4 h-4" aria-hidden="true" />
-                </ShineButton>
+
+                <Link to="/collections" className="group inline-block">
+                  <span className="flex items-center gap-2 text-[18px] text-accent">
+                    לצפייה בקולקציות
+                    <ArrowLeft
+                      className="w-[18px] h-[18px] transition-transform duration-300 ease-out group-hover:-translate-x-1"
+                      aria-hidden="true"
+                    />
+                  </span>
+                  <span
+                    aria-hidden="true"
+                    className="block h-px w-0 bg-accent/70 transition-[width] duration-500 ease-out group-hover:w-full"
+                  />
+                </Link>
               </div>
             </Reveal>
           </div>

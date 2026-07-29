@@ -38,7 +38,7 @@ const CategoryIcons = () => {
   return (
     <section className="py-24 md:py-32 bg-secondary">
       <div className="container-luxury">
-        <Reveal className="mb-10 md:mb-14 flex flex-col items-center">
+        <Reveal className="mb-16 md:mb-20 flex flex-col items-center">
           {/* Charcoal, not terracotta: this heading sits on sand beige. */}
           <SectionHeading tone="charcoal">גלו את הריהוט שלנו לפי קטגוריה</SectionHeading>
         </Reveal>

@@ -123,9 +123,12 @@ const ShowroomBand = () => {
               בואו לראות מקרוב
             </SectionHeading>
 
-            <div className="mt-8 flex items-start gap-3.5">
-              <MapPin className="w-6 h-6 shrink-0 text-primary mt-1" aria-hidden="true" />
-              <div>
+            <div className="mt-8 flex items-start gap-4">
+              {/* 22px at leading-snug is a ~30px line box, so a 24px glyph
+                  centres on the address line at 3px — not at the 4px a plain
+                  spacing step would land on. */}
+              <MapPin className="w-6 h-6 shrink-0 text-primary mt-[3px]" aria-hidden="true" />
+              <div className="min-w-0">
                 <p className="font-display font-normal text-[22px] leading-snug text-background">
                   {SITE.address.full}
                 </p>
@@ -150,11 +153,16 @@ const ShowroomBand = () => {
           {/* Hours — left column */}
           <Reveal delay={120} className="order-2 min-w-0">
             <div className="rounded-[14px] border border-background/15 bg-background/[0.06] p-6 md:p-8 shadow-luxury">
-              <div className="flex items-center gap-3">
-                <Clock className="w-5 h-5 text-primary" aria-hidden="true" />
+              {/* Title flush to the card's content edge, exactly like every
+                  other title on the site, with the clock parked in the opposite
+                  corner. Leading with the icon pushed the title 32px inwards
+                  and left the rule beneath it measuring from the icon rather
+                  than from the word — and left the far corner empty. */}
+              <div className="flex items-center justify-between gap-4">
                 <h3 className="font-display font-normal text-[22px] leading-snug text-background">
                   שעות פעילות
                 </h3>
+                <Clock className="w-6 h-6 shrink-0 text-primary" aria-hidden="true" />
               </div>
               <div className="w-20 h-[2px] bg-background/40 mt-5" aria-hidden="true" />
 
@@ -182,14 +190,20 @@ const ShowroomBand = () => {
                 )}
               </div>
 
-              <ul className="mt-6 space-y-2">
+              {/* The rows run the full width of the card: the negative margin
+                  cancels the card's own padding and the row's padding puts the
+                  text back on it, so every label lines up with the title, the
+                  rule and the note below — while today's highlight reads as a
+                  band across the card instead of a floating pill inset from
+                  everything else. */}
+              <ul className="mt-6 space-y-1">
                 {rows.map((row) => {
                   const isToday = row.days.includes(status.day);
                   return (
                     <li
                       key={row.label}
                       className={cn(
-                        "flex flex-wrap items-center justify-between gap-x-4 gap-y-1.5 rounded-[10px] px-4 py-3 text-[18px] transition-colors duration-300",
+                        "flex flex-wrap items-center justify-between gap-x-4 gap-y-1.5 -mx-6 md:-mx-8 px-6 md:px-8 py-3 text-[18px] transition-colors duration-300",
                         isToday ? "bg-background/10 text-background" : "text-background/70",
                       )}
                     >
@@ -209,7 +223,10 @@ const ShowroomBand = () => {
                 })}
               </ul>
 
-              <p className="mt-6 pt-5 border-t border-background/15 text-[18px] leading-relaxed text-background/70">
+              {/* Same full-width treatment as the rows above, so the card
+                  closes on one clean edge-to-edge rule rather than a hairline
+                  that stops short of the band sitting right above it. */}
+              <p className="mt-6 -mx-6 md:-mx-8 px-6 md:px-8 pt-5 border-t border-background/15 text-[18px] leading-relaxed text-background/70">
                 ניתן להגיע לאולם התצוגה בתיאום מראש, בטלפון{" "}
                 <a href={`tel:${SITE.phone.tel}`} className="link-underline text-background" dir="ltr">
                   {SITE.phone.display}
