@@ -1,128 +1,167 @@
-import { useEffect, useMemo, useRef } from "react";
+import { Fragment, useEffect, useMemo } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Layout from "@/components/Layout";
 import SEO from "@/components/SEO";
 import PageHero from "@/components/PageHero";
+import Reveal from "@/components/Reveal";
 import FilterSidebar, { type FilterGroup } from "@/components/FilterSidebar";
 import { useFilterParams } from "@/hooks/useFilterParams";
-import { ArrowLeft, ArrowRight } from "lucide-react";
 import { useCollections, type DBCollection, type DBProduct } from "@/hooks/useCollectionsData";
 import FavoriteButton from "@/components/FavoriteButton";
 
 const SITE = "https://alumaoutdoor.com";
 
-const CategoryRow = ({
+/**
+ * The whole grouping device, and the only thing left of what used to be a
+ * per-collection <section>: the client's heading, a count, a hairline and the
+ * intro — one full-width row inside the single catalogue grid.
+ *
+ * RTL: the <h2> is the first flex child, so it sits against the RIGHT container
+ * edge, the count follows it inward and the rule runs out to the far LEFT.
+ *
+ * `items-baseline` needs no help from the rule: an empty flex item synthesises
+ * its baseline from its own bottom edge, which lands it exactly on the type
+ * baseline.
+ *
+ * The count is `hidden sm:inline` so a long CMS name at 375px can never squeeze
+ * the rule to nothing; `flex-wrap` + `min-w-0` on the h2 + `min-w-[48px]` on the
+ * rule mean a name too long to share the line wraps and drops the rule to its
+ * own line instead of overflowing the page.
+ */
+const CollectionLabel = ({
   col,
-  products,
-  showHeading = true,
+  count,
+  first,
 }: {
   col: DBCollection;
-  products: DBProduct[];
-  /** Hidden when this is the only collection on screen — the page title
-   *  already names it, and repeating it twice reads as a mistake. */
-  showHeading?: boolean;
-}) => {
-  const scrollerRef = useRef<HTMLDivElement>(null);
+  count: number;
+  first: boolean;
+}) => (
+  <Reveal className={`col-span-full ${first ? "pt-0" : "pt-10 md:pt-14"}`}>
+    <div className="flex flex-wrap items-baseline gap-x-4 md:gap-x-5 gap-y-2">
+      {/* Heading classes copied verbatim from the old CategoryRow — the brief
+          was "keep only the titles the same", so only its POSITION changes:
+          centred column → right-anchored line. Terracotta on warm white
+          measures 3.08:1, which is AA for large text. Do not "fix" it. */}
+      <h2
+        id={col.slug}
+        className="scroll-mt-32 min-w-0 font-display text-3xl md:text-4xl text-primary font-normal leading-tight"
+      >
+        {col.name_he}
+      </h2>
+      {/* Hebrew has a real singular: "1 פריטים" is wrong, and a type filter can
+          easily leave a collection with exactly one match. Zero is left unsaid —
+          the "בקרוב" line below already says it, better. */}
+      {count > 0 && (
+        <span className="hidden sm:inline shrink-0 text-[18px] text-muted-foreground tabular-nums">
+          {count === 1 ? "פריט אחד" : `${count} פריטים`}
+        </span>
+      )}
+      <span aria-hidden="true" className="h-px flex-1 min-w-[48px] bg-primary/25" />
+    </div>
 
-  const scrollBy = (dir: 1 | -1) => {
-    const el = scrollerRef.current;
-    if (!el) return;
-    el.scrollBy({ left: dir * el.clientWidth * 0.85, behavior: "smooth" });
-  };
+    {col.intro && (
+      <p className="mt-3 max-w-[62ch] text-[20px] leading-relaxed text-foreground-soft text-pretty">
+        {col.intro}
+      </p>
+    )}
+  </Reveal>
+);
+
+/**
+ * One product. No card panel — a framed photograph sitting on the page
+ * background, with the caption aligned to the photo's right edge.
+ *
+ * `lead` gives the first product of a collection `col-span-2` below sm, so on a
+ * 375px phone every collection opens on a real 335×251 photograph and the rest
+ * scan 2-up. At sm and above every cell is already ≥284px, so the span is
+ * released.
+ */
+const ProductCell = ({
+  product: p,
+  index,
+  lead,
+  eager,
+}: {
+  product: DBProduct;
+  index: number;
+  lead: boolean;
+  eager: boolean;
+}) => {
+  const meta = [p.tag, p.dimensions].filter(Boolean) as string[];
 
   return (
-    <section
-      id={col.slug}
-      className="py-16 md:py-24 first:pt-8 scroll-mt-28 border-t border-border/60 first:border-t-0"
+    // Delay cascades from the right — index 0 is the rightmost child in RTL —
+    // so the reveal runs in reading order.
+    <Reveal
+      delay={(index % 3) * 80}
+      className={`min-w-0 ${lead ? "col-span-2 sm:col-span-1" : ""}`}
     >
-      <div className="container-luxury">
-<div className="text-center mb-10 max-w-2xl mx-auto">
-          {showHeading && (
-            <h2 className="font-display text-3xl md:text-4xl text-primary font-normal leading-tight">
-              {col.name_he}
-            </h2>
-          )}
-          {col.intro && (
-            <p className={`text-body text-foreground-soft ${showHeading ? "mt-4" : ""}`}>
-              {col.intro}
+      {/* `group` on the wrapper, not the Link, so the FavoriteButton is a
+          sibling of the anchor and hovering the caption still lifts the photo. */}
+      <div className="group relative">
+        <Link to={`/collections/${p.slug}`} className="block text-right">
+          <div className="relative aspect-[4/3] overflow-hidden rounded-[14px] bg-secondary border border-border transition-all duration-500 ease-out group-hover:-translate-y-1 group-hover:shadow-luxury group-hover:border-primary/60">
+            {/* Zoom on the wrapper, never the <img> — scaling the image drags
+                the border and the radius with it in some engines. Same
+                construction as the approved Projects entry. */}
+            <div className="absolute inset-0 transition-transform duration-600 ease-out group-hover:scale-[1.06]">
+              {p.cover_url && (
+                <img
+                  src={p.cover_url}
+                  alt={[p.name, p.tag].filter(Boolean).join(", ") + " | Aluma"}
+                  width={1024}
+                  height={768}
+                  loading={eager ? "eager" : "lazy"}
+                  decoding="async"
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
+              )}
+            </div>
+          </div>
+
+          <h3 className="mt-4 font-display font-normal text-[22px] leading-snug text-foreground transition-colors duration-300 group-hover:text-accent">
+            {p.name}
+          </h3>
+
+          {p.tagline && (
+            <p className="mt-1.5 text-[18px] leading-relaxed text-muted-foreground text-pretty">
+              {p.tagline}
             </p>
           )}
-        </div>
 
-        {products.length === 0 ? (
-          <p className="text-center text-muted-foreground py-12">בקרוב, מוצרים חדשים בקולקציה זו.</p>
-        ) : (
-          <>
-            <div
-              ref={scrollerRef}
-              dir="rtl"
-              className="flex gap-5 lg:gap-7 overflow-x-auto snap-x snap-mandatory scrollbar-hide pb-4 -mx-6 px-6"
-              style={{ scrollbarWidth: "none" }}
-            >
-              {products.map((p, i) => (
-                <div key={p.slug} className="relative shrink-0 snap-start w-[85%] sm:w-[48%] lg:w-[32%]">
-                  <Link
-                    to={`/collections/${p.slug}`}
-                    className="group block bg-card rounded-sm overflow-hidden shadow-soft hover:shadow-luxury hover:-translate-y-1 transition-smooth"
-                  >
-                    <div className="aspect-[4/3] relative overflow-hidden bg-secondary">
-                      {p.cover_url && (
-                        <img
-                          src={p.cover_url}
-                          alt={`${p.name}, ${p.tag ?? ""} | Aluma`}
-                          loading={i < 2 ? "eager" : "lazy"}
-                          decoding="async"
-                          className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                        />
-                      )}
-                      {p.tag && (
-                        <div className="absolute top-4 right-4 px-3.5 py-1.5 bg-background/90 backdrop-blur-sm rounded-[10px] text-[18px] text-foreground">
-                          {p.tag}
-                        </div>
-                      )}
-                    </div>
-                    <div className="p-6">
-                      <h3 className="font-display text-2xl text-primary group-hover:text-accent transition-smooth">
-                        {p.name}
-                      </h3>
-                      {p.tagline && (
-                        <p className="text-muted-foreground text-[18px] font-normal mt-2 leading-relaxed">
-                          {p.tagline}
-                        </p>
-                      )}
-                    </div>
-                  </Link>
-                  <FavoriteButton
-                    productId={p.id}
-                    collectionSlug={p.slug}
-                    className="absolute top-4 left-4 z-10"
-                  />
-                </div>
+          {/* The tag used to be an opaque chip floating on the photograph, 20×
+              per page. It is ink on the page now, next to the dimensions.
+              `hidden sm:flex`: at 159px the tag + dimensions + rule wrap to two
+              18px lines under a 120px photo — caption taller than the plate —
+              and the 18px floor forbids shrinking them. Each rule travels
+              INSIDE the item it follows, so a wrap can only ever leave a rule
+              at the left margin. */}
+          {meta.length > 0 && (
+            <div className="mt-2 hidden sm:flex flex-wrap items-center gap-y-1 text-[18px] text-muted-foreground">
+              {meta.map((m, j) => (
+                <span key={`${j}-${m}`} className="inline-flex items-center whitespace-nowrap">
+                  {m}
+                  {j < meta.length - 1 && (
+                    <span aria-hidden="true" className="w-px h-4 bg-primary/45 shrink-0 mx-3" />
+                  )}
+                </span>
               ))}
             </div>
+          )}
+        </Link>
 
-            <div className="flex items-center justify-center gap-4 mt-8">
-              <button
-                onClick={() => scrollBy(1)}
-                aria-label="הקודם"
-                className="inline-flex items-center gap-2 h-11 px-5 rounded-sm border border-primary/30 text-primary hover:bg-primary hover:text-primary-foreground transition-smooth text-[18px]"
-              >
-                <ArrowRight className="w-4 h-4" />
-                <span>הקודם</span>
-              </button>
-              <button
-                onClick={() => scrollBy(-1)}
-                aria-label="הבא"
-                className="inline-flex items-center gap-2 h-11 px-5 rounded-sm border border-primary/30 text-primary hover:bg-primary hover:text-primary-foreground transition-smooth text-[18px]"
-              >
-                <span>הבא</span>
-                <ArrowLeft className="w-4 h-4" />
-              </button>
-            </div>
-          </>
-        )}
+        {/* `size="sm"` (32px): the default 40px is 34% of a 119px mobile photo.
+            `left-3` is physical on purpose — this is a positioned overlay, not
+            flow content, so it must not become a logical property. */}
+        <FavoriteButton
+          productId={p.id}
+          collectionSlug={p.slug}
+          size="sm"
+          className="absolute top-3 left-3 z-10"
+        />
       </div>
-    </section>
+    </Reveal>
   );
 };
 
@@ -151,7 +190,7 @@ const CollectionsPage = () => {
       : collections;
     if (!selectedTypes.length) return byCat;
     // A collection stays on the page only while it still has a product of a
-    // selected type — an empty carousel is worse than a hidden row.
+    // selected type — a label over nothing is worse than a hidden group.
     return byCat.filter((c) =>
       products.some(
         (p) => p.collection_id === c.id && p.tag && selectedTypes.includes(p.tag)
@@ -236,6 +275,9 @@ const CollectionsPage = () => {
             "כל הקולקציות שלנו"
           )
         }
+        // With one collection on screen its intro belongs to the page, not to a
+        // label row that would only repeat the title above it.
+        subtitle={visible.length === 1 ? (visible[0].intro ?? undefined) : undefined}
         filterSlot={
           <FilterSidebar
             groups={filterGroups}
@@ -247,37 +289,74 @@ const CollectionsPage = () => {
         }
       />
 
-      <div className="bg-background">
-        {loading ? (
-          <p className="text-center text-muted-foreground py-24">טוען…</p>
-        ) : collections.length === 0 ? (
-          <p className="text-center text-muted-foreground py-24">
-            עדיין לא הועלו קולקציות. חזרו בקרוב.
-          </p>
-        ) : visible.length === 0 ? (
-          <div className="text-center py-24">
-            <p className="text-body text-foreground-soft">
-              אין קולקציות שמתאימות לסינון שבחרתם.
+      <section className="bg-background pt-6 md:pt-10 pb-24 md:pb-32">
+        <div className="container-luxury">
+          {loading ? (
+            <p className="py-24 text-center text-[20px] leading-relaxed text-foreground-soft">
+              טוען…
             </p>
-            <button
-              type="button"
-              onClick={() => setValue({ cat: [], type: [] })}
-              className="mt-4 text-primary hover:opacity-80 transition-smooth"
-            >
-              נקה את הסינון
-            </button>
-          </div>
-        ) : (
-          visible.map((c) => (
-            <CategoryRow
-              key={c.id}
-              col={c}
-              products={productsFor(c.id)}
-              showHeading={visible.length > 1}
-            />
-          ))
-        )}
-      </div>
+          ) : collections.length === 0 ? (
+            <p className="py-24 text-center text-[20px] leading-relaxed text-foreground-soft">
+              עדיין לא הועלו קולקציות. חזרו בקרוב.
+            </p>
+          ) : visible.length === 0 ? (
+            <Reveal className="max-w-xl mx-auto text-center py-24 md:py-32">
+              <p className="text-[20px] leading-relaxed text-foreground-soft">
+                אין קולקציות שמתאימות לסינון שבחרתם.
+              </p>
+              <button
+                type="button"
+                onClick={() => setValue({ cat: [], type: [] })}
+                className="mt-6 text-[18px] text-accent link-underline transition-smooth"
+              >
+                נקה את הסינון
+              </button>
+            </Reveal>
+          ) : (
+            /* ONE grid for the whole catalogue. Column tracks and gutters never
+               change from the first product to the last; a collection is a
+               label inside it, not a section around it.
+
+               Never add `grid-flow-dense` — default sparse flow is what
+               guarantees a col-span-full label always starts a fresh row after
+               a ragged one. The ragged last row is correct: in RTL the gap
+               falls on the LEFT, the same side as a ragged text edge in Hebrew.
+
+               gap-y > gap-x at every breakpoint: cells in a row belong
+               together, rows do not. */
+            <div className="grid grid-cols-2 lg:grid-cols-3 gap-x-4 sm:gap-x-6 lg:gap-x-7 gap-y-10 md:gap-y-12 lg:gap-y-16">
+              {visible.map((c, ci) => {
+                const items = productsFor(c.id);
+                return (
+                  <Fragment key={c.id}>
+                    {/* The old showHeading gate, moved up one level: with a
+                        single collection on screen nothing repeats its name,
+                        because the page title already says it. */}
+                    {visible.length > 1 && (
+                      <CollectionLabel col={c} count={items.length} first={ci === 0} />
+                    )}
+                    {items.length === 0 ? (
+                      <p className="col-span-full py-4 text-[20px] leading-relaxed text-muted-foreground">
+                        בקרוב, מוצרים חדשים בקולקציה זו.
+                      </p>
+                    ) : (
+                      items.map((p, i) => (
+                        <ProductCell
+                          key={p.slug}
+                          product={p}
+                          index={i}
+                          lead={i === 0}
+                          eager={ci === 0 && i < 2}
+                        />
+                      ))
+                    )}
+                  </Fragment>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      </section>
     </Layout>
   );
 };
