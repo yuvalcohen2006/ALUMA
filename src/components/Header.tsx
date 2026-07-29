@@ -56,14 +56,7 @@ const Header = () => {
       { label: "הסיפור שלנו", to: "/story" },
       { label: "קולקציות", to: "/collections", submenu: collectionsSub },
       { label: "חומרים", to: "/materials", submenu: materialsSub },
-      {
-        label: "פרויקטים",
-        to: "/projects",
-        submenu: [
-          { label: "כל הפרויקטים", to: "/projects" },
-          { label: "לפני ואחרי", to: "/before-after" },
-        ],
-      },
+      { label: "פרויקטים", to: "/projects" },
       { label: "עשה זאת בעצמך", to: "/diy", submenu: diySub },
       { label: "מגזין", to: "/blog" },
       { label: "שאלות ותשובות", to: "/faq" },

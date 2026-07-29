@@ -90,10 +90,7 @@ const MaterialsBrief = () => {
 
       <div className="relative z-10 flex flex-1 flex-col justify-center px-4 md:px-8">
         <div className="mb-6 flex flex-col items-center">
-          <SectionHeading light>החומרים שלנו</SectionHeading>
-          {/* White rule — the charcoal band's counterpart to the terracotta one
-              every section on a light background carries. */}
-          <div className="w-20 h-[2px] bg-background/70 mt-5" aria-hidden="true" />
+          <SectionHeading light>רק החומרים הטובים בעולם</SectionHeading>
         </div>
 
         {/* 3D rail */}

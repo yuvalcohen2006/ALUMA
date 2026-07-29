@@ -12,6 +12,8 @@ interface SectionHeadingProps {
    * warm-white — any title sitting on sand beige must use "charcoal".
    */
   tone?: "primary" | "charcoal";
+  /** Set false to drop the rule between the title and its subtitle. */
+  divider?: boolean;
   /** Horizontal alignment. */
   align?: "center" | "start";
   as?: "h2" | "h3";
@@ -24,6 +26,7 @@ const SectionHeading = ({
   children,
   subtitle,
   light = false,
+  divider = true,
   tone = "primary",
   align = "center",
   as: Tag = "h2",
@@ -37,15 +40,17 @@ const SectionHeading = ({
       : "text-primary";
   return (
     <div className={`flex flex-col ${alignCls} ${className}`}>
-      <Tag className={`font-display font-bold text-[30px] leading-snug ${titleColor}`}>
+      <Tag className={`font-display font-bold text-[38px] leading-snug ${titleColor}`}>
         {children}
       </Tag>
       {subtitle != null && subtitle !== "" && (
         <>
-          <div
-            className={`w-20 h-[2px] my-5 ${light ? "bg-background/40" : "bg-primary/55"}`}
-            aria-hidden="true"
-          />
+          {divider && (
+            <div
+              className={`w-20 h-[2px] my-5 ${light ? "bg-background/40" : "bg-primary/55"}`}
+              aria-hidden="true"
+            />
+          )}
           <p
             className={`text-[20px] font-normal leading-relaxed max-w-2xl text-pretty ${
               light ? "text-background/75" : "text-foreground"

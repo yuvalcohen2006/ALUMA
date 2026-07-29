@@ -76,7 +76,6 @@ const ProjectsGrid = () => {
       <div className="container-luxury">
         <Reveal className="mb-10 md:mb-16 flex flex-col items-center">
           <SectionHeading>עבודות נבחרות</SectionHeading>
-          <div className="w-20 h-[2px] bg-primary/55 mt-5" aria-hidden="true" />
         </Reveal>
 
         <div className="grid md:grid-cols-2 gap-10 md:gap-14 items-start max-w-6xl mx-auto">

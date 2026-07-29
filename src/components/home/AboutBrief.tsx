@@ -11,6 +11,7 @@ const AboutBrief = () => {
         <Reveal className="max-w-3xl mx-auto flex flex-col items-center">
           <SectionHeading
             align="center"
+            divider={false}
             subtitle={
               <>
                 {/* The running text's own face — only the colour marks it as the
