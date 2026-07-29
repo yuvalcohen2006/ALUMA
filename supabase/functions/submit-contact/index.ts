@@ -16,13 +16,40 @@ const escapeHtml = (value: string) =>
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;");
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-  "Access-Control-Allow-Methods": "POST, OPTIONS",
+// Only the site itself may POST leads. `*` meant any page on the internet could
+// spray the leads table from a visitor's browser; the honeypot and rate limiter
+// were the only defence. Origins are matched exactly, plus any Cloudflare Pages
+// preview deployment of this project.
+const ALLOWED_ORIGINS = new Set([
+  "https://alumaoutdoor.com",
+  "https://www.alumaoutdoor.com",
+  "http://localhost:8080",
+  "http://localhost:4173",
+]);
+
+const isAllowedOrigin = (origin: string | null): boolean => {
+  if (!origin) return false;
+  if (ALLOWED_ORIGINS.has(origin)) return true;
+  // aluma.pages.dev + per-deploy preview URLs (<hash>.aluma.pages.dev)
+  return /^https:\/\/([a-z0-9-]+\.)?aluma(-[a-z0-9]+)?\.pages\.dev$/.test(origin);
 };
 
-const phoneRegex = /^(\+?972|0)[\s-]?[23489567][\s-]?\d{3}[\s-]?\d{4}$/;
+const corsHeadersFor = (origin: string | null) => ({
+  "Access-Control-Allow-Origin": isAllowedOrigin(origin) ? origin! : "https://alumaoutdoor.com",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Methods": "POST, OPTIONS",
+  Vary: "Origin",
+});
+
+// Israeli phone, mobile or landline. Separators are stripped first, +972 is
+// normalised to a leading 0, then the digits are checked: 05X/07X numbers are
+// ten digits, 0[23489]X landlines are nine. The previous single-regex version
+// only ever matched nine digits — it rejected every Israeli MOBILE number,
+// including the studio's own 050 number printed on the site.
+const isIsraeliPhone = (raw: string): boolean => {
+  const digits = raw.replace(/[\s-]/g, "").replace(/^\+?972/, "0");
+  return /^0(?:[23489]\d{7}|5\d{8}|7\d{8})$/.test(digits);
+};
 
 const BodySchema = z.object({
   name: z
@@ -31,7 +58,7 @@ const BodySchema = z.object({
     .min(2)
     .max(100)
     .refine((v) => !/<[^>]*>|https?:\/\//i.test(v)),
-  phone: z.string().trim().min(9).max(20).regex(phoneRegex),
+  phone: z.string().trim().min(9).max(20).refine(isIsraeliPhone),
   email: z.string().trim().max(255).email().optional().or(z.literal("")),
   message: z.string().trim().max(1000).optional().or(z.literal("")),
   source: z.string().trim().max(50).optional(),
@@ -56,6 +83,7 @@ const getClientIp = (req: Request) => {
 };
 
 Deno.serve(async (req) => {
+  const corsHeaders = corsHeadersFor(req.headers.get("origin"));
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
 
   if (req.method !== "POST") {

@@ -282,8 +282,16 @@ const SofaDesigner = () => {
                 </>
               )}
 
+              {/* dir="ltr" must sit on the SCROLL CONTAINER, not just the inner
+                  track: with the container inheriting rtl, scrollLeft ran
+                  0 → negative, so canScrollLeft was never true (left arrow
+                  permanently dead), canScrollRight never false, and
+                  scrollTo({left: scrollWidth}) clamped to 0 — the tool was
+                  unusable past the first viewport of units. With the container
+                  itself ltr, all the existing math is simply correct. */}
               <div
                 ref={scrollRef}
+                dir="ltr"
                 className="overflow-x-auto overflow-y-hidden scroll-smooth"
                 style={{ WebkitOverflowScrolling: "touch" }}
               >

@@ -32,7 +32,7 @@ const CookieConsent = () => {
       aria-label="הסכמה לעוגיות"
       className="fixed inset-x-3 bottom-3 z-[60] md:inset-x-auto md:right-4 md:bottom-4 md:max-w-md"
     >
-      <div className="relative bg-background border border-primary/20 shadow-elegant rounded-sm p-4 md:p-5 text-right">
+      <div className="relative bg-background border border-primary/20 shadow-luxury rounded-sm p-4 md:p-5 text-right">
         <button
           aria-label="סגירה"
           onClick={() => decide("declined")}

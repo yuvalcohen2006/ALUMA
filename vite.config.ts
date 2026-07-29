@@ -24,6 +24,12 @@ export default defineConfig(() => ({
         // Split heavy vendor libs into cacheable chunks instead of one large bundle.
         manualChunks(id) {
           if (!id.includes("node_modules")) return;
+          // MUST come before the charts rule: clsx/tailwind-merge are imported
+          // by cn() (every component). Left unassigned, Rollup absorbed them
+          // into the charts chunk, statically dragging 360KB of admin-only
+          // recharts onto the public homepage's critical path.
+          if (id.includes("clsx") || id.includes("tailwind-merge") || id.includes("class-variance-authority"))
+            return "ui-utils";
           if (id.includes("recharts") || id.includes("/d3-")) return "charts";
           if (id.includes("@supabase")) return "supabase";
           if (id.includes("@tanstack")) return "query";

@@ -59,6 +59,16 @@ export default {
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
+      // Named type scale in rem, so the accessibility widget's font-scale
+      // (html { font-size: calc(16px * s) }) genuinely scales the site. The px
+      // values these replace: meta 18, body 20, card 22, section 38.
+      // Arbitrary text-[NNpx] classes are being migrated onto these.
+      fontSize: {
+        meta: ["1.125rem", { lineHeight: "1.6" }],     // 18px
+        body: ["1.25rem", { lineHeight: "1.75" }],      // 20px
+        card: ["1.375rem", { lineHeight: "1.35" }],     // 22px
+        section: ["2.375rem", { lineHeight: "1.25" }],  // 38px
+      },
       // Tailwind's default scale jumps 500 -> 700. Without 600 here the site's
       // standard image-zoom reached for `duration-[600ms]`, which Tailwind drops
       // entirely as ambiguous (transition- or animation-duration?) — so those

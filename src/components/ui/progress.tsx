@@ -13,8 +13,11 @@ const Progress = React.forwardRef<
     {...props}
   >
     <ProgressPrimitive.Indicator
-      className="h-full w-full flex-1 bg-primary transition-all"
-      style={{ transform: `translateX(-${100 - (value || 0)}%)` }}
+      className="h-full bg-primary transition-all"
+      // Width from the start edge instead of a physical translateX — in RTL the
+      // transform version filled from the wrong side, so the questionnaire's
+      // progress appeared to EMPTY as you advanced.
+      style={{ width: `${value || 0}%` }}
     />
   </ProgressPrimitive.Root>
 ));

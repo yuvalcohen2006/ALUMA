@@ -1,7 +1,14 @@
 import { z } from "zod";
 
-// Israeli phone: allows 0XX-XXXXXXX or +972, spaces/dashes optional
-const phoneRegex = /^(\+?972|0)[\s-]?[23489567][\s-]?\d{3}[\s-]?\d{4}$/;
+// Israeli phone, mobile or landline. Separators are stripped first, +972 is
+// normalised to a leading 0, then the digits are checked: 05X/07X numbers are
+// ten digits, 0[23489]X landlines are nine. The previous single-regex version
+// only ever matched nine digits — it rejected every Israeli MOBILE number,
+// including the studio's own 050 number printed on the site.
+const isIsraeliPhone = (raw: string): boolean => {
+  const digits = raw.replace(/[\s-]/g, "").replace(/^\+?972/, "0");
+  return /^0(?:[23489]\d{7}|5\d{8}|7\d{8})$/.test(digits);
+};
 
 export const contactSchema = z.object({
   name: z
@@ -18,7 +25,7 @@ export const contactSchema = z.object({
     .trim()
     .min(9, { message: "מספר טלפון לא תקין" })
     .max(20, { message: "מספר טלפון ארוך מדי" })
-    .regex(phoneRegex, { message: "מספר טלפון ישראלי לא תקין" }),
+    .refine(isIsraeliPhone, { message: "מספר טלפון ישראלי לא תקין" }),
   email: z
     .string()
     .trim()
