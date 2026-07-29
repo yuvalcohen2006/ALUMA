@@ -78,8 +78,24 @@ const StoryPage = () => {
                   className="h-[58px] md:h-[77px] w-auto opacity-90"
                 />
               </div>
-              {/* Portraits — +10% again (wider max-width than the logo) */}
-              <div className="flex items-end justify-center gap-[26px] w-full max-w-[813px] mx-auto">
+              {/* Portraits — +10% again (wider max-width than the logo).
+                  The drawing is cropped hard at its baseline, which left a
+                  visible straight edge. A mask softens the bottom band and both
+                  lower corners so the illustration dissolves into the page
+                  instead of being cut off. Corner radials are subtracted first,
+                  then the horizontal band, so the corners fade further up than
+                  the centre does. */}
+              <div
+                className="flex items-end justify-center gap-[26px] w-full max-w-[813px] mx-auto"
+                style={{
+                  maskImage:
+                    "radial-gradient(120% 90% at 50% 0%, #000 62%, transparent 100%), linear-gradient(to bottom, #000 68%, transparent 100%)",
+                  WebkitMaskImage:
+                    "radial-gradient(120% 90% at 50% 0%, #000 62%, transparent 100%), linear-gradient(to bottom, #000 68%, transparent 100%)",
+                  maskComposite: "intersect",
+                  WebkitMaskComposite: "source-in",
+                }}
+              >
                 {[
                   { src: storyPortraitIdan, alt: "דיוקן קווי, עידן", name: "idan" },
                   { src: storyPortraitRoy, alt: "דיוקן קווי, רועי", name: "roy" },

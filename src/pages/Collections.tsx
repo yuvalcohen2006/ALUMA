@@ -220,11 +220,21 @@ const CollectionsPage = () => {
       />
       <PageHero
         title={
-          // One collection in view (picked from the nav or the filter) names
-          // itself; otherwise this is the whole catalogue.
-          visible.length === 1
-            ? `קולקציית ${visible[0].name_he}`
-            : "כל הקולקציות שלנו"
+          // One collection names itself. A subset states how many, and hovering
+          // the count lists exactly which — the names would be too long to sit
+          // in the title, but "3 collections" alone is not answerable.
+          visible.length === 1 ? (
+            `קולקציית ${visible[0].name_he}`
+          ) : visible.length < collections.length ? (
+            <span
+              className="cursor-default border-b border-dashed border-primary/40"
+              title={visible.map((c) => c.name_he).join(" · ")}
+            >
+              נבחרו {visible.length} קולקציות להצגה
+            </span>
+          ) : (
+            "כל הקולקציות שלנו"
+          )
         }
         filterSlot={
           <FilterSidebar

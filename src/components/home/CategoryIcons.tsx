@@ -22,15 +22,22 @@ const categories = [
   { slug: "akssvryz", label: "אקססוריז", img: umbrella },
 ];
 
-/** How long the pointer must rest on one tile before the row recedes. */
+/** How long the pointer must rest on one tile before the OTHERS recede. */
 const DWELL_MS = 300;
-/** How long the others take to fade and blur once it does. */
+/** How long the others take to fade and blur once they do. */
 const RECEDE_MS = 400;
+/** The hovered tile's own response — snappy, and one single movement. */
+const GROW_MS = 200;
 
 const CategoryIcons = () => {
   // Tracked in state rather than with CSS :hover on the list, because the list
   // includes the gaps between tiles — hovering the gap was dimming everything
   // while nothing was actually selected.
+  // Two separate things, deliberately. `hovered` is immediate and drives the
+  // tile's own growth. `focused` waits out the dwell and is what pushes the
+  // other seven back — so pointing at a tile responds at once, while sweeping
+  // across the row never dims anything.
+  const [hovered, setHovered] = useState<string | null>(null);
   const [focused, setFocused] = useState<string | null>(null);
   const dwellTimer = useRef<number | null>(null);
 
@@ -43,19 +50,20 @@ const CategoryIcons = () => {
 
   const onEnter = (slug: string) => {
     clearDwell();
-    // Only commit after the pointer has genuinely settled, so sweeping across
-    // the row on the way somewhere else never triggers the effect.
+    setHovered(slug);
+    // Only recede the rest once the pointer has genuinely settled.
     dwellTimer.current = window.setTimeout(() => setFocused(slug), DWELL_MS);
   };
 
   const onLeave = () => {
     clearDwell();
+    setHovered(null);
     setFocused(null);
   };
 
   useEffect(() => clearDwell, []);
 
-  return(
+  return (
     <section className="py-24 md:py-32 bg-secondary">
       <div className="container-luxury">
         <Reveal className="mb-10 md:mb-14 flex flex-col items-center">
@@ -76,24 +84,33 @@ const CategoryIcons = () => {
             over the row or sitting in a gap between tiles. */}
         <ul className="rail-scroll flex gap-4 lg:gap-5 overflow-x-auto lg:overflow-x-visible px-5 sm:px-6 lg:px-[150px] pb-5 lg:pb-0">
           {categories.map((c) => {
-            const isFocused = focused === c.slug;
-            const isReceded = focused !== null && !isFocused;
+            const isHovered = hovered === c.slug;
+            const isReceded = focused !== null && focused !== c.slug;
             return (
               <li
                 key={c.slug}
                 onMouseEnter={() => onEnter(c.slug)}
                 onMouseLeave={onLeave}
                 className={`shrink-0 w-[152px] sm:w-[180px] lg:flex-1 relative ease-out ${
-                  isFocused ? "scale-[1.08] z-10" : ""
+                  isHovered ? "scale-[1.08] z-10" : ""
                 } ${isReceded ? "opacity-45 blur-[2px]" : "opacity-100 blur-0"}`}
                 style={{
-                  // The recede is the slow part; the tile's own growth stays
-                  // brisk so the one you picked responds immediately.
-                  transition: `opacity ${RECEDE_MS}ms ease-out, filter ${RECEDE_MS}ms ease-out, transform 300ms ease-out`,
+                  // Growth is fast; the recede of the others is the slow,
+                  // gradual part. They are separate transitions on purpose.
+                  transition: `transform ${GROW_MS}ms ease-out, opacity ${RECEDE_MS}ms ease-out, filter ${RECEDE_MS}ms ease-out`,
                 }}
               >
-                <Link to={`/collections#${c.slug}`} className="group block">
-                  <div className="relative w-full aspect-square rounded-[14px] bg-background/50 border border-foreground/15 overflow-hidden transition-all duration-300 group-hover:border-foreground/35 group-hover:shadow-luxury">
+                <Link to={`/collections#${c.slug}`} className="block">
+                  <div
+                    className={`relative w-full aspect-square rounded-[14px] bg-background/50 border overflow-hidden ${
+                      isHovered ? "border-foreground/35 shadow-luxury" : "border-foreground/15"
+                    }`}
+                    style={{ transition: `border-color ${GROW_MS}ms ease-out, box-shadow ${GROW_MS}ms ease-out` }}
+                  >
+                    {/* Driven by the same state and the same duration as the tile
+                        so the two grow as one movement. Previously the image ran
+                        off CSS :hover at 600ms while the tile waited out the
+                        dwell, which read as two separate phases. */}
                     <img
                       src={c.img}
                       alt={c.label}
@@ -102,7 +119,10 @@ const CategoryIcons = () => {
                       draggable={false}
                       width={1536}
                       height={1536}
-                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-[600ms] ease-out group-hover:scale-[1.06]"
+                      className={`absolute inset-0 w-full h-full object-cover ${
+                        isHovered ? "scale-[1.06]" : "scale-100"
+                      }`}
+                      style={{ transition: `transform ${GROW_MS}ms ease-out` }}
                     />
                   </div>
                   <div className="mt-3 text-center">
