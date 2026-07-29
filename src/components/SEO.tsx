@@ -10,9 +10,12 @@ interface SEOProps {
   image?: string;
   type?: "website" | "article" | "product";
   jsonLd?: object | object[];
+  /** Pages that must stay out of search: 404 (soft-404 otherwise), thank-you,
+   *  auth and the member area. */
+  noIndex?: boolean;
 }
 
-const SEO = ({ title, description, path, image, type = "website", jsonLd }: SEOProps) => {
+const SEO = ({ title, description, path, image, type = "website", jsonLd, noIndex = false }: SEOProps) => {
   const url = `${SITE_URL}${path}`;
   const ogImage = image
     ? (image.startsWith("http") ? image : `${SITE_URL}${image}`)
@@ -25,6 +28,7 @@ const SEO = ({ title, description, path, image, type = "website", jsonLd }: SEOP
       <title>{title}</title>
       <meta name="description" content={description} />
       <link rel="canonical" href={url} />
+      {noIndex && <meta name="robots" content="noindex,follow" />}
 
       <meta property="og:site_name" content="Aluma" />
       <meta property="og:locale" content="he_IL" />

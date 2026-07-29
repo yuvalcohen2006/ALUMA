@@ -81,9 +81,11 @@ const Index = () => {
       <Suspense fallback={<div className="min-h-[820px] md:min-h-[900px] bg-foreground" />}>
         <MaterialsBrief />
       </Suspense>
-      {/* ⚠️ Placeholder testimonials — fabricated demo content for preview only.
-          Swap in real, attributed customer quotes before launch. See the banner
-          in src/data/testimonials.ts. */}
+      {/* ⚠️ Testimonials are dev-gated: the component renders only when
+          import.meta.env.DEV (fabricated demo quotes, preview only) and
+          returns null in production — the Suspense wrapper is fine with that.
+          Real, attributed customer quotes must land in src/data/testimonials.ts
+          before the gate inside Testimonials.tsx is removed. */}
       <Suspense fallback={<div className="min-h-[700px] bg-background" />}>
         <Testimonials />
       </Suspense>

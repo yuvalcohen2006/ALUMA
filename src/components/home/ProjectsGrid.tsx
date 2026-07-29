@@ -14,11 +14,31 @@ const ProjectsGrid = () => {
   const count = projects.length;
   const [active, setActive] = useState(0);
   const [progress, setProgress] = useState(0);
-  const [paused, setPaused] = useState(false);
+  const [hovered, setHovered] = useState(false);
+  const [focusWithin, setFocusWithin] = useState(false);
+  // matchMedia rather than framer-motion's useReducedMotion on purpose: this
+  // section loads eagerly and framer-motion is confined to the lazy chunks
+  // (see the comment in src/pages/Index.tsx).
+  const [reducedMotion, setReducedMotion] = useState(
+    typeof window !== "undefined"
+      ? window.matchMedia("(prefers-reduced-motion: reduce)").matches
+      : false,
+  );
   const touchStart = useRef(0);
   // ms already elapsed on the current slide — survives a pause so hovering freezes
   // the strip instead of wiping it.
   const elapsedRef = useRef(0);
+
+  // Autoplay pauses on hover AND while focus is inside the section; under
+  // prefers-reduced-motion it never runs (arrows/bars/swipe still navigate).
+  const paused = hovered || focusWithin || reducedMotion;
+
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const onChange = () => setReducedMotion(mq.matches);
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, []);
 
   const step = useCallback(
     (dir: number) => setActive((prev) => (prev + dir + count) % count),
@@ -68,8 +88,14 @@ const ProjectsGrid = () => {
     <section
       dir="rtl"
       className="py-24 md:py-32 bg-background overflow-hidden"
-      onMouseEnter={() => setPaused(true)}
-      onMouseLeave={() => setPaused(false)}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      // Focus/blur bubble in React, so this covers focus-within; the
+      // relatedTarget check keeps tabbing between inner controls paused.
+      onFocus={() => setFocusWithin(true)}
+      onBlur={(e) => {
+        if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setFocusWithin(false);
+      }}
       onTouchStart={onTouchStart}
       onTouchEnd={onTouchEnd}
     >
@@ -95,7 +121,7 @@ const ProjectsGrid = () => {
                   className="absolute inset-0 w-full h-full object-cover animate-rise-in transition-transform duration-700 group-hover:scale-105"
                 />
                 {/* Same 14px radius as the photo it sits on */}
-                <div className="absolute top-4 right-4 bg-background/90 backdrop-blur-sm px-3.5 py-1.5 rounded-[14px] text-[16px] tracking-[0.12em] text-foreground">
+                <div className="absolute top-4 right-4 bg-background/90 backdrop-blur-sm px-3.5 py-1.5 rounded-[14px] text-meta tracking-[0.12em] text-foreground">
                   {p.area}
                 </div>
               </Link>

@@ -340,7 +340,7 @@ const DIYPage = () => {
 
                 {/* Real swatches from the configurator, waking one after another. */}
                 <Specimen
-                  caption={`ועוד ${swatchRest} גוונים במניפה, מ-Canvas לצבעי בסיס, דרך Heritage למרקמים ועד Patterns לדוגמאות ופסים.`}
+                  caption={`ועוד ${swatchRest} גוונים במניפה, מ־Canvas לצבעי בסיס, דרך Heritage למרקמים ועד Patterns לדוגמאות ופסים.`}
                   className="mt-6"
                 >
                   {/* A fixed 4×2 block rather than a loose row: at the plank's

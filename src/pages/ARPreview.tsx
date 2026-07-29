@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
+import Layout from "@/components/Layout";
 import SEO from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { Smartphone, Box, ScanLine, Info } from "lucide-react";
@@ -52,14 +51,6 @@ const ARPreview = () => {
   const [active, setActive] = useState(products[0]);
 
   useEffect(() => {
-    document.title = "AR Preview, נסו את הרהיט במרחב שלכם | Aluma";
-    const meta =
-      document.querySelector('meta[name="description"]') ||
-      Object.assign(document.createElement("meta"), { name: "description" });
-    (meta as HTMLMetaElement).content =
-      "תצוגת מציאות רבודה, מקמו רהיטי חוץ של Aluma במרפסת או בגינה שלכם דרך הסמארטפון.";
-    if (!meta.parentNode) document.head.appendChild(meta);
-
     // Lazy-load Google's <model-viewer> web component
     const existing = document.querySelector(
       'script[data-mv="true"]'
@@ -78,15 +69,14 @@ const ARPreview = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background">
+    <Layout>
       <SEO
         title="תצוגת AR, ראו ריהוט חוץ במציאות רבודה | Aluma"
         description="הציבו ספות, כורסאות ושולחנות חוץ של Aluma בגינה או במרפסת שלכם בעזרת תצוגת AR ישירות מהדפדפן בטלפון."
         path="/ar"
       />
-      <Header />
 
-      <main className="pt-32 pb-20">
+      <div className="pt-32 pb-20">
         <section className="container mx-auto px-6 max-w-6xl">
           <div className="text-center mb-12">
             <span className="text-[10px] tracking-[0.3em] uppercase text-accent">
@@ -214,10 +204,8 @@ const ARPreview = () => {
             </p>
           </div>
         </section>
-      </main>
-
-      <Footer />
-    </div>
+      </div>
+    </Layout>
   );
 };
 

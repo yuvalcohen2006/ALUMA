@@ -1,9 +1,8 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Helmet } from "react-helmet-async";
 import { Check, ArrowLeft, Phone, MessageCircle } from "lucide-react";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
+import Layout from "@/components/Layout";
+import SEO from "@/components/SEO";
 import alumaLogo from "@/assets/aluma-logo.png";
 
 const ThankYou = () => {
@@ -22,14 +21,14 @@ const ThankYou = () => {
   }, []);
 
   return (
-    <>
-      <Helmet>
-        <title>תודה על פנייתכם | Aluma</title>
-        <meta name="robots" content="noindex,follow" />
-        <link rel="canonical" href="https://alumaoutdoor.com/thank-you" />
-      </Helmet>
-      <Header />
-      <main className="min-h-[80vh] flex items-center justify-center px-5 py-20 bg-background">
+    <Layout>
+      <SEO
+        title="תודה על פנייתכם | Aluma"
+        description="קיבלנו את פנייתכם, צוות Aluma יחזור אליכם בהקדם."
+        path="/thank-you"
+        noIndex
+      />
+      <div className="min-h-[80vh] flex items-center justify-center px-5 py-20 bg-background">
         <div className="max-w-xl w-full text-center">
           <div className="mx-auto w-16 h-16 rounded-sm bg-accent/15 border border-accent/40 flex items-center justify-center mb-6">
             <Check className="w-8 h-8 text-accent" strokeWidth={2.5} />
@@ -83,9 +82,8 @@ const ThankYou = () => {
             </Link>
           </div>
         </div>
-      </main>
-      <Footer />
-    </>
+      </div>
+    </Layout>
   );
 };
 

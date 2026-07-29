@@ -1,5 +1,5 @@
 import * as React from "react";
-import { motion, AnimatePresence, type PanInfo } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion, type PanInfo } from "framer-motion";
 import { ArrowLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { materials } from "@/data/materials";
@@ -32,6 +32,8 @@ const CARD_OFFSET = 280;
 const MaterialsBrief = () => {
   const [active, setActive] = React.useState(0);
   const [hovering, setHovering] = React.useState(false);
+  const [focused, setFocused] = React.useState(false);
+  const reduceMotion = useReducedMotion();
 
   const count = items.length;
   const activeItem = items[wrap(0, count, active)];
@@ -39,13 +41,15 @@ const MaterialsBrief = () => {
   const prev = React.useCallback(() => setActive((p) => p - 1), []);
   const next = React.useCallback(() => setActive((p) => p + 1), []);
 
-  // Auto-advance, pauses on hover. Deliberately no wheel handler: hijacking the
-  // wheel made the rail spin while you were only trying to scroll past it.
+  // Auto-advance, pauses on hover and while focus is inside the section, and is
+  // skipped entirely under prefers-reduced-motion (manual arrows/keys still work).
+  // Deliberately no wheel handler: hijacking the wheel made the rail spin while
+  // you were only trying to scroll past it.
   React.useEffect(() => {
-    if (hovering) return;
+    if (reduceMotion || hovering || focused) return;
     const t = window.setInterval(next, 5000);
     return () => window.clearInterval(t);
-  }, [hovering, next]);
+  }, [reduceMotion, hovering, focused, next]);
 
   const onKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "ArrowRight") prev(); // RTL: right = previous
@@ -64,9 +68,16 @@ const MaterialsBrief = () => {
   return (
     <section
       dir="rtl"
-      className="relative flex w-full flex-col overflow-hidden bg-foreground text-background outline-none select-none py-20 md:py-28"
+      className="relative flex w-full flex-col overflow-hidden bg-foreground text-background select-none py-20 md:py-28"
       onMouseEnter={() => setHovering(true)}
       onMouseLeave={() => setHovering(false)}
+      // Focus/blur bubble in React (focusin/focusout), so this pauses the
+      // autoplay while focus is anywhere inside the section — the relatedTarget
+      // check keeps focus moves between inner controls from un-pausing it.
+      onFocus={() => setFocused(true)}
+      onBlur={(e) => {
+        if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setFocused(false);
+      }}
       tabIndex={0}
       onKeyDown={onKeyDown}
       aria-label="החומרים שלנו"

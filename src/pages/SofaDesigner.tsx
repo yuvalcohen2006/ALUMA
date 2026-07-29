@@ -8,8 +8,7 @@ import {
   ChevronRight,
   MoveHorizontal,
 } from "lucide-react";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
+import Layout from "@/components/Layout";
 import { SITE } from "@/config/site";
 import SEO from "@/components/SEO";
 import { Button } from "@/components/ui/button";
@@ -154,15 +153,14 @@ const SofaDesigner = () => {
   }, [summary]);
 
   return (
-    <div dir="rtl" className="min-h-screen bg-background">
+    <Layout>
       <SEO
         title="עצבו סלון מודולרי לחוץ, יחידות אמצע, פינה והדום | Aluma"
         description="הרכיבו סלון חוץ מודולרי לפי המידות שלכם, חברו יחידות אמצע, פינה והדום, וקבלו הצעת מחיר מותאמת אישית מ-Aluma."
         path="/designer"
       />
-      <Header />
 
-      <main className="pt-32 pb-20">
+      <div className="pt-32 pb-20">
         <section className="container mx-auto px-6">
           <div className="max-w-3xl mb-10">
             <span className="text-xs tracking-[0.3em] uppercase text-accent font-medium">
@@ -382,16 +380,14 @@ const SofaDesigner = () => {
             </div>
           </div>
         </section>
-      </main>
+      </div>
 
       <ConversionCTA
         title="הרכבתם את הספה. עכשיו נהפוך אותה למציאות."
         subtitle="נבנה יחד את הצעת המחיר המדויקת, כולל בדים, גוונים ומידות אמת. תשובה תוך יום עסקים."
         whatsappMessage="היי, הרכבתי ספה בסטודיו של אלומה ואשמח לתמחור."
       />
-
-      <Footer />
-    </div>
+    </Layout>
   );
 };
 

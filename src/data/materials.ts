@@ -27,7 +27,7 @@ export const materials: Material[] = [
     name: "בד Sunbrella",
     tagline: "נוחות שלא נכנעת לשמש",
     shortDesc:
-      "בדי Sunbrella איכותיים, עמידים ל-UV, לדהייה ולמים. נוחות ויוקרה שנשארות שנים בחוץ.",
+      "בדי Sunbrella איכותיים, עמידים ל־UV, לדהייה ולמים. נוחות ויוקרה שנשארות שנים בחוץ.",
     image: sunbrellaImg,
     accent: "hsl(38 44% 64%)",
     origin: "ארה״ב, תקן Sunbrella® מקורי",
@@ -39,7 +39,7 @@ export const materials: Material[] = [
       { title: "עמידות UV", desc: "צבע מלא בסיב, לא דוהה גם בשמש הישראלית." },
       { title: "דוחה מים וכתמים", desc: "ציפוי הידרופובי, כתמים מנוקים במים וסבון עדין." },
       { title: "מגע פרימיום", desc: "רכות של בד פנים, יציבות של בד חוץ." },
-      { title: "אחריות יצרן", desc: "עד 10 שנות אחריות בינלאומית מ-Sunbrella®." },
+      { title: "אחריות יצרן", desc: "עד 10 שנות אחריות בינלאומית מ־Sunbrella®." },
     ],
     faq: [
       {

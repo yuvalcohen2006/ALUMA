@@ -9,7 +9,7 @@ const WhatsAppIcon = ({ className = "" }: { className?: string }) => (
 
 /**
  * Mobile-only sticky action bar.
- * Three high-conversion CTAs: WhatsApp, Phone call, and a quote request.
+ * Three actions: WhatsApp, phone call, and the accessibility-panel trigger.
  * Hidden on the contact page (already on the form) and on /admin.
  */
 const MobileActionBar = () => {
@@ -35,7 +35,7 @@ const MobileActionBar = () => {
             className="flex flex-col items-center justify-center gap-1 text-background active:bg-background/10 transition-smooth"
           >
             <WhatsAppIcon className="w-5 h-5 text-[#25D366]" />
-            <span className="text-[11px] font-medium">WhatsApp</span>
+            <span className="text-meta font-medium">WhatsApp</span>
           </a>
           <a
             href="tel:+972504519062"
@@ -43,7 +43,7 @@ const MobileActionBar = () => {
             className="flex flex-col items-center justify-center gap-1 text-background border-x border-background/15 active:bg-background/10 transition-smooth"
           >
             <Phone className="w-5 h-5 text-accent" />
-            <span className="text-[11px] font-medium">חיוג</span>
+            <span className="text-meta font-medium">חיוג</span>
           </a>
           <button
             type="button"
@@ -52,7 +52,7 @@ const MobileActionBar = () => {
             className="flex flex-col items-center justify-center gap-1 text-background active:bg-background/10 transition-smooth"
           >
             <Accessibility className="w-5 h-5" />
-            <span className="text-[11px] font-medium">נגישות</span>
+            <span className="text-meta font-medium">נגישות</span>
           </button>
         </div>
       </nav>

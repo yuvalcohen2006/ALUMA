@@ -64,10 +64,12 @@ export default {
       // values these replace: meta 18, body 20, card 22, section 38.
       // Arbitrary text-[NNpx] classes are being migrated onto these.
       fontSize: {
-        meta: ["1.125rem", { lineHeight: "1.6" }],     // 18px
-        body: ["1.25rem", { lineHeight: "1.75" }],      // 20px
-        card: ["1.375rem", { lineHeight: "1.35" }],     // 22px
-        section: ["2.375rem", { lineHeight: "1.25" }],  // 38px
+        meta: ["1.125rem", { lineHeight: "1.6" }], // 18px labels/meta
+        // NOT named "body": that class name is taken by the .text-body prose
+        // utility in index.css (18px/1.75) and the collision would be silent.
+        lede: ["1.25rem", { lineHeight: "1.75" }], // 20px running text
+        card: ["1.375rem", { lineHeight: "1.35" }], // 22px item titles
+        section: ["2.375rem", { lineHeight: "1.25" }], // 38px section titles
       },
       // Tailwind's default scale jumps 500 -> 700. Without 600 here the site's
       // standard image-zoom reached for `duration-[600ms]`, which Tailwind drops

@@ -1,31 +1,49 @@
-import { useEffect, useMemo, useRef, useState } from "react";
-import { ChevronDown, Menu, X } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { ArrowLeft, ChevronDown, Menu, X } from "lucide-react";
 import { NavLink, Link, useLocation } from "react-router-dom";
+import * as NavigationMenu from "@radix-ui/react-navigation-menu";
 import { Button } from "@/components/ui/button";
 import alumaLogo from "@/assets/aluma-logo.png";
 import { useCollections } from "@/hooks/useCollectionsData";
 import { WhatsAppIcon } from "@/components/WhatsAppButton";
 
-const materialsSub = [
+type SubLink = { label: string; to: string };
+type NavEntry = { label: string; to?: string; submenu?: SubLink[] };
+
+const materialsSub: SubLink[] = [
   { label: "בד Sunbrella", to: "/materials/sunbrella" },
   { label: "אלומיניום", to: "/materials/aluminum" },
   { label: "שיש גרניט פורצלן", to: "/materials/granite-porcelain" },
   { label: "PolyStone", to: "/materials/polystone" },
 ];
 
-const diySub = [
+const studioSub: SubLink[] = [
   { label: "עצבו סלון", to: "/designer" },
   { label: "בחרו את הבד", to: "/fabric" },
-  { label: "AR, תצוגה במרחב", to: "/ar" },
+  { label: "תצוגה במרחב (AR)", to: "/ar" },
   { label: "שאלון חכם", to: "/questionnaire" },
+];
+
+const aboutSub: SubLink[] = [
+  { label: "הסיפור שלנו", to: "/story" },
+  { label: "שאלות ותשובות", to: "/faq" },
+  { label: "הצהרת נגישות", to: "/accessibility" },
 ];
 
 // Desktop nav link: a barely-rounded light-grey pill that fades in on hover, with
 // the label sitting in soft charcoal and deepening as it fills.
 const navItem =
-  "inline-flex items-center rounded-[10px] px-2.5 xl:px-3.5 py-2 text-sm xl:text-[15px] 2xl:text-base font-medium tracking-wide transition-colors duration-300";
+  "group inline-flex items-center rounded-[10px] px-3.5 py-2 text-meta font-medium tracking-wide transition-colors duration-300";
 const navRest = "text-foreground-soft hover:bg-foreground/[0.07] hover:text-foreground";
 const navActive = "bg-foreground/[0.09] text-foreground";
+// A trigger whose submenu is open reads as active regardless of route.
+const navOpen =
+  "data-[state=open]:bg-foreground/[0.09] data-[state=open]:text-foreground";
+
+const panelClass =
+  "min-w-[240px] rounded-[10px] border border-border bg-popover p-1.5 shadow-luxury animate-in fade-in slide-in-from-top-1 duration-200";
+const panelItemClass =
+  "block rounded-[10px] px-4 py-2.5 text-meta text-right text-foreground transition-colors duration-200 hover:bg-secondary/70 hover:text-accent focus-visible:bg-secondary/70 focus-visible:text-accent outline-none";
 
 const Header = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -36,38 +54,38 @@ const Header = () => {
   const forceBorder = pathname !== "/";
   const [open, setOpen] = useState(false);
   const [expanded, setExpanded] = useState<string | null>(null);
-  // Desktop dropdowns: `hovered` opens on pointer-over; `pinned` is a click-locked
-  // menu that stays open after the pointer leaves (until re-click / outside / Esc).
-  const [hovered, setHovered] = useState<string | null>(null);
-  const [pinned, setPinned] = useState<string | null>(null);
-  const navRef = useRef<HTMLElement | null>(null);
+  // Radix NavigationMenu is controlled so a Space keypress on a link-trigger can
+  // open the submenu without navigating (Enter still follows the hub link).
+  const [menuValue, setMenuValue] = useState("");
   const { collections } = useCollections();
 
-  // No "all collections" entry — the קולקציות button itself goes to the
+  // No "all collections" entry — the קולקציות trigger itself goes to the
   // unfiltered page, and filtering happens there in the sidebar.
-  const collectionsSub = useMemo(
+  const collectionsSub = useMemo<SubLink[]>(
     () => collections.map((c) => ({ label: c.name_he, to: `/collections#${c.slug}` })),
     [collections]
   );
 
-  const navLinks = useMemo(
+  // אודות has no hub route, so it is the one trigger that only opens a menu.
+  const mainNav = useMemo<NavEntry[]>(
     () => [
-      { label: "דף הבית", to: "/" },
-      { label: "הסיפור שלנו", to: "/story" },
       { label: "קולקציות", to: "/collections", submenu: collectionsSub },
-      { label: "חומרים", to: "/materials", submenu: materialsSub },
       { label: "פרויקטים", to: "/projects" },
-      { label: "עשה זאת בעצמך", to: "/diy", submenu: diySub },
+      { label: "חומרים", to: "/materials", submenu: materialsSub },
+      { label: "הסטודיו", to: "/diy", submenu: studioSub },
       { label: "מגזין", to: "/blog" },
-      { label: "שאלות ותשובות", to: "/faq" },
+      { label: "אודות", submenu: aboutSub },
       { label: "מועדון", to: "/club" },
-      { label: "צרו קשר", to: "/contact" },
     ],
     [collectionsSub]
   );
 
-
-
+  // The drawer carries the same IA; צרו קשר lives here as a plain row because
+  // the desktop bar renders it as a separate CTA outside the menu.
+  const mobileNav = useMemo<NavEntry[]>(
+    () => [...mainNav, { label: "צרו קשר", to: "/contact" }],
+    [mainNav]
+  );
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -84,22 +102,10 @@ const Header = () => {
     };
   }, [open]);
 
-  // A click-pinned desktop dropdown closes on outside click or Escape.
+  // Clicking a hub trigger navigates without Radix noticing — close on route change.
   useEffect(() => {
-    if (!pinned) return;
-    const onPointerDown = (e: PointerEvent) => {
-      if (navRef.current && !navRef.current.contains(e.target as Node)) setPinned(null);
-    };
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setPinned(null);
-    };
-    document.addEventListener("pointerdown", onPointerDown);
-    document.addEventListener("keydown", onKey);
-    return () => {
-      document.removeEventListener("pointerdown", onPointerDown);
-      document.removeEventListener("keydown", onKey);
-    };
-  }, [pinned]);
+    setMenuValue("");
+  }, [pathname]);
 
   return (
     <header
@@ -115,101 +121,119 @@ const Header = () => {
       <div dir="rtl" className="w-full px-4 lg:px-6 flex items-center h-24 gap-4">
 
         {/* Logo (right side in RTL) */}
-        <div className="hidden lg:flex items-center shrink-0">
+        <div className="hidden xl:flex items-center shrink-0">
           <Link to="/" aria-label="Aluma">
-            <img src={alumaLogo} alt="Aluma" className="h-7 xl:h-8 w-auto" />
+            <img src={alumaLogo} alt="Aluma" className="h-8 w-auto" />
           </Link>
         </div>
 
         {/* Mobile logo */}
-        <Link to="/" className="lg:hidden shrink-0 order-last" aria-label="Aluma">
+        <Link to="/" className="xl:hidden shrink-0 order-last" aria-label="Aluma">
           <img src={alumaLogo} alt="Aluma" className="h-7 md:h-8 w-auto" />
         </Link>
 
-        {/* Desktop nav */}
-        <nav
-          ref={navRef}
-          className="hidden lg:flex flex-1 items-center justify-center gap-0.5 xl:gap-1 2xl:gap-1.5 whitespace-nowrap"
+        {/* Desktop nav — Radix NavigationMenu: hover opens with delay, click on a
+            hub trigger navigates, Space/ArrowDown opens for keyboard users,
+            arrows walk items, Esc closes and restores focus. */}
+        <NavigationMenu.Root
+          dir="rtl"
+          value={menuValue}
+          onValueChange={setMenuValue}
+          aria-label="ניווט ראשי"
+          className="hidden xl:flex flex-1 justify-center"
         >
-          {navLinks.map((link) => {
-            // While a menu is pinned open, only that one shows; otherwise hover rules.
-            const isOpen = pinned ? pinned === link.to : hovered === link.to;
-            const chevron = link.submenu ? (
-              <ChevronDown
-                className={`ms-1 h-3.5 w-3.5 opacity-70 transition-transform duration-300 ${
-                  isOpen ? "rotate-180" : ""
-                }`}
-                aria-hidden="true"
-              />
-            ) : null;
-            return (
-              <div
-                key={link.to}
-                className="relative"
-                onMouseEnter={() => setHovered(link.to)}
-                onMouseLeave={() => setHovered((h) => (h === link.to ? null : h))}
-              >
-                {/* Every top-level item navigates. Submenus open on hover (and
-                    stay pinned on click of the chevron area) but never swallow
-                    the click — קולקציות goes to the unfiltered page. */}
-                <NavLink
-                  to={link.to}
-                  end={link.to === "/"}
-                  className={({ isActive }) =>
-                    `${navItem} ${isActive || isOpen ? navActive : navRest}`
-                  }
-                >
-                  {link.label}
-                  {chevron}
-                </NavLink>
+          <NavigationMenu.List className="flex items-center gap-1 2xl:gap-1.5 whitespace-nowrap">
+            {mainNav.map((link) => {
+              if (!link.submenu) {
+                return (
+                  <NavigationMenu.Item key={link.label}>
+                    <NavigationMenu.Link asChild>
+                      <NavLink
+                        to={link.to!}
+                        className={({ isActive }) =>
+                          `${navItem} ${isActive ? navActive : navRest}`
+                        }
+                      >
+                        {link.label}
+                      </NavLink>
+                    </NavigationMenu.Link>
+                  </NavigationMenu.Item>
+                );
+              }
 
-                {link.submenu && (
-                  <div
-                    className={`absolute top-full right-1/2 translate-x-1/2 pt-3 z-50 transition-all duration-200 ease-out ${
-                      isOpen
-                        ? "opacity-100 visible translate-y-0"
-                        : "opacity-0 invisible -translate-y-1 pointer-events-none"
-                    }`}
-                  >
-                    <div
-                      role="menu"
-                      className="min-w-[240px] rounded-xl border border-border bg-popover p-1.5 shadow-luxury"
-                    >
+              const chevron = (
+                <ChevronDown
+                  className="ms-1 h-3.5 w-3.5 opacity-70 transition-transform duration-300 group-data-[state=open]:rotate-180"
+                  aria-hidden="true"
+                />
+              );
+
+              return (
+                <NavigationMenu.Item key={link.label} value={link.label} className="relative">
+                  {link.to ? (
+                    <NavigationMenu.Trigger asChild>
+                      <NavLink
+                        to={link.to}
+                        onKeyDown={(e) => {
+                          if (e.key === " ") {
+                            e.preventDefault();
+                            setMenuValue((v) => (v === link.label ? "" : link.label));
+                          }
+                        }}
+                        className={({ isActive }) =>
+                          `${navItem} ${navOpen} ${isActive ? navActive : navRest}`
+                        }
+                      >
+                        {link.label}
+                        {chevron}
+                      </NavLink>
+                    </NavigationMenu.Trigger>
+                  ) : (
+                    <NavigationMenu.Trigger className={`${navItem} ${navOpen} ${navRest}`}>
+                      {link.label}
+                      {chevron}
+                    </NavigationMenu.Trigger>
+                  )}
+
+                  <NavigationMenu.Content className="absolute top-full right-1/2 translate-x-1/2 pt-3 z-50">
+                    <div className={panelClass}>
                       {link.submenu.map((sub) => (
-                        <Link
-                          key={sub.to}
-                          to={sub.to}
-                          role="menuitem"
-                          onClick={() => {
-                            setPinned(null);
-                            setHovered(null);
-                          }}
-                          className="block rounded-lg px-4 py-2.5 text-sm text-right text-foreground transition-colors duration-200 hover:bg-secondary/70 hover:text-accent"
-                        >
-                          {sub.label}
-                        </Link>
+                        <NavigationMenu.Link asChild key={sub.to}>
+                          <Link to={sub.to} className={panelItemClass}>
+                            {sub.label}
+                          </Link>
+                        </NavigationMenu.Link>
                       ))}
                     </div>
-                  </div>
-                )}
-              </div>
-            );
-          })}
-        </nav>
+                  </NavigationMenu.Content>
+                </NavigationMenu.Item>
+              );
+            })}
+          </NavigationMenu.List>
+        </NavigationMenu.Root>
 
-        {/* WhatsApp — last child, so RTL places it at the far left of the bar */}
-        <a
-          href="https://wa.me/972504519062"
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="צרו קשר בוואטסאפ"
-          className="hidden lg:flex shrink-0 w-11 h-11 rounded-full bg-[#25D366] text-white items-center justify-center shadow-soft hover:scale-110 transition-smooth"
-        >
-          <WhatsAppIcon className="w-6 h-6" />
-        </a>
+        {/* Contact CTA + WhatsApp — last children, so RTL places them at the far
+            left of the bar, separated from the menu by the centered nav. */}
+        <div className="hidden xl:flex items-center gap-3 shrink-0">
+          <Link
+            to="/contact"
+            className="inline-flex items-center rounded-[10px] border border-primary/40 px-4 py-2 text-meta font-medium tracking-wide text-primary transition-colors duration-300 hover:bg-primary hover:text-primary-foreground"
+          >
+            צרו קשר
+          </Link>
+          <a
+            href="https://wa.me/972504519062"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="צרו קשר בוואטסאפ"
+            className="flex shrink-0 w-11 h-11 rounded-full bg-[#25D366] text-white items-center justify-center shadow-soft hover:scale-110 transition-smooth"
+          >
+            <WhatsAppIcon className="w-6 h-6" />
+          </a>
+        </div>
 
         {/* Mobile menu button */}
-        <div className="lg:hidden relative z-50 order-first me-auto">
+        <div className="xl:hidden relative z-50 order-first me-auto">
           <Button
             variant="ghost"
             size="icon"
@@ -224,7 +248,7 @@ const Header = () => {
 
       {/* Mobile menu, slide-in from right */}
       <div
-        className={`lg:hidden fixed inset-0 z-40 transition-opacity duration-300 ${
+        className={`xl:hidden fixed inset-0 z-40 transition-opacity duration-300 ${
           open ? "opacity-100 visible" : "opacity-0 invisible pointer-events-none"
         }`}
         aria-hidden={!open}
@@ -257,34 +281,45 @@ const Header = () => {
 
           {/* Scrollable links area */}
           <div className="flex-1 overflow-y-auto px-6 py-6 flex flex-col gap-1">
-            {navLinks.map((link, i) => {
-              const isOpen = expanded === link.to;
+            {mobileNav.map((link, i) => {
+              const isOpen = expanded === link.label;
               const hasSub = !!link.submenu;
               return (
                 <div
-                  key={link.to}
+                  key={link.label}
                   style={{ transitionDelay: open ? `${100 + i * 50}ms` : "0ms" }}
                   className={`transition-all duration-500 ${
                     open ? "opacity-100 translate-x-0" : "opacity-0 translate-x-4"
                   }`}
                 >
                   <div className="flex items-center justify-between gap-2 border-b border-border/40">
-                    <NavLink
-                      to={link.to}
-                      end={link.to === "/"}
-                      onClick={() => setOpen(false)}
-                      className={({ isActive }) =>
-                        `flex-1 font-display text-xl text-right py-3 ${
-                          isActive ? "text-accent" : "text-foreground hover:text-accent"
-                        }`
-                      }
-                    >
-                      {link.label}
-                    </NavLink>
+                    {link.to ? (
+                      <NavLink
+                        to={link.to}
+                        onClick={() => setOpen(false)}
+                        className={({ isActive }) =>
+                          `flex-1 font-display text-xl text-right py-3 ${
+                            isActive ? "text-accent" : "text-foreground hover:text-accent"
+                          }`
+                        }
+                      >
+                        {link.label}
+                      </NavLink>
+                    ) : (
+                      /* אודות has no hub page — the label itself toggles the submenu */
+                      <button
+                        type="button"
+                        onClick={() => setExpanded(isOpen ? null : link.label)}
+                        aria-expanded={isOpen}
+                        className="flex-1 font-display text-xl text-right py-3 text-foreground hover:text-accent"
+                      >
+                        {link.label}
+                      </button>
+                    )}
                     {hasSub && (
                       <button
                         type="button"
-                        onClick={() => setExpanded(isOpen ? null : link.to)}
+                        onClick={() => setExpanded(isOpen ? null : link.label)}
                         aria-label={isOpen ? "סגור תת תפריט" : "פתח תת תפריט"}
                         aria-expanded={isOpen}
                         className="w-10 h-10 shrink-0 rounded-sm flex items-center justify-center text-primary/70 hover:text-accent hover:bg-secondary/40 transition-smooth"
@@ -299,19 +334,23 @@ const Header = () => {
                   </div>
 
                   {hasSub && isOpen && (
-                    <div className="flex flex-col py-2 pr-4 gap-1 animate-in fade-in slide-in-from-top-1 duration-200">
+                    <div className="flex flex-col py-2 ps-4 gap-1 animate-in fade-in slide-in-from-top-1 duration-200">
                       {link.submenu!.map((sub) => (
                         <NavLink
-                          key={`${link.to}-${sub.to}`}
+                          key={sub.to}
                           to={sub.to}
                           onClick={() => setOpen(false)}
                           className={({ isActive }) =>
-                            `text-sm tracking-wide text-right py-1.5 ${
+                            `flex items-center gap-2 text-meta tracking-wide text-right py-1.5 ${
                               isActive ? "text-accent" : "text-foreground hover:text-accent"
                             }`
                           }
                         >
-                          ← {sub.label}
+                          <ArrowLeft
+                            className="h-4 w-4 shrink-0 opacity-70"
+                            aria-hidden="true"
+                          />
+                          {sub.label}
                         </NavLink>
                       ))}
                     </div>
@@ -319,25 +358,6 @@ const Header = () => {
                 </div>
               );
             })}
-
-            <div
-              className="mt-8 flex items-center gap-2"
-              style={{
-                transition: "all 0.5s",
-                transitionDelay: open ? `${100 + navLinks.length * 50}ms` : "0ms",
-                opacity: open ? 1 : 0,
-                transform: open ? "translateY(0)" : "translateY(16px)",
-              }}
-            >
-              <span className="h-px flex-1 bg-primary/30" />
-              <span
-                className="text-[9px] tracking-[0.2em] uppercase text-foreground whitespace-nowrap"
-                dir="ltr"
-              >
-                Where outdoor becomes lifestyle
-              </span>
-              <span className="h-px flex-1 bg-primary/30" />
-            </div>
           </div>
         </nav>
       </div>

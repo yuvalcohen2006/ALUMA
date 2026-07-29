@@ -41,7 +41,7 @@ const Avatar = ({ t }: { t: Testimonial }) =>
   ) : (
     <div
       aria-hidden="true"
-      className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/12 text-primary font-medium text-sm"
+      className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/12 text-primary font-medium text-meta"
     >
       {t.initials}
     </div>
@@ -50,12 +50,12 @@ const Avatar = ({ t }: { t: Testimonial }) =>
 const Card = ({ t }: { t: Testimonial }) => (
   <div className="w-full max-w-xs rounded-[14px] border border-border/70 bg-card p-6 md:p-7 shadow-soft">
     <Stars rating={t.rating} />
-    <p className="mt-3 text-[15px] leading-relaxed text-foreground text-pretty">{t.text}</p>
+    <p className="mt-3 text-meta leading-relaxed text-foreground text-pretty">{t.text}</p>
     <div className="mt-5 flex items-center gap-3">
       <Avatar t={t} />
       <div className="flex flex-col">
         <span className="font-medium leading-5 text-foreground">{t.name}</span>
-        <span className="text-sm leading-5 text-muted-foreground">{t.role}</span>
+        <span className="text-meta text-muted-foreground">{t.role}</span>
       </div>
     </div>
   </div>

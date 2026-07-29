@@ -54,7 +54,7 @@ const Newsletter = () => {
                 align="center"
                 subtitle="טיפים לעיצוב מרפסות וגינות, הצצה לקולקציות חדשות לפני כולם, ותוכן השראה שבועי ישירות לאינבוקס."
               >
-                הצטרפו למועדון
+                הישארו בהשראה
               </SectionHeading>
             </div>
 
@@ -64,14 +64,14 @@ const Newsletter = () => {
                 role="status"
                 aria-live="polite"
               >
-                <div className="w-9 h-9 rounded-sm bg-primary text-primary-foreground flex items-center justify-center">
+                <div className="w-9 h-9 rounded-[10px] bg-primary text-primary-foreground flex items-center justify-center">
                   <Check className="w-5 h-5" />
                 </div>
                 <div className="text-right">
-                  <div className="font-display text-base md:text-lg leading-tight">
+                  <div className="font-display text-lede leading-tight">
                     תודה שהצטרפת!
                   </div>
-                  <div className="text-xs text-muted-foreground">
+                  <div className="text-meta text-muted-foreground">
                     עדכונים ותוכן השראה ישלחו אליך בקרוב
                   </div>
                 </div>
@@ -90,7 +90,7 @@ const Newsletter = () => {
                   onChange={(e) => setName(e.target.value)}
                   placeholder="שם פרטי"
                   autoComplete="given-name"
-                  className="flex-1 px-4 py-3 rounded-[10px] text-[16px] bg-background border border-border text-foreground placeholder:text-muted-foreground/70 focus:border-primary outline-none transition-smooth"
+                  className="flex-1 px-4 py-3 rounded-[10px] text-meta bg-background border border-border text-foreground placeholder:text-muted-foreground/70 focus:border-primary outline-none transition-smooth"
                 />
                 <label className="sr-only" htmlFor="newsletter-email">אימייל</label>
                 <div className="flex-[1.4] relative">
@@ -103,7 +103,7 @@ const Newsletter = () => {
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="כתובת אימייל"
                     autoComplete="email"
-                    className="w-full h-full pr-10 pl-4 py-3 rounded-[10px] text-[16px] bg-background border border-border text-foreground placeholder:text-muted-foreground/70 focus:border-primary outline-none transition-smooth"
+                    className="w-full h-full pr-10 pl-4 py-3 rounded-[10px] text-meta bg-background border border-border text-foreground placeholder:text-muted-foreground/70 focus:border-primary outline-none transition-smooth"
                   />
                 </div>
                 {/* Same .btn-shine treatment as every other CTA on the site */}

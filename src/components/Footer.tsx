@@ -28,7 +28,7 @@ const Footer = () => {
           {/* Column 1 (rightmost in RTL), Logo + about + socials */}
           <div className="w-full text-center md:text-right lg:max-w-[320px] lg:pl-8">
             <img src={alumaLogo} alt="Aluma" loading="lazy" decoding="async" width={400} height={100} className="h-10 w-auto mb-5 mx-auto md:ml-auto brightness-0 invert opacity-90" />
-            <p className="text-background/75 text-sm leading-relaxed mb-6">
+            <p className="text-background/75 text-body mb-6">
               אנחנו יוצרים מערכות חוץ שמרגישות כמו סלון יוקרתי תחת כיפת השמיים —
               מקום לארח, להירגע, ולחיות את הרגעים היפים באמת.
             </p>
@@ -63,55 +63,60 @@ const Footer = () => {
 
           {/* Column 2, Quick navigation */}
           <div className="w-full text-center md:text-right lg:max-w-[220px] lg:justify-self-center lg:px-8 lg:border-r lg:border-background/15">
-            <h4 className="font-display text-xl mb-6">מעבר מהיר</h4>
-            <ul className="space-y-3 text-sm text-background/85">
+            <h4 className="font-display text-card mb-6">מעבר מהיר</h4>
+            <ul className="space-y-3 text-meta text-background/85">
               <li>
-                <Link to="/" className="link-underline inline-block hover:text-accent transition-smooth">
+                <Link to="/" className="link-underline inline-block hover:text-background transition-smooth">
                   דף הבית
                 </Link>
               </li>
               <li>
-                <Link to="/story" className="link-underline inline-block hover:text-accent transition-smooth">
+                <Link to="/story" className="link-underline inline-block hover:text-background transition-smooth">
                   הסיפור שלנו
                 </Link>
               </li>
               <li>
-                <Link to="/collections" className="link-underline inline-block hover:text-accent transition-smooth">
+                <Link to="/collections" className="link-underline inline-block hover:text-background transition-smooth">
                   קולקציות
                 </Link>
               </li>
               <li>
-                <Link to="/materials" className="link-underline inline-block hover:text-accent transition-smooth">
+                <Link to="/materials" className="link-underline inline-block hover:text-background transition-smooth">
                   חומרים
                 </Link>
               </li>
               <li>
-                <Link to="/projects" className="link-underline inline-block hover:text-accent transition-smooth">
+                <Link to="/projects" className="link-underline inline-block hover:text-background transition-smooth">
                   פרויקטים
                 </Link>
               </li>
               <li>
-                <Link to="/blog" className="link-underline inline-block hover:text-accent transition-smooth">
+                <Link to="/diy" className="link-underline inline-block hover:text-background transition-smooth">
+                  הסטודיו
+                </Link>
+              </li>
+              <li>
+                <Link to="/blog" className="link-underline inline-block hover:text-background transition-smooth">
                   מגזין
                 </Link>
               </li>
               <li>
-                <Link to="/questionnaire" className="link-underline inline-block hover:text-accent transition-smooth">
+                <Link to="/questionnaire" className="link-underline inline-block hover:text-background transition-smooth">
                   שאלון חכם
                 </Link>
               </li>
               <li>
-                <Link to="/account" className="link-underline inline-block hover:text-accent transition-smooth">
+                <Link to="/account" className="link-underline inline-block hover:text-background transition-smooth">
                   אזור לקוחות
                 </Link>
               </li>
               <li>
-                <Link to="/faq" className="link-underline inline-block hover:text-accent transition-smooth">
+                <Link to="/faq" className="link-underline inline-block hover:text-background transition-smooth">
                   שאלות ותשובות
                 </Link>
               </li>
               <li>
-                <Link to="/contact" className="link-underline inline-block hover:text-accent transition-smooth">
+                <Link to="/contact" className="link-underline inline-block hover:text-background transition-smooth">
                   צרו קשר
                 </Link>
               </li>
@@ -120,25 +125,25 @@ const Footer = () => {
 
           {/* Column 3, Materials */}
           <div className="w-full text-center md:text-right lg:max-w-[220px] lg:justify-self-center lg:px-8 lg:border-r lg:border-background/15">
-            <h4 className="font-display text-xl mb-6">החומרים שלנו</h4>
-            <ul className="space-y-3 text-sm text-background/85">
+            <h4 className="font-display text-card mb-6">החומרים שלנו</h4>
+            <ul className="space-y-3 text-meta text-background/85">
               <li>
-                <Link to="/materials" className="link-underline inline-block hover:text-accent transition-smooth">
+                <Link to="/materials" className="link-underline inline-block hover:text-background transition-smooth">
                   בד Sunbrella
                 </Link>
               </li>
               <li>
-                <Link to="/materials" className="link-underline inline-block hover:text-accent transition-smooth">
+                <Link to="/materials" className="link-underline inline-block hover:text-background transition-smooth">
                   אלומיניום
                 </Link>
               </li>
               <li>
-                <Link to="/materials" className="link-underline inline-block hover:text-accent transition-smooth">
+                <Link to="/materials" className="link-underline inline-block hover:text-background transition-smooth">
                   שיש גרניט פורצלן
                 </Link>
               </li>
               <li>
-                <Link to="/materials/polystone" className="link-underline inline-block hover:text-accent transition-smooth">
+                <Link to="/materials/polystone" className="link-underline inline-block hover:text-background transition-smooth">
                   PolyStone
                 </Link>
               </li>
@@ -147,12 +152,12 @@ const Footer = () => {
 
           {/* Column 4 (leftmost in RTL), Contact */}
           <div className="w-full text-center md:text-right lg:max-w-[240px] lg:justify-self-start lg:pr-8 lg:border-r lg:border-background/15">
-            <h4 className="font-display text-xl mb-6">יצירת קשר</h4>
-            <ul className="space-y-4 text-sm text-background/85">
+            <h4 className="font-display text-card mb-6">יצירת קשר</h4>
+            <ul className="space-y-4 text-meta text-background/85">
               <li>
                 <a
                   href="tel:+972504519062"
-                  className="flex items-center gap-3 justify-center md:justify-start hover:text-accent transition-smooth"
+                  className="flex items-center gap-3 justify-center md:justify-start hover:text-background transition-smooth"
                 >
                   <Phone className="w-4 h-4 shrink-0" />
                   <span dir="ltr">050-451-9062</span>
@@ -165,7 +170,7 @@ const Footer = () => {
               <li>
                 <a
                   href="mailto:info@aluma.co.il"
-                  className="flex items-center gap-3 justify-center md:justify-start hover:text-accent transition-smooth"
+                  className="flex items-center gap-3 justify-center md:justify-start hover:text-background transition-smooth"
                 >
                   <Mail className="w-4 h-4 shrink-0" />
                   <span dir="ltr">info@aluma.co.il</span>
@@ -176,7 +181,7 @@ const Footer = () => {
                   href="https://wa.me/972504519062"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-3 justify-center md:justify-start hover:text-accent transition-smooth"
+                  className="flex items-center gap-3 justify-center md:justify-start hover:text-background transition-smooth"
                 >
                   <WhatsAppIcon className="w-4 h-4 shrink-0" />
                   <span>צ'אט באמצעות WhatsApp</span>
@@ -185,8 +190,8 @@ const Footer = () => {
             </ul>
 
             <div className="mt-8 pt-6 border-t border-background/20 max-w-[240px] mx-auto md:mx-0 md:max-w-none">
-              <div className="text-sm font-semibold mb-2">שעות פעילות</div>
-              <div className="text-sm space-y-1 font-normal">
+              <div className="text-meta font-semibold mb-2">שעות פעילות</div>
+              <div className="text-meta space-y-1 font-normal">
                 <div className="flex justify-center md:justify-between gap-4">
                   <span>א׳ – ה׳</span>
                   <span dir="ltr">08:30 – 18:00</span>
@@ -196,23 +201,23 @@ const Footer = () => {
                   <span dir="ltr">08:30 – 12:00</span>
                 </div>
               </div>
-              <div className="text-xs text-background/70 mt-3">
+              <div className="text-meta text-background/70 mt-3">
                 ניתן להגיע לאולם התצוגה בתיאום מראש
               </div>
             </div>
           </div>
         </div>
 
-        <div dir="rtl" className="mt-14 pt-8 border-t border-background/15 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-background/60 text-center md:text-right">
+        <div dir="rtl" className="mt-14 pt-8 border-t border-background/15 flex flex-col md:flex-row justify-between items-center gap-4 text-meta text-background/60 text-center md:text-right">
           <div>© {new Date().getFullYear()} Aluma. כל הזכויות שמורות.</div>
           <div className="flex flex-wrap justify-center gap-5">
-            <Link to="/accessibility" className="link-underline inline-block hover:text-accent transition-smooth">
+            <Link to="/accessibility" className="link-underline inline-block hover:text-background transition-smooth">
               הצהרת נגישות
             </Link>
-            <Link to="/terms" className="link-underline inline-block hover:text-accent transition-smooth">
+            <Link to="/terms" className="link-underline inline-block hover:text-background transition-smooth">
               תקנון ומדיניות
             </Link>
-            <Link to="/privacy" className="link-underline inline-block hover:text-accent transition-smooth">
+            <Link to="/privacy" className="link-underline inline-block hover:text-background transition-smooth">
               מדיניות פרטיות
             </Link>
           </div>

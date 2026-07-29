@@ -69,7 +69,7 @@ const PrivacyPage = () => {
           <div>
             <h2 className="font-display text-2xl text-primary mb-3">הזכויות שלכם</h2>
             <p>
-              בהתאם לחוק הגנת הפרטיות, התשמ״א-1981, עומדת לכם הזכות לעיין במידע
+              בהתאם לחוק הגנת הפרטיות, התשמ״א־1981, עומדת לכם הזכות לעיין במידע
               האישי שמוחזק עליכם, לבקש את תיקונו או מחיקתו, ולהסיר עצמכם מרשימת
               דיוור. לפניות בנושא:{" "}
               <a href="mailto:info@aluma.co.il" className="text-foreground underline hover:text-accent" dir="ltr">

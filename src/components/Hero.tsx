@@ -108,7 +108,7 @@ const Hero = () => {
         {settings.cta_text && settings.cta_link && (
           <Link
             to={settings.cta_link}
-            className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-sm tracking-wider hover:bg-accent transition-smooth animate-fade-in-up"
+            className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-[10px] text-meta tracking-wider hover:bg-accent transition-smooth animate-fade-in-up"
             style={{ animationDelay: "0.3s" }}
           >
             {settings.cta_text}
