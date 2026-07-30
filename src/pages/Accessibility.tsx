@@ -13,7 +13,7 @@ const AccessibilityPage = () => {
       <PageHero title="נגישות" />
 
       <section className="py-12 md:py-20 bg-background">
-        <div className="container-luxury max-w-3xl prose-luxury text-foreground space-y-8 text-body text-right">
+        <div className="container-luxury max-w-3xl text-foreground space-y-8 text-body text-right">
           <div>
             <h2 className="font-display text-2xl text-primary mb-3">המחויבות שלנו</h2>
             <p>
@@ -62,7 +62,7 @@ const AccessibilityPage = () => {
             </ul>
           </div>
 
-          <div className="pt-4 border-t border-border text-[18px] text-muted-foreground">
+          <div className="pt-4 border-t border-border text-meta text-muted-foreground">
             הצהרה זו עודכנה לאחרונה ב־{new Date().toLocaleDateString("he-IL")}.
           </div>
         </div>

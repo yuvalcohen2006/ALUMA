@@ -39,7 +39,7 @@ const CookieConsent = () => {
         >
           <X className="w-4 h-4" />
         </button>
-        <h3 className="font-display text-card text-foreground mb-1">
+        <h3 className="font-display text-card-title text-foreground mb-1">
           העדפות פרטיות
         </h3>
         <p className="text-meta text-muted-foreground leading-relaxed mb-3">

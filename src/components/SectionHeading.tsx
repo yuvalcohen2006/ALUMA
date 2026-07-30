@@ -20,8 +20,9 @@ interface SectionHeadingProps {
   className?: string;
 }
 
-// Shared section heading: terracotta (or white) 30px bold Heebo title,
-// cream divider, 20px normal running text.
+// Shared section heading: terracotta (or white) bold display title at
+// text-section (38px), cream divider, text-lede (20px) running text. Both are
+// rem tokens, so the accessibility widget's font slider moves them.
 const SectionHeading = ({
   children,
   subtitle,
@@ -40,7 +41,7 @@ const SectionHeading = ({
       : "text-primary";
   return (
     <div className={`flex flex-col ${alignCls} ${className}`}>
-      <Tag className={`font-display font-bold text-[38px] leading-snug ${titleColor}`}>
+      <Tag className={`font-display font-bold text-section leading-snug ${titleColor}`}>
         {children}
       </Tag>
       {subtitle != null && subtitle !== "" && (
@@ -52,7 +53,7 @@ const SectionHeading = ({
             />
           )}
           <p
-            className={`text-[20px] font-normal leading-relaxed max-w-2xl text-pretty ${
+            className={`text-lede font-normal leading-relaxed max-w-2xl text-pretty ${
               // With the rule gone the subtitle would sit right under the title,
               // so it carries the gap itself.
               divider ? "" : "mt-7"

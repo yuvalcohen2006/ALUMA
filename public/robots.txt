@@ -1,15 +1,13 @@
 User-agent: Googlebot
 Allow: /
 Disallow: /admin
-Disallow: /account
-Disallow: /auth
+Disallow: /club/auth
 Disallow: /club/dashboard
 
 User-agent: Bingbot
 Allow: /
 Disallow: /admin
-Disallow: /account
-Disallow: /auth
+Disallow: /club/auth
 Disallow: /club/dashboard
 
 User-agent: Twitterbot
@@ -21,8 +19,7 @@ Allow: /
 User-agent: *
 Allow: /
 Disallow: /admin
-Disallow: /account
-Disallow: /auth
+Disallow: /club/auth
 Disallow: /club/dashboard
 
 Sitemap: https://alumaoutdoor.com/sitemap.xml

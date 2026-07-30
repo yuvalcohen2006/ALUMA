@@ -153,7 +153,7 @@ const AccessibilityWidget = () => {
                 >
                   <Minus className="w-4 h-4" />
                 </button>
-                <div className="flex-1 text-center font-display text-card text-foreground">
+                <div className="flex-1 text-center font-display text-card-title text-foreground">
                   {Math.round(settings.fontScale * 100)}%
                 </div>
                 <button

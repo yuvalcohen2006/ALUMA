@@ -79,7 +79,7 @@ const PrivacyPage = () => {
             </p>
           </div>
 
-          <div className="pt-4 border-t border-border text-[18px] text-muted-foreground">
+          <div className="pt-4 border-t border-border text-meta text-muted-foreground">
             עודכן לאחרונה: {new Date().toLocaleDateString("he-IL")}.
           </div>
         </div>

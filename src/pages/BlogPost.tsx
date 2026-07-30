@@ -58,10 +58,10 @@ const ARTICLE_BODY = [
   // Headings — the site's section/card scale, not the browser's. h1 is mapped
   // too: the page already owns the real h1, but authors paste them in, and an
   // unmapped one renders at preflight's `font-size: inherit`, i.e. body copy.
-  "[&_h1]:font-display [&_h1]:font-bold [&_h1]:text-[26px] [&_h1]:leading-snug [&_h1]:text-primary [&_h1]:mt-12 [&_h1]:mb-4",
-  "[&_h2]:font-display [&_h2]:font-bold [&_h2]:text-[26px] [&_h2]:leading-snug [&_h2]:text-primary [&_h2]:mt-12 [&_h2]:mb-4",
-  "[&_h3]:font-display [&_h3]:font-normal [&_h3]:text-[22px] [&_h3]:leading-snug [&_h3]:text-foreground [&_h3]:mt-10 [&_h3]:mb-3",
-  "[&_h4]:font-display [&_h4]:font-normal [&_h4]:text-[20px] [&_h4]:leading-snug [&_h4]:text-foreground [&_h4]:mt-8 [&_h4]:mb-3",
+  "[&_h1]:font-display [&_h1]:font-bold [&_h1]:text-subsection [&_h1]:leading-snug [&_h1]:text-primary [&_h1]:mt-12 [&_h1]:mb-4",
+  "[&_h2]:font-display [&_h2]:font-bold [&_h2]:text-subsection [&_h2]:leading-snug [&_h2]:text-primary [&_h2]:mt-12 [&_h2]:mb-4",
+  "[&_h3]:font-display [&_h3]:font-normal [&_h3]:text-card-title [&_h3]:leading-snug [&_h3]:text-foreground [&_h3]:mt-10 [&_h3]:mb-3",
+  "[&_h4]:font-display [&_h4]:font-normal [&_h4]:text-lede [&_h4]:leading-snug [&_h4]:text-foreground [&_h4]:mt-8 [&_h4]:mb-3",
 
   // Running text.
   "[&_p]:mb-6 [&_p]:text-pretty",
@@ -70,7 +70,7 @@ const ARTICLE_BODY = [
   // explicitly; ps-6 is logical, so the bullets sit on the right in RTL.
   "[&_ul]:mb-6 [&_ul]:ps-6 [&_ul]:list-disc",
   "[&_ol]:mb-6 [&_ol]:ps-6 [&_ol]:list-decimal",
-  "[&_li]:mb-2 [&_li]:text-[18px]",
+  "[&_li]:mb-2 [&_li]:text-meta",
   "[&_li::marker]:text-primary/70",
 
   // Links inside the copy — terracotta on warm white, underline kept.
@@ -80,19 +80,19 @@ const ARTICLE_BODY = [
 
   // Preflight leaves <small> alone, so the browser default (`font-size: smaller`,
   // ~14px) survives — the exact kind of small weird text the pass exists to kill.
-  "[&_small]:text-[18px]",
+  "[&_small]:text-meta",
 
   // Pull quote — rule on the start (right) edge.
   "[&_blockquote]:my-8 [&_blockquote]:border-s-2 [&_blockquote]:border-primary/45 [&_blockquote]:ps-6",
-  "[&_blockquote]:text-[20px] [&_blockquote]:leading-relaxed [&_blockquote]:text-foreground-soft",
+  "[&_blockquote]:text-lede [&_blockquote]:leading-relaxed [&_blockquote]:text-foreground-soft",
 
   // Media and rules.
   "[&_img]:w-full [&_img]:rounded-[14px] [&_img]:my-8",
-  "[&_figcaption]:mt-3 [&_figcaption]:text-[18px] [&_figcaption]:text-muted-foreground",
+  "[&_figcaption]:mt-3 [&_figcaption]:text-meta [&_figcaption]:text-muted-foreground",
   "[&_hr]:my-10 [&_hr]:border-border",
 
   // Tables are rare in the CMS but arrive completely bare when they do.
-  "[&_table]:w-full [&_table]:my-8 [&_table]:text-[18px]",
+  "[&_table]:w-full [&_table]:my-8 [&_table]:text-meta",
   "[&_th]:py-3 [&_th]:text-right [&_th]:font-normal [&_th]:text-foreground",
   "[&_td]:py-3 [&_td]:text-right [&_td]:border-b [&_td]:border-border",
 
@@ -154,11 +154,11 @@ const BlogPost = () => {
       <Layout>
         <section className="pt-40 pb-20 bg-background">
           <div className="container-luxury max-w-3xl text-center">
-            <p className="text-[20px] leading-relaxed text-foreground mb-6">המאמר לא נמצא.</p>
+            <p className="text-lede leading-relaxed text-foreground mb-6">המאמר לא נמצא.</p>
             <button
               type="button"
               onClick={() => nav("/blog")}
-              className="text-[18px] text-accent link-underline transition-smooth"
+              className="text-meta text-accent link-underline transition-smooth"
             >
               חזרה למגזין
             </button>
@@ -187,7 +187,7 @@ const BlogPost = () => {
           {/* Back, not forward: in RTL the return arrow points right. */}
           <Link
             to="/blog"
-            className="group inline-flex items-center gap-2 text-[18px] text-foreground-soft hover:text-primary transition-smooth mb-10"
+            className="group inline-flex items-center gap-2 text-meta text-foreground-soft hover:text-primary transition-smooth mb-10"
           >
             <ArrowRight
               className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1"
@@ -203,7 +203,7 @@ const BlogPost = () => {
           </h1>
           <div className="w-20 h-[2px] bg-primary/55 mx-auto mt-2" aria-hidden="true" />
           {meta.length > 0 && (
-            <div className="flex flex-wrap items-center justify-center gap-3 text-[18px] text-muted-foreground mt-5">
+            <div className="flex flex-wrap items-center justify-center gap-3 text-meta text-muted-foreground mt-5">
               {meta.map((part, i) => (
                 <Fragment key={part}>
                   {/* shrink-0: without it the hairline collapses to nothing once

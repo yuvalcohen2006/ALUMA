@@ -68,7 +68,17 @@ export default {
         // NOT named "body": that class name is taken by the .text-body prose
         // utility in index.css (18px/1.75) and the collision would be silent.
         lede: ["1.25rem", { lineHeight: "1.75" }], // 20px running text
-        card: ["1.375rem", { lineHeight: "1.35" }], // 22px item titles
+        // 22px item titles. NOT named "card": `card` is also a colour in the
+        // palette, so `text-card` compiled to BOTH this size rule and
+        // `color: hsl(var(--card))` — pure white. Anything using it without a
+        // later colour utility went invisible on a light background (the
+        // sticky CTA headline did exactly that). Same class of silent
+        // collision as the `body` note above; the palette is the other
+        // namespace a fontSize key can land in.
+        "card-title": ["1.375rem", { lineHeight: "1.35" }],
+        /** @deprecated collides with the `card` colour — use card-title. */
+        card: ["1.375rem", { lineHeight: "1.35" }],
+        subsection: ["1.625rem", { lineHeight: "1.3" }], // 26px headings inside a section
         section: ["2.375rem", { lineHeight: "1.25" }], // 38px section titles
       },
       // Tailwind's default scale jumps 500 -> 700. Without 600 here the site's

@@ -156,7 +156,7 @@ const Club = () => {
           </ShineButton>
           <Link
             to="/club/auth"
-            className="link-underline text-[18px] text-foreground-soft hover:text-accent transition-smooth"
+            className="link-underline text-meta text-foreground-soft hover:text-accent transition-smooth"
           >
             כבר חברים? התחברות
           </Link>
@@ -191,16 +191,16 @@ const Club = () => {
             {/* RTL: first child sits at the right edge */}
             <Reveal className="lg:col-span-7">
               <div className="text-right">
-                <h2 className="font-display font-bold text-[30px] leading-snug text-primary">
+                <h2 className="font-display font-bold text-[1.875rem] leading-snug text-primary">
                   מה זה מועדון אלומה
                 </h2>
                 <div className="w-20 h-[2px] bg-primary/55 mt-5" aria-hidden="true" />
 
-                <p className="text-[20px] leading-relaxed text-foreground mt-6 text-pretty">
+                <p className="text-lede leading-relaxed text-foreground mt-6 text-pretty">
                   מועדון אלומה הוא לא תוכנית נקודות. זו דלת אחורית לעולם של מעצבים,
                   קולקציות מוקדמות ושירות אישי, למי שרואה את החוץ של הבית כמו את הפנים.
                 </p>
-                <p className="text-[20px] leading-relaxed text-foreground-soft mt-5 text-pretty">
+                <p className="text-lede leading-relaxed text-foreground-soft mt-5 text-pretty">
                   החברות במועדון אלומה חינמית לחלוטין ואישית, לא נשלח לכם ספאם,
                   לא נמכור את הנתונים ולא נציק לכם בטלפון.
                 </p>
@@ -244,7 +244,7 @@ const Club = () => {
                       <p className="text-meta tracking-wider text-background/60">
                         מועדון אלומה
                       </p>
-                      <p className="mt-1 font-display text-card text-background">
+                      <p className="mt-1 font-display text-card-title text-background">
                         {/* bdi: the fallback name is a Latin email prefix, and
                             full names can mix scripts — isolate the run so it
                             never drags the line's RTL order around. */}
@@ -273,13 +273,13 @@ const Club = () => {
                   />
 
                   <AuthGate loading={loading} className="mt-5">
-                    <h3 className="font-display font-normal text-[22px] text-foreground">
+                    <h3 className="font-display font-normal text-card-title text-foreground">
                       {user ? "אתם כבר בפנים" : "החברות פתוחה, ובחינם"}
                     </h3>
 
                     {user ? (
                       <>
-                        <p className="text-[18px] text-foreground-soft leading-relaxed mt-3">
+                        <p className="text-meta text-foreground-soft leading-relaxed mt-3">
                           החשבון מחובר. כל מה שסימנתם ועקבתם אחריו מחכה באזור האישי שלכם.
                         </p>
                         {user.email && (
@@ -287,7 +287,7 @@ const Club = () => {
                           // right edge with the rest of the panel.
                           <p
                             dir="ltr"
-                            className="text-[18px] text-foreground mt-4 pt-4 border-t border-border/70 text-right break-all"
+                            className="text-meta text-foreground mt-4 pt-4 border-t border-border/70 text-right break-all"
                           >
                             {user.email}
                           </p>
@@ -305,7 +305,7 @@ const Club = () => {
                               strokeWidth={2.5}
                               aria-hidden="true"
                             />
-                            <span className="text-[18px] leading-relaxed text-foreground">
+                            <span className="text-meta leading-relaxed text-foreground">
                               {t}
                             </span>
                           </li>
@@ -365,10 +365,10 @@ const Club = () => {
                     <Icon className="w-6 h-6" aria-hidden="true" />
                   </span>
 
-                  <h3 className="font-display font-normal text-[22px] text-background mt-5 leading-snug">
+                  <h3 className="font-display font-normal text-card-title text-background mt-5 leading-snug">
                     {perk.title}
                   </h3>
-                  <p className="text-[20px] leading-relaxed text-background/75 mt-3 text-pretty">
+                  <p className="text-lede leading-relaxed text-background/75 mt-3 text-pretty">
                     {perk.text}
                   </p>
                 </motion.li>
@@ -390,7 +390,7 @@ const Club = () => {
                 </SectionHeading>
                 <div className="w-20 h-[2px] bg-primary/55 mt-5" aria-hidden="true" />
 
-                <p className="text-[20px] leading-relaxed text-foreground mt-6 text-pretty">
+                <p className="text-lede leading-relaxed text-foreground mt-6 text-pretty">
                   ההרשמה נעשית פעם אחת, ומשם החשבון פשוט זוכר אתכם, את מה שאהבתם
                   ואת הפרויקט שפתחתם איתנו.
                 </p>
@@ -425,7 +425,7 @@ const Club = () => {
                     <div className="flex flex-col items-center shrink-0">
                       <span
                         aria-hidden="true"
-                        className="grid place-items-center w-14 h-14 rounded-full border border-primary/45 bg-background font-display text-[22px] leading-none tabular-nums text-primary shadow-soft"
+                        className="grid place-items-center w-14 h-14 rounded-full border border-primary/45 bg-background font-display text-card-title leading-none tabular-nums text-primary shadow-soft"
                       >
                         {step.n}
                       </span>
@@ -438,10 +438,10 @@ const Club = () => {
                     </div>
 
                     <div className={`text-right pt-2.5 ${i < steps.length - 1 ? "pb-8" : ""}`}>
-                      <h3 className="font-display font-normal text-[22px] text-foreground leading-snug">
+                      <h3 className="font-display font-normal text-card-title text-foreground leading-snug">
                         {step.title}
                       </h3>
-                      <p className="text-[20px] leading-relaxed text-foreground-soft mt-2 text-pretty">
+                      <p className="text-lede leading-relaxed text-foreground-soft mt-2 text-pretty">
                         {step.text}
                       </p>
                     </div>

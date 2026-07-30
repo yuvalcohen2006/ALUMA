@@ -63,7 +63,7 @@ const Footer = () => {
 
           {/* Column 2, Quick navigation */}
           <div className="w-full text-center md:text-right lg:max-w-[220px] lg:justify-self-center lg:px-8 lg:border-r lg:border-background/15">
-            <h4 className="font-display text-card mb-6">מעבר מהיר</h4>
+            <h4 className="font-display text-card-title mb-6">מעבר מהיר</h4>
             <ul className="space-y-3 text-meta text-background/85">
               <li>
                 <Link to="/" className="link-underline inline-block hover:text-background transition-smooth">
@@ -125,7 +125,7 @@ const Footer = () => {
 
           {/* Column 3, Materials */}
           <div className="w-full text-center md:text-right lg:max-w-[220px] lg:justify-self-center lg:px-8 lg:border-r lg:border-background/15">
-            <h4 className="font-display text-card mb-6">החומרים שלנו</h4>
+            <h4 className="font-display text-card-title mb-6">החומרים שלנו</h4>
             <ul className="space-y-3 text-meta text-background/85">
               <li>
                 <Link to="/materials" className="link-underline inline-block hover:text-background transition-smooth">
@@ -152,7 +152,7 @@ const Footer = () => {
 
           {/* Column 4 (leftmost in RTL), Contact */}
           <div className="w-full text-center md:text-right lg:max-w-[240px] lg:justify-self-start lg:pr-8 lg:border-r lg:border-background/15">
-            <h4 className="font-display text-card mb-6">יצירת קשר</h4>
+            <h4 className="font-display text-card-title mb-6">יצירת קשר</h4>
             <ul className="space-y-4 text-meta text-background/85">
               <li>
                 <a

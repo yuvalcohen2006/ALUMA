@@ -315,7 +315,7 @@ const FAQPage = () => {
                                 the chevron on the FIRST line — every question wraps
                                 to two lines at 375px, and items-center would leave
                                 both floating in the middle of the block. */}
-                            <AccordionTrigger className="items-start gap-4 md:gap-6 py-5 md:py-6 text-[22px] font-display font-normal leading-snug text-right text-foreground hover:no-underline hover:text-accent [&>svg]:mt-[5px] [&>svg]:h-5 [&>svg]:w-5 [&>svg]:text-accent">
+                            <AccordionTrigger className="items-start gap-4 md:gap-6 py-5 md:py-6 text-card-title font-display font-normal leading-snug text-right text-foreground hover:no-underline hover:text-accent [&>svg]:mt-[5px] [&>svg]:h-5 [&>svg]:w-5 [&>svg]:text-accent">
                               <span className="flex min-w-0 items-start gap-3">
                                 <item.Icon
                                   className="mt-[5px] h-5 w-5 shrink-0 text-accent"
@@ -325,8 +325,8 @@ const FAQPage = () => {
                                 {item.q}
                               </span>
                             </AccordionTrigger>
-                            <AccordionContent className="ps-8 pb-6 pt-0 text-[20px] leading-relaxed text-right">
-                              <p className="text-[20px] leading-relaxed text-foreground text-pretty">
+                            <AccordionContent className="ps-8 pb-6 pt-0 text-lede leading-relaxed text-right">
+                              <p className="text-lede leading-relaxed text-foreground text-pretty">
                                 {item.a}
                               </p>
                             </AccordionContent>

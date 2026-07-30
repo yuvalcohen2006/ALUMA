@@ -6,8 +6,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build && npm run check:demo",
     "build:dev": "vite build --mode development",
+    "check:demo": "node scripts/check-demo-gate.mjs",
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest run",

@@ -7,7 +7,6 @@ import Reveal from "@/components/Reveal";
 import ShineButton from "@/components/ui/shine-button";
 import ShineAction from "@/components/ui/shine-action";
 import { waLink } from "@/lib/whatsapp";
-import { demoProducts } from "@/data/demoCollections";
 
 /**
  * The viewing room.
@@ -23,40 +22,33 @@ import { demoProducts } from "@/data/demoCollections";
  * that doesn't fight a rendered mesh.
  */
 
+type ARProduct = {
+  /** Matches the catalogue slug, so "לפרטים על הפריט" lands on the right page. */
+  slug: string;
+  name: string;
+  tagline: string | null;
+  /** Still frame shown before the mesh loads. Import it; don't hotlink. */
+  poster: string | null;
+};
+
 /**
  * Products with a real GLB in public/models/.
  *
- * Adding one is: drop <slug>.glb into public/models/, add the slug here. The
- * name, blurb and poster all come from the catalogue, so nothing is duplicated
- * and nothing can drift. `arScale: "fixed"` pins the model to its true size in
- * the room — right for furniture, where scale IS the question being asked.
+ * Adding one is: drop <slug>.glb into public/models/, import its poster, and
+ * add an entry here. Three or four flagship pieces, hand-curated — these are
+ * not the catalogue, they are the handful of models we have verified look
+ * right in a room.
+ *
+ * Deliberately NOT read from the product catalogue. Doing that made this page
+ * import the demo catalogue module, which anchored all 34 demo product photos
+ * into the production bundle — fake products, shipped, because of a lookup on
+ * a page that renders nothing. Four short literals cost less than that.
  *
  * iOS note: Quick Look needs USDZ, which we don't produce. Without it iPhone
  * users get the 3D viewer but not in-room placement, and the copy below says so
  * rather than letting the button fail silently.
  */
-const AR_SLUGS: string[] = [];
-
-type ARProduct = {
-  slug: string;
-  name: string;
-  tagline: string | null;
-  poster: string | null;
-  glb: string;
-};
-
-const arProducts: ARProduct[] = AR_SLUGS.map((slug) => {
-  const p = demoProducts.find((d) => d.slug === slug);
-  return p
-    ? {
-        slug,
-        name: p.name,
-        tagline: p.tagline,
-        poster: p.cover_url,
-        glb: `/models/${slug}.glb`,
-      }
-    : null;
-}).filter((p): p is ARProduct => p !== null);
+const arProducts: ARProduct[] = [];
 
 const STEPS = [
   { icon: Smartphone, text: "פותחים את העמוד בטלפון" },
@@ -81,7 +73,7 @@ const HandoffToPhone = () => {
 
   return (
     <div className="rounded-[14px] border border-border bg-background p-6 md:p-8 text-right">
-      <h2 className="font-display font-normal text-card text-foreground">
+      <h2 className="font-display font-normal text-card-title text-foreground">
         להצבה במרחב, פתחו בטלפון
       </h2>
       <p className="text-lede text-muted-foreground mt-2 max-w-xl">
@@ -151,7 +143,7 @@ const ARPreview = () => {
                     {ready ? (
                       <model-viewer
                         key={active.slug}
-                        src={active.glb}
+                        src={`/models/${active.slug}.glb`}
                         alt={active.name}
                         poster={active.poster || undefined}
                         ar
@@ -188,7 +180,7 @@ const ARPreview = () => {
                   {/* Spec footer */}
                   <div className="p-6 md:p-8 border-t border-background/15 flex flex-col md:flex-row md:items-end md:justify-between gap-5 text-right">
                     <div className="min-w-0">
-                      <h2 className="font-display font-normal text-card text-background">
+                      <h2 className="font-display font-normal text-card-title text-background">
                         {active.name}
                       </h2>
                       {active.tagline && (
@@ -268,7 +260,7 @@ const ARPreview = () => {
                furniture — which is exactly what this page used to do. */
             <Reveal>
               <div className="rounded-[14px] border border-background/15 bg-background/[0.04] p-8 md:p-12 text-right">
-                <h2 className="font-display font-normal text-card text-background">
+                <h2 className="font-display font-normal text-card-title text-background">
                   התצוגה התלת־ממדית בהכנה
                 </h2>
                 <p className="text-lede text-background/75 mt-3 max-w-2xl">

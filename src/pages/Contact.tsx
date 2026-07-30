@@ -101,14 +101,14 @@ const ContactPage = () => {
                       )}
                       <span
                         aria-hidden="true"
-                        className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full border border-primary/45 bg-background font-display text-[22px] leading-none tabular-nums text-primary"
+                        className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full border border-primary/45 bg-background font-display text-card-title leading-none tabular-nums text-primary"
                       >
                         {step.n}
                       </span>
-                      <h3 className="mt-6 font-display font-normal text-[22px] leading-snug text-foreground">
+                      <h3 className="mt-6 font-display font-normal text-card-title leading-snug text-foreground">
                         {step.title}
                       </h3>
-                      <p className="mt-3 text-[18px] leading-relaxed text-muted-foreground">
+                      <p className="mt-3 text-meta leading-relaxed text-muted-foreground">
                         {step.line}
                       </p>
                     </Reveal>
@@ -118,7 +118,7 @@ const ContactPage = () => {
             </div>
 
             <Reveal className="mt-12 md:mt-16 border-t border-border pt-9 flex flex-col gap-7 sm:flex-row sm:items-center sm:justify-between">
-              <p className="text-[20px] leading-relaxed text-foreground max-w-xl text-right">
+              <p className="text-lede leading-relaxed text-foreground max-w-xl text-right">
                 רוצים להקדים את השלב הראשון? השאלון החכם אוסף את הפרטים בשתי דקות, ואנחנו כבר מגיעים
                 לשיחה עם רעיונות מתאימים.
               </p>
@@ -135,7 +135,7 @@ const ContactPage = () => {
                 </ShineButton>
 
                 <Link to="/collections" className="group inline-block">
-                  <span className="flex items-center gap-2 text-[18px] text-accent">
+                  <span className="flex items-center gap-2 text-meta text-accent">
                     לצפייה בקולקציות
                     <ArrowLeft
                       className="w-[18px] h-[18px] transition-transform duration-300 ease-out group-hover:-translate-x-1"

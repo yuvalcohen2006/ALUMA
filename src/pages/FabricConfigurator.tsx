@@ -5,7 +5,11 @@ import SEO from "@/components/SEO";
 import PageHero from "@/components/PageHero";
 import Reveal from "@/components/Reveal";
 import { Check, MessageCircle } from "lucide-react";
-import sofaPhoto from "@/assets/collections/gen/salon-corner-a.webp";
+// Lives outside src/assets/collections/gen on purpose: everything in that
+// folder is demo catalogue and must never reach production, and this photo is
+// real production UI. Same picture, its own copy, so the demo gate can treat
+// that whole folder as forbidden without an exception list.
+import sofaPhoto from "@/assets/fabric/sofa-preview.webp";
 import { SITE } from "@/config/site";
 import {
   sunbrellaFabrics,
@@ -39,23 +43,37 @@ const familyLabelsHe: Record<(typeof families)[number], string> = {
  */
 const sofaPreview = {
   photo: sofaPhoto,
-  /* salon-corner-a: an L-shaped sectional shot three-quarter from the left.
-     Back cushions run as a band across the upper middle; the seat cushions sit
-     below them, and the right-hand return arm carries its own pair. */
+  /* sofa-preview.webp (2400×1792, 4:3): an L-shaped sectional shot three-quarter
+     from the left, in evening sun. Two masses carry cushions:
+       - the FAR run, which enters at the left edge, turns at the corner block
+         around the middle of the frame and carries on to the right;
+       - the NEAR return arm in the lower right, whose back cushions sit lower
+         and taller in frame because it is closer to the camera.
+     Measured off the photograph at 2000px wide and expressed as percentages so
+     the same map serves the 76px mobile thumbnail and the full desktop plate.
+     The previous map stopped at 78% across and missed both the far run's last
+     cushion and the right half of the near arm — on a wide plate the sofa
+     recoloured on the left and stayed beige on the right. */
   regions: [
-    // back cushions, left run
-    { top: "50%", left: "14%", width: "13%", height: "11%", radius: "10px" },
-    { top: "50%", left: "27%", width: "12%", height: "11%", radius: "10px" },
-    { top: "50%", left: "39%", width: "11%", height: "11%", radius: "10px" },
-    // back cushions, corner + right run
-    { top: "49%", left: "50%", width: "12%", height: "11%", radius: "10px" },
-    { top: "50%", left: "62%", width: "11%", height: "11%", radius: "10px" },
-    // seat cushions, left run
-    { top: "61%", left: "13%", width: "27%", height: "8%", radius: "10px" },
-    { top: "59%", left: "40%", width: "20%", height: "8%", radius: "10px" },
-    // return arm, lower right
-    { top: "56%", left: "60%", width: "18%", height: "10%", radius: "10px" },
-    { top: "66%", left: "47%", width: "17%", height: "9%", radius: "10px" },
+    // FAR RUN — back cushions, left of the corner
+    { top: "50%", left: "14%", width: "13%", height: "9%", radius: "10px" },
+    { top: "50%", left: "27%", width: "11.5%", height: "9%", radius: "10px" },
+    { top: "49.5%", left: "38.5%", width: "8%", height: "9%", radius: "10px" },
+    // the corner block itself
+    { top: "49%", left: "46.5%", width: "8%", height: "9%", radius: "10px" },
+    // FAR RUN — back cushions, right of the corner
+    { top: "49.5%", left: "54.5%", width: "11.5%", height: "9.5%", radius: "10px" },
+    { top: "50%", left: "66%", width: "11.5%", height: "9.5%", radius: "10px" },
+    { top: "50.5%", left: "77.5%", width: "8.5%", height: "9%", radius: "10px" },
+    // FAR RUN — seat cushions
+    { top: "59%", left: "14%", width: "27%", height: "8.5%", radius: "10px" },
+    { top: "58%", left: "41%", width: "18%", height: "8%", radius: "10px" },
+    // NEAR RETURN ARM — back cushions, foreground right
+    { top: "55.5%", left: "59%", width: "15%", height: "13%", radius: "10px" },
+    { top: "54.5%", left: "74%", width: "11%", height: "12.5%", radius: "10px" },
+    { top: "53.5%", left: "85%", width: "10%", height: "12.5%", radius: "10px" },
+    // NEAR RETURN ARM — seat
+    { top: "68.5%", left: "47%", width: "28%", height: "8%", radius: "10px" },
   ],
 } as const;
 
@@ -99,9 +117,11 @@ const PreviewPhoto = ({
       className="block h-auto w-full"
     />
     {/* Colour overlays on the cushions */}
-    {sofaPreview.regions.map((r, i) => (
+    {sofaPreview.regions.map((r) => (
+      // Keyed on the geometry, not the index: the map is a fixed measurement of
+      // one photograph, so each rectangle's own coordinates are its identity.
       <div
-        key={i}
+        key={`${r.left}-${r.top}`}
         aria-hidden
         className="absolute pointer-events-none transition-colors duration-500"
         style={{
@@ -263,10 +283,18 @@ const FabricConfigurator = () => {
                 {/* SWATCHES — second child, the LEFT column in RTL */}
                 <div className="lg:col-span-2 text-right">
                   {/* Family segmented control */}
+                  {/* overflow-x-auto, not overflow-hidden: the three labels
+                      measure ~291px in Assistant and a 375px phone gives the
+                      column ~327px, but the stylesheet loads with
+                      font-display:swap and the system fallback runs wider — for
+                      that first paint, and on any device that never gets the
+                      webfont, hidden would cut the third segment off with no
+                      way to reach it. Auto keeps the page from scrolling and
+                      still lets the control reach its own end. */}
                   <div
                     role="group"
                     aria-label="משפחות הבד"
-                    className="inline-flex max-w-full overflow-hidden rounded-[10px] border border-border"
+                    className="inline-flex max-w-full overflow-x-auto overflow-y-hidden rounded-[10px] border border-border"
                   >
                     {families.map((fam) => {
                       const active = family === fam;

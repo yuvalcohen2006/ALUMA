@@ -73,7 +73,7 @@ const MetaLine = ({
   const shown = parts.filter((p): p is ReactNode => p !== null && p !== undefined && p !== "");
   if (shown.length === 0) return null;
   return (
-    <div className={cn("flex flex-wrap items-center gap-3 text-[18px]", className)}>
+    <div className={cn("flex flex-wrap items-center gap-3 text-meta", className)}>
       {shown.map((part, i) => (
         <Fragment key={i}>
           {i > 0 && (
@@ -110,7 +110,7 @@ const TagMark = ({
       className={cn("h-px w-8 shrink-0", light ? "bg-secondary/70" : "bg-primary/70")}
       aria-hidden="true"
     />
-    <span className={cn("text-[18px]", light ? "text-secondary" : "text-foreground")}>{label}</span>
+    <span className={cn("text-meta", light ? "text-secondary" : "text-foreground")}>{label}</span>
   </div>
 );
 
@@ -185,7 +185,7 @@ const CoverStory = ({ post }: { post: Post }) => (
           <div className="order-2 lg:col-span-5 min-w-0 text-right">
             <TagMark label="כתבת השער" light />
 
-            <h2 className="font-display font-bold text-[26px] leading-snug text-background mt-4">
+            <h2 className="font-display font-bold text-subsection leading-snug text-background mt-4">
               <Link to={`/blog/${post.slug}`} className="transition-smooth hover:text-secondary">
                 {post.title}
               </Link>
@@ -194,7 +194,7 @@ const CoverStory = ({ post }: { post: Post }) => (
             <div className="w-20 h-[2px] bg-background/40 mt-5" aria-hidden="true" />
 
             {post.excerpt && (
-              <p className="text-[20px] leading-relaxed text-background/75 mt-5 text-pretty">
+              <p className="text-lede leading-relaxed text-background/75 mt-5 text-pretty">
                 {post.excerpt}
               </p>
             )}
@@ -242,12 +242,12 @@ const HalfPage = ({ post }: { post: Post }) => (
     <div className="mt-5">
       {post.tag && <TagMark label={post.tag} className="mb-3" />}
 
-      <h3 className="font-display font-normal text-[22px] leading-snug text-foreground transition-smooth group-hover:text-accent">
+      <h3 className="font-display font-normal text-card-title leading-snug text-foreground transition-smooth group-hover:text-accent">
         {post.title}
       </h3>
 
       {post.excerpt && (
-        <p className="text-[20px] leading-relaxed text-foreground-soft mt-3 line-clamp-3 text-pretty">
+        <p className="text-lede leading-relaxed text-foreground-soft mt-3 line-clamp-3 text-pretty">
           {post.excerpt}
         </p>
       )}
@@ -290,12 +290,12 @@ const Band = ({ post, flip }: { post: Post; flip: boolean }) => (
     >
       {post.tag && <TagMark label={post.tag} className="mb-3" />}
 
-      <h3 className="font-display font-normal text-[22px] leading-snug text-foreground">
+      <h3 className="font-display font-normal text-card-title leading-snug text-foreground">
         {post.title}
       </h3>
 
       {post.excerpt && (
-        <p className="text-[20px] leading-relaxed text-foreground/75 mt-3 line-clamp-3 text-pretty">
+        <p className="text-lede leading-relaxed text-foreground/75 mt-3 line-clamp-3 text-pretty">
           {post.excerpt}
         </p>
       )}
@@ -305,7 +305,7 @@ const Band = ({ post, flip }: { post: Post; flip: boolean }) => (
         parts={[formatRead(post.read_minutes), formatDate(post.published_at)]}
       />
 
-      <span className="mt-6 inline-flex items-center gap-2 text-[18px] text-foreground">
+      <span className="mt-6 inline-flex items-center gap-2 text-meta text-foreground">
         להמשך קריאה
         <ArrowLeft
           className="w-4 h-4 transition-transform duration-300 group-hover:-translate-x-1"
@@ -539,7 +539,7 @@ const Blog = () => {
           <div className="container-luxury">
             <div className="max-w-xl mx-auto text-center">
               <img src={logo} alt="" aria-hidden="true" className="h-8 w-auto mx-auto opacity-30" />
-              <p className="text-[20px] leading-relaxed text-foreground mt-7">
+              <p className="text-lede leading-relaxed text-foreground mt-7">
                 עדיין אין מאמרים מפורסמים. חוזרים בקרוב עם תכנים חדשים.
               </p>
             </div>
@@ -548,13 +548,13 @@ const Blog = () => {
       ) : visible.length === 0 || !lead ? (
         <section className="py-16 md:py-24 bg-background">
           <div className="container-luxury text-center">
-            <p className="text-[20px] leading-relaxed text-foreground-soft">
+            <p className="text-lede leading-relaxed text-foreground-soft">
               אין מאמרים בנושא שבחרתם.
             </p>
             <button
               type="button"
               onClick={() => setValue({ topic: [] })}
-              className="mt-5 text-[18px] text-accent link-underline transition-smooth"
+              className="mt-5 text-meta text-accent link-underline transition-smooth"
             >
               נקה את הסינון
             </button>
@@ -599,7 +599,7 @@ const Blog = () => {
                two dark blocks merge into one and the page loses its floor. */
             <section className="py-14 md:py-20 bg-background">
               <div className="container-luxury text-right">
-                <p className="text-[20px] leading-relaxed text-foreground-soft">
+                <p className="text-lede leading-relaxed text-foreground-soft">
                   {selectedTopics.length
                     ? "זו הכתבה היחידה בנושא שבחרתם."
                     : "זו הכתבה האחרונה שפורסמה במגזין."}
@@ -608,7 +608,7 @@ const Blog = () => {
                   <button
                     type="button"
                     onClick={() => setValue({ topic: [] })}
-                    className="mt-5 text-[18px] text-accent link-underline transition-smooth"
+                    className="mt-5 text-meta text-accent link-underline transition-smooth"
                   >
                     להצגת כל הכתבות
                   </button>

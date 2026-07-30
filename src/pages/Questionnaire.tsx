@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Layout from "@/components/Layout";
 import SEO from "@/components/SEO";
@@ -13,8 +13,7 @@ import { ArrowLeft, Check } from "lucide-react";
 import { trackPixel } from "@/lib/pixel";
 import { waLink } from "@/lib/whatsapp";
 import { cn } from "@/lib/utils";
-import { demoCollections } from "@/data/demoCollections";
-import type { DBCollection } from "@/hooks/useCollectionsData";
+import { useCollections, type DBCollection } from "@/hooks/useCollectionsData";
 
 type Answers = {
   space_type: string;
@@ -79,8 +78,34 @@ const recommendFor = (a: Answers): string => {
   return "salons";
 };
 
-const collectionFor = (slug: string): DBCollection =>
-  demoCollections.find((c) => c.slug === slug) ?? demoCollections[0];
+/**
+ * The five collection names, so the result card can name its recommendation
+ * before — or without — the catalogue having loaded. These are real collection
+ * names, not placeholder content; only the photograph waits on the database.
+ *
+ * The card used to read the whole record out of the demo catalogue module,
+ * which put all 34 placeholder product photos into the production bundle. The
+ * live record is looked up below and wins whenever it exists.
+ */
+const COLLECTION_NAMES: Record<string, string> = {
+  salons: "סלוני חוץ",
+  "fire-tables": "שולחנות אש",
+  bar: "פינות בר",
+  dining: "פינות אוכל",
+  lounge: "שיזוף ונדנדות",
+};
+
+/** Enough of a collection to render the card; the photo stays null until the
+ *  real row arrives, and the card already handles a missing image. */
+const placeholderFor = (slug: string): DBCollection => ({
+  id: slug,
+  slug,
+  name_he: COLLECTION_NAMES[slug] ?? COLLECTION_NAMES.salons,
+  name_en: null,
+  intro: null,
+  image_url: null,
+  sort_order: 0,
+});
 
 /**
  * The quiet second action on the result card: a WhatsApp chat that opens with
@@ -149,6 +174,7 @@ const Questionnaire = () => {
   const [busy, setBusy] = useState(false);
   const [done, setDone] = useState<string | null>(null);
   const { user } = useAuth();
+  const { collections } = useCollections();
 
   const update = <K extends keyof Answers>(k: K, v: Answers[K]) => setA((p) => ({ ...p, [k]: v }));
   const toggleFeature = (f: string) =>
@@ -184,16 +210,34 @@ const Questionnaire = () => {
         content_category: "Questionnaire",
       });
       toast.success("השאלון נשלח!");
-    } catch (err: any) {
-      toast.error(err?.message ?? "אירעה שגיאה");
+    } catch (err) {
+      // Supabase throws a PostgrestError — a plain object, not an Error — so
+      // `instanceof` would drop the only useful sentence it carries.
+      const message =
+        typeof err === "object" && err !== null && "message" in err
+          ? String((err as { message: unknown }).message)
+          : "";
+      toast.error(message || "אירעה שגיאה");
     } finally {
       setBusy(false);
     }
   };
 
+  // The result replaces a wizard the visitor had just scrolled to the bottom
+  // of, and the card is shorter than the step they submitted from — without
+  // this they land somewhere in the middle of it and never see the line that
+  // names the recommendation.
+  useEffect(() => {
+    if (done) window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [done]);
+
   // `done` holds the recommended slug once the answers are in; from there the
-  // card renders the real collection, not a sentence about one.
-  const rec = done ? collectionFor(done) : null;
+  // card renders the real collection, not a sentence about one. The live row
+  // carries the photograph and the intro; until it lands (or if the catalogue
+  // is empty) the card still names the collection and links to it.
+  const rec = done
+    ? collections.find((c) => c.slug === done) ?? placeholderFor(done)
+    : null;
 
   return (
     <Layout>
@@ -260,7 +304,7 @@ const Questionnaire = () => {
                     <a
                       href={waSummaryLink(a, rec)}
                       target="_blank"
-                      rel="noreferrer"
+                      rel="noopener noreferrer"
                       className="text-meta text-accent link-underline transition-smooth"
                     >
                       להמשך התאמה בוואטסאפ

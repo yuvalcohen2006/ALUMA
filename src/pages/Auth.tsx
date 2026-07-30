@@ -182,7 +182,7 @@ const AuthPage = () => {
                 </div>
 
                 <div className="relative">
-                  <h2 className="font-display font-normal text-[30px] xl:text-[34px] leading-tight">
+                  <h2 className="font-display font-normal text-[1.875rem] xl:text-[2.125rem] leading-tight">
                     עולם שקט של שירות,
                     <br />
                     שנתפר במידה שלכם.
@@ -243,7 +243,7 @@ const AuthPage = () => {
                   </div>
 
                   {/* Greeting, not the page title — the h1 lives in PageHero. */}
-                  <h2 className="font-display font-normal text-[26px] leading-snug text-foreground">
+                  <h2 className="font-display font-normal text-subsection leading-snug text-foreground">
                     {isSignup ? "ברוכים הבאים למועדון" : "ברוכים השבים"}
                   </h2>
                   <p className="mt-2 mb-8 text-meta leading-relaxed text-muted-foreground">

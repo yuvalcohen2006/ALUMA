@@ -52,7 +52,7 @@ const TopicIndex = ({
   className,
 }: TopicIndexProps) => (
   <div className={cn("text-right", className)}>
-    <h2 className="font-display font-normal text-[22px] leading-snug text-foreground">
+    <h2 className="font-display font-normal text-card-title leading-snug text-foreground">
       מפתח הנושאים
     </h2>
 
@@ -87,7 +87,7 @@ const TopicIndex = ({
 
             <span
               className={cn(
-                "font-display text-[20px] leading-none tabular-nums transition-colors duration-300",
+                "font-display text-lede leading-none tabular-nums transition-colors duration-300",
                 isActive
                   ? "text-accent"
                   : "text-foreground/70 group-hover:text-foreground",
@@ -99,7 +99,7 @@ const TopicIndex = ({
 
             <span
               className={cn(
-                "text-[18px] leading-snug transition-colors duration-300",
+                "text-meta leading-snug transition-colors duration-300",
                 isActive
                   ? "text-foreground"
                   : "text-foreground-soft group-hover:text-foreground",
@@ -120,7 +120,7 @@ const TopicIndex = ({
             <span
               aria-hidden="true"
               className={cn(
-                "text-[18px] tabular-nums transition-colors duration-300",
+                "text-meta tabular-nums transition-colors duration-300",
                 isActive ? "text-foreground" : "text-muted-foreground",
               )}
             >
@@ -135,7 +135,7 @@ const TopicIndex = ({
         answers, where a running total reads as filler between a visitor and
         the thing they came to read. */}
     {footnote && (
-      <p className="mt-6 hidden text-[18px] leading-relaxed text-muted-foreground lg:block">
+      <p className="mt-6 hidden text-meta leading-relaxed text-muted-foreground lg:block">
         {footnote}
       </p>
     )}

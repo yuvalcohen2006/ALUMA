@@ -54,13 +54,13 @@ const MaterialsPage = () => {
               />
 
               <div className="grid gap-x-10 gap-y-6 lg:gap-x-14 md:grid-cols-2 lg:grid-cols-3 mt-8 md:mt-10">
-                <p className="text-[20px] leading-relaxed text-background/80 text-pretty">
+                <p className="text-lede leading-relaxed text-background/80 text-pretty">
                   רהיט חוץ לא נמדד ביום שהוא מגיע לחצר, אלא בעונות שבאות אחריו.
                   השמש, הלחות, רסס המלח והגשם פועלים עליו כל השנה בלי הפסקה,
                   ולכן ההחלטה הראשונה בכל פריט שאנחנו מייצרים היא לא הצורה, אלא
                   החומר.
                 </p>
-                <p className="text-[20px] leading-relaxed text-background/80 text-pretty">
+                <p className="text-lede leading-relaxed text-background/80 text-pretty">
                   אנחנו עובדים עם מספר מצומצם של חומרים שהוכיחו את עצמם בתנאי
                   חוץ: פרופילי אלומיניום בציפוי אבקה תרמי, שלא מחלידים ולא
                   דורשים תחזוקה; בדי Sunbrella אקריליים שנצבעים בצבע מלא, כך
@@ -68,7 +68,7 @@ const MaterialsPage = () => {
                   דורשים איטום; ו־PolyStone, חומר מרוכב בגימור אבן שמאפשר צורות
                   פיסוליות במשקל נמוך.
                 </p>
-                <p className="text-[20px] leading-relaxed text-background/80 text-pretty md:col-span-2 lg:col-span-1">
+                <p className="text-lede leading-relaxed text-background/80 text-pretty md:col-span-2 lg:col-span-1">
                   אף חומר לא נכנס לכאן במקרה, והצירוף ביניהם הוא מה שמאפשר לרהיט
                   להישאר בחוץ כל השנה: בלי לפרק, בלי לאחסן ובלי לחדש. התחזוקה
                   מסתכמת בשטיפה מדי פעם, והמראה כמעט לא משתנה עם השנים.

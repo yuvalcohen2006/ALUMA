@@ -156,7 +156,7 @@ const StationHead = ({ icon: Icon, title }: { icon: LucideIcon; title: string })
     <span className="inline-flex h-14 w-14 shrink-0 items-center justify-center rounded-[10px] border border-border bg-secondary text-primary transition-all duration-300 group-hover:border-primary/50 group-hover:bg-primary/10 group-focus-within:border-primary/50 group-focus-within:bg-primary/10">
       <Icon className="h-7 w-7" strokeWidth={1.6} aria-hidden="true" />
     </span>
-    <h3 className="mt-6 font-display font-normal text-[22px] leading-snug text-foreground">
+    <h3 className="mt-6 font-display font-normal text-card-title leading-snug text-foreground">
       {title}
     </h3>
     <span
@@ -188,7 +188,7 @@ const Specimen = ({
     )}
   >
     {children}
-    <p className="mt-3 text-[18px] leading-relaxed text-muted-foreground">{caption}</p>
+    <p className="mt-3 text-meta leading-relaxed text-muted-foreground">{caption}</p>
   </div>
 );
 
@@ -237,7 +237,7 @@ const DIYPage = () => {
 
               <ul className="space-y-4 lg:border-s lg:border-border lg:ps-10">
                 {introFacts.map((f) => (
-                  <li key={f} className="flex items-center gap-3 text-[18px] text-foreground">
+                  <li key={f} className="flex items-center gap-3 text-meta text-foreground">
                     <span className="h-px w-6 shrink-0 bg-primary/60" aria-hidden="true" />
                     {f}
                   </li>
@@ -279,13 +279,13 @@ const DIYPage = () => {
                   <div className="lg:w-[40%] lg:shrink-0">
                     <StationHead icon={Blocks} title="עצבו סלון" />
 
-                    <p className="mt-5 text-[20px] leading-relaxed text-foreground text-pretty">
+                    <p className="mt-5 text-lede leading-relaxed text-foreground text-pretty">
                       הרכיבו את מערכת הישיבה שלכם יחידה אחר יחידה: פינות, יחידות
                       אמצע והדומים. גררו כדי לשנות את הסדר, הוסיפו והורידו יחידות,
                       והאורך הכולל מתעדכן מולכם בזמן אמת.
                     </p>
 
-                    <p className="mt-6 text-[18px] leading-relaxed text-muted-foreground">
+                    <p className="mt-6 text-meta leading-relaxed text-muted-foreground">
                       בסוף: הקומפוזיציה והאורך הכולל נשלחים אלינו בוואטסאפ, ואנחנו
                       חוזרים אליכם עם הצעת מחיר.
                     </p>
@@ -319,7 +319,7 @@ const DIYPage = () => {
                             className="h-auto w-full object-contain"
                             style={{ transform: u.mirrored ? "scaleX(-1)" : undefined }}
                           />
-                          <span className="mt-1 block text-center text-[18px] text-muted-foreground">
+                          <span className="mt-1 block text-center text-meta text-muted-foreground">
                             {u.nameHe}
                           </span>
                         </li>
@@ -333,7 +333,7 @@ const DIYPage = () => {
               <Station n="02" to="/fabric">
                 <StationHead icon={Palette} title="בחרו את הבד" />
 
-                <p className="mt-5 text-[20px] leading-relaxed text-foreground text-pretty">
+                <p className="mt-5 text-lede leading-relaxed text-foreground text-pretty">
                   עברו על מניפת Sunbrella המקורית, לחצו על גוון, וראו מיד איך הספה
                   נראית איתו.
                 </p>
@@ -367,7 +367,7 @@ const DIYPage = () => {
               <Station n="03" to="/ar">
                 <StationHead icon={ScanLine} title="AR, תצוגה במרחב" />
 
-                <p className="mt-5 text-[20px] leading-relaxed text-foreground text-pretty">
+                <p className="mt-5 text-lede leading-relaxed text-foreground text-pretty">
                   בחרו פריט, כוונו את מצלמת הטלפון לרצפה, והרהיט יופיע לפניכם בגודל
                   אמיתי, כדי לבדוק שהמידות עובדות עוד לפני שמזמינים.
                 </p>
@@ -411,7 +411,7 @@ const DIYPage = () => {
                 <div className="flex flex-col gap-8 lg:flex-row lg:items-center lg:gap-14">
                   <div className="lg:flex-1">
                     <StationHead icon={ClipboardList} title="שאלון חכם" />
-                    <p className="mt-5 max-w-2xl text-[20px] leading-relaxed text-foreground text-pretty">
+                    <p className="mt-5 max-w-2xl text-lede leading-relaxed text-foreground text-pretty">
                       ארבעה שלבים קצרים על המרחב, על הסגנון ועל לוח הזמנים שלכם.
                       בסוף תקבלו המלצה על הקולקציה שמתאימה לכם ביותר, ואנחנו נחזור
                       אליכם לתאם פגישת אפיון ללא עלות.
@@ -437,7 +437,7 @@ const DIYPage = () => {
                       className="flex items-center gap-3 lg:flex-1 lg:last:flex-none"
                     >
                       <span
-                        className="whitespace-nowrap rounded-[10px] border border-border bg-secondary/60 px-4 py-2 text-[18px] text-foreground transition-colors duration-300 group-hover:border-primary/40 group-focus-within:border-primary/40"
+                        className="whitespace-nowrap rounded-[10px] border border-border bg-secondary/60 px-4 py-2 text-meta text-foreground transition-colors duration-300 group-hover:border-primary/40 group-focus-within:border-primary/40"
                         style={{ transitionDelay: `${i * 45}ms` }}
                       >
                         {s}
@@ -463,11 +463,11 @@ const DIYPage = () => {
           <Reveal>
             <div className="mx-auto grid max-w-6xl items-center gap-10 lg:grid-cols-[minmax(0,1.55fr)_auto_minmax(0,1fr)] lg:gap-14">
               <div className="text-right">
-                <h2 className="font-display font-bold text-[26px] leading-snug text-background">
+                <h2 className="font-display font-bold text-subsection leading-snug text-background">
                   מה שיוצא מכאן מגיע ישירות אלינו
                 </h2>
                 <div className="w-20 h-[2px] bg-background/40 mt-5" aria-hidden="true" />
-                <p className="mt-6 text-[20px] leading-relaxed text-background/75 text-pretty">
+                <p className="mt-6 text-lede leading-relaxed text-background/75 text-pretty">
                   הקומפוזיציה שהרכבתם, הגוון שבחרתם או התשובות שמילאתם מגיעים אלינו
                   בדיוק כפי שהם. משם אנחנו לוקחים את זה הלאה: בודקים מידות, מתאימים
                   חומרים ובדים, וחוזרים אליכם עם הצעה מדויקת למרחב שלכם. ואם נוח
@@ -480,7 +480,7 @@ const DIYPage = () => {
               <div className="flex flex-col items-start gap-7">
                 <ul className="space-y-3">
                   {closingFacts.map((f) => (
-                    <li key={f} className="flex items-center gap-3 text-[18px] text-background/80">
+                    <li key={f} className="flex items-center gap-3 text-meta text-background/80">
                       <span className="h-px w-6 shrink-0 bg-primary/70" aria-hidden="true" />
                       {f}
                     </li>

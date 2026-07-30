@@ -61,8 +61,12 @@
        scale lands sm:10 / md:12 / lg:14, matching the materials-photo corners. */
     --radius: 0.875rem;
 
-    /* Solid sand — NEVER a gradient between the neutral backgrounds (clean lines only) */
-    --gradient-cream: hsl(34 34% 87%);
+    /* Solid sand — NEVER a gradient between the neutral backgrounds (clean lines only).
+       Derived from --secondary rather than repeating its value: the two were
+       identical literals, so high-contrast mode (which only reassigns
+       --secondary) left every .gradient-cream band sitting at warm sand while
+       the rest of the page went near-white. */
+    --gradient-cream: hsl(var(--secondary));
 
     --shadow-luxury: 0 20px 60px -20px hsl(0 0% 18% / 0.22);
     --shadow-soft: 0 4px 20px -4px hsl(0 0% 18% / 0.10);

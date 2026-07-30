@@ -122,7 +122,7 @@ const ChannelTile = ({ channel }: { channel: Channel }) => {
       <span className="min-w-0 flex-1">
         <span
           className={cn(
-            "block font-display font-normal text-[22px] leading-snug text-foreground",
+            "block font-display font-normal text-card-title leading-snug text-foreground",
             // A latin string inside an RTL block: flip the element to LTR so the
             // digits read correctly, then pin it back to the right edge.
             channel.ltr && "text-right",
@@ -131,7 +131,7 @@ const ChannelTile = ({ channel }: { channel: Channel }) => {
         >
           {channel.title}
         </span>
-        <span className="block text-[18px] leading-snug text-muted-foreground mt-1.5">
+        <span className="block text-meta leading-snug text-muted-foreground mt-1.5">
           {channel.line}
         </span>
       </span>
@@ -189,15 +189,15 @@ const assurances = [
 // ring in index.css is what keyboard users navigate by.
 const fieldClass = (invalid: boolean) =>
   cn(
-    "w-full rounded-[10px] border bg-background px-5 text-[18px] text-foreground text-right",
+    "w-full rounded-[10px] border bg-background px-5 text-meta text-foreground text-right",
     "placeholder:text-muted-foreground/70 transition-smooth focus:ring-4 focus:ring-primary/15",
     invalid ? "border-destructive/70 focus:border-destructive" : "border-border focus:border-primary",
   );
 
-const labelClass = "block font-display text-[18px] font-medium text-foreground mb-2.5";
+const labelClass = "block font-display text-meta font-medium text-foreground mb-2.5";
 
 const FieldError = ({ id, message }: { id: string; message: string }) => (
-  <p id={id} className="mt-2.5 flex items-start gap-2.5 text-[18px] leading-snug text-destructive">
+  <p id={id} className="mt-2.5 flex items-start gap-2.5 text-meta leading-snug text-destructive">
     {/* 18px at leading-snug is a ~25px line box; a 18px glyph centres on it at
         3px, not at the 6px a plain spacing step would give. */}
     <AlertCircle className="w-[18px] h-[18px] mt-[3px] shrink-0" aria-hidden="true" />
@@ -330,7 +330,7 @@ const Contact = () => {
             {/* Close to the heading (24px) because it belongs to it, and a full
                 36px clear of the form below — related things near, the change
                 of gear far. */}
-            <ul className="mt-6 flex flex-col gap-3 text-[18px] text-foreground-soft">
+            <ul className="mt-6 flex flex-col gap-3 text-meta text-foreground-soft">
               {assurances.map((a) => (
                 <li key={a} className="flex items-center gap-3">
                   {/* Deeper terracotta, not primary: this band is sand, where
@@ -369,11 +369,11 @@ const Contact = () => {
                   role="alert"
                   className="mb-7 rounded-[14px] border border-destructive/40 bg-destructive/5 p-5 text-right"
                 >
-                  <p className="flex items-center gap-2.5 text-[18px] font-medium text-destructive">
+                  <p className="flex items-center gap-2.5 text-meta font-medium text-destructive">
                     <AlertCircle className="w-5 h-5 shrink-0" aria-hidden="true" />
                     לא הצלחנו לשלוח, יש לתקן את השדות המסומנים
                   </p>
-                  <ul className="mt-3 space-y-1.5 text-[18px] leading-snug text-destructive">
+                  <ul className="mt-3 space-y-1.5 text-meta leading-snug text-destructive">
                     {errorList.map(([key, message]) => (
                       <li key={key}>
                         {FIELD_LABELS[key] ?? key}: {message}
@@ -391,7 +391,7 @@ const Contact = () => {
                     on sand, where text-accent measures ~3.3:1 — under AA for
                     18px. On sand the ink is charcoal and the terracotta stays
                     in the rules, exactly as the projects index does it. */}
-                <p className="text-[18px] leading-snug text-muted-foreground">
+                <p className="text-meta leading-snug text-muted-foreground">
                   השדות המסומנים ב־<span className="font-medium text-foreground">*</span> הם שדות
                   חובה
                 </p>
@@ -488,7 +488,7 @@ const Contact = () => {
                   aria-busy={submitting}
                   // min-w holds the width across the label swap, so the row
                   // does not jump the moment you press send.
-                  className="group inline-flex h-14 w-full sm:w-auto sm:min-w-[15rem] items-center justify-center gap-3 rounded-[10px] bg-accent px-10 text-[20px] font-medium text-accent-foreground shadow-accent transition-all duration-300 hover:bg-accent/90 hover:-translate-y-0.5 hover:shadow-luxury disabled:cursor-not-allowed disabled:opacity-60 disabled:translate-y-0"
+                  className="group inline-flex h-14 w-full sm:w-auto sm:min-w-[15rem] items-center justify-center gap-3 rounded-[10px] bg-accent px-10 text-lede font-medium text-accent-foreground shadow-accent transition-all duration-300 hover:bg-accent/90 hover:-translate-y-0.5 hover:shadow-luxury disabled:cursor-not-allowed disabled:opacity-60 disabled:translate-y-0"
                 >
                   {submitting ? (
                     <>
@@ -506,7 +506,7 @@ const Contact = () => {
                   )}
                 </button>
 
-                <p className="text-[18px] leading-relaxed text-muted-foreground sm:max-w-[22rem]">
+                <p className="text-meta leading-relaxed text-muted-foreground sm:max-w-[22rem]">
                   בשליחת הטופס הינכם מאשרים את{" "}
                   {/* Sand again: charcoal ink, and a standing underline rather
                       than the hover-grown one, because this is a link buried

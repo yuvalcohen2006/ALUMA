@@ -31,6 +31,15 @@ export interface Project {
   story: string[];
   scope: string[];
   materials: string[];
+  /**
+   * A genuine pre-installation photo of THIS space, paired with the finished
+   * shot. Optional on purpose, and the module only renders when it is set:
+   * the old /before-after page filled the "before" slot with catalogue photos
+   * of finished furniture — one entry's "before" was another entry's "after" —
+   * which presented invented transformations as our work. Never substitute a
+   * shot to fill this. No pair, no module.
+   */
+  beforeAfter?: { before: string; after: string; note: string };
 }
 
 export const projects: Project[] = [

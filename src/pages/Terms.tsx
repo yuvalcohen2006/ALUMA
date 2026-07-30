@@ -294,7 +294,7 @@ const TermsPage = () => {
             </TabsContent>
           </Tabs>
 
-          <div className="pt-10 mt-12 border-t border-border text-[18px] text-muted-foreground text-center">
+          <div className="pt-10 mt-12 border-t border-border text-meta text-muted-foreground text-center">
             עודכן לאחרונה: {new Date().toLocaleDateString("he-IL")}
           </div>
         </div>

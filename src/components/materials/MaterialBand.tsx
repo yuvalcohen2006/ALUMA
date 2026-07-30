@@ -187,7 +187,7 @@ const MaterialBand = ({ material, index }: MaterialBandProps) => {
               photoRight ? "lg:order-2" : "lg:order-1"
             )}
           >
-            <p className="text-[18px] leading-snug text-background/65">
+            <p className="text-meta leading-snug text-background/65">
               {material.origin}
             </p>
 
@@ -195,7 +195,7 @@ const MaterialBand = ({ material, index }: MaterialBandProps) => {
                 weight 300, and every other card title on the site (Projects,
                 the home materials rail) opts back up to 400. Without it this
                 one name would be the only light-weight title on the page. */}
-            <h2 className="font-display font-normal text-[26px] leading-snug text-background mt-3">
+            <h2 className="font-display font-normal text-subsection leading-snug text-background mt-3">
               {material.name}
             </h2>
 
@@ -207,7 +207,7 @@ const MaterialBand = ({ material, index }: MaterialBandProps) => {
               aria-hidden="true"
             />
 
-            <p className="text-[20px] leading-relaxed text-background/80 text-pretty mt-5 max-w-xl">
+            <p className="text-lede leading-relaxed text-background/80 text-pretty mt-5 max-w-xl">
               {material.shortDesc}
             </p>
 
@@ -224,10 +224,10 @@ const MaterialBand = ({ material, index }: MaterialBandProps) => {
                     aria-hidden="true"
                   />
                   <div className="min-w-0">
-                    <p className="text-[18px] font-normal leading-snug text-background">
+                    <p className="text-meta font-normal leading-snug text-background">
                       {f.title}
                     </p>
-                    <p className="text-[18px] italic leading-snug text-background/70 mt-1">
+                    <p className="text-meta italic leading-snug text-background/70 mt-1">
                       {f.desc}
                     </p>
                   </div>
@@ -240,7 +240,7 @@ const MaterialBand = ({ material, index }: MaterialBandProps) => {
                 the column. The rule grows from the right, the way every link
                 underline on the site does. */}
             <span className="mt-9 self-start">
-              <span className="inline-flex items-center gap-2 text-[18px] text-background/85">
+              <span className="inline-flex items-center gap-2 text-meta text-background/85">
                 לצפייה בחומר
                 <ArrowLeft
                   className="w-[18px] h-[18px] transition-transform duration-300 ease-out group-hover:-translate-x-1"

@@ -41,7 +41,7 @@ const StickyCTA = () => {
       <div className="container-luxury pb-4 md:pb-6 px-24">
         <div className="relative overflow-hidden rounded-[14px] border border-border shadow-luxury px-4 py-3 flex items-center justify-between gap-6 bg-background/95 backdrop-blur-md">
           <div className="relative z-10 flex-1 text-right min-w-0 text-foreground">
-            <div className="font-display text-card truncate">
+            <div className="font-display text-card-title truncate">
               רוצים הצעת מחיר בהתאמה אישית?
             </div>
             <div className="text-meta opacity-70 mt-0.5">

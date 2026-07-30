@@ -166,7 +166,7 @@ const ProjectEntry = ({ project: p, index }: { project: Project; index: number }
               />
             </div>
 
-            <h2 className="font-display font-normal text-[22px] leading-snug text-foreground mt-6 transition-colors duration-300 group-hover:text-accent">
+            <h2 className="font-display font-normal text-card-title leading-snug text-foreground mt-6 transition-colors duration-300 group-hover:text-accent">
               {p.name}
             </h2>
 
@@ -176,7 +176,7 @@ const ProjectEntry = ({ project: p, index }: { project: Project; index: number }
                 a line (the left margin in RTL, where it reads as a
                 continuation tick) and never orphan one at the right margin
                 where the eye starts the next line. */}
-            <div className="mt-4 flex flex-wrap items-center gap-y-2 text-[18px] text-muted-foreground">
+            <div className="mt-4 flex flex-wrap items-center gap-y-2 text-meta text-muted-foreground">
               {meta.map((m, i) => (
                 <span
                   key={`${i}-${m}`}
@@ -188,13 +188,13 @@ const ProjectEntry = ({ project: p, index }: { project: Project; index: number }
               ))}
             </div>
 
-            <p className="mt-6 text-[20px] leading-relaxed text-foreground text-pretty">
+            <p className="mt-6 text-lede leading-relaxed text-foreground text-pretty">
               {p.intro}
             </p>
 
             {/* Rule grows from the right (the RTL start) on row hover. */}
             <span className="inline-block mt-8">
-              <span className="inline-flex items-center gap-2 text-[18px] text-accent">
+              <span className="inline-flex items-center gap-2 text-meta text-accent">
                 לצפייה בפרויקט
                 <ArrowLeft
                   className="w-[18px] h-[18px] transition-transform duration-300 ease-out group-hover:-translate-x-1"
@@ -288,7 +288,7 @@ const ProjectsPage = () => {
               aria-label="מפתח הפרויקטים"
               className="rail-scroll flex md:flex-wrap items-center gap-x-7 gap-y-3 overflow-x-auto md:overflow-visible pb-2 md:pb-0"
             >
-              <span className="shrink-0 text-[18px] text-muted-foreground">
+              <span className="shrink-0 text-meta text-muted-foreground">
                 {activeCount > 0
                   ? `מציגים ${visible.length} מתוך ${projects.length} פרויקטים`
                   : "מפתח הפרויקטים"}
@@ -310,12 +310,12 @@ const ProjectsPage = () => {
                   }}
                   className="group shrink-0 inline-flex items-baseline gap-2"
                 >
-                  <span className="font-display text-[18px] tabular-nums text-foreground/70 transition-colors duration-300 group-hover:text-foreground">
+                  <span className="font-display text-meta tabular-nums text-foreground/70 transition-colors duration-300 group-hover:text-foreground">
                     {folio(i + 1)}
                   </span>
                   {/* Underline grows from the right — the RTL start — matching
                       the .link-underline grammar used site-wide. */}
-                  <span className="relative text-[18px] text-foreground">
+                  <span className="relative text-meta text-foreground">
                     {p.name}
                     <span
                       aria-hidden="true"
@@ -334,13 +334,13 @@ const ProjectsPage = () => {
         <div className="container-luxury">
           {visible.length === 0 ? (
             <Reveal className="max-w-xl mx-auto text-center py-24 md:py-32">
-              <p className="text-[20px] leading-relaxed text-foreground-soft">
+              <p className="text-lede leading-relaxed text-foreground-soft">
                 אין פרויקטים שמתאימים לסינון שבחרתם.
               </p>
               <button
                 type="button"
                 onClick={clearFilters}
-                className="mt-6 text-[18px] text-accent link-underline transition-smooth"
+                className="mt-6 text-meta text-accent link-underline transition-smooth"
               >
                 נקה את הסינון
               </button>

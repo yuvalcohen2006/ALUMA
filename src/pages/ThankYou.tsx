@@ -42,7 +42,7 @@ const ThankYou = () => {
           <p className="text-body text-foreground mb-2">
             קיבלנו את ההודעה ונחזור אליכם בהקדם, בדרך כלל תוך 24 שעות בימי עסקים.
           </p>
-          <p className="text-[18px] text-muted-foreground mb-10">
+          <p className="text-meta text-muted-foreground mb-10">
             בינתיים, אתם מוזמנים להתרשם מהפרויקטים שלנו או לכתוב לנו ישירות בוואטסאפ.
           </p>
 
@@ -51,21 +51,21 @@ const ThankYou = () => {
               href="https://wa.me/972504519062"
               target="_blank"
               rel="noreferrer"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#1ebd5a] text-white px-6 py-3 rounded-[14px] text-[18px] transition-smooth"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#1ebd5a] text-white px-6 py-3 rounded-[14px] text-meta transition-smooth"
             >
               <MessageCircle className="w-4 h-4" />
               שלחו לנו ב-Whatsapp
             </a>
             <a
               href="tel:0504519062"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground px-6 py-3 rounded-[14px] text-[18px] transition-smooth"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground px-6 py-3 rounded-[14px] text-meta transition-smooth"
             >
               <Phone className="w-4 h-4" />
               חיוג ישיר
             </a>
           </div>
 
-          <div className="border-t border-border/60 pt-6 flex flex-col sm:flex-row items-center justify-center gap-4 text-[18px]">
+          <div className="border-t border-border/60 pt-6 flex flex-col sm:flex-row items-center justify-center gap-4 text-meta">
             <Link
               to="/projects"
               className="text-foreground hover:text-accent transition-smooth inline-flex items-center gap-1.5"

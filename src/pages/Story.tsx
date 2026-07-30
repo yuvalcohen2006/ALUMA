@@ -163,7 +163,7 @@ const StoryPage = () => {
                   </span>
                   <span aria-hidden="true" className="h-px flex-1 bg-primary/25" />
                 </div>
-                <h2 className="font-display font-normal text-card text-foreground mt-5">
+                <h2 className="font-display font-normal text-card-title text-foreground mt-5">
                   {v.word}
                 </h2>
                 <p className="mt-3 text-meta text-muted-foreground text-pretty">{v.line}</p>

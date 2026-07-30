@@ -21,7 +21,6 @@ const Materials = lazy(() => import("./pages/Materials.tsx"));
 const MaterialDetail = lazy(() => import("./pages/MaterialDetail.tsx"));
 const Projects = lazy(() => import("./pages/Projects.tsx"));
 const ProjectDetail = lazy(() => import("./pages/ProjectDetail.tsx"));
-const BeforeAfterPage = lazy(() => import("./pages/BeforeAfter.tsx"));
 const FAQ = lazy(() => import("./pages/FAQ.tsx"));
 const Contact = lazy(() => import("./pages/Contact.tsx"));
 const AccessibilityPage = lazy(() => import("./pages/Accessibility.tsx"));
@@ -86,7 +85,6 @@ const App = () => (
                 <Route path="/materials/:slug" element={<MaterialDetail />} />
                 <Route path="/projects" element={<Projects />} />
                 <Route path="/projects/:slug" element={<ProjectDetail />} />
-                <Route path="/before-after" element={<BeforeAfterPage />} />
                 <Route path="/blog" element={<Blog />} />
                 <Route path="/blog/:slug" element={<BlogPost />} />
                 <Route path="/questionnaire" element={<Questionnaire />} />
