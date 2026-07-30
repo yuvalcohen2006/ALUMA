@@ -11,15 +11,30 @@ import barChair from "@/assets/categories/bar-chair.jpg";
 import diningChair from "@/assets/categories/dining-chair.jpg";
 import umbrella from "@/assets/categories/umbrella.jpg";
 
+/**
+ * Eight tiles onto five real collections.
+ *
+ * These used to link to /collections#מערכות-ישיבה and, in one case,
+ * #akssvryz — invented slugs that matched nothing in site_collections, so
+ * every tile landed on the catalogue with a filter for a category that does
+ * not exist. `cat` is now the collection's actual slug and the link is the
+ * filter URL the drawer itself writes (/collections?cat=…), which is also
+ * what the header dropdown resolves its hash into.
+ *
+ * The catalogue has five collections and the client wants eight doors into it,
+ * so several tiles share one: coffee tables live inside the salon sets, the
+ * dining chairs sit in the dining collection with the tables they belong to,
+ * and the parasol goes with the loungers and swings it stands over.
+ */
 const categories = [
-  { slug: "מערכות-ישיבה", label: "מערכות ישיבה", img: loungeSet },
-  { slug: "מיטות-שיזוף", label: "מיטות שיזוף", img: sunbed },
-  { slug: "פינות-אוכל", label: "פינות אוכל", img: diningSet },
-  { slug: "שולחנות-קפה", label: "שולחנות קפה", img: coffeeTable },
-  { slug: "שולחנות-אש", label: "שולחנות אש", img: fireTable },
-  { slug: "כסאות-בר", label: "כסאות בר", img: barChair },
-  { slug: "כסאות-פינות-אוכל", label: "כסאות פינות אוכל", img: diningChair },
-  { slug: "akssvryz", label: "אקססוריז", img: umbrella },
+  { cat: "salons", label: "מערכות ישיבה", img: loungeSet },
+  { cat: "lounge", label: "מיטות שיזוף", img: sunbed },
+  { cat: "dining", label: "פינות אוכל", img: diningSet },
+  { cat: "salons", label: "שולחנות קפה", img: coffeeTable },
+  { cat: "fire-tables", label: "שולחנות אש", img: fireTable },
+  { cat: "bar", label: "כסאות בר", img: barChair },
+  { cat: "dining", label: "כסאות פינות אוכל", img: diningChair },
+  { cat: "lounge", label: "אקססוריז", img: umbrella },
 ];
 
 /** Every part of the hover — grow, dim, blur — runs on this one duration, so
@@ -33,6 +48,8 @@ const CategoryIcons = () => {
   // Still tracked per tile in state rather than with CSS :hover on the list —
   // the list includes the gaps between tiles, and hovering a gap was dimming
   // everything while nothing was actually selected.
+  // Keyed on the label, not the collection: two tiles can now point at the same
+  // collection, and keying on that would light both at once.
   const [hovered, setHovered] = useState<string | null>(null);
 
   return (
@@ -52,12 +69,12 @@ const CategoryIcons = () => {
             seven, all on one duration so it reads as a single movement. */}
         <ul className="rail-scroll flex gap-4 lg:gap-5 overflow-x-auto lg:overflow-x-visible px-5 sm:px-6 lg:px-[150px] pb-5 lg:pb-0">
           {categories.map((c) => {
-            const isHovered = hovered === c.slug;
+            const isHovered = hovered === c.label;
             const isReceded = hovered !== null && !isHovered;
             return (
               <li
-                key={c.slug}
-                onMouseEnter={() => setHovered(c.slug)}
+                key={c.label}
+                onMouseEnter={() => setHovered(c.label)}
                 onMouseLeave={() => setHovered(null)}
                 className={`shrink-0 w-[152px] sm:w-[180px] lg:flex-1 relative ease-out ${
                   isHovered ? "scale-[1.08] z-10" : ""
@@ -68,7 +85,7 @@ const CategoryIcons = () => {
                   transition: `transform ${HOVER_MS}ms ease-out, opacity ${HOVER_MS}ms ease-out, filter ${HOVER_MS}ms ease-out`,
                 }}
               >
-                <Link to={`/collections#${c.slug}`} className="block">
+                <Link to={`/collections?cat=${c.cat}`} className="block">
                   <div
                     className={`relative w-full aspect-square rounded-[14px] bg-background/50 border overflow-hidden ${
                       isHovered ? "border-foreground/35 shadow-luxury" : "border-foreground/15"

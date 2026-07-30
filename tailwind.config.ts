@@ -76,8 +76,6 @@ export default {
         // collision as the `body` note above; the palette is the other
         // namespace a fontSize key can land in.
         "card-title": ["1.375rem", { lineHeight: "1.35" }],
-        /** @deprecated collides with the `card` colour — use card-title. */
-        card: ["1.375rem", { lineHeight: "1.35" }],
         subsection: ["1.625rem", { lineHeight: "1.3" }], // 26px headings inside a section
         section: ["2.375rem", { lineHeight: "1.25" }], // 38px section titles
       },

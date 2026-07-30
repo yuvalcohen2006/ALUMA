@@ -231,7 +231,7 @@ const FabricConfigurator = () => {
                     style={{ background: selected.background }}
                   />
                   <div className="min-w-0">
-                    <p className="truncate font-display text-card leading-tight text-foreground">
+                    <p className="truncate font-display text-card-title leading-tight text-foreground">
                       {selected.nameHe}
                     </p>
                     <p className="truncate text-meta text-muted-foreground">
@@ -262,7 +262,7 @@ const FabricConfigurator = () => {
                         record in one LTR run. */}
                     <div className="mt-5 flex flex-wrap items-center justify-between gap-x-8 gap-y-5">
                       <div className="min-w-0">
-                        <p className="font-display text-card text-foreground">
+                        <p className="font-display text-card-title text-foreground">
                           {selected.nameHe}
                         </p>
                         <p className="mt-1 text-meta text-muted-foreground">

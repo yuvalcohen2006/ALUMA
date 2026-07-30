@@ -11,6 +11,37 @@ export type ProductCellProps = {
 };
 
 /**
+ * The handle for the shared-element View Transition between this cell and the
+ * product page. The PDP must put this EXACT string on its own main-image frame;
+ * importing the helper from here is what stops the two halves drifting apart
+ * the day someone renames one of them.
+ *
+ * The `product-` prefix is load-bearing, not decoration: a view-transition-name
+ * is a CSS custom-ident, an ident may not begin with a digit, and a CMS slug
+ * can. An invalid name is dropped silently by the browser, so this would fail
+ * as a missing animation with no error anywhere.
+ */
+export const productTransitionName = (slug: string) => `product-${slug}`;
+
+/**
+ * Chrome does NOT skip a View Transition under prefers-reduced-motion: the
+ * default group animation still morphs a photograph across the whole viewport,
+ * which is exactly the motion the setting asks us to drop. Everywhere else on
+ * the site that guard lives in CSS (index.css, kinetic-or.css); a router-driven
+ * transition has no CSS to hang it on, so it is gated at the only place that
+ * can start one — the link itself.
+ *
+ * Read during render instead of held in state, so no cell keeps a media-query
+ * listener alive: the value is only ever consumed on the next click, and a user
+ * who changes the OS setting mid-session gets the new behaviour on the next
+ * render either way.
+ */
+const prefersReducedMotion = () =>
+  typeof window !== "undefined" &&
+  typeof window.matchMedia === "function" &&
+  window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/**
  * One product. No card panel — a framed photograph sitting on the page
  * background, with the caption aligned to the photo's right edge.
  *
@@ -32,8 +63,33 @@ const ProductCell = ({ product: p, index, lead, eager }: ProductCellProps) => {
       {/* `group` on the wrapper, not the Link, so the FavoriteButton is a
           sibling of the anchor and hovering the caption still lifts the photo. */}
       <div className="group relative">
-        <Link to={`/collections/${p.slug}`} className="block text-right">
-          <div className="relative aspect-[4/3] overflow-hidden rounded-[14px] bg-secondary border border-border transition-all duration-500 ease-out group-hover:-translate-y-1 group-hover:shadow-luxury group-hover:border-primary/60">
+        <Link
+          to={`/collections/${p.slug}`}
+          // Pairs with the PDP's main image. Off under prefers-reduced-motion,
+          // and a no-op in browsers without startViewTransition — react-router
+          // falls back to a plain navigation in both cases.
+          viewTransition={!prefersReducedMotion()}
+          className="block text-right"
+        >
+          {/* THE SHARED ELEMENT.
+              It is the FRAME that is named, never the zoom layer inside it: a
+              view-transition snapshot ignores clipping from its ancestors, so
+              naming the zoom layer would capture a square, borderless photo,
+              already scaled to 1.06 because you are hovering when you click,
+              bursting out of the card on the very first frame. The frame owns
+              the radius, the border and the overflow clip, so its snapshot is
+              the photograph exactly as drawn.
+
+              ONE element per page may hold a given name — a duplicate makes the
+              browser abort the entire transition, silently. A product belongs to
+              exactly one collection and is rendered once per grid, so this holds
+              by construction. Anything that renders the same product twice on
+              one page (a "related" / "complete the set" rail sitting beside the
+              grid it was drawn from) must suppress the name on the duplicate. */}
+          <div
+            style={{ viewTransitionName: productTransitionName(p.slug) }}
+            className="relative aspect-[4/3] overflow-hidden rounded-[14px] bg-secondary border border-border transition-all duration-500 ease-out group-hover:-translate-y-1 group-hover:shadow-luxury group-hover:border-primary/60"
+          >
             {/* Zoom on the wrapper, never the <img> — scaling the image drags
                 the border and the radius with it in some engines. Same
                 construction as the approved Projects entry. */}

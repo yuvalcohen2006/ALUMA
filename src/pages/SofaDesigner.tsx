@@ -211,7 +211,7 @@ const SofaDesigner = () => {
             <div className="grid lg:grid-cols-[300px_minmax(0,1fr)] gap-8 items-start">
               {/* Palette + summary — first child, so it sits on the RIGHT in RTL */}
               <aside className="space-y-5 lg:sticky lg:top-28">
-                <h2 className="font-display text-card text-foreground">
+                <h2 className="font-display text-card-title text-foreground">
                   יחידות זמינות
                 </h2>
 
@@ -349,6 +349,9 @@ const SofaDesigner = () => {
                       dir="rtl"
                       className="flex h-[400px] flex-col items-center justify-center gap-6 px-4 text-center"
                     >
+                      {/* 0.7 px per cm, not 0.85: at 0.85 the four silhouettes
+                          measured ~307px and a 375px phone gives the strip
+                          ~279px, so the empty state opened already scrolled. */}
                       <div className="flex items-end gap-1.5" aria-hidden="true" dir="ltr">
                         {["corner-left", "middle", "middle", "corner-right"].map((id, i) => {
                           const u = getUnit(id);
@@ -358,7 +361,7 @@ const SofaDesigner = () => {
                               key={`${id}-${i}`}
                               className="rounded-[10px] border border-dashed border-foreground/25 bg-secondary/60"
                               style={{
-                                width: u.widthCm * 0.85,
+                                width: u.widthCm * 0.7,
                                 height: u.type === "middle" ? 44 : 58,
                               }}
                             />
@@ -413,6 +416,7 @@ const SofaDesigner = () => {
                               {/* Reorder controls (always visible on touch, hover on desktop) */}
                               <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-smooth z-10">
                                 <button
+                                  type="button"
                                   onClick={() => shift(i, -1)}
                                   disabled={i === 0}
                                   className="flex h-8 w-8 items-center justify-center rounded-[10px] border border-border bg-background/95 text-foreground shadow-soft transition-smooth hover:border-foreground/50 hover:bg-secondary disabled:opacity-30"
@@ -421,6 +425,7 @@ const SofaDesigner = () => {
                                   <ChevronLeft className="h-4 w-4" />
                                 </button>
                                 <button
+                                  type="button"
                                   onClick={() => shift(i, 1)}
                                   disabled={i === placed.length - 1}
                                   className="flex h-8 w-8 items-center justify-center rounded-[10px] border border-border bg-background/95 text-foreground shadow-soft transition-smooth hover:border-foreground/50 hover:bg-secondary disabled:opacity-30"
@@ -432,6 +437,7 @@ const SofaDesigner = () => {
 
                               <div className="absolute -top-2 -right-2 flex gap-1 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-smooth z-10">
                                 <button
+                                  type="button"
                                   onClick={() => remove(p.key)}
                                   className="flex h-8 w-8 items-center justify-center rounded-[10px] border border-border bg-background/95 text-foreground shadow-soft transition-smooth hover:border-destructive hover:bg-destructive/10 hover:text-destructive"
                                   aria-label="הסר יחידה"
@@ -470,8 +476,15 @@ const SofaDesigner = () => {
                   <MoveHorizontal className="h-4 w-4 shrink-0" aria-hidden="true" />
                   <span>
                     החליקו את התצוגה עם האצבע או השתמשו בחיצים לגלילה. סדרו את היחידות עם כפתורי{" "}
-                    <ChevronLeft className="inline h-3.5 w-3.5" aria-hidden="true" />
-                    <ChevronRight className="inline h-3.5 w-3.5" aria-hidden="true" /> שעל כל יחידה.
+                    {/* Two icons quoted inside an RTL sentence are bidi
+                        neutrals: without an LTR run of their own they resolve
+                        to the paragraph direction and render ► ◄ — the mirror
+                        image of the buttons they are naming. */}
+                    <span dir="ltr" className="inline-flex items-center align-[-4px]">
+                      <ChevronLeft className="h-[18px] w-[18px]" aria-hidden="true" />
+                      <ChevronRight className="h-[18px] w-[18px]" aria-hidden="true" />
+                    </span>{" "}
+                    שעל כל יחידה.
                   </span>
                 </p>
               </div>

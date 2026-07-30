@@ -58,8 +58,8 @@ const steps = ["המרחב", "סגנון ולוח זמנים", "מה לכלול"
 
 /**
  * Maps the answers onto one of the real collections in the catalogue, by slug —
- * the result card looks the collection up in demoCollections and links straight
- * into /collections?cat=<slug>, so this must only ever return slugs that exist
+ * the result card looks the collection up and links straight into
+ * /collections?cat=<slug>, so this must only ever return slugs that exist
  * there. Priority runs from the most specific signal to the most generic:
  * a pool or a swing wish beats a style, a style beats the roof, and the salons
  * are the catch-all because every space can carry one.
@@ -285,7 +285,7 @@ const Questionnaire = () => {
                     <Check className="h-5 w-5 shrink-0 text-primary" aria-hidden="true" />
                     ההמלצה שלנו עבורכם
                   </p>
-                  <h2 className="mt-3 font-display font-normal text-card text-foreground">
+                  <h2 className="mt-3 font-display font-normal text-card-title text-foreground">
                     קולקציית {rec.name_he}
                   </h2>
                   {rec.intro && (

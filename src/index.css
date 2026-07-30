@@ -381,7 +381,10 @@
   overflow: hidden;
 
   font-family: inherit;
-  font-size: 18px;
+  /* rem, not px: every primary CTA on the site is a .btn-shine, and pinned in
+     px they were the one thing the accessibility widget's font slider could
+     not move. The em-based padding and radius below scale with it. */
+  font-size: 1.125rem;
   line-height: 1.4em;
   letter-spacing: 0.02em;
   color: var(--btn-ink);

@@ -7,10 +7,15 @@ import ProjectsGrid from "@/components/home/ProjectsGrid";
 import Newsletter from "@/components/home/Newsletter";
 import SEO from "@/components/SEO";
 
-// Below-the-fold + pulls in framer-motion, so load them lazily to keep the
-// initial bundle light. Fixed-height fallbacks avoid layout shift.
+// All below the fold, and each one carries weight the first paint has no use
+// for — framer-motion for the two rails, three full-size stills for the light
+// band, a Supabase round-trip for the magazine. Loaded lazily to keep the
+// initial bundle light; the fixed-height fallbacks hold the page open so
+// nothing below them jumps as the chunks land.
+const LightBand = lazy(() => import("@/components/home/LightBand"));
 const MaterialsBrief = lazy(() => import("@/components/home/MaterialsBrief"));
 const Testimonials = lazy(() => import("@/components/home/Testimonials"));
+const MagazineStrip = lazy(() => import("@/components/home/MagazineStrip"));
 
 const localBusiness = {
   "@context": "https://schema.org",
@@ -76,6 +81,17 @@ const Index = () => {
       />
       <Hero />
       <AboutBrief />
+      {/* The light band and the category rail are both sand: they read as one
+          continuous slab between the warm-white About and the warm-white
+          projects carousel, which is why the band closes on its own CTA rather
+          than trailing off into the tiles. */}
+      {/* Fallback heights are measured against the real sections: padding +
+          heading block + a 16:9 frame at the container's width + the controls
+          under it. Short fallbacks are the whole failure mode here — the page
+          would settle taller than it was held open for. */}
+      <Suspense fallback={<div className="min-h-[850px] md:min-h-[1090px] bg-secondary" />}>
+        <LightBand />
+      </Suspense>
       <CategoryIcons />
       <ProjectsGrid />
       <Suspense fallback={<div className="min-h-[820px] md:min-h-[900px] bg-foreground" />}>
@@ -88,6 +104,14 @@ const Index = () => {
           before the gate inside Testimonials.tsx is removed. */}
       <Suspense fallback={<div className="min-h-[700px] bg-background" />}>
         <Testimonials />
+      </Suspense>
+      {/* Warm white on purpose. In production the testimonials above return
+          null, so this lands directly on the charcoal materials rail and the
+          page steps charcoal → warm white → sand into the newsletter. */}
+      {/* Mobile stacks the three cards, so the phone fallback is the tall one:
+          three covers plus two-line titles, not a third of the desktop row. */}
+      <Suspense fallback={<div className="min-h-[1600px] md:min-h-[920px] bg-background" />}>
+        <MagazineStrip />
       </Suspense>
       <Newsletter />
     </Layout>

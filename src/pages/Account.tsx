@@ -9,13 +9,12 @@ import SectionHeading from "@/components/SectionHeading";
 import ProductCell from "@/components/ProductCell";
 import ShineButton from "@/components/ui/shine-button";
 import ShineAction from "@/components/ui/shine-action";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useFavorites } from "@/hooks/useFavorites";
 import type { DBProduct } from "@/hooks/useCollectionsData";
+import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 
 type Project = {
@@ -52,6 +51,16 @@ const statusLabels: Record<string, string> = {
 /** Folio number, printed-portfolio style: 1 → "01" — same device as /projects. */
 const folio = (n: number) => String(n).padStart(2, "0");
 
+// The site's own field grammar, the one the contact form and the questionnaire
+// use: 14px-tall control, 10px radius, 18px ink, and no outline-none — the
+// global focus-visible ring is what keyboard users navigate by. Written out
+// here rather than reached for through the shadcn <Input>/<Label>, whose base
+// classes are text-base/md:text-sm and text-sm: an 18px override only beats
+// them on stylesheet order, which is not a thing to rest a type floor on.
+const fieldClass =
+  "h-14 w-full rounded-[10px] border border-border bg-background px-5 text-meta text-foreground text-right placeholder:text-muted-foreground/70 transition-smooth focus:border-primary focus:ring-4 focus:ring-primary/15";
+const labelClass = "mb-2.5 block font-display text-meta font-medium text-foreground";
+
 /**
  * ProductCell renders a full catalogue product; the favorites query fetches
  * only the fields the card actually shows. The rest is padded so the type
@@ -75,7 +84,7 @@ const toCellProduct = (p: FavProduct): DBProduct => ({
 
 const Account = () => {
   const { user, loading, signOut } = useAuth();
-  const { ids: favIds } = useFavorites();
+  const { ids: favIds, loading: favLoading } = useFavorites();
   const nav = useNavigate();
   const [projects, setProjects] = useState<Project[]>([]);
   const [profile, setProfile] = useState<Profile>({ full_name: "", phone: "" });
@@ -227,7 +236,7 @@ const Account = () => {
                         <span aria-hidden="true" className="h-px flex-1 bg-primary/25" />
                       </div>
 
-                      <h3 className="mt-5 font-display font-normal text-card text-foreground">
+                      <h3 className="mt-5 font-display font-normal text-card-title text-foreground">
                         {p.title}
                       </h3>
 
@@ -286,7 +295,13 @@ const Account = () => {
               </SectionHeading>
             </Reveal>
 
-            {favProducts.length === 0 ? (
+            {/* Two loads stand between arriving and seeing the hearts: the
+                favourite ids, then the products behind them. Without this gate
+                the page states outright that nothing is saved, and then
+                contradicts itself a moment later. */}
+            {favLoading || (favIds.size > 0 && favProducts.length === 0) ? (
+              <p className="mt-8 text-lede text-foreground-soft">טוען…</p>
+            ) : favProducts.length === 0 ? (
               <Reveal className="mt-8 md:mt-10">
                 <p className="max-w-2xl text-lede text-foreground-soft text-pretty">
                   עדיין לא שמרתם כאן מוצרים. לחצו על הלב שליד כל מוצר בקולקציות, והוא יחכה לכם כאן —
@@ -325,41 +340,48 @@ const Account = () => {
             <Reveal delay={100}>
               <form onSubmit={saveProfile} className="mt-8 md:mt-10 max-w-2xl">
                 <div className="grid gap-6 sm:grid-cols-2">
-                  <div className="space-y-2.5">
-                    <Label htmlFor="fullName" className="text-meta">
+                  <div>
+                    <label htmlFor="fullName" className={labelClass}>
                       שם מלא
-                    </Label>
-                    <Input
+                    </label>
+                    <input
                       id="fullName"
-                      className="h-12 rounded-[10px] text-meta md:text-meta"
+                      autoComplete="name"
+                      className={fieldClass}
                       value={profile.full_name ?? ""}
                       onChange={(e) => setProfile((s) => ({ ...s, full_name: e.target.value }))}
                     />
                   </div>
-                  <div className="space-y-2.5">
-                    <Label htmlFor="phone" className="text-meta">
+                  <div>
+                    <label htmlFor="phone" className={labelClass}>
                       טלפון
-                    </Label>
-                    <Input
+                    </label>
+                    <input
                       id="phone"
                       type="tel"
-                      className="h-12 rounded-[10px] text-meta md:text-meta"
+                      inputMode="tel"
+                      autoComplete="tel"
+                      className={fieldClass}
                       value={profile.phone ?? ""}
                       onChange={(e) => setProfile((s) => ({ ...s, phone: e.target.value }))}
                     />
                   </div>
-                  <div className="space-y-2.5 sm:col-span-2">
-                    <Label htmlFor="email" className="text-meta">
+                  <div className="sm:col-span-2">
+                    <label htmlFor="email" className={labelClass}>
                       אימייל
-                    </Label>
-                    <Input
+                    </label>
+                    {/* The address is the account key — shown, never edited
+                        here, so it is left-aligned like every other Latin run
+                        on the site. */}
+                    <input
                       id="email"
-                      className="h-12 rounded-[10px] text-meta md:text-meta"
-                      value={user.email ?? ""}
-                      disabled
                       dir="ltr"
+                      value={user.email ?? ""}
+                      readOnly
+                      disabled
+                      className={cn(fieldClass, "text-left disabled:cursor-not-allowed disabled:opacity-70")}
                     />
-                    <p className="text-meta text-muted-foreground">
+                    <p className="mt-2.5 text-meta text-muted-foreground">
                       לשינוי כתובת האימייל, צרו איתנו קשר.
                     </p>
                   </div>

@@ -243,6 +243,17 @@ const CollectionsPage = () => {
                         בקרוב, מוצרים חדשים בקולקציה זו.
                       </p>
                     ) : (
+                      /* Every cell carries a unique `view-transition-name` so it
+                         can morph into the product page's main image (see
+                         ProductCell). Two elements may never hold the same name
+                         at once — the browser aborts the whole transition if
+                         they do — so this grid has to stay the only place a
+                         given product is drawn on this page. It holds by
+                         construction: a product belongs to exactly one
+                         collection, and `visible` lists each collection once.
+                         If a promo or "you may also like" rail is ever added to
+                         this page, it must not re-render a product that is
+                         already in the grid below it. */
                       items.map((p, i) => (
                         <ProductCell
                           key={p.slug}
