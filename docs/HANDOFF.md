@@ -80,31 +80,94 @@ and `src/data/projects.ts` gallery rewiring.
 
 ---
 
+## 🚧 WHAT IS BLOCKED AND WHY — read this first
+
+### 1. Higgsfield MCP connector is DISCONNECTED (the only hard blocker)
+
+Every `mcp__claude_ai_Higgsfield__*` call returns **`MCP server "claude.ai Higgsfield" is not connected`**.
+This is a transport-level disconnect, *not* the documented 8-concurrent-job cap — retrying and pacing
+do not help. A non-interactive session cannot run the OAuth flow.
+
+**To unblock:** the user runs `/mcp` in an interactive Claude Code session (or re-authorises the
+connector in claude.ai connector settings), then the generation work below can resume.
+Balance when it was last reachable: **~1,000 credits**, plenty for everything outstanding.
+
+**What is still owed once it reconnects:**
+
+| Item | Size | Notes |
+|---|---|---|
+| Catalogue backfill | 26 images | 13 existing products × 2 angles (detail + lifestyle): `tamid`, `shalhevet`, `ofek`, `namal`, `ratzif`, `terrazzo`, `granit`, `omer`, `shevil`, `hof`, `tzel`, `ruach`, `gal` |
+| 20 NEW products | 60 images | 3 angles each. **Hebrew copy is already drafted** — see below |
+| `/ar` GLB models | 3–4 models | The whole point of the AR page. See §2 |
+| Before/after pairs | 3 images | "Empty this terrace" variants of 3 project scenes, via nano_banana_pro with the scene as reference |
+| Sunbrella macro re-gen | 1 image | Current one reads as coarse rope/jute, not fine acrylic weave |
+
+⚠️ **The 20 new products' Hebrew copy** (names, tags, taglines, dimensions, materials, unique slugs)
+was drafted and saved to the session scratchpad:
+`…\1e179650-…\scratchpad\new-products-draft.json`.
+**That path is session-scoped and will not survive.** If it's gone, re-draft it — do not skip it,
+and match the existing naming spirit (nature/light/place words: מונוליט, להב, אופק, חוף…).
+
+**Hard rule that was followed and must keep being followed:** never add a product entry whose image
+import points at a file that doesn't exist — it breaks the Vite build. Generate first, wire second.
+
+### 2. `/ar` has no models — by design, temporarily
+
+The page used to serve three **third-party sample meshes from modelviewer.dev** (a generic sofa,
+chair and table) as if they were Aluma products. That was a genuine launch blocker and they are
+**deleted**. The page is fully rebuilt and ships an honest empty state instead.
+
+To light it up: generate a clean studio cutout per product (`marketing_studio_image`, 1:1, neutral
+light-grey backdrop, whole object with margin, no scene/props/text), feed that job id to
+`generate_3d`, download the GLB to `public/models/<slug>.glb`, then add the slug to `AR_SLUGS` in
+`src/pages/ARPreview.tsx`. Everything else (name, blurb, poster) resolves from the catalogue.
+Sanity-check each mesh — if it's degenerate, drop that product rather than shipping something bad.
+Budget guard: if `generate_3d` costs >60 credits/model, do one and reassess.
+**iOS:** Quick Look needs USDZ, which we don't produce. The page already states this honestly
+(3D view on iPhone, in-room placement on Android). Do not silently ship a failing AR button.
+
+### 3. Session limits keep truncating fleets
+
+Three separate workflows were wiped mid-run by account session limits. Everything is resumable —
+`Workflow({scriptPath, resumeFromRunId})` replays completed agents from cache instantly and only
+re-runs what failed. Scripts and run IDs are in the table below. If work looks half-done, **check
+the filesystem before regenerating** — the interrupted runs left real, valid output on disk (14
+catalogue angles, 4 material macros, 12 project scenes all survived that way).
+
+### 4. Not blocked, just not done yet
+
+`/before-after` still exists as a route and is still absent from the nav. The plan says fold its
+slider into `ProjectDetail` as a module and delete the standalone route. Its RTL clip math is
+broken and must be fixed while moving: use `inset-y-0` + start-edge + `width`, **not** `inset-0` +
+`width` (an over-constrained box drops `left` in RTL, so the reveal grows from the wrong side while
+the handle is measured from the other).
+
+---
+
 ## ▶️ NEXT ACTIONS, in order
 
-1. **Commit the above.** Build and tsc are clean; verify once more then commit + push.
-2. **`/ar` rebuild** — the only Phase 3 page not done. Its build agent was blocked by a transient
-   safety-classifier error; just retry. Task spec is in the Phase 3 workflow script (see below).
-   ⚠️ **Launch blocker inside it**: `/ar` currently ships third-party demo meshes from
-   modelviewer.dev. Must be replaced with GLBs generated from our own product renders
-   (Higgsfield `generate_3d`), max 3-4 hero products, each sanity-checked. If a mesh is bad,
-   drop that product — never ship a generic sofa. iOS needs USDZ for real AR placement; if we
-   don't convert, say so honestly in-UI (3D view on iPhone, AR on Android).
-3. **Re-run the 4 verify agents** that died on the session limit: questionnaire, fabric,
-   account, designer. Resume the Phase 3 workflow (cached builds replay instantly).
-4. **Finish the media factory** — catalogue is ~34/100 images. Resume that workflow.
-   Then the 3 before/after pairs (generate "empty this terrace" variants from project scenes).
-5. **PDP rebuild** (`CollectionDetail.tsx`) — needs the full catalogue first. Spec: media-first
-   split, gallery + lightbox, sticky spec panel, materials as chips linking to `/materials/:slug`,
-   charcoal showroom-visit band riding `submit-contact` with `source:"visit"`, "complete the set"
-   cross-sell using the extracted `ProductCell`, and the shared-element View Transition paired
-   with the Collections grid (`viewTransition` on the Link + matching `view-transition-name`).
-6. **Phase 4 — homepage integration**: hero film (poster-first, `preload="none"`, src attached
-   after `load`, parallax off while playing, CMS custom image still wins), the "אלומה. על שם האור"
-   sun-slider band between AboutBrief and CategoryIcons, a "מהמגזין" 3-up strip, magnetic CTAs.
-7. **Hardening + deploy**: tsc/eslint/build, 375px no-overflow (incl. a11y scale 1.3), AA on new
-   work, Lighthouse before/after, then push and confirm the Cloudflare Pages build goes green.
-8. **Rewrite `docs/NEXT-STEPS.md`** to the true final state.
+**A workflow was in flight when this note was last updated** (`wf_f1934a71-39f`, "phase4-pdp-home"):
+PDP rebuild, homepage integration, the Collections view-transition half, and catch-up verification
+of Questionnaire/Fabric/Account/Designer. **Check whether its output landed before redoing any of
+it** — `git log` and `git status`, then resume the workflow if agents failed.
+
+1. **Verify + commit whatever that workflow produced.** `npx tsc --noEmit`, `npm run build`,
+   `npx eslint` on the touched files, then commit and push.
+2. **Reconnect Higgsfield and finish the media** (see §1 above). This is the largest remaining
+   chunk and the only thing gating a genuinely finished-feeling catalogue.
+3. **Light up `/ar`** once models exist (see §2).
+4. **Fold `/before-after` into ProjectDetail** and delete the route (see §4).
+5. **Hardening pass** — do this yourself, not via a fleet, and actually reason about each:
+   - `npx tsc --noEmit`, `npm run build`, `npx eslint src/` (the only pre-existing errors are
+     ~14 `no-explicit-any` in admin/`useCollectionsData`/`Auth` — do not count those as new).
+   - 375px: no horizontal overflow anywhere, including at accessibility font scale 1.3.
+   - AA contrast on everything new (accent was darkened to `14 50% 38%`, ~5.4:1 on warm white).
+   - Lighthouse before/after on the homepage — the hero video must not regress LCP.
+   - Confirm demo content still cannot reach production: `npm run build` then
+     `ls dist/assets/*.webp` should show **no** demo catalogue/blog images.
+6. **Push and confirm the Cloudflare Pages build goes green.** `_redirects` is committed, so deep
+   links should work — test `/collections/monolit` and `/blog/<slug>` on the `.pages.dev` URL.
+7. **Rewrite `docs/NEXT-STEPS.md`** to the true final state, then update this file.
 
 ---
 
@@ -112,9 +175,10 @@ and `src/data/projects.ts` gallery rewiring.
 
 | Purpose | Script | Run ID |
 |---|---|---|
-| Phase 1 chrome | `aluma-phase1-chrome-wf_79cbc36b-c5d.js` | `wf_79cbc36b-c5d` (done) |
-| Phase 3 pages | `aluma-phase3-pages-wf_0e6a93f9-9f0.js` | `wf_0e6a93f9-9f0` |
-| Media factory | `aluma-media-factory-wf_bca3466a-6c0.js` | `wf_bca3466a-6c0` |
+| Phase 1 chrome | `aluma-phase1-chrome-wf_79cbc36b-c5d.js` | `wf_79cbc36b-c5d` — done |
+| Phase 3 pages | `aluma-phase3-pages-wf_0e6a93f9-9f0.js` | `wf_0e6a93f9-9f0` — done (AR was finished by hand) |
+| Media factory | `aluma-media-factory-wf_bca3466a-6c0.js` | `wf_bca3466a-6c0` — **resume when Higgsfield is back** |
+| Phase 4 PDP + home | `aluma-phase4-pdp-home-wf_f1934a71-39f.js` | `wf_f1934a71-39f` — check if it finished |
 
 All under `C:\Users\wolft\.claude\projects\c--Yuvalco-private-projects-benAluma\<session>\workflows\scripts\`.
 ⚠️ If you edit one with a Python script on Windows, **normalize it back to LF** — CRLF makes the
