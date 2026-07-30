@@ -21,6 +21,21 @@ import loungerB from "@/assets/collections/gen/lounger-b.webp";
 import swingA from "@/assets/collections/gen/swing-a.webp";
 import swingB from "@/assets/collections/gen/swing-b.webp";
 
+import monolitDetail from "@/assets/collections/gen/monolit-detail.webp";
+import monolitLife from "@/assets/collections/gen/monolit-life.webp";
+import eucalyptusDetail from "@/assets/collections/gen/eucalyptus-detail.webp";
+import eucalyptusLife from "@/assets/collections/gen/eucalyptus-life.webp";
+import marinaDetail from "@/assets/collections/gen/marina-detail.webp";
+import marinaLife from "@/assets/collections/gen/marina-life.webp";
+import saharaDetail from "@/assets/collections/gen/sahara-detail.webp";
+import saharaLife from "@/assets/collections/gen/sahara-life.webp";
+import lahavDetail from "@/assets/collections/gen/lahav-detail.webp";
+import lahavLife from "@/assets/collections/gen/lahav-life.webp";
+import gaheletDetail from "@/assets/collections/gen/gahelet-detail.webp";
+import gaheletLife from "@/assets/collections/gen/gahelet-life.webp";
+import wadiDetail from "@/assets/collections/gen/wadi-detail.webp";
+import wadiLife from "@/assets/collections/gen/wadi-life.webp";
+
 /**
  * Placeholder catalogue — NOT real Aluma products.
  *
@@ -85,6 +100,8 @@ type DemoSeed = {
   tag: string;
   tagline: string;
   cover: string;
+  /** Extra angles (detail close-up, lifestyle wide) shown after the cover. */
+  extra?: string[];
   dimensions: string;
   materials: string[];
 };
@@ -97,6 +114,7 @@ const seeds: Record<string, DemoSeed[]> = {
       tag: "סלון פינתי",
       tagline: "קו אחד ארוך שסוגר את הפינה",
       cover: salonCornerA,
+      extra: [monolitDetail, monolitLife],
       dimensions: "320 × 260 ס״מ",
       materials: ["אלומיניום", "בד Sunbrella"],
     },
@@ -106,6 +124,7 @@ const seeds: Record<string, DemoSeed[]> = {
       tag: "סלון מודולרי",
       tagline: "יחידות שמתחברות מחדש בכל עונה",
       cover: salonCornerB,
+      extra: [eucalyptusDetail, eucalyptusLife],
       dimensions: "מודולרי, מ-240 ס״מ",
       materials: ["אלומיניום", "בד Sunbrella"],
     },
@@ -115,6 +134,7 @@ const seeds: Record<string, DemoSeed[]> = {
       tag: "ספה דו-מושבית",
       tagline: "שניים, קפה, ובוקר שלם",
       cover: salonDuoA,
+      extra: [marinaDetail, marinaLife],
       dimensions: "180 × 90 ס״מ",
       materials: ["אלומיניום", "בד Sunbrella"],
     },
@@ -124,6 +144,7 @@ const seeds: Record<string, DemoSeed[]> = {
       tag: "כורסת נוח",
       tagline: "הכורסה שאף אחד לא קם ממנה",
       cover: salonDuoB,
+      extra: [saharaDetail, saharaLife],
       dimensions: "95 × 90 ס״מ",
       materials: ["אלומיניום", "בד Sunbrella"],
     },
@@ -135,6 +156,7 @@ const seeds: Record<string, DemoSeed[]> = {
       tag: "שולחן אש מלבני",
       tagline: "פס אש נקי לאורך הלוח",
       cover: fireTableA,
+      extra: [lahavDetail, lahavLife],
       dimensions: "140 × 80 ס״מ",
       materials: ["שיש גרניט פורצלן", "אלומיניום"],
     },
@@ -144,6 +166,7 @@ const seeds: Record<string, DemoSeed[]> = {
       tag: "שולחן אש עגול",
       tagline: "מעגל שמושך את כולם פנימה",
       cover: fireRoundA,
+      extra: [gaheletDetail, gaheletLife],
       dimensions: "קוטר 110 ס״מ",
       materials: ["PolyStone"],
     },
@@ -153,6 +176,7 @@ const seeds: Record<string, DemoSeed[]> = {
       tag: "שולחן אש עגול",
       tagline: "נמוך, רחב, ופתוח לכל הכיוונים",
       cover: fireRoundB,
+      extra: [wadiDetail, wadiLife],
       dimensions: "קוטר 130 ס״מ",
       materials: ["PolyStone"],
     },
@@ -303,6 +327,6 @@ export const demoProducts: DBProduct[] = Object.entries(seeds).flatMap(
       materials: s.materials,
       dimensions: s.dimensions,
       cover_url: s.cover,
-      gallery: [s.cover],
+      gallery: [s.cover, ...(s.extra ?? [])],
     }))
 );

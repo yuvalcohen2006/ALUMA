@@ -5,7 +5,7 @@ import SEO from "@/components/SEO";
 import PageHero from "@/components/PageHero";
 import Reveal from "@/components/Reveal";
 import { Check, MessageCircle } from "lucide-react";
-import sofaAsset from "@/assets/modular-sofa-fabric.png.asset.json";
+import sofaPhoto from "@/assets/collections/gen/salon-corner-a.webp";
 import { SITE } from "@/config/site";
 import {
   sunbrellaFabrics,
@@ -27,21 +27,35 @@ const familyLabelsHe: Record<(typeof families)[number], string> = {
 /**
  * The preview photograph and the cushion geometry that belongs to it.
  *
- * The six regions are hand-measured percentages that trace the cushions of
- * THIS photo (modular-sofa-fabric.png) — over any other image they are just
- * rectangles floating on nothing. Swapping the asset means re-measuring every
- * region, which is why photo and regions travel as one record instead of the
- * percentages sitting anonymously beside the JSX.
+ * The regions are hand-measured percentages that trace the cushions of THIS
+ * photo — over any other image they are just rectangles floating on nothing.
+ * Swapping the photo means re-measuring every region, which is why the two
+ * travel as one record instead of the percentages sitting anonymously beside
+ * the JSX.
+ *
+ * The previous photo was a Lovable CDN manifest whose URL had gone dead, so
+ * this preview had been rendering a broken image with six coloured rectangles
+ * floating over the gap.
  */
 const sofaPreview = {
-  asset: sofaAsset,
+  photo: sofaPhoto,
+  /* salon-corner-a: an L-shaped sectional shot three-quarter from the left.
+     Back cushions run as a band across the upper middle; the seat cushions sit
+     below them, and the right-hand return arm carries its own pair. */
   regions: [
-    { top: "25%", left: "8%", width: "26%", height: "24%", radius: "8px" },
-    { top: "25%", left: "37%", width: "26%", height: "24%", radius: "8px" },
-    { top: "25%", left: "66%", width: "26%", height: "24%", radius: "8px" },
-    { top: "52%", left: "8%", width: "26%", height: "20%", radius: "8px" },
-    { top: "52%", left: "37%", width: "26%", height: "20%", radius: "8px" },
-    { top: "52%", left: "66%", width: "26%", height: "20%", radius: "8px" },
+    // back cushions, left run
+    { top: "50%", left: "14%", width: "13%", height: "11%", radius: "10px" },
+    { top: "50%", left: "27%", width: "12%", height: "11%", radius: "10px" },
+    { top: "50%", left: "39%", width: "11%", height: "11%", radius: "10px" },
+    // back cushions, corner + right run
+    { top: "49%", left: "50%", width: "12%", height: "11%", radius: "10px" },
+    { top: "50%", left: "62%", width: "11%", height: "11%", radius: "10px" },
+    // seat cushions, left run
+    { top: "61%", left: "13%", width: "27%", height: "8%", radius: "10px" },
+    { top: "59%", left: "40%", width: "20%", height: "8%", radius: "10px" },
+    // return arm, lower right
+    { top: "56%", left: "60%", width: "18%", height: "10%", radius: "10px" },
+    { top: "66%", left: "47%", width: "17%", height: "9%", radius: "10px" },
   ],
 } as const;
 
@@ -76,7 +90,7 @@ const PreviewPhoto = ({
 }) => (
   <div className="relative">
     <img
-      src={sofaPreview.asset.url}
+      src={sofaPreview.photo}
       alt={alt}
       width={1280}
       height={960}
