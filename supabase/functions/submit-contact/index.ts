@@ -22,7 +22,14 @@ const corsHeaders = {
   "Access-Control-Allow-Methods": "POST, OPTIONS",
 };
 
-const phoneRegex = /^(\+?972|0)[\s-]?[23489567][\s-]?\d{3}[\s-]?\d{4}$/;
+/** Must stay identical to isIsraeliPhone in src/lib/contactSchema.ts — the
+ *  client and the server have to agree on what a valid number is, or the form
+ *  accepts something the function then silently rejects. Both used to demand
+ *  nine digits, which excluded every mobile number. */
+const isIsraeliPhone = (raw: string): boolean => {
+  const digits = raw.replace(/[\s-]/g, "").replace(/^\+?972/, "0");
+  return /^0(?:[23489]\d{7}|5\d{8}|7\d{8})$/.test(digits);
+};
 
 const BodySchema = z.object({
   name: z
@@ -31,7 +38,7 @@ const BodySchema = z.object({
     .min(2)
     .max(100)
     .refine((v) => !/<[^>]*>|https?:\/\//i.test(v)),
-  phone: z.string().trim().min(9).max(20).regex(phoneRegex),
+  phone: z.string().trim().min(9).max(20).refine(isIsraeliPhone),
   email: z.string().trim().max(255).email().optional().or(z.literal("")),
   message: z.string().trim().max(1000).optional().or(z.literal("")),
   source: z.string().trim().max(50).optional(),
