@@ -11,7 +11,9 @@ import {
 import Layout from "@/components/Layout";
 import { SITE } from "@/config/site";
 import SEO from "@/components/SEO";
-import { Button } from "@/components/ui/button";
+import PageHero from "@/components/PageHero";
+import Reveal from "@/components/Reveal";
+import ShineAction from "@/components/ui/shine-action";
 import { SOFA_UNITS, getUnit, type SofaUnit } from "@/data/sofaUnits";
 import { trackPixel } from "@/lib/pixel";
 import ConversionCTA from "@/components/ConversionCTA";
@@ -43,11 +45,35 @@ const UnitTile = ({ unit }: { unit: SofaUnit }) => {
           className="w-full h-full object-contain block pointer-events-none"
         />
       ) : (
-        <div className="absolute inset-0 rounded-md border border-primary/20 bg-secondary" />
+        <div className="absolute inset-0 rounded-[10px] border border-border bg-secondary" />
       )}
     </div>
   );
 };
+
+/**
+ * The drawn floor the composition stands on: a perspective grid in border
+ * tones rising from the bottom edge of the canvas, so the sofa sits in a room
+ * rather than on white void. Purely decorative — the scroll strip paints above
+ * it (the strip is positioned, the floor comes first in the DOM).
+ */
+const CanvasFloor = () => (
+  <div
+    aria-hidden="true"
+    className="pointer-events-none absolute inset-x-0 bottom-0 h-48 overflow-hidden [perspective:520px]"
+  >
+    <span
+      className="absolute inset-x-[-25%] bottom-[-1px] block h-72 origin-bottom opacity-80 [transform:rotateX(58deg)]"
+      style={{
+        backgroundImage:
+          "linear-gradient(hsl(var(--border)) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--border)) 1px, transparent 1px)",
+        backgroundSize: "36px 36px",
+        maskImage: "linear-gradient(to top, #000 20%, transparent 90%)",
+        WebkitMaskImage: "linear-gradient(to top, #000 20%, transparent 90%)",
+      }}
+    />
+  </div>
+);
 
 const SofaDesigner = () => {
   const [placed, setPlaced] = useState<Placed[]>([
@@ -59,6 +85,8 @@ const SofaDesigner = () => {
   ]);
   const [dragIndex, setDragIndex] = useState<number | null>(null);
   const [overIndex, setOverIndex] = useState<number | null>(null);
+  // Read aloud by the sr-only live region after every reorder.
+  const [liveNote, setLiveNote] = useState("");
 
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
@@ -121,6 +149,8 @@ const SofaDesigner = () => {
       next.splice(to, 0, item);
       return next;
     });
+    // A move never changes the count, so reading the closure's length is safe.
+    setLiveNote(`הוזז למקום ${to + 1} מתוך ${placed.length}`);
   };
 
   const shift = (index: number, dir: -1 | 1) => {
@@ -152,6 +182,16 @@ const SofaDesigner = () => {
     return encodeURIComponent(lines.join("\n"));
   }, [summary]);
 
+  const quoteHref = `${SITE.whatsapp.href}?text=${waMessage}`;
+  const onQuoteClick = () =>
+    trackPixel("InitiateCheckout", {
+      content_name: "סלון מודולרי מותאם אישית",
+      content_category: "Sofa Designer",
+    });
+
+  const unitsLabel =
+    placed.length === 1 ? "יחידה אחת" : `${placed.length} יחידות`;
+
   return (
     <Layout>
       <SEO
@@ -160,227 +200,313 @@ const SofaDesigner = () => {
         path="/designer"
       />
 
-      <div className="pt-32 pb-20">
-        <section className="container mx-auto px-6">
-          <div className="max-w-3xl mb-10">
-            <span className="text-xs tracking-[0.3em] uppercase text-accent font-medium">
-              Modular sofa designer
-            </span>
-            <h1 className="font-display text-3xl sm:text-4xl md:text-5xl text-primary mt-3 mb-4">
-              עצבו את הסלון שלכם
-            </h1>
-            <p className="text-foreground text-lg leading-relaxed">
-              כל הסלונים שלנו מודולריים. חברו פינה, יחידות אמצע והדומים, ובנו את הקומפוזיציה
-              שמתאימה בדיוק למרפסת או לגינה שלכם. האורך והתצורה מתעדכנים בזמן אמת.
-            </p>
-          </div>
+      <PageHero
+        title="עצבו סלון"
+        subtitle="כל הסלונים שלנו מודולריים. חברו פינה, יחידות אמצע והדומים, ובנו את הקומפוזיציה שמתאימה בדיוק למרפסת או לגינה שלכם. האורך והתצורה מתעדכנים בזמן אמת."
+      />
 
-          <div className="grid lg:grid-cols-[280px_1fr] gap-8">
-            {/* Palette */}
-            <aside className="space-y-4">
-              <h2 className="text-sm tracking-[0.2em] uppercase text-muted-foreground font-medium">
-                יחידות זמינות
-              </h2>
-              <div className="space-y-3">
-                {SOFA_UNITS.map((u) => (
-                  <button
-                    key={u.id}
-                    onClick={() => add(u.id)}
-                    className="w-full flex items-center gap-4 p-4 rounded-md border border-border bg-card hover:border-accent hover:shadow-soft transition-smooth text-right group"
-                  >
-                    <div className="shrink-0 w-16 h-16 rounded bg-secondary/60 border border-primary/15 flex items-center justify-center overflow-hidden">
-                      {u.image ? (
-                        <img
-                          src={u.image}
-                          alt={u.nameHe}
-                          className="w-full h-full object-contain"
-                          style={{ transform: u.mirrored ? "scaleX(-1)" : undefined }}
-                        />
-                      ) : (
-                        <span className="text-[10px] text-muted-foreground">
-                          {u.widthCm}×{u.depthCm}
+      <section className="pt-8 md:pt-12 pb-20 bg-background">
+        <div className="container-luxury">
+          <Reveal>
+            <div className="grid lg:grid-cols-[300px_minmax(0,1fr)] gap-8 items-start">
+              {/* Palette + summary — first child, so it sits on the RIGHT in RTL */}
+              <aside className="space-y-5 lg:sticky lg:top-28">
+                <h2 className="font-display text-card text-foreground">
+                  יחידות זמינות
+                </h2>
+
+                <ul role="list" className="space-y-3">
+                  {SOFA_UNITS.map((u) => (
+                    <li key={u.id}>
+                      <button
+                        type="button"
+                        onClick={() => add(u.id)}
+                        aria-label={`הוספת ${u.nameHe}`}
+                        className="group w-full rounded-[10px] border border-border bg-card p-3 text-right transition-all duration-300 hover:-translate-y-1 hover:border-primary/50 hover:shadow-luxury"
+                      >
+                        <span className="flex items-center gap-4">
+                          {/* Specimen plate — DIY-station grammar */}
+                          <span className="flex h-16 w-20 shrink-0 items-center justify-center overflow-hidden rounded-[10px] border border-border bg-secondary/50 p-1.5 transition-colors duration-300 group-hover:border-primary/40">
+                            {u.image && (
+                              <img
+                                src={u.image}
+                                alt=""
+                                loading="lazy"
+                                decoding="async"
+                                draggable={false}
+                                className="h-full w-full object-contain"
+                                style={{ transform: u.mirrored ? "scaleX(-1)" : undefined }}
+                              />
+                            )}
+                          </span>
+                          <span className="min-w-0 flex-1">
+                            <span className="block text-meta font-medium text-foreground">
+                              {u.nameHe}
+                            </span>
+                            <span className="block text-meta text-muted-foreground">
+                              <bdi dir="ltr">{u.widthCm}×{u.depthCm}</bdi> ס״מ
+                            </span>
+                          </span>
+                          <Plus
+                            className="h-5 w-5 shrink-0 text-foreground/40 transition-smooth group-hover:text-primary"
+                            aria-hidden="true"
+                          />
                         </span>
-                      )}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+
+                {/* Summary — desktop sidebar block; the mobile twin is the
+                    sticky bar at the bottom of the page. */}
+                <div className="rounded-[14px] border border-border bg-card p-5">
+                  <dl className="space-y-3">
+                    <div className="flex items-center justify-between gap-4">
+                      <dt className="text-meta text-muted-foreground">סה״כ יחידות</dt>
+                      <dd className="text-meta font-medium tabular-nums text-foreground">
+                        {placed.length}
+                      </dd>
                     </div>
-                    <div className="flex-1">
-                      <div className="font-semibold text-foreground">{u.nameHe}</div>
-                      <div className="text-xs text-muted-foreground">1×1 מ׳</div>
+                    <div className="flex items-center justify-between gap-4">
+                      <dt className="text-meta text-muted-foreground">אורך כולל</dt>
+                      <dd className="text-meta font-medium text-foreground">
+                        <span className="tabular-nums">{summary.totalCm}</span> ס״מ
+                      </dd>
                     </div>
-                    <Plus className="h-5 w-5 text-primary/40 group-hover:text-accent transition-smooth" />
-                  </button>
-                ))}
-              </div>
+                  </dl>
 
-              <div className="pt-4 border-t border-border space-y-3">
-                <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">סה״כ יחידות</span>
-                  <span className="font-semibold text-foreground">{placed.length}</span>
+                  {placed.length > 0 && (
+                    <div className="mt-5 flex items-stretch gap-2 border-t border-border pt-5">
+                      <a
+                        href={quoteHref}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={onQuoteClick}
+                        className="btn-shine flex-1"
+                      >
+                        הצעת מחיר
+                        <MessageCircle className="h-4 w-4" aria-hidden="true" />
+                      </a>
+                      <button
+                        type="button"
+                        onClick={reset}
+                        aria-label="איפוס הקומפוזיציה"
+                        title="איפוס הקומפוזיציה"
+                        className="flex w-12 shrink-0 items-center justify-center rounded-[10px] border border-border text-foreground transition-smooth hover:border-foreground/50 hover:bg-secondary"
+                      >
+                        <RotateCcw className="h-4 w-4" aria-hidden="true" />
+                      </button>
+                    </div>
+                  )}
                 </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">אורך כולל</span>
-                  <span className="font-semibold text-foreground">
-                    {summary.totalCm} ס״מ
-                  </span>
-                </div>
-              </div>
+              </aside>
 
-              <div className="flex gap-2 pt-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={reset}
-                  className="flex-1"
-                  disabled={!placed.length}
-                >
-                  <RotateCcw className="h-4 w-4 ml-2" />
-                  אפס
-                </Button>
-                <Button asChild size="sm" className="flex-1" disabled={!placed.length}>
-                  <a
-                    href={`${SITE.whatsapp.href}?text=${waMessage}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={() =>
-                      trackPixel("InitiateCheckout", {
-                        content_name: "סלון מודולרי מותאם אישית",
-                        content_category: "Sofa Designer",
-                      })
-                    }
-                  >
-                    <MessageCircle className="h-4 w-4 ml-2" />
-                    הצעת מחיר
-                  </a>
-                </Button>
-              </div>
-            </aside>
+              {/* Canvas */}
+              <div className="relative min-h-[480px] min-w-0 overflow-hidden rounded-[14px] border border-border bg-card p-6">
+                <CanvasFloor />
 
-            {/* Canvas */}
-            <div className="relative rounded-lg border border-border bg-card p-6 min-h-[480px] min-w-0 overflow-hidden">
-              {/* Scroll arrows, always visible, disabled when nothing to scroll */}
-              {placed.length > 0 && (
-                <>
-                  <button
-                    type="button"
-                    onClick={() => scrollByAmount(-1)}
-                    disabled={!canScrollLeft}
-                    aria-label="גלול שמאלה"
-                    className="absolute left-2 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-sm bg-primary text-primary-foreground shadow-soft flex items-center justify-center transition-smooth hover:bg-accent disabled:opacity-30 disabled:cursor-not-allowed"
-                  >
-                    <ChevronLeft className="h-5 w-5" />
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => scrollByAmount(1)}
-                    disabled={!canScrollRight}
-                    aria-label="גלול ימינה"
-                    className="absolute right-2 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-sm bg-primary text-primary-foreground shadow-soft flex items-center justify-center transition-smooth hover:bg-accent disabled:opacity-30 disabled:cursor-not-allowed"
-                  >
-                    <ChevronRight className="h-5 w-5" />
-                  </button>
-                </>
-              )}
-
-              {/* dir="ltr" must sit on the SCROLL CONTAINER, not just the inner
-                  track: with the container inheriting rtl, scrollLeft ran
-                  0 → negative, so canScrollLeft was never true (left arrow
-                  permanently dead), canScrollRight never false, and
-                  scrollTo({left: scrollWidth}) clamped to 0 — the tool was
-                  unusable past the first viewport of units. With the container
-                  itself ltr, all the existing math is simply correct. */}
-              <div
-                ref={scrollRef}
-                dir="ltr"
-                className="overflow-x-auto overflow-y-hidden scroll-smooth"
-                style={{ WebkitOverflowScrolling: "touch" }}
-              >
-                {placed.length === 0 ? (
-                  <div className="h-[400px] flex items-center justify-center text-muted-foreground text-sm">
-                    הוסיפו יחידות מהצד כדי להתחיל
-                  </div>
-                ) : (
-                  <div className="flex items-end min-h-[320px] py-4 w-max" dir="ltr">
-                    {placed.map((p, i) => {
-                      const u = getUnit(p.unitId);
-                      if (!u) return null;
-                      const isDragging = dragIndex === i;
-                      const isOver = overIndex === i && dragIndex !== null && dragIndex !== i;
-                      return (
-                        <div
-                          key={p.key}
-                          draggable
-                          onDragStart={(e) => {
-                            setDragIndex(i);
-                            e.dataTransfer.effectAllowed = "move";
-                          }}
-                          onDragOver={(e) => {
-                            e.preventDefault();
-                            e.dataTransfer.dropEffect = "move";
-                            if (overIndex !== i) setOverIndex(i);
-                          }}
-                          onDrop={(e) => {
-                            e.preventDefault();
-                            if (dragIndex !== null) moveTo(dragIndex, i);
-                            setDragIndex(null);
-                            setOverIndex(null);
-                          }}
-                          onDragEnd={() => {
-                            setDragIndex(null);
-                            setOverIndex(null);
-                          }}
-                          className={`relative group cursor-grab active:cursor-grabbing transition-all ${
-                            isDragging ? "opacity-40" : ""
-                          } ${isOver ? "ring-2 ring-accent rounded-md" : ""}`}
-                        >
-                          <UnitTile unit={u} />
-
-                          {/* Reorder controls (always visible on touch, hover on desktop) */}
-                          <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-smooth z-10">
-                            <button
-                              onClick={() => shift(i, -1)}
-                              disabled={i === 0}
-                              className="w-8 h-8 rounded-sm bg-primary/90 text-primary-foreground flex items-center justify-center shadow-soft hover:bg-accent transition-smooth disabled:opacity-30"
-                              aria-label="הזז שמאלה"
-                            >
-                              <ChevronLeft className="h-4 w-4" />
-                            </button>
-                            <button
-                              onClick={() => shift(i, 1)}
-                              disabled={i === placed.length - 1}
-                              className="w-8 h-8 rounded-sm bg-primary/90 text-primary-foreground flex items-center justify-center shadow-soft hover:bg-accent transition-smooth disabled:opacity-30"
-                              aria-label="הזז ימינה"
-                            >
-                              <ChevronRight className="h-4 w-4" />
-                            </button>
-                          </div>
-
-                          <div className="absolute -top-2 -right-2 flex gap-1 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-smooth z-10">
-                            <button
-                              onClick={() => remove(p.key)}
-                              className="w-7 h-7 rounded-sm bg-destructive text-destructive-foreground flex items-center justify-center shadow-soft hover:opacity-90 transition-smooth"
-                              aria-label="הסר יחידה"
-                            >
-                              <Trash2 className="h-3.5 w-3.5" />
-                            </button>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
+                {/* Scroll arrows, always visible, disabled when nothing to scroll */}
+                {placed.length > 0 && (
+                  <>
+                    <button
+                      type="button"
+                      onClick={() => scrollByAmount(-1)}
+                      disabled={!canScrollLeft}
+                      aria-label="גלול שמאלה"
+                      className="absolute left-2 top-1/2 -translate-y-1/2 z-20 flex h-10 w-10 items-center justify-center rounded-[10px] border border-border bg-background/95 text-foreground shadow-soft transition-smooth hover:border-foreground/50 hover:bg-secondary disabled:cursor-not-allowed disabled:opacity-30"
+                    >
+                      <ChevronLeft className="h-5 w-5" />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => scrollByAmount(1)}
+                      disabled={!canScrollRight}
+                      aria-label="גלול ימינה"
+                      className="absolute right-2 top-1/2 -translate-y-1/2 z-20 flex h-10 w-10 items-center justify-center rounded-[10px] border border-border bg-background/95 text-foreground shadow-soft transition-smooth hover:border-foreground/50 hover:bg-secondary disabled:cursor-not-allowed disabled:opacity-30"
+                    >
+                      <ChevronRight className="h-5 w-5" />
+                    </button>
+                  </>
                 )}
-              </div>
 
-              <p className="text-xs text-muted-foreground mt-4 text-center flex items-center justify-center gap-2 flex-wrap">
-                <MoveHorizontal className="h-3.5 w-3.5" />
-                <span>
-                  החליקו את התצוגה עם האצבע או השתמשו בחיצים לגלילה. סדרו את היחידות עם כפתורי{" "}
-                  <ChevronLeft className="h-3 w-3 inline" />
-                  <ChevronRight className="h-3 w-3 inline" /> שעל כל יחידה.
-                </span>
-              </p>
+                {/* dir="ltr" must sit on the SCROLL CONTAINER, not just the inner
+                    track: with the container inheriting rtl, scrollLeft ran
+                    0 → negative, so canScrollLeft was never true (left arrow
+                    permanently dead), canScrollRight never false, and
+                    scrollTo({left: scrollWidth}) clamped to 0 — the tool was
+                    unusable past the first viewport of units. With the container
+                    itself ltr, all the existing math is simply correct. */}
+                <div
+                  ref={scrollRef}
+                  dir="ltr"
+                  className="relative overflow-x-auto overflow-y-hidden scroll-smooth"
+                  style={{ WebkitOverflowScrolling: "touch" }}
+                >
+                  {placed.length === 0 ? (
+                    /* Empty state: soft silhouettes of a composition-to-be, and
+                       a seed action that opens with a corner unit. */
+                    <div
+                      dir="rtl"
+                      className="flex h-[400px] flex-col items-center justify-center gap-6 px-4 text-center"
+                    >
+                      <div className="flex items-end gap-1.5" aria-hidden="true" dir="ltr">
+                        {["corner-left", "middle", "middle", "corner-right"].map((id, i) => {
+                          const u = getUnit(id);
+                          if (!u) return null;
+                          return (
+                            <span
+                              key={`${id}-${i}`}
+                              className="rounded-[10px] border border-dashed border-foreground/25 bg-secondary/60"
+                              style={{
+                                width: u.widthCm * 0.85,
+                                height: u.type === "middle" ? 44 : 58,
+                              }}
+                            />
+                          );
+                        })}
+                      </div>
+                      <p className="max-w-sm text-meta text-muted-foreground">
+                        הקומפוזיציה שלכם תיבנה כאן. הוסיפו יחידות מהרשימה, או פתחו עם פינה.
+                      </p>
+                      <ShineAction onClick={() => add("corner-right")}>
+                        התחילו עם יחידת פינה
+                        <Plus className="h-4 w-4" aria-hidden="true" />
+                      </ShineAction>
+                    </div>
+                  ) : (
+                    <div className="mx-auto w-max" dir="ltr">
+                      <div className="flex items-end min-h-[320px] py-4">
+                        {placed.map((p, i) => {
+                          const u = getUnit(p.unitId);
+                          if (!u) return null;
+                          const isDragging = dragIndex === i;
+                          const isOver = overIndex === i && dragIndex !== null && dragIndex !== i;
+                          return (
+                            <div
+                              key={p.key}
+                              draggable
+                              onDragStart={(e) => {
+                                setDragIndex(i);
+                                e.dataTransfer.effectAllowed = "move";
+                              }}
+                              onDragOver={(e) => {
+                                e.preventDefault();
+                                e.dataTransfer.dropEffect = "move";
+                                if (overIndex !== i) setOverIndex(i);
+                              }}
+                              onDrop={(e) => {
+                                e.preventDefault();
+                                if (dragIndex !== null) moveTo(dragIndex, i);
+                                setDragIndex(null);
+                                setOverIndex(null);
+                              }}
+                              onDragEnd={() => {
+                                setDragIndex(null);
+                                setOverIndex(null);
+                              }}
+                              className={`relative group cursor-grab active:cursor-grabbing transition-all ${
+                                isDragging ? "opacity-40" : ""
+                              } ${isOver ? "ring-2 ring-primary/60 rounded-[10px]" : ""}`}
+                            >
+                              <UnitTile unit={u} />
+
+                              {/* Reorder controls (always visible on touch, hover on desktop) */}
+                              <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-smooth z-10">
+                                <button
+                                  onClick={() => shift(i, -1)}
+                                  disabled={i === 0}
+                                  className="flex h-8 w-8 items-center justify-center rounded-[10px] border border-border bg-background/95 text-foreground shadow-soft transition-smooth hover:border-foreground/50 hover:bg-secondary disabled:opacity-30"
+                                  aria-label="הזז שמאלה"
+                                >
+                                  <ChevronLeft className="h-4 w-4" />
+                                </button>
+                                <button
+                                  onClick={() => shift(i, 1)}
+                                  disabled={i === placed.length - 1}
+                                  className="flex h-8 w-8 items-center justify-center rounded-[10px] border border-border bg-background/95 text-foreground shadow-soft transition-smooth hover:border-foreground/50 hover:bg-secondary disabled:opacity-30"
+                                  aria-label="הזז ימינה"
+                                >
+                                  <ChevronRight className="h-4 w-4" />
+                                </button>
+                              </div>
+
+                              <div className="absolute -top-2 -right-2 flex gap-1 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-smooth z-10">
+                                <button
+                                  onClick={() => remove(p.key)}
+                                  className="flex h-8 w-8 items-center justify-center rounded-[10px] border border-border bg-background/95 text-foreground shadow-soft transition-smooth hover:border-destructive hover:bg-destructive/10 hover:text-destructive"
+                                  aria-label="הסר יחידה"
+                                >
+                                  <Trash2 className="h-3.5 w-3.5" />
+                                </button>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+
+                      {/* The payoff: a measured dimension line drawn under the
+                          composition itself. It lives inside the w-max wrapper,
+                          so it is exactly as wide as the sofa and scrolls with
+                          it — a real measurement, not decoration. */}
+                      <div className="flex items-center gap-3 pb-2 pt-1">
+                        <span aria-hidden="true" className="h-3.5 w-px bg-foreground/60" />
+                        <span aria-hidden="true" className="h-px min-w-6 flex-1 bg-foreground/30" />
+                        <p dir="rtl" className="shrink-0 whitespace-nowrap text-meta font-medium text-foreground">
+                          <span className="tabular-nums">{summary.totalCm}</span> ס״מ
+                        </p>
+                        <span aria-hidden="true" className="h-px min-w-6 flex-1 bg-foreground/30" />
+                        <span aria-hidden="true" className="h-3.5 w-px bg-foreground/60" />
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Announces reorders to screen readers ("הוזז למקום 2 מתוך 4") */}
+                <div role="status" aria-live="polite" className="sr-only">
+                  {liveNote}
+                </div>
+
+                <p className="relative mt-4 flex flex-wrap items-center justify-center gap-2 text-center text-meta text-muted-foreground">
+                  <MoveHorizontal className="h-4 w-4 shrink-0" aria-hidden="true" />
+                  <span>
+                    החליקו את התצוגה עם האצבע או השתמשו בחיצים לגלילה. סדרו את היחידות עם כפתורי{" "}
+                    <ChevronLeft className="inline h-3.5 w-3.5" aria-hidden="true" />
+                    <ChevronRight className="inline h-3.5 w-3.5" aria-hidden="true" /> שעל כל יחידה.
+                  </span>
+                </p>
+              </div>
             </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* Mobile summary — sticky above the MobileActionBar (its 4rem plus the
+          device safe-area), so count, length and the quote action ride along
+          while scrolling. */}
+      {placed.length > 0 && (
+        <div
+          className="md:hidden fixed inset-x-0 z-30 border-t border-border bg-background/95 shadow-luxury backdrop-blur-md"
+          style={{ bottom: "calc(4rem + env(safe-area-inset-bottom))" }}
+        >
+          <div className="flex items-center justify-between gap-4 px-5 py-3">
+            <p className="min-w-0 text-meta text-foreground">
+              {unitsLabel}
+              <span className="text-muted-foreground"> · </span>
+              <span className="tabular-nums">{summary.totalCm}</span> ס״מ
+            </p>
+            <a
+              href={quoteHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={onQuoteClick}
+              className="btn-shine shrink-0"
+            >
+              הצעת מחיר
+              <MessageCircle className="h-4 w-4" aria-hidden="true" />
+            </a>
           </div>
-        </section>
-      </div>
+        </div>
+      )}
 
       <ConversionCTA
         title="הרכבתם את הספה. עכשיו נהפוך אותה למציאות."

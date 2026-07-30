@@ -1,5 +1,5 @@
 // Modular sofa units catalog.
-// All modules are a fixed 1m × 1m footprint.
+// Real footprints per unit type (cm): corner 90×90, middle 80×90, ottoman 70×70.
 
 import cornerImg from "@/assets/sofa-corner.png";
 import middleImg from "@/assets/sofa-middle.png";
@@ -24,8 +24,8 @@ export const SOFA_UNITS: SofaUnit[] = [
     type: "corner-right",
     name: "Right Corner",
     nameHe: "פינה ימין",
-    widthCm: 100,
-    depthCm: 100,
+    widthCm: 90,
+    depthCm: 90,
     image: cornerImg,
   },
   {
@@ -33,8 +33,8 @@ export const SOFA_UNITS: SofaUnit[] = [
     type: "corner-left",
     name: "Left Corner",
     nameHe: "פינה שמאל",
-    widthCm: 100,
-    depthCm: 100,
+    widthCm: 90,
+    depthCm: 90,
     image: cornerImg,
     mirrored: true,
   },
@@ -43,8 +43,8 @@ export const SOFA_UNITS: SofaUnit[] = [
     type: "middle",
     name: "Middle Unit",
     nameHe: "אמצע",
-    widthCm: 100,
-    depthCm: 100,
+    widthCm: 80,
+    depthCm: 90,
     image: middleImg,
   },
   {
@@ -52,8 +52,8 @@ export const SOFA_UNITS: SofaUnit[] = [
     type: "ottoman",
     name: "Ottoman",
     nameHe: "הדום",
-    widthCm: 100,
-    depthCm: 100,
+    widthCm: 70,
+    depthCm: 70,
     image: ottomanImg,
   },
 ];

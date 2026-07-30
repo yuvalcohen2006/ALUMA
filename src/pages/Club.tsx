@@ -32,6 +32,9 @@ import alumaLogo from "@/assets/aluma-logo.png";
  * Structure runs on one strong contrast beat, the way the home screen does:
  * warm-white explanation → a single charcoal band carrying the four benefits as
  * a hairline-separated ledger row → sand-beige joining spine → warm-white close.
+ * The page's signature object is the charcoal member card at the top of the
+ * membership column: the club rendered as the physical thing you would hold,
+ * carrying the signed-in member's own name.
  *
  * Vertical rhythm is one scale, `py-14 md:py-20`, on every band — the colour
  * change at each seam is what separates the sections, so the padding only has
@@ -120,6 +123,16 @@ const Club = () => {
   const { user, loading } = useAuth();
   const reduceMotion = useReducedMotion();
 
+  /* The name the member card carries. Signed in: the full name the member gave
+     at signup (auth metadata), falling back to their email prefix while the
+     profile has no name yet. Signed out: a plain placeholder — the card shows
+     visitors the object they would be holding. */
+  const fullName =
+    typeof user?.user_metadata?.full_name === "string"
+      ? user.user_metadata.full_name.trim()
+      : "";
+  const cardName = (user && (fullName || user.email?.split("@")[0])) || "השם שלכם";
+
   /* Both faces of the primary call to action. Alignment follows the block it is
      dropped into: start (= right, in RTL) inside the right-aligned membership
      panel, centred in the closing band. */
@@ -194,74 +207,123 @@ const Club = () => {
               </div>
             </Reveal>
 
-            <Reveal className="lg:col-span-5" delay={120}>
-              {/* No hover state: the panel is a container, not a link, and the
-                  house rule is that only things you can click react to the
-                  pointer. Padding tops out at p-8 — this is the tallest thing
-                  in the row, so every millimetre it carries is a millimetre of
-                  empty column the copy beside it gets centred against. It eases
-                  back to p-6 on narrow screens so the fixed-width ShineButton
-                  never overflows it at 375px. */}
-              <div className="rounded-[14px] border border-border bg-secondary/50 shadow-soft p-6 sm:p-7 md:p-8 text-right">
-                <img
-                  src={alumaLogo}
-                  alt="Aluma"
-                  className="h-10 w-auto opacity-90"
-                  loading="lazy"
-                  decoding="async"
-                />
+            <div className="lg:col-span-5">
+              {/* THE MEMBER CARD — the club's signature object: the membership
+                  rendered as a physical charcoal card, resting above the
+                  paperwork that issues it. It is not a link, and it is the one
+                  deliberate exception to the "only clickables react" rule
+                  below: the object is meant to feel pick-up-able, so under the
+                  pointer it tips a degree in perspective and its shadow
+                  deepens, the way a card lifts off a desk. */}
+              <Reveal delay={120}>
+                <div className="mx-auto lg:ms-0 w-full max-w-sm aspect-[8/5] relative grain overflow-hidden rounded-[14px] bg-foreground shadow-soft transition-[transform,box-shadow] duration-500 ease-out hover:shadow-luxury motion-safe:hover:[transform:perspective(1000px)_rotateX(2deg)_rotate(-1deg)]">
+                  {/* Diagonal sheen — one soft band of light across the face,
+                      the way lacquer catches a window. Pure gradient, no
+                      animation: the grain supplies the texture, this supplies
+                      the depth. */}
+                  <div
+                    aria-hidden="true"
+                    className="absolute inset-0 bg-[linear-gradient(115deg,transparent_38%,rgba(255,255,255,0.09)_50%,transparent_64%)]"
+                  />
 
-                <AuthGate loading={loading} className="mt-5">
-                  <h3 className="font-display font-normal text-[22px] text-foreground">
-                    {user ? "אתם כבר בפנים" : "החברות פתוחה, ובחינם"}
-                  </h3>
+                  <div className="relative flex h-full flex-col justify-between p-6 sm:p-7 text-right">
+                    {/* Decorative here: the brand is named by the meta line
+                        right below on the same card. */}
+                    <img
+                      src={alumaLogo}
+                      alt=""
+                      aria-hidden="true"
+                      className="h-7 w-auto self-start brightness-0 invert opacity-95"
+                      loading="lazy"
+                      decoding="async"
+                    />
 
-                  {user ? (
-                    <>
-                      <p className="text-[18px] text-foreground-soft leading-relaxed mt-3">
-                        החשבון מחובר. כל מה שסימנתם ועקבתם אחריו מחכה באזור האישי שלכם.
+                    {/* Held behind the gate so a signed-in member never sees
+                        the placeholder name flash before the session resolves. */}
+                    <AuthGate loading={loading}>
+                      <p className="text-meta tracking-wider text-background/60">
+                        מועדון אלומה
                       </p>
-                      {user.email && (
-                        // Latin text, so it reads LTR — but still parked on the
-                        // right edge with the rest of the panel.
-                        <p
-                          dir="ltr"
-                          className="text-[18px] text-foreground mt-4 pt-4 border-t border-border/70 text-right break-all"
-                        >
-                          {user.email}
-                        </p>
-                      )}
-                    </>
-                  ) : (
-                    <ul className="mt-5 space-y-3">
-                      {terms.map((t) => (
-                        <li
-                          key={t}
-                          className="flex items-start gap-3 border-t border-border/70 pt-3 first:border-t-0 first:pt-0"
-                        >
-                          <Check
-                            className="w-[18px] h-[18px] mt-1.5 shrink-0 text-primary"
-                            strokeWidth={2.5}
-                            aria-hidden="true"
-                          />
-                          <span className="text-[18px] leading-relaxed text-foreground">
-                            {t}
-                          </span>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
+                      <p className="mt-1 font-display text-card text-background">
+                        {/* bdi: the fallback name is a Latin email prefix, and
+                            full names can mix scripts — isolate the run so it
+                            never drags the line's RTL order around. */}
+                        <bdi>{cardName}</bdi>
+                      </p>
+                    </AuthGate>
+                  </div>
+                </div>
+              </Reveal>
 
-                  <div className="mt-7">{cta("start")}</div>
-                </AuthGate>
-              </div>
-            </Reveal>
+              <Reveal className="mt-6" delay={220}>
+                {/* No hover state: the panel is a container, not a link, and the
+                    house rule is that only things you can click react to the
+                    pointer. Padding tops out at p-8 — this is the tallest thing
+                    in the row, so every millimetre it carries is a millimetre of
+                    empty column the copy beside it gets centred against. It eases
+                    back to p-6 on narrow screens so the fixed-width ShineButton
+                    never overflows it at 375px. */}
+                <div className="rounded-[14px] border border-border bg-secondary/50 shadow-soft p-6 sm:p-7 md:p-8 text-right">
+                  <img
+                    src={alumaLogo}
+                    alt="Aluma"
+                    className="h-10 w-auto opacity-90"
+                    loading="lazy"
+                    decoding="async"
+                  />
+
+                  <AuthGate loading={loading} className="mt-5">
+                    <h3 className="font-display font-normal text-[22px] text-foreground">
+                      {user ? "אתם כבר בפנים" : "החברות פתוחה, ובחינם"}
+                    </h3>
+
+                    {user ? (
+                      <>
+                        <p className="text-[18px] text-foreground-soft leading-relaxed mt-3">
+                          החשבון מחובר. כל מה שסימנתם ועקבתם אחריו מחכה באזור האישי שלכם.
+                        </p>
+                        {user.email && (
+                          // Latin text, so it reads LTR — but still parked on the
+                          // right edge with the rest of the panel.
+                          <p
+                            dir="ltr"
+                            className="text-[18px] text-foreground mt-4 pt-4 border-t border-border/70 text-right break-all"
+                          >
+                            {user.email}
+                          </p>
+                        )}
+                      </>
+                    ) : (
+                      <ul className="mt-5 space-y-3">
+                        {terms.map((t) => (
+                          <li
+                            key={t}
+                            className="flex items-start gap-3 border-t border-border/70 pt-3 first:border-t-0 first:pt-0"
+                          >
+                            <Check
+                              className="w-[18px] h-[18px] mt-1.5 shrink-0 text-primary"
+                              strokeWidth={2.5}
+                              aria-hidden="true"
+                            />
+                            <span className="text-[18px] leading-relaxed text-foreground">
+                              {t}
+                            </span>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+
+                    <div className="mt-7">{cta("start")}</div>
+                  </AuthGate>
+                </div>
+              </Reveal>
+            </div>
           </div>
         </div>
       </section>
 
       {/* ── 2. The one dark band: benefits as a hairline-separated ledger row ── */}
-      <section className="py-14 md:py-20 bg-foreground text-background">
+      <section className="relative grain py-14 md:py-20 bg-foreground text-background">
         <div className="container-luxury">
           <Reveal className="flex flex-col items-center mb-10 md:mb-14">
             <SectionHeading
@@ -363,7 +425,7 @@ const Club = () => {
                     <div className="flex flex-col items-center shrink-0">
                       <span
                         aria-hidden="true"
-                        className="grid place-items-center w-14 h-14 rounded-full border border-primary/45 bg-background font-display text-[22px] text-primary shadow-soft"
+                        className="grid place-items-center w-14 h-14 rounded-full border border-primary/45 bg-background font-display text-[22px] leading-none tabular-nums text-primary shadow-soft"
                       >
                         {step.n}
                       </span>

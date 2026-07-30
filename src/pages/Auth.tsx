@@ -2,16 +2,24 @@ import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams, Link } from "react-router-dom";
 import Layout from "@/components/Layout";
 import SEO from "@/components/SEO";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
+import PageHero from "@/components/PageHero";
+import Reveal from "@/components/Reveal";
+import ShineAction from "@/components/ui/shine-action";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
 import { trackPixel } from "@/lib/pixel";
+import { cn } from "@/lib/utils";
 import alumaLogo from "@/assets/aluma-logo.png";
 import heroSalon from "@/assets/hero-salon.jpg";
-import { Sparkles, Heart, ShieldCheck, ClipboardCheck, ArrowLeft } from "lucide-react";
+import {
+  Sparkles,
+  Heart,
+  ShieldCheck,
+  ClipboardCheck,
+  ArrowLeft,
+  ArrowRight,
+} from "lucide-react";
 
 const GoogleIcon = () => (
   <svg width="18" height="18" viewBox="0 0 48 48" aria-hidden="true">
@@ -28,6 +36,16 @@ const sidePerks = [
   { icon: Sparkles, text: "גישה מוקדמת לקולקציות והזמנות פרטיות" },
   { icon: ShieldCheck, text: "מעצב אישי ושירות VIP מלווה" },
 ];
+
+/* Plain <label>/<input> with the Contact-form field grammar rather than the ui
+   Input/Label primitives: those carry text-sm / md:text-sm baked in, which
+   fights the 18px floor through tailwind-merge. Same 10px control radius, same
+   focus ring recipe — deliberately no `outline-none`, the global focus-visible
+   ring is what keyboard users navigate by. */
+const fieldClass =
+  "h-12 w-full rounded-[10px] border border-border bg-background px-4 text-meta text-foreground placeholder:text-muted-foreground/70 transition-smooth focus:border-primary focus:ring-4 focus:ring-primary/15";
+
+const labelClass = "block font-display text-meta font-medium text-foreground mb-2.5";
 
 const AuthPage = () => {
   const [params] = useSearchParams();
@@ -108,220 +126,260 @@ const AuthPage = () => {
 
   const isSignup = mode === "signup";
 
+  const segmentClass = (active: boolean) =>
+    cn(
+      "h-11 rounded-[10px] text-meta transition-smooth",
+      active
+        ? "bg-foreground text-background"
+        : "text-foreground-soft hover:text-foreground"
+    );
+
   return (
     <Layout>
       <SEO
         title={isSignup ? "הצטרפות למועדון | Aluma" : "התחברות למועדון | Aluma"}
         description="מועדון אלומה, מעקב הזמנה, מועדפים והטבות בלעדיות."
         path="/club/auth"
+        noIndex
       />
-      <section className="pt-24 md:pt-28 pb-16 md:pb-24 gradient-cream">
+
+      <PageHero title={isSignup ? "הצטרפות למועדון" : "התחברות למועדון"} />
+
+      <section className="pt-8 md:pt-10 pb-16 md:pb-24 bg-background">
         <div className="container-luxury">
-          <div className="max-w-6xl mx-auto grid lg:grid-cols-2 rounded-sm overflow-hidden shadow-luxury border border-primary/15 bg-background">
-            {/* LEFT, brand panel */}
-            <aside className="relative hidden lg:flex flex-col justify-between p-12 text-primary-foreground overflow-hidden min-h-[640px]">
-              <div
-                aria-hidden
-                className="absolute inset-0"
-                style={{
-                  backgroundImage: `url(${heroSalon})`,
-                  backgroundSize: "cover",
-                  backgroundPosition: "center",
-                }}
-              />
-              <div
-                aria-hidden
-                className="absolute inset-0"
-                style={{
-                  background:
-                    "linear-gradient(160deg, hsl(13 39% 22% / 0.88), hsl(13 39% 32% / 0.72))",
-                }}
-              />
+          <Reveal>
+            <div className="max-w-6xl mx-auto grid lg:grid-cols-2 rounded-[14px] overflow-hidden border border-border bg-background shadow-soft">
+              {/* ── Brand panel — the page's one dark element ──
+                  The hero photograph under a charcoal scrim, finished with the
+                  shared film grain. RTL: first grid child, so it takes the
+                  RIGHT column and the form sits left. */}
+              <aside className="grain relative hidden lg:flex flex-col justify-between p-12 min-h-[640px] overflow-hidden text-background">
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-0"
+                  style={{
+                    backgroundImage: `url(${heroSalon})`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                  }}
+                />
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-0 bg-gradient-to-b from-foreground/90 via-foreground/85 to-foreground/80"
+                />
 
-              <div className="relative">
-                <img src={alumaLogo} alt="Aluma" className="h-12 w-auto brightness-0 invert opacity-95" />
-                <p className="mt-3 text-[11px] tracking-[0.4em] uppercase opacity-70">
-                  Aluma Private Club
-                </p>
-              </div>
-
-              <div className="relative">
-                <h2 className="font-display text-3xl xl:text-4xl leading-tight text-balance mb-6">
-                  עולם שקט של שירות,
-                  <br />
-                  שנתפר במידה שלכם.
-                </h2>
-                <div className="w-16 h-px bg-primary-foreground/40 mb-6" />
-                <ul className="space-y-4">
-                  {sidePerks.map(({ icon: Icon, text }) => (
-                    <li key={text} className="flex items-start gap-3 text-sm opacity-95 font-normal leading-relaxed">
-                      <span className="mt-0.5 inline-flex items-center justify-center w-8 h-8 rounded-sm bg-primary-foreground/10 backdrop-blur border border-primary-foreground/20 shrink-0">
-                        <Icon className="w-4 h-4" />
-                      </span>
-                      <span>{text}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <div className="relative text-[11px] tracking-[0.25em] uppercase opacity-70">
-                חינם · בלי התחייבות · יציאה בכל רגע
-              </div>
-            </aside>
-
-            {/* RIGHT, form */}
-            <div className="p-8 md:p-12 lg:p-14 bg-background">
-              <div className="max-w-sm mx-auto">
-                {/* Mobile logo */}
-                <div className="lg:hidden text-center mb-8">
-                  <img src={alumaLogo} alt="Aluma" className="h-12 w-auto mx-auto mb-2" />
-                  <p className="text-[10px] tracking-[0.4em] uppercase text-foreground">
-                    Aluma Private Club
+                <div className="relative">
+                  {/* Decorative: the Hebrew line right under it names the brand. */}
+                  <img
+                    src={alumaLogo}
+                    alt=""
+                    aria-hidden="true"
+                    className="h-12 w-auto brightness-0 invert opacity-95"
+                  />
+                  <p className="mt-4 text-meta text-background/80">
+                    מועדון הלקוחות של אלומה
                   </p>
                 </div>
 
-                {/* Mode toggle pills */}
-                <div className="inline-flex w-full rounded-sm bg-secondary/60 p-1 mb-8 border border-border">
-                  <button
-                    type="button"
-                    onClick={() => setMode("signup")}
-                    className={`flex-1 py-2.5 text-sm rounded-sm transition-smooth ${
-                      isSignup
-                        ? "bg-background shadow-soft text-foreground font-medium"
-                        : "text-muted-foreground hover:text-foreground"
-                    }`}
-                  >
-                    הצטרפות
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setMode("signin")}
-                    className={`flex-1 py-2.5 text-sm rounded-sm transition-smooth ${
-                      !isSignup
-                        ? "bg-background shadow-soft text-foreground font-medium"
-                        : "text-muted-foreground hover:text-foreground"
-                    }`}
-                  >
-                    התחברות
-                  </button>
+                <div className="relative">
+                  <h2 className="font-display font-normal text-[30px] xl:text-[34px] leading-tight">
+                    עולם שקט של שירות,
+                    <br />
+                    שנתפר במידה שלכם.
+                  </h2>
+                  <div className="w-16 h-px bg-background/40 my-7" aria-hidden="true" />
+                  <ul className="space-y-4">
+                    {sidePerks.map(({ icon: Icon, text }) => (
+                      <li key={text} className="flex items-center gap-3 text-meta text-background/90">
+                        <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-[10px] border border-background/20 bg-background/10">
+                          <Icon className="h-5 w-5" aria-hidden="true" />
+                        </span>
+                        <span className="leading-relaxed">{text}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
 
-                <h1 className="font-display text-3xl md:text-4xl text-primary mb-2 leading-tight">
-                  {isSignup ? "ברוכים הבאים למועדון" : "ברוכים השבים"}
-                </h1>
-                <p className="text-sm text-muted-foreground mb-8 font-normal leading-relaxed">
-                  {isSignup
-                    ? "דקה אחת, ואתם בפנים. חינם, ללא התחייבות."
-                    : "טוב לראות אתכם שוב. התחברו כדי להמשיך."}
+                <p className="relative text-meta text-background/70">
+                  חינם · בלי התחייבות · יציאה בכל רגע
                 </p>
+              </aside>
 
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={onGoogle}
-                  disabled={googleBusy}
-                  className="w-full h-11 rounded-sm flex items-center justify-center gap-3 border-primary/25 hover:border-primary hover:bg-secondary/40"
-                >
-                  <GoogleIcon />
-                  <span className="text-sm">
+              {/* ── The form ── */}
+              <div className="p-7 sm:p-8 md:p-12 lg:p-14 bg-background">
+                <div className="max-w-md mx-auto">
+                  {/* Mobile brand head — below lg the charcoal panel is gone,
+                      so the card still opens on the mark and the Hebrew line. */}
+                  <div className="lg:hidden text-center mb-8">
+                    <img
+                      src={alumaLogo}
+                      alt=""
+                      aria-hidden="true"
+                      className="h-12 w-auto mx-auto"
+                    />
+                    <p className="mt-3 text-meta text-muted-foreground">
+                      מועדון הלקוחות של אלומה
+                    </p>
+                  </div>
+
+                  {/* Segmented mode control — active half takes the charcoal fill. */}
+                  <div className="grid grid-cols-2 gap-1 rounded-[14px] border border-border bg-secondary/60 p-1 mb-8">
+                    <button
+                      type="button"
+                      onClick={() => setMode("signup")}
+                      aria-pressed={isSignup}
+                      className={segmentClass(isSignup)}
+                    >
+                      הצטרפות
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setMode("signin")}
+                      aria-pressed={!isSignup}
+                      className={segmentClass(!isSignup)}
+                    >
+                      התחברות
+                    </button>
+                  </div>
+
+                  {/* Greeting, not the page title — the h1 lives in PageHero. */}
+                  <h2 className="font-display font-normal text-[26px] leading-snug text-foreground">
+                    {isSignup ? "ברוכים הבאים למועדון" : "ברוכים השבים"}
+                  </h2>
+                  <p className="mt-2 mb-8 text-meta leading-relaxed text-muted-foreground">
+                    {isSignup
+                      ? "דקה אחת, ואתם בפנים. חינם, ללא התחייבות."
+                      : "טוב לראות אתכם שוב. התחברו כדי להמשיך."}
+                  </p>
+
+                  <button
+                    type="button"
+                    onClick={onGoogle}
+                    disabled={googleBusy}
+                    className="inline-flex h-12 w-full items-center justify-center gap-3 rounded-[10px] border border-border bg-background text-meta text-foreground transition-smooth hover:border-primary/60 hover:bg-secondary/40 disabled:cursor-not-allowed disabled:opacity-60"
+                  >
+                    <GoogleIcon />
                     {googleBusy ? "רגע..." : isSignup ? "הרשמה מהירה עם Google" : "המשך עם Google"}
-                  </span>
-                </Button>
+                  </button>
 
-                <div className="flex items-center gap-3 text-[11px] tracking-[0.2em] uppercase text-muted-foreground my-6">
-                  <div className="flex-1 h-px bg-border" />
-                  <span>או במייל</span>
-                  <div className="flex-1 h-px bg-border" />
-                </div>
+                  <div className="my-6 flex items-center gap-3 text-meta text-muted-foreground">
+                    <span className="h-px flex-1 bg-border" aria-hidden="true" />
+                    או במייל
+                    <span className="h-px flex-1 bg-border" aria-hidden="true" />
+                  </div>
 
-                <form onSubmit={onSubmit} className="space-y-4">
-                  {isSignup && (
-                    <>
-                      <div className="space-y-1.5">
-                        <Label htmlFor="fullName" className="text-xs text-foreground">שם מלא</Label>
-                        <Input
-                          id="fullName"
-                          value={fullName}
-                          onChange={(e) => setFullName(e.target.value)}
-                          required
-                          className="h-11 rounded-sm"
-                          placeholder="שם פרטי ומשפחה"
-                        />
-                      </div>
-                      <div className="space-y-1.5">
-                        <Label htmlFor="phone" className="text-xs text-foreground">טלפון</Label>
-                        <Input
-                          id="phone"
-                          type="tel"
-                          value={phone}
-                          onChange={(e) => setPhone(e.target.value)}
-                          required
-                          className="h-11 rounded-sm"
-                          placeholder="050-0000000"
-                        />
-                      </div>
-                    </>
-                  )}
-                  <div className="space-y-1.5">
-                    <Label htmlFor="email" className="text-xs text-foreground">אימייל</Label>
-                    <Input
-                      id="email"
-                      type="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      required
-                      dir="ltr"
-                      className="h-11 rounded-sm"
-                      placeholder="you@example.com"
-                    />
-                  </div>
-                  <div className="space-y-1.5">
-                    <Label htmlFor="password" className="text-xs text-foreground">סיסמה</Label>
-                    <Input
-                      id="password"
-                      type="password"
-                      minLength={8}
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      required
-                      dir="ltr"
-                      className="h-11 rounded-sm"
-                      placeholder="לפחות 8 תווים"
-                    />
-                  </div>
-                  <Button
-                    type="submit"
-                    disabled={busy}
-                    className="w-full h-11 rounded-sm shadow-luxury group"
-                  >
-                    {busy ? "רגע..." : isSignup ? "להצטרפות למועדון" : "התחברות"}
-                    {!busy && (
-                      <ArrowLeft className="mr-2 h-4 w-4 group-hover:-translate-x-1 transition-smooth" />
+                  <form onSubmit={onSubmit} className="space-y-5">
+                    {isSignup && (
+                      <>
+                        <div>
+                          <label htmlFor="fullName" className={labelClass}>
+                            שם מלא
+                          </label>
+                          <input
+                            id="fullName"
+                            value={fullName}
+                            onChange={(e) => setFullName(e.target.value)}
+                            required
+                            className={fieldClass}
+                            placeholder="שם פרטי ומשפחה"
+                          />
+                        </div>
+                        <div>
+                          <label htmlFor="phone" className={labelClass}>
+                            טלפון
+                          </label>
+                          <input
+                            id="phone"
+                            type="tel"
+                            value={phone}
+                            onChange={(e) => setPhone(e.target.value)}
+                            required
+                            className={fieldClass}
+                            placeholder="050-0000000"
+                          />
+                        </div>
+                      </>
                     )}
-                  </Button>
-                </form>
+                    <div>
+                      <label htmlFor="email" className={labelClass}>
+                        אימייל
+                      </label>
+                      <input
+                        id="email"
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                        dir="ltr"
+                        className={fieldClass}
+                        placeholder="you@example.com"
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="password" className={labelClass}>
+                        סיסמה
+                      </label>
+                      <input
+                        id="password"
+                        type="password"
+                        minLength={8}
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                        dir="ltr"
+                        className={fieldClass}
+                        placeholder="לפחות 8 תווים"
+                      />
+                    </div>
 
-                <p className="text-[11px] text-muted-foreground text-center mt-6 leading-relaxed">
-                  בהצטרפות אתם מאשרים את{" "}
-                  <Link to="/terms" className="text-foreground hover:text-accent underline underline-offset-2">
-                    תנאי השימוש
-                  </Link>{" "}
-                  ואת{" "}
-                  <Link to="/privacy" className="text-foreground hover:text-accent underline underline-offset-2">
-                    מדיניות הפרטיות
-                  </Link>
-                  .
-                </p>
+                    <ShineAction
+                      type="submit"
+                      disabled={busy}
+                      className="group w-full disabled:cursor-not-allowed disabled:opacity-60"
+                    >
+                      {busy ? "רגע..." : isSignup ? "להצטרפות למועדון" : "התחברות"}
+                      {!busy && (
+                        <ArrowLeft
+                          className="h-4 w-4 transition-transform duration-300 group-hover:-translate-x-1"
+                          aria-hidden="true"
+                        />
+                      )}
+                    </ShineAction>
+                  </form>
 
-                <Link
-                  to="/club"
-                  className="mt-6 block text-center text-xs text-muted-foreground hover:text-accent tracking-[0.15em] uppercase"
-                >
-                  ← על המועדון
-                </Link>
+                  <p className="mt-6 text-meta leading-relaxed text-muted-foreground text-center">
+                    בהצטרפות אתם מאשרים את{" "}
+                    <Link
+                      to="/terms"
+                      className="font-medium text-foreground underline underline-offset-4 decoration-foreground/40 transition-colors hover:decoration-foreground"
+                    >
+                      תנאי השימוש
+                    </Link>{" "}
+                    ואת{" "}
+                    <Link
+                      to="/privacy"
+                      className="font-medium text-foreground underline underline-offset-4 decoration-foreground/40 transition-colors hover:decoration-foreground"
+                    >
+                      מדיניות הפרטיות
+                    </Link>
+                    .
+                  </p>
+
+                  <div className="mt-8 text-center">
+                    {/* RTL: back points RIGHT, and the icon leads so it sits on
+                        the right of the label. */}
+                    <Link
+                      to="/club"
+                      className="link-underline inline-flex items-center gap-2 text-meta text-foreground-soft transition-smooth hover:text-accent"
+                    >
+                      <ArrowRight className="h-[18px] w-[18px]" aria-hidden="true" />
+                      על המועדון
+                    </Link>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
+          </Reveal>
         </div>
       </section>
     </Layout>

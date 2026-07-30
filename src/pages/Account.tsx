@@ -1,18 +1,22 @@
 import { useEffect, useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { ArrowLeft, LogOut } from "lucide-react";
 import Layout from "@/components/Layout";
 import SEO from "@/components/SEO";
-import SectionLabel from "@/components/SectionLabel";
-import { Button } from "@/components/ui/button";
+import PageHero from "@/components/PageHero";
+import Reveal from "@/components/Reveal";
+import SectionHeading from "@/components/SectionHeading";
+import ProductCell from "@/components/ProductCell";
+import ShineButton from "@/components/ui/shine-button";
+import ShineAction from "@/components/ui/shine-action";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useFavorites } from "@/hooks/useFavorites";
+import type { DBProduct } from "@/hooks/useCollectionsData";
 import { toast } from "sonner";
-import { LogOut, Calendar, MapPin, Heart, ClipboardList, UserRound } from "lucide-react";
 
 type Project = {
   id: string;
@@ -44,6 +48,30 @@ const statusLabels: Record<string, string> = {
   completed: "הושלם",
   on_hold: "בהמתנה",
 };
+
+/** Folio number, printed-portfolio style: 1 → "01" — same device as /projects. */
+const folio = (n: number) => String(n).padStart(2, "0");
+
+/**
+ * ProductCell renders a full catalogue product; the favorites query fetches
+ * only the fields the card actually shows. The rest is padded so the type
+ * stays honest without widening the query — tag/dimensions arrive null, so
+ * the cell simply renders without its meta line.
+ */
+const toCellProduct = (p: FavProduct): DBProduct => ({
+  id: p.id,
+  collection_id: "",
+  slug: p.slug,
+  name: p.name,
+  tag: null,
+  tagline: p.tagline,
+  description: [],
+  highlights: [],
+  materials: [],
+  dimensions: null,
+  cover_url: p.cover_url,
+  gallery: [],
+});
 
 const Account = () => {
   const { user, loading, signOut } = useAuth();
@@ -125,163 +153,225 @@ const Account = () => {
 
   return (
     <Layout>
-      <SEO title="האזור האישי שלי | מועדון אלומה" description="מעקב הזמנה, מועדפים ופרטי חשבון." path="/club/dashboard" />
+      <SEO
+        title="האזור האישי שלי | מועדון אלומה"
+        description="מעקב הזמנה, מועדפים ופרטי חשבון."
+        path="/club/dashboard"
+        noIndex
+      />
 
-      <section className="pt-32 pb-6 md:pt-40 gradient-cream">
+      <PageHero
+        title="האזור האישי"
+        subtitle={`שלום ${profile.full_name || "חבר יקר"}, כאן עוקבים אחרי הפרויקט שלכם, חוזרים למוצרים ששמרתם ומעדכנים את הפרטים.`}
+        filterSlot={
+          // The quiet counterpart to the page's real actions: sign-out sits in
+          // the filter position under the title, as plain ink. -scale-x-100 on
+          // the icon so the "exit" arrow points forward — left, in RTL.
+          <button
+            type="button"
+            onClick={handleSignOut}
+            className="inline-flex items-center gap-2 text-meta text-muted-foreground hover:text-accent transition-smooth"
+          >
+            התנתקות
+            <LogOut className="w-[18px] h-[18px] -scale-x-100" aria-hidden="true" />
+          </button>
+        }
+      />
+
+      <section className="bg-background pt-10 md:pt-14 pb-24 md:pb-32">
         <div className="container-luxury">
-          <div className="flex items-start justify-between flex-wrap gap-4">
-            <div>
-              <SectionLabel he="מועדון אלומה" en="My Club" className="text-xs mb-4" />
-              <h1 className="font-display text-3xl md:text-5xl text-foreground">
-                שלום {profile.full_name || "חבר יקר"}
-              </h1>
-              <p className="text-muted-foreground mt-2">{user.email}</p>
-            </div>
-            <Button variant="outline" onClick={handleSignOut} className="gap-2">
-              <LogOut className="w-4 h-4" />
-              התנתקות
-            </Button>
-          </div>
-        </div>
-      </section>
+          {/* ————— THE PROJECTS LEDGER ————— */}
+          <Reveal>
+            <SectionHeading align="start" as="h2">
+              הפרויקטים שלי
+            </SectionHeading>
+          </Reveal>
 
-      <section className="py-10">
-        <div className="container-luxury">
-          <Tabs defaultValue="orders" dir="rtl">
-            <TabsList className="mb-8">
-              <TabsTrigger value="orders" className="gap-2">
-                <ClipboardList className="w-4 h-4" />
-                ההזמנות שלי {projects.length > 0 && `(${projects.length})`}
-              </TabsTrigger>
-              <TabsTrigger value="favorites" className="gap-2">
-                <Heart className="w-4 h-4" />
-                המועדפים שלי {favProducts.length > 0 && `(${favProducts.length})`}
-              </TabsTrigger>
-              <TabsTrigger value="profile" className="gap-2">
-                <UserRound className="w-4 h-4" />
-                הפרטים שלי
-              </TabsTrigger>
-            </TabsList>
+          {busy ? (
+            <p className="mt-8 text-lede text-foreground-soft">טוען…</p>
+          ) : projects.length === 0 ? (
+            <Reveal className="mt-8 md:mt-10">
+              <p className="max-w-2xl text-lede text-foreground-soft text-pretty">
+                עדיין אין פרויקט פעיל בחשבון שלכם. מהרגע שנתחיל לתכנן יחד, כל שלב יופיע כאן — מהשרטוט
+                הראשון ועד ההתקנה בחצר.
+              </p>
+              <div className="mt-7">
+                <ShineButton to="/collections">
+                  לצפייה בקולקציות
+                  <ArrowLeft className="w-4 h-4" aria-hidden="true" />
+                </ShineButton>
+              </div>
+            </Reveal>
+          ) : (
+            /* Each project is an entry in the same ledger grammar as /projects:
+               folio numeral with a rule running off it, the name at card size,
+               a meta line threaded on thin terracotta rules. */
+            <div className="mt-2 md:mt-4 divide-y divide-border">
+              {projects.map((p, i) => {
+                const meta = [
+                  statusLabels[p.status] || p.status,
+                  p.location,
+                  `עודכן ${new Date(p.updated_at).toLocaleDateString("he-IL")}`,
+                ].filter(Boolean) as string[];
 
-            {/* Orders */}
-            <TabsContent value="orders">
-              {busy ? (
-                <p className="text-muted-foreground">טוען…</p>
-              ) : projects.length === 0 ? (
-                <div className="bg-card border border-border rounded-sm p-10 text-center">
-                  <p className="text-muted-foreground mb-4">אין לך עדיין הזמנה פעילה.</p>
-                  <Button asChild>
-                    <Link to="/contact">צור קשר להתחלת פרויקט</Link>
-                  </Button>
-                </div>
-              ) : (
-                <div className="grid gap-5">
-                  {projects.map((p) => (
-                    <article key={p.id} className="bg-card border border-border rounded-sm p-6 hover:shadow-soft transition-smooth">
-                      <div className="flex items-start justify-between flex-wrap gap-3 mb-4">
-                        <div>
-                          <h3 className="font-display text-2xl text-primary">{p.title}</h3>
-                          {p.location && (
-                            <p className="text-sm text-muted-foreground flex items-center gap-1 mt-1">
-                              <MapPin className="w-3.5 h-3.5" />
-                              {p.location}
-                            </p>
-                          )}
-                        </div>
-                        <span className="text-xs tracking-wider uppercase px-3 py-1 rounded-sm bg-accent/10 text-accent">
-                          {statusLabels[p.status] || p.status}
+                return (
+                  <Reveal key={p.id} className="py-10 md:py-12">
+                    <article>
+                      <div className="flex items-center gap-4">
+                        <span
+                          aria-hidden="true"
+                          className="font-display text-[40px] md:text-[48px] leading-none tabular-nums text-primary/70"
+                        >
+                          {folio(i + 1)}
                         </span>
+                        <span aria-hidden="true" className="h-px flex-1 bg-primary/25" />
                       </div>
-                      {p.description && <p className="text-sm text-muted-foreground mb-4">{p.description}</p>}
-                      <div className="space-y-2">
-                        <div className="flex justify-between text-xs text-muted-foreground">
+
+                      <h3 className="mt-5 font-display font-normal text-card text-foreground">
+                        {p.title}
+                      </h3>
+
+                      {/* Rules travel INSIDE the item they follow — a wrap can
+                          only ever leave one at the left margin, never orphan
+                          one where the eye starts the next line. */}
+                      <div className="mt-3 flex flex-wrap items-center gap-y-2 text-meta text-muted-foreground">
+                        {meta.map((m, j) => (
+                          <span key={`${j}-${m}`} className="inline-flex items-center whitespace-nowrap">
+                            {m}
+                            {j < meta.length - 1 && (
+                              <span aria-hidden="true" className="w-px h-4 bg-primary/45 shrink-0 mx-3" />
+                            )}
+                          </span>
+                        ))}
+                      </div>
+
+                      {p.description && (
+                        <p className="mt-4 max-w-2xl text-lede text-foreground-soft text-pretty">
+                          {p.description}
+                        </p>
+                      )}
+
+                      <div className="mt-7 max-w-2xl">
+                        <div className="flex items-baseline justify-between text-meta text-muted-foreground">
                           <span>התקדמות</span>
-                          <span>{p.progress}%</span>
+                          <span className="tabular-nums">{p.progress}%</span>
                         </div>
-                        <Progress value={p.progress} />
+                        <Progress value={p.progress} className="mt-2 h-2" />
                       </div>
+
                       {p.next_milestone && (
-                        <div className="mt-4 pt-4 border-t border-border flex items-center gap-2 text-sm">
-                          <Calendar className="w-4 h-4 text-accent" />
-                          <span className="text-muted-foreground">אבן דרך הבאה:</span>
-                          <span className="text-foreground font-medium">{p.next_milestone}</span>
+                        <p className="mt-6 text-lede text-foreground">
+                          <span className="text-muted-foreground">אבן הדרך הבאה: </span>
+                          {p.next_milestone}
                           {p.next_milestone_date && (
-                            <span className="text-xs text-muted-foreground mr-auto">
-                              {new Date(p.next_milestone_date).toLocaleDateString("he-IL")}
+                            <span className="text-muted-foreground">
+                              {" "}
+                              · {new Date(p.next_milestone_date).toLocaleDateString("he-IL")}
                             </span>
                           )}
-                        </div>
+                        </p>
                       )}
                     </article>
-                  ))}
-                </div>
-              )}
-            </TabsContent>
+                  </Reveal>
+                );
+              })}
+            </div>
+          )}
 
-            {/* Favorites */}
-            <TabsContent value="favorites">
-              {favProducts.length === 0 ? (
-                <div className="bg-card border border-border rounded-sm p-10 text-center">
-                  <Heart className="w-8 h-8 text-muted-foreground mx-auto mb-3" />
-                  <p className="text-muted-foreground mb-4">עדיין לא סימנת מוצרים במועדפים.</p>
-                  <Button asChild>
-                    <Link to="/collections">גלה את הקולקציות</Link>
-                  </Button>
-                </div>
-              ) : (
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
-                  {favProducts.map((p) => (
-                    <Link
-                      key={p.id}
-                      to={`/collections/${p.slug}`}
-                      className="group bg-card border border-border rounded-sm overflow-hidden hover:shadow-luxury transition-smooth"
-                    >
-                      <div className="aspect-square bg-secondary overflow-hidden">
-                        {p.cover_url && (
-                          <img src={p.cover_url} alt={p.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
-                        )}
-                      </div>
-                      <div className="p-4">
-                        <h3 className="font-display text-base text-foreground group-hover:text-accent transition-smooth">{p.name}</h3>
-                        {p.tagline && <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{p.tagline}</p>}
-                      </div>
-                    </Link>
-                  ))}
-                </div>
-              )}
-            </TabsContent>
+          {/* ————— FAVORITES ————— */}
+          <div className="mt-16 md:mt-24 border-t border-border pt-14 md:pt-16">
+            <Reveal>
+              <SectionHeading align="start" as="h2">
+                המועדפים שלי
+              </SectionHeading>
+            </Reveal>
 
-            {/* Profile */}
-            <TabsContent value="profile">
-              <form onSubmit={saveProfile} className="max-w-md space-y-5 bg-card border border-border rounded-sm p-6">
-                <div className="space-y-2">
-                  <Label htmlFor="fullName">שם מלא</Label>
-                  <Input
-                    id="fullName"
-                    value={profile.full_name ?? ""}
-                    onChange={(e) => setProfile((s) => ({ ...s, full_name: e.target.value }))}
+            {favProducts.length === 0 ? (
+              <Reveal className="mt-8 md:mt-10">
+                <p className="max-w-2xl text-lede text-foreground-soft text-pretty">
+                  עדיין לא שמרתם כאן מוצרים. לחצו על הלב שליד כל מוצר בקולקציות, והוא יחכה לכם כאן —
+                  מכל מכשיר.
+                </p>
+                <div className="mt-7">
+                  <ShineButton to="/collections">
+                    לגילוי הקולקציות
+                    <ArrowLeft className="w-4 h-4" aria-hidden="true" />
+                  </ShineButton>
+                </div>
+              </Reveal>
+            ) : (
+              <div className="mt-8 md:mt-10 grid grid-cols-2 lg:grid-cols-3 gap-x-4 sm:gap-x-6 lg:gap-x-7 gap-y-10 md:gap-y-12">
+                {favProducts.map((p, i) => (
+                  <ProductCell
+                    key={p.id}
+                    product={toCellProduct(p)}
+                    index={i}
+                    lead={false}
+                    eager={false}
                   />
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* ————— DETAILS ————— */}
+          <div className="mt-16 md:mt-24 border-t border-border pt-14 md:pt-16">
+            <Reveal>
+              <SectionHeading align="start" as="h2">
+                הפרטים שלי
+              </SectionHeading>
+            </Reveal>
+
+            <Reveal delay={100}>
+              <form onSubmit={saveProfile} className="mt-8 md:mt-10 max-w-2xl">
+                <div className="grid gap-6 sm:grid-cols-2">
+                  <div className="space-y-2.5">
+                    <Label htmlFor="fullName" className="text-meta">
+                      שם מלא
+                    </Label>
+                    <Input
+                      id="fullName"
+                      className="h-12 rounded-[10px] text-meta md:text-meta"
+                      value={profile.full_name ?? ""}
+                      onChange={(e) => setProfile((s) => ({ ...s, full_name: e.target.value }))}
+                    />
+                  </div>
+                  <div className="space-y-2.5">
+                    <Label htmlFor="phone" className="text-meta">
+                      טלפון
+                    </Label>
+                    <Input
+                      id="phone"
+                      type="tel"
+                      className="h-12 rounded-[10px] text-meta md:text-meta"
+                      value={profile.phone ?? ""}
+                      onChange={(e) => setProfile((s) => ({ ...s, phone: e.target.value }))}
+                    />
+                  </div>
+                  <div className="space-y-2.5 sm:col-span-2">
+                    <Label htmlFor="email" className="text-meta">
+                      אימייל
+                    </Label>
+                    <Input
+                      id="email"
+                      className="h-12 rounded-[10px] text-meta md:text-meta"
+                      value={user.email ?? ""}
+                      disabled
+                      dir="ltr"
+                    />
+                    <p className="text-meta text-muted-foreground">
+                      לשינוי כתובת האימייל, צרו איתנו קשר.
+                    </p>
+                  </div>
                 </div>
-                <div className="space-y-2">
-                  <Label htmlFor="phone">טלפון</Label>
-                  <Input
-                    id="phone"
-                    type="tel"
-                    value={profile.phone ?? ""}
-                    onChange={(e) => setProfile((s) => ({ ...s, phone: e.target.value }))}
-                  />
+                <div className="mt-9">
+                  <ShineAction type="submit" disabled={savingProfile}>
+                    {savingProfile ? "שומר..." : "שמירת שינויים"}
+                  </ShineAction>
                 </div>
-                <div className="space-y-2">
-                  <Label>אימייל</Label>
-                  <Input value={user.email ?? ""} disabled dir="ltr" />
-                  <p className="text-xs text-muted-foreground">לשינוי אימייל צור קשר</p>
-                </div>
-                <Button type="submit" disabled={savingProfile}>
-                  {savingProfile ? "שומר..." : "שמור שינויים"}
-                </Button>
               </form>
-            </TabsContent>
-          </Tabs>
+            </Reveal>
+          </div>
         </div>
       </section>
     </Layout>

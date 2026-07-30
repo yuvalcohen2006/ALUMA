@@ -1,0 +1,47 @@
+/* ===== THE SIGNATURE — the word אור gains weight as it climbs the screen =====
+   The one word the brand is named for, thickening from hairline to black as it
+   scrolls through the viewport: Heebo's variable wght axis driven by a
+   scroll-linked view() timeline. Pure CSS — no scroll listener, no JS.
+
+   Heebo rather than Assistant on purpose: the running text around it is
+   Assistant, loaded at five discrete weights, so animating its font-weight
+   would snap between files instead of sweeping. index.html loads Heebo as a
+   true variable range (wght@100..900) for exactly this span. */
+
+.kinetic-or {
+  font-family: var(--font-display);
+  /* Static fallback for engines without scroll-driven animations (the
+     @supports gate below never opens there): the word simply reads as
+     deliberate bold emphasis. */
+  font-weight: 700;
+}
+
+@supports (animation-timeline: view()) {
+  .kinetic-or {
+    /* An inline box of its own, so the view() timeline has a subject. */
+    display: inline-block;
+    animation: kinetic-or-weight linear both;
+    /* Must come AFTER the shorthand — `animation:` resets the timeline. */
+    animation-timeline: view();
+  }
+
+  @keyframes kinetic-or-weight {
+    from {
+      font-weight: 300;
+      font-variation-settings: "wght" 300;
+    }
+    to {
+      font-weight: 900;
+      font-variation-settings: "wght" 900;
+    }
+  }
+
+  /* Weight tied to scroll is texture, not information — a reduced-motion
+     visitor gets the same plain bold as an unsupporting browser. */
+  @media (prefers-reduced-motion: reduce) {
+    .kinetic-or {
+      animation: none;
+      font-weight: 700;
+    }
+  }
+}

@@ -1,8 +1,10 @@
 import { useMemo, useState } from "react";
+import type { ReactNode } from "react";
 import Layout from "@/components/Layout";
 import SEO from "@/components/SEO";
-import { Button } from "@/components/ui/button";
-import { Check, MessageCircle, Sparkles } from "lucide-react";
+import PageHero from "@/components/PageHero";
+import Reveal from "@/components/Reveal";
+import { Check, MessageCircle } from "lucide-react";
 import sofaAsset from "@/assets/modular-sofa-fabric.png.asset.json";
 import { SITE } from "@/config/site";
 import {
@@ -11,13 +13,138 @@ import {
   type SunbrellaFabric,
 } from "@/data/sunbrella";
 import { trackPixel } from "@/lib/pixel";
+import { cn } from "@/lib/utils";
 import ConversionCTA from "@/components/ConversionCTA";
 
-const familyLabelsHe: Record<string, string> = {
-  Canvas: "Canvas · צבעי בסיס",
-  Heritage: "Heritage · מרקמים",
-  Patterns: "Patterns · דוגמאות ופסים",
+/** Segment labels. Hebrew-first so three of them fit one 375px row; the Latin
+    family name still surfaces in the count line and in the preview caption. */
+const familyLabelsHe: Record<(typeof families)[number], string> = {
+  Canvas: "צבעי בסיס",
+  Heritage: "מרקמים",
+  Patterns: "דוגמאות ופסים",
 };
+
+/**
+ * The preview photograph and the cushion geometry that belongs to it.
+ *
+ * The six regions are hand-measured percentages that trace the cushions of
+ * THIS photo (modular-sofa-fabric.png) — over any other image they are just
+ * rectangles floating on nothing. Swapping the asset means re-measuring every
+ * region, which is why photo and regions travel as one record instead of the
+ * percentages sitting anonymously beside the JSX.
+ */
+const sofaPreview = {
+  asset: sofaAsset,
+  regions: [
+    { top: "25%", left: "8%", width: "26%", height: "24%", radius: "8px" },
+    { top: "25%", left: "37%", width: "26%", height: "24%", radius: "8px" },
+    { top: "25%", left: "66%", width: "26%", height: "24%", radius: "8px" },
+    { top: "52%", left: "8%", width: "26%", height: "20%", radius: "8px" },
+    { top: "52%", left: "37%", width: "26%", height: "20%", radius: "8px" },
+    { top: "52%", left: "66%", width: "26%", height: "20%", radius: "8px" },
+  ],
+} as const;
+
+/** The Sunbrella facts, spelled out instead of spec-sheet shorthand. */
+const specFacts: { id: string; label: ReactNode }[] = [
+  {
+    id: "uv",
+    label: (
+      <>
+        עמידות של יותר מ־<bdi dir="ltr">1,500</bdi> שעות{" "}
+        <bdi dir="ltr">UV</bdi>
+      </>
+    ),
+  },
+  { id: "water", label: "דוחה מים וכתמים" },
+  { id: "warranty", label: "חמש שנות אחריות" },
+];
+
+/**
+ * The tinted sofa: photograph + the colour overlays multiplied over its
+ * cushions. One construction serving both the desktop plate and the compact
+ * mobile bar's thumbnail, so the two previews can never drift apart.
+ */
+const PreviewPhoto = ({
+  fabric,
+  alt = "",
+  eager = false,
+}: {
+  fabric: SunbrellaFabric;
+  alt?: string;
+  eager?: boolean;
+}) => (
+  <div className="relative">
+    <img
+      src={sofaPreview.asset.url}
+      alt={alt}
+      width={1280}
+      height={960}
+      loading={eager ? "eager" : "lazy"}
+      decoding="async"
+      className="block h-auto w-full"
+    />
+    {/* Colour overlays on the cushions */}
+    {sofaPreview.regions.map((r, i) => (
+      <div
+        key={i}
+        aria-hidden
+        className="absolute pointer-events-none transition-colors duration-500"
+        style={{
+          top: r.top,
+          left: r.left,
+          width: r.width,
+          height: r.height,
+          borderRadius: r.radius,
+          background: fabric.background,
+          mixBlendMode: "color",
+          opacity: 0.88,
+        }}
+      />
+    ))}
+    {/* Subtle highlight to retain depth */}
+    <div
+      aria-hidden
+      className="absolute inset-0 pointer-events-none"
+      style={{
+        background:
+          "radial-gradient(ellipse at 50% 35%, rgba(255,255,255,0.18), transparent 60%)",
+        mixBlendMode: "screen",
+      }}
+    />
+  </div>
+);
+
+/**
+ * The quote action, defined once so the desktop caption row and the mobile
+ * flow fire the identical pixel event with the identical payload.
+ */
+const QuoteCta = ({
+  fabric,
+  href,
+  className,
+}: {
+  fabric: SunbrellaFabric;
+  href: string;
+  className?: string;
+}) => (
+  <a
+    href={href}
+    target="_blank"
+    rel="noopener noreferrer"
+    className={cn("btn-shine", className)}
+    onClick={() =>
+      trackPixel("InitiateCheckout", {
+        content_name: `בד Sunbrella, ${fabric.nameHe}`,
+        content_category: "Fabric Configurator",
+        content_ids: [fabric.code],
+      })
+    }
+  >
+    הצעת מחיר בוואטסאפ
+    <MessageCircle className="h-4 w-4" aria-hidden="true" />
+  </a>
+);
 
 const FabricConfigurator = () => {
   const [family, setFamily] = useState<(typeof families)[number]>("Canvas");
@@ -35,16 +162,6 @@ const FabricConfigurator = () => {
   );
   const whatsappUrl = `${SITE.whatsapp.href}?text=${waText}`;
 
-  // Approximate cushion regions for 3-section modular sofa
-  const cushionRegions = [
-    { top: "25%", left: "8%", width: "26%", height: "24%", radius: "8px" },
-    { top: "25%", left: "37%", width: "26%", height: "24%", radius: "8px" },
-    { top: "25%", left: "66%", width: "26%", height: "24%", radius: "8px" },
-    { top: "52%", left: "8%", width: "26%", height: "20%", radius: "8px" },
-    { top: "52%", left: "37%", width: "26%", height: "20%", radius: "8px" },
-    { top: "52%", left: "66%", width: "26%", height: "20%", radius: "8px" },
-  ];
-
   return (
     <Layout>
       <SEO
@@ -53,186 +170,204 @@ const FabricConfigurator = () => {
         path="/fabric"
       />
 
-      <div className="pt-32 pb-20">
-        <section className="container mx-auto px-6 max-w-7xl">
-          {/* Hero */}
-          <div className="text-center mb-12">
-            <span className="text-[10px] tracking-[0.3em] uppercase text-accent">
-              Sunbrella · Fabric Configurator
-            </span>
-            <h1 className="font-display text-4xl md:text-6xl text-primary mt-3 mb-4">
-              בחרו את הבד למניפה שלכם
-            </h1>
-            <p className="text-foreground max-w-2xl mx-auto leading-relaxed">
-              כל הבדים מתוך מניפת Sunbrella המקורית, עמידים ב-UV, דוחי מים,
-              אחריות 5 שנים. בחרו משפחה, לחצו על דגימה, וראו מיד איך הספה תיראה
-              עם הבד שבחרתם.
-            </p>
-          </div>
+      <PageHero
+        title="בחרו את הבד"
+        subtitle="לחצו על גוון מתוך מניפת Sunbrella המקורית — בד אקרילי שנצבע בצבע מלא, דוחה מים ועמיד בשמש כל השנה — וראו מיד איך הספה נראית איתו."
+      />
 
-          <div className="grid lg:grid-cols-5 gap-8">
-            {/* LEFT: Live preview */}
-            <div className="lg:col-span-3 lg:sticky lg:top-28 self-start">
-              <div className="relative bg-secondary border border-border rounded-sm overflow-hidden shadow-soft">
-                <div className="relative">
-                  <img
-                    src={sofaAsset.url}
-                    alt="ספה מודולרית, תצוגה מקדימה לבחירת בד"
-                    width={1280}
-                    height={960}
-                    loading="eager"
-                    className="w-full h-auto block"
-                  />
-                  {/* Color overlays on cushions */}
-                  {cushionRegions.map((r, i) => (
-                    <div
-                      key={i}
-                      aria-hidden
-                      className="absolute pointer-events-none transition-colors duration-500"
-                      style={{
-                        top: r.top,
-                        left: r.left,
-                        width: r.width,
-                        height: r.height,
-                        borderRadius: r.radius,
-                        background: selected.background,
-                        mixBlendMode: "color",
-                        opacity: 0.88,
-                      }}
-                    />
-                  ))}
-                  {/* Subtle highlight to retain depth */}
+      <section className="bg-background pt-6 pb-16 md:pt-10 md:pb-24">
+        <div className="container-luxury">
+          <Reveal>
+            <div className="mx-auto max-w-6xl">
+              {/* MOBILE — the live preview, compacted into a bar that rides
+                  under the fixed header (z-40) while the swatches scroll, so
+                  every tap answers on screen. The thumbnail is the same tinted
+                  construction as the desktop plate, just 76px wide. */}
+              <div className="sticky top-24 z-30 mb-8 lg:hidden">
+                <div className="flex items-center gap-3 rounded-[14px] border border-border bg-background/95 p-2.5 shadow-soft backdrop-blur-sm">
                   <div
-                    aria-hidden
-                    className="absolute inset-0 pointer-events-none"
-                    style={{
-                      background:
-                        "radial-gradient(ellipse at 50% 35%, rgba(255,255,255,0.18), transparent 60%)",
-                      mixBlendMode: "screen",
-                    }}
+                    aria-hidden="true"
+                    className="w-[76px] shrink-0 overflow-hidden rounded-[10px] border border-border"
+                  >
+                    <PreviewPhoto fabric={selected} />
+                  </div>
+                  <span
+                    aria-hidden="true"
+                    className="h-10 w-10 shrink-0 rounded-[10px] border border-border"
+                    style={{ background: selected.background }}
                   />
-                </div>
-
-                <div className="p-5 border-t border-border flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                  <div>
-                    <div className="text-[10px] tracking-[0.25em] uppercase text-accent">
-                      Sunbrella · {selected.family}
-                    </div>
-                    <div className="font-display text-xl text-foreground mt-1">
+                  <div className="min-w-0">
+                    <p className="truncate font-display text-card leading-tight text-foreground">
                       {selected.nameHe}
-                    </div>
-                    <div className="text-xs text-muted-foreground mt-0.5" dir="ltr">
-                      {selected.name} · {selected.code}
-                    </div>
+                    </p>
+                    <p className="truncate text-meta text-muted-foreground">
+                      <bdi dir="ltr">
+                        {selected.name} · {selected.code}
+                      </bdi>
+                    </p>
                   </div>
-
-                  <a
-                    href={whatsappUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={() =>
-                      trackPixel("InitiateCheckout", {
-                        content_name: `בד Sunbrella, ${selected.nameHe}`,
-                        content_category: "Fabric Configurator",
-                        content_ids: [selected.code],
-                      })
-                    }
-                  >
-                    <Button variant="default" className="gap-2">
-                      <MessageCircle className="h-4 w-4" />
-                      הצעת מחיר ב-WhatsApp
-                    </Button>
-                  </a>
                 </div>
               </div>
 
-              {/* Spec strip */}
-              <div className="grid grid-cols-3 gap-3 mt-4">
-                {[
-                  "עמיד UV 1500+ שעות",
-                  "דוחה מים ודוחה כתמים",
-                  "אחריות 5 שנים",
-                ].map((s) => (
-                  <div
-                    key={s}
-                    className="bg-secondary/40 border border-border rounded-sm p-3 text-center text-xs text-muted-foreground"
-                  >
-                    <Sparkles className="h-3.5 w-3.5 inline text-accent mr-1" />
-                    {s}
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* RIGHT: Swatches fan */}
-            <div className="lg:col-span-2">
-              {/* Family tabs */}
-              <div className="flex flex-wrap gap-2 mb-5">
-                {families.map((fam) => (
-                  <button
-                    key={fam}
-                    onClick={() => setFamily(fam)}
-                    className={`px-4 py-2 rounded-sm text-sm font-medium transition-smooth border ${
-                      family === fam
-                        ? "bg-primary text-primary-foreground border-primary"
-                        : "bg-background text-foreground border-border hover:border-primary/60"
-                    }`}
-                  >
-                    {familyLabelsHe[fam]}
-                  </button>
-                ))}
-              </div>
-
-              <div className="text-xs text-muted-foreground mb-3">
-                {filtered.length} דגימות במשפחה זו
-              </div>
-
-              {/* Swatch grid */}
-              <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
-                {filtered.map((f) => {
-                  const isActive = selected.code === f.code;
-                  return (
-                    <button
-                      key={f.code}
-                      onClick={() => setSelected(f)}
-                      className={`group relative aspect-square rounded-sm overflow-hidden border-2 transition-smooth ${
-                        isActive
-                          ? "border-accent shadow-luxury scale-[1.03]"
-                          : "border-border hover:border-primary/50"
-                      }`}
-                      aria-pressed={isActive}
-                      aria-label={`${f.nameHe} ${f.code}`}
-                    >
-                      <span
-                        className="absolute inset-0"
-                        style={{ background: f.background }}
+              <div className="grid gap-10 lg:grid-cols-5 xl:gap-14">
+                {/* PREVIEW — first grid child, so the RIGHT column in RTL.
+                    Sticky on desktop; below lg the compact bar above replaces
+                    it entirely. */}
+                <div className="hidden lg:block lg:col-span-3">
+                  <div className="lg:sticky lg:top-28">
+                    <div className="overflow-hidden rounded-[14px] border border-border bg-secondary shadow-soft">
+                      <PreviewPhoto
+                        fabric={selected}
+                        alt="ספה מודולרית, תצוגה מקדימה לבחירת בד"
+                        eager
                       />
-                      {isActive && (
-                        <span className="absolute top-1.5 right-1.5 bg-accent text-accent-foreground rounded-sm p-1">
-                          <Check className="h-3 w-3" />
-                        </span>
-                      )}
-                      <span className="absolute inset-x-0 bottom-0 bg-background/85 backdrop-blur-sm text-[10px] text-foreground text-center py-1 leading-tight">
-                        {f.nameHe}
-                      </span>
-                    </button>
-                  );
-                })}
-              </div>
+                    </div>
 
-              <p className="text-[11px] text-muted-foreground mt-5 leading-relaxed">
-                * הצבעים על המסך הם קירוב חזותי. הגוון, המרקם והמשקל הסופיים
-                נקבעים מול המניפה הפיזית, נשמח להביא אליכם אותה בפגישה.
-              </p>
+                    {/* Caption row under the plate, like every framed
+                        photograph on the site: Hebrew name, then the Latin
+                        record in one LTR run. */}
+                    <div className="mt-5 flex flex-wrap items-center justify-between gap-x-8 gap-y-5">
+                      <div className="min-w-0">
+                        <p className="font-display text-card text-foreground">
+                          {selected.nameHe}
+                        </p>
+                        <p className="mt-1 text-meta text-muted-foreground">
+                          <bdi dir="ltr">
+                            Sunbrella {selected.name} · {selected.code}
+                          </bdi>
+                        </p>
+                      </div>
+                      <QuoteCta
+                        fabric={selected}
+                        href={whatsappUrl}
+                        className="shrink-0"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* SWATCHES — second child, the LEFT column in RTL */}
+                <div className="lg:col-span-2 text-right">
+                  {/* Family segmented control */}
+                  <div
+                    role="group"
+                    aria-label="משפחות הבד"
+                    className="inline-flex max-w-full overflow-hidden rounded-[10px] border border-border"
+                  >
+                    {families.map((fam) => {
+                      const active = family === fam;
+                      return (
+                        <button
+                          key={fam}
+                          type="button"
+                          onClick={() => setFamily(fam)}
+                          aria-pressed={active}
+                          className={`whitespace-nowrap border-s border-border px-3 py-2.5 text-meta transition-smooth first:border-s-0 sm:px-5 ${
+                            active
+                              ? "bg-foreground text-background"
+                              : "text-foreground hover:bg-secondary"
+                          }`}
+                        >
+                          {familyLabelsHe[fam]}
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  <p className="mt-4 text-meta text-muted-foreground">
+                    {filtered.length} גוונים במשפחת{" "}
+                    <bdi dir="ltr">{family}</bdi>
+                  </p>
+
+                  {/* Swatch grid — chip, name underneath, never a caption
+                      painted over the colour itself. */}
+                  <div className="mt-4 grid grid-cols-3 gap-x-3 gap-y-5 sm:grid-cols-4 lg:grid-cols-3 xl:grid-cols-4">
+                    {filtered.map((f) => {
+                      const isActive = selected.code === f.code;
+                      return (
+                        <button
+                          key={f.code}
+                          type="button"
+                          onClick={() => setSelected(f)}
+                          aria-pressed={isActive}
+                          aria-label={`${f.nameHe} ${f.code}`}
+                          className="group text-right"
+                        >
+                          <span
+                            className={`relative block h-12 w-full rounded-[10px] border transition-all duration-300 ${
+                              isActive
+                                ? "border-transparent ring-2 ring-accent"
+                                : "border-border group-hover:-translate-y-0.5 group-hover:border-primary/50"
+                            }`}
+                            style={{ background: f.background }}
+                          >
+                            {/* The white halo keeps the badge legible even on
+                                the terracotta chip, where an accent-on-accent
+                                mark would sink. */}
+                            {isActive && (
+                              <span className="absolute top-1 end-1 grid h-5 w-5 place-items-center rounded-full bg-accent text-background ring-2 ring-background">
+                                <Check
+                                  className="h-3 w-3"
+                                  strokeWidth={3}
+                                  aria-hidden="true"
+                                />
+                              </span>
+                            )}
+                          </span>
+                          <span
+                            className={`mt-1.5 block text-meta leading-snug ${
+                              isActive
+                                ? "text-foreground"
+                                : "text-muted-foreground"
+                            }`}
+                          >
+                            {f.nameHe}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  {/* Hairline facts instead of three little spec boxes */}
+                  <ul className="mt-9 space-y-3 border-t border-border pt-7">
+                    {specFacts.map((s) => (
+                      <li
+                        key={s.id}
+                        className="flex items-center gap-3 text-meta text-foreground"
+                      >
+                        <span
+                          className="h-px w-6 shrink-0 bg-primary/60"
+                          aria-hidden="true"
+                        />
+                        <span>{s.label}</span>
+                      </li>
+                    ))}
+                  </ul>
+
+                  <p className="mt-6 text-meta text-muted-foreground">
+                    הצבעים על המסך הם קירוב חזותי; הגוון, המרקם והמשקל הסופיים
+                    נקבעים מול המניפה הפיזית — נשמח להביא אותה אליכם לפגישה.
+                  </p>
+
+                  {/* Below lg the caption row above is gone, and with it the
+                      quote action — it returns here so a phone can still ask
+                      for a price without scrolling to the closing band. */}
+                  <QuoteCta
+                    fabric={selected}
+                    href={whatsappUrl}
+                    className="mt-8 lg:hidden"
+                  />
+                </div>
+              </div>
             </div>
-          </div>
-        </section>
-      </div>
+          </Reveal>
+        </div>
+      </section>
 
       <ConversionCTA
         title="מצאתם את הבד. עכשיו נביא לכם את המניפה."
         subtitle="נשלח אליכם דגימות פיזיות ונרכיב הצעה סגורה, כדי שתראו ותרגישו לפני שמחליטים."
-        whatsappMessage="היי, בחרתי בד בסטודיו של אלומה ואשמח לקבל דגימות והצעת מחיר."
+        whatsappMessage={`היי, בחרתי את הבד ${selected.nameHe} (${selected.code}) באתר ואשמח לקבל דגימות והצעת מחיר.`}
       />
     </Layout>
   );
