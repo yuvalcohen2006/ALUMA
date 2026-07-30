@@ -70,13 +70,39 @@ No gimmick stacking.
 sun-slider stills (`src/assets/home/light/` — morning/golden/night, scene-locked), magazine at
 10 articles with covers.
 
-### 🟡 UNCOMMITTED but done and verified (tsc + build clean) — COMMIT THESE
+**Phase 3 — the eight tool and member pages** (`18313a1`, `ccc61d0`)
+`FabricConfigurator`, `SofaDesigner`, `Questionnaire`, `Auth`, `Account`, `Story`
+(+ `story/kinetic-or.css`), `Club`, and `/ar` rebuilt. `ProductCell` extracted from
+Collections for reuse. All four catch-up verify passes ran and landed fixes.
 
-Phase 3 pages, 7 of 8: `FabricConfigurator`, `SofaDesigner`, `Questionnaire`, `Auth`,
-`Account` (+ `src/components/ProductCell.tsx` extracted from Collections), `Story`
-(+ `src/components/story/kinetic-or.css`), `Club`.
-Plus partial media: 14 catalogue backfill images, 4 materials macros, 12 project scenes,
-and `src/data/projects.ts` gallery rewiring.
+**Phase 4 — product page and homepage** (`bc527e2`)
+- PDP rebuilt media-first: `ProductGallery` (wrapper-zoom, thumb column, phone snap-carousel,
+  Radix lightbox), sticky spec panel, material chips resolving through `materials.ts`,
+  `ShowroomVisit` charcoal band posting `source:"visit"`, per-product og:image.
+- Shared-element view transition, paired via `productTransitionName()`. Named on the FRAME,
+  never the zoom layer — a snapshot ignores ancestor clipping. The loading branch renders a
+  *named skeleton*, because Router captures the incoming DOM before Supabase answers.
+- Hero film: poster-first, mounted only after `window.load`, `preload="none"`, yields to a CMS
+  hero / reduced-motion / saveData, and unmounts itself if autoplay is refused.
+- `LightBand` (sun dragged along a real arc across the three scene-locked stills) and
+  `MagazineStrip`. Category tiles now link to real `/collections?cat=` filters.
+
+**Correctness pass** (`5f8d0bb`)
+- **The production bundle had been shipping all 34 demo catalogue photos.** DEV-gating is
+  tree-shaken only while nothing imports a demo module for another reason — `/ar` did (a slug
+  lookup) and Questionnaire did (one collection record). Both cut loose.
+  `scripts/check-demo-gate.mjs` now runs in `npm run build` and fails it if anything from a
+  demo asset folder reaches `dist`. **Do not add exceptions to that script**; if a demo image
+  is genuinely production UI, copy it out of the demo folder (see `assets/fabric/sofa-preview.webp`).
+- **The accessibility font slider only moved some of the text.** ~190 sizes were pinned in px,
+  including SectionHeading's own title — which is why `text-section` had never compiled once.
+  All migrated to rem tokens; explicit `leading-*` preserved, so scale-1 rendering is unchanged.
+- **`text-card` was both a fontSize key and a palette colour**, so it emitted
+  `color: hsl(var(--card))` — pure white. StickyCTA's headline used it on `bg-background`:
+  invisible on every desktop page. Renamed to `text-card-title`; `card` is a colour again.
+- `/before-after` deleted. Its "before" images were catalogue photos of finished furniture —
+  one entry's "before" was another's "after". The slider survives as a ProjectDetail module,
+  RTL clip maths fixed, gated behind `project.beforeAfter` which no project sets yet.
 
 ---
 
@@ -119,8 +145,9 @@ chair and table) as if they were Aluma products. That was a genuine launch block
 
 To light it up: generate a clean studio cutout per product (`marketing_studio_image`, 1:1, neutral
 light-grey backdrop, whole object with margin, no scene/props/text), feed that job id to
-`generate_3d`, download the GLB to `public/models/<slug>.glb`, then add the slug to `AR_SLUGS` in
-`src/pages/ARPreview.tsx`. Everything else (name, blurb, poster) resolves from the catalogue.
+`generate_3d`, download the GLB to `public/models/<slug>.glb`, then add an entry to `arProducts`
+in `src/pages/ARPreview.tsx` (slug, name, tagline, imported poster). It deliberately does NOT read
+the catalogue any more — that lookup is what dragged the demo photos into production.
 Sanity-check each mesh — if it's degenerate, drop that product rather than shipping something bad.
 Budget guard: if `generate_3d` costs >60 credits/model, do one and reassess.
 **iOS:** Quick Look needs USDZ, which we don't produce. The page already states this honestly
@@ -134,39 +161,45 @@ re-runs what failed. Scripts and run IDs are in the table below. If work looks h
 the filesystem before regenerating** — the interrupted runs left real, valid output on disk (14
 catalogue angles, 4 material macros, 12 project scenes all survived that way).
 
-### 4. Not blocked, just not done yet
+### 4. Before/after: the module is done, the photographs are not
 
-`/before-after` still exists as a route and is still absent from the nav. The plan says fold its
-slider into `ProjectDetail` as a module and delete the standalone route. Its RTL clip math is
-broken and must be fixed while moving: use `inset-y-0` + start-edge + `width`, **not** `inset-0` +
-`width` (an over-constrained box drops `left` in RTL, so the reveal grows from the wrong side while
-the handle is measured from the other).
+`/before-after` is gone as a route. The slider now lives on `ProjectDetail`, behind
+`project.beforeAfter` — a field no project sets, so nothing renders today. Add one the moment a
+real pair exists: `{ before, after, note }` on the project in `src/data/projects.ts`.
+
+**Never fill the "before" slot with a substitute shot.** The deleted page did exactly that — its
+"before" images were catalogue photos of finished furniture, and one entry's "before" was another
+entry's "after" — which advertised transformations that never happened. No pair, no module.
+
+The RTL maths is fixed and worth not re-breaking: `pos` is logical (measured from the inline
+start edge), the reveal is a `clip-path` on a full-size image so both layers share identical
+geometry, and the one conversion to a physical `left` happens at the very end for the divider and
+handle. The old version over-constrained a wrapper with `inset-0` + `width`, which drops `left`
+in RTL, so the reveal grew from one edge while the handle was measured from the other.
 
 ---
 
 ## ▶️ NEXT ACTIONS, in order
 
-**A workflow was in flight when this note was last updated** (`wf_f1934a71-39f`, "phase4-pdp-home"):
-PDP rebuild, homepage integration, the Collections view-transition half, and catch-up verification
-of Questionnaire/Fabric/Account/Designer. **Check whether its output landed before redoing any of
-it** — `git log` and `git status`, then resume the workflow if agents failed.
+Everything through Phase 4 is committed and pushed. The build is green end to end:
+`npx tsc --noEmit`, `npm run build` (which now includes the demo gate), and `npx eslint src/`
+with no new problems — the ~37 remaining lint errors are all pre-existing `no-explicit-any`
+in `pages/admin/`, `useCollectionsData`, `useFavorites`, `Auth` and two shadcn primitives.
 
-1. **Verify + commit whatever that workflow produced.** `npx tsc --noEmit`, `npm run build`,
-   `npx eslint` on the touched files, then commit and push.
-2. **Reconnect Higgsfield and finish the media** (see §1 above). This is the largest remaining
-   chunk and the only thing gating a genuinely finished-feeling catalogue.
-3. **Light up `/ar`** once models exist (see §2).
-4. **Fold `/before-after` into ProjectDetail** and delete the route (see §4).
-5. **Hardening pass** — do this yourself, not via a fleet, and actually reason about each:
-   - `npx tsc --noEmit`, `npm run build`, `npx eslint src/` (the only pre-existing errors are
-     ~14 `no-explicit-any` in admin/`useCollectionsData`/`Auth` — do not count those as new).
-   - 375px: no horizontal overflow anywhere, including at accessibility font scale 1.3.
-   - AA contrast on everything new (accent was darkened to `14 50% 38%`, ~5.4:1 on warm white).
-   - Lighthouse before/after on the homepage — the hero video must not regress LCP.
-   - Confirm demo content still cannot reach production: `npm run build` then
-     `ls dist/assets/*.webp` should show **no** demo catalogue/blog images.
-6. **Push and confirm the Cloudflare Pages build goes green.** `_redirects` is committed, so deep
-   links should work — test `/collections/monolit` and `/blog/<slug>` on the `.pages.dev` URL.
+1. **Reconnect Higgsfield and finish the media** (§1). This is the single largest remaining
+   chunk and the only thing standing between the site and a catalogue that feels finished.
+2. **Light up `/ar`** once models exist (§2).
+3. **Add real before/after pairs** to `project.beforeAfter` as they are generated (§4).
+   The module and its RTL maths are done and waiting.
+4. **A real device pass at 375px** — the one thing that cannot be done from here. Check
+   horizontal overflow at accessibility font scale 1.3 as well as 1.0; there is deliberately
+   NO global `overflow-x: clip` guard, because hiding an RTL overflow makes the content
+   unreachable instead of merely ugly. Find the element, fix the element.
+5. **Lighthouse before/after on the homepage.** The hero film must not move LCP: the still
+   keeps `fetchPriority="high"`, the video mounts only after `window.load` with
+   `preload="none"`, and its poster is the same asset, so it should be a cache hit.
+6. **Confirm the Cloudflare build goes green** and test deep links on the `.pages.dev` URL
+   (`/collections/<slug>`, `/blog/<slug>`) — that is what `public/_redirects` is for.
 7. **Rewrite `docs/NEXT-STEPS.md`** to the true final state, then update this file.
 
 ---
@@ -197,7 +230,15 @@ Workflow tool reject it ("control characters that would be hidden in the approva
   live on the right.
 - Terracotta `--primary` is large-text-only on warm white (3.07:1). On sand use charcoal.
 - Demo content must be DEV-gated (`import.meta.env.DEV` + dynamic import), like
-  `useCollectionsData.ts` does. Verified: 0 demo webp files reach `dist/`.
+  `useCollectionsData.ts` does — but **the gate is only as good as the import graph**. Any
+  module-scope import of a demo data file anchors every image in it, DEV branch or not. That is
+  how 34 fake product photos shipped. `npm run build` now proves it instead of assuming it.
+- A `fontSize` key that collides with a **colour** name silently emits a `color` rule too
+  (`text-card` → `color: hsl(var(--card))`, pure white). The config warns about `body`; `card`
+  hit the same trap. Check both namespaces before adding a type token.
+- Anything sized in `px` is invisible to the accessibility font slider, which scales the root
+  font-size. Use the rem tokens (`text-meta` / `lede` / `card-title` / `subsection` / `section`)
+  or arbitrary rem values — never `text-[18px]`.
 - Resend is still in test mode — it will only deliver to `yuval.cohen006@gmail.com` until the
   domain is verified. `RESEND_FROM` and `OWNER_EMAIL` are env vars, so going live is two
   `supabase secrets set` calls and no code change.
@@ -206,7 +247,13 @@ Workflow tool reject it ("control characters that would be hidden in the approva
 
 - Tab renamed "הסטודיו" (was "עשה זאת בעצמך") because 10 items don't survive 18px.
 - "דף הבית" removed from the nav.
-- `/before-after` route to be deleted, content folded into project pages (RTL clip math needs
-  fixing when it moves: `inset-y-0` + start-edge + width, not `inset-0` + width).
+- `/before-after` route deleted, content folded into project pages (done).
+- **The hero scrim over the new dusk poster.** `from-background/40 via-background/30 to-background/80`
+  is a warm-white wash tuned in the client-approved readability pass against the bright daytime
+  `hero-salon.jpg`. The film's poster is a dusk frame, where lightening both kills the drama and
+  does little for a terracotta logo (roughly 1.4–1.6:1 at the logo's band). Not a WCAG failure —
+  the logo is an `<img>` and the page's accessible title is the sr-only `h1` — but it is a visible
+  change to a screen he already signed off, so it wants his eye, not a silent retune. Options: an
+  inverted dark scrim for the film only, or a brighter still.
 - The domain is locked until ~11 Aug (registered 12 Jun, ICANN 60-day rule, registrar Name.com,
   bought through Lovable). Nothing to do before then.

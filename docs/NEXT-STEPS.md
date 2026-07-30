@@ -1,23 +1,54 @@
 # What to do next — click by click
 
 Written to be followed without knowing anything about DNS, hosting or email.
-Do the blocks in order. Nothing here can break the live site.
+Nothing here can break the live site.
 
 If a screen doesn't look like what's written here, stop and ask rather than
 guessing — these services change their layouts.
 
 ---
 
-## The situation in four sentences
+## Where things actually stand
 
-The website's code lives in this folder and on GitHub. The database, logins and
-photos live on Supabase. Emails will be sent by a service called Resend. The
-live site at alumaoutdoor.com is *still* running on Lovable's servers and will
-keep running there, untouched, until we deliberately switch it over.
+**Blocks 1, 2 and 3 below are DONE.** Resend is live, the Supabase project is
+`jzqayfllojeqivwbbuyf` with both secrets set, the auth email hook is on, and the
+site builds and deploys on Cloudflare Pages. Email was proven end to end: a real
+signup produced a branded Hebrew email, and a real contact-form submission
+produced both a lead row and an owner notification. They are kept below as a
+record of what was configured, and to redo if anything is ever lost.
 
-**The domain is stuck until ~11 August.** It was registered on 12 June through
-Lovable, and ICANN forbids moving a domain for 60 days after registration.
-Nothing you do before then can change that, so we work around it.
+**Only two things are left, and one of them is just waiting for a date.**
+
+### 1. The domain, from ~11 August — see BLOCK 4
+
+alumaoutdoor.com is still served by Lovable and stays there, untouched, until we
+deliberately switch. It was registered on 12 June through Lovable and ICANN
+forbids moving a domain for 60 days, so nothing before ~11 August will work.
+
+### 2. Photographs — this is the real remaining work
+
+The catalogue, the magazine and the project pages currently run on
+**generated placeholder images**, and the site is honest about it: none of them
+are in the published build, and `npm run build` now fails outright if any ever
+sneak in. What that means in practice:
+
+- In production the catalogue shows whatever is actually in the database. If
+  that is empty, the pages say so plainly rather than inventing furniture.
+- Locally (`npm run dev`) you see 20 demo products so the layouts can be judged
+  against realistic content.
+
+So the site is finished; the *content* is what it is waiting on. Three things
+would each visibly lift it, in order of impact:
+
+1. **Real product photography** — the single biggest one. Three angles per
+   piece: the hero shot, a detail, and one in a real space.
+2. **Real customer quotes.** The homepage testimonials are invented and are
+   hidden in production for that reason. Two or three real ones turn that
+   section back on.
+3. **Before/after pairs.** Project pages have a working before/after slider that
+   appears the moment a project has a genuine "before" photograph. There is
+   deliberately no substitute: showing a stock photo as a customer's "before"
+   would be inventing a transformation.
 
 ---
 
@@ -179,7 +210,7 @@ finished reviewing.
 
 ---
 
-# BLOCK 4 — after ~11 August: the domain
+# BLOCK 4 — after ~11 August: the domain  ← THE ONE THAT IS STILL OPEN
 
 Don't attempt any of this before then; ICANN will simply refuse.
 
@@ -224,14 +255,19 @@ switches. Do it only when you're happy with what's on the `.pages.dev` URL.
 
 ---
 
-# What to send me, all together
+# What I still need from you
 
-- [ ] Resend API key — `re_...`
-- [ ] Supabase **anon/public** key
-- [ ] Auth hook secret — `v1,whsec_...`
-- [ ] Your `.pages.dev` URL
+- [x] Resend API key — received and set
+- [x] Supabase **anon/public** key — received and set
+- [x] Auth hook secret — received and set
+- [ ] **Your `.pages.dev` URL** — so deep links can be verified against the real
+      host (`/collections/<slug>` and `/blog/<slug>` must load directly, not
+      just by clicking through; that is what `public/_redirects` is for)
+- [ ] Confirmation the Resend sending domain is verified, after ~11 August
 
 **Never send:** the Supabase `service_role` key, or the database password.
+Those are the two that can actually cause damage. Everything above is either
+public by design or scoped to sending mail.
 
 ---
 
@@ -243,16 +279,26 @@ npm run dev
 
 Then open **http://localhost:8080**.
 
-Worth looking at, since none of it has been seen in a browser yet:
+Worth looking at — every page has been rebuilt since you last saw it:
 
-| Page | What's new |
+| Page | What's there now |
 |---|---|
-| `/` | New buttons, white scroll chevrons, category hover-focus, Hebrew wordmark |
-| `/materials` | Rebuilt dark, small cards |
-| `/collections` | All 20 generated products, working filter drawer |
-| `/projects` | Numbered editorial index |
-| `/diy` | Brand-new page |
-| `/blog`, `/faq`, `/contact`, `/club` | All rebuilt |
+| `/` | Hero film over the still (poster-first, so it never slows the first paint), the "אלומה, על שם האור" sun-slider, a magazine strip, category tiles that link to real filters |
+| `/collections/<any product>` | Rebuilt product page: gallery with lightbox, sticky spec panel, clickable material chips, showroom-booking band. The photo flies from the grid into the page on Chrome and Edge |
+| `/materials` | Dark, small cards |
+| `/collections` | 20 demo products, filter drawer on the right |
+| `/projects` | Numbered editorial index; project pages gained a before/after slider that appears once a real pair exists |
+| `/story` | "אור" thickens as you scroll |
+| `/ar` | Rebuilt. Honest empty state until we have our own 3D models — it used to show three sample sofas from Google's demo site as if they were ours |
+| `/diy`, `/blog`, `/faq`, `/contact`, `/club`, `/questionnaire` | All rebuilt |
+
+Two things to try that are easy to miss:
+
+- **The accessibility widget's font slider** (bottom corner) now moves *all* the
+  text, including every button. It previously moved only some of it, which
+  mattered because the site publishes an accessibility statement promising it.
+- **A phone, or a narrow browser window.** This is the one thing that could not
+  be checked from here, and it is where problems hide in Hebrew layouts.
 
 The 20 products are placeholder content for judging layout — they're not real
-Aluma products and they only appear in local development.
+Aluma products and they never appear anywhere but your own machine.
