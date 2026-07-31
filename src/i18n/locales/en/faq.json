@@ -1,0 +1,46 @@
+{
+  "title": "Questions? Answers.",
+  "subtitle": "Everything we get asked before an order — and what's worth knowing after.",
+  "notFound": "Didn't find your answer?",
+  "talkToUs": "Talk to us",
+  "replyTime": "— we reply within one business day.",
+  "cats": {
+    "buy": "Ordering & Delivery",
+    "materials": "Materials & Durability",
+    "service": "Warranty & Service"
+  },
+  "q": {
+    "price": {
+      "q": "How much does outdoor furniture cost?",
+      "a": "Prices vary by collection, set size and the pieces included. We offer a range of solutions for different needs and styles, with an uncompromising focus on quality and long-term value."
+    },
+    "leadTime": {
+      "q": "How long does an order take?",
+      "a": "Average lead time is 5-10 weeks, depending on collection availability and the scope of the order. You'll receive a clear time estimate at purchase, and we'll keep you updated at every stage - from order to the day the furniture arrives at your home."
+    },
+    "delivery": {
+      "q": "Is delivery and assembly included?",
+      "a": "Furniture is delivered to your home by appointment and assembled by an experienced professional team. We take care of safe transport, precise assembly and packaging removal, for a complete experience."
+    },
+    "outdoor": {
+      "q": "Is the furniture weatherproof?",
+      "a": "Our furniture is made from materials chosen specifically for Israel's climate: oven-painted aluminium frames, water- and UV-resistant Sunbrella fabrics, granite-porcelain surfaces that keep their look for years, and durable Polystone tops combining strength with a clean modern look. Every piece is built to live outdoors all year round."
+    },
+    "quality": {
+      "q": "What about material quality?",
+      "a": "Every collection is chosen with care, with an emphasis on quality, comfort and durability. The combination of aluminium frames, premium fabrics and granite-porcelain and Polystone surfaces makes outdoor furniture that's built for many years of use and hosting."
+    },
+    "care": {
+      "q": "How do I maintain it?",
+      "a": "Our outdoor furniture is designed to need minimal upkeep. Periodic cleaning of the frame, fabrics and surfaces with water and mild detergents will keep it looking clean and impressive for years."
+    },
+    "warranty": {
+      "q": "What does the warranty cover?",
+      "a": "We provide a warranty according to the product type and its components. It's there to give you peace of mind, and our service team remains available for any question after delivery too."
+    },
+    "showroom": {
+      "q": "Is there a showroom?",
+      "a": "Our showroom at HaTamar 78, Yatzitz, is open by appointment. You can see the collections up close, feel the materials, and get professional advice on choosing the right outdoor furniture for you."
+    }
+  }
+}

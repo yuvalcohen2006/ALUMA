@@ -3,6 +3,10 @@ import { initReactI18next } from "react-i18next";
 
 import heCommon from "./locales/he/common.json";
 import enCommon from "./locales/en/common.json";
+import heHome from "./locales/he/home.json";
+import enHome from "./locales/en/home.json";
+import heFaq from "./locales/he/faq.json";
+import enFaq from "./locales/en/faq.json";
 
 /**
  * Two languages, so both catalogues are imported eagerly rather than fetched.
@@ -37,8 +41,8 @@ export function languageFromPath(pathname: string): Language {
 
 i18n.use(initReactI18next).init({
   resources: {
-    he: { common: heCommon },
-    en: { common: enCommon },
+    he: { common: heCommon, home: heHome, faq: heFaq },
+    en: { common: enCommon, home: enHome, faq: enFaq },
   },
   lng: DEFAULT_LANGUAGE,
   fallbackLng: DEFAULT_LANGUAGE,

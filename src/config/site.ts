@@ -30,11 +30,11 @@ export const SITE = {
   },
 
   /**
-   * Shows the language switcher. Off until the English catalogues are actually
-   * filled in (roadmap Phase 14) — the /en tree already routes and renders, so
-   * flipping this before the copy exists would ship a half-translated site.
+   * Shows the language switcher. The home page, nav, footer, club card and Q&A
+   * are fully translated; pages that aren't yet fall back to Hebrew under /en,
+   * tracked in docs/ROADMAP.md.
    */
-  enableEnglish: false,
+  enableEnglish: true,
 
   address: {
     street: "התמר 78",

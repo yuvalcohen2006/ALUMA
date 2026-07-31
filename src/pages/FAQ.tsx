@@ -5,96 +5,19 @@ import Layout from "@/components/Layout";
 import SEO from "@/components/SEO";
 import Reveal from "@/components/Reveal";
 import { useLocalizedPath } from "@/lib/useLocalizedPath";
-
-interface FaqItem {
-  id: string;
-  q: string;
-  a: string;
-}
-
-interface FaqCategory {
-  id: string;
-  label: string;
-  items: FaqItem[];
-}
+import { useTranslation } from "react-i18next";
 
 /**
- * The whole page is driven by this one array — the list and the FAQPage
- * JSON-LD both read from it, so they can't drift apart. Every question and
- * answer is the client's existing copy.
+ * Structure only — the copy lives in the faq catalogs (he + en), so this page
+ * translates with the rest of the site. i18n keys, not literals.
  */
-const categories: FaqCategory[] = [
-  {
-    id: "faq-buy",
-    label: "רכישה ואספקה",
-    items: [
-      {
-        id: "price",
-        q: "כמה עולה ריהוט חוץ?",
-        a: "מחירי ריהוט החוץ משתנים בהתאם לקולקציה, לגודל הסט ולפריטים הכלולים בו. אנו מציעים מגוון פתרונות המתאימים לצרכים ולסגנונות שונים, תוך הקפדה על איכות גבוהה ותמורה מצוינת לאורך זמן.",
-      },
-      {
-        id: "lead-time",
-        q: "כמה זמן לוקח לקבל את ההזמנה?",
-        a: "זמן האספקה הממוצע נע בין 5 ל-10 שבועות, בהתאם לזמינות הקולקציה ולהיקף ההזמנה. כבר במעמד הרכישה תקבלו הערכת זמן מסודרת, ואנו נדאג לעדכן אתכם לאורך כל התהליך – משלב ההזמנה ועד להגעת הריהוט לביתכם.",
-      },
-      {
-        id: "delivery",
-        q: "האם יש הובלה והרכבה?",
-        a: "הריהוט מסופק לבית הלקוח בתיאום מראש, ומורכב על ידי צוות מקצועי ומנוסה. אנו מקפידים על הובלה בטוחה, הרכבה מדויקת ופינוי האריזות, כדי שתוכלו ליהנות מחוויית רכישה מושלמת.",
-      },
-    ],
-  },
-  {
-    id: "faq-materials",
-    label: "חומרים ועמידות",
-    items: [
-      {
-        id: "outdoor",
-        q: "האם הריהוט עמיד לתנאי חוץ?",
-        a: "ריהוט החוץ שלנו מיוצר מחומרים שנבחרו במיוחד לתנאי האקלים בישראל: שלדת אלומיניום איכותית בצביעה בתנור, בדי Sunbrella עמידים בפני מים וקרינת UV, משטחי שיש גרניט פורצלן השומרים על מראה יוקרתי לאורך שנים, וכן משטחי Polystone איכותיים המשלבים עמידות גבוהה לצד מראה מודרני ואלגנטי. כל פריט מיועד לשימוש חיצוני בכל עונות השנה.",
-      },
-      {
-        id: "quality",
-        q: "מה איכות החומרים?",
-        a: "כל קולקציה נבחרת בקפידה מתוך דגש על איכות, נוחות ועמידות. השילוב בין שלדת האלומיניום, בדי הפרימיום ומשטחי הגרניט פורצלן וה-Polystone יוצר ריהוט חוץ יוקרתי המיועד לשנים רבות של שימוש ואירוח.",
-      },
-      {
-        id: "care",
-        q: "איך מתחזקים את הריהוט?",
-        a: "ריהוט החוץ שלנו תוכנן לדרוש תחזוקה מינימלית. ניקוי תקופתי של השלדה, הבדים והמשטחים באמצעות מים וחומרי ניקוי עדינים יסייע לשמור על מראה נקי ומרשים לאורך שנים.",
-      },
-    ],
-  },
-  {
-    id: "faq-service",
-    label: "אחריות ושירות",
-    items: [
-      {
-        id: "warranty",
-        q: "מה כוללת האחריות?",
-        a: "אנו מעניקים אחריות על ריהוט החוץ בהתאם לסוג המוצר והרכיבים ממנו הוא מיוצר. האחריות נועדה להבטיח לכם שקט נפשי וביטחון ברכישה, וצוות השירות שלנו זמין לכל שאלה גם לאחר האספקה.",
-      },
-      {
-        id: "showroom",
-        q: "האם יש אולם תצוגה?",
-        a: "אולם התצוגה שלנו, הממוקם ברחוב התמר 78, יציץ, פתוח בתיאום מראש. במקום תוכלו להתרשם ממגוון הקולקציות, להרגיש את איכות החומרים מקרוב ולקבל ייעוץ מקצועי בבחירת ריהוט החוץ המתאים ביותר עבורכם.",
-      },
-    ],
-  },
-];
+const categories = [
+  { id: "faq-buy", labelKey: "cats.buy", items: ["price", "leadTime", "delivery"] },
+  { id: "faq-materials", labelKey: "cats.materials", items: ["outdoor", "quality", "care"] },
+  { id: "faq-service", labelKey: "cats.service", items: ["warranty", "showroom"] },
+] as const;
 
-const faqSchema = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: categories.flatMap((c) =>
-    c.items.map((f) => ({
-      "@type": "Question",
-      name: f.q,
-      acceptedAnswer: { "@type": "Answer", text: f.a },
-    })),
-  ),
-};
+
 
 /**
  * One question row. The whole row is the button; the plus sits at the leading
@@ -102,13 +25,13 @@ const faqSchema = {
  * which is exactly why it beats a chevron here — a start-pointing chevron has
  * to mirror in RTL and someone always forgets.
  */
-const FaqRow = ({ item, open, onToggle }: { item: FaqItem; open: boolean; onToggle: () => void }) => (
+const FaqRow = ({ q, a, id, open, onToggle }: { q: string; a: string; id: string; open: boolean; onToggle: () => void }) => (
   <div className="border-b border-foreground/10">
     <button
       type="button"
       onClick={onToggle}
       aria-expanded={open}
-      aria-controls={`faq-a-${item.id}`}
+      aria-controls={`faq-a-${id}`}
       className="group flex w-full items-start gap-5 py-6 text-start hover:opacity-70 transition-opacity duration-200 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring"
     >
       <Plus
@@ -119,14 +42,14 @@ const FaqRow = ({ item, open, onToggle }: { item: FaqItem; open: boolean; onTogg
         strokeWidth={2}
       />
       <span className="text-[19px] md:text-[21px] font-medium leading-[1.35] text-foreground">
-        {item.q}
+        {q}
       </span>
     </button>
 
     {/* 0fr→1fr is the modern height-auto animation — no measuring, no maxHeight
         guesses that clip long answers. */}
     <div
-      id={`faq-a-${item.id}`}
+      id={`faq-a-${id}`}
       role="region"
       className={`grid transition-[grid-template-rows] duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] ${
         open ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
@@ -138,7 +61,7 @@ const FaqRow = ({ item, open, onToggle }: { item: FaqItem; open: boolean; onTogg
             open ? "opacity-100 delay-75" : "opacity-0"
           }`}
         >
-          {item.a}
+          {a}
         </p>
       </div>
     </div>
@@ -155,6 +78,21 @@ const FaqRow = ({ item, open, onToggle }: { item: FaqItem; open: boolean; onTogg
 const FAQPage = () => {
   const [open, setOpen] = useState<Set<string>>(new Set());
   const { to } = useLocalizedPath();
+  const { t } = useTranslation("faq");
+
+  // Regenerated from the catalog in the ACTIVE language, so the structured
+  // data always matches what the page shows.
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: categories.flatMap((c) =>
+      c.items.map((key) => ({
+        "@type": "Question",
+        name: t(`q.${key}.q`),
+        acceptedAnswer: { "@type": "Answer", text: t(`q.${key}.a`) },
+      })),
+    ),
+  };
 
   const toggle = (id: string) =>
     setOpen((prev) => {
@@ -176,11 +114,11 @@ const FAQPage = () => {
         <div className="mx-auto max-w-[720px] px-6">
           <Reveal>
             {/* Apple's two-beat heading convention, not the word "FAQ". */}
-            <h1 className="font-display font-semibold text-[40px] md:text-[56px] leading-[1.08] text-foreground text-right">
-              שאלות? תשובות.
+            <h1 className="font-display font-semibold text-[40px] md:text-[56px] leading-[1.08] text-foreground text-start">
+              {t("title")}
             </h1>
-            <p className="mt-4 max-w-[46ch] text-[17px] md:text-[19px] leading-relaxed text-foreground-soft text-right">
-              כל מה שאנחנו נשאלים לפני שמזמינים — ומה שכדאי לדעת אחרי.
+            <p className="mt-4 max-w-[46ch] text-[17px] md:text-[19px] leading-relaxed text-foreground-soft text-start">
+              {t("subtitle")}
             </p>
           </Reveal>
 
@@ -192,16 +130,18 @@ const FAQPage = () => {
                       no uppercase, so size + color + tracking do that job. */}
                   <h2
                     id={cat.id}
-                    className="mt-14 first:mt-0 mb-4 text-[13px] font-semibold tracking-[0.08em] text-primary text-right"
+                    className="mt-14 first:mt-0 mb-4 text-[13px] font-semibold tracking-[0.08em] text-primary text-start"
                   >
-                    {cat.label}
+                    {t(cat.labelKey)}
                   </h2>
-                  {cat.items.map((item) => (
+                  {cat.items.map((key) => (
                     <FaqRow
-                      key={item.id}
-                      item={item}
-                      open={open.has(item.id)}
-                      onToggle={() => toggle(item.id)}
+                      key={key}
+                      id={key}
+                      q={t(`q.${key}.q`)}
+                      a={t(`q.${key}.a`)}
+                      open={open.has(key)}
+                      onToggle={() => toggle(key)}
                     />
                   ))}
                 </section>
@@ -210,15 +150,15 @@ const FAQPage = () => {
           </div>
 
           <Reveal>
-            <p className="mt-14 text-[17px] leading-relaxed text-foreground-soft text-right">
-              לא מצאתם את התשובה?{" "}
+            <p className="mt-14 text-[17px] leading-relaxed text-foreground-soft text-start">
+              {t("notFound")}{" "}
               <Link
                 to={to("/contact")}
                 className="text-primary decoration-1 underline-offset-4 hover:underline"
               >
-                דברו איתנו
+                {t("talkToUs")}
               </Link>
-              {" "}— עונים תוך יום עסקים.
+              {" "}{t("replyTime")}
             </p>
           </Reveal>
         </div>

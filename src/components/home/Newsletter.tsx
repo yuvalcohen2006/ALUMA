@@ -1,6 +1,7 @@
 import { FormEvent, useState } from "react";
 import { ArrowLeft, Check } from "lucide-react";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
 import clubBg from "@/assets/categories/club-morning.jpg";
 
@@ -17,6 +18,7 @@ import clubBg from "@/assets/categories/club-morning.jpg";
  * the page when a focused field is under 16px, and doesn't zoom back.
  */
 const Newsletter = () => {
+  const { t } = useTranslation("home");
   const [email, setEmail] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [subscribed, setSubscribed] = useState(
@@ -34,7 +36,7 @@ const Newsletter = () => {
 
       // 23505 = unique violation = already subscribed; treat that as success.
       if (error && error.code !== "23505") {
-        toast.error("משהו השתבש בהרשמה. נסו שוב או פנו אלינו ישירות.");
+        toast.error(t("club.error"));
         return;
       }
 
@@ -45,7 +47,7 @@ const Newsletter = () => {
       }
       setSubscribed(true);
     } catch {
-      toast.error("משהו השתבש בהרשמה. נסו שוב מאוחר יותר.");
+      toast.error(t("club.error"));
     } finally {
       setSubmitting(false);
     }
@@ -74,10 +76,10 @@ const Newsletter = () => {
 
         <div className="relative z-10 text-center text-foreground px-6 pt-[42px] lg:pt-[52px]">
           <h2 className="font-display font-semibold text-[32px] lg:text-[40px] leading-[1.125] lg:leading-[1.1]">
-            הצטרפו למועדון
+            {t("club.title")}
           </h2>
           <p className="mt-1 text-[19px] lg:text-[21px] leading-[1.21] lg:leading-[1.238] text-foreground-soft">
-            קולקציות חדשות לפני כולם, וטיפים לעיצוב החוץ — ישירות לתיבה.
+            {t("club.subtitle")}
           </p>
 
           {subscribed ? (
@@ -87,7 +89,7 @@ const Newsletter = () => {
               aria-live="polite"
             >
               <Check className="w-5 h-5 text-primary" aria-hidden="true" />
-              תודה — נתראה בתיבה.
+              {t("club.thanks")}
             </div>
           ) : (
             <form onSubmit={onSubmit} className="mx-auto mt-8 max-w-[420px]" noValidate>
@@ -104,7 +106,7 @@ const Newsletter = () => {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="כתובת אימייל"
+                  placeholder={t("club.emailPlaceholder")}
                   autoComplete="email"
                   // Email addresses are Latin, so the text runs LTR — but the
                   // field still aligns to the reading edge.
@@ -114,14 +116,14 @@ const Newsletter = () => {
                 <button
                   type="submit"
                   disabled={submitting}
-                  aria-label="הצטרפות"
+                  aria-label={t("club.submit")}
                   className="absolute end-1.5 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-foreground text-background inline-flex items-center justify-center hover:bg-accent disabled:opacity-50 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
                 >
                   <ArrowLeft className="w-5 h-5 ltr:-scale-x-100" aria-hidden="true" />
                 </button>
               </div>
               <p className="mt-3 text-[13px] text-foreground/55">
-                אפשר להסיר את ההרשמה בכל רגע.
+                {t("club.unsubscribe")}
               </p>
             </form>
           )}

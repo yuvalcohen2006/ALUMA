@@ -1,0 +1,45 @@
+{
+  "tiles": {
+    "lounge": {
+      "label": "Lounge Sets",
+      "tagline": "A living room that continues outside."
+    },
+    "fire": {
+      "label": "Fire Tables",
+      "tagline": "The evening doesn't end at sunset."
+    },
+    "sunbed": {
+      "label": "Sun Loungers",
+      "tagline": "The quietest spot in the house."
+    },
+    "coffee": {
+      "label": "Coffee Tables",
+      "tagline": "Stone that stays beautiful for years."
+    },
+    "bar": {
+      "label": "Bar Stools",
+      "tagline": "Stand close, take your time."
+    },
+    "dining": {
+      "label": "Dining Sets",
+      "tagline": "Long dinners, under the sky."
+    },
+    "chairs": {
+      "label": "Dining Chairs",
+      "tagline": "Sitting well, outdoors too."
+    },
+    "accessories": {
+      "label": "Accessories",
+      "tagline": "Shade, cushions and light."
+    }
+  },
+  "club": {
+    "title": "Join the Club",
+    "subtitle": "New collections before everyone else, and outdoor design tips — straight to your inbox.",
+    "emailPlaceholder": "Email address",
+    "submit": "Join",
+    "thanks": "Thank you — see you in your inbox.",
+    "unsubscribe": "You can unsubscribe at any time.",
+    "error": "Something went wrong. Try again, or contact us directly."
+  }
+}

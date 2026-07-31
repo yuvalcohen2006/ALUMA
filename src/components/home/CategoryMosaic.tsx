@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { useLocalizedPath } from "@/lib/useLocalizedPath";
 import loungeSet from "@/assets/categories/lounge-set.jpg";
 import sunbed from "@/assets/categories/sunbed.jpg";
@@ -11,8 +12,6 @@ import umbrella from "@/assets/categories/umbrella.jpg";
 
 type Tile = {
   id: string;
-  label: string;
-  tagline: string;
   img: string;
   /** Full-bleed row of its own, rather than sharing one with a sibling. */
   wide?: boolean;
@@ -35,14 +34,14 @@ type Tile = {
  *   row 5  כסאות פינות אוכל · אקססוריז    morning
  */
 const tiles: Tile[] = [
-  { id: "lounge", label: "מערכות ישיבה", tagline: "סלון שממשיך אל מחוץ לבית.", img: loungeSet, wide: true },
-  { id: "fire", label: "שולחנות אש", tagline: "הערב לא נגמר עם השקיעה.", img: fireTable, wide: true, ink: "light" },
-  { id: "sunbed", label: "מיטות שיזוף", tagline: "המקום הכי שקט בבית.", img: sunbed },
-  { id: "coffee", label: "שולחנות קפה", tagline: "אבן שנשארת יפה שנים.", img: coffeeTable },
-  { id: "bar", label: "כסאות בר", tagline: "לעמוד ליד, ולא למהר.", img: barChair, ink: "light" },
-  { id: "dining", label: "פינות אוכל", tagline: "ארוחות ארוכות, מתחת לשמיים.", img: diningSet, ink: "light" },
-  { id: "chairs", label: "כסאות פינות אוכל", tagline: "לשבת בנוח, גם בחוץ.", img: diningChair },
-  { id: "accessories", label: "אקססוריז", tagline: "צל, כריות ותאורה.", img: umbrella },
+  { id: "lounge", img: loungeSet, wide: true },
+  { id: "fire", img: fireTable, wide: true, ink: "light" },
+  { id: "sunbed", img: sunbed },
+  { id: "coffee", img: coffeeTable },
+  { id: "bar", img: barChair, ink: "light" },
+  { id: "dining", img: diningSet, ink: "light" },
+  { id: "chairs", img: diningChair },
+  { id: "accessories", img: umbrella },
 ];
 
 /**
@@ -67,6 +66,7 @@ const TILE_H = "h-[500px] md:h-[490px] lg:h-[580px]";
 
 const CategoryMosaic = () => {
   const { to } = useLocalizedPath();
+  const { t } = useTranslation("home");
 
   return (
     // The canvas colour shows through the 12px seams, so the gaps read as
@@ -74,20 +74,20 @@ const CategoryMosaic = () => {
     // and the first tile.
     <section className="bg-background pt-3">
       <ul className="flex flex-wrap gap-3">
-        {tiles.map((t, i) => {
-          const light = t.ink === "light";
+        {tiles.map((t_, i) => {
+          const light = t_.ink === "light";
           return (
             <li
-              key={t.id}
-              className={t.wide ? "w-full" : "w-full md:w-[calc(50%-6px)]"}
+              key={t_.id}
+              className={t_.wide ? "w-full" : "w-full md:w-[calc(50%-6px)]"}
             >
               <Link
-                to={t.cat ? to(`/collections?cat=${t.cat}`) : to("/collections")}
+                to={t_.cat ? to(`/collections?cat=${t_.cat}`) : to("/collections")}
                 className={`group relative block w-full overflow-hidden ${TILE_H} focus-visible:outline-2 focus-visible:outline-offset-[-4px] focus-visible:outline-ring`}
               >
                 <img
-                  src={t.img}
-                  alt={t.label}
+                  src={t_.img}
+                  alt={t(`tiles.${t_.id}.label`)}
                   // The first two tiles are above the fold on most screens.
                   loading={i < 2 ? "eager" : "lazy"}
                   decoding="async"
@@ -114,14 +114,14 @@ const CategoryMosaic = () => {
                   }`}
                 >
                   <h2 className="font-display font-semibold text-[32px] lg:text-[40px] leading-[1.125] lg:leading-[1.1]">
-                    {t.label}
+                    {t(`tiles.${t_.id}.label`)}
                   </h2>
                   <p
                     className={`mt-1 text-[19px] lg:text-[21px] leading-[1.21] lg:leading-[1.238] ${
                       light ? "text-background/80" : "text-foreground-soft"
                     }`}
                   >
-                    {t.tagline}
+                    {t(`tiles.${t_.id}.tagline`)}
                   </p>
                 </div>
               </Link>
