@@ -50,7 +50,6 @@ const Header = () => {
   const navLinks = useMemo(
     () => [
       { label: t("nav.home"), to: localized("/") },
-      { label: t("nav.story"), to: localized("/story") },
       { label: t("nav.collections"), to: localized("/collections"), submenu: collectionsSub },
       // Materials and the magazine share one entry — same reader, and each half
       // looked thin on its own.
@@ -77,6 +76,9 @@ const Header = () => {
       },
       { label: t("nav.faq"), to: localized("/faq") },
       { label: t("nav.club"), to: localized("/club") },
+      // Near the end on purpose: the owner filed the backstory under "nice,
+      // not important", and in RTL later means further left.
+      { label: t("nav.story"), to: localized("/story") },
       { label: t("nav.contact"), to: localized("/contact") },
     ],
     [collectionsSub, t, localized]
