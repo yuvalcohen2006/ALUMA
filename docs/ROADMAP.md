@@ -738,6 +738,36 @@ project we don't control.
 
 ## STATUS SUMMARY
 
+*Last updated: 2026-07-31 evening — owner-directed round two, shipped*
+
+**The owner approved the rolled-back baseline and directed this round himself.**
+All shipped and pushed:
+
+- **Hero split parallax** — background climbs out at 0.2×scroll while the
+  wordmark drifts the other way; image got extra height for the travel.
+- **Category photography regenerated to a day/night plan**: morning rows take
+  charcoal ink, night rows (fire table, bar + dining) take white; every prompt
+  reserved a clean upper-middle sky for the type. 12px seam added under the
+  hero; the לצפייה line removed.
+- **Reviews cut entirely** (owner's call; `site_reviews` table stays — real
+  quotes can earn the section back). **Club card is now the ninth tile**, same
+  geometry, over a purpose-generated image with an empty upper two-thirds.
+- **הסיפור שלנו → אודות**, moved near the nav's end; the protected
+  paragraphs/wordmark/portraits untouched, but the page grounded with the
+  four real materials and the showroom band. No invented content.
+- **Collections rebuilt on the Apple lineup pattern** (research-verified):
+  editorial band per collection, uniform square tiles on tinted panels, no
+  chrome, no filters (DEDON/Tribù ship none), sticky anchor chips, unequal
+  rhythm for grouping. Filter drawer gone; `#slug` links scroll after data
+  loads. `Materials.tsx` (orphaned by the revert) deleted.
+
+**Open asks on the owner:** Cloudflare env vars confirmation, `/admin` via
+Google sign-in, the Resend key.
+
+---
+
+*Earlier that day:*
+
 *Last updated: 2026-07-31 — redesign rolled back at the owner's request*
 
 ### What happened
