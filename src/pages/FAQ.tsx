@@ -1,133 +1,89 @@
-import { useEffect, useState } from "react";
-import {
-  Truck,
-  Sun,
-  Gem,
-  ShieldCheck,
-  Tag,
-  Wrench,
-  Sparkles,
-  Eye,
-  ArrowLeft,
-  type LucideIcon,
-} from "lucide-react";
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { Plus } from "lucide-react";
 import Layout from "@/components/Layout";
 import SEO from "@/components/SEO";
-import PageHero from "@/components/PageHero";
 import Reveal from "@/components/Reveal";
-import SectionHeading from "@/components/SectionHeading";
-import ShineButton from "@/components/ui/shine-button";
-import TopicIndex from "@/components/faq/TopicIndex";
-import {
-  Accordion,
-  AccordionItem,
-  AccordionTrigger,
-  AccordionContent,
-} from "@/components/ui/accordion";
+import { useLocalizedPath } from "@/lib/useLocalizedPath";
 
 interface FaqItem {
-  /** Stable ASCII id — used as the accordion value. */
   id: string;
   q: string;
   a: string;
-  Icon: LucideIcon;
 }
 
 interface FaqCategory {
-  /** ASCII id — the scroll target for the index on the right. */
   id: string;
   label: string;
-  blurb: string;
-  Icon: LucideIcon;
   items: FaqItem[];
 }
 
 /**
- * The whole page is driven by this one array: the index panel, the three
- * accordion groups and the FAQPage JSON-LD all read from it, so nothing can
- * drift out of sync. Every question and answer here is the client's existing
- * copy, only regrouped by subject.
+ * The whole page is driven by this one array — the list and the FAQPage
+ * JSON-LD both read from it, so they can't drift apart. Every question and
+ * answer is the client's existing copy.
  */
 const categories: FaqCategory[] = [
   {
     id: "faq-buy",
     label: "רכישה ואספקה",
-    blurb:
-      "כמה זה עולה, מתי זה מגיע ומי מרכיב. כל מה שקורה מרגע ההזמנה ועד שהריהוט עומד אצלכם בחוץ.",
-    Icon: Truck,
     items: [
       {
         id: "price",
         q: "כמה עולה ריהוט חוץ?",
         a: "מחירי ריהוט החוץ משתנים בהתאם לקולקציה, לגודל הסט ולפריטים הכלולים בו. אנו מציעים מגוון פתרונות המתאימים לצרכים ולסגנונות שונים, תוך הקפדה על איכות גבוהה ותמורה מצוינת לאורך זמן.",
-        Icon: Tag,
       },
       {
         id: "lead-time",
         q: "כמה זמן לוקח לקבל את ההזמנה?",
         a: "זמן האספקה הממוצע נע בין 5 ל-10 שבועות, בהתאם לזמינות הקולקציה ולהיקף ההזמנה. כבר במעמד הרכישה תקבלו הערכת זמן מסודרת, ואנו נדאג לעדכן אתכם לאורך כל התהליך – משלב ההזמנה ועד להגעת הריהוט לביתכם.",
-        Icon: Truck,
       },
       {
         id: "delivery",
         q: "האם יש הובלה והרכבה?",
         a: "הריהוט מסופק לבית הלקוח בתיאום מראש, ומורכב על ידי צוות מקצועי ומנוסה. אנו מקפידים על הובלה בטוחה, הרכבה מדויקת ופינוי האריזות, כדי שתוכלו ליהנות מחוויית רכישה מושלמת.",
-        Icon: Wrench,
       },
     ],
   },
   {
     id: "faq-materials",
     label: "חומרים ועמידות",
-    blurb:
-      "מה עומד מאחורי כל פריט, מהשלדה ועד הבד, ואיך שומרים על המראה הזה גם אחרי שנים של שמש, גשם ומלח.",
-    Icon: Gem,
     items: [
       {
         id: "outdoor",
         q: "האם הריהוט עמיד לתנאי חוץ?",
         a: "ריהוט החוץ שלנו מיוצר מחומרים שנבחרו במיוחד לתנאי האקלים בישראל: שלדת אלומיניום איכותית בצביעה בתנור, בדי Sunbrella עמידים בפני מים וקרינת UV, משטחי שיש גרניט פורצלן השומרים על מראה יוקרתי לאורך שנים, וכן משטחי Polystone איכותיים המשלבים עמידות גבוהה לצד מראה מודרני ואלגנטי. כל פריט מיועד לשימוש חיצוני בכל עונות השנה.",
-        Icon: Sun,
       },
       {
         id: "quality",
         q: "מה איכות החומרים?",
         a: "כל קולקציה נבחרת בקפידה מתוך דגש על איכות, נוחות ועמידות. השילוב בין שלדת האלומיניום, בדי הפרימיום ומשטחי הגרניט פורצלן וה-Polystone יוצר ריהוט חוץ יוקרתי המיועד לשנים רבות של שימוש ואירוח.",
-        Icon: Gem,
       },
       {
         id: "care",
         q: "איך מתחזקים את הריהוט?",
         a: "ריהוט החוץ שלנו תוכנן לדרוש תחזוקה מינימלית. ניקוי תקופתי של השלדה, הבדים והמשטחים באמצעות מים וחומרי ניקוי עדינים יסייע לשמור על מראה נקי ומרשים לאורך שנים.",
-        Icon: Sparkles,
       },
     ],
   },
   {
     id: "faq-service",
     label: "אחריות ושירות",
-    blurb:
-      "מה מכסה האחריות, ואיפה אפשר לראות את הריהוט מקרוב, לגעת בבדים ולהתייעץ לפני שמחליטים.",
-    Icon: ShieldCheck,
     items: [
       {
         id: "warranty",
         q: "מה כוללת האחריות?",
         a: "אנו מעניקים אחריות על ריהוט החוץ בהתאם לסוג המוצר והרכיבים ממנו הוא מיוצר. האחריות נועדה להבטיח לכם שקט נפשי וביטחון ברכישה, וצוות השירות שלנו זמין לכל שאלה גם לאחר האספקה.",
-        Icon: ShieldCheck,
       },
       {
         id: "showroom",
         q: "האם יש אולם תצוגה?",
         a: "אולם התצוגה שלנו, הממוקם ברחוב התמר 78, יציץ, פתוח בתיאום מראש. במקום תוכלו להתרשם ממגוון הקולקציות, להרגיש את איכות החומרים מקרוב ולקבל ייעוץ מקצועי בבחירת ריהוט החוץ המתאים ביותר עבורכם.",
-        Icon: Eye,
       },
     ],
   },
 ];
 
-// Regenerated from the array above, so the structured data can never fall out of
-// step with what the page actually shows.
 const faqSchema = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
@@ -140,226 +96,130 @@ const faqSchema = {
   ),
 };
 
-const totalQuestions = categories.reduce((n, c) => n + c.items.length, 0);
+/**
+ * One question row. The whole row is the button; the plus sits at the leading
+ * edge (the right, in Hebrew) and rotates into a ×. A plus is direction-neutral,
+ * which is exactly why it beats a chevron here — a start-pointing chevron has
+ * to mirror in RTL and someone always forgets.
+ */
+const FaqRow = ({ item, open, onToggle }: { item: FaqItem; open: boolean; onToggle: () => void }) => (
+  <div className="border-b border-foreground/10">
+    <button
+      type="button"
+      onClick={onToggle}
+      aria-expanded={open}
+      aria-controls={`faq-a-${item.id}`}
+      className="group flex w-full items-start gap-5 py-6 text-start hover:opacity-70 transition-opacity duration-200 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring"
+    >
+      <Plus
+        aria-hidden="true"
+        className={`mt-1 w-5 h-5 shrink-0 text-primary transition-transform duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] ${
+          open ? "rotate-45" : ""
+        }`}
+        strokeWidth={2}
+      />
+      <span className="text-[19px] md:text-[21px] font-medium leading-[1.35] text-foreground">
+        {item.q}
+      </span>
+    </button>
 
-// The index reads the same array, so a new topic appears in it for free.
-const indexEntries = categories.map((c) => ({
-  id: c.id,
-  label: c.label,
-  count: c.items.length,
-}));
+    {/* 0fr→1fr is the modern height-auto animation — no measuring, no maxHeight
+        guesses that clip long answers. */}
+    <div
+      id={`faq-a-${item.id}`}
+      role="region"
+      className={`grid transition-[grid-template-rows] duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] ${
+        open ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
+      }`}
+    >
+      <div className="overflow-hidden">
+        <p
+          className={`ps-10 pb-8 pt-1 max-w-[62ch] text-[16px] md:text-[17px] leading-[1.6] text-foreground-soft transition-opacity duration-300 ${
+            open ? "opacity-100 delay-75" : "opacity-0"
+          }`}
+        >
+          {item.a}
+        </p>
+      </div>
+    </div>
+  </div>
+);
 
-// Hebrew counts the noun, not the digit — so the footnote spells the number of
-// topics out instead of hard-coding "שלושה" and drifting the day a topic is added.
-const HE_TOPIC_COUNT = [
-  "",
-  "נושא אחד",
-  "שני נושאים",
-  "שלושה נושאים",
-  "ארבעה נושאים",
-  "חמישה נושאים",
-  "שישה נושאים",
-];
-const topicsLabel = HE_TOPIC_COUNT[categories.length] || `${categories.length} נושאים`;
-
+/**
+ * Q&A, on Apple's marketing-FAQ pattern: one flat accordion in a 720px
+ * measure, quiet category labels as separators rather than tabs or a sidebar,
+ * multiple rows allowed open at once, and no search — Apple runs 25 questions
+ * in a flat list without one, and this page has nine. The previous version's
+ * scroll-spy topic index was a support-portal device the content never needed.
+ */
 const FAQPage = () => {
-  const [activeCat, setActiveCat] = useState(categories[0].id);
+  const [open, setOpen] = useState<Set<string>>(new Set());
+  const { to } = useLocalizedPath();
 
-  // Scroll-spy for the index on the right. The top margin clears the fixed
-  // header; the bottom one keeps the highlight on whichever group owns the
-  // upper half of the screen rather than flipping at the very bottom edge.
-  useEffect(() => {
-    const els = categories
-      .map((c) => document.getElementById(c.id))
-      .filter((el): el is HTMLElement => el !== null);
-    if (!els.length || typeof IntersectionObserver === "undefined") return;
-
-    // An IntersectionObserver callback only carries the entries that CHANGED,
-    // never the full set — so the visible groups have to be accumulated across
-    // callbacks. Reading `entries` alone leaves the index stuck on a group that
-    // has already scrolled away (its "left the band" callback carries no
-    // intersecting entry at all, so nothing gets set).
-    const visible = new Set<string>();
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting) visible.add(e.target.id);
-          else visible.delete(e.target.id);
-        });
-        // `categories` is in document order, so the first hit is the topmost
-        // group currently inside the reading band.
-        const top = categories.find((c) => visible.has(c.id));
-        if (top) setActiveCat(top.id);
-      },
-      { rootMargin: "-140px 0px -55% 0px", threshold: 0 },
-    );
-
-    els.forEach((el) => observer.observe(el));
-    return () => observer.disconnect();
-  }, []);
-
-  const goToCategory = (id: string) => {
-    const el = document.getElementById(id);
-    if (!el) return;
-    // html carries scroll-behavior:smooth globally, so "instant" is the only way
-    // to honour a reduced-motion preference here.
-    const reduce =
-      typeof window.matchMedia === "function" &&
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    el.scrollIntoView({ behavior: reduce ? "instant" : "smooth", block: "start" });
-    // Focus follows the jump (each group carries tabIndex={-1} as a programmatic
-    // focus target), so a keyboard user carries on tabbing from the group they
-    // picked instead of from the index. preventScroll keeps this call from
-    // re-scrolling and cancelling the smooth animation above.
-    el.focus({ preventScroll: true });
-    setActiveCat(id);
-  };
+  const toggle = (id: string) =>
+    setOpen((prev) => {
+      const next = new Set(prev);
+      next.has(id) ? next.delete(id) : next.add(id);
+      return next;
+    });
 
   return (
     <Layout>
       <SEO
-        title="שאלות ותשובות | Aluma, ריהוט חוץ יוקרתי"
-        description="שאלות נפוצות על מוצרי Aluma: עמידות החומרים, זמני אספקה, התאמה אישית, אחריות וטיפול בריהוט חוץ, כל מה שחשוב לדעת לפני שמזמינים."
+        title="שאלות ותשובות | Aluma"
+        description="אספקה, חומרים, אחריות ותחזוקה — התשובות לשאלות שאנחנו נשאלים הכי הרבה על ריהוט החוץ של Aluma."
         path="/faq"
         jsonLd={faqSchema}
       />
 
-      <PageHero
-        title="שאלות ותשובות"
-        subtitle="ריכזנו כאן את מה שנשאלנו לאורך השנים, מסודר לפי נושא. בחרו נושא מהרשימה או פשוט גללו למטה."
-      />
+      <section className="pt-40 pb-20 md:pt-48 md:pb-28 bg-background">
+        <div className="mx-auto max-w-[720px] px-6">
+          <Reveal>
+            {/* Apple's two-beat heading convention, not the word "FAQ". */}
+            <h1 className="font-display font-semibold text-[40px] md:text-[56px] leading-[1.08] text-foreground text-right">
+              שאלות? תשובות.
+            </h1>
+            <p className="mt-4 max-w-[46ch] text-[17px] md:text-[19px] leading-relaxed text-foreground-soft text-right">
+              כל מה שאנחנו נשאלים לפני שמזמינים — ומה שכדאי לדעת אחרי.
+            </p>
+          </Reveal>
 
-      {/* ===== Index on the right, answers on the left ===== */}
-      <section className="pt-10 pb-16 md:pt-14 md:pb-24 bg-background">
-        <div className="container-luxury">
-          {/* 17rem index track. The gutter rule below is centred by gap-12 +
-              ps-12 on the answers column, which is independent of this width —
-              the extra rem goes to the index leaders so they read as rules
-              rather than as 28px stubs behind the longest topic label. */}
-          <div className="grid gap-8 lg:gap-12 lg:grid-cols-[minmax(0,17rem)_minmax(0,1fr)] max-w-6xl mx-auto">
-            {/* First DOM child → right column in RTL. Sticky from lg up; below
-                that it simply sits above the answers as the same index column.
-                No closing border here — the last index line already ends in a
-                hairline, and a second one 28px under it just looked doubled. */}
-            <aside className="lg:sticky lg:top-28 lg:self-start">
-              <TopicIndex
-                entries={indexEntries}
-                activeId={activeCat}
-                onSelect={goToCategory}
-                footnote={`${totalQuestions} שאלות, ${topicsLabel}.`}
-              />
-            </aside>
-
-            {/* Answers column. The gutter rule sits on this column rather than
-                between the grid tracks so it runs the full height of the
-                answers, the way the gutter rule on a printed index page does.
-                It fades out near the bottom instead of stopping dead under the
-                last accordion. */}
-            <div className="relative lg:ps-12">
-              <span
-                aria-hidden="true"
-                className="absolute inset-y-0 start-0 hidden w-px lg:block"
-                style={{
-                  backgroundImage:
-                    "linear-gradient(to bottom, hsl(var(--border)) 0%, hsl(var(--border)) 62%, transparent 100%)",
-                }}
-              />
-
-              <div className="space-y-14 md:space-y-20">
-                {categories.map((cat, ci) => (
-                  <section
-                    key={cat.id}
+          <div className="mt-12 md:mt-16">
+            {categories.map((cat) => (
+              <Reveal key={cat.id}>
+                <section aria-labelledby={cat.id}>
+                  {/* A label, not a tab: small, tracked, terracotta. Hebrew has
+                      no uppercase, so size + color + tracking do that job. */}
+                  <h2
                     id={cat.id}
-                    aria-labelledby={`${cat.id}-title`}
-                    // tabIndex/-1 + focus:outline-none: a landing target for
-                    // goToCategory's focus move, never a tab stop of its own
-                    // and never a stray focus ring.
-                    tabIndex={-1}
-                    className="scroll-mt-32 focus:outline-none"
+                    className="mt-14 first:mt-0 mb-4 text-[13px] font-semibold tracking-[0.08em] text-primary text-right"
                   >
-                    <Reveal>
-                      <div className="flex items-start gap-4">
-                        <span
-                          className="shrink-0 mt-1 flex h-12 w-12 items-center justify-center rounded-[10px] border border-primary/25 bg-secondary/60 text-accent"
-                          aria-hidden="true"
-                        >
-                          <cat.Icon className="h-6 w-6" strokeWidth={1.5} />
-                        </span>
-                        <SectionHeading
-                          align="start"
-                          className="min-w-0"
-                          subtitle={cat.blurb}
-                        >
-                          <span id={`${cat.id}-title`}>{cat.label}</span>
-                        </SectionHeading>
-                      </div>
-                    </Reveal>
-
-                    <Reveal delay={90}>
-                      <Accordion
-                        type="single"
-                        collapsible
-                        defaultValue={ci === 0 ? cat.items[0].id : undefined}
-                        className="mt-7 space-y-3"
-                      >
-                        {cat.items.map((item) => (
-                          <AccordionItem
-                            key={item.id}
-                            value={item.id}
-                            className="rounded-[14px] border border-border bg-secondary/20 px-5 md:px-6 transition-all duration-300 hover:border-primary/60 data-[state=open]:border-primary/60 data-[state=open]:bg-secondary/40 data-[state=open]:shadow-soft"
-                          >
-                            {/* RTL: the trigger's children sit at the right edge and
-                                justify-between pushes the chevron to the far left.
-                                items-start + the 5px nudge keep the topic mark and
-                                the chevron on the FIRST line — every question wraps
-                                to two lines at 375px, and items-center would leave
-                                both floating in the middle of the block. */}
-                            <AccordionTrigger className="items-start gap-4 md:gap-6 py-5 md:py-6 text-[22px] font-display font-normal leading-snug text-right text-foreground hover:no-underline hover:text-accent [&>svg]:mt-[5px] [&>svg]:h-5 [&>svg]:w-5 [&>svg]:text-accent">
-                              <span className="flex min-w-0 items-start gap-3">
-                                <item.Icon
-                                  className="mt-[5px] h-5 w-5 shrink-0 text-accent"
-                                  strokeWidth={1.5}
-                                  aria-hidden="true"
-                                />
-                                {item.q}
-                              </span>
-                            </AccordionTrigger>
-                            <AccordionContent className="ps-8 pb-6 pt-0 text-[20px] leading-relaxed text-right">
-                              <p className="text-[20px] leading-relaxed text-foreground text-pretty">
-                                {item.a}
-                              </p>
-                            </AccordionContent>
-                          </AccordionItem>
-                        ))}
-                      </Accordion>
-                    </Reveal>
-                  </section>
-                ))}
-              </div>
-            </div>
+                    {cat.label}
+                  </h2>
+                  {cat.items.map((item) => (
+                    <FaqRow
+                      key={item.id}
+                      item={item}
+                      open={open.has(item.id)}
+                      onToggle={() => toggle(item.id)}
+                    />
+                  ))}
+                </section>
+              </Reveal>
+            ))}
           </div>
-        </div>
-      </section>
 
-      {/* ===== The one dark band: still stuck? talk to us ===== */}
-      <section className="py-16 md:py-24 bg-foreground">
-        <div className="container-luxury">
-          <Reveal className="max-w-3xl mx-auto flex flex-col items-center">
-            <SectionHeading
-              light
-              align="center"
-              subtitle="צוות אלומה כאן בשבילכם. ספרו לנו על החלל שלכם ועל מה שחשוב לכם, ונחזור אליכם עם מענה אישי."
-            >
-              לא מצאתם תשובה?
-            </SectionHeading>
-
-            <div className="mt-9 flex justify-center">
-              <ShineButton to="/contact" invert>
+          <Reveal>
+            <p className="mt-14 text-[17px] leading-relaxed text-foreground-soft text-right">
+              לא מצאתם את התשובה?{" "}
+              <Link
+                to={to("/contact")}
+                className="text-primary decoration-1 underline-offset-4 hover:underline"
+              >
                 דברו איתנו
-                <ArrowLeft className="w-4 h-4" />
-              </ShineButton>
-            </div>
+              </Link>
+              {" "}— עונים תוך יום עסקים.
+            </p>
           </Reveal>
         </div>
       </section>

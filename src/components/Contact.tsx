@@ -98,7 +98,7 @@ const scrollToShowroom = () => {
 };
 
 const tileClass =
-  "group flex w-full items-center gap-4 rounded-[14px] border border-border bg-background p-5 text-right shadow-soft transition-all duration-300 ease-out hover:-translate-y-1 hover:border-primary/60 hover:shadow-luxury";
+  "group flex h-full w-full flex-col items-start gap-4 rounded-[14px] border border-foreground/10 bg-background p-6 md:p-7 text-right transition-colors duration-200 hover:bg-white";
 
 const ChannelTile = ({ channel }: { channel: Channel }) => {
   const { Icon } = channel;
@@ -187,14 +187,17 @@ const assurances = [
 // the same tablet the buttons and pills use) rather than the 14px reserved for
 // cards and panels. Deliberately no `outline-none`: the global focus-visible
 // ring in index.css is what keyboard users navigate by.
+// Underline fields, not boxes. The border is the single line under the text;
+// focus deepens it to the accent. Radius/background/padding all gone — a boxed
+// grey input is the support-ticket tell this page is escaping.
 const fieldClass = (invalid: boolean) =>
   cn(
-    "w-full rounded-[10px] border bg-background px-5 text-[18px] text-foreground text-right",
-    "placeholder:text-muted-foreground/70 transition-smooth focus:ring-4 focus:ring-primary/15",
-    invalid ? "border-destructive/70 focus:border-destructive" : "border-border focus:border-primary",
+    "w-full rounded-none border-0 border-b bg-transparent px-0 text-[18px] text-foreground text-right",
+    "placeholder:text-muted-foreground/60 transition-colors focus:ring-0",
+    invalid ? "border-destructive/70 focus:border-destructive" : "border-foreground/25 focus:border-accent",
   );
 
-const labelClass = "block font-display text-[18px] font-medium text-foreground mb-2.5";
+const labelClass = "block text-[14px] tracking-[0.04em] text-foreground-soft mb-1.5";
 
 const FieldError = ({ id, message }: { id: string; message: string }) => (
   <p id={id} className="mt-2.5 flex items-start gap-2.5 text-[18px] leading-snug text-destructive">
@@ -309,16 +312,20 @@ const Contact = () => {
     // on the subtitle's last line.
     <section id="contact" dir="rtl" className="mt-10 md:mt-12 py-16 md:py-24 bg-secondary">
       <div className="container-luxury">
-        {/* The split: the form takes the wider right column (first child in RTL),
-            the direct channels ride alongside it on the left and stay put while
-            the form scrolls. */}
-        <div className="grid gap-12 lg:gap-16 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)] items-start max-w-6xl mx-auto">
+        {/* Channels before the form, everywhere. Apple's own contact page has
+            no form at all — a person deciding on made-to-order furniture wants
+            a phone number and a showroom before a message box. */}
+        <div className="max-w-6xl mx-auto">
+          <Reveal className="min-w-0">
+            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4 mb-16 md:mb-20">
+              {channels.map((c) => (
+                <ChannelTile key={c.key} channel={c} />
+              ))}
+            </div>
+          </Reveal>
+
           {/* ===== FORM ===== */}
-          {/* Stacked on a phone the form runs ~1000px, so putting it first
-              meant scrolling past all of it to reach a phone number. The
-              channels lead on mobile; from lg the two sit side by side and the
-              form takes the right (RTL start) column again. */}
-          <Reveal className="order-2 lg:order-1 min-w-0">
+          <Reveal className="min-w-0 max-w-[640px]">
             <SectionHeading
               align="start"
               tone="charcoal"
@@ -488,7 +495,7 @@ const Contact = () => {
                   aria-busy={submitting}
                   // min-w holds the width across the label swap, so the row
                   // does not jump the moment you press send.
-                  className="group inline-flex h-14 w-full sm:w-auto sm:min-w-[15rem] items-center justify-center gap-3 rounded-[10px] bg-accent px-10 text-[20px] font-medium text-accent-foreground shadow-accent transition-all duration-300 hover:bg-accent/90 hover:-translate-y-0.5 hover:shadow-luxury disabled:cursor-not-allowed disabled:opacity-60 disabled:translate-y-0"
+                  className="group inline-flex h-14 w-full sm:w-auto sm:min-w-[13rem] items-center justify-center gap-3 rounded-full bg-foreground px-10 text-[18px] font-medium text-background transition-colors duration-300 hover:bg-accent disabled:cursor-not-allowed disabled:opacity-60"
                 >
                   {submitting ? (
                     <>
@@ -529,24 +536,6 @@ const Contact = () => {
             </form>
           </Reveal>
 
-          {/* ===== DIRECT CHANNELS =====
-              Pinned beside the long form, and set at the same 30px as "כתבו
-              לנו" so the two column heads read as peers. Deliberately no
-              running text under the rule: the stack has to clear the header
-              (top-28) AND still fit a short laptop viewport, or the bottom tile
-              becomes unreachable for as long as the column is stuck. */}
-          <Reveal delay={120} className="order-1 lg:order-2 min-w-0 lg:sticky lg:top-28 lg:max-h-[calc(100dvh-8rem)] lg:overflow-y-auto rail-scroll">
-            <SectionHeading align="start" tone="charcoal">
-              מעדיפים לדבר ישירות?
-            </SectionHeading>
-            <div className="w-20 h-[2px] bg-primary/55 mt-5" aria-hidden="true" />
-
-            <div className="mt-7 flex flex-col gap-4">
-              {channels.map((c) => (
-                <ChannelTile key={c.key} channel={c} />
-              ))}
-            </div>
-          </Reveal>
         </div>
       </div>
     </section>
