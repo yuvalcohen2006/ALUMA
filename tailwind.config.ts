@@ -55,7 +55,6 @@ export default {
           foreground: "hsl(var(--card-foreground))",
         },
         footer: "hsl(var(--footer))",
-        cream: "hsl(var(--cream))",
       },
       fontFamily: {
         display: ['var(--font-display)'],

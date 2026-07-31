@@ -4,7 +4,7 @@ import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { Check, MessageCircle, Sparkles } from "lucide-react";
-import sofaAsset from "@/assets/modular-sofa-fabric.png.asset.json";
+import salonPhoto from "@/assets/collections/salon-monolith.jpg";
 import { SITE } from "@/config/site";
 import {
   sunbrellaFabrics,
@@ -36,16 +36,6 @@ const FabricConfigurator = () => {
   );
   const whatsappUrl = `${SITE.whatsapp.href}?text=${waText}`;
 
-  // Approximate cushion regions for 3-section modular sofa
-  const cushionRegions = [
-    { top: "25%", left: "8%", width: "26%", height: "24%", radius: "8px" },
-    { top: "25%", left: "37%", width: "26%", height: "24%", radius: "8px" },
-    { top: "25%", left: "66%", width: "26%", height: "24%", radius: "8px" },
-    { top: "52%", left: "8%", width: "26%", height: "20%", radius: "8px" },
-    { top: "52%", left: "37%", width: "26%", height: "20%", radius: "8px" },
-    { top: "52%", left: "66%", width: "26%", height: "20%", radius: "8px" },
-  ];
-
   return (
     <div className="min-h-screen bg-background">
       <SEO
@@ -76,43 +66,33 @@ const FabricConfigurator = () => {
             {/* LEFT: Live preview */}
             <div className="lg:col-span-3 lg:sticky lg:top-28 self-start">
               <div className="relative bg-secondary border border-border rounded-sm overflow-hidden shadow-soft">
+                {/* The old preview tinted six hand-positioned rectangles over a
+                    photo that 404s in production, so it showed coloured blocks
+                    floating on a broken image. Until the per-fabric renders
+                    exist (masked inpainting from the real product photos), show
+                    an honest large swatch beside a real sofa rather than a fake
+                    recolour. */}
                 <div className="relative">
                   <img
-                    src={sofaAsset.url}
-                    alt="ספה מודולרית, תצוגה מקדימה לבחירת בד"
+                    src={salonPhoto}
+                    alt="סלון חוץ של Aluma"
                     width={1280}
                     height={960}
                     loading="eager"
                     className="w-full h-auto block"
                   />
-                  {/* Color overlays on cushions */}
-                  {cushionRegions.map((r, i) => (
-                    <div
-                      key={i}
-                      aria-hidden
-                      className="absolute pointer-events-none transition-colors duration-500"
-                      style={{
-                        top: r.top,
-                        left: r.left,
-                        width: r.width,
-                        height: r.height,
-                        borderRadius: r.radius,
-                        background: selected.background,
-                        mixBlendMode: "color",
-                        opacity: 0.88,
-                      }}
-                    />
-                  ))}
-                  {/* Subtle highlight to retain depth */}
+                </div>
+
+                <div className="p-5 border-b border-border">
                   <div
                     aria-hidden
-                    className="absolute inset-0 pointer-events-none"
-                    style={{
-                      background:
-                        "radial-gradient(ellipse at 50% 35%, rgba(255,255,255,0.18), transparent 60%)",
-                      mixBlendMode: "screen",
-                    }}
+                    className="h-28 w-full rounded-sm border border-border transition-all duration-500"
+                    style={{ background: selected.background }}
                   />
+                  <p className="mt-3 text-[15px] leading-relaxed text-muted-foreground">
+                    זהו הגוון עצמו. תצוגה של הבד על המוצר תיווצר מצילומי המוצרים
+                    שלנו — עד אז, מוזמנים להזמין דוגמית בד אמיתית.
+                  </p>
                 </div>
 
                 <div className="p-5 border-t border-border flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">

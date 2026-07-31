@@ -4,7 +4,6 @@ import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { Smartphone, Box, ScanLine, Info } from "lucide-react";
-import modularSofaPoster from "@/assets/modular-sofa-3m.jpeg.asset.json";
 
 // Demo products, placeholder GLB/USDZ models hosted on modelviewer.dev.
 // Replace `glb` / `usdz` URLs later with Aluma's own scanned models.
@@ -15,7 +14,7 @@ const products = [
     desc: "ספה מודולרית 3 יחידות, רוחב 3 מטר, עומק 1 מטר. תצוגת AR בגודל אמיתי.",
     glb: "https://modelviewer.dev/shared-assets/models/glTF-Sample-Assets/Models/Sofa/glTF-Binary/Sofa.glb",
     usdz: "",
-    poster: modularSofaPoster.url,
+    poster: "",
     arScale: "fixed" as const,
   },
   {

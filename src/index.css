@@ -47,7 +47,6 @@
     --footer: 0 0% 18%;
 
     /* Cream — warm beige used for title/text dividers (visible on warm-white AND sand) */
-    --cream: 34 30% 80%;
 
     /* Typography — two faces only. Titles: Heebo (light). Running text: Assistant. */
     --font-display: 'Heebo', system-ui, sans-serif;
@@ -209,18 +208,6 @@
   }
   @media (prefers-reduced-motion: reduce) {
     .animate-rise-in { animation: none; }
-  }
-
-  /* Gentle down-nudge for the hero scroll cue (keeps horizontal centering) */
-  @keyframes scroll-nudge {
-    0%, 100% { transform: translate(-50%, 0); }
-    50% { transform: translate(-50%, 8px); }
-  }
-  .scroll-cue {
-    animation: scroll-nudge 2s ease-in-out 1.6s infinite;
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .scroll-cue { animation: none; }
   }
 
   /* Hero logo: a soft left→right reveal. A wide gradient mask slides across the

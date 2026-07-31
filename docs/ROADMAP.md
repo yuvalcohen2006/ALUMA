@@ -89,32 +89,40 @@ re-litigate):
 
 ---
 
-## PHASE 2 — Cleanup sweep
+## PHASE 2 — Cleanup sweep ✅
 
-- [ ] Delete `src/assets/story-sunlight-sofa.jpg` (referenced nowhere).
-- [ ] Delete dead CSS: `scroll-nudge` keyframes + `.scroll-cue` (unused —
+- [x] Deleted `src/assets/story-sunlight-sofa.jpg` (referenced nowhere).
+- [x] Deleted dead CSS: `scroll-nudge` keyframes + `.scroll-cue` (unused —
       `Hero.tsx` uses `animate-chevron-blink`), the `--cream` token and its
       Tailwind `cream` colour.
-- [ ] Delete the two broken Lovable asset stubs — `modular-sofa-3m.jpeg.asset.json`
-      and `modular-sofa-fabric.png.asset.json`. Both point at `/__l5e/assets-v1/…`
-      CDN paths that **404 in production**. One is the AR page's poster; the
-      other is the *entire* base photo of the fabric configurator.
-- [ ] Remove `/before-after` (page, component, `src/data/beforeAfter.ts`, route)
-      — dropped from the nav in `4ac7ace`, reachable only by URL. 301 → `/projects`.
-- [ ] **Remove favourites**: `FavoriteButton.tsx`, `useFavorites.tsx`, the call
-      sites in `Collections.tsx` + `CollectionDetail.tsx`, `FavoritesProvider`
-      in `App.tsx`, and the favourites tab in `Account.tsx` (removing the button
-      but keeping the tab would leave a tab that can never gain entries).
-      Grep for stray `useFavorites` imports first. Leave the DB table alone.
-- [ ] **Invert the demo-data fork.** `useCollectionsData.ts` currently discards
-      live Supabase data in dev *unconditionally* unless `?live=1` is in the
-      URL. Flip to: live always, demo only behind `VITE_USE_DEMO_DATA=1`.
-      Same for `CollectionDetail.tsx` and the blog fallback.
-      **This is a prerequisite for the photos playbook** — otherwise the owner
-      uploads real photos and keeps seeing the 20 fake ones.
-- [ ] `/auth` and `/account` → `<Navigate>` aliases (duplicate route pairs).
-- [ ] Mark `src/data/testimonials.ts` entries `verified: false` so the Phase-5
-      swap to real reviews is mechanical.
+- [x] Deleted the two broken Lovable asset stubs — both pointed at
+      `/__l5e/assets-v1/…` CDN paths that **404 in production**.
+      - AR page: that was its `poster`; now empty (model-viewer handles it).
+      - Fabric page: that was the *entire* base photo, so the page was showing
+        six tinted rectangles floating over a broken-image icon. Replaced with a
+        real sofa photo plus a large true-colour swatch and an honest line
+        saying on-product previews come once the product photos exist. The six
+        hand-positioned `mixBlendMode` rectangles are gone — they were calibrated
+        to a photo that no longer exists.
+- [x] Removed `/before-after` (page, component, data). Route kept as an in-app
+      `<Navigate>` → `/projects`; pruned from `sitemap.xml`.
+- [x] **Favourites removed** — button, hook, provider, both call sites, and the
+      club-dashboard tab (keeping the tab would have left one that can never
+      gain entries). DB table deliberately left in place.
+- [x] **Demo-data fork inverted.** It used to discard live Supabase data in dev
+      *unconditionally* unless `?live=1` was in the URL — meaning you could
+      upload real products and keep seeing the 20 fake ones with nothing to
+      explain why. Now live-first everywhere; placeholder catalogue and magazine
+      are opt-in via `VITE_USE_DEMO_DATA=1`, documented in `.env.example`.
+      ⚠️ **Side effect:** with no valid anon key in `.env`, `/collections` now
+      renders *empty* instead of showing fake products. That is the honest
+      signal — see WAITING ON THE OWNER #2.
+- [x] `/auth` and `/account` are now `<Navigate>` aliases.
+- [ ] ~~Mark testimonials `verified: false`~~ — **dropped deliberately.** Phase 5
+      makes the band read `site_reviews` and fall back to the placeholders while
+      that table is empty, so the DB *is* the switch. A flag nothing reads would
+      be exactly the dead code this phase removes. The file already carries a
+      prominent DO-NOT-SHIP banner.
 
 ---
 
