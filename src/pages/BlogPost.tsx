@@ -160,7 +160,7 @@ const BlogPost = () => {
               onClick={() => nav("/blog")}
               className="text-[18px] text-accent link-underline transition-smooth"
             >
-              חזרה למגזין
+              חזרה לשווה לדעת
             </button>
           </div>
         </section>
@@ -186,14 +186,14 @@ const BlogPost = () => {
         <div className="container-luxury max-w-3xl">
           {/* Back, not forward: in RTL the return arrow points right. */}
           <Link
-            to="/blog"
+            to="/journal"
             className="group inline-flex items-center gap-2 text-[18px] text-foreground-soft hover:text-primary transition-smooth mb-10"
           >
             <ArrowRight
               className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1"
               aria-hidden="true"
             />
-            חזרה למגזין
+            חזרה לשווה לדעת
           </Link>
           <div className="flex justify-center mb-2">
             <img src={logo} alt="Aluma" className="h-7 md:h-8 w-auto object-contain opacity-70" />

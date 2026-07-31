@@ -12,6 +12,15 @@
 /story        /about      301
 /en/story     /en/about   301
 
+# Materials + magazine merged into "שווה לדעת". The material DETAIL pages stay
+# live — only the index is retired — so /materials/* must NOT be caught here.
+/materials       /journal      301
+/en/materials    /en/journal   301
+/blog            /journal      301
+/en/blog         /en/journal   301
+/blog/*          /journal/:splat      301
+/en/blog/*       /en/journal/:splat   301
+
 # Retired page (dropped from the nav; old links still land somewhere sensible)
 /before-after     /projects     301
 /en/before-after  /en/projects  301

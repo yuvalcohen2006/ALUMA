@@ -349,7 +349,36 @@ than years, because nobody has supplied any dates. Swap in years when they exist
 
 ---
 
-## PHASE 7 — "שווה לדעת" (`/journal`) — materials + magazine merged
+## PHASE 7 — "שווה לדעת" (`/journal`) ✅ — materials + magazine merged
+
+- [x] `src/pages/Journal.tsx`, **light mode end to end**: PageHero → materials
+      strip → filter chips → featured article (60/40, no card chrome) → 3-col
+      feed at `aspect-[3/2]`.
+- [x] **The materials strip sits ABOVE the feed, not inside it.** Materials are
+      evergreen and articles are chronological; interleaved, the Sunbrella
+      explainer sinks below the fold on the day a third article is published and
+      never resurfaces. Small square tiles, exactly as asked.
+- [x] **All three glow layers gone** — `MaterialBand.tsx` (the box-shadow
+      backlight, the radial `wash`, and the blurred-photo interior ground) and
+      `accent.ts` (which existed *only* to lift accent colours for the dark
+      background) are deleted along with the old dark index. A coloured glow on
+      white reads as a printing error.
+- [x] Chips, not tabs — chips wrap and scroll on a phone. No "featured" post
+      while a filter is active: promoting one out of a filtered set is arbitrary.
+- [x] `MaterialDetail` needed no conversion — it was already light; only its
+      back-link moved to `/journal`. **The detail pages stay live** as the
+      strip's targets; only the index was retired.
+- [x] Redirects at both layers, including the splat `/blog/* → /journal/:splat`
+      (a `<Navigate>` can't interpolate a param, so `LegacyBlogPostRedirect`
+      does it in-app). These are the site's most-linked URLs — dumping them all
+      on the index would lose the article the visitor clicked.
+- [x] Nav: חומרים + מגזין collapse into one **שווה לדעת** entry keeping the four
+      material pages as its submenu. Footer, sitemap and 404 links repointed.
+- [x] `Blog.tsx` (626 lines) and `Materials.tsx` deleted. 42 tests, including
+      one asserting `/materials/:slug` is still reachable — if a redirect ever
+      swallows it, every tile in the strip breaks.
+
+<details><summary>Original spec (kept for reference)</summary>
 
 Owner's brief: casual, understandable, hints that there's more depth behind what
 you're buying. **Light mode.**
@@ -369,8 +398,18 @@ you're buying. **Light mode.**
 - [ ] Redirects: `/materials`, `/blog` → `/journal`; **`/blog/* → /journal/:splat 301`**
       (must sit above the `/*` catch-all in `public/_redirects`).
       `/materials/:slug` **stays live** — it's the materials strip's target.
-- [ ] Delete `Materials.tsx`, `Blog.tsx`, `MaterialsBrief.tsx`.
-- [ ] Nav: drop חומרים + מגזין, add **שווה לדעת** (submenu = the 4 material pages).
+- Delete `Materials.tsx`, `Blog.tsx`, `MaterialsBrief.tsx`.
+- Nav: drop חומרים + מגזין, add **שווה לדעת** (submenu = the 4 material pages).
+
+</details>
+
+**Deviations:** `BlogPost.tsx` was left where it is and simply mounted at
+`/journal/:slug` rather than renamed — the rename is churn with no reader
+benefit, and it keeps the diff readable. Filter chips hold state locally instead
+of in `?topic=`; shareable filtered URLs are worth having, but the existing
+`useFilterParams` hook is built around the drawer's multi-select model and
+bending it to single-select chips was more risk than the feature is worth right
+now. Noted as a small follow-up.
 
 ---
 

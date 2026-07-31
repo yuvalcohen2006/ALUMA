@@ -89,6 +89,24 @@ describe("public route table", () => {
     expect(matchedLeaf(path)).toBe("about");
   });
 
+  it.each(["/journal", "/en/journal"])("serves the merged journal at %s", (path) => {
+    expect(matchedLeaf(path)).toBe("journal");
+  });
+
+  it("keeps the material detail pages live under their own URLs", () => {
+    // Only the /materials INDEX was retired. If a redirect ever swallows
+    // /materials/:slug, the journal's materials strip links to nothing.
+    expect(matchedLeaf("/materials/sunbrella")).toBe("materials/:slug");
+    expect(matchedLeaf("/en/materials/sunbrella")).toBe("materials/:slug");
+  });
+
+  it.each(["/materials", "/blog", "/blog/some-post"])(
+    "still matches the retired %s URL so it can redirect",
+    (path) => {
+      expect(matchedLeaf(path)).not.toBe("*");
+    }
+  );
+
   it.each(["/story", "/en/story"])("still matches the retired %s URL", (path) => {
     // Matched, not 404: the route renders a <Navigate> to /about. Losing this
     // silently breaks every indexed link to the old page.

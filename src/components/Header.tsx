@@ -65,11 +65,11 @@ const Header = () => {
         ],
       },
       { label: t("nav.projects"), to: localized("/projects") },
-      // Materials and the magazine merge into one "שווה לדעת" entry in the next
-      // phase; until that page exists they stay as they are.
+      // Materials and the magazine, merged: the same audience wants both —
+      // people who care what they're actually buying.
       {
-        label: t("nav.materials"),
-        to: localized("/materials"),
+        label: t("nav.journal"),
+        to: localized("/journal"),
         submenu: [
           { label: t("materialsSub.sunbrella"), to: localized("/materials/sunbrella") },
           { label: t("materialsSub.aluminum"), to: localized("/materials/aluminum") },
@@ -77,7 +77,6 @@ const Header = () => {
           { label: t("materialsSub.polystone"), to: localized("/materials/polystone") },
         ],
       },
-      { label: t("nav.blog"), to: localized("/blog") },
       { label: t("nav.faq"), to: localized("/faq") },
       { label: t("nav.club"), to: localized("/club") },
       { label: t("nav.about"), to: localized("/about") },

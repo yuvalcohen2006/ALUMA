@@ -161,11 +161,11 @@ const MaterialDetailPage = () => {
 
       <div className="py-16 md:py-20 bg-background flex justify-center">
         <Link
-          to="/materials"
+          to="/journal"
           className="inline-flex items-center gap-2.5 text-[18px] font-normal text-primary border border-primary/60 hover:bg-primary hover:text-primary-foreground hover:border-primary transition-smooth rounded-[10px] px-8 py-3.5"
         >
           <ArrowRight className="w-5 h-5" aria-hidden="true" />
-          חזרה לחומרים
+          חזרה לשווה לדעת
         </Link>
       </div>
 

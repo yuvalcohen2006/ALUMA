@@ -84,18 +84,13 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link to={localized("/materials")} className="link-underline inline-block hover:text-accent transition-smooth">
-                  חומרים
-                </Link>
-              </li>
-              <li>
                 <Link to={localized("/projects")} className="link-underline inline-block hover:text-accent transition-smooth">
                   פרויקטים
                 </Link>
               </li>
               <li>
-                <Link to={localized("/blog")} className="link-underline inline-block hover:text-accent transition-smooth">
-                  מגזין
+                <Link to={localized("/journal")} className="link-underline inline-block hover:text-accent transition-smooth">
+                  שווה לדעת
                 </Link>
               </li>
               <li>
@@ -126,17 +121,17 @@ const Footer = () => {
             <h4 className="font-display text-xl mb-6">החומרים שלנו</h4>
             <ul className="space-y-3 text-sm text-background/85">
               <li>
-                <Link to={localized("/materials")} className="link-underline inline-block hover:text-accent transition-smooth">
+                <Link to={localized("/materials/sunbrella")} className="link-underline inline-block hover:text-accent transition-smooth">
                   בד Sunbrella
                 </Link>
               </li>
               <li>
-                <Link to={localized("/materials")} className="link-underline inline-block hover:text-accent transition-smooth">
+                <Link to={localized("/materials/aluminum")} className="link-underline inline-block hover:text-accent transition-smooth">
                   אלומיניום
                 </Link>
               </li>
               <li>
-                <Link to={localized("/materials")} className="link-underline inline-block hover:text-accent transition-smooth">
+                <Link to={localized("/materials/granite-porcelain")} className="link-underline inline-block hover:text-accent transition-smooth">
                   שיש גרניט פורצלן
                 </Link>
               </li>
