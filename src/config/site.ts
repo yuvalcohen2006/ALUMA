@@ -29,6 +29,13 @@ export const SITE = {
         : `https://wa.me/${WHATSAPP_NUMBER}`,
   },
 
+  /**
+   * Shows the language switcher. Off until the English catalogues are actually
+   * filled in (roadmap Phase 14) — the /en tree already routes and renders, so
+   * flipping this before the copy exists would ship a half-translated site.
+   */
+  enableEnglish: false,
+
   address: {
     street: "התמר 78",
     city: "יציץ",

@@ -1,17 +1,15 @@
 import { lazy, Suspense } from "react";
 import Layout from "@/components/Layout";
 import Hero from "@/components/Hero";
-import AboutBrief from "@/components/home/AboutBrief";
-import CategoryIcons from "@/components/home/CategoryIcons";
-import ProjectsGrid from "@/components/home/ProjectsGrid";
-import Newsletter from "@/components/home/Newsletter";
+import CategoryMosaic from "@/components/home/CategoryMosaic";
+import ConsultCTA from "@/components/home/ConsultCTA";
+import ClubCard from "@/components/home/ClubCard";
 import SEO from "@/components/SEO";
 import { SITE } from "@/config/site";
 
-// Below-the-fold + pulls in framer-motion, so load them lazily to keep the
-// initial bundle light. Fixed-height fallbacks avoid layout shift.
-const MaterialsBrief = lazy(() => import("@/components/home/MaterialsBrief"));
-const Testimonials = lazy(() => import("@/components/home/Testimonials"));
+// Below the fold, and the only remaining section that queries Supabase on the
+// home page — lazy so it stays out of the initial bundle.
+const ReviewsBand = lazy(() => import("@/components/home/ReviewsBand"));
 
 const localBusiness = {
   "@context": "https://schema.org",
@@ -75,22 +73,21 @@ const Index = () => {
         path="/"
         jsonLd={[localBusiness, websiteSchema]}
       />
+      {/* The client's brief, in order: show them the range, then the proof,
+          then one small ask. Materials, projects and the story brief moved off
+          this page — a visitor should scroll once and understand what is being
+          sold, not read three essays first. Those pages are all still linked
+          from the navbar for anyone who wants the detail. */}
       <Hero />
-      <AboutBrief />
-      <CategoryIcons />
-      <ProjectsGrid />
-      <Suspense fallback={<div className="min-h-[820px] md:min-h-[900px] bg-foreground" />}>
-        <MaterialsBrief />
+      <CategoryMosaic />
+      <ConsultCTA />
+      {/* ⚠️ Falls back to fabricated placeholder quotes until real reviews are
+          entered in the admin panel. They must not reach the live domain — see
+          the banner in src/data/testimonials.ts. */}
+      <Suspense fallback={<div className="min-h-[560px] bg-background" />}>
+        <ReviewsBand />
       </Suspense>
-      {/* ⚠️ Placeholder testimonials — fabricated demo content for preview only.
-          Swap in real, attributed customer quotes before launch. See the banner
-          in src/data/testimonials.ts. */}
-      {/* Fallback height matches the real section (py-24 + heading + mb-16 +
-          the 560–620px columns) so the page doesn't jump when the chunk lands. */}
-      <Suspense fallback={<div className="min-h-[860px] md:min-h-[900px] bg-background" />}>
-        <Testimonials />
-      </Suspense>
-      <Newsletter />
+      <ClubCard />
     </Layout>
   );
 };

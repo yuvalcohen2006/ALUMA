@@ -2,6 +2,8 @@ import { Link } from "react-router-dom";
 import { Phone, Mail, MapPin, Instagram, Facebook } from "lucide-react";
 import alumaLogo from "@/assets/aluma-logo.png";
 import { SITE } from "@/config/site";
+import { useLocalizedPath } from "@/lib/useLocalizedPath";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 
 const WhatsAppIcon = ({ className = "" }: { className?: string }) => (
   <svg
@@ -15,6 +17,7 @@ const WhatsAppIcon = ({ className = "" }: { className?: string }) => (
 );
 
 const Footer = () => {
+  const { to: localized } = useLocalizedPath();
   // Light-grey wash plus a small lift on hover — the old version flipped to a
   // solid white block, which was far too loud against the charcoal footer.
   const iconBox =
@@ -66,52 +69,52 @@ const Footer = () => {
             <h4 className="font-display text-xl mb-6">מעבר מהיר</h4>
             <ul className="space-y-3 text-sm text-background/85">
               <li>
-                <Link to="/" className="link-underline inline-block hover:text-accent transition-smooth">
+                <Link to={localized("/")} className="link-underline inline-block hover:text-accent transition-smooth">
                   דף הבית
                 </Link>
               </li>
               <li>
-                <Link to="/story" className="link-underline inline-block hover:text-accent transition-smooth">
+                <Link to={localized("/story")} className="link-underline inline-block hover:text-accent transition-smooth">
                   הסיפור שלנו
                 </Link>
               </li>
               <li>
-                <Link to="/collections" className="link-underline inline-block hover:text-accent transition-smooth">
+                <Link to={localized("/collections")} className="link-underline inline-block hover:text-accent transition-smooth">
                   קולקציות
                 </Link>
               </li>
               <li>
-                <Link to="/materials" className="link-underline inline-block hover:text-accent transition-smooth">
+                <Link to={localized("/materials")} className="link-underline inline-block hover:text-accent transition-smooth">
                   חומרים
                 </Link>
               </li>
               <li>
-                <Link to="/projects" className="link-underline inline-block hover:text-accent transition-smooth">
+                <Link to={localized("/projects")} className="link-underline inline-block hover:text-accent transition-smooth">
                   פרויקטים
                 </Link>
               </li>
               <li>
-                <Link to="/blog" className="link-underline inline-block hover:text-accent transition-smooth">
+                <Link to={localized("/blog")} className="link-underline inline-block hover:text-accent transition-smooth">
                   מגזין
                 </Link>
               </li>
               <li>
-                <Link to="/questionnaire" className="link-underline inline-block hover:text-accent transition-smooth">
+                <Link to={localized("/questionnaire")} className="link-underline inline-block hover:text-accent transition-smooth">
                   שאלון חכם
                 </Link>
               </li>
               <li>
-                <Link to="/account" className="link-underline inline-block hover:text-accent transition-smooth">
+                <Link to={localized("/account")} className="link-underline inline-block hover:text-accent transition-smooth">
                   אזור לקוחות
                 </Link>
               </li>
               <li>
-                <Link to="/faq" className="link-underline inline-block hover:text-accent transition-smooth">
+                <Link to={localized("/faq")} className="link-underline inline-block hover:text-accent transition-smooth">
                   שאלות ותשובות
                 </Link>
               </li>
               <li>
-                <Link to="/contact" className="link-underline inline-block hover:text-accent transition-smooth">
+                <Link to={localized("/contact")} className="link-underline inline-block hover:text-accent transition-smooth">
                   צרו קשר
                 </Link>
               </li>
@@ -123,22 +126,22 @@ const Footer = () => {
             <h4 className="font-display text-xl mb-6">החומרים שלנו</h4>
             <ul className="space-y-3 text-sm text-background/85">
               <li>
-                <Link to="/materials" className="link-underline inline-block hover:text-accent transition-smooth">
+                <Link to={localized("/materials")} className="link-underline inline-block hover:text-accent transition-smooth">
                   בד Sunbrella
                 </Link>
               </li>
               <li>
-                <Link to="/materials" className="link-underline inline-block hover:text-accent transition-smooth">
+                <Link to={localized("/materials")} className="link-underline inline-block hover:text-accent transition-smooth">
                   אלומיניום
                 </Link>
               </li>
               <li>
-                <Link to="/materials" className="link-underline inline-block hover:text-accent transition-smooth">
+                <Link to={localized("/materials")} className="link-underline inline-block hover:text-accent transition-smooth">
                   שיש גרניט פורצלן
                 </Link>
               </li>
               <li>
-                <Link to="/materials/polystone" className="link-underline inline-block hover:text-accent transition-smooth">
+                <Link to={localized("/materials/polystone")} className="link-underline inline-block hover:text-accent transition-smooth">
                   PolyStone
                 </Link>
               </li>
@@ -206,15 +209,20 @@ const Footer = () => {
         <div dir="rtl" className="mt-14 pt-8 border-t border-background/15 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-background/60 text-center md:text-right">
           <div>© {new Date().getFullYear()} Aluma. כל הזכויות שמורות.</div>
           <div className="flex flex-wrap justify-center gap-5">
-            <Link to="/accessibility" className="link-underline inline-block hover:text-accent transition-smooth">
+            <Link to={localized("/accessibility")} className="link-underline inline-block hover:text-accent transition-smooth">
               הצהרת נגישות
             </Link>
-            <Link to="/terms" className="link-underline inline-block hover:text-accent transition-smooth">
+            <Link to={localized("/terms")} className="link-underline inline-block hover:text-accent transition-smooth">
               תקנון ומדיניות
             </Link>
-            <Link to="/privacy" className="link-underline inline-block hover:text-accent transition-smooth">
+            <Link to={localized("/privacy")} className="link-underline inline-block hover:text-accent transition-smooth">
               מדיניות פרטיות
             </Link>
+            {/* Repeated here as well as in the navbar: visitors who don't find
+                a language control at the top look for it in the footer. */}
+            {SITE.enableEnglish && (
+              <LanguageSwitcher className="min-h-0 px-0 text-xs text-background/60 hover:text-accent" />
+            )}
           </div>
         </div>
       </div>

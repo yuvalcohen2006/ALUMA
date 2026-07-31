@@ -1,24 +1,14 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ChevronDown, Menu, X } from "lucide-react";
 import { NavLink, Link, useLocation } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import alumaLogo from "@/assets/aluma-logo.png";
 import { useCollections } from "@/hooks/useCollectionsData";
 import { WhatsAppIcon } from "@/components/WhatsAppButton";
-
-const materialsSub = [
-  { label: "בד Sunbrella", to: "/materials/sunbrella" },
-  { label: "אלומיניום", to: "/materials/aluminum" },
-  { label: "שיש גרניט פורצלן", to: "/materials/granite-porcelain" },
-  { label: "PolyStone", to: "/materials/polystone" },
-];
-
-const diySub = [
-  { label: "עצבו סלון", to: "/designer" },
-  { label: "בחרו את הבד", to: "/fabric" },
-  { label: "AR, תצוגה במרחב", to: "/ar" },
-  { label: "שאלון חכם", to: "/questionnaire" },
-];
+import LanguageSwitcher from "@/components/LanguageSwitcher";
+import { useLocalizedPath } from "@/lib/useLocalizedPath";
+import { SITE } from "@/config/site";
 
 // Desktop nav link: a barely-rounded light-grey pill that fades in on hover, with
 // the label sitting in soft charcoal and deepening as it fills.
@@ -30,10 +20,13 @@ const navActive = "bg-foreground/[0.09] text-foreground";
 const Header = () => {
   const [scrolled, setScrolled] = useState(false);
   const { pathname } = useLocation();
+  const { t } = useTranslation();
+  const { to: localized } = useLocalizedPath();
   // Interior pages open straight onto the background with no sand band, so the
   // header needs its border immediately. Only the home page, whose hero image
-  // separates it on its own, waits for scroll.
-  const forceBorder = pathname !== "/";
+  // separates it on its own, waits for scroll. Both language roots count as
+  // home.
+  const forceBorder = pathname !== "/" && pathname !== "/en";
   const [open, setOpen] = useState(false);
   const [expanded, setExpanded] = useState<string | null>(null);
   // Desktop dropdowns: `hovered` opens on pointer-over; `pinned` is a click-locked
@@ -46,24 +39,46 @@ const Header = () => {
   // No "all collections" entry — the קולקציות button itself goes to the
   // unfiltered page, and filtering happens there in the sidebar.
   const collectionsSub = useMemo(
-    () => collections.map((c) => ({ label: c.name_he, to: `/collections#${c.slug}` })),
-    [collections]
+    () =>
+      collections.map((c) => ({
+        label: c.name_he,
+        to: localized(`/collections#${c.slug}`),
+      })),
+    [collections, localized]
   );
 
   const navLinks = useMemo(
     () => [
-      { label: "דף הבית", to: "/" },
-      { label: "הסיפור שלנו", to: "/story" },
-      { label: "קולקציות", to: "/collections", submenu: collectionsSub },
-      { label: "חומרים", to: "/materials", submenu: materialsSub },
-      { label: "פרויקטים", to: "/projects" },
-      { label: "עשה זאת בעצמך", to: "/diy", submenu: diySub },
-      { label: "מגזין", to: "/blog" },
-      { label: "שאלות ותשובות", to: "/faq" },
-      { label: "מועדון", to: "/club" },
-      { label: "צרו קשר", to: "/contact" },
+      { label: t("nav.home"), to: localized("/") },
+      { label: t("nav.story"), to: localized("/story") },
+      { label: t("nav.collections"), to: localized("/collections"), submenu: collectionsSub },
+      {
+        label: t("nav.materials"),
+        to: localized("/materials"),
+        submenu: [
+          { label: t("materialsSub.sunbrella"), to: localized("/materials/sunbrella") },
+          { label: t("materialsSub.aluminum"), to: localized("/materials/aluminum") },
+          { label: t("materialsSub.granitePorcelain"), to: localized("/materials/granite-porcelain") },
+          { label: t("materialsSub.polystone"), to: localized("/materials/polystone") },
+        ],
+      },
+      { label: t("nav.projects"), to: localized("/projects") },
+      {
+        label: t("nav.diy"),
+        to: localized("/diy"),
+        submenu: [
+          { label: t("diySub.designer"), to: localized("/designer") },
+          { label: t("diySub.fabric"), to: localized("/fabric") },
+          { label: t("diySub.ar"), to: localized("/ar") },
+          { label: t("diySub.questionnaire"), to: localized("/questionnaire") },
+        ],
+      },
+      { label: t("nav.blog"), to: localized("/blog") },
+      { label: t("nav.faq"), to: localized("/faq") },
+      { label: t("nav.club"), to: localized("/club") },
+      { label: t("nav.contact"), to: localized("/contact") },
     ],
-    [collectionsSub]
+    [collectionsSub, t, localized]
   );
 
 
@@ -116,7 +131,7 @@ const Header = () => {
 
         {/* Logo (right side in RTL) */}
         <div className="hidden lg:flex items-center shrink-0">
-          <Link to="/" aria-label="Aluma">
+          <Link to={localized("/")} aria-label="Aluma">
             <img src={alumaLogo} alt="Aluma" className="h-7 xl:h-8 w-auto" />
           </Link>
         </div>
@@ -124,7 +139,7 @@ const Header = () => {
         {/* Mobile logo. Sits on the right like the desktop one — it used to
             carry `order-last`, which flipped the brand mark to the left below
             the lg breakpoint. `me-auto` pushes the hamburger to the far edge. */}
-        <Link to="/" className="lg:hidden shrink-0 me-auto" aria-label="Aluma">
+        <Link to={localized("/")} className="lg:hidden shrink-0 me-auto" aria-label="Aluma">
           <img src={alumaLogo} alt="Aluma" className="h-7 md:h-8 w-auto" />
         </Link>
 
@@ -156,7 +171,9 @@ const Header = () => {
                     the click — קולקציות goes to the unfiltered page. */}
                 <NavLink
                   to={link.to}
-                  end={link.to === "/"}
+                  // Both language roots are "home"; without /en here the home
+                  // item would read as active on every English page.
+                  end={link.to === "/" || link.to === "/en"}
                   className={({ isActive }) =>
                     `${navItem} ${isActive || isOpen ? navActive : navRest}`
                   }
@@ -198,6 +215,12 @@ const Header = () => {
             );
           })}
         </nav>
+
+        {SITE.enableEnglish && (
+          <div className="hidden lg:flex shrink-0">
+            <LanguageSwitcher />
+          </div>
+        )}
 
         {/* WhatsApp — last child, so RTL places it at the far left of the bar */}
         <a
@@ -252,7 +275,7 @@ const Header = () => {
             >
               <X className="h-6 w-6" />
             </button>
-            <Link to="/" onClick={() => setOpen(false)} aria-label="Aluma">
+            <Link to={localized("/")} onClick={() => setOpen(false)} aria-label="Aluma">
               <img src={alumaLogo} alt="Aluma" className="h-7 w-auto" />
             </Link>
           </div>

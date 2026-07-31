@@ -170,35 +170,75 @@ needs a trailing "view all" link, add it to `SectionHeading`, not here.
 
 ---
 
-## PHASE 4 — i18n plumbing (switcher stays hidden)
+## PHASE 4 — i18n plumbing ✅ (switcher stays hidden)
 
-Do the plumbing **before** the page rebuilds, so each rebuilt page is authored
-with `t()` keys natively instead of being touched twice.
+- [x] Installed `i18next`, `react-i18next`, `i18next-browser-languagedetector`.
+- [x] `src/i18n/index.ts` — both catalogues imported eagerly (a few KB each; an
+      HTTP backend would add a round trip and a flash of raw keys to save
+      nothing). **Language comes from the URL, not a detector** — `/en/…` is
+      English, everything else Hebrew — so a shared link always opens in the
+      language it was written in, and it matches what `index.html` reads.
+- [x] `src/routes.tsx` — the public route table, extracted with **relative**
+      paths and mounted twice in `App.tsx` under `LangShell` (`/en` first, or
+      the Hebrew catch-all would swallow it). Admin stays outside the tree.
+- [x] `index.html` — inline pre-mount script sets `lang`/`dir` for `/en`.
+- [x] `SEO.tsx` — per-language canonical, `og:locale`, and hreflang
+      `he-IL`/`en`/`x-default`, all gated on `SITE.enableEnglish` so crawlers
+      aren't pointed at a half-translated tree.
+- [x] `useLocalizedPath` / `localizePath` + `LanguageSwitcher` (globe + names in
+      their own script, **no flags**, real `<a href>`, 44px hit area, links to
+      the *same page* in the other language). Header and Footer migrated to
+      `t()` + localised links; switcher slotted into both, gated off.
+- [x] **34 tests passing**, including 21 that match the real route config: both
+      trees resolve, `/enquiries` is not mistaken for English, the catch-all
+      still fires, and no child path is absolute (an absolute one would silently
+      make `/en` unreachable).
 
-- [ ] Install `i18next react-i18next i18next-browser-languagedetector`.
-- [ ] `src/i18n/index.ts` — eager JSON imports (2 languages, a few KB; skip
-      http-backend), `fallbackLng: 'he'`, detector order `['path','localStorage','navigator']`.
-- [ ] Namespaces under `src/i18n/locales/{he,en}/`: common, home, about,
-      collections, journal, projects, diy, contact, faq, club, legal.
-- [ ] **Extract the public route table from `App.tsx` → `src/routes.tsx` as a
-      pure move first** (no behaviour change, its own commit). Then mount it
-      twice under a `LangShell`: `/` = he/rtl, `/en` = en/ltr. Admin stays
-      outside the language tree.
-- [ ] `index.html` — inline script *before* React mounts that sets `lang`/`dir`
-      from the path or localStorage. Without it the first paint is LTR and
-      visibly snaps.
-- [ ] `SEO.tsx` — per-language canonical + hreflang `he-IL` / `en` /
-      **`x-default`** (>60% of multilingual sites omit x-default).
-- [ ] `LocalizedLink` + `useLocalizedPath`; migrate Header/Footer strings.
-- [ ] `LanguageSwitcher.tsx` — **globe icon + language names in their own script
-      (עברית / English). No flags** (flags mean countries, not languages — and
-      "which flag for English?" has no good answer). Real `<a href>` elements,
-      not buttons, so they're crawlable. 44px hit area. Navbar inline-end +
-      footer repeat. Hidden behind `SITE.enableEnglish` until Phase 14.
+⚠️ **Known and intentional:** only Header, Footer and SEO speak `t()` so far.
+Every other page still has hardcoded Hebrew and hardcoded `to="/…"` links, so
+inside `/en` those links jump back to the Hebrew tree. That is exactly why
+`SITE.enableEnglish` is `false` — nobody can reach `/en` in the UI. Phase 14
+sweeps the rest and only then flips the flag.
 
 ---
 
-## PHASE 5 — Homepage restructure
+## PHASE 5 — Homepage restructure ✅ (one item deferred)
+
+**Shipped:** hero → **CategoryMosaic** → ConsultCTA → ReviewsBand → ClubCard →
+footer. `AboutBrief`, `ProjectsGrid`, `CategoryIcons`, `Newsletter`,
+`Testimonials`, `testimonials-column` and `MaterialsBrief` all deleted — every
+one was orphaned by the new composition. Homepage JS fell from 226KB to 216KB
+and the framer-motion rail is gone from the critical path.
+
+- [x] **`CategoryMosaic`** — replaces a rail of eight square icons that squashed
+      to ~73px each at 1024px, where the label wrapped to three lines and the
+      furniture was unreadable. Tile widths are arranged so every desktop row
+      sums to exactly four columns (2+1+1, 1+1+2, 2+2); rows align without
+      masonry maths because grid items stretch to their row height, so the
+      aspect ratios only set each tile's natural proportion. Label over the
+      photo on a scrim, image (never the card) scales 1.04 on hover,
+      reduced-motion respected, arrows flip with `ltr:-scale-x-100`.
+- [x] **`ReviewsBand`** — 3 columns of plain typography on a tinted panel; no
+      cards, stars, avatars or giant quote glyphs. Reads `site_reviews`, falls
+      back to the flagged placeholders while empty.
+- [x] **`site_reviews` migration** — RLS: public reads published rows only,
+      admins read and write everything.
+- [x] **`ClubCard`** — underline field, one input, 17px (16px is the iOS
+      zoom-on-focus threshold and the zoom does not undo itself), arrow submit
+      at `end-0`, inline success instead of a toast.
+- [x] **`ConsultCTA`** — quiet band, honest copy: a person gets back to you.
+- [ ] **Deferred: `/admin/reviews` CRUD screen.** The table and RLS exist and
+      the band reads them, so reviews are enterable *today* via the Supabase
+      Table Editor — `docs/GUIDE.md` has the click-by-click. A friendlier admin
+      screen (clone `AdminBlog`) is the remaining nicety, not a blocker.
+- [ ] **Category taxonomy needs reconciling.** The eight marketing categories
+      (מערכות ישיבה, שולחנות אש, …) do not map onto the CMS collection slugs,
+      so every tile currently links to the unfiltered `/collections`. Linking to
+      `?cat=<unknown>` would land visitors on an *empty* results page, which is
+      worse. Set each category's `cat` field in `CategoryMosaic.tsx` once the
+      real collections exist.
+
+<details><summary>Original spec (kept for reference)</summary>
 
 Client's verdict: **categories are the product.** Order becomes hero →
 categories → reviews → consultation CTA → club card → footer. Materials,
@@ -232,9 +272,21 @@ projects and the story brief all come off the homepage.
       at `inset-inline-end` with `rtl:-scale-x-100`, centred `max-w-[520px]`,
       **one field only**, inline success state (not a toast). Keeps the existing
       `newsletter_subscribers` insert and its 23505-as-success handling.
-- [ ] Recompose `Index.tsx`; delete `AboutBrief` + `ProjectsGrid`;
-      `MaterialsBrief` dies in Phase 7. Apply `SectionRule` per background tone.
-- [ ] Verify CLS < 0.1 — every mosaic image needs an explicit aspect box.
+- Recompose `Index.tsx`; delete `AboutBrief` + `ProjectsGrid`;
+  `MaterialsBrief` dies in Phase 7. Apply `SectionRule` per background tone.
+- Verify CLS < 0.1 — every mosaic image needs an explicit aspect box.
+
+</details>
+
+**Note on the "two 4:5 tiles + gap ≈ 8:5" claim in the spec:** it is only
+approximate — with a 24px gap the wide tile is ~15px taller than two standard
+ones. It does not matter, because grid items stretch to their row height by
+default, so the row takes the max and every tile fills its cell. No masonry, no
+manual row sizing.
+
+**`MaterialsBrief` was deleted here, not in Phase 7** — the new composition
+orphaned it immediately, and the Journal's materials strip is a different thing
+entirely (small light square tiles, no glow). It is in git history if needed.
 
 ---
 
@@ -554,7 +606,30 @@ Full instructions for each are in **`docs/GUIDE.md` Part 1**.
 
 ## STATUS SUMMARY
 
-*Last updated: 2026-07-31 — Phases 1–3 complete*
+*Last updated: 2026-07-31 — Phases 1–5 complete*
+
+**Phases 1–3 are merged to `main` and pushed.** Phases 4–5 are on branch
+`redesign/phase-4-i18n`.
+
+- **Phase 4 (i18n plumbing).** Route table extracted to `src/routes.tsx` with
+  relative paths and mounted twice — `/` for Hebrew, `/en` for English — under
+  `LangShell`. Language is read from the URL, not a browser detector. Switcher
+  built (globe + own-script names, no flags, real anchors) but **gated off**:
+  only Header/Footer/SEO speak `t()` so far, so `/en` still leaks into Hebrew
+  pages. 21 routing tests lock the structure.
+- **Phase 5 (homepage).** hero → **CategoryMosaic** → ConsultCTA → ReviewsBand
+  → ClubCard → footer. Seven orphaned components deleted; homepage JS 226→216KB.
+  `site_reviews` table added so reviews are real content — the fabricated
+  placeholders retire themselves the moment three real rows exist.
+
+**Next up: Phase 6 (About page).** Extract `TeamPortraits` verbatim *first*,
+then rebuild around it. Needs real facts from the owner (founding year, the
+family's own words, 3 proof numbers) — build the structure with clearly-marked
+placeholders and flag them.
+
+---
+
+*Earlier summary (Phases 1–3):*
 
 **Where we are:** Phases 1, 2 and 3 are done and committed on branch
 `redesign/phase-1-stabilize` (3 commits). `npm run build`, `npx tsc --noEmit`
