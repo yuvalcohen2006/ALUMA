@@ -3,17 +3,12 @@
 # ORDER MATTERS: every 301 must sit ABOVE the catch-all, or the SPA fallback
 # swallows it and the rule never fires.
 #
-# These handle crawlers and people arriving on an old URL from a bookmark or a
-# search result. The same moves also exist as in-app <Navigate> routes in
-# src/routes.tsx, which is what catches link clicks inside the SPA — those
-# never reach the edge at all. Both layers are needed.
-
-# Renamed pages
-/story        /about      301
-/en/story     /en/about   301
+# These catch crawlers and people arriving on an old URL. The same moves also
+# exist as in-app <Navigate> routes in src/routes.tsx, which is what handles
+# link clicks inside the SPA — those never reach the edge at all.
 
 # Materials + magazine merged into "שווה לדעת". The material DETAIL pages stay
-# live — only the index is retired — so /materials/* must NOT be caught here.
+# live, so /materials/* must NOT be caught here.
 /materials       /journal      301
 /en/materials    /en/journal   301
 /blog            /journal      301
@@ -21,21 +16,18 @@
 /blog/*          /journal/:splat      301
 /en/blog/*       /en/journal/:splat   301
 
-# Retired page (dropped from the nav; old links still land somewhere sensible)
+# Briefly-lived URLs from the restructure that was rolled back.
+/about        /story      301
+/en/about     /en/story   301
+/consult      /questionnaire      301
+/en/consult   /en/questionnaire   301
+/diy/scene    /designer   301
+/diy/fabric   /fabric     301
+/diy/ar       /ar         301
+
+# Retired page
 /before-after     /projects     301
 /en/before-after  /en/projects  301
-
-# Build-your-own stations nested under the hub
-/designer       /diy/scene      301
-/en/designer    /en/diy/scene   301
-/fabric         /diy/fabric     301
-/en/fabric      /en/diy/fabric  301
-/ar             /diy/ar         301
-/en/ar          /en/diy/ar      301
-
-# The questionnaire, renamed to what it actually is
-/questionnaire     /consult      301
-/en/questionnaire  /en/consult   301
 
 # Duplicate routes collapsed onto one canonical URL each
 /auth        /club/auth          301

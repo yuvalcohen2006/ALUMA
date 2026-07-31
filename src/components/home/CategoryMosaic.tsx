@@ -1,7 +1,4 @@
 import { Link } from "react-router-dom";
-import { ArrowLeft } from "lucide-react";
-import SectionHeading from "@/components/SectionHeading";
-import Reveal from "@/components/Reveal";
 import { useLocalizedPath } from "@/lib/useLocalizedPath";
 import loungeSet from "@/assets/categories/lounge-set.jpg";
 import sunbed from "@/assets/categories/sunbed.jpg";
@@ -12,122 +9,125 @@ import barChair from "@/assets/categories/bar-chair.jpg";
 import diningChair from "@/assets/categories/dining-chair.jpg";
 import umbrella from "@/assets/categories/umbrella.jpg";
 
-type Category = {
+type Tile = {
   id: string;
   label: string;
-  /** One-line teaser, shown over the photo on the wide tiles only. */
-  teaser?: string;
+  tagline: string;
   img: string;
-  /** Wide tiles span two columns and carry the teaser. */
+  /** Full-bleed row of its own, rather than sharing one with a sibling. */
   wide?: boolean;
   /**
-   * Collection slug to pre-filter on. Left unset until the real catalogue
-   * exists — these marketing categories don't map onto the CMS collection
-   * slugs yet, and linking to `?cat=<unknown>` lands the visitor on an empty
-   * results page, which is worse than landing on the full catalogue.
+   * Reserved for a future tile shot against a genuinely dark sky. Every current
+   * photograph has a bright top — even the dusk fire-table one, whose sky is
+   * pale blue over a white villa — so they all take dark type on a light scrim.
+   * Setting this on a bright photo makes the headline disappear.
    */
+  ink?: "dark" | "light";
+  /** Collection slug to pre-filter on, once the catalogue taxonomy matches. */
   cat?: string;
 };
 
-/**
- * Widths are deliberately arranged so every desktop row sums to exactly four
- * columns — 2+1+1, 1+1+2, 2+2 — which is what keeps the mosaic reading as a
- * designed grid rather than a masonry wall with ragged edges.
- */
-const categories: Category[] = [
-  { id: "lounge", label: "מערכות ישיבה", teaser: "סלוני חוץ מודולריים", img: loungeSet, wide: true },
-  { id: "sunbed", label: "מיטות שיזוף", img: sunbed },
-  { id: "dining", label: "פינות אוכל", img: diningSet },
-  { id: "coffee", label: "שולחנות קפה", img: coffeeTable },
-  { id: "bar", label: "כסאות בר", img: barChair },
-  { id: "fire", label: "שולחנות אש", teaser: "חום ואור לערבים בחוץ", img: fireTable, wide: true },
-  { id: "chairs", label: "כסאות פינות אוכל", teaser: "לשבת בנוח, גם בחוץ", img: diningChair, wide: true },
-  { id: "accessories", label: "אקססוריז", teaser: "שמשיות, כריות ותאורה", img: umbrella, wide: true },
+const tiles: Tile[] = [
+  { id: "lounge", label: "מערכות ישיבה", tagline: "סלון שממשיך אל מחוץ לבית.", img: loungeSet, wide: true },
+  { id: "fire", label: "שולחנות אש", tagline: "הערב לא נגמר עם השקיעה.", img: fireTable, wide: true },
+  { id: "dining", label: "פינות אוכל", tagline: "ארוחות ארוכות, מתחת לשמיים.", img: diningSet },
+  { id: "sunbed", label: "מיטות שיזוף", tagline: "המקום הכי שקט בבית.", img: sunbed },
+  { id: "coffee", label: "שולחנות קפה", tagline: "אבן שנשארת יפה שנים.", img: coffeeTable },
+  { id: "bar", label: "כסאות בר", tagline: "לעמוד ליד, ולא למהר.", img: barChair },
+  { id: "chairs", label: "כסאות פינות אוכל", tagline: "לשבת בנוח, גם בחוץ.", img: diningChair },
+  { id: "accessories", label: "אקססוריז", tagline: "צל, כריות ותאורה.", img: umbrella },
 ];
 
 /**
- * The home page's centrepiece: the catalogue, shown as photographs.
+ * The home page's catalogue, as a stack of full-bleed tiles.
  *
- * Replaces a rail of eight small square icons that squashed to ~73px each on a
- * 1024px screen — at that size the label wrapped to three lines and the
- * furniture was unreadable, which is the opposite of "here is the range".
+ * Deliberately has NO section heading. Apple's home page carries none either —
+ * a tile whose own headline is "iPhone" doesn't need a "Products" label above
+ * it, and neither does one that says "מערכות ישיבה". A heading here would only
+ * announce what the pictures already say.
  *
- * Rows align without any masonry maths: grid items stretch to their row's
- * height by default, so the aspect ratios only set each tile's natural
- * proportion and the image fills whatever cell it lands in.
+ * The geometry is Apple's, from their own stylesheet: fixed tile heights rather
+ * than viewport units (vh jitters as mobile browsers show and hide their URL
+ * bar), a 12px seam between tiles in the page canvas colour, square corners,
+ * and no max-width — the tiles run edge to edge.
+ *
+ * Where this departs from Apple, it follows what luxury furniture brands do
+ * instead: the copy sits ON the photograph rather than in a white band above
+ * it, because furniture photography supplies its own negative space, and the
+ * links are ink rather than Apple's blue.
  */
+const TILE_H = "h-[500px] md:h-[490px] lg:h-[580px]";
+
 const CategoryMosaic = () => {
   const { to } = useLocalizedPath();
 
   return (
-    <section className="section-pad bg-secondary">
-      <div className="container-luxury">
-        <Reveal className="mb-12 md:mb-16 flex flex-col items-center">
-          {/* Charcoal, not terracotta: this heading sits on sand beige. */}
-          <SectionHeading tone="charcoal" subtitle="מסלוני חוץ ופינות אוכל ועד שולחנות אש — כל מה שהופך חצר למקום שנשארים בו.">
-            הקטגוריות שלנו
-          </SectionHeading>
-        </Reveal>
-
-        <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6 max-w-[1440px] mx-auto">
-          {categories.map((c, i) => (
+    // The canvas colour shows through the 12px seams, so the gaps read as
+    // hairlines rather than as holes.
+    <section className="bg-background">
+      <ul className="flex flex-wrap gap-3">
+        {tiles.map((t, i) => {
+          const light = t.ink === "light";
+          return (
             <li
-              key={c.id}
-              className={c.wide ? "sm:col-span-2" : ""}
+              key={t.id}
+              className={t.wide ? "w-full" : "w-full md:w-[calc(50%-6px)]"}
             >
-              <Reveal delay={(i % 4) * 70}>
-                <Link
-                  to={c.cat ? to(`/collections?cat=${c.cat}`) : to("/collections")}
-                  className="group relative block h-full overflow-hidden rounded-[14px] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring"
+              <Link
+                to={t.cat ? to(`/collections?cat=${t.cat}`) : to("/collections")}
+                className={`group relative block w-full overflow-hidden ${TILE_H} focus-visible:outline-2 focus-visible:outline-offset-[-4px] focus-visible:outline-ring`}
+              >
+                <img
+                  src={t.img}
+                  alt={t.label}
+                  // The first two tiles are above the fold on most screens.
+                  loading={i < 2 ? "eager" : "lazy"}
+                  decoding="async"
+                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-[900ms] ease-[cubic-bezier(0.28,0.11,0.32,1)] group-hover:scale-[1.03] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+                />
+
+                {/* A scrim only where the words are, so the photograph stays
+                    the subject. */}
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-x-0 top-0 h-1/2"
+                  style={{
+                    background: light
+                      ? "linear-gradient(to bottom, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.15) 55%, transparent 100%)"
+                      : "linear-gradient(to bottom, rgba(255,255,255,0.72) 0%, rgba(255,255,255,0.25) 55%, transparent 100%)",
+                  }}
+                />
+
+                {/* Top-centred, like Apple: 52px down on desktop, 42px below
+                    that. The photograph fills the rest of the tile. */}
+                <div
+                  className={`relative z-10 text-center px-6 pt-[42px] lg:pt-[52px] ${
+                    light ? "text-background" : "text-foreground"
+                  }`}
                 >
-                  <div className={c.wide ? "aspect-[8/5]" : "aspect-[4/5]"}>
-                    <img
-                      src={c.img}
-                      alt={c.label}
-                      width={1536}
-                      height={1536}
-                      // The first row is above the fold on most screens.
-                      loading={i < 3 ? "eager" : "lazy"}
-                      decoding="async"
-                      draggable={false}
-                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-[600ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
-                    />
-                  </div>
-
-                  {/* Scrim, not a solid bar: the photograph is the pitch, so the
-                      label has to sit on it without covering the furniture. */}
-                  <div
-                    aria-hidden="true"
-                    className="absolute inset-0 transition-opacity duration-[600ms] opacity-90 group-hover:opacity-100"
-                    style={{
-                      background:
-                        "linear-gradient(to top, rgba(0,0,0,0.58) 0%, rgba(0,0,0,0.16) 35%, transparent 65%)",
-                    }}
-                  />
-
-                  <div className="absolute bottom-0 start-0 end-0 p-5 md:p-6 flex items-end gap-2 text-background">
-                    <div className="min-w-0">
-                      <h3 className="font-display font-medium text-[21px] md:text-[26px] leading-tight">
-                        {c.label}
-                      </h3>
-                      {c.teaser && (
-                        <p className="mt-1 text-[15px] leading-snug text-background/75">
-                          {c.teaser}
-                        </p>
-                      )}
-                    </div>
-                    {/* Points the reading direction: flipped under LTR. */}
-                    <ArrowLeft
-                      className="w-4 h-4 mb-1.5 shrink-0 transition-transform duration-500 group-hover:-translate-x-1 ltr:-scale-x-100 ltr:group-hover:translate-x-1 motion-reduce:transition-none"
-                      aria-hidden="true"
-                    />
-                  </div>
-                </Link>
-              </Reveal>
+                  <h2 className="font-display font-semibold text-[32px] lg:text-[40px] leading-[1.125] lg:leading-[1.1]">
+                    {t.label}
+                  </h2>
+                  <p
+                    className={`mt-1 text-[19px] lg:text-[21px] leading-[1.21] lg:leading-[1.238] ${
+                      light ? "text-background/80" : "text-foreground-soft"
+                    }`}
+                  >
+                    {t.tagline}
+                  </p>
+                  <span
+                    className={`mt-5 inline-block text-[19px] lg:text-[21px] underline-offset-[6px] decoration-1 group-hover:underline ${
+                      light ? "text-background" : "text-primary"
+                    }`}
+                  >
+                    לצפייה
+                  </span>
+                </div>
+              </Link>
             </li>
-          ))}
-        </ul>
-      </div>
+          );
+        })}
+      </ul>
     </section>
   );
 };

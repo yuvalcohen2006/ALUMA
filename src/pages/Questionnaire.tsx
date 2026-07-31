@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
 import Layout from "@/components/Layout";
 import SEO from "@/components/SEO";
 import PageHero from "@/components/PageHero";
@@ -50,28 +49,21 @@ const featureOptions = [
   "מצעים ושטיחים",
 ];
 
-/**
- * A one-line summary of the answers, stored alongside the lead so whoever picks
- * it up in the admin panel sees the shape of the request without opening every
- * field.
- *
- * This replaces a five-branch "recommendation engine" that named collections —
- * Pool, Soft Lines, Mediterranean, Skyline, Signature — which exist nowhere in
- * the catalogue, and which ignored three of the four things the form asks. A
- * real person reads these and answers properly.
- */
-const summarise = (a: Answers) =>
-  [a.space_type, a.space_size, a.style, a.timeline, a.features.join(", ")]
-    .filter(Boolean)
-    .join(" · ");
+const recommendFor = (a: Answers) => {
+  if (a.space_type === "אזור בריכה") return "קולקציית Pool, סטים עמידים בכלור עם בדי Sunbrella ושלדת אלומיניום מוקצף.";
+  if (a.style.includes("מינימליסטי")) return "קולקציית Soft Lines, סלוני חוץ נקיים בגווני אבן ולבן שמנת.";
+  if (a.style.includes("ים-תיכוני")) return "קולקציית Mediterranean, טראקוטה, פשתן וגוונים חמים.";
+  if (a.space_type.includes("גג")) return "קולקציית Skyline, מודולים גמישים לפנטהאוזים עם דגש על נוף.";
+  return "קולקציית Signature, סלוני חוץ בהתאמה אישית עם בדי Sunbrella ושלדת אלומיניום.";
+};
 
-const steps = ["המרחב", "סגנון ולוח זמנים", "מה לכלול", "פרטי קשר"];
+const steps = ["מרחב", "סגנון ולוח זמנים", "פיצ׳רים", "פרטי קשר"];
 
 const Questionnaire = () => {
   const [step, setStep] = useState(0);
   const [a, setA] = useState<Answers>(initial);
   const [busy, setBusy] = useState(false);
-  const [done, setDone] = useState(false);
+  const [done, setDone] = useState<string | null>(null);
   const { user } = useAuth();
 
   const update = <K extends keyof Answers>(k: K, v: Answers[K]) => setA((p) => ({ ...p, [k]: v }));
@@ -88,7 +80,7 @@ const Questionnaire = () => {
   const submit = async () => {
     setBusy(true);
     try {
-      const recommendation = summarise(a);
+      const recommendation = recommendFor(a);
       const { error } = await supabase.from("questionnaire_responses").insert({
         user_id: user?.id ?? null,
         contact_name: a.contact_name,
@@ -102,7 +94,7 @@ const Questionnaire = () => {
         recommendation,
       });
       if (error) throw error;
-      setDone(true);
+      setDone(recommendation);
       trackPixel("Lead", {
         content_name: "שאלון אפיון חכם",
         content_category: "Questionnaire",
@@ -118,14 +110,11 @@ const Questionnaire = () => {
   return (
     <Layout>
       <SEO
-        title="ייעוץ אישי | Aluma"
-        description="ספרו לנו על המרחב שלכם בכמה שאלות קצרות, ומעצב מהצוות יחזור אליכם עם המלצה אישית — בלי עלות ובלי התחייבות."
-        path="/consult"
+        title="שאלון אפיון חכם | Aluma"
+        description="ענו על 4 שאלות קצרות וקבלו המלצה אישית על קולקציית סלוני החוץ המתאימה למרחב שלכם."
+        path="/questionnaire"
       />
-      <PageHero
-        title="ייעוץ אישי"
-        subtitle="כמה שאלות קצרות על המרחב שלכם, ומעצב מהצוות חוזר אליכם עם המלצה אישית. בלי עלות, בלי התחייבות."
-      />
+      <PageHero title="שאלון חכם" />
 
       <section className="py-16 md:py-20">
         <div className="container-luxury max-w-2xl">
@@ -134,17 +123,14 @@ const Questionnaire = () => {
               <div className="w-14 h-14 bg-accent/10 rounded-sm flex items-center justify-center mx-auto mb-6">
                 <Check className="h-7 w-7 text-accent" />
               </div>
-              <h2 className="font-display text-2xl text-primary mb-4">קיבלנו, תודה</h2>
-              <p className="text-foreground text-lg mb-3 leading-relaxed">
-                מעצב מהצוות שלנו יעבור על מה שכתבתם ויחזור אליכם תוך 24 שעות עם
-                המלצה שמתאימה למרחב שלכם.
+              <h2 className="font-display text-2xl text-primary mb-4">ההמלצה שלנו עבורך</h2>
+              <p className="text-foreground text-lg mb-8 leading-relaxed">{done}</p>
+              <p className="text-sm text-muted-foreground mb-6">
+                נחזור אליך תוך 24 שעות לתאם פגישת אפיון ללא עלות.
               </p>
-              <p className="text-sm text-muted-foreground mb-8">
-                בינתיים — אתם מוזמנים להסתובב בקולקציות.
-              </p>
-              <Link to="/collections">
-                <Button>לקולקציות</Button>
-              </Link>
+              <a href="/collections">
+                <Button>צפייה בקולקציות</Button>
+              </a>
             </div>
           ) : (
             <div className="bg-background border border-border rounded-sm p-8 md:p-10 shadow-soft">

@@ -20,7 +20,7 @@ const ConversionCTA = ({
   eyebrow = "הצעד הבא",
   title,
   subtitle,
-  primaryHref = "/consult",
+  primaryHref = "/questionnaire",
   primaryLabel = "לקבלת הצעת מחיר אישית",
   whatsappMessage = "היי, שיחקתי עם הכלי באתר ואשמח לדבר על פרויקט.",
 }: ConversionCTAProps) => {

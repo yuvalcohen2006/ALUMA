@@ -130,7 +130,7 @@ const ContactPage = () => {
                   quiet link grammar the rest of the site uses, with the rule
                   growing from the right — the RTL start. */}
               <div className="flex flex-wrap items-center gap-x-8 gap-y-5 sm:shrink-0">
-                <ShineButton to="/consult">
+                <ShineButton to="/questionnaire">
                   לשאלון החכם
                   <ArrowLeft className="w-4 h-4" aria-hidden="true" />
                 </ShineButton>
