@@ -33,7 +33,7 @@ const Footer = () => {
               מקום לארח, להירגע, ולחיות את הרגעים היפים באמת.
             </p>
             <div className="flex gap-3 justify-center md:justify-end flex-row-reverse">
-              <a href="mailto:info@aluma.co.il" aria-label="Email" className={iconBox}>
+              <a href={`mailto:${SITE.email}`} aria-label="Email" className={iconBox}>
                 <Mail className="w-4 h-4" />
               </a>
               <a href="tel:+972504519062" aria-label="Phone" className={iconBox}>
@@ -164,11 +164,11 @@ const Footer = () => {
               </li>
               <li>
                 <a
-                  href="mailto:info@aluma.co.il"
+                  href={`mailto:${SITE.email}`}
                   className="flex items-center gap-3 justify-center md:justify-start hover:text-accent transition-smooth"
                 >
                   <Mail className="w-4 h-4 shrink-0" />
-                  <span dir="ltr">info@aluma.co.il</span>
+                  <span dir="ltr">{SITE.email}</span>
                 </a>
               </li>
               <li>

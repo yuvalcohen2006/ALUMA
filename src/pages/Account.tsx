@@ -10,9 +10,8 @@ import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
-import { useFavorites } from "@/hooks/useFavorites";
 import { toast } from "sonner";
-import { LogOut, Calendar, MapPin, Heart, ClipboardList, UserRound } from "lucide-react";
+import { LogOut, Calendar, MapPin, ClipboardList, UserRound } from "lucide-react";
 
 type Project = {
   id: string;
@@ -28,14 +27,6 @@ type Project = {
 
 type Profile = { full_name: string | null; phone: string | null };
 
-type FavProduct = {
-  id: string;
-  slug: string;
-  name: string;
-  tagline: string | null;
-  cover_url: string | null;
-};
-
 const statusLabels: Record<string, string> = {
   lead: "פנייה ראשונית",
   design: "תכנון ועיצוב",
@@ -47,11 +38,9 @@ const statusLabels: Record<string, string> = {
 
 const Account = () => {
   const { user, loading, signOut } = useAuth();
-  const { ids: favIds } = useFavorites();
   const nav = useNavigate();
   const [projects, setProjects] = useState<Project[]>([]);
   const [profile, setProfile] = useState<Profile>({ full_name: "", phone: "" });
-  const [favProducts, setFavProducts] = useState<FavProduct[]>([]);
   const [busy, setBusy] = useState(true);
   const [savingProfile, setSavingProfile] = useState(false);
 
@@ -79,22 +68,6 @@ const Account = () => {
       setBusy(false);
     })();
   }, [user]);
-
-  // Load favorite product details when favIds change
-  useEffect(() => {
-    if (!user) return;
-    if (favIds.size === 0) {
-      setFavProducts([]);
-      return;
-    }
-    (async () => {
-      const { data } = await supabase
-        .from("site_collection_products")
-        .select("id, slug, name, tagline, cover_url")
-        .in("id", Array.from(favIds));
-      setFavProducts((data as FavProduct[]) ?? []);
-    })();
-  }, [favIds, user]);
 
   const handleSignOut = async () => {
     await signOut();
@@ -125,7 +98,7 @@ const Account = () => {
 
   return (
     <Layout>
-      <SEO title="האזור האישי שלי | מועדון אלומה" description="מעקב הזמנה, מועדפים ופרטי חשבון." path="/club/dashboard" />
+      <SEO title="האזור האישי שלי | מועדון אלומה" description="מעקב הזמנה ופרטי חשבון." path="/club/dashboard" />
 
       <section className="pt-32 pb-6 md:pt-40 gradient-cream">
         <div className="container-luxury">
@@ -152,10 +125,6 @@ const Account = () => {
               <TabsTrigger value="orders" className="gap-2">
                 <ClipboardList className="w-4 h-4" />
                 ההזמנות שלי {projects.length > 0 && `(${projects.length})`}
-              </TabsTrigger>
-              <TabsTrigger value="favorites" className="gap-2">
-                <Heart className="w-4 h-4" />
-                המועדפים שלי {favProducts.length > 0 && `(${favProducts.length})`}
               </TabsTrigger>
               <TabsTrigger value="profile" className="gap-2">
                 <UserRound className="w-4 h-4" />
@@ -213,39 +182,6 @@ const Account = () => {
                         </div>
                       )}
                     </article>
-                  ))}
-                </div>
-              )}
-            </TabsContent>
-
-            {/* Favorites */}
-            <TabsContent value="favorites">
-              {favProducts.length === 0 ? (
-                <div className="bg-card border border-border rounded-sm p-10 text-center">
-                  <Heart className="w-8 h-8 text-muted-foreground mx-auto mb-3" />
-                  <p className="text-muted-foreground mb-4">עדיין לא סימנת מוצרים במועדפים.</p>
-                  <Button asChild>
-                    <Link to="/collections">גלה את הקולקציות</Link>
-                  </Button>
-                </div>
-              ) : (
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
-                  {favProducts.map((p) => (
-                    <Link
-                      key={p.id}
-                      to={`/collections/${p.slug}`}
-                      className="group bg-card border border-border rounded-sm overflow-hidden hover:shadow-luxury transition-smooth"
-                    >
-                      <div className="aspect-square bg-secondary overflow-hidden">
-                        {p.cover_url && (
-                          <img src={p.cover_url} alt={p.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
-                        )}
-                      </div>
-                      <div className="p-4">
-                        <h3 className="font-display text-base text-foreground group-hover:text-accent transition-smooth">{p.name}</h3>
-                        {p.tagline && <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{p.tagline}</p>}
-                      </div>
-                    </Link>
                   ))}
                 </div>
               )}

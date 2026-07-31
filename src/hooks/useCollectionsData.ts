@@ -56,18 +56,15 @@ export function useCollections() {
         gallery: Array.isArray(p.gallery) ? p.gallery : [],
       })) as DBProduct[];
 
-      // While the site is being designed, development runs on the placeholder
-      // catalogue — 20 products across 5 categories — rather than whatever few
-      // rows happen to be in the database. There is no point judging a grid,
-      // a carousel or a filter against two records.
+      // Live data is the default, everywhere. The placeholder catalogue (20
+      // products across 5 categories) is opt-in via VITE_USE_DEMO_DATA=1, for
+      // judging a grid or a filter against more than the two rows that happen
+      // to be in the database.
       //
-      // Production is never affected. Add `?live=1` to see the real database
-      // contents in development when reconnecting the CMS.
-      const wantsLive =
-        typeof window !== "undefined" &&
-        new URLSearchParams(window.location.search).has("live");
-
-      if (import.meta.env.DEV && !wantsLive) {
+      // This used to be inverted — dev discarded live data unless `?live=1` was
+      // in the URL — which meant uploading real products and still seeing the
+      // fake ones, with nothing to explain why.
+      if (import.meta.env.VITE_USE_DEMO_DATA === "1") {
         const { demoCollections, demoProducts } = await import("@/data/demoCollections");
         setCollections(demoCollections);
         setProducts(demoProducts);

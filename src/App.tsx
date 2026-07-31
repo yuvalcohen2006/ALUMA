@@ -7,7 +7,6 @@ import Index from "./pages/Index.tsx";
 import RouteFallback from "@/components/RouteFallback";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import { AuthProvider } from "@/hooks/useAuth";
-import { FavoritesProvider } from "@/hooks/useFavorites";
 import SiteTracker from "@/components/SiteTracker";
 import ScrollToTop from "@/components/ScrollToTop";
 import RoutePrefetcher from "@/components/RoutePrefetcher";
@@ -21,7 +20,6 @@ const Materials = lazy(() => import("./pages/Materials.tsx"));
 const MaterialDetail = lazy(() => import("./pages/MaterialDetail.tsx"));
 const Projects = lazy(() => import("./pages/Projects.tsx"));
 const ProjectDetail = lazy(() => import("./pages/ProjectDetail.tsx"));
-const BeforeAfterPage = lazy(() => import("./pages/BeforeAfter.tsx"));
 const FAQ = lazy(() => import("./pages/FAQ.tsx"));
 const Contact = lazy(() => import("./pages/Contact.tsx"));
 const AccessibilityPage = lazy(() => import("./pages/Accessibility.tsx"));
@@ -60,7 +58,6 @@ const App = () => (
       <TooltipProvider>
         <Sonner />
         <AuthProvider>
-          <FavoritesProvider>
           <BrowserRouter>
             <ScrollToTop />
             <RoutePrefetcher />
@@ -86,7 +83,7 @@ const App = () => (
                 <Route path="/materials/:slug" element={<MaterialDetail />} />
                 <Route path="/projects" element={<Projects />} />
                 <Route path="/projects/:slug" element={<ProjectDetail />} />
-                <Route path="/before-after" element={<BeforeAfterPage />} />
+                <Route path="/before-after" element={<Navigate to="/projects" replace />} />
                 <Route path="/blog" element={<Blog />} />
                 <Route path="/blog/:slug" element={<BlogPost />} />
                 <Route path="/questionnaire" element={<Questionnaire />} />
@@ -97,8 +94,9 @@ const App = () => (
                 <Route path="/club" element={<Club />} />
                 <Route path="/club/auth" element={<Auth />} />
                 <Route path="/club/dashboard" element={<Account />} />
-                <Route path="/auth" element={<Auth />} />
-                <Route path="/account" element={<Account />} />
+                {/* Legacy aliases — one page, one canonical URL. */}
+                <Route path="/auth" element={<Navigate to="/club/auth" replace />} />
+                <Route path="/account" element={<Navigate to="/club/dashboard" replace />} />
                 <Route path="/faq" element={<FAQ />} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/accessibility" element={<AccessibilityPage />} />
@@ -110,7 +108,6 @@ const App = () => (
               </Routes>
             </Suspense>
           </BrowserRouter>
-          </FavoritesProvider>
         </AuthProvider>
       </TooltipProvider>
     </QueryClientProvider>

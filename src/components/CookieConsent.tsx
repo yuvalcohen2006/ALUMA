@@ -25,18 +25,20 @@ const CookieConsent = () => {
 
   if (!visible) return null;
 
+  // bottom-24 from md up clears the WhatsApp FAB, which shares this corner
+  // (start-6) between md and lg. z-50 sits above both FABs (z-40).
   return (
     <div
       role="dialog"
       aria-live="polite"
       aria-label="הסכמה לעוגיות"
-      className="fixed inset-x-3 bottom-3 z-[60] md:inset-x-auto md:right-4 md:bottom-4 md:max-w-md"
+      className="fixed inset-x-3 bottom-3 z-50 md:inset-x-auto md:start-4 md:bottom-24 md:max-w-md"
     >
-      <div className="relative bg-background border border-primary/20 shadow-elegant rounded-sm p-4 md:p-5 text-right">
+      <div className="relative bg-background border border-primary/20 shadow-soft rounded-sm p-4 md:p-5 text-right">
         <button
           aria-label="סגירה"
           onClick={() => decide("declined")}
-          className="absolute top-2 left-2 text-muted-foreground hover:text-primary transition-smooth"
+          className="absolute top-2 end-2 text-muted-foreground hover:text-primary transition-smooth"
         >
           <X className="w-4 h-4" />
         </button>

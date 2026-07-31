@@ -47,7 +47,6 @@
     --footer: 0 0% 18%;
 
     /* Cream — warm beige used for title/text dividers (visible on warm-white AND sand) */
-    --cream: 34 30% 80%;
 
     /* Typography — two faces only. Titles: Heebo (light). Running text: Assistant. */
     --font-display: 'Heebo', system-ui, sans-serif;
@@ -60,6 +59,18 @@
 
     /* Solid sand — NEVER a gradient between the neutral backgrounds (clean lines only) */
     --gradient-cream: hsl(34 34% 87%);
+
+    /* Section dividers, one value per surface — see SectionRule.tsx. Tuned by
+       eye against each background: a hairline under ~0.08 disappears on cheap
+       panels, and over ~0.14 on a light surface reads as a table border. */
+    --rule-on-light: rgb(0 0 0 / 0.10);   /* warm white #F8F6F2 */
+    --rule-on-tinted: rgb(0 0 0 / 0.09);  /* sand #E9DFD2 */
+    --rule-on-dark: rgb(255 255 255 / 0.14); /* charcoal #2F2F2F */
+    /* The brand-coloured mark, for rules that belong to a title rather than
+       separating a section: the short mark under a centred heading, and the
+       title-width rule in PageHero. */
+    --rule-accent: hsl(var(--primary) / 0.55);
+    --rule-accent-on-dark: hsl(var(--background) / 0.45);
 
     --shadow-luxury: 0 20px 60px -20px hsl(0 0% 18% / 0.22);
     --shadow-soft: 0 4px 20px -4px hsl(0 0% 18% / 0.10);
@@ -125,15 +136,30 @@
   }
 }
 
-@layer utilities {
+@layer base {
+  /* Lives in `base`, not `utilities`, on purpose. Tailwind emits user
+     utilities AFTER its own, so as a utility this rule silently beat every
+     `font-bold` / `font-medium` / `tracking-*` placed beside it — every
+     section title on the site was rendering at 400 instead of 700. In the
+     base layer it still out-specifies the bare `h1`/`h2` element rules
+     (0,1,0 vs 0,0,1), so headings look exactly as before, but a weight or
+     tracking utility on the same element now wins. */
   .font-display {
     font-family: var(--font-display);
     font-weight: 400;
     letter-spacing: -0.005em;
   }
+}
 
+@layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+
+  /* One vertical rhythm for every full-width section. Sections that set their
+     own py-* are legacy; move them onto this as they're rebuilt. */
+  .section-pad {
+    padding-block: clamp(56px, 9vw, 120px);
   }
 
   /* Running text. One size for every paragraph a visitor actually reads —
@@ -200,18 +226,6 @@
   }
   @media (prefers-reduced-motion: reduce) {
     .animate-rise-in { animation: none; }
-  }
-
-  /* Gentle down-nudge for the hero scroll cue (keeps horizontal centering) */
-  @keyframes scroll-nudge {
-    0%, 100% { transform: translate(-50%, 0); }
-    50% { transform: translate(-50%, 8px); }
-  }
-  .scroll-cue {
-    animation: scroll-nudge 2s ease-in-out 1.6s infinite;
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .scroll-cue { animation: none; }
   }
 
   /* Hero logo: a soft left→right reveal. A wide gradient mask slides across the

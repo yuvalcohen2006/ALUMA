@@ -7,7 +7,6 @@ import Reveal from "@/components/Reveal";
 import FilterSidebar, { type FilterGroup } from "@/components/FilterSidebar";
 import { useFilterParams } from "@/hooks/useFilterParams";
 import { useCollections, type DBCollection, type DBProduct } from "@/hooks/useCollectionsData";
-import FavoriteButton from "@/components/FavoriteButton";
 
 const SITE = "https://alumaoutdoor.com";
 
@@ -97,8 +96,6 @@ const ProductCell = ({
       delay={(index % 3) * 80}
       className={`min-w-0 ${lead ? "col-span-2 sm:col-span-1" : ""}`}
     >
-      {/* `group` on the wrapper, not the Link, so the FavoriteButton is a
-          sibling of the anchor and hovering the caption still lifts the photo. */}
       <div className="group relative">
         <Link to={`/collections/${p.slug}`} className="block text-right">
           <div className="relative aspect-[4/3] overflow-hidden rounded-[14px] bg-secondary border border-border transition-all duration-500 ease-out group-hover:-translate-y-1 group-hover:shadow-luxury group-hover:border-primary/60">
@@ -150,16 +147,6 @@ const ProductCell = ({
             </div>
           )}
         </Link>
-
-        {/* `size="sm"` (32px): the default 40px is 34% of a 119px mobile photo.
-            `left-3` is physical on purpose — this is a positioned overlay, not
-            flow content, so it must not become a logical property. */}
-        <FavoriteButton
-          productId={p.id}
-          collectionSlug={p.slug}
-          size="sm"
-          className="absolute top-3 left-3 z-10"
-        />
       </div>
     </Reveal>
   );

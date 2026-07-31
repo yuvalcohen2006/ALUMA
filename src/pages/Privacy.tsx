@@ -1,6 +1,7 @@
 import Layout from "@/components/Layout";
 import SEO from "@/components/SEO";
 import PageHero from "@/components/PageHero";
+import { SITE } from "@/config/site";
 
 const PrivacyPage = () => {
   return (
@@ -72,8 +73,8 @@ const PrivacyPage = () => {
               בהתאם לחוק הגנת הפרטיות, התשמ״א-1981, עומדת לכם הזכות לעיין במידע
               האישי שמוחזק עליכם, לבקש את תיקונו או מחיקתו, ולהסיר עצמכם מרשימת
               דיוור. לפניות בנושא:{" "}
-              <a href="mailto:info@aluma.co.il" className="text-foreground underline hover:text-accent" dir="ltr">
-                info@aluma.co.il
+              <a href={`mailto:${SITE.email}`} className="text-foreground underline hover:text-accent" dir="ltr">
+                {SITE.email}
               </a>
               .
             </p>

@@ -8,6 +8,7 @@ import Reveal from "@/components/Reveal";
 import SectionHeading from "@/components/SectionHeading";
 import ShineButton from "@/components/ui/shine-button";
 import ShowroomBand from "@/components/contact/ShowroomBand";
+import { SITE } from "@/config/site";
 
 const breadcrumbs = {
   "@context": "https://schema.org",
@@ -54,7 +55,7 @@ const ContactPage = () => {
     <Layout>
       <SEO
         title="צרו קשר | Aluma, סלוני חוץ בעיצוב אישי"
-        description="ספרו לנו על הפרויקט שלכם, צוות Aluma חוזר אליכם להתאמה אישית מלאה. טלפון 050-451-9062, מייל info@aluma.co.il, אולם תצוגה ביציץ."
+        description={`ספרו לנו על הפרויקט שלכם, צוות Aluma חוזר אליכם להתאמה אישית מלאה. טלפון ${SITE.phone.display}, מייל ${SITE.email}, אולם תצוגה ביציץ.`}
         path="/contact"
         jsonLd={breadcrumbs}
       />

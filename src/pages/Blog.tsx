@@ -383,14 +383,10 @@ const Blog = () => {
           .order("published_at", { ascending: false });
         const rows = (data as Post[]) ?? [];
         if (cancelled) return;
-        // The blog table is empty, so in development fall back to the
-        // placeholder magazine — the page has nothing to lay out otherwise, and
-        // no cover images at all. Real rows always win; production never takes
-        // this path. `?live=1` forces the database.
-        const wantsLive =
-          typeof window !== "undefined" &&
-          new URLSearchParams(window.location.search).has("live");
-        if (import.meta.env.DEV && !wantsLive && rows.length === 0) {
+        // Fall back to the placeholder magazine only when the table is empty
+        // AND demo data is switched on — the page has nothing to lay out
+        // otherwise, and no cover images at all. Real rows always win.
+        if (import.meta.env.VITE_USE_DEMO_DATA === "1" && rows.length === 0) {
           const { demoPosts } = await import("@/data/demoBlog");
           setPosts(demoPosts as Post[]);
           return;

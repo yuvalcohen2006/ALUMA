@@ -75,7 +75,7 @@ and is being handled separately.
 
 **For now: just create an account and an API key. Skip the domain steps.**
 
-1. Sign up at **resend.com** with **yuval.cohen006@gmail.com** (test emails can
+1. Sign up at **resend.com** with **outdooraluma@gmail.com** (test emails can
    only be delivered to that address until a domain is verified).
 2. Sidebar → **API Keys** → **Create API Key**, name it `aluma-dev`,
    permission **Sending access**.
@@ -325,7 +325,7 @@ its dynamic import in `src/hooks/useCollectionsData.ts` to remove it entirely.
 | `RESEND_API_KEY` | Sending email | ⏳ waiting on the key |
 | `SEND_EMAIL_HOOK_SECRET` | Verifying auth-hook requests really came from Supabase | ⏳ waiting (Block B3) |
 | `RESEND_FROM` | Sender address | ✅ set to `Aluma <onboarding@resend.dev>` for testing |
-| `OWNER_EMAIL` | Where studio notifications land | ✅ set to `yuval.cohen006@gmail.com` for testing |
+| `OWNER_EMAIL` | Where studio notifications land | ⚠️ still set to a personal address — run `npx supabase secrets set OWNER_EMAIL=outdooraluma@gmail.com` |
 
 All `SUPABASE_*` secrets are auto-provisioned by the platform — you don't set those.
 

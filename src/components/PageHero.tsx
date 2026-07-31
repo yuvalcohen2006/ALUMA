@@ -31,8 +31,13 @@ const PageHero = ({ title, subtitle, filterSlot, dark = false }: PageHeroProps) 
             its rule and the filter trigger all sit against the same edge. The
             trigger is stacked under the title rather than opposite it, so it
             stays on the right without crowding the heading — and on the same
-            side as the drawer it opens. */}
-        <div className="flex flex-col items-end">
+            side as the drawer it opens.
+
+            items-START, not items-end: in a column flex the cross axis is the
+            INLINE axis, so under dir="rtl" `items-end` resolves to the LEFT
+            edge. That one word used to push the title, its rule and the filter
+            button to the wrong side of every interior page. */}
+        <div className="flex flex-col items-start">
           {/* Shrink-to-fit, so the rule (w-full of this wrapper) measures
               exactly as wide as the title. A title too long for the row wraps
               and the rule follows it rather than overflowing the page. */}
@@ -44,8 +49,15 @@ const PageHero = ({ title, subtitle, filterSlot, dark = false }: PageHeroProps) 
             >
               {title}
             </h1>
+            {/* Title-width, so it measures exactly as wide as the words and a
+                wrapping title takes the rule with it. Colour comes from the
+                shared accent token — same mark as the one under a centred
+                SectionHeading, so the site has one rule vocabulary. */}
             <span
-              className={`block w-full h-px mt-4 ${dark ? "bg-background/40" : "bg-primary/50"}`}
+              className="block w-full h-px mt-4"
+              style={{
+                background: dark ? "var(--rule-accent-on-dark)" : "var(--rule-accent)",
+              }}
               aria-hidden="true"
             />
           </div>

@@ -147,7 +147,10 @@ const MaterialsBrief = () => {
 
         {/* Info + controls */}
         <div className="mx-auto mt-10 md:mt-12 flex w-full max-w-4xl flex-col items-center justify-between gap-6 md:flex-row-reverse pointer-events-auto">
-          <div className="flex flex-1 flex-col items-center text-center md:items-end md:text-right min-h-[11rem] justify-center">
+          {/* items-START: the section is dir="rtl", so in a column flex
+              `items-end` resolved to the LEFT and left the text block hugging
+              the wrong edge while its lines stayed right-aligned inside it. */}
+          <div className="flex flex-1 flex-col items-center text-center md:items-start md:text-right min-h-[11rem] justify-center">
             <AnimatePresence mode="wait">
               <motion.div
                 key={activeItem.id}

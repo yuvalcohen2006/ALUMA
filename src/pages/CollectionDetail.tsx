@@ -7,7 +7,6 @@ import { ArrowLeft, ArrowRight, Check, Ruler, Layers } from "lucide-react";
 import NotFound from "./NotFound";
 import { supabase } from "@/integrations/supabase/client";
 import type { DBProduct } from "@/hooks/useCollectionsData";
-import FavoriteButton from "@/components/FavoriteButton";
 import { trackPixel } from "@/lib/pixel";
 
 const SITE = "https://alumaoutdoor.com";
@@ -25,14 +24,9 @@ const CollectionDetailPage = () => {
     setLoading(true);
     setLoadError(false);
 
-    // The collections page runs on the placeholder catalogue in development, so
-    // detail pages have to resolve from it too — otherwise every one of those
-    // products 404s the moment you click it. `?live=1` opts back into the
-    // database, and production never takes this path.
-    const wantsLive =
-      typeof window !== "undefined" &&
-      new URLSearchParams(window.location.search).has("live");
-    if (import.meta.env.DEV && !wantsLive) {
+    // Mirrors useCollectionsData: when the placeholder catalogue is switched on,
+    // detail pages must resolve from it too or every demo product 404s on click.
+    if (import.meta.env.VITE_USE_DEMO_DATA === "1") {
       const { demoProducts } = await import("@/data/demoCollections");
       const found = demoProducts.find((p) => p.slug === slug) ?? null;
       setItem(found);
@@ -185,13 +179,6 @@ const CollectionDetailPage = () => {
             <h1 className="font-display text-3xl sm:text-4xl md:text-5xl leading-tight text-primary">
               {item.name}
             </h1>
-            <FavoriteButton
-              productId={item.id}
-              collectionSlug={item.slug}
-              size="md"
-              variant="inline"
-              className="shrink-0 -mt-1"
-            />
           </div>
           {item.tagline && (
             <p className="text-[20px] leading-relaxed italic text-foreground-soft max-w-2xl mx-auto">

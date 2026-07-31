@@ -6,6 +6,7 @@ import CategoryIcons from "@/components/home/CategoryIcons";
 import ProjectsGrid from "@/components/home/ProjectsGrid";
 import Newsletter from "@/components/home/Newsletter";
 import SEO from "@/components/SEO";
+import { SITE } from "@/config/site";
 
 // Below-the-fold + pulls in framer-motion, so load them lazily to keep the
 // initial bundle light. Fixed-height fallbacks avoid layout shift.
@@ -20,7 +21,7 @@ const localBusiness = {
     "Aluma מתמחה בריהוט גן וריהוט חוץ יוקרתי בעיצוב אישי, סלוני חוץ, שולחנות גן ופינות אוכל מאלומיניום פרימיום, בדי Sunbrella ושיש גרניט פורצלן.",
   url: "https://alumaoutdoor.com/",
   telephone: "+972-50-451-9062",
-  email: "info@aluma.co.il",
+  email: SITE.email,
   image: "https://alumaoutdoor.com/og-image.jpg",
   address: {
     "@type": "PostalAddress",
@@ -84,7 +85,9 @@ const Index = () => {
       {/* ⚠️ Placeholder testimonials — fabricated demo content for preview only.
           Swap in real, attributed customer quotes before launch. See the banner
           in src/data/testimonials.ts. */}
-      <Suspense fallback={<div className="min-h-[700px] bg-background" />}>
+      {/* Fallback height matches the real section (py-24 + heading + mb-16 +
+          the 560–620px columns) so the page doesn't jump when the chunk lands. */}
+      <Suspense fallback={<div className="min-h-[860px] md:min-h-[900px] bg-background" />}>
         <Testimonials />
       </Suspense>
       <Newsletter />

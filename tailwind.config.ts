@@ -7,7 +7,14 @@ export default {
     container: {
       center: true,
       padding: "2rem",
+      // All five breakpoints, not just 2xl. Listing only "2xl" REPLACES the
+      // default screens map, which left the container with no max-width at
+      // all below 1400px — every 1280–1399px laptop rendered edge to edge.
       screens: {
+        sm: "640px",
+        md: "768px",
+        lg: "1024px",
+        xl: "1280px",
         "2xl": "1400px",
       },
     },
@@ -48,7 +55,6 @@ export default {
           foreground: "hsl(var(--card-foreground))",
         },
         footer: "hsl(var(--footer))",
-        cream: "hsl(var(--cream))",
       },
       fontFamily: {
         display: ['var(--font-display)'],
