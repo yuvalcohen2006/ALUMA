@@ -1,0 +1,47 @@
+{
+  "nav": {
+    "home": "Home",
+    "story": "Our Story",
+    "collections": "Collections",
+    "materials": "Materials",
+    "projects": "Projects",
+    "diy": "Build Your Own",
+    "blog": "Journal",
+    "faq": "Q&A",
+    "club": "Club",
+    "contact": "Contact",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "toggleSubmenu": "Toggle submenu"
+  },
+  "diySub": {
+    "designer": "Design a lounge",
+    "fabric": "Choose your fabric",
+    "ar": "AR, view in your space",
+    "questionnaire": "Personal consultation"
+  },
+  "materialsSub": {
+    "sunbrella": "Sunbrella fabric",
+    "aluminum": "Aluminium",
+    "granitePorcelain": "Granite porcelain",
+    "polystone": "PolyStone"
+  },
+  "footer": {
+    "quickLinks": "Quick links",
+    "ourMaterials": "Our materials",
+    "getInTouch": "Get in touch",
+    "rights": "All rights reserved.",
+    "accessibility": "Accessibility",
+    "terms": "Terms",
+    "privacy": "Privacy"
+  },
+  "language": {
+    "switchLabel": "Language",
+    "he": "עברית",
+    "en": "English"
+  },
+  "actions": {
+    "whatsapp": "Contact us on WhatsApp",
+    "skipToContent": "Skip to main content"
+  }
+}

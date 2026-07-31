@@ -11,6 +11,18 @@
     <meta name="referrer" content="strict-origin-when-cross-origin" />
     <meta name="format-detection" content="telephone=no" />
     <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+    <!-- Set lang/dir from the URL BEFORE React mounts. Without this an English
+         deep link paints right-to-left for a frame and then snaps into place,
+         which is far more noticeable than it sounds. The attributes above are
+         the Hebrew default; this only has to correct the /en case. -->
+    <script>
+      (function () {
+        if (/^\/en(\/|$)/.test(location.pathname)) {
+          document.documentElement.lang = "en";
+          document.documentElement.dir = "ltr";
+        }
+      })();
+    </script>
     <!-- Per-page canonical is set at runtime by react-helmet (src/components/SEO.tsx).
          No static canonical here, a hardcoded href="/" would mislabel every subpage as the homepage. -->
 

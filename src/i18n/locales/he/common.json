@@ -1,0 +1,47 @@
+{
+  "nav": {
+    "home": "דף הבית",
+    "story": "הסיפור שלנו",
+    "collections": "קולקציות",
+    "materials": "חומרים",
+    "projects": "פרויקטים",
+    "diy": "עשה זאת בעצמך",
+    "blog": "מגזין",
+    "faq": "שאלות ותשובות",
+    "club": "מועדון",
+    "contact": "צרו קשר",
+    "openMenu": "פתח תפריט",
+    "closeMenu": "סגור תפריט",
+    "toggleSubmenu": "פתח/סגור"
+  },
+  "diySub": {
+    "designer": "עצבו סלון",
+    "fabric": "בחרו את הבד",
+    "ar": "AR, תצוגה במרחב",
+    "questionnaire": "שאלון חכם"
+  },
+  "materialsSub": {
+    "sunbrella": "בד Sunbrella",
+    "aluminum": "אלומיניום",
+    "granitePorcelain": "שיש גרניט פורצלן",
+    "polystone": "PolyStone"
+  },
+  "footer": {
+    "quickLinks": "מעבר מהיר",
+    "ourMaterials": "החומרים שלנו",
+    "getInTouch": "יצירת קשר",
+    "rights": "כל הזכויות שמורות.",
+    "accessibility": "נגישות",
+    "terms": "תקנון",
+    "privacy": "פרטיות"
+  },
+  "language": {
+    "switchLabel": "שפה",
+    "he": "עברית",
+    "en": "English"
+  },
+  "actions": {
+    "whatsapp": "צרו קשר בוואטסאפ",
+    "skipToContent": "דלגו לתוכן הראשי"
+  }
+}

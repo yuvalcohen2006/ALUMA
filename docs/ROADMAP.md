@@ -170,31 +170,35 @@ needs a trailing "view all" link, add it to `SectionHeading`, not here.
 
 ---
 
-## PHASE 4 — i18n plumbing (switcher stays hidden)
+## PHASE 4 — i18n plumbing ✅ (switcher stays hidden)
 
-Do the plumbing **before** the page rebuilds, so each rebuilt page is authored
-with `t()` keys natively instead of being touched twice.
+- [x] Installed `i18next`, `react-i18next`, `i18next-browser-languagedetector`.
+- [x] `src/i18n/index.ts` — both catalogues imported eagerly (a few KB each; an
+      HTTP backend would add a round trip and a flash of raw keys to save
+      nothing). **Language comes from the URL, not a detector** — `/en/…` is
+      English, everything else Hebrew — so a shared link always opens in the
+      language it was written in, and it matches what `index.html` reads.
+- [x] `src/routes.tsx` — the public route table, extracted with **relative**
+      paths and mounted twice in `App.tsx` under `LangShell` (`/en` first, or
+      the Hebrew catch-all would swallow it). Admin stays outside the tree.
+- [x] `index.html` — inline pre-mount script sets `lang`/`dir` for `/en`.
+- [x] `SEO.tsx` — per-language canonical, `og:locale`, and hreflang
+      `he-IL`/`en`/`x-default`, all gated on `SITE.enableEnglish` so crawlers
+      aren't pointed at a half-translated tree.
+- [x] `useLocalizedPath` / `localizePath` + `LanguageSwitcher` (globe + names in
+      their own script, **no flags**, real `<a href>`, 44px hit area, links to
+      the *same page* in the other language). Header and Footer migrated to
+      `t()` + localised links; switcher slotted into both, gated off.
+- [x] **34 tests passing**, including 21 that match the real route config: both
+      trees resolve, `/enquiries` is not mistaken for English, the catch-all
+      still fires, and no child path is absolute (an absolute one would silently
+      make `/en` unreachable).
 
-- [ ] Install `i18next react-i18next i18next-browser-languagedetector`.
-- [ ] `src/i18n/index.ts` — eager JSON imports (2 languages, a few KB; skip
-      http-backend), `fallbackLng: 'he'`, detector order `['path','localStorage','navigator']`.
-- [ ] Namespaces under `src/i18n/locales/{he,en}/`: common, home, about,
-      collections, journal, projects, diy, contact, faq, club, legal.
-- [ ] **Extract the public route table from `App.tsx` → `src/routes.tsx` as a
-      pure move first** (no behaviour change, its own commit). Then mount it
-      twice under a `LangShell`: `/` = he/rtl, `/en` = en/ltr. Admin stays
-      outside the language tree.
-- [ ] `index.html` — inline script *before* React mounts that sets `lang`/`dir`
-      from the path or localStorage. Without it the first paint is LTR and
-      visibly snaps.
-- [ ] `SEO.tsx` — per-language canonical + hreflang `he-IL` / `en` /
-      **`x-default`** (>60% of multilingual sites omit x-default).
-- [ ] `LocalizedLink` + `useLocalizedPath`; migrate Header/Footer strings.
-- [ ] `LanguageSwitcher.tsx` — **globe icon + language names in their own script
-      (עברית / English). No flags** (flags mean countries, not languages — and
-      "which flag for English?" has no good answer). Real `<a href>` elements,
-      not buttons, so they're crawlable. 44px hit area. Navbar inline-end +
-      footer repeat. Hidden behind `SITE.enableEnglish` until Phase 14.
+⚠️ **Known and intentional:** only Header, Footer and SEO speak `t()` so far.
+Every other page still has hardcoded Hebrew and hardcoded `to="/…"` links, so
+inside `/en` those links jump back to the Hebrew tree. That is exactly why
+`SITE.enableEnglish` is `false` — nobody can reach `/en` in the UI. Phase 14
+sweeps the rest and only then flips the flag.
 
 ---
 
