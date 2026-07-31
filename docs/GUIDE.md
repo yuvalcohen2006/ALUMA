@@ -142,19 +142,48 @@ code where anyone can read it, and it's safe to send.
 
 ## ⛔ BLOCKER 3 — Make yourself an admin
 
-**Why:** the admin panel (where you upload products) checks whether your user
-account is on an approved list. Being the owner isn't enough — there has to be
-a row in a permissions table saying so. Without it, every upload is rejected.
+**Why:** the admin panel (where you upload products) checks whether your account
+is on an approved list. Being the owner isn't enough — there has to be a row in
+a permissions table saying so. Without it, every upload is rejected.
 
-### Steps
+> ### ⚠️ Read this first — it will save you half an hour
+>
+> I checked your project's settings: **new accounts have to confirm their email
+> address before they can log in.** Email isn't working yet (that's Blocker 4).
+>
+> So if you sign up with an email and password right now, you'll be stuck
+> waiting for a confirmation message that can never arrive.
+>
+> **Two ways round it. Pick either.**
 
-1. First, **create an account on the website itself** — go to the site, click
-   מועדון → הצטרפות, and sign up with **outdooraluma@gmail.com**. This creates
-   your user.
-2. Now go to supabase.com/dashboard → the correct project.
-3. Far-left icon bar → click **SQL Editor**.
-4. Click **New query**.
-5. Paste this in exactly:
+### Option A — sign up with Google (easiest)
+
+Google sign-in is already switched on for your project, and it skips email
+confirmation entirely.
+
+1. Run the site — either `npm run dev` and open **http://localhost:8080**, or
+   use your `.pages.dev` address.
+2. Click **מועדון** → **הצטרפות** → the **Google** button.
+3. Sign in with **outdooraluma@gmail.com**.
+
+Then jump to "Make that account an admin" below.
+
+### Option B — email and password, then confirm it by hand
+
+1. Sign up on the site with **outdooraluma@gmail.com** and a password. It will
+   tell you to check your email. Ignore that — nothing will arrive yet.
+2. **supabase.com/dashboard** → the aluma project → **Authentication** (the
+   little person icon) → **Users**.
+3. Find your address in the list, click the **⋯** menu at the end of its row,
+   and choose **Confirm email** (sometimes shown as "Send confirmation" —
+   you want the one that confirms it outright).
+4. Now you can log in on the site.
+
+### Make that account an admin
+
+1. **supabase.com/dashboard** → the aluma project → **SQL Editor** →
+   **New query**.
+2. Paste this exactly, and click **Run**:
 
    ```sql
    insert into public.user_roles (user_id, role)
@@ -162,11 +191,18 @@ a row in a permissions table saying so. Without it, every upload is rejected.
    on conflict do nothing;
    ```
 
-6. Click **Run** (or press Ctrl+Enter).
-7. It should say "Success". If it says "0 rows", the signup in step 1 didn't
-   work — check the email address and try again.
+3. **It must say `Success. 1 row`** (or similar).
 
-Now visit `/admin` on the website and you should get in.
+   **If it says 0 rows**, the account doesn't exist yet — the sign-up above
+   didn't complete. Go back and check the address is exactly
+   `outdooraluma@gmail.com`.
+
+4. Go to **/admin** on the site. You should be in.
+
+**Then tell me: "I'm in /admin."**
+
+> Once email is working (Blocker 4), sign-ups confirm themselves normally. This
+> only applies to the first account, made before email exists.
 
 ---
 
