@@ -1,12 +1,11 @@
 {
   "nav": {
     "home": "Home",
-    "story": "Our Story",
+    "about": "About",
     "collections": "Collections",
-    "materials": "Materials",
+    "journal": "Worth Knowing",
     "projects": "Projects",
     "diy": "Build Your Own",
-    "blog": "Journal",
     "faq": "Q&A",
     "club": "Club",
     "contact": "Contact",

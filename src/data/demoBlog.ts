@@ -13,7 +13,7 @@ import balconyB from "@/assets/blog/gen/balcony-b.webp";
  * against realistic content. Used in development only; real rows always win,
  * and production shows the honest empty state.
  *
- * Delete this file and its import in src/pages/Blog.tsx to remove it.
+ * Delete this file and its import in src/pages/Journal.tsx to remove it.
  */
 export type DemoPost = {
   id: string;

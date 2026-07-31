@@ -229,7 +229,7 @@ const AdminDashboard = () => {
     if (p === "/contact") return "יצירת קשר";
     if (p === "/materials") return "חומרים";
     if (p === "/privacy") return "מדיניות פרטיות";
-    if (p === "/designer") return "מעצב";
+    if (p === "/diy/scene") return "מעצב";
     if (p.startsWith("/projects/")) return `פרויקט: ${decodeURIComponent(p.replace("/projects/", ""))}`;
     return p;
   };

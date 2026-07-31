@@ -290,7 +290,38 @@ entirely (small light square tiles, no glow). It is in git history if needed.
 
 ---
 
-## PHASE 6 — About (`/story` → `/about`)
+## PHASE 6 — About (`/story` → `/about`) ✅
+
+- [x] `src/components/about/TeamPortraits.tsx` — the wordmark and the three line
+      portraits extracted **verbatim first**, before anything was restructured
+      around them. Still one bottom-edge 10px mask, no radial. Gained a caption
+      naming עידן · רועי · בן in reading order (overlaying names on the drawings
+      is fragile at every width).
+- [x] `src/pages/About.tsx` in the researched order: hero statement over a
+      furniture photo (not the team photo) → the letter → three alternating
+      editorial chapters → three numbered values, no icons → craft teaser into
+      the material pages → the portraits → proof numbers → dual CTA.
+- [x] Route, in-app `<Navigate>`, and a real 301 in `public/_redirects` (which
+      was previously just the SPA catch-all — all the 301s live above it now).
+      `Story.tsx` deleted; sitemap, footer and 404 suggestions repointed.
+- [x] Navbar reordered toward the client's target: home · collections ·
+      build-your-own · projects · materials · magazine · Q&A · club · **about** ·
+      contact. Materials + magazine merge into "שווה לדעת" in Phase 7.
+- [x] 36 tests, including that `/about` resolves and `/story` still *matches*
+      (rendering the redirect) rather than 404ing.
+
+⚠️ **Two content holes, both deliberate and both flagged in `docs/GUIDE.md`:**
+1. **The letter is the brand's own existing words, reformatted** — nothing is
+   invented, but it's ~70 words against a 120–180 target and doesn't say why
+   the business exists. Only the owner can write that.
+2. **The proof-numbers band renders nothing** because `PROOF` is empty.
+   Inventing "500 families" is the same category of lie as the fabricated
+   reviews. It appears the moment three real figures are filled in.
+
+Also unresolved and asked in the guide: whether Aluma is a family business and
+whether Idan/Roy/Ben are the founders. Neither is claimed on the page.
+
+<details><summary>Original spec (kept for reference)</summary>
 
 - [ ] **Extract the preserved elements FIRST** into
       `src/components/about/TeamPortraits.tsx`, before restructuring anything:
@@ -308,12 +339,46 @@ entirely (small light square tiles, no glow). It is in git history if needed.
       → **TeamPortraits, full-bleed, with a caption naming people in order**
       (overlaying names on faces is fragile and RTL-hostile) → **exactly 3**
       proof numbers → CTA band.
-- [ ] Route + 301 from `/story`; nav label "אודות"; delete `Story.tsx`.
-- [ ] ⚠️ Real letter facts and years needed from the owner — see WAITING ON THE OWNER.
+- Route + 301 from `/story`; nav label "אודות"; delete `Story.tsx`.
+
+</details>
+
+**Deviation:** the chapters carry thematic labels (השם / הגישה / הייצור) rather
+than years, because nobody has supplied any dates. Swap in years when they exist
+— the layout already works as a timeline.
 
 ---
 
-## PHASE 7 — "שווה לדעת" (`/journal`) — materials + magazine merged
+## PHASE 7 — "שווה לדעת" (`/journal`) ✅ — materials + magazine merged
+
+- [x] `src/pages/Journal.tsx`, **light mode end to end**: PageHero → materials
+      strip → filter chips → featured article (60/40, no card chrome) → 3-col
+      feed at `aspect-[3/2]`.
+- [x] **The materials strip sits ABOVE the feed, not inside it.** Materials are
+      evergreen and articles are chronological; interleaved, the Sunbrella
+      explainer sinks below the fold on the day a third article is published and
+      never resurfaces. Small square tiles, exactly as asked.
+- [x] **All three glow layers gone** — `MaterialBand.tsx` (the box-shadow
+      backlight, the radial `wash`, and the blurred-photo interior ground) and
+      `accent.ts` (which existed *only* to lift accent colours for the dark
+      background) are deleted along with the old dark index. A coloured glow on
+      white reads as a printing error.
+- [x] Chips, not tabs — chips wrap and scroll on a phone. No "featured" post
+      while a filter is active: promoting one out of a filtered set is arbitrary.
+- [x] `MaterialDetail` needed no conversion — it was already light; only its
+      back-link moved to `/journal`. **The detail pages stay live** as the
+      strip's targets; only the index was retired.
+- [x] Redirects at both layers, including the splat `/blog/* → /journal/:splat`
+      (a `<Navigate>` can't interpolate a param, so `LegacyBlogPostRedirect`
+      does it in-app). These are the site's most-linked URLs — dumping them all
+      on the index would lose the article the visitor clicked.
+- [x] Nav: חומרים + מגזין collapse into one **שווה לדעת** entry keeping the four
+      material pages as its submenu. Footer, sitemap and 404 links repointed.
+- [x] `Blog.tsx` (626 lines) and `Materials.tsx` deleted. 42 tests, including
+      one asserting `/materials/:slug` is still reachable — if a redirect ever
+      swallows it, every tile in the strip breaks.
+
+<details><summary>Original spec (kept for reference)</summary>
 
 Owner's brief: casual, understandable, hints that there's more depth behind what
 you're buying. **Light mode.**
@@ -333,12 +398,22 @@ you're buying. **Light mode.**
 - [ ] Redirects: `/materials`, `/blog` → `/journal`; **`/blog/* → /journal/:splat 301`**
       (must sit above the `/*` catch-all in `public/_redirects`).
       `/materials/:slug` **stays live** — it's the materials strip's target.
-- [ ] Delete `Materials.tsx`, `Blog.tsx`, `MaterialsBrief.tsx`.
-- [ ] Nav: drop חומרים + מגזין, add **שווה לדעת** (submenu = the 4 material pages).
+- Delete `Materials.tsx`, `Blog.tsx`, `MaterialsBrief.tsx`.
+- Nav: drop חומרים + מגזין, add **שווה לדעת** (submenu = the 4 material pages).
+
+</details>
+
+**Deviations:** `BlogPost.tsx` was left where it is and simply mounted at
+`/journal/:slug` rather than renamed — the rename is churn with no reader
+benefit, and it keeps the diff readable. Filter chips hold state locally instead
+of in `?topic=`; shareable filtered URLs are worth having, but the existing
+`useFilterParams` hook is built around the drawer's multi-select model and
+bending it to single-select chips was more risk than the feature is worth right
+now. Noted as a small follow-up.
 
 ---
 
-## PHASE 8 — Collections polish + Projects wiring
+## PHASE 8 — Collections polish + Projects wiring ✅
 
 - [ ] Collections: give each collection block a hero/support hierarchy — first
       product `aspect-[8/5]`, the rest `aspect-[4/5]` (same grid maths as the
@@ -351,7 +426,7 @@ you're buying. **Light mode.**
 
 ---
 
-## PHASE 9 — Navigation finalisation + redirect/sitemap sweep
+## PHASE 9 — Navigation finalisation + redirect/sitemap sweep ✅
 
 - [ ] Final navbar (RTL, right→left): **דף הבית · קולקציות · עשה זאת בעצמך ·
       פרויקטים · שווה לדעת · שאלות ותשובות · מועדון · אודות · צרו קשר** ·
@@ -363,7 +438,7 @@ you're buying. **Light mode.**
 
 ---
 
-## PHASE 10 — Build-Your-Own restructure + honest consultation
+## PHASE 10 — Build-Your-Own restructure + honest consultation ✅
 
 - [ ] DIY hub → **3 stations** (`/diy/scene`, `/diy/fabric`, `/diy/ar`); relayout
       the plank grid, which currently has 01 and 04 spanning two columns.
@@ -606,7 +681,41 @@ Full instructions for each are in **`docs/GUIDE.md` Part 1**.
 
 ## STATUS SUMMARY
 
-*Last updated: 2026-07-31 — Phases 1–5 complete*
+*Last updated: 2026-07-31 — Phases 1–10 complete*
+
+**Everything through Phase 10 is done.** Phases 1–5 are merged to `main`;
+6–10 are on `redesign/phase-6-about`. `npm run build`, `npx tsc --noEmit` and
+50 tests are clean.
+
+- **6 — About.** `/story` → `/about`, rebuilt around the preserved wordmark and
+  portraits (extracted verbatim first). Nav reordered; real 301s added to
+  `public/_redirects`, which had only ever held the SPA catch-all.
+- **7 — "שווה לדעת" (`/journal`).** Materials + magazine merged, light mode,
+  all three glow layers deleted with the old dark index. Material *detail*
+  pages stay live as the strip's targets (there's a test guarding that).
+  `Blog.tsx` was 626 lines; the replacement is 300 and does more.
+- **8 — Projects wired to the CMS.** `site_projects` had a full admin screen
+  and no reader; editing a project changed nothing. Static list is now the
+  empty-table fallback. Collections gained the same hero/support hierarchy as
+  the home page.
+- **9 + 10 — Build Your Own.** Four stations became three; the questionnaire
+  was never one — it's a callback request, now at `/consult`, with the fake
+  recommendation engine deleted. All stations use `<Layout>` and nest under
+  `/diy`. `model-viewer` is an npm dependency, dynamically imported, with
+  `ar-scale="fixed"` everywhere.
+
+**Next: Phase 11 — the scene builder.** The full spec is in this file; it needs
+`konva` + `react-konva` and the placeholder assets described there. It is the
+largest remaining piece of work and the one the client cares most about.
+Phases 12–13 (AR models, AI recolour) are blocked on real assets, not on code.
+
+**Still blocked on the owner:** everything in WAITING ON THE OWNER below —
+above all which Supabase project is real, which nothing database-shaped can be
+trusted until someone answers.
+
+---
+
+*Earlier summary (Phases 1–5):*
 
 **Phases 1–3 are merged to `main` and pushed.** Phases 4–5 are on branch
 `redesign/phase-4-i18n`.

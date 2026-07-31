@@ -85,6 +85,51 @@ describe("public route table", () => {
     expect(matchedLang("/enquiries")).toBe("he");
   });
 
+  it.each(["/about", "/en/about"])("serves the renamed about page at %s", (path) => {
+    expect(matchedLeaf(path)).toBe("about");
+  });
+
+  it.each([
+    ["/diy/scene", "diy/scene"],
+    ["/diy/fabric", "diy/fabric"],
+    ["/diy/ar", "diy/ar"],
+    ["/consult", "consult"],
+  ])("serves %s", (path, leaf) => {
+    expect(matchedLeaf(path)).toBe(leaf);
+    expect(matchedLeaf(`/en${path}`)).toBe(leaf);
+  });
+
+  it.each(["/designer", "/fabric", "/ar", "/questionnaire"])(
+    "still matches the retired station URL %s so it can redirect",
+    (path) => {
+      expect(matchedLeaf(path)).not.toBe("*");
+    }
+  );
+
+  it.each(["/journal", "/en/journal"])("serves the merged journal at %s", (path) => {
+    expect(matchedLeaf(path)).toBe("journal");
+  });
+
+  it("keeps the material detail pages live under their own URLs", () => {
+    // Only the /materials INDEX was retired. If a redirect ever swallows
+    // /materials/:slug, the journal's materials strip links to nothing.
+    expect(matchedLeaf("/materials/sunbrella")).toBe("materials/:slug");
+    expect(matchedLeaf("/en/materials/sunbrella")).toBe("materials/:slug");
+  });
+
+  it.each(["/materials", "/blog", "/blog/some-post"])(
+    "still matches the retired %s URL so it can redirect",
+    (path) => {
+      expect(matchedLeaf(path)).not.toBe("*");
+    }
+  );
+
+  it.each(["/story", "/en/story"])("still matches the retired %s URL", (path) => {
+    // Matched, not 404: the route renders a <Navigate> to /about. Losing this
+    // silently breaks every indexed link to the old page.
+    expect(matchedLeaf(path)).toBe("story");
+  });
+
   it("still falls through to the catch-all for unknown paths", () => {
     expect(matchedLeaf("/no-such-page")).toBe("*");
     expect(matchedLeaf("/en/no-such-page")).toBe("*");

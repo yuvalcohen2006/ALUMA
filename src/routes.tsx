@@ -1,12 +1,24 @@
 import { lazy } from "react";
-import { Navigate, Route } from "react-router-dom";
+import { Navigate, Route, useParams } from "react-router-dom";
 import Index from "./pages/Index.tsx";
 
+/**
+ * /blog/:slug → /journal/:slug, carrying the slug across.
+ *
+ * `<Navigate>` cannot interpolate a route param, and these are the site's most
+ * linked-to URLs — dropping them all onto the index would lose the article the
+ * visitor actually clicked.
+ */
+const LegacyBlogPostRedirect = () => {
+  const { slug } = useParams();
+  return <Navigate to={`../journal/${slug}`} replace />;
+};
+
 // Code-split secondary routes for faster initial load
-const Story = lazy(() => import("./pages/Story.tsx"));
+const About = lazy(() => import("./pages/About.tsx"));
 const Collections = lazy(() => import("./pages/Collections.tsx"));
 const CollectionDetail = lazy(() => import("./pages/CollectionDetail.tsx"));
-const Materials = lazy(() => import("./pages/Materials.tsx"));
+const Journal = lazy(() => import("./pages/Journal.tsx"));
 const MaterialDetail = lazy(() => import("./pages/MaterialDetail.tsx"));
 const Projects = lazy(() => import("./pages/Projects.tsx"));
 const ProjectDetail = lazy(() => import("./pages/ProjectDetail.tsx"));
@@ -17,7 +29,6 @@ const TermsPage = lazy(() => import("./pages/Terms.tsx"));
 const PrivacyPage = lazy(() => import("./pages/Privacy.tsx"));
 const Auth = lazy(() => import("./pages/Auth.tsx"));
 const Account = lazy(() => import("./pages/Account.tsx"));
-const Blog = lazy(() => import("./pages/Blog.tsx"));
 const BlogPost = lazy(() => import("./pages/BlogPost.tsx"));
 const Questionnaire = lazy(() => import("./pages/Questionnaire.tsx"));
 const ARPreview = lazy(() => import("./pages/ARPreview.tsx"));
@@ -42,21 +53,39 @@ const NotFound = lazy(() => import("./pages/NotFound.tsx"));
 export const publicRoutes = (
   <>
     <Route path="" element={<Index />} />
-    <Route path="story" element={<Story />} />
+    <Route path="about" element={<About />} />
+    {/* Renamed from "our story". The old URL is indexed, so it redirects here
+        in-app as well as at the edge (public/_redirects). */}
+    <Route path="story" element={<Navigate to="../about" replace />} />
     <Route path="collections" element={<Collections />} />
     <Route path="collections/:slug" element={<CollectionDetail />} />
-    <Route path="materials" element={<Materials />} />
+    {/* "שווה לדעת" — materials and the magazine, merged. The material DETAIL
+        pages survive as the targets of the journal's materials strip; only the
+        old index is retired. */}
+    <Route path="journal" element={<Journal />} />
+    <Route path="journal/:slug" element={<BlogPost />} />
+    <Route path="materials" element={<Navigate to="../journal" replace />} />
     <Route path="materials/:slug" element={<MaterialDetail />} />
+    <Route path="blog" element={<Navigate to="../journal" replace />} />
+    <Route path="blog/:slug" element={<LegacyBlogPostRedirect />} />
     <Route path="projects" element={<Projects />} />
     <Route path="projects/:slug" element={<ProjectDetail />} />
     <Route path="before-after" element={<Navigate to="../projects" replace />} />
-    <Route path="blog" element={<Blog />} />
-    <Route path="blog/:slug" element={<BlogPost />} />
-    <Route path="questionnaire" element={<Questionnaire />} />
-    <Route path="ar" element={<ARPreview />} />
-    <Route path="fabric" element={<FabricConfigurator />} />
+    {/* Build-your-own: the hub plus its three stations, nested so the IA reads
+        from the URL. */}
     <Route path="diy" element={<DIY />} />
-    <Route path="designer" element={<SofaDesigner />} />
+    <Route path="diy/scene" element={<SofaDesigner />} />
+    <Route path="diy/fabric" element={<FabricConfigurator />} />
+    <Route path="diy/ar" element={<ARPreview />} />
+    <Route path="designer" element={<Navigate to="../diy/scene" replace />} />
+    <Route path="fabric" element={<Navigate to="../diy/fabric" replace />} />
+    <Route path="ar" element={<Navigate to="../diy/ar" replace />} />
+
+    {/* The questionnaire, honestly framed as what it is: a request for a
+        callback. It was the fourth "build your own" station, which it never
+        really was. */}
+    <Route path="consult" element={<Questionnaire />} />
+    <Route path="questionnaire" element={<Navigate to="../consult" replace />} />
     <Route path="club" element={<Club />} />
     <Route path="club/auth" element={<Auth />} />
     <Route path="club/dashboard" element={<Account />} />

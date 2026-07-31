@@ -4,14 +4,29 @@ import SEO from "@/components/SEO";
 import SectionHeading from "@/components/SectionHeading";
 import ShineButton from "@/components/ui/shine-button";
 
-import { projects, getProject } from "@/data/projects";
+import { useProject } from "@/hooks/useProjectsData";
 import { ArrowLeft, ArrowRight, Check, MapPin, Calendar, Maximize2 } from "lucide-react";
 import NotFound from "./NotFound";
 
 const ProjectDetailPage = () => {
   const { slug } = useParams();
-  const project = slug ? getProject(slug) : undefined;
-  if (!project) return <NotFound />;
+  const { project, projects, loading } = useProject(slug);
+
+  // Don't render a 404 while the CMS query is still in flight — the fallback
+  // list is in place from the first paint, so this only guards the moment a
+  // CMS-only slug is being resolved.
+  if (!project) {
+    if (loading) {
+      return (
+        <Layout>
+          <div className="min-h-[60vh] flex items-center justify-center text-[20px] text-muted-foreground">
+            טוען…
+          </div>
+        </Layout>
+      );
+    }
+    return <NotFound />;
+  }
 
   const others = projects.filter((p) => p.slug !== project.slug).slice(0, 3);
 
@@ -77,22 +92,32 @@ const ProjectDetailPage = () => {
               <p className="text-[20px] leading-relaxed text-foreground-soft text-pretty mb-6">
                 {project.intro}
               </p>
+              {/* Each chip is conditional: projects entered through the CMS
+                  carry no year or area, and an icon with nothing beside it
+                  reads as a rendering fault. */}
               <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-[18px] text-muted-foreground">
-                <span className="inline-flex items-center gap-2">
-                  <MapPin className="w-[18px] h-[18px] text-accent shrink-0" aria-hidden="true" />
-                  {project.location}
-                </span>
-                <span className="inline-flex items-center gap-2">
-                  <Calendar className="w-[18px] h-[18px] text-accent shrink-0" aria-hidden="true" />
-                  {project.year}
-                </span>
-                <span className="inline-flex items-center gap-2">
-                  <Maximize2 className="w-[18px] h-[18px] text-accent shrink-0" aria-hidden="true" />
-                  {project.area}
-                </span>
+                {project.location && (
+                  <span className="inline-flex items-center gap-2">
+                    <MapPin className="w-[18px] h-[18px] text-accent shrink-0" aria-hidden="true" />
+                    {project.location}
+                  </span>
+                )}
+                {project.year && (
+                  <span className="inline-flex items-center gap-2">
+                    <Calendar className="w-[18px] h-[18px] text-accent shrink-0" aria-hidden="true" />
+                    {project.year}
+                  </span>
+                )}
+                {project.area && (
+                  <span className="inline-flex items-center gap-2">
+                    <Maximize2 className="w-[18px] h-[18px] text-accent shrink-0" aria-hidden="true" />
+                    {project.area}
+                  </span>
+                )}
               </div>
             </div>
 
+            {project.story.length > 0 && (
             <div className="border border-border rounded-[14px] p-6 md:p-8 mb-6 md:mb-8">
               <h2 className="font-display font-bold text-[26px] leading-snug text-primary">
                 על הפרויקט
@@ -108,7 +133,12 @@ const ProjectDetailPage = () => {
                 ))}
               </div>
             </div>
+            )}
 
+            {/* The whole panel is conditional. A CMS project carries neither
+                scope nor materials, and an empty bordered box with two headings
+                and nothing under them looks broken rather than sparse. */}
+            {(project.scope.length > 0 || project.materials.length > 0) && (
             <div className="border border-border rounded-[14px] p-6 md:p-8">
               <h2 className="font-display font-bold text-[26px] leading-snug text-primary">
                 הפרויקט כולל
@@ -122,6 +152,7 @@ const ProjectDetailPage = () => {
                   </li>
                 ))}
               </ul>
+              {project.materials.length > 0 && (
               <div className="pt-6 border-t border-border">
                 <h3 className="font-display font-normal text-[22px] text-foreground">
                   חומרים
@@ -138,7 +169,9 @@ const ProjectDetailPage = () => {
                   ))}
                 </div>
               </div>
+              )}
             </div>
+            )}
           </div>
 
           {/* LEFT COLUMN, images */}

@@ -94,11 +94,15 @@ const ProductCell = ({
     // so the reveal runs in reading order.
     <Reveal
       delay={(index % 3) * 80}
-      className={`min-w-0 ${lead ? "col-span-2 sm:col-span-1" : ""}`}
+      // The first product of each collection leads at double width from sm up,
+      // not just on a phone. One large photograph followed by smaller ones is
+      // what gives a group a focal point instead of a uniform wall of tiles —
+      // the same hierarchy the home page's mosaic uses.
+      className={`min-w-0 ${lead ? "col-span-2" : ""}`}
     >
       <div className="group relative">
         <Link to={`/collections/${p.slug}`} className="block text-right">
-          <div className="relative aspect-[4/3] overflow-hidden rounded-[14px] bg-secondary border border-border transition-all duration-500 ease-out group-hover:-translate-y-1 group-hover:shadow-luxury group-hover:border-primary/60">
+          <div className={`relative ${lead ? "aspect-[8/5]" : "aspect-[4/3]"} overflow-hidden rounded-[14px] bg-secondary border border-border transition-all duration-500 ease-out group-hover:-translate-y-1 group-hover:shadow-luxury group-hover:border-primary/60`}>
             {/* Zoom on the wrapper, never the <img> — scaling the image drags
                 the border and the radius with it in some engines. Same
                 construction as the approved Projects entry. */}
@@ -117,7 +121,7 @@ const ProductCell = ({
             </div>
           </div>
 
-          <h3 className="mt-4 font-display font-normal text-[22px] leading-snug text-foreground transition-colors duration-300 group-hover:text-accent">
+          <h3 className={`mt-4 font-display font-normal leading-snug text-foreground transition-colors duration-300 group-hover:text-accent ${lead ? "text-[26px]" : "text-[22px]"}`}>
             {p.name}
           </h3>
 
