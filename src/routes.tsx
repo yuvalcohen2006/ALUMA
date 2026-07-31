@@ -33,7 +33,7 @@ const BlogPost = lazy(() => import("./pages/BlogPost.tsx"));
 const Questionnaire = lazy(() => import("./pages/Questionnaire.tsx"));
 const ARPreview = lazy(() => import("./pages/ARPreview.tsx"));
 const FabricConfigurator = lazy(() => import("./pages/FabricConfigurator.tsx"));
-const SofaDesigner = lazy(() => import("./pages/SofaDesigner.tsx"));
+const SceneBuilder = lazy(() => import("./pages/SceneBuilder.tsx"));
 const DIY = lazy(() => import("./pages/DIY.tsx"));
 const Club = lazy(() => import("./pages/Club.tsx"));
 const ThankYou = lazy(() => import("./pages/ThankYou.tsx"));
@@ -74,7 +74,7 @@ export const publicRoutes = (
     {/* Build-your-own: the hub plus its three stations, nested so the IA reads
         from the URL. */}
     <Route path="diy" element={<DIY />} />
-    <Route path="diy/scene" element={<SofaDesigner />} />
+    <Route path="diy/scene" element={<SceneBuilder />} />
     <Route path="diy/fabric" element={<FabricConfigurator />} />
     <Route path="diy/ar" element={<ARPreview />} />
     <Route path="designer" element={<Navigate to="../diy/scene" replace />} />
