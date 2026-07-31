@@ -418,10 +418,41 @@ complains it can't make one, type a short English word in the slug field.
 
 ## ⭐ Adding a review
 
-> **Not built yet — arrives in Phase 5 of the roadmap.** When it exists it will
-> be a sidebar item where you type the customer's name, their town, and their
-> words. The moment you add three real ones, the invented placeholder reviews
-> on the homepage disappear automatically and yours take their place.
+**This is a launch blocker.** The three reviews on the homepage right now are
+**invented** — they were written to test the design. Publishing made-up reviews
+with made-up customer names is deceptive advertising, so they have to be
+replaced before the site goes on the real domain.
+
+**The good news:** the moment you add real ones, the fake ones vanish on their
+own. No code change, no request to me.
+
+### For now, add them in Supabase directly
+
+*(A friendlier screen in the admin panel is coming; until then this takes about
+two minutes per review.)*
+
+1. supabase.com/dashboard → the correct project → **Table Editor** (grid icon).
+2. Find **`site_reviews`** in the list on the left and click it.
+3. Click **Insert** → **Insert row**.
+4. Fill in only these four:
+
+| Field | What to put | Example |
+|---|---|---|
+| **quote** | What the customer said. Keep it to 1–3 sentences — long quotes get visually cut off. | `הצוות ליווה אותנו מהסקיצה ועד ההתקנה. הסלון מרגיש יוקרתי, והבד לא דהה גם אחרי קיץ שלם.` |
+| **name** | Their name | `נועה ב.` |
+| **meta** | Their town, or what they bought | `הרצליה` |
+| **published** | Switch it to **true** | ✅ |
+
+   Leave `id`, `created_at` and `sort_order` alone — they fill themselves.
+   (`sort_order` is only for controlling the order later; smaller numbers show
+   first.)
+5. Click **Save**.
+6. Repeat until you have **at least three**. Refresh the homepage — yours will
+   be there.
+
+> **⚠️ Get permission first.** Ask the customer before publishing their words
+> and their name. A first name plus an initial (`נועה ב.`) is usually the
+> comfortable middle ground.
 
 ---
 
