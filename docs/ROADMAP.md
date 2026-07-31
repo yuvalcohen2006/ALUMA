@@ -413,7 +413,7 @@ now. Noted as a small follow-up.
 
 ---
 
-## PHASE 8 — Collections polish + Projects wiring
+## PHASE 8 — Collections polish + Projects wiring ✅
 
 - [ ] Collections: give each collection block a hero/support hierarchy — first
       product `aspect-[8/5]`, the rest `aspect-[4/5]` (same grid maths as the
@@ -426,7 +426,7 @@ now. Noted as a small follow-up.
 
 ---
 
-## PHASE 9 — Navigation finalisation + redirect/sitemap sweep
+## PHASE 9 — Navigation finalisation + redirect/sitemap sweep ✅
 
 - [ ] Final navbar (RTL, right→left): **דף הבית · קולקציות · עשה זאת בעצמך ·
       פרויקטים · שווה לדעת · שאלות ותשובות · מועדון · אודות · צרו קשר** ·
@@ -438,7 +438,7 @@ now. Noted as a small follow-up.
 
 ---
 
-## PHASE 10 — Build-Your-Own restructure + honest consultation
+## PHASE 10 — Build-Your-Own restructure + honest consultation ✅
 
 - [ ] DIY hub → **3 stations** (`/diy/scene`, `/diy/fabric`, `/diy/ar`); relayout
       the plank grid, which currently has 01 and 04 spanning two columns.
@@ -681,7 +681,41 @@ Full instructions for each are in **`docs/GUIDE.md` Part 1**.
 
 ## STATUS SUMMARY
 
-*Last updated: 2026-07-31 — Phases 1–5 complete*
+*Last updated: 2026-07-31 — Phases 1–10 complete*
+
+**Everything through Phase 10 is done.** Phases 1–5 are merged to `main`;
+6–10 are on `redesign/phase-6-about`. `npm run build`, `npx tsc --noEmit` and
+50 tests are clean.
+
+- **6 — About.** `/story` → `/about`, rebuilt around the preserved wordmark and
+  portraits (extracted verbatim first). Nav reordered; real 301s added to
+  `public/_redirects`, which had only ever held the SPA catch-all.
+- **7 — "שווה לדעת" (`/journal`).** Materials + magazine merged, light mode,
+  all three glow layers deleted with the old dark index. Material *detail*
+  pages stay live as the strip's targets (there's a test guarding that).
+  `Blog.tsx` was 626 lines; the replacement is 300 and does more.
+- **8 — Projects wired to the CMS.** `site_projects` had a full admin screen
+  and no reader; editing a project changed nothing. Static list is now the
+  empty-table fallback. Collections gained the same hero/support hierarchy as
+  the home page.
+- **9 + 10 — Build Your Own.** Four stations became three; the questionnaire
+  was never one — it's a callback request, now at `/consult`, with the fake
+  recommendation engine deleted. All stations use `<Layout>` and nest under
+  `/diy`. `model-viewer` is an npm dependency, dynamically imported, with
+  `ar-scale="fixed"` everywhere.
+
+**Next: Phase 11 — the scene builder.** The full spec is in this file; it needs
+`konva` + `react-konva` and the placeholder assets described there. It is the
+largest remaining piece of work and the one the client cares most about.
+Phases 12–13 (AR models, AI recolour) are blocked on real assets, not on code.
+
+**Still blocked on the owner:** everything in WAITING ON THE OWNER below —
+above all which Supabase project is real, which nothing database-shaped can be
+trusted until someone answers.
+
+---
+
+*Earlier summary (Phases 1–5):*
 
 **Phases 1–3 are merged to `main` and pushed.** Phases 4–5 are on branch
 `redesign/phase-4-i18n`.
