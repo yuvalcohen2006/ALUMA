@@ -25,80 +25,93 @@ from inside the code. They're in priority order.
 
 ---
 
-## ⛔ BLOCKER 1 — Which Supabase project is the real one?
+## ✅ BLOCKER 1 — SOLVED: the database is `jzqayfllojeqivwbbuyf`
 
-**Do this first. Everything else depends on it.**
+**Nothing to do here. Kept for the record.**
 
-### The problem, in plain words
+There were two Supabase projects and the repo disagreed about which was live.
+Resolved on 2026-07-31: **`jzqayfllojeqivwbbuyf` is ours.** The other one,
+`yvxynsonjmcppaxflmvz`, sits in an account we cannot even open — it is not ours
+and nothing points at it any more.
 
-Supabase is the database — it holds the products, photos, club members and
-contact-form messages. There are **two** Supabase projects sitting in the
-account, and the files in this repo disagree about which one the website
-should be talking to:
-
-| Project reference (its ID) | What points at it |
-|---|---|
-| `jzqayfllojeqivwbbuyf` | The setup docs, and the database migration tool |
-| `yvxynsonjmcppaxflmvz` | The local settings file and the website's HTML |
-
-One of these has all the real tables in it. The other is an abandoned earlier
-attempt. **I cannot tell which from the outside** — both are alive, and both
-refuse to answer questions without a password. So a human has to look.
-
-### What to do
-
-1. Go to **supabase.com/dashboard** and log in.
-2. You'll see a list of projects. Open the **first** one.
-3. Look at the very top of the browser address bar. It will say something like
-   `supabase.com/dashboard/project/jzqayfllojeqivwbbuyf`. **That long string of
-   letters is the project reference.** Note which one you're in.
-4. In the far-left icon bar, click the **Table Editor** icon (looks like a grid/spreadsheet).
-5. Look at the list of tables on the left.
-
-**You are looking for a project that contains these table names:**
-`site_collections`, `site_collection_products`, `blog_posts`, `contact_leads`,
-`profiles`, `newsletter_subscribers`.
-
-6. Repeat for the other project.
-
-### What to report back
-
-> "The project with the tables in it is `___________`."
-
-That's it. One line. Then the code gets pointed at the right one and this
-blocker disappears.
-
-**If BOTH have tables:** don't delete anything. Tell me, and also say which one
-has the most rows / most recent data. **If NEITHER has tables:** also tell me —
-it means the database was never set up and we run the migrations fresh.
-
-> **Why this matters so much:** if the website talks to the empty project, you
-> will upload 40 product photos and see absolutely nothing appear on the site,
-> with no error message explaining why. Half a day lost to a five-letter typo.
+`.env`, `.env.example` and `index.html` are all pointed at the right project,
+and the anon key is in place.
 
 ---
 
-## ⛔ BLOCKER 2 — The database password (the "anon key")
+## ✅ BLOCKER 2 — SOLVED: the anon key is in
 
-**Why:** the website needs a key to read the database. Right now the key in the
-local settings file is a placeholder that literally says
-`REPLACE_WITH_YOUR_SUPABASE_ANON_KEY`. Until it's replaced, **nothing that
-touches the database works on this computer** — no logins, no newsletter, no
-admin panel, no product list.
+**Nothing to do here.** The key is in `.env` (which is never committed) and
+verified working against the live project.
+
+> ⚠️ One thing still outstanding for **the live website** rather than your
+> laptop: Cloudflare Pages holds its own copy of these settings, and if it is
+> still pointed at the old project the deployed site will talk to a database we
+> don't own.
+>
+> 1. **dash.cloudflare.com** → Workers & Pages → the `aluma` project
+> 2. **Settings** → **Environment variables**
+> 3. Check all three, and correct any that don't match:
+>    - `VITE_SUPABASE_URL` = `https://jzqayfllojeqivwbbuyf.supabase.co`
+>    - `VITE_SUPABASE_PROJECT_ID` = `jzqayfllojeqivwbbuyf`
+>    - `VITE_SUPABASE_PUBLISHABLE_KEY` = the same `eyJ…` key that's in `.env`
+> 4. If you changed anything: **Deployments** → **Retry deployment**, or just
+>    push any commit. Environment variables only take effect on a new build.
+
+---
+
+## ⛔ STEP 1 — Run one SQL script (5 minutes)
+
+**Do this now.** Your tables all exist, but I checked each one against the live
+database and found two gaps.
+
+### What I found
+
+| | |
+|---|---|
+| ✅ All 15 tables exist | products, collections, articles, club members, leads — all there, all **empty**, which is expected |
+| ❌ `site_reviews` was missing | the reviews table is newer than this database |
+| ❌ `site_projects` refused public access | the projects page would have shown an **error**, not an empty list |
+| ✅ `contact_leads` refuses public access | **correct** — leads must never be publicly readable, leave it alone |
+
+Empty tables are completely fine. That's what the upload steps in Part 2 are
+for. The two ❌ rows are what this script fixes.
 
 ### Steps
 
-1. supabase.com/dashboard → open **the correct project** (from Blocker 1).
-2. Bottom-left, click the **gear icon** (Project Settings).
-3. In that menu click **API**.
-4. Find the section headed **Project API keys**.
-5. There are two keys. You want the one labelled **`anon`** and **`public`**.
-   Click the copy icon beside it.
+1. **supabase.com/dashboard** → the **aluma** project (`jzqayfllojeqivwbbuyf`).
+2. Far-left icon bar → **SQL Editor** → **New query**.
+3. Open the file **`supabase/migrations/20260731130000_repair_live_project.sql`**
+   in this project folder, select all of it, copy it.
+4. Paste it into the SQL Editor.
+5. Click **Run** (or Ctrl+Enter).
+6. It should say **Success. No rows returned.**
 
-### ⚠️ The one genuinely dangerous thing in this whole document
+> **It is safe to run twice.** Every statement is written to check first, so
+> running it again changes nothing. If you're ever unsure whether it worked,
+> just run it again.
 
-The other key says **`service_role`** and usually hides behind a "Reveal"
-button.
+### Then check it worked
+
+New query, paste this, Run:
+
+```sql
+select
+  (select count(*) from public.site_reviews)  as reviews_table_ok,
+  (select count(*) from public.site_projects) as projects_table_ok;
+```
+
+Two zeros is a pass — it means both tables exist and are readable. (Zero rows
+is expected; there's no content in them yet.)
+
+**Then tell me: "SQL ran, both zeros."**
+
+---
+
+## ⚠️ The one genuinely dangerous thing in this whole document
+
+While you're in the API settings, you'll see a second key labelled
+**`service_role`**, usually behind a "Reveal" button.
 
 **Never copy, paste, screenshot or send that key to anybody — including me.**
 
@@ -109,10 +122,6 @@ code where anyone can read it, and it's safe to send.
 
 > Rule of thumb: **`anon` = safe to publish. `service_role` = treat like your
 > bank password.**
-
-### What to send
-
-> The `anon` / `public` key (a long string starting `eyJ…`)
 
 ---
 
@@ -400,10 +409,10 @@ likelihood:
 Sidebar → **פרויקטים בגלריה**. Same pattern: title, location, description,
 cover photo, gallery, **פורסם** switch.
 
-> **Note (as of Phase 1):** the public projects page currently shows a
-> hardcoded list, not this admin screen. Wiring it up is Phase 8 on the
-> roadmap. Until then, adding projects here won't change the public site —
-> don't panic, it's a known gap and it's scheduled.
+> **This is now live.** The public projects page reads this screen. While the
+> table is empty it falls back to six example projects so the page is never
+> blank — the moment you publish one real project here, all six examples
+> disappear and only yours show. So publish them in a batch, not one at a time.
 
 ---
 
@@ -767,17 +776,19 @@ that unblocks the most work.
 
 ---
 
-## Block A — unlocks everything (15 minutes, do this first)
+## Block A — unlocks everything (do this first)
 
 ```
-1. Supabase project with the tables:   jzqayfllojeqivwbbuyf  /  yvxynsonjmcppaxflmvz   (circle one)
-2. Supabase anon / public key:         eyJ...
-3. Can you get into /admin?            yes / no
-4. Resend API key:                     re_...
+1. ✅ DONE  Supabase project:  jzqayfllojeqivwbbuyf
+2. ✅ DONE  Anon key received and verified
+
+3. SQL script run?  (STEP 1)          "SQL ran, both zeros"
+4. Cloudflare env vars checked?       yes / no        (BLOCKER 2 box)
+5. Can you get into /admin?           yes / no        (BLOCKER 3)
+6. Resend API key:                    re_...          (BLOCKER 4)
 ```
 
-*Instructions: Blockers 1–4 in Part 1 above.*
-**Until Block A lands, nothing that touches the database or sends email can be
+**Until 3–6 land, nothing that touches the database or sends email can be
 finished or tested** — including confirming that the contact form actually
 delivers to outdooraluma@gmail.com.
 

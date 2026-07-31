@@ -684,14 +684,18 @@ Run in this order.
 
 Full instructions for each are in **`docs/GUIDE.md` Part 1**.
 
-1. **⛔ Which Supabase project is real** — `jzqayfllojeqivwbbuyf` (docs +
-   `config.toml`) vs `yvxynsonjmcppaxflmvz` (`.env` + `index.html`). Both hosts
-   are alive and both reject unauthenticated probes, so this **cannot be
-   determined from the code** — a human must open the dashboard and see which
-   one has the tables. **Nothing that touches the database can be trusted until
-   this is answered; do not "fix" the ref by guessing.**
-2. **⛔ The Supabase anon key** — `.env` still holds the literal placeholder, so
-   every database call fails locally.
+1. ✅ **RESOLVED 2026-07-31 — the live project is `jzqayfllojeqivwbbuyf`.**
+   The other ref, `yvxynsonjmcppaxflmvz`, is in an account the owner cannot even
+   open; it is not ours. `.env`, `.env.example` and `index.html` are repointed.
+2. ✅ **RESOLVED — anon key in place and verified** against the live project.
+2b. **⛔ Run `supabase/migrations/20260731130000_repair_live_project.sql`** in
+   the SQL Editor. Probing every table with the anon key found the live schema
+   had drifted: `site_reviews` did not exist, and `site_projects` rejected anon
+   at the GRANT level, so the projects page would have errored rather than shown
+   an empty list. (`contact_leads` also rejects anon — that one is correct.)
+   All 15 other tables exist and are empty, which is expected.
+2c. **⛔ Check the Cloudflare Pages env vars** point at `jzqay…` too — the
+   deployed site has its own copy, and env changes only apply on a new build.
 3. **⛔ Admin role row** — needed before any upload will be accepted.
 4. **⛔ Resend account under `outdooraluma@gmail.com`** + API key. (Test mode
    only delivers to the account-owner address, so the account email itself
