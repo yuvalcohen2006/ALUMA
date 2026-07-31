@@ -738,121 +738,61 @@ project we don't control.
 
 ## STATUS SUMMARY
 
-*Last updated: 2026-07-31 — Phases 1–11 complete*
+*Last updated: 2026-07-31 — redesign rolled back at the owner's request*
 
-**Phase 11 (the scene builder) shipped.** `/diy/scene` places furniture on a
-backdrop using real pinhole-camera geometry — an object's on-screen height is
-linear in how far its base sits below the horizon, so dragging a sofa up the
-picture shrinks it correctly. 18 tests pin that. Sprites are anchored at their
-ground-contact point so rotation pivots on the floor; depth order is derived,
-never user-managed; the transformer rotates only. `SofaDesigner` is deleted —
-its HTML5 drag events never fired on touch, so it was desktop-only.
-Konva is code-split (284KB own chunk; main bundle unchanged at 216KB).
-Deferred by choice: alignment guides, image export, the calibrator admin tools.
+### What happened
 
-**Everything visible in it is placeholder artwork and says so.** The tool is
-finished; it is waiting on assets, not code. `docs/GUIDE.md` Part 3.3b spells
-out exactly what it needs — including the one thing photographers never think
-to provide: the ground-contact point per cut-out, and a 1-metre rod in frame on
-each backdrop.
+Phases 5–11 redesigned pages the owner had already approved. He rejected the
+result and asked for a rollback. **Phases 6, 8, 9, 10 and 11 are reverted.**
+The lesson, recorded so the next session doesn't repeat it: *phases that fixed
+defects were wanted; phases that restyled working pages were not.* Do not
+redesign an approved page unless asked for that page by name.
 
-*Previous summary (Phases 1–10):*
+### Live state of `main`
 
-**Everything through Phase 10 is done.** Phases 1–5 are merged to `main`;
-6–10 are on `redesign/phase-6-about`. `npm run build`, `npx tsc --noEmit` and
-50 tests are clean.
+**Kept — the technical work:**
+- Phase 1 bug fixes (the `PageHero` RTL root cause, the `.font-display` cascade
+  bug, container max-widths, z-stack, undefined classes)
+- Phase 2 cleanup — favourites removed (owner asked), dead code, `/before-after`
+- Phase 3 `SectionRule` tokens; Phase 4 i18n + `/en` tree (switcher still gated)
+- Projects wired to `site_projects`; database repair; Supabase repointed at
+  `jzqayfllojeqivwbbuyf`
+- **Deploy fix: Vite 6 + Node pinned** — Cloudflare rejected the Vite 5 build
 
-- **6 — About.** `/story` → `/about`, rebuilt around the preserved wordmark and
-  portraits (extracted verbatim first). Nav reordered; real 301s added to
-  `public/_redirects`, which had only ever held the SPA catch-all.
-- **7 — "שווה לדעת" (`/journal`).** Materials + magazine merged, light mode,
-  all three glow layers deleted with the old dark index. Material *detail*
-  pages stay live as the strip's targets (there's a test guarding that).
-  `Blog.tsx` was 626 lines; the replacement is 300 and does more.
-- **8 — Projects wired to the CMS.** `site_projects` had a full admin screen
-  and no reader; editing a project changed nothing. Static list is now the
-  empty-table fallback. Collections gained the same hero/support hierarchy as
-  the home page.
-- **9 + 10 — Build Your Own.** Four stations became three; the questionnaire
-  was never one — it's a callback request, now at `/consult`, with the fake
-  recommendation engine deleted. All stations use `<Layout>` and nest under
-  `/diy`. `model-viewer` is an npm dependency, dynamically imported, with
-  `ar-scale="fixed"` everywhere.
+**Kept — by explicit request:**
+- **`/journal` ("שווה לדעת")**, materials + magazine merged. Its materials
+  section is now the ORIGINAL full-width band layout converted to light: the
+  glow, the radial wash and the blurred tinted interior are gone, since all
+  three existed only to give a charcoal page depth.
+- **Apple-geometry category tiles on the home page**, with new photography.
+  No section heading (Apple has none); fixed tile heights, not `vh`; 12px seams.
 
-**Next: Phase 11 — the scene builder.** The full spec is in this file; it needs
-`konva` + `react-konva` and the placeholder assets described there. It is the
-largest remaining piece of work and the one the client cares most about.
-Phases 12–13 (AR models, AI recolour) are blocked on real assets, not on code.
+**Reverted:**
+- `/about` → back to `/story`; `About.tsx` and `TeamPortraits` deleted
+- Collections lead-tile hierarchy → back to the uniform grid
+- Build-Your-Own → 4 stations at `/designer` `/fabric` `/ar` `/questionnaire`;
+  scene builder deleted, `SofaDesigner` restored, konva uninstalled
+- Nav order and `SectionHeading` back to their previous behaviour
+- Home reviews + newsletter → the original `Testimonials` marquee and
+  `Newsletter` card. `ReviewsBand`, `ClubCard`, `ConsultCTA` deleted.
 
-**Still blocked on the owner:** everything in WAITING ON THE OWNER below —
-above all which Supabase project is real, which nothing database-shaped can be
-trusted until someone answers.
+**Recoverable if ever wanted:** the scene builder and its 18 geometry tests are
+in history at `9733584`; the About page at `e2873c3`.
 
----
+### Data behaviour, corrected twice — get this right
 
-*Earlier summary (Phases 1–5):*
+Placeholder catalogue/magazine content now **fills an empty page and steps aside
+the moment one real row exists**. The original code discarded live data in dev;
+the first fix over-corrected to opt-in-only, which made an empty database render
+an empty shop that looked broken. `VITE_USE_DEMO_DATA=0` forces the empty state.
 
-**Phases 1–3 are merged to `main` and pushed.** Phases 4–5 are on branch
-`redesign/phase-4-i18n`.
+### Next
 
-- **Phase 4 (i18n plumbing).** Route table extracted to `src/routes.tsx` with
-  relative paths and mounted twice — `/` for Hebrew, `/en` for English — under
-  `LangShell`. Language is read from the URL, not a browser detector. Switcher
-  built (globe + own-script names, no flags, real anchors) but **gated off**:
-  only Header/Footer/SEO speak `t()` so far, so `/en` still leaks into Hebrew
-  pages. 21 routing tests lock the structure.
-- **Phase 5 (homepage).** hero → **CategoryMosaic** → ConsultCTA → ReviewsBand
-  → ClubCard → footer. Seven orphaned components deleted; homepage JS 226→216KB.
-  `site_reviews` table added so reviews are real content — the fabricated
-  placeholders retire themselves the moment three real rows exist.
-
-**Next up: Phase 6 (About page).** Extract `TeamPortraits` verbatim *first*,
-then rebuild around it. Needs real facts from the owner (founding year, the
-family's own words, 3 proof numbers) — build the structure with clearly-marked
-placeholders and flag them.
+Owner is reviewing. Outstanding from him: Cloudflare env vars confirmed,
+`/admin` access (**use Google sign-in** — the project requires email
+confirmation and email isn't wired yet), and the Resend key.
 
 ---
 
-*Earlier summary (Phases 1–3):*
-
-**Where we are:** Phases 1, 2 and 3 are done and committed on branch
-`redesign/phase-1-stabilize` (3 commits). `npm run build`, `npx tsc --noEmit`
-and `npm run test` are all clean after each.
-
-- **Phase 1 (stabilise).** The experimental `rebuild/launch-plan` branch is
-  deleted from GitHub. Both headline bugs were single-line root causes: the RTL
-  misalignment across all 14 interior pages was `items-end` in `PageHero.tsx`
-  (in a *column* flex the cross axis is the inline axis, so it resolved to the
-  left, taking the title, its rule and the filter button with it), and the
-  un-bolded headings were `.font-display` setting `font-weight: 400` as a
-  utility — emitted after Tailwind's own, so it beat every `font-bold` on the
-  site. Moving it to `@layer base` fixes it with no visual change to headings.
-  Also: the container had no max-width below 1400px, `shadow-elegant` and
-  `prose-luxury` referenced nothing, the cookie banner covered the WhatsApp FAB,
-  and several smaller RTL defects. All email now resolves from `SITE.email` =
-  **outdooraluma@gmail.com**.
-- **Phase 2 (cleanup).** Favourites removed end-to-end, `/before-after` retired,
-  both dead Lovable asset stubs deleted (one *was* the fabric page's entire base
-  photo — that page now shows a real sofa and a true-colour swatch instead of
-  tinted rectangles over a broken image), and the demo-data fork **inverted** so
-  live Supabase data is the default and the fake catalogue is opt-in.
-- **Phase 3 (design foundation).** `SectionRule` + rule tokens + `.section-pad`.
-  `SectionHeading` now draws a correctly-toned rule under every heading, and
-  `PageHero` reads the same accent token, so there is one rule vocabulary.
-
-**What's next: Phase 4 (i18n plumbing).** It must land before the page rebuilds
-so each rebuilt page is authored with `t()` keys once instead of twice. Start
-with the pure-move commit that extracts the route table out of `App.tsx`.
-Phase 5 (homepage restructure — the category mosaic) is the first visible win
-and the client's headline request.
-
-**What's blocked:** two Phase-1 items only — setting the `OWNER_EMAIL` secret
-and the end-to-end email test. Both need the owner (see **WAITING ON THE
-OWNER**). Nothing in Phases 4–9 depends on them.
-
-⚠️ **Read before touching anything database-shaped:** the Supabase project-ref
-conflict was deliberately **not** resolved by guessing. Both candidate projects
-are live and both reject unauthenticated probes, so there is no way to tell from
-the code which one holds the tables. Picking one blindly risks pointing the site
-at an empty database and silently losing uploads. A human must look — the
-two-minute procedure is `docs/GUIDE.md` → Blocker 1.
+*The phase notes above are kept for their reasoning, but phases 6, 8, 9, 10 and
+11 no longer describe the live site.*
