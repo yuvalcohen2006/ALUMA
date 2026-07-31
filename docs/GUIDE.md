@@ -44,67 +44,82 @@ and the anon key is in place.
 **Nothing to do here.** The key is in `.env` (which is never committed) and
 verified working against the live project.
 
-> ⚠️ One thing still outstanding for **the live website** rather than your
-> laptop: Cloudflare Pages holds its own copy of these settings, and if it is
-> still pointed at the old project the deployed site will talk to a database we
-> don't own.
->
-> 1. **dash.cloudflare.com** → Workers & Pages → the `aluma` project
-> 2. **Settings** → **Environment variables**
-> 3. Check all three, and correct any that don't match:
->    - `VITE_SUPABASE_URL` = `https://jzqayfllojeqivwbbuyf.supabase.co`
->    - `VITE_SUPABASE_PROJECT_ID` = `jzqayfllojeqivwbbuyf`
->    - `VITE_SUPABASE_PUBLISHABLE_KEY` = the same `eyJ…` key that's in `.env`
-> 4. If you changed anything: **Deployments** → **Retry deployment**, or just
->    push any commit. Environment variables only take effect on a new build.
+> Cloudflare keeps a separate copy of these settings — see the audit below.
 
 ---
 
-## ⛔ STEP 1 — Run one SQL script (5 minutes)
+## ✅ STEP 1 — SOLVED: SQL script run
 
-**Do this now.** Your tables all exist, but I checked each one against the live
-database and found two gaps.
+Confirmed 2026-07-31 — `site_reviews` and `site_projects` both answer correctly
+now. `site_projects` went from rejecting visitors to serving them.
 
-### What I found
+---
 
-| | |
+## 🔎 Is anything still wired to the old project?
+
+You asked. I checked every way a site can be attached to a Supabase project.
+**Nine of ten are confirmed clean; one is yours to check.**
+
+### Confirmed pointing at the live project ✅
+
+| What | How I know |
 |---|---|
-| ✅ All 15 tables exist | products, collections, articles, club members, leads — all there, all **empty**, which is expected |
-| ❌ `site_reviews` was missing | the reviews table is newer than this database |
-| ❌ `site_projects` refused public access | the projects page would have shown an **error**, not an empty list |
-| ✅ `contact_leads` refuses public access | **correct** — leads must never be publicly readable, leave it alone |
+| The website's database settings | `.env` repointed and verified with your key |
+| The connection hint in the page header | `index.html` repointed |
+| The command-line tool's link | `supabase/config.toml` already said `jzqay…` |
+| **The contact-form function** | I POSTed it an empty form; it replied with its own Hebrew validation error. A function that isn't there returns "not found" — I checked that too, against a made-up name |
+| **The branded-email function** | Live, correctly refusing an unsigned request |
+| **The admin-invite function** | Live, correctly refusing an unauthenticated one |
+| **All four photo buckets** | `site-collections`, `site-projects`, `site-hero`, `blog-images` all exist here |
+| Existing data | Every table is empty, so no old links are stored in any row |
+| The whole codebase | No file references the old project any more |
 
-Empty tables are completely fine. That's what the upload steps in Part 2 are
-for. The two ❌ rows are what this script fixes.
+### One booby-trap found and defused 💣
 
-### Steps
+A database script from June set an article's cover photo to an image **in the
+old project's storage**. It hadn't gone off yet (no articles exist), but the
+first time anyone published an article with that name, the site would have been
+serving a photo out of a project we don't control — which would break the day
+that project is paused. Emptied out, with the explanation kept in the file.
 
-1. **supabase.com/dashboard** → the **aluma** project (`jzqayfllojeqivwbbuyf`).
-2. Far-left icon bar → **SQL Editor** → **New query**.
-3. Open the file **`supabase/migrations/20260731130000_repair_live_project.sql`**
-   in this project folder, select all of it, copy it.
-4. Paste it into the SQL Editor.
-5. Click **Run** (or Ctrl+Enter).
-6. It should say **Success. No rows returned.**
+### The one thing I can't check from here ⚠️
 
-> **It is safe to run twice.** Every statement is written to check first, so
-> running it again changes nothing. If you're ever unsure whether it worked,
-> just run it again.
+**Cloudflare keeps its own copy of the database settings.** Your laptop is
+correct; the published website has a separate set, and I have no way to read
+them.
 
-### Then check it worked
+1. **dash.cloudflare.com** → Workers & Pages → **aluma** → Settings →
+   **Environment variables**
+2. All three must say `jzqayfllojeqivwbbuyf`:
+   - `VITE_SUPABASE_URL` = `https://jzqayfllojeqivwbbuyf.supabase.co`
+   - `VITE_SUPABASE_PROJECT_ID` = `jzqayfllojeqivwbbuyf`
+   - `VITE_SUPABASE_PUBLISHABLE_KEY` = the `eyJ…` key
+3. **If you change anything → Deployments → Retry deployment.** Environment
+   variables only take effect on a fresh build; editing them alone does nothing.
 
-New query, paste this, Run:
+**Tell me: "Cloudflare checked."**
 
-```sql
-select
-  (select count(*) from public.site_reviews)  as reviews_table_ok,
-  (select count(*) from public.site_projects) as projects_table_ok;
-```
+### Two more you'll set up later, on the live project
 
-Two zeros is a pass — it means both tables exist and are readable. (Zero rows
-is expected; there's no content in them yet.)
+Not problems — just make sure you do them on **`jzqayfllojeqivwbbuyf`** and not
+the old one, since both would look identical while you're doing them:
 
-**Then tell me: "SQL ran, both zeros."**
+- The **Send Email Hook** (Authentication → Hooks). Its URL must start
+  `https://jzqayfllojeqivwbbuyf.supabase.co/...`
+- The **secrets** (`RESEND_API_KEY` and friends). These live per-project.
+
+### About the old project itself
+
+You don't need to do anything with it, and **don't delete it yet.**
+
+That defused script tells us it once held real article images, so there may be
+content in it worth keeping. If you can get back into that other account,
+worth a look before you retire it: any real articles, product photos or
+customer records in there won't come across on their own — the two projects
+share nothing.
+
+Once the site is live and you're happy, pausing it is tidy. There's no rush,
+and nothing here depends on it.
 
 ---
 
@@ -782,8 +797,9 @@ that unblocks the most work.
 1. ✅ DONE  Supabase project:  jzqayfllojeqivwbbuyf
 2. ✅ DONE  Anon key received and verified
 
-3. SQL script run?  (STEP 1)          "SQL ran, both zeros"
-4. Cloudflare env vars checked?       yes / no        (BLOCKER 2 box)
+3. ✅ DONE  SQL script run — both tables verified
+
+4. Cloudflare env vars checked?       "Cloudflare checked"
 5. Can you get into /admin?           yes / no        (BLOCKER 3)
 6. Resend API key:                    re_...          (BLOCKER 4)
 ```

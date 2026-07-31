@@ -1,1 +1,22 @@
-UPDATE public.blog_posts SET cover_image_url = 'https://yvxynsonjmcppaxflmvz.supabase.co/storage/v1/object/public/blog-images/aluminum-profiles.jpg' WHERE slug = 'aluminum-frames';
+-- Neutralised 2026-07-31. Left in place rather than deleted, because removing an
+-- applied migration rewrites history; emptied because what it did is now
+-- actively harmful.
+--
+-- It used to be:
+--
+--   UPDATE public.blog_posts
+--   SET cover_image_url = 'https://yvxynsonjmcppaxflmvz.supabase.co/storage/v1/
+--                          object/public/blog-images/aluminum-profiles.jpg'
+--   WHERE slug = 'aluminum-frames';
+--
+-- That URL points into the storage bucket of a DIFFERENT Supabase project — the
+-- old one this site no longer uses. Run against the live project it would write
+-- an image URL we don't control into a published article: it breaks the moment
+-- that project is paused or deleted, and until then it serves our images off
+-- someone else's storage.
+--
+-- Harmless today (blog_posts is empty, so the WHERE matches nothing), but it
+-- would have gone off the first time an article used that slug.
+--
+-- Article covers belong in THIS project's `blog-images` bucket, uploaded via
+-- /admin/blog, which writes the correct URL by itself.

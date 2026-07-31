@@ -688,14 +688,24 @@ Full instructions for each are in **`docs/GUIDE.md` Part 1**.
    The other ref, `yvxynsonjmcppaxflmvz`, is in an account the owner cannot even
    open; it is not ours. `.env`, `.env.example` and `index.html` are repointed.
 2. ✅ **RESOLVED — anon key in place and verified** against the live project.
-2b. **⛔ Run `supabase/migrations/20260731130000_repair_live_project.sql`** in
-   the SQL Editor. Probing every table with the anon key found the live schema
-   had drifted: `site_reviews` did not exist, and `site_projects` rejected anon
-   at the GRANT level, so the projects page would have errored rather than shown
-   an empty list. (`contact_leads` also rejects anon — that one is correct.)
-   All 15 other tables exist and are empty, which is expected.
-2c. **⛔ Check the Cloudflare Pages env vars** point at `jzqay…` too — the
-   deployed site has its own copy, and env changes only apply on a new build.
+2b. ✅ **RESOLVED — repair migration run and verified.** `site_reviews` now
+   exists; `site_projects` went 401 → 200. (`contact_leads` still rejects anon,
+   which is correct.) All other tables exist and are empty, as expected.
+2c. **⛔ Cloudflare Pages env vars** — the deployed site keeps its own copy of
+   `VITE_SUPABASE_*` and cannot be inspected from here. Must read `jzqay…`, and
+   env changes only take effect on a **new build**.
+
+**Old-project audit (2026-07-31), so nobody re-does it:** every attachment
+point was checked. Edge functions (`submit-contact`, `auth-email-hook`,
+`invite-admin`) are all deployed on `jzqay…` and executing current code —
+`submit-contact` returns its own zod error for an empty body, versus 404 for a
+name that doesn't exist. All four storage buckets exist there. Every table is
+empty, so no old URLs are stored in any row, and no source file references the
+old ref. One landmine was found and neutralised: migration
+`20260625060348_*.sql` hardcoded a `blog_posts.cover_image_url` pointing into
+the OLD project's `blog-images` bucket — a no-op today, but it would have fired
+the first time an article used that slug and served a published image off a
+project we don't control.
 3. **⛔ Admin role row** — needed before any upload will be accepted.
 4. **⛔ Resend account under `outdooraluma@gmail.com`** + API key. (Test mode
    only delivers to the account-owner address, so the account email itself
