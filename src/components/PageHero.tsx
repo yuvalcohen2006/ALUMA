@@ -31,8 +31,13 @@ const PageHero = ({ title, subtitle, filterSlot, dark = false }: PageHeroProps) 
             its rule and the filter trigger all sit against the same edge. The
             trigger is stacked under the title rather than opposite it, so it
             stays on the right without crowding the heading — and on the same
-            side as the drawer it opens. */}
-        <div className="flex flex-col items-end">
+            side as the drawer it opens.
+
+            items-START, not items-end: in a column flex the cross axis is the
+            INLINE axis, so under dir="rtl" `items-end` resolves to the LEFT
+            edge. That one word used to push the title, its rule and the filter
+            button to the wrong side of every interior page. */}
+        <div className="flex flex-col items-start">
           {/* Shrink-to-fit, so the rule (w-full of this wrapper) measures
               exactly as wide as the title. A title too long for the row wraps
               and the rule follows it rather than overflowing the page. */}

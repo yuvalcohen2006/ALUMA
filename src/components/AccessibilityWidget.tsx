@@ -111,20 +111,25 @@ const AccessibilityWidget = () => {
 
   return (
     <>
+      {/* end-6 = left under RTL, the opposite corner from the WhatsApp FAB
+          (start-6). z-40 keeps both FABs under the cookie banner (z-50). */}
       <button
         type="button"
         onClick={() => setOpen(true)}
         aria-label="פתיחת תפריט נגישות"
         aria-haspopup="dialog"
         aria-expanded={open}
-        className="hidden md:flex fixed bottom-24 md:bottom-6 left-6 z-50 w-14 h-14 rounded-full bg-primary text-background items-center justify-center shadow-luxury hover:bg-accent transition-smooth focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+        className="hidden md:flex fixed bottom-6 end-6 z-40 w-14 h-14 rounded-full bg-primary text-background items-center justify-center shadow-luxury hover:bg-accent transition-smooth focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
       >
         <Accessibility className="w-7 h-7" />
       </button>
 
+      {/* justify-end so the panel opens on the same side as the button that
+          opened it — `justify-start` resolved to the right in RTL while the
+          trigger sits on the left. */}
       {open && (
         <div
-          className="fixed inset-0 z-[60] flex items-end md:items-center justify-start md:justify-start"
+          className="fixed inset-0 z-[60] flex items-end md:items-center justify-end"
           role="dialog"
           aria-modal="true"
           aria-label="תפריט נגישות"

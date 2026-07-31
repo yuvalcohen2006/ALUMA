@@ -8,7 +8,11 @@ export const SITE = {
   name: "Aluma",
   nameHe: "אלומה",
   domain: "https://alumaoutdoor.com",
-  email: "info@aluma.co.il",
+  // The studio inbox. Everything the site sends — contact-form notifications,
+  // club signup notices — lands here, and every mailto: on the site points at
+  // it. Change it HERE only; the edge functions read OWNER_EMAIL separately
+  // (see docs/GUIDE.md) and must be updated to match.
+  email: "outdooraluma@gmail.com",
 
   phone: {
     display: "050-451-9062", // human-readable, RTL-safe

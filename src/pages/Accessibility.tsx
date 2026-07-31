@@ -1,6 +1,7 @@
 import Layout from "@/components/Layout";
 import SEO from "@/components/SEO";
 import PageHero from "@/components/PageHero";
+import { SITE } from "@/config/site";
 
 const AccessibilityPage = () => {
   return (
@@ -13,7 +14,7 @@ const AccessibilityPage = () => {
       <PageHero title="נגישות" />
 
       <section className="py-12 md:py-20 bg-background">
-        <div className="container-luxury max-w-3xl prose-luxury text-foreground space-y-8 text-body text-right">
+        <div className="container-luxury max-w-3xl text-foreground space-y-8 text-body text-right">
           <div>
             <h2 className="font-display text-2xl text-primary mb-3">המחויבות שלנו</h2>
             <p>
@@ -57,7 +58,7 @@ const AccessibilityPage = () => {
             </p>
             <ul className="mt-3 space-y-1 text-foreground">
               <li>טלפון: <a href="tel:0504519062" className="text-foreground underline hover:text-accent" dir="ltr">050-451-9062</a></li>
-              <li>דוא״ל: <a href="mailto:info@aluma.co.il" className="text-foreground underline hover:text-accent" dir="ltr">info@aluma.co.il</a></li>
+              <li>דוא״ל: <a href={`mailto:${SITE.email}`} className="text-foreground underline hover:text-accent" dir="ltr">{SITE.email}</a></li>
               <li>כתובת: התמר 78, יציץ</li>
             </ul>
           </div>

@@ -125,13 +125,22 @@
   }
 }
 
-@layer utilities {
+@layer base {
+  /* Lives in `base`, not `utilities`, on purpose. Tailwind emits user
+     utilities AFTER its own, so as a utility this rule silently beat every
+     `font-bold` / `font-medium` / `tracking-*` placed beside it — every
+     section title on the site was rendering at 400 instead of 700. In the
+     base layer it still out-specifies the bare `h1`/`h2` element rules
+     (0,1,0 vs 0,0,1), so headings look exactly as before, but a weight or
+     tracking utility on the same element now wins. */
   .font-display {
     font-family: var(--font-display);
     font-weight: 400;
     letter-spacing: -0.005em;
   }
+}
 
+@layer utilities {
   .text-balance {
     text-wrap: balance;
   }

@@ -1,5 +1,10 @@
 # What to do next — click by click
 
+> ⚠️ **Superseded by [`GUIDE.md`](GUIDE.md).** That file covers the same ground
+> in more detail, plus content uploading and the photo/asset shopping list, and
+> it is the one being kept up to date. This file is retained only because the
+> Cloudflare and Resend walkthroughs below are still accurate.
+
 Written to be followed without knowing anything about DNS, hosting or email.
 Do the blocks in order. Nothing here can break the live site.
 
@@ -30,7 +35,7 @@ password resets, and a notification when someone fills in the contact form.
 
 1. Open **resend.com**
 2. Click **Sign up** (top right)
-3. Sign up with **yuval.cohen006@gmail.com**
+3. Sign up with **outdooraluma@gmail.com**
    - ⚠️ This specific address matters. Until we own the domain, Resend will only
      deliver test emails to the address the account was created with. Use a
      different one and no test email will arrive anywhere.

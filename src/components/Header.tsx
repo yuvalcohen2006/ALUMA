@@ -121,8 +121,10 @@ const Header = () => {
           </Link>
         </div>
 
-        {/* Mobile logo */}
-        <Link to="/" className="lg:hidden shrink-0 order-last" aria-label="Aluma">
+        {/* Mobile logo. Sits on the right like the desktop one — it used to
+            carry `order-last`, which flipped the brand mark to the left below
+            the lg breakpoint. `me-auto` pushes the hamburger to the far edge. */}
+        <Link to="/" className="lg:hidden shrink-0 me-auto" aria-label="Aluma">
           <img src={alumaLogo} alt="Aluma" className="h-7 md:h-8 w-auto" />
         </Link>
 
@@ -209,7 +211,7 @@ const Header = () => {
         </a>
 
         {/* Mobile menu button */}
-        <div className="lg:hidden relative z-50 order-first me-auto">
+        <div className="lg:hidden relative z-50">
           <Button
             variant="ghost"
             size="icon"
