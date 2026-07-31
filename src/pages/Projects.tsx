@@ -131,7 +131,7 @@ const ProjectEntry = ({ project: p, index }: { project: Project; index: number }
           <Reveal
             className={cn("min-w-0", photoRight ? "lg:order-1" : "lg:order-2")}
           >
-            <div className="relative aspect-[4/3] overflow-hidden rounded-[14px] border border-border shadow-soft transition-all duration-500 ease-out group-hover:-translate-y-1 group-hover:shadow-luxury group-hover:border-primary/60">
+            <div className="relative aspect-[4/3] overflow-hidden rounded-[14px]">
               <div className="absolute inset-0 transition-transform duration-600 ease-out group-hover:scale-[1.06]">
                 <img
                   src={p.cover}
@@ -154,22 +154,19 @@ const ProjectEntry = ({ project: p, index }: { project: Project; index: number }
               photoRight ? "lg:order-2" : "lg:order-1"
             )}
           >
-            {/* Folio numeral with a rule running off it — the index device that
-                repeats down the page and sets the rhythm. */}
-            <div className="flex items-center gap-4">
-              <span
-                aria-hidden="true"
-                className="font-display text-[46px] lg:text-[58px] leading-none tabular-nums text-primary/70 transition-colors duration-500 group-hover:text-primary"
-              >
-                {folio(index + 1)}
-              </span>
-              <span
-                aria-hidden="true"
-                className="h-px flex-1 bg-primary/25 transition-colors duration-500 group-hover:bg-primary/50"
-              />
-            </div>
+            {/* The folio numeral, demoted from a 58px display glyph to a
+                quiet eyebrow. It keeps the 01–06 editorial device, but the
+                project name gets the headline job back — at the homepage
+                tile's own type scale, so the two pages speak in one voice. */}
+            <span
+              aria-hidden="true"
+              dir="ltr"
+              className="block text-start text-[13px] font-medium tracking-[0.14em] tabular-nums text-primary"
+            >
+              {folio(index + 1)}
+            </span>
 
-            <h2 className="font-display font-normal text-[22px] leading-snug text-foreground mt-6 transition-colors duration-300 group-hover:text-accent">
+            <h2 className="font-display font-semibold text-[32px] md:text-[40px] leading-[1.1] text-foreground mt-3 transition-colors duration-300 group-hover:text-accent">
               {p.name}
             </h2>
 

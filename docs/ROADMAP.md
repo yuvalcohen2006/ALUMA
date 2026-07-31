@@ -738,6 +738,40 @@ project we don't control.
 
 ## STATUS SUMMARY
 
+*Last updated: 2026-07-31 night — round three, shipped*
+
+**All owner notes from round three are in**, each pushed separately:
+
+- **Photography round three**: coffee table set with espresso + cookies; bar
+  stools re-shot as three simple identical silhouettes (the old set read as an
+  impossible object); bar + dining night rows moved purple → deep charcoal
+  (fire table untouched, by order); parasol canopy pinned low and to the side,
+  clear of the headline zone; dining chair got a throw and olive-branch
+  shadows; club background is now a peach dawn over an infinity pool.
+- **Journal**: material bands are the homepage tile language at half height,
+  2-up, no fade — `MaterialBand` and `accent.ts` deleted for good this time.
+- **Club tile**: frosted-pill input (the underline vanished on a bright sky),
+  filled round submit, 12px seam below as well as above.
+- **About**: materials strip removed (it duplicated the journal).
+- **FAQ**: rebuilt on Apple's marketing-FAQ pattern — 720px flat accordion,
+  terracotta category labels, leading-edge plus (direction-neutral, so nothing
+  mirrors in RTL), 0fr→1fr answers, no search, scroll-spy index deleted.
+- **Contact**: channels-first (Apple's own contact page has no form at all),
+  calm hairline tiles with the phone number as the typography, underline form
+  fields, charcoal pill submit. All form logic untouched.
+- **English is ON** (`SITE.enableEnglish = true`): nav, footer, home page and
+  Q&A fully translate; FAQ copy moved into he/en catalogs and its JSON-LD
+  regenerates per language. **Remaining Hebrew-only pages under /en**: journal,
+  collections (DB content), projects, story, contact, DIY pages, legal —
+  migrate next.
+- **Projects**: three minimal alignments only — folio numeral demoted to a
+  terracotta eyebrow, titles up to the homepage tile scale (32/40 semibold),
+  photo card chrome dropped for the tiles' plain rounded treatment.
+
+---
+
+*Earlier:*
+
 *Last updated: 2026-07-31 evening — owner-directed round two, shipped*
 
 **The owner approved the rolled-back baseline and directed this round himself.**
