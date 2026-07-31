@@ -25,6 +25,18 @@
 /before-after     /projects     301
 /en/before-after  /en/projects  301
 
+# Build-your-own stations nested under the hub
+/designer       /diy/scene      301
+/en/designer    /en/diy/scene   301
+/fabric         /diy/fabric     301
+/en/fabric      /en/diy/fabric  301
+/ar             /diy/ar         301
+/en/ar          /en/diy/ar      301
+
+# The questionnaire, renamed to what it actually is
+/questionnaire     /consult      301
+/en/questionnaire  /en/consult   301
+
 # Duplicate routes collapsed onto one canonical URL each
 /auth        /club/auth          301
 /account     /club/dashboard     301

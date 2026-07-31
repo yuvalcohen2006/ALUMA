@@ -1,12 +1,17 @@
 import { useEffect, useState } from "react";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
+import Layout from "@/components/Layout";
 import SEO from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { Smartphone, Box, ScanLine, Info } from "lucide-react";
 
-// Demo products, placeholder GLB/USDZ models hosted on modelviewer.dev.
-// Replace `glb` / `usdz` URLs later with Aluma's own scanned models.
+// ⚠️ PLACEHOLDER MODELS. These are Khronos sample assets served from
+// modelviewer.dev — a generic sofa, chair and table, not Aluma products. Three
+// of the four have no USDZ, so iOS Quick Look cannot open them.
+//
+// Real models are a commissioning job, not a coding one: see docs/GUIDE.md
+// Part 3.4 for the spec and the budget. `ar-scale="fixed"` on every entry is
+// deliberate — "auto" lets the viewer pinch-resize the furniture, which
+// destroys the one question AR exists to answer.
 const products = [
   {
     id: "modular-sofa-3m",
@@ -24,7 +29,7 @@ const products = [
     glb: "https://modelviewer.dev/shared-assets/models/glTF-Sample-Assets/Models/Chair/glTF-Binary/Chair.glb",
     usdz: "https://modelviewer.dev/shared-assets/models/Chair.usdz",
     poster: "",
-    arScale: "auto" as const,
+    arScale: "fixed" as const,
   },
   {
     id: "sofa",
@@ -33,7 +38,7 @@ const products = [
     glb: "https://modelviewer.dev/shared-assets/models/glTF-Sample-Assets/Models/Sofa/glTF-Binary/Sofa.glb",
     usdz: "",
     poster: "",
-    arScale: "auto" as const,
+    arScale: "fixed" as const,
   },
   {
     id: "table",
@@ -42,7 +47,7 @@ const products = [
     glb: "https://modelviewer.dev/shared-assets/models/glTF-Sample-Assets/Models/Table/glTF-Binary/Table.glb",
     usdz: "",
     poster: "",
-    arScale: "auto" as const,
+    arScale: "fixed" as const,
   },
 ];
 
@@ -51,41 +56,40 @@ const ARPreview = () => {
   const [active, setActive] = useState(products[0]);
 
   useEffect(() => {
-    document.title = "AR Preview, נסו את הרהיט במרחב שלכם | Aluma";
-    const meta =
-      document.querySelector('meta[name="description"]') ||
-      Object.assign(document.createElement("meta"), { name: "description" });
-    (meta as HTMLMetaElement).content =
-      "תצוגת מציאות רבודה, מקמו רהיטי חוץ של Aluma במרפסת או בגינה שלכם דרך הסמארטפון.";
-    if (!meta.parentNode) document.head.appendChild(meta);
-
-    // Lazy-load Google's <model-viewer> web component
-    const existing = document.querySelector(
-      'script[data-mv="true"]'
-    ) as HTMLScriptElement | null;
-    if (existing) {
+    // model-viewer is an npm dependency now, not a runtime <script> pointed at
+    // a CDN. The CDN version pinned a URL nothing in this repo could audit or
+    // update, and a third-party outage took the whole feature down. The dynamic
+    // import keeps its ~300KB out of every other route's bundle.
+    //
+    // Registering a custom element twice throws, so a second visit to this
+    // route must not re-register it.
+    let cancelled = false;
+    if (customElements.get("model-viewer")) {
       setReady(true);
       return;
     }
-    const s = document.createElement("script");
-    s.type = "module";
-    s.src =
-      "https://cdn.jsdelivr.net/npm/@google/model-viewer@3.5.0/dist/model-viewer.min.js";
-    s.dataset.mv = "true";
-    s.onload = () => setReady(true);
-    document.head.appendChild(s);
+    import("@google/model-viewer")
+      .then(() => {
+        if (!cancelled) setReady(true);
+      })
+      .catch(() => {
+        // Leave `ready` false — the viewer keeps its loading state rather than
+        // rendering an element the browser doesn't know.
+      });
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   return (
-    <div className="min-h-screen bg-background">
+    <Layout>
       <SEO
         title="תצוגת AR, ראו ריהוט חוץ במציאות רבודה | Aluma"
         description="הציבו ספות, כורסאות ושולחנות חוץ של Aluma בגינה או במרפסת שלכם בעזרת תצוגת AR ישירות מהדפדפן בטלפון."
-        path="/ar"
+        path="/diy/ar"
       />
-      <Header />
 
-      <main className="pt-32 pb-20">
+      <div className="pt-8 pb-20">
         <section className="container mx-auto px-6 max-w-6xl">
           <div className="text-center mb-12">
             <span className="text-[10px] tracking-[0.3em] uppercase text-accent">
@@ -213,10 +217,9 @@ const ARPreview = () => {
             </p>
           </div>
         </section>
-      </main>
+      </div>
 
-      <Footer />
-    </div>
+    </Layout>
   );
 };
 

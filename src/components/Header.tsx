@@ -58,10 +58,9 @@ const Header = () => {
         label: t("nav.diy"),
         to: localized("/diy"),
         submenu: [
-          { label: t("diySub.designer"), to: localized("/designer") },
-          { label: t("diySub.fabric"), to: localized("/fabric") },
-          { label: t("diySub.ar"), to: localized("/ar") },
-          { label: t("diySub.questionnaire"), to: localized("/questionnaire") },
+          { label: t("diySub.designer"), to: localized("/diy/scene") },
+          { label: t("diySub.fabric"), to: localized("/diy/fabric") },
+          { label: t("diySub.ar"), to: localized("/diy/ar") },
         ],
       },
       { label: t("nav.projects"), to: localized("/projects") },

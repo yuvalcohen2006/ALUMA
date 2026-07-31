@@ -71,11 +71,21 @@ export const publicRoutes = (
     <Route path="projects" element={<Projects />} />
     <Route path="projects/:slug" element={<ProjectDetail />} />
     <Route path="before-after" element={<Navigate to="../projects" replace />} />
-    <Route path="questionnaire" element={<Questionnaire />} />
-    <Route path="ar" element={<ARPreview />} />
-    <Route path="fabric" element={<FabricConfigurator />} />
+    {/* Build-your-own: the hub plus its three stations, nested so the IA reads
+        from the URL. */}
     <Route path="diy" element={<DIY />} />
-    <Route path="designer" element={<SofaDesigner />} />
+    <Route path="diy/scene" element={<SofaDesigner />} />
+    <Route path="diy/fabric" element={<FabricConfigurator />} />
+    <Route path="diy/ar" element={<ARPreview />} />
+    <Route path="designer" element={<Navigate to="../diy/scene" replace />} />
+    <Route path="fabric" element={<Navigate to="../diy/fabric" replace />} />
+    <Route path="ar" element={<Navigate to="../diy/ar" replace />} />
+
+    {/* The questionnaire, honestly framed as what it is: a request for a
+        callback. It was the fourth "build your own" station, which it never
+        really was. */}
+    <Route path="consult" element={<Questionnaire />} />
+    <Route path="questionnaire" element={<Navigate to="../consult" replace />} />
     <Route path="club" element={<Club />} />
     <Route path="club/auth" element={<Auth />} />
     <Route path="club/dashboard" element={<Account />} />

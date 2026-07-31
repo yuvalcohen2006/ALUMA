@@ -29,7 +29,7 @@ const ConsultCTA = () => {
               </p>
             </div>
             <Link
-              to={to("/questionnaire")}
+              to={to("/consult")}
               className="btn-shine shrink-0 self-start md:self-auto inline-flex items-center gap-2"
             >
               לייעוץ אישי

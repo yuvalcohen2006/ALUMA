@@ -94,8 +94,8 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link to={localized("/questionnaire")} className="link-underline inline-block hover:text-accent transition-smooth">
-                  שאלון חכם
+                <Link to={localized("/consult")} className="link-underline inline-block hover:text-accent transition-smooth">
+                  ייעוץ אישי
                 </Link>
               </li>
               <li>

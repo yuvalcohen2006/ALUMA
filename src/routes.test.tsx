@@ -89,6 +89,23 @@ describe("public route table", () => {
     expect(matchedLeaf(path)).toBe("about");
   });
 
+  it.each([
+    ["/diy/scene", "diy/scene"],
+    ["/diy/fabric", "diy/fabric"],
+    ["/diy/ar", "diy/ar"],
+    ["/consult", "consult"],
+  ])("serves %s", (path, leaf) => {
+    expect(matchedLeaf(path)).toBe(leaf);
+    expect(matchedLeaf(`/en${path}`)).toBe(leaf);
+  });
+
+  it.each(["/designer", "/fabric", "/ar", "/questionnaire"])(
+    "still matches the retired station URL %s so it can redirect",
+    (path) => {
+      expect(matchedLeaf(path)).not.toBe("*");
+    }
+  );
+
   it.each(["/journal", "/en/journal"])("serves the merged journal at %s", (path) => {
     expect(matchedLeaf(path)).toBe("journal");
   });
