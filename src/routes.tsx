@@ -15,7 +15,7 @@ const LegacyBlogPostRedirect = () => {
 };
 
 // Code-split secondary routes for faster initial load
-const About = lazy(() => import("./pages/About.tsx"));
+const Story = lazy(() => import("./pages/Story.tsx"));
 const Collections = lazy(() => import("./pages/Collections.tsx"));
 const CollectionDetail = lazy(() => import("./pages/CollectionDetail.tsx"));
 const Journal = lazy(() => import("./pages/Journal.tsx"));
@@ -33,7 +33,7 @@ const BlogPost = lazy(() => import("./pages/BlogPost.tsx"));
 const Questionnaire = lazy(() => import("./pages/Questionnaire.tsx"));
 const ARPreview = lazy(() => import("./pages/ARPreview.tsx"));
 const FabricConfigurator = lazy(() => import("./pages/FabricConfigurator.tsx"));
-const SceneBuilder = lazy(() => import("./pages/SceneBuilder.tsx"));
+const SofaDesigner = lazy(() => import("./pages/SofaDesigner.tsx"));
 const DIY = lazy(() => import("./pages/DIY.tsx"));
 const Club = lazy(() => import("./pages/Club.tsx"));
 const ThankYou = lazy(() => import("./pages/ThankYou.tsx"));
@@ -53,10 +53,8 @@ const NotFound = lazy(() => import("./pages/NotFound.tsx"));
 export const publicRoutes = (
   <>
     <Route path="" element={<Index />} />
-    <Route path="about" element={<About />} />
-    {/* Renamed from "our story". The old URL is indexed, so it redirects here
-        in-app as well as at the edge (public/_redirects). */}
-    <Route path="story" element={<Navigate to="../about" replace />} />
+    <Route path="story" element={<Story />} />
+    <Route path="about" element={<Navigate to="../story" replace />} />
     <Route path="collections" element={<Collections />} />
     <Route path="collections/:slug" element={<CollectionDetail />} />
     {/* "שווה לדעת" — materials and the magazine, merged. The material DETAIL
@@ -71,21 +69,17 @@ export const publicRoutes = (
     <Route path="projects" element={<Projects />} />
     <Route path="projects/:slug" element={<ProjectDetail />} />
     <Route path="before-after" element={<Navigate to="../projects" replace />} />
-    {/* Build-your-own: the hub plus its three stations, nested so the IA reads
-        from the URL. */}
     <Route path="diy" element={<DIY />} />
-    <Route path="diy/scene" element={<SceneBuilder />} />
-    <Route path="diy/fabric" element={<FabricConfigurator />} />
-    <Route path="diy/ar" element={<ARPreview />} />
-    <Route path="designer" element={<Navigate to="../diy/scene" replace />} />
-    <Route path="fabric" element={<Navigate to="../diy/fabric" replace />} />
-    <Route path="ar" element={<Navigate to="../diy/ar" replace />} />
-
-    {/* The questionnaire, honestly framed as what it is: a request for a
-        callback. It was the fourth "build your own" station, which it never
-        really was. */}
-    <Route path="consult" element={<Questionnaire />} />
-    <Route path="questionnaire" element={<Navigate to="../consult" replace />} />
+    <Route path="designer" element={<SofaDesigner />} />
+    <Route path="fabric" element={<FabricConfigurator />} />
+    <Route path="ar" element={<ARPreview />} />
+    <Route path="questionnaire" element={<Questionnaire />} />
+    {/* Short-lived nested URLs from the restructure — kept so anything already
+        linked still lands somewhere. */}
+    <Route path="diy/scene" element={<Navigate to="../designer" replace />} />
+    <Route path="diy/fabric" element={<Navigate to="../fabric" replace />} />
+    <Route path="diy/ar" element={<Navigate to="../ar" replace />} />
+    <Route path="consult" element={<Navigate to="../questionnaire" replace />} />
     <Route path="club" element={<Club />} />
     <Route path="club/auth" element={<Auth />} />
     <Route path="club/dashboard" element={<Account />} />

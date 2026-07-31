@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Blocks, Palette, ScanLine } from "lucide-react";
+import { ArrowLeft, Blocks, ClipboardList, Palette, ScanLine } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import Layout from "@/components/Layout";
 import SEO from "@/components/SEO";
@@ -15,16 +15,13 @@ import { sunbrellaFabrics } from "@/data/sunbrella";
 /**
  * DIY hub — "the workbench".
  *
- * Not a card grid: a long bench plank, two shorter stations clamped under it,
- * and a plank closing the bench. Each plank is stamped with its bench number
- * and carries a framed *specimen* of the tool it opens — the actual modular
- * units with their real names, the actual Sunbrella swatches, a drawn floor
- * plane with the AR reticle — instead of a stock photo. A cursor-tracked lamp
- * warms whichever plank you point at.
- *
- * There were four stations. The questionnaire was never a "build your own"
- * thing — it collects contact details so a designer can call back — so it now
- * lives at /consult, reachable from the home page and the contact page.
+ * Not a card grid: two long bench planks with two shorter stations clamped
+ * between them (wide / two-up / wide). Each plank is stamped with its bench
+ * number and carries a framed *specimen* of the tool it opens — the actual
+ * modular units with their real names, the actual Sunbrella swatches, a drawn
+ * floor plane with the AR reticle, the actual questionnaire steps as a rail —
+ * instead of a stock photo. A cursor-tracked lamp warms whichever plank you
+ * point at.
  *
  * Heights are left to the content on purpose: the two wide planks size
  * themselves and the two short ones share a row, so no plank can end up with a
@@ -38,6 +35,9 @@ const SITE = "https://alumaoutdoor.com";
 /** Eight swatches spread across all three Sunbrella families. */
 const swatchSample = sunbrellaFabrics.filter((_, i) => i % 2 === 0).slice(0, 8);
 const swatchRest = sunbrellaFabrics.length - swatchSample.length;
+
+/** The four steps the questionnaire actually walks you through. */
+const questionnaireSteps = ["המרחב", "סגנון ולוח זמנים", "מה לכלול", "פרטי קשר"];
 
 const introFacts = [
   "בלי הרשמה, בלי עלות",
@@ -62,9 +62,10 @@ const toolList = {
   name: "כלים לתכנון עצמי של ריהוט חוץ",
   inLanguage: "he-IL",
   itemListElement: [
-    { name: "עצבו סלון", url: `${SITE}/diy/scene` },
-    { name: "בחרו את הבד", url: `${SITE}/diy/fabric` },
-    { name: "AR, תצוגה במרחב", url: `${SITE}/diy/ar` },
+    { name: "עצבו סלון", url: `${SITE}/designer` },
+    { name: "בחרו את הבד", url: `${SITE}/fabric` },
+    { name: "AR, תצוגה במרחב", url: `${SITE}/ar` },
+    { name: "שאלון חכם", url: `${SITE}/questionnaire` },
   ].map((t, i) => ({
     "@type": "ListItem",
     position: i + 1,
@@ -255,7 +256,7 @@ const DIYPage = () => {
               tone="charcoal"
               subtitle="אין כאן סדר נכון. אפשר להתחיל מהתחנה שהכי מדברת אליכם ולחזור לשאר מתי שתרצו, כל אחת מהן עומדת בפני עצמה."
             >
-              שלוש תחנות עבודה
+              ארבע תחנות עבודה
             </SectionHeading>
           </Reveal>
 
@@ -273,7 +274,7 @@ const DIYPage = () => {
               className="mx-auto grid max-w-6xl gap-6 lg:gap-8 lg:grid-cols-2"
             >
               {/* ---- 01 · the long plank at the head of the bench ---- */}
-              <Station n="01" to="/diy/scene" className="lg:col-span-2">
+              <Station n="01" to="/designer" className="lg:col-span-2">
                 <div className="flex flex-col gap-8 lg:flex-row lg:items-center lg:gap-14">
                   <div className="lg:w-[40%] lg:shrink-0">
                     <StationHead icon={Blocks} title="עצבו סלון" />
@@ -289,7 +290,7 @@ const DIYPage = () => {
                       חוזרים אליכם עם הצעת מחיר.
                     </p>
 
-                    <StationCta to="/diy/scene" className="mt-8">
+                    <StationCta to="/designer" className="mt-8">
                       פתחו את המעצב
                     </StationCta>
                   </div>
@@ -329,7 +330,7 @@ const DIYPage = () => {
               </Station>
 
               {/* ---- 02 · short station, right column in RTL ---- */}
-              <Station n="02" to="/diy/fabric">
+              <Station n="02" to="/fabric">
                 <StationHead icon={Palette} title="בחרו את הבד" />
 
                 <p className="mt-5 text-[20px] leading-relaxed text-foreground text-pretty">
@@ -357,13 +358,13 @@ const DIYPage = () => {
                   </div>
                 </Specimen>
 
-                <StationCta to="/diy/fabric" className="mt-8 lg:mt-auto lg:pt-8">
+                <StationCta to="/fabric" className="mt-8 lg:mt-auto lg:pt-8">
                   לבחירת הבד
                 </StationCta>
               </Station>
 
               {/* ---- 03 · short station, left column in RTL ---- */}
-              <Station n="03" to="/diy/ar" className="lg:col-span-2">
+              <Station n="03" to="/ar">
                 <StationHead icon={ScanLine} title="AR, תצוגה במרחב" />
 
                 <p className="mt-5 text-[20px] leading-relaxed text-foreground text-pretty">
@@ -400,11 +401,57 @@ const DIYPage = () => {
                   </div>
                 </Specimen>
 
-                <StationCta to="/diy/ar" className="mt-8 lg:mt-auto lg:pt-8">
+                <StationCta to="/ar" className="mt-8 lg:mt-auto lg:pt-8">
                   פתחו את התצוגה
                 </StationCta>
               </Station>
 
+              {/* ---- 04 · the long plank that closes the bench ---- */}
+              <Station n="04" to="/questionnaire" className="lg:col-span-2">
+                <div className="flex flex-col gap-8 lg:flex-row lg:items-center lg:gap-14">
+                  <div className="lg:flex-1">
+                    <StationHead icon={ClipboardList} title="שאלון חכם" />
+                    <p className="mt-5 max-w-2xl text-[20px] leading-relaxed text-foreground text-pretty">
+                      ארבעה שלבים קצרים על המרחב, על הסגנון ועל לוח הזמנים שלכם.
+                      בסוף תקבלו המלצה על הקולקציה שמתאימה לכם ביותר, ואנחנו נחזור
+                      אליכם לתאם פגישת אפיון ללא עלות.
+                    </p>
+                  </div>
+
+                  <StationCta to="/questionnaire" className="shrink-0">
+                    התחילו בשאלון
+                  </StationCta>
+                </div>
+
+                {/* The one thing only this plank is wide enough to do: the four
+                    real steps stretched end to end, like a track along the bench.
+                    The connectors take the slack, so the rail always reaches both
+                    edges however long the labels are. It only goes single-line at
+                    lg, where the plank spans both columns — narrower than that the
+                    four chips cannot fit a row and would be clipped by the plank's
+                    overflow-hidden, so they wrap instead. */}
+                <ol className="mt-9 flex flex-wrap items-center gap-3 lg:flex-nowrap">
+                  {questionnaireSteps.map((s, i) => (
+                    <li
+                      key={s}
+                      className="flex items-center gap-3 lg:flex-1 lg:last:flex-none"
+                    >
+                      <span
+                        className="whitespace-nowrap rounded-[10px] border border-border bg-secondary/60 px-4 py-2 text-[18px] text-foreground transition-colors duration-300 group-hover:border-primary/40 group-focus-within:border-primary/40"
+                        style={{ transitionDelay: `${i * 45}ms` }}
+                      >
+                        {s}
+                      </span>
+                      {i < questionnaireSteps.length - 1 && (
+                        <span
+                          className="h-px w-5 shrink-0 lg:w-auto lg:flex-1 bg-primary/45"
+                          aria-hidden="true"
+                        />
+                      )}
+                    </li>
+                  ))}
+                </ol>
+              </Station>
             </ul>
           </Reveal>
         </div>

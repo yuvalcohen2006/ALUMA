@@ -90,17 +90,17 @@ describe("public route table", () => {
   });
 
   it.each([
-    ["/diy/scene", "diy/scene"],
-    ["/diy/fabric", "diy/fabric"],
-    ["/diy/ar", "diy/ar"],
-    ["/consult", "consult"],
-  ])("serves %s", (path, leaf) => {
+    ["/designer", "designer"],
+    ["/fabric", "fabric"],
+    ["/ar", "ar"],
+    ["/questionnaire", "questionnaire"],
+  ])("serves the build-your-own station %s", (path, leaf) => {
     expect(matchedLeaf(path)).toBe(leaf);
     expect(matchedLeaf(`/en${path}`)).toBe(leaf);
   });
 
-  it.each(["/designer", "/fabric", "/ar", "/questionnaire"])(
-    "still matches the retired station URL %s so it can redirect",
+  it.each(["/diy/scene", "/diy/fabric", "/diy/ar", "/consult"])(
+    "still matches the short-lived nested URL %s so it can redirect back",
     (path) => {
       expect(matchedLeaf(path)).not.toBe("*");
     }

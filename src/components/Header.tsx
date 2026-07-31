@@ -47,25 +47,13 @@ const Header = () => {
     [collections, localized]
   );
 
-  // Order is the client's: what they're selling comes first, the supporting
-  // reading material after it, and "about" sits near the far end — someone who
-  // wants the backstory will look there, and nobody arrives wanting it first.
   const navLinks = useMemo(
     () => [
       { label: t("nav.home"), to: localized("/") },
+      { label: t("nav.story"), to: localized("/story") },
       { label: t("nav.collections"), to: localized("/collections"), submenu: collectionsSub },
-      {
-        label: t("nav.diy"),
-        to: localized("/diy"),
-        submenu: [
-          { label: t("diySub.designer"), to: localized("/diy/scene") },
-          { label: t("diySub.fabric"), to: localized("/diy/fabric") },
-          { label: t("diySub.ar"), to: localized("/diy/ar") },
-        ],
-      },
-      { label: t("nav.projects"), to: localized("/projects") },
-      // Materials and the magazine, merged: the same audience wants both —
-      // people who care what they're actually buying.
+      // Materials and the magazine share one entry — same reader, and each half
+      // looked thin on its own.
       {
         label: t("nav.journal"),
         to: localized("/journal"),
@@ -76,9 +64,19 @@ const Header = () => {
           { label: t("materialsSub.polystone"), to: localized("/materials/polystone") },
         ],
       },
+      { label: t("nav.projects"), to: localized("/projects") },
+      {
+        label: t("nav.diy"),
+        to: localized("/diy"),
+        submenu: [
+          { label: t("diySub.designer"), to: localized("/designer") },
+          { label: t("diySub.fabric"), to: localized("/fabric") },
+          { label: t("diySub.ar"), to: localized("/ar") },
+          { label: t("diySub.questionnaire"), to: localized("/questionnaire") },
+        ],
+      },
       { label: t("nav.faq"), to: localized("/faq") },
       { label: t("nav.club"), to: localized("/club") },
-      { label: t("nav.about"), to: localized("/about") },
       { label: t("nav.contact"), to: localized("/contact") },
     ],
     [collectionsSub, t, localized]

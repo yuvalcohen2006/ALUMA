@@ -7,6 +7,7 @@ import Reveal from "@/components/Reveal";
 import SectionRule from "@/components/SectionRule";
 import { supabase } from "@/integrations/supabase/client";
 import { materials } from "@/data/materials";
+import MaterialBand from "@/components/materials/MaterialBand";
 import { useLocalizedPath } from "@/lib/useLocalizedPath";
 
 type Post = {
@@ -150,46 +151,20 @@ const JournalPage = () => {
         subtitle="על החומרים, על המלאכה, ועל מה שכדאי לדעת לפני שבוחרים ריהוט שנשאר בחוץ כל השנה."
       />
 
-      {/* MATERIALS — a persistent strip above the feed, not mixed into it.
-          Materials are evergreen and articles are chronological; interleaved,
-          the Sunbrella explainer sinks below the fold forever and never
-          resurfaces. Small square tiles on a light surface, and none of the
-          three glow layers the old dark bands carried — a coloured glow on
-          white just reads as a printing error. */}
-      <section className="pb-4 bg-background">
+      {/* MATERIALS — full-width bands, the same layout as the old materials
+          page, on a light ground now. They sit ABOVE the article feed rather
+          than mixed into it: materials are evergreen and articles are
+          chronological, so interleaved, the Sunbrella explainer sinks below the
+          fold the day a third article is published and never comes back. */}
+      <section className="pb-8 bg-background">
         <div className="container-luxury">
-          <Reveal>
-            <h2 className="font-display font-bold text-[26px] md:text-[30px] text-primary text-right">
-              החומרים
-            </h2>
-            <SectionRule on="light" variant="hairline" />
-          </Reveal>
-
-          <ul className="grid grid-cols-2 sm:grid-cols-4 gap-4 md:gap-5">
+          <div className="space-y-14 md:space-y-20 max-w-[920px] mx-auto">
             {materials.map((m, i) => (
-              <Reveal key={m.slug} delay={i * 70}>
-                <li>
-                  <Link to={to(`/materials/${m.slug}`)} className="group block text-right">
-                    <div className="aspect-square overflow-hidden rounded-[14px] bg-secondary">
-                      <img
-                        src={m.image}
-                        alt={m.name}
-                        loading="lazy"
-                        decoding="async"
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.03] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
-                      />
-                    </div>
-                    <h3 className="mt-3 text-[18px] leading-snug text-foreground decoration-1 underline-offset-4 group-hover:underline">
-                      {m.name}
-                    </h3>
-                    <p className="mt-1 text-[15px] leading-snug text-foreground/55 line-clamp-2">
-                      {m.tagline}
-                    </p>
-                  </Link>
-                </li>
+              <Reveal key={m.slug}>
+                <MaterialBand material={m} index={i} />
               </Reveal>
             ))}
-          </ul>
+          </div>
         </div>
       </section>
 

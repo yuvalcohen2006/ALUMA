@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
-import Layout from "@/components/Layout";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { Check, MessageCircle, Sparkles } from "lucide-react";
@@ -36,14 +37,15 @@ const FabricConfigurator = () => {
   const whatsappUrl = `${SITE.whatsapp.href}?text=${waText}`;
 
   return (
-    <Layout>
+    <div className="min-h-screen bg-background">
       <SEO
         title="בחרו את הבד, קונפיגורטור בדי Sunbrella לסלוני חוץ | Aluma"
         description="בחרו צבע ומרקם של בד Sunbrella וראו תצוגה מקדימה מיידית על ספת חוץ של Aluma. עשרות גוונים, עמיד UV, חיוני לריהוט גן ומרפסת."
-        path="/diy/fabric"
+        path="/fabric"
       />
+      <Header />
 
-      <div className="pt-8 pb-20">
+      <main className="pt-32 pb-20">
         <section className="container mx-auto px-6 max-w-7xl">
           {/* Hero */}
           <div className="text-center mb-12">
@@ -207,7 +209,7 @@ const FabricConfigurator = () => {
             </div>
           </div>
         </section>
-      </div>
+      </main>
 
       <ConversionCTA
         title="מצאתם את הבד. עכשיו נביא לכם את המניפה."
@@ -215,7 +217,8 @@ const FabricConfigurator = () => {
         whatsappMessage="היי, בחרתי בד בסטודיו של אלומה ואשמח לקבל דגימות והצעת מחיר."
       />
 
-    </Layout>
+      <Footer />
+    </div>
   );
 };
 
