@@ -60,6 +60,18 @@
     /* Solid sand — NEVER a gradient between the neutral backgrounds (clean lines only) */
     --gradient-cream: hsl(34 34% 87%);
 
+    /* Section dividers, one value per surface — see SectionRule.tsx. Tuned by
+       eye against each background: a hairline under ~0.08 disappears on cheap
+       panels, and over ~0.14 on a light surface reads as a table border. */
+    --rule-on-light: rgb(0 0 0 / 0.10);   /* warm white #F8F6F2 */
+    --rule-on-tinted: rgb(0 0 0 / 0.09);  /* sand #E9DFD2 */
+    --rule-on-dark: rgb(255 255 255 / 0.14); /* charcoal #2F2F2F */
+    /* The brand-coloured mark, for rules that belong to a title rather than
+       separating a section: the short mark under a centred heading, and the
+       title-width rule in PageHero. */
+    --rule-accent: hsl(var(--primary) / 0.55);
+    --rule-accent-on-dark: hsl(var(--background) / 0.45);
+
     --shadow-luxury: 0 20px 60px -20px hsl(0 0% 18% / 0.22);
     --shadow-soft: 0 4px 20px -4px hsl(0 0% 18% / 0.10);
     --shadow-accent: 0 10px 40px -10px hsl(14 47% 40% / 0.30);
@@ -142,6 +154,12 @@
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+
+  /* One vertical rhythm for every full-width section. Sections that set their
+     own py-* are legacy; move them onto this as they're rebuilt. */
+  .section-pad {
+    padding-block: clamp(56px, 9vw, 120px);
   }
 
   /* Running text. One size for every paragraph a visitor actually reads —

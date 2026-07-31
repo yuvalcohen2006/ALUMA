@@ -126,9 +126,26 @@ re-litigate):
 
 ---
 
-## PHASE 3 — Design foundation (build BEFORE any page rebuild)
+## PHASE 3 — Design foundation ✅
 
-- [ ] `src/components/SectionRule.tsx` — the one divider system:
+- [x] `src/components/SectionRule.tsx` — the one divider system, plus tokens
+      `--rule-on-light/-tinted/-dark` and `--rule-accent(-on-dark)` in
+      `index.css`, and a `.section-pad` rhythm utility.
+- [x] `SectionHeading` now draws a rule under **every** heading, not only those
+      that happen to have a subtitle — which is why most of the home page showed
+      no rule at all. The variant follows the heading rather than the call site
+      (centred → 48×1px accent mark, start-aligned → full-width hairline) and
+      the surface is inferred from the existing colour props, so the site can't
+      drift back into a mix of bar styles. `divider={false}` still works as an
+      escape hatch.
+- [x] `PageHero`'s title-width rule now reads the same `--rule-accent` token
+      instead of its own `bg-primary/50`, so there is one rule vocabulary.
+- [ ] Move legacy `py-*` sections onto `.section-pad` as each page is rebuilt.
+- [ ] Audit stray hardcoded radii / arbitrary `text-[..px]` and normalise.
+
+<details><summary>Original spec (kept for reference)</summary>
+
+- `src/components/SectionRule.tsx` — the one divider system:
       - **Hairline variant** (90% of uses): flex row, title at inline-start,
         optional "view all" at inline-end, `padding-block-end: 18px`,
         `border-block-end: 1px`, `margin-block-end: 48px` (28px mobile).
@@ -138,11 +155,18 @@ re-litigate):
       - **Accent variant** (centred hero titles only, ≤2 per page): **48×1px**,
         brand accent, 20px above / 32px below. Not 2px, not 4px — that's the
         theme-template look.
-- [ ] Tokens in `index.css`: `--rule-on-light/-dark/-tinted`;
-      `.section-pad { padding-block: clamp(56px, 9vw, 120px) }`.
-- [ ] `SectionHeading.tsx` composes `SectionRule`; keep the old `divider` prop
-      working (mapped) so untouched pages don't regress.
-- [ ] Audit stray hardcoded radii / arbitrary `text-[..px]` and normalise.
+- Tokens in `index.css`: `--rule-on-light/-dark/-tinted`;
+  `.section-pad { padding-block: clamp(56px, 9vw, 120px) }`.
+- `SectionHeading.tsx` composes `SectionRule`; keep the old `divider` prop
+  working so untouched pages don't regress.
+
+</details>
+
+**Deviation from the spec, and why:** the hairline shipped as a plain rule
+rather than the flex "title + view all" row. The row belongs to the *heading*,
+and `SectionHeading` already owns that layout — building it into the rule too
+would have meant two components fighting over the same box. When a section
+needs a trailing "view all" link, add it to `SectionHeading`, not here.
 
 ---
 
@@ -530,30 +554,46 @@ Full instructions for each are in **`docs/GUIDE.md` Part 1**.
 
 ## STATUS SUMMARY
 
-*Last updated: 2026-07-31 (Phase 1)*
+*Last updated: 2026-07-31 — Phases 1–3 complete*
 
-**Where we are:** Phase 1 (Stabilise) is code-complete on branch
-`redesign/phase-1-stabilize`. The experimental `rebuild/launch-plan` branch has
-been deleted from GitHub. Both headline bugs are fixed at the root: the RTL
-misalignment on all 14 interior pages was a single `items-end` in `PageHero.tsx`
-(in a column flex, the cross axis is the inline axis, so it resolved to the
-left), and the homepage's un-bolded headings were a `.font-display` utility
-whose `font-weight: 400` was silently beating every `font-bold` — fixed by
-moving that rule into `@layer base` so weight utilities win while headings look
-unchanged. Also fixed: the container having no max-width below 1400px, two
-class names that referenced nothing, the cookie banner sitting on top of the
-WhatsApp button, and a handful of smaller RTL defects (dialogs, the
-accessibility panel, the mobile logo flipping sides). All email now flows from
-`SITE.email` = **outdooraluma@gmail.com**. `docs/GUIDE.md` (owner-facing) and
-this file were created.
+**Where we are:** Phases 1, 2 and 3 are done and committed on branch
+`redesign/phase-1-stabilize` (3 commits). `npm run build`, `npx tsc --noEmit`
+and `npm run test` are all clean after each.
 
-**What's next:** Phase 2 (cleanup sweep) — it has no external dependencies and
-can start immediately. Phase 3 (the divider/spacing system) must land before any
-page rebuild, and Phase 4 (i18n plumbing) before the pages are re-authored.
+- **Phase 1 (stabilise).** The experimental `rebuild/launch-plan` branch is
+  deleted from GitHub. Both headline bugs were single-line root causes: the RTL
+  misalignment across all 14 interior pages was `items-end` in `PageHero.tsx`
+  (in a *column* flex the cross axis is the inline axis, so it resolved to the
+  left, taking the title, its rule and the filter button with it), and the
+  un-bolded headings were `.font-display` setting `font-weight: 400` as a
+  utility — emitted after Tailwind's own, so it beat every `font-bold` on the
+  site. Moving it to `@layer base` fixes it with no visual change to headings.
+  Also: the container had no max-width below 1400px, `shadow-elegant` and
+  `prose-luxury` referenced nothing, the cookie banner covered the WhatsApp FAB,
+  and several smaller RTL defects. All email now resolves from `SITE.email` =
+  **outdooraluma@gmail.com**.
+- **Phase 2 (cleanup).** Favourites removed end-to-end, `/before-after` retired,
+  both dead Lovable asset stubs deleted (one *was* the fabric page's entire base
+  photo — that page now shows a real sofa and a true-colour swatch instead of
+  tinted rectangles over a broken image), and the demo-data fork **inverted** so
+  live Supabase data is the default and the fake catalogue is opt-in.
+- **Phase 3 (design foundation).** `SectionRule` + rule tokens + `.section-pad`.
+  `SectionHeading` now draws a correctly-toned rule under every heading, and
+  `PageHero` reads the same accent token, so there is one rule vocabulary.
 
-**What's blocked:** two Phase-1 items — setting the `OWNER_EMAIL` secret and the
-end-to-end email test — because both need answers from the owner (which Supabase
-project is real, and the Resend key). See **WAITING ON THE OWNER**. Note that
-the Supabase project-ref conflict was deliberately **not** guessed at: both
-candidate projects are live and neither will answer without a key, so picking
-one blindly risked pointing the site at an empty database.
+**What's next: Phase 4 (i18n plumbing).** It must land before the page rebuilds
+so each rebuilt page is authored with `t()` keys once instead of twice. Start
+with the pure-move commit that extracts the route table out of `App.tsx`.
+Phase 5 (homepage restructure — the category mosaic) is the first visible win
+and the client's headline request.
+
+**What's blocked:** two Phase-1 items only — setting the `OWNER_EMAIL` secret
+and the end-to-end email test. Both need the owner (see **WAITING ON THE
+OWNER**). Nothing in Phases 4–9 depends on them.
+
+⚠️ **Read before touching anything database-shaped:** the Supabase project-ref
+conflict was deliberately **not** resolved by guessing. Both candidate projects
+are live and both reject unauthenticated probes, so there is no way to tell from
+the code which one holds the tables. Picking one blindly risks pointing the site
+at an empty database and silently losing uploads. A human must look — the
+two-minute procedure is `docs/GUIDE.md` → Blocker 1.
