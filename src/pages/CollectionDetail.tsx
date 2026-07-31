@@ -24,22 +24,7 @@ const CollectionDetailPage = () => {
     setLoading(true);
     setLoadError(false);
 
-    // Mirrors useCollectionsData: when the placeholder catalogue is switched on,
-    // detail pages must resolve from it too or every demo product 404s on click.
-    if (import.meta.env.VITE_USE_DEMO_DATA === "1") {
-      const { demoProducts } = await import("@/data/demoCollections");
-      const found = demoProducts.find((p) => p.slug === slug) ?? null;
-      setItem(found);
-      setRelated(
-        found
-          ? demoProducts
-              .filter((p) => p.collection_id === found.collection_id && p.id !== found.id)
-              .slice(0, 3)
-          : []
-      );
-      setLoading(false);
-      return;
-    }
+    const demoAllowed = import.meta.env.VITE_USE_DEMO_DATA !== "0";
 
     const { data, error } = await supabase
       .from("site_collection_products")
@@ -56,6 +41,25 @@ const CollectionDetailPage = () => {
       setLoading(false);
       return;
     }
+    // Mirrors useCollectionsData: the index falls back to the placeholder
+    // catalogue while the database is empty, so detail pages have to resolve
+    // from it too — otherwise every placeholder product 404s the moment it is
+    // clicked. A real row always wins.
+    if (!data && demoAllowed) {
+      const { demoProducts } = await import("@/data/demoCollections");
+      const found = demoProducts.find((p) => p.slug === slug) ?? null;
+      if (found) {
+        setItem(found);
+        setRelated(
+          demoProducts
+            .filter((p) => p.collection_id === found.collection_id && p.id !== found.id)
+            .slice(0, 3)
+        );
+        setLoading(false);
+        return;
+      }
+    }
+
     if (data) {
       const p: DBProduct = {
         ...(data as any),

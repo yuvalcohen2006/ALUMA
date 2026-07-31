@@ -56,15 +56,20 @@ export function useCollections() {
         gallery: Array.isArray(p.gallery) ? p.gallery : [],
       })) as DBProduct[];
 
-      // Live data is the default, everywhere. The placeholder catalogue (20
-      // products across 5 categories) is opt-in via VITE_USE_DEMO_DATA=1, for
-      // judging a grid or a filter against more than the two rows that happen
-      // to be in the database.
+      // Real data ALWAYS wins when it exists. The placeholder catalogue only
+      // fills an empty page, so there is nothing to judge a layout against.
       //
-      // This used to be inverted — dev discarded live data unless `?live=1` was
-      // in the URL — which meant uploading real products and still seeing the
-      // fake ones, with nothing to explain why.
-      if (import.meta.env.VITE_USE_DEMO_DATA === "1") {
+      // Two earlier versions of this were both wrong. The original discarded
+      // live data in dev unless `?live=1` was in the URL, so uploading real
+      // products still showed the fake ones. The fix over-corrected to
+      // opt-in-only, which meant an empty database rendered an empty catalogue
+      // and the page looked broken.
+      //
+      // Falling back on zero rows gets both: upload one real product and the
+      // placeholders vanish on their own. `VITE_USE_DEMO_DATA=0` forces them
+      // off if you specifically want to see the empty state.
+      const demoAllowed = import.meta.env.VITE_USE_DEMO_DATA !== "0";
+      if (demoAllowed && loadedProducts.length === 0) {
         const { demoCollections, demoProducts } = await import("@/data/demoCollections");
         setCollections(demoCollections);
         setProducts(demoProducts);

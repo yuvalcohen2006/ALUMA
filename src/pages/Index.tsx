@@ -2,14 +2,12 @@ import { lazy, Suspense } from "react";
 import Layout from "@/components/Layout";
 import Hero from "@/components/Hero";
 import CategoryMosaic from "@/components/home/CategoryMosaic";
-import ConsultCTA from "@/components/home/ConsultCTA";
-import ClubCard from "@/components/home/ClubCard";
+import Newsletter from "@/components/home/Newsletter";
 import SEO from "@/components/SEO";
 import { SITE } from "@/config/site";
 
-// Below the fold, and the only remaining section that queries Supabase on the
-// home page — lazy so it stays out of the initial bundle.
-const ReviewsBand = lazy(() => import("@/components/home/ReviewsBand"));
+// Below the fold and pulls in framer-motion, so it loads lazily.
+const Testimonials = lazy(() => import("@/components/home/Testimonials"));
 
 const localBusiness = {
   "@context": "https://schema.org",
@@ -73,21 +71,15 @@ const Index = () => {
         path="/"
         jsonLd={[localBusiness, websiteSchema]}
       />
-      {/* The client's brief, in order: show them the range, then the proof,
-          then one small ask. Materials, projects and the story brief moved off
-          this page — a visitor should scroll once and understand what is being
-          sold, not read three essays first. Those pages are all still linked
-          from the navbar for anyone who wants the detail. */}
+      {/* Scroll once and you know what is being sold: the range, then the
+          proof, then one small ask. Materials, projects and the story all live
+          in the navbar for anyone who wants them. */}
       <Hero />
       <CategoryMosaic />
-      <ConsultCTA />
-      {/* ⚠️ Falls back to fabricated placeholder quotes until real reviews are
-          entered in the admin panel. They must not reach the live domain — see
-          the banner in src/data/testimonials.ts. */}
-      <Suspense fallback={<div className="min-h-[560px] bg-background" />}>
-        <ReviewsBand />
+      <Suspense fallback={<div className="min-h-[860px] md:min-h-[900px] bg-background" />}>
+        <Testimonials />
       </Suspense>
-      <ClubCard />
+      <Newsletter />
     </Layout>
   );
 };

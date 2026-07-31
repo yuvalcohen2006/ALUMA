@@ -100,7 +100,7 @@ const JournalPage = () => {
           .order("published_at", { ascending: false });
         if (cancelled) return;
         const rows = (data as Post[]) ?? [];
-        if (import.meta.env.VITE_USE_DEMO_DATA === "1" && rows.length === 0) {
+        if (import.meta.env.VITE_USE_DEMO_DATA !== "0" && rows.length === 0) {
           const { demoPosts } = await import("@/data/demoBlog");
           setPosts(demoPosts as Post[]);
           return;
