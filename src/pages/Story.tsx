@@ -10,7 +10,6 @@ import alumaLogo from "@/assets/aluma-logo.png";
 import storyPortrait from "@/assets/story-portrait.png";
 import storyPortraitRoy from "@/assets/story-portrait-roy.png";
 import storyPortraitIdan from "@/assets/story-portrait-idan.png";
-import { materials } from "@/data/materials";
 
 const breadcrumbs = {
   "@context": "https://schema.org",
@@ -28,8 +27,7 @@ const breadcrumbs = {
  * right, the wordmark and the three line portraits on the left. What changed is
  * everything around them — the block used to sit alone in a full viewport of
  * white, which read as an unfinished page rather than a quiet one. It now opens
- * the page at its natural height, and two grounded sections follow it: the
- * materials we actually build with, and the showroom you can actually visit.
+ * the page at its natural height and the showroom band closes it.
  * Real content only; no invented history, no invented numbers.
  */
 const StoryPage = () => {
@@ -121,46 +119,6 @@ const StoryPage = () => {
               </div>
             </Reveal>
           </div>
-        </div>
-      </section>
-
-      {/* WHAT WE BUILD WITH — real materials, linking to their real pages. */}
-      <section className="py-14 md:py-20 bg-secondary">
-        <div className="container-luxury">
-          <Reveal>
-            <h2 className="font-display font-bold text-[26px] md:text-[30px] text-foreground text-right">
-              החומרים שאנחנו עובדים איתם
-            </h2>
-            <p className="mt-2 mb-8 text-[18px] leading-relaxed text-foreground-soft text-right max-w-2xl">
-              ההחלטה הראשונה בכל פריט היא לא הצורה, אלא החומר. אלה הארבעה שאנחנו
-              בונים איתם.
-            </p>
-          </Reveal>
-          <ul className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
-            {materials.map((m, i) => (
-              <Reveal key={m.slug} delay={i * 70}>
-                <li>
-                  <Link to={to(`/materials/${m.slug}`)} className="group block text-right">
-                    <div className="aspect-square overflow-hidden rounded-[14px]">
-                      <img
-                        src={m.image}
-                        alt={m.name}
-                        loading="lazy"
-                        decoding="async"
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.03] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
-                      />
-                    </div>
-                    <h3 className="mt-3 text-[18px] leading-snug text-foreground decoration-1 underline-offset-4 group-hover:underline">
-                      {m.name}
-                    </h3>
-                    <p className="mt-1 text-[15px] leading-snug text-foreground/55 line-clamp-2">
-                      {m.tagline}
-                    </p>
-                  </Link>
-                </li>
-              </Reveal>
-            ))}
-          </ul>
         </div>
       </section>
 

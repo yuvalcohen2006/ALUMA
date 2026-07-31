@@ -13,9 +13,8 @@ import clubBg from "@/assets/categories/club-morning.jpg";
  * generated with the whole upper two thirds empty, because unlike a category
  * tile this one needs room for a form as well as a headline.
  *
- * The input is an underline, not a boxed field with a filled button — that
- * combination is the default shop-template look. 17px matters: iOS Safari
- * zooms the page when a focused field is under 16px, and doesn't zoom back.
+ * The input is a frosted pill over the sky. 17px matters: iOS Safari zooms
+ * the page when a focused field is under 16px, and doesn't zoom back.
  */
 const Newsletter = () => {
   const [email, setEmail] = useState("");
@@ -53,7 +52,7 @@ const Newsletter = () => {
   };
 
   return (
-    <section className="bg-background pt-3">
+    <section className="bg-background py-3">
       <div className="relative h-[500px] md:h-[490px] lg:h-[580px] overflow-hidden">
         <img
           src={clubBg}
@@ -95,7 +94,10 @@ const Newsletter = () => {
               <label className="sr-only" htmlFor="club-email">
                 כתובת אימייל
               </label>
-              <div className="relative border-b border-foreground/35 focus-within:border-foreground transition-colors">
+              {/* A frosted pill, not an underline: over a bright sky a 1px
+                  hairline all but disappears, and a field people can't find
+                  isn't minimal, it's missing. */}
+              <div className="relative rounded-full bg-white/70 backdrop-blur-md border border-foreground/10 shadow-soft focus-within:border-foreground/35 transition-colors">
                 <input
                   id="club-email"
                   type="email"
@@ -107,13 +109,13 @@ const Newsletter = () => {
                   // Email addresses are Latin, so the text runs LTR — but the
                   // field still aligns to the reading edge.
                   dir="ltr"
-                  className="w-full h-12 bg-transparent text-[17px] text-foreground text-start pe-12 outline-none placeholder:text-foreground/50"
+                  className="w-full h-[52px] bg-transparent text-[17px] text-foreground text-start ps-6 pe-14 outline-none rounded-full placeholder:text-foreground/45"
                 />
                 <button
                   type="submit"
                   disabled={submitting}
                   aria-label="הצטרפות"
-                  className="absolute end-0 top-1/2 -translate-y-1/2 w-10 h-10 inline-flex items-center justify-center text-foreground/70 hover:text-accent disabled:opacity-50 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+                  className="absolute end-1.5 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-foreground text-background inline-flex items-center justify-center hover:bg-accent disabled:opacity-50 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
                 >
                   <ArrowLeft className="w-5 h-5 ltr:-scale-x-100" aria-hidden="true" />
                 </button>

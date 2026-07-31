@@ -7,7 +7,6 @@ import Reveal from "@/components/Reveal";
 import SectionRule from "@/components/SectionRule";
 import { supabase } from "@/integrations/supabase/client";
 import { materials } from "@/data/materials";
-import MaterialBand from "@/components/materials/MaterialBand";
 import { useLocalizedPath } from "@/lib/useLocalizedPath";
 
 type Post = {
@@ -151,20 +150,51 @@ const JournalPage = () => {
         subtitle="על החומרים, על המלאכה, ועל מה שכדאי לדעת לפני שבוחרים ריהוט שנשאר בחוץ כל השנה."
       />
 
-      {/* MATERIALS — full-width bands, the same layout as the old materials
-          page, on a light ground now. They sit ABOVE the article feed rather
-          than mixed into it: materials are evergreen and articles are
-          chronological, so interleaved, the Sunbrella explainer sinks below the
-          fold the day a third article is published and never comes back. */}
+      {/* MATERIALS — the home page's tile language, at half scale: the
+          photograph IS the card, two to a row, the name sitting top-centre on
+          the same light scrim the morning tiles use. No fade into the page,
+          no panel, no chrome. They sit ABOVE the article feed because
+          materials are evergreen and articles are chronological — interleaved,
+          the Sunbrella explainer sinks below the fold the day a third article
+          is published and never comes back. */}
       <section className="pb-8 bg-background">
         <div className="container-luxury">
-          <div className="space-y-14 md:space-y-20 max-w-[920px] mx-auto">
+          <ul className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {materials.map((m, i) => (
-              <Reveal key={m.slug}>
-                <MaterialBand material={m} index={i} />
+              <Reveal key={m.slug} delay={(i % 2) * 80}>
+                <li>
+                  <Link
+                    to={to(`/materials/${m.slug}`)}
+                    className="group relative block h-[240px] md:h-[280px] overflow-hidden rounded-[14px] focus-visible:outline-2 focus-visible:outline-offset-[-4px] focus-visible:outline-ring"
+                  >
+                    <img
+                      src={m.image}
+                      alt={m.name}
+                      loading="lazy"
+                      decoding="async"
+                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.25,0.1,0.25,1)] group-hover:scale-[1.03] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+                    />
+                    <div
+                      aria-hidden="true"
+                      className="absolute inset-x-0 top-0 h-2/3"
+                      style={{
+                        background:
+                          "linear-gradient(to bottom, rgba(255,255,255,0.78) 0%, rgba(255,255,255,0.28) 55%, transparent 100%)",
+                      }}
+                    />
+                    <div className="relative z-10 text-center px-6 pt-7 text-foreground">
+                      <h3 className="font-display font-semibold text-[24px] md:text-[28px] leading-tight">
+                        {m.name}
+                      </h3>
+                      <p className="mt-1 text-[16px] md:text-[17px] leading-snug text-foreground-soft">
+                        {m.tagline}
+                      </p>
+                    </div>
+                  </Link>
+                </li>
               </Reveal>
             ))}
-          </div>
+          </ul>
         </div>
       </section>
 
