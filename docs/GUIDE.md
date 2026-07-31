@@ -639,6 +639,48 @@ backdrop.
 
 ---
 
+## Part 3.3b — ⚙️ What the scene builder needs from you, exactly
+
+The scene builder (**"עצבו את המרחב"**) is **built and working right now** — go
+try it. Everything in it is placeholder artwork, and it will keep looking like
+placeholder artwork until it gets these three things. Nothing else is blocking
+it; there is no more code to write before it can go live.
+
+**1. Cut-out product PNGs** — from Part 3.1. For the builder specifically, the
+front-left and front-right three-quarter shots are the ones that matter.
+
+**2. The cm dimensions** — from Part 3.2. The builder draws each item at its
+true size relative to the scene, so a sofa with no height in the spreadsheet
+cannot be placed at all.
+
+**3. For every cut-out, one extra number: the ground-contact point.**
+
+> Mark, on each cut-out, the single point where the furniture touches the floor
+> — the front-centre of its base. A dot in a layer, or just "x = 51%, y = 97%"
+> written in the spreadsheet, is enough.
+>
+> **Why:** that point is what the software pins the furniture to the ground by,
+> and what it rotates around. Get it right and a rotated sofa stays planted on
+> the floor. Get it wrong and it swings into the air like a compass needle.
+> Take it from the retoucher while the file is open — measuring it later, across
+> eighty-five images, is a day of work.
+
+**4. Backdrops, per Part 3.3** — and please do insist on the 1-metre rod frame.
+That one extra photo per scene is the difference between the furniture *sitting*
+on your patio and *hovering* over it.
+
+### What it looks like today, and why
+
+The three backdrops currently in it are **product photographs that already have
+furniture in them** — precisely what a real backdrop must not be. They are
+standing in so the tool could be built and tested. The three items are the old
+sofa modules. The colour swatches are approximations.
+
+Each product can carry **any number of colours and finishes** — three, or
+twenty. That is data, not code, so adding fabrics later costs nothing.
+
+---
+
 ## Part 3.4 — 3D models for AR ("see it in your garden")
 
 **Only 3 products at launch.** Pick the signature sofa, the signature lounger,
@@ -772,9 +814,18 @@ delivers to outdooraluma@gmail.com.
 ```
 9.  Product photos, per the shot list in Part 3.1
 10. The product information spreadsheet (Part 3.2) — the cm dimensions
-11. Backdrop photos or a go-ahead for me to generate them (Part 3.3)
-12. Go/no-go on commissioning 3 AR models (Part 3.4, ~$750–1,500)
+11. The ground-contact point for each cut-out (Part 3.3b) — ask the retoucher
+    for it while the file is open; measuring it later across 85 images is a
+    day's work
+12. Backdrop photos + the 1-metre rod frames, or a go-ahead for me to generate
+    the backdrops (Part 3.3)
+13. Go/no-go on commissioning 3 AR models (Part 3.4, ~$750–1,500)
 ```
+
+**The scene builder, the AR viewer and the fabric previews are all already
+built.** They are running on placeholder artwork and will keep looking like it
+until Block C lands. There is no further code to write before they can go live —
+only assets.
 
 Send Block C whenever it's ready — the scene builder, the AR viewer and the
 fabric colour previews are all built to switch from placeholders to your real
@@ -785,8 +836,8 @@ products without further design work.
 ## Block D — after ~11 August
 
 ```
-13. Domain transferred to name.com?              yes / no
-14. notify.alumaoutdoor.com verified in Resend?  yes / no
+14. Domain transferred to name.com?              yes / no
+15. notify.alumaoutdoor.com verified in Resend?  yes / no
 ```
 
 Then I flip the email sender to the real address and attach the domain to the
@@ -797,9 +848,10 @@ live site.
 ## Quick answers I also need at some point
 
 ```
-15. Should the smart questionnaire stay where it is, or move to
-    its own page linked from Contact?  (I've kept it for now.)
-16. Anything on the new homepage you want changed before I keep going?
+16. Is Aluma a family business, and are Idan, Roy and Ben the founders?
+    (Nothing on the site claims either, because I don't know.)
+17. Anything on the new homepage, About page or "שווה לדעת" you want
+    changed?
 ```
 
 ---

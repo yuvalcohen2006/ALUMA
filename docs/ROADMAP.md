@@ -463,7 +463,48 @@ now. Noted as a small follow-up.
 
 ---
 
-## PHASE 11 — Scene builder v1 (the flagship)
+## PHASE 11 — Scene builder v1 ✅ (v1 shipped; polish deferred)
+
+**Shipped.** `/diy/scene` is a photographic scene builder. `SofaDesigner` is
+deleted — its 1-D strip used raw HTML5 drag events, which don't fire on touch,
+so the feature was desktop-only.
+
+- [x] `src/lib/sceneGeometry.ts` + **18 tests** — the linear horizon model,
+      clamps, depth sort, rotation snapping, shadow geometry. The tests pin
+      linearity specifically, because an eased curve looks plausible and is
+      wrong.
+- [x] `src/components/scene/SceneCanvas.tsx` — 4 layers (backdrop / shadows /
+      items / glaze+UI), ground-contact offsets, `dragBoundFunc` clamped to the
+      floor band, `Konva.hitOnDragEnabled = true`, rotation-only transformer
+      with `forceUpdate()` after attach, `crossOrigin` via `useImage(url,
+      "anonymous")`, commit-on-dragend.
+- [x] `src/pages/SceneBuilder.tsx` — backdrop picker, catalogue, variant chips,
+      snapshot undo/redo in refs (50 cap), localStorage autosave, full keyboard
+      map, screen-reader mirror list, WhatsApp summary CTA.
+- [x] `sceneItems.ts` / `sceneBackdrops.ts` — **variants are an open list**, so
+      a product with twenty fabrics needs data, not code.
+- [x] Konva code-split: 284KB in its own chunk, main bundle unchanged at 216KB.
+
+**Deferred from the spec, deliberately:**
+- [ ] **Magnetic alignment guides.** Worth having, but they interact with the
+      drag path and the drag path is the thing that must not break on touch.
+      Add once the real cut-outs are in and the basics are confirmed on device.
+- [ ] **PNG/JPEG export + Web Share.** `stageRef` is already plumbed through for
+      it. Blocked in practice on real assets — exporting a shareable image of
+      placeholder furniture is not worth shipping.
+- [ ] **Sprite / Backdrop Calibrator admin tools.** Only three sprites and three
+      backdrops exist; hand-authored numbers are fine at this size. Build these
+      *before* the ~85 real sprites arrive, not after.
+- [ ] **Foreground plate per backdrop** (so items can pass behind a near
+      planter) — needs purpose-shot backdrops first.
+
+⚠️ **Everything visible is a placeholder and says so in the UI.** The backdrops
+are product photos that already contain furniture, which is exactly what a real
+backdrop must not; their calibration numbers are eyeballed. Real plates come
+with a 1-metre rod shot at three marked spots, which turns those numbers from
+estimates into measurements. See `docs/GUIDE.md` Part 3.
+
+<details><summary>Original spec (kept for reference)</summary>
 
 **Model:** fixed, pre-calibrated backdrop photos; product sprites auto-scaled by
 where they're placed, auto z-sorted, with soft contact shadows.
@@ -544,7 +585,9 @@ do, and a bad attempt looks broken.
 - [ ] Delete `SofaDesigner.tsx` once absorbed (its 4 sofa units become the first
       scene items; its 1-D strip and touch-less HTML5 drag do not survive).
 
-**Regression tests to write** (each is a bug this design is built to avoid):
+</details>
+
+**Regression tests still to write** (each is a bug this design is built to avoid):
 anchor-not-at-ground-point · crossOrigin-after-src · per-frame snap recompute ·
 array-index keys · two-finger touch during an item drag · dragmove→setState ·
 `Konva.pixelRatio = 1` shipped · undo captured during drag · unclamped scale ·
@@ -681,7 +724,25 @@ Full instructions for each are in **`docs/GUIDE.md` Part 1**.
 
 ## STATUS SUMMARY
 
-*Last updated: 2026-07-31 — Phases 1–10 complete*
+*Last updated: 2026-07-31 — Phases 1–11 complete*
+
+**Phase 11 (the scene builder) shipped.** `/diy/scene` places furniture on a
+backdrop using real pinhole-camera geometry — an object's on-screen height is
+linear in how far its base sits below the horizon, so dragging a sofa up the
+picture shrinks it correctly. 18 tests pin that. Sprites are anchored at their
+ground-contact point so rotation pivots on the floor; depth order is derived,
+never user-managed; the transformer rotates only. `SofaDesigner` is deleted —
+its HTML5 drag events never fired on touch, so it was desktop-only.
+Konva is code-split (284KB own chunk; main bundle unchanged at 216KB).
+Deferred by choice: alignment guides, image export, the calibrator admin tools.
+
+**Everything visible in it is placeholder artwork and says so.** The tool is
+finished; it is waiting on assets, not code. `docs/GUIDE.md` Part 3.3b spells
+out exactly what it needs — including the one thing photographers never think
+to provide: the ground-contact point per cut-out, and a 1-metre rod in frame on
+each backdrop.
+
+*Previous summary (Phases 1–10):*
 
 **Everything through Phase 10 is done.** Phases 1–5 are merged to `main`;
 6–10 are on `redesign/phase-6-about`. `npm run build`, `npx tsc --noEmit` and
