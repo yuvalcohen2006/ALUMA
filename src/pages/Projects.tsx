@@ -9,12 +9,15 @@ import SectionHeading from "@/components/SectionHeading";
 import ShineButton from "@/components/ui/shine-button";
 import FilterSidebar, { type FilterGroup } from "@/components/FilterSidebar";
 import { useFilterParams } from "@/hooks/useFilterParams";
-import { projects, type Project } from "@/data/projects";
+import { type Project } from "@/data/projects";
+import { useProjects } from "@/hooks/useProjectsData";
 import { cn } from "@/lib/utils";
 
 const SITE = "https://alumaoutdoor.com";
 
-const collectionSchema = {
+// Built from whatever the page actually loaded, so a CMS-managed list is what
+// gets described to crawlers rather than the static fallback.
+const buildCollectionSchema = (list: Project[]) => ({
   "@context": "https://schema.org",
   "@type": "CollectionPage",
   name: "פרויקטים של Aluma",
@@ -24,8 +27,8 @@ const collectionSchema = {
   inLanguage: "he-IL",
   mainEntity: {
     "@type": "ItemList",
-    numberOfItems: projects.length,
-    itemListElement: projects.map((p, i) => ({
+    numberOfItems: list.length,
+    itemListElement: list.map((p, i) => ({
       "@type": "ListItem",
       position: i + 1,
       item: {
@@ -35,7 +38,7 @@ const collectionSchema = {
       },
     })),
   },
-};
+});
 
 // Built from the data rather than hardcoded, so values arriving from the CMS
 // show up in the drawer without a code change.
@@ -214,6 +217,7 @@ const ProjectEntry = ({ project: p, index }: { project: Project; index: number }
 };
 
 const ProjectsPage = () => {
+  const { projects } = useProjects();
   const { value, setValue, activeCount } = useFilterParams(["type", "area"]);
   const selectedTypes = value.type;
   const selectedAreas = value.area;
@@ -225,7 +229,7 @@ const ProjectsPage = () => {
           (!selectedTypes.length || selectedTypes.includes(p.tag)) &&
           (!selectedAreas.length || selectedAreas.includes(p.location))
       ),
-    [selectedTypes, selectedAreas]
+    [projects, selectedTypes, selectedAreas]
   );
 
   const filterGroups: FilterGroup[] = useMemo(
@@ -249,7 +253,7 @@ const ProjectsPage = () => {
         })),
       },
     ],
-    []
+    [projects]
   );
 
   const clearFilters = useCallback(
@@ -263,7 +267,7 @@ const ProjectsPage = () => {
         title="פרויקטים | סלוני חוץ בוילות, פנטהאוזים ובתי יוקרה | Aluma"
         description="מבחר פרויקטים נבחרים של Aluma, סלוני חוץ, מרפסות פנורמיות, מתחמי בריכה ופינות אירוח בעיצוב אישי. עבודות בוילות, פנטהאוזים ובתים פרטיים בישראל."
         path="/projects"
-        jsonLd={collectionSchema}
+        jsonLd={buildCollectionSchema(projects)}
       />
       <PageHero
         title="פרויקטים"
