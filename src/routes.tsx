@@ -3,7 +3,7 @@ import { Navigate, Route } from "react-router-dom";
 import Index from "./pages/Index.tsx";
 
 // Code-split secondary routes for faster initial load
-const Story = lazy(() => import("./pages/Story.tsx"));
+const About = lazy(() => import("./pages/About.tsx"));
 const Collections = lazy(() => import("./pages/Collections.tsx"));
 const CollectionDetail = lazy(() => import("./pages/CollectionDetail.tsx"));
 const Materials = lazy(() => import("./pages/Materials.tsx"));
@@ -42,7 +42,10 @@ const NotFound = lazy(() => import("./pages/NotFound.tsx"));
 export const publicRoutes = (
   <>
     <Route path="" element={<Index />} />
-    <Route path="story" element={<Story />} />
+    <Route path="about" element={<About />} />
+    {/* Renamed from "our story". The old URL is indexed, so it redirects here
+        in-app as well as at the edge (public/_redirects). */}
+    <Route path="story" element={<Navigate to="../about" replace />} />
     <Route path="collections" element={<Collections />} />
     <Route path="collections/:slug" element={<CollectionDetail />} />
     <Route path="materials" element={<Materials />} />

@@ -715,16 +715,92 @@ This one step often pays for itself.
 ---
 ---
 
-# What to send me, all together
+# 📬 WHAT TO SEND ME TO WRAP THIS UP
 
-- [ ] Which Supabase project has the tables (Blocker 1)
-- [ ] The Supabase **anon / public** key (Blocker 2)
-- [ ] Confirmation that `/admin` lets you in (Blocker 3)
-- [ ] The Resend `re_…` key (Blocker 4)
-- [ ] 3+ real customer reviews
-- [ ] The About-page story facts
+Copy this list into a message and fill it in. **You don't need all of it at
+once** — send each block as you get it and I'll act on it. They're in the order
+that unblocks the most work.
 
 **Never send:** the Supabase `service_role` key, or any database password.
+
+---
+
+## Block A — unlocks everything (15 minutes, do this first)
+
+```
+1. Supabase project with the tables:   jzqayfllojeqivwbbuyf  /  yvxynsonjmcppaxflmvz   (circle one)
+2. Supabase anon / public key:         eyJ...
+3. Can you get into /admin?            yes / no
+4. Resend API key:                     re_...
+```
+
+*Instructions: Blockers 1–4 in Part 1 above.*
+**Until Block A lands, nothing that touches the database or sends email can be
+finished or tested** — including confirming that the contact form actually
+delivers to outdooraluma@gmail.com.
+
+---
+
+## Block B — content that's blocking launch
+
+```
+5. Three real customer reviews. For each:
+      what they said (1–3 sentences):
+      their name (or first name + initial):
+      their town, or what they bought:
+      do we have their permission to publish it?  yes / no
+
+6. The About page letter — 120–180 words in your own voice, answering:
+      why did you start Aluma?
+      what do you refuse to compromise on?
+      (I'll format it. Write it however it comes out — messy is fine.)
+
+7. Three numbers we can prove, for the About page. For example:
+      years in business:
+      families / projects delivered:
+      showroom size in m²:
+      (If you'd rather not publish numbers, say so and I'll drop that band.)
+
+8. Is "Aluma" a family business, and are Idan, Roy and Ben the founders?
+      (I've deliberately not claimed either on the site, because I don't know.)
+```
+
+---
+
+## Block C — the photo shoot (the big one)
+
+```
+9.  Product photos, per the shot list in Part 3.1
+10. The product information spreadsheet (Part 3.2) — the cm dimensions
+11. Backdrop photos or a go-ahead for me to generate them (Part 3.3)
+12. Go/no-go on commissioning 3 AR models (Part 3.4, ~$750–1,500)
+```
+
+Send Block C whenever it's ready — the scene builder, the AR viewer and the
+fabric colour previews are all built to switch from placeholders to your real
+products without further design work.
+
+---
+
+## Block D — after ~11 August
+
+```
+13. Domain transferred to name.com?              yes / no
+14. notify.alumaoutdoor.com verified in Resend?  yes / no
+```
+
+Then I flip the email sender to the real address and attach the domain to the
+live site.
+
+---
+
+## Quick answers I also need at some point
+
+```
+15. Should the smart questionnaire stay where it is, or move to
+    its own page linked from Contact?  (I've kept it for now.)
+16. Anything on the new homepage you want changed before I keep going?
+```
 
 ---
 

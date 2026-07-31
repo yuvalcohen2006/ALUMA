@@ -1,1 +1,26 @@
+# Cloudflare Pages redirects.
+#
+# ORDER MATTERS: every 301 must sit ABOVE the catch-all, or the SPA fallback
+# swallows it and the rule never fires.
+#
+# These handle crawlers and people arriving on an old URL from a bookmark or a
+# search result. The same moves also exist as in-app <Navigate> routes in
+# src/routes.tsx, which is what catches link clicks inside the SPA — those
+# never reach the edge at all. Both layers are needed.
+
+# Renamed pages
+/story        /about      301
+/en/story     /en/about   301
+
+# Retired page (dropped from the nav; old links still land somewhere sensible)
+/before-after     /projects     301
+/en/before-after  /en/projects  301
+
+# Duplicate routes collapsed onto one canonical URL each
+/auth        /club/auth          301
+/account     /club/dashboard     301
+/en/auth     /en/club/auth       301
+/en/account  /en/club/dashboard  301
+
+# SPA fallback — must stay last.
 /*  /index.html  200

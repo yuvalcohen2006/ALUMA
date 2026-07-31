@@ -74,8 +74,8 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link to={localized("/story")} className="link-underline inline-block hover:text-accent transition-smooth">
-                  הסיפור שלנו
+                <Link to={localized("/about")} className="link-underline inline-block hover:text-accent transition-smooth">
+                  אודות
                 </Link>
               </li>
               <li>

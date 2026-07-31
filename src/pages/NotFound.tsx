@@ -8,7 +8,7 @@ const popular = [
   { to: "/collections", label: "קולקציות" },
   { to: "/projects", label: "פרויקטים" },
   { to: "/materials", label: "החומרים שלנו" },
-  { to: "/story", label: "הסיפור שלנו" },
+  { to: "/about", label: "אודות" },
   { to: "/faq", label: "שאלות ותשובות" },
   { to: "/contact", label: "צרו קשר" },
 ];

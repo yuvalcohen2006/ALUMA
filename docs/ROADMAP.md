@@ -290,7 +290,38 @@ entirely (small light square tiles, no glow). It is in git history if needed.
 
 ---
 
-## PHASE 6 — About (`/story` → `/about`)
+## PHASE 6 — About (`/story` → `/about`) ✅
+
+- [x] `src/components/about/TeamPortraits.tsx` — the wordmark and the three line
+      portraits extracted **verbatim first**, before anything was restructured
+      around them. Still one bottom-edge 10px mask, no radial. Gained a caption
+      naming עידן · רועי · בן in reading order (overlaying names on the drawings
+      is fragile at every width).
+- [x] `src/pages/About.tsx` in the researched order: hero statement over a
+      furniture photo (not the team photo) → the letter → three alternating
+      editorial chapters → three numbered values, no icons → craft teaser into
+      the material pages → the portraits → proof numbers → dual CTA.
+- [x] Route, in-app `<Navigate>`, and a real 301 in `public/_redirects` (which
+      was previously just the SPA catch-all — all the 301s live above it now).
+      `Story.tsx` deleted; sitemap, footer and 404 suggestions repointed.
+- [x] Navbar reordered toward the client's target: home · collections ·
+      build-your-own · projects · materials · magazine · Q&A · club · **about** ·
+      contact. Materials + magazine merge into "שווה לדעת" in Phase 7.
+- [x] 36 tests, including that `/about` resolves and `/story` still *matches*
+      (rendering the redirect) rather than 404ing.
+
+⚠️ **Two content holes, both deliberate and both flagged in `docs/GUIDE.md`:**
+1. **The letter is the brand's own existing words, reformatted** — nothing is
+   invented, but it's ~70 words against a 120–180 target and doesn't say why
+   the business exists. Only the owner can write that.
+2. **The proof-numbers band renders nothing** because `PROOF` is empty.
+   Inventing "500 families" is the same category of lie as the fabricated
+   reviews. It appears the moment three real figures are filled in.
+
+Also unresolved and asked in the guide: whether Aluma is a family business and
+whether Idan/Roy/Ben are the founders. Neither is claimed on the page.
+
+<details><summary>Original spec (kept for reference)</summary>
 
 - [ ] **Extract the preserved elements FIRST** into
       `src/components/about/TeamPortraits.tsx`, before restructuring anything:
@@ -308,8 +339,13 @@ entirely (small light square tiles, no glow). It is in git history if needed.
       → **TeamPortraits, full-bleed, with a caption naming people in order**
       (overlaying names on faces is fragile and RTL-hostile) → **exactly 3**
       proof numbers → CTA band.
-- [ ] Route + 301 from `/story`; nav label "אודות"; delete `Story.tsx`.
-- [ ] ⚠️ Real letter facts and years needed from the owner — see WAITING ON THE OWNER.
+- Route + 301 from `/story`; nav label "אודות"; delete `Story.tsx`.
+
+</details>
+
+**Deviation:** the chapters carry thematic labels (השם / הגישה / הייצור) rather
+than years, because nobody has supplied any dates. Swap in years when they exist
+— the layout already works as a timeline.
 
 ---
 

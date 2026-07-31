@@ -85,6 +85,16 @@ describe("public route table", () => {
     expect(matchedLang("/enquiries")).toBe("he");
   });
 
+  it.each(["/about", "/en/about"])("serves the renamed about page at %s", (path) => {
+    expect(matchedLeaf(path)).toBe("about");
+  });
+
+  it.each(["/story", "/en/story"])("still matches the retired %s URL", (path) => {
+    // Matched, not 404: the route renders a <Navigate> to /about. Losing this
+    // silently breaks every indexed link to the old page.
+    expect(matchedLeaf(path)).toBe("story");
+  });
+
   it("still falls through to the catch-all for unknown paths", () => {
     expect(matchedLeaf("/no-such-page")).toBe("*");
     expect(matchedLeaf("/en/no-such-page")).toBe("*");
