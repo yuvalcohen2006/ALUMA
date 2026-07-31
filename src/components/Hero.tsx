@@ -82,12 +82,19 @@ const Hero = () => {
       id="home"
       className="relative min-h-dvh flex items-center justify-center overflow-hidden"
     >
+      {/* Split parallax: the photograph climbs OUT faster than the page
+          (negative translate) while the wordmark lags slightly behind it
+          (positive), so the background visibly slides away from under the
+          title as you scroll. The image is 25% taller than the section and
+          top-anchored, which is the slack the upward travel eats into — at
+          0.2×scroll the bottom edge can never clear the section while any of
+          the hero is still on screen. */}
       <div className="absolute inset-0">
         <img
           src={bg}
           alt="סלון חוץ יוקרתי בעיצוב מודרני של Aluma"
-          className="w-full h-[115%] object-cover will-change-transform"
-          style={{ transform: `translate3d(0, ${offset}px, 0)` }}
+          className="w-full h-[125%] object-cover object-top will-change-transform"
+          style={{ transform: `translate3d(0, ${-offset * 0.8}px, 0)` }}
           width={1920}
           height={1280}
           fetchPriority="high"
@@ -95,7 +102,10 @@ const Hero = () => {
         <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-background/30 to-background/80" />
       </div>
 
-      <div className="container-luxury relative z-10 text-center pt-24 pb-12 flex flex-col items-center">
+      <div
+        className="container-luxury relative z-10 text-center pt-24 pb-12 flex flex-col items-center will-change-transform"
+        style={{ transform: `translate3d(0, ${offset * 0.45}px, 0)` }}
+      >
         <h1 className="sr-only">{srTitle}</h1>
         <img
           src={alumaLogo}

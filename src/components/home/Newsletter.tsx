@@ -1,13 +1,24 @@
 import { FormEvent, useState } from "react";
-import { Mail, Check } from "lucide-react";
+import { ArrowLeft, Check } from "lucide-react";
 import { toast } from "sonner";
-import Reveal from "@/components/Reveal";
-import SectionHeading from "@/components/SectionHeading";
 import { supabase } from "@/integrations/supabase/client";
+import clubBg from "@/assets/categories/club-morning.jpg";
 
+/**
+ * Club signup, styled as the ninth tile.
+ *
+ * Same anatomy as the category tiles above it: full bleed, fixed height,
+ * photograph with a clean upper-middle, type top-centred at the same scale,
+ * separated from the mosaic by the same 12px seam. The photograph was
+ * generated with the whole upper two thirds empty, because unlike a category
+ * tile this one needs room for a form as well as a headline.
+ *
+ * The input is an underline, not a boxed field with a filled button — that
+ * combination is the default shop-template look. 17px matters: iOS Safari
+ * zooms the page when a focused field is under 16px, and doesn't zoom back.
+ */
 const Newsletter = () => {
   const [email, setEmail] = useState("");
-  const [name, setName] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [subscribed, setSubscribed] = useState(
     typeof window !== "undefined" && localStorage.getItem("aluma_newsletter") === "1",
@@ -20,7 +31,7 @@ const Newsletter = () => {
     try {
       const { error } = await supabase
         .from("newsletter_subscribers")
-        .insert({ email: email.trim().toLowerCase(), name: name.trim() || null });
+        .insert({ email: email.trim().toLowerCase(), name: null });
 
       // 23505 = unique violation = already subscribed; treat that as success.
       if (error && error.code !== "23505") {
@@ -34,7 +45,6 @@ const Newsletter = () => {
         // ignore storage failures
       }
       setSubscribed(true);
-      toast.success("נרשמת בהצלחה! נשלח אליך השראה ועדכונים על קולקציות חדשות.");
     } catch {
       toast.error("משהו השתבש בהרשמה. נסו שוב מאוחר יותר.");
     } finally {
@@ -43,77 +53,77 @@ const Newsletter = () => {
   };
 
   return (
-    <section className="py-16 md:py-24 bg-secondary">
-      <div className="container-luxury">
-        <Reveal>
-          {/* Warm-white card on the sand-beige section, matching the 14px radius
-              used by the project photo and category tiles. */}
-          <div className="relative max-w-4xl mx-auto bg-background rounded-[14px] overflow-hidden p-8 md:p-14 text-center border border-border/60 shadow-soft">
-            <div className="flex flex-col items-center mb-8">
-              <SectionHeading
-                align="center"
-                subtitle="טיפים לעיצוב מרפסות וגינות, הצצה לקולקציות חדשות לפני כולם, ותוכן השראה שבועי ישירות לאינבוקס."
-              >
-                הצטרפו למועדון
-              </SectionHeading>
-            </div>
+    <section className="bg-background pt-3">
+      <div className="relative h-[500px] md:h-[490px] lg:h-[580px] overflow-hidden">
+        <img
+          src={clubBg}
+          alt=""
+          aria-hidden="true"
+          loading="lazy"
+          decoding="async"
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+        {/* Same treatment as a morning category tile. */}
+        <div
+          aria-hidden="true"
+          className="absolute inset-x-0 top-0 h-1/2"
+          style={{
+            background:
+              "linear-gradient(to bottom, rgba(255,255,255,0.72) 0%, rgba(255,255,255,0.25) 55%, transparent 100%)",
+          }}
+        />
 
-            {subscribed ? (
-              <div
-                className="inline-flex items-center gap-3 px-6 py-4 rounded-[14px] bg-primary/5 border border-primary/15 text-foreground"
-                role="status"
-                aria-live="polite"
-              >
-                <div className="w-9 h-9 rounded-sm bg-primary text-primary-foreground flex items-center justify-center">
-                  <Check className="w-5 h-5" />
-                </div>
-                <div className="text-right">
-                  <div className="font-display text-base md:text-lg leading-tight">
-                    תודה שהצטרפת!
-                  </div>
-                  <div className="text-xs text-muted-foreground">
-                    עדכונים ותוכן השראה ישלחו אליך בקרוב
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <form
-                onSubmit={onSubmit}
-                className="flex flex-col sm:flex-row gap-3 max-w-xl mx-auto"
-                noValidate
-              >
-                <label className="sr-only" htmlFor="newsletter-name">שם</label>
+        <div className="relative z-10 text-center text-foreground px-6 pt-[42px] lg:pt-[52px]">
+          <h2 className="font-display font-semibold text-[32px] lg:text-[40px] leading-[1.125] lg:leading-[1.1]">
+            הצטרפו למועדון
+          </h2>
+          <p className="mt-1 text-[19px] lg:text-[21px] leading-[1.21] lg:leading-[1.238] text-foreground-soft">
+            קולקציות חדשות לפני כולם, וטיפים לעיצוב החוץ — ישירות לתיבה.
+          </p>
+
+          {subscribed ? (
+            <div
+              className="mt-8 inline-flex items-center gap-2 text-[19px]"
+              role="status"
+              aria-live="polite"
+            >
+              <Check className="w-5 h-5 text-primary" aria-hidden="true" />
+              תודה — נתראה בתיבה.
+            </div>
+          ) : (
+            <form onSubmit={onSubmit} className="mx-auto mt-8 max-w-[420px]" noValidate>
+              <label className="sr-only" htmlFor="club-email">
+                כתובת אימייל
+              </label>
+              <div className="relative border-b border-foreground/35 focus-within:border-foreground transition-colors">
                 <input
-                  id="newsletter-name"
-                  type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder="שם פרטי"
-                  autoComplete="given-name"
-                  className="flex-1 px-4 py-3 rounded-[10px] text-[16px] bg-background border border-border text-foreground placeholder:text-muted-foreground/70 focus:border-primary outline-none transition-smooth"
+                  id="club-email"
+                  type="email"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="כתובת אימייל"
+                  autoComplete="email"
+                  // Email addresses are Latin, so the text runs LTR — but the
+                  // field still aligns to the reading edge.
+                  dir="ltr"
+                  className="w-full h-12 bg-transparent text-[17px] text-foreground text-start pe-12 outline-none placeholder:text-foreground/50"
                 />
-                <label className="sr-only" htmlFor="newsletter-email">אימייל</label>
-                <div className="flex-[1.4] relative">
-                  <Mail className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                  <input
-                    id="newsletter-email"
-                    type="email"
-                    required
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="כתובת אימייל"
-                    autoComplete="email"
-                    className="w-full h-full pr-10 pl-4 py-3 rounded-[10px] text-[16px] bg-background border border-border text-foreground placeholder:text-muted-foreground/70 focus:border-primary outline-none transition-smooth"
-                  />
-                </div>
-                {/* Same .btn-shine treatment as every other CTA on the site */}
-                <button type="submit" disabled={submitting} className="btn-shine shrink-0 disabled:opacity-60">
-                  {submitting ? "שולח…" : "הצטרפות"}
+                <button
+                  type="submit"
+                  disabled={submitting}
+                  aria-label="הצטרפות"
+                  className="absolute end-0 top-1/2 -translate-y-1/2 w-10 h-10 inline-flex items-center justify-center text-foreground/70 hover:text-accent disabled:opacity-50 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+                >
+                  <ArrowLeft className="w-5 h-5 ltr:-scale-x-100" aria-hidden="true" />
                 </button>
-              </form>
-            )}
-          </div>
-        </Reveal>
+              </div>
+              <p className="mt-3 text-[13px] text-foreground/55">
+                אפשר להסיר את ההרשמה בכל רגע.
+              </p>
+            </form>
+          )}
+        </div>
       </div>
     </section>
   );

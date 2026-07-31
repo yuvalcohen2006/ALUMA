@@ -1,13 +1,9 @@
-import { lazy, Suspense } from "react";
 import Layout from "@/components/Layout";
 import Hero from "@/components/Hero";
 import CategoryMosaic from "@/components/home/CategoryMosaic";
 import Newsletter from "@/components/home/Newsletter";
 import SEO from "@/components/SEO";
 import { SITE } from "@/config/site";
-
-// Below the fold and pulls in framer-motion, so it loads lazily.
-const Testimonials = lazy(() => import("@/components/home/Testimonials"));
 
 const localBusiness = {
   "@context": "https://schema.org",
@@ -71,14 +67,12 @@ const Index = () => {
         path="/"
         jsonLd={[localBusiness, websiteSchema]}
       />
-      {/* Scroll once and you know what is being sold: the range, then the
-          proof, then one small ask. Materials, projects and the story all live
-          in the navbar for anyone who wants them. */}
+      {/* Scroll once and you know what is being sold: the range, then one
+          small ask. The reviews came off at the owner's call — placeholder
+          quotes weren't worth the scroll; real ones can earn a section back
+          via the site_reviews table when they exist. */}
       <Hero />
       <CategoryMosaic />
-      <Suspense fallback={<div className="min-h-[860px] md:min-h-[900px] bg-background" />}>
-        <Testimonials />
-      </Suspense>
       <Newsletter />
     </Layout>
   );

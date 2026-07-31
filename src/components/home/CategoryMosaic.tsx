@@ -16,24 +16,31 @@ type Tile = {
   img: string;
   /** Full-bleed row of its own, rather than sharing one with a sibling. */
   wide?: boolean;
-  /**
-   * Reserved for a future tile shot against a genuinely dark sky. Every current
-   * photograph has a bright top — even the dusk fire-table one, whose sky is
-   * pale blue over a white villa — so they all take dark type on a light scrim.
-   * Setting this on a bright photo makes the headline disappear.
-   */
+  /** White type on the night photographs, charcoal on the morning ones. */
   ink?: "dark" | "light";
   /** Collection slug to pre-filter on, once the catalogue taxonomy matches. */
   cat?: string;
 };
 
+/**
+ * The rows alternate time of day, and the ink follows the photograph:
+ * morning rows (soft golden light) take charcoal type, night rows (deep
+ * purple, product lit) take white. The photo set was generated to this plan —
+ * every image keeps its upper-middle clean sky for exactly this text.
+ *
+ *   row 1  מערכות ישיבה          wide   morning
+ *   row 2  שולחנות אש            wide   night
+ *   row 3  מיטות שיזוף · שולחנות קפה     morning
+ *   row 4  כסאות בר · פינות אוכל          night
+ *   row 5  כסאות פינות אוכל · אקססוריז    morning
+ */
 const tiles: Tile[] = [
   { id: "lounge", label: "מערכות ישיבה", tagline: "סלון שממשיך אל מחוץ לבית.", img: loungeSet, wide: true },
-  { id: "fire", label: "שולחנות אש", tagline: "הערב לא נגמר עם השקיעה.", img: fireTable, wide: true },
-  { id: "dining", label: "פינות אוכל", tagline: "ארוחות ארוכות, מתחת לשמיים.", img: diningSet },
+  { id: "fire", label: "שולחנות אש", tagline: "הערב לא נגמר עם השקיעה.", img: fireTable, wide: true, ink: "light" },
   { id: "sunbed", label: "מיטות שיזוף", tagline: "המקום הכי שקט בבית.", img: sunbed },
   { id: "coffee", label: "שולחנות קפה", tagline: "אבן שנשארת יפה שנים.", img: coffeeTable },
-  { id: "bar", label: "כסאות בר", tagline: "לעמוד ליד, ולא למהר.", img: barChair },
+  { id: "bar", label: "כסאות בר", tagline: "לעמוד ליד, ולא למהר.", img: barChair, ink: "light" },
+  { id: "dining", label: "פינות אוכל", tagline: "ארוחות ארוכות, מתחת לשמיים.", img: diningSet, ink: "light" },
   { id: "chairs", label: "כסאות פינות אוכל", tagline: "לשבת בנוח, גם בחוץ.", img: diningChair },
   { id: "accessories", label: "אקססוריז", tagline: "צל, כריות ותאורה.", img: umbrella },
 ];
@@ -63,8 +70,9 @@ const CategoryMosaic = () => {
 
   return (
     // The canvas colour shows through the 12px seams, so the gaps read as
-    // hairlines rather than as holes.
-    <section className="bg-background">
+    // hairlines rather than as holes. pt-3 puts the same seam between the hero
+    // and the first tile.
+    <section className="bg-background pt-3">
       <ul className="flex flex-wrap gap-3">
         {tiles.map((t, i) => {
           const light = t.ink === "light";
@@ -115,13 +123,6 @@ const CategoryMosaic = () => {
                   >
                     {t.tagline}
                   </p>
-                  <span
-                    className={`mt-5 inline-block text-[19px] lg:text-[21px] underline-offset-[6px] decoration-1 group-hover:underline ${
-                      light ? "text-background" : "text-primary"
-                    }`}
-                  >
-                    לצפייה
-                  </span>
                 </div>
               </Link>
             </li>
