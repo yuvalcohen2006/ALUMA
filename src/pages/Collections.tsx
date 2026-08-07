@@ -5,6 +5,7 @@ import SEO from "@/components/SEO";
 import PageHero from "@/components/PageHero";
 import Reveal from "@/components/Reveal";
 import { useCollections, type DBCollection, type DBProduct } from "@/hooks/useCollectionsData";
+import { ProductCard } from "./CollectionPage";
 import { useLocalizedPath } from "@/lib/useLocalizedPath";
 
 const SITE = "https://alumaoutdoor.com";
@@ -21,70 +22,14 @@ const SITE = "https://alumaoutdoor.com";
  * their collections with NO filters at all. Five collections of four products
  * don't need a drawer; they need a scroll.
  *
- * So: an editorial band opens each collection, a row of uniform product tiles
- * follows it, and the only navigation is a row of chips that scroll. Grouping
- * is carried by unequal vertical rhythm — far more space between collections
- * than between rows — rather than by rules or boxes.
+ * So: each collection opens on one wide photograph carrying its name in
+ * white, shows a single row of pieces, and offers one way deeper. Grouping is
+ * carried by unequal vertical rhythm — far more space between collections than
+ * between rows — rather than by rules or boxes.
  */
 
-/** Sticky chip rail. Anchor-scroll, not filtering — nothing here hides. */
-const ChipNav = ({ collections }: { collections: DBCollection[] }) => (
-  <nav
-    aria-label="קולקציות"
-    // Below the fixed h-24 header. Translucent over the content it passes.
-    className="sticky top-24 z-30 bg-background/85 backdrop-blur-md border-b border-border/60"
-  >
-    <div className="container-luxury">
-      <ul className="flex gap-2 overflow-x-auto py-3 rail-scroll">
-        {collections.map((c) => (
-          <li key={c.slug} className="shrink-0">
-            <a
-              href={`#${c.slug}`}
-              className="inline-flex items-center h-9 px-4 rounded-full border border-foreground/15 text-[15px] text-foreground/75 hover:border-foreground/40 hover:text-foreground transition-colors"
-            >
-              {c.name_he}
-            </a>
-          </li>
-        ))}
-      </ul>
-    </div>
-  </nav>
-);
-
-const ProductCard = ({ product: p, eager }: { product: DBProduct; eager: boolean }) => (
-  <Link to={`/collections/${p.slug}`} className="group block text-center">
-    {/* The tinted panel carries the radius — the card itself has no chrome.
-        A border or a hover shadow here is the single clearest cheap tell. */}
-    <div className="relative aspect-square overflow-hidden rounded-[14px] bg-secondary/50">
-      {p.cover_url && (
-        <img
-          src={p.cover_url}
-          alt={[p.name, p.tag].filter(Boolean).join(", ")}
-          width={1024}
-          height={1024}
-          loading={eager ? "eager" : "lazy"}
-          decoding="async"
-          className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.25,0.1,0.25,1)] group-hover:scale-[1.03] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
-        />
-      )}
-    </div>
-
-    <h3 className="mt-5 font-display font-medium text-[21px] leading-snug text-foreground transition-colors duration-300 group-hover:text-accent">
-      {p.name}
-    </h3>
-    {p.tagline && (
-      <p className="mt-1 text-[16px] leading-relaxed text-muted-foreground text-pretty">
-        {p.tagline}
-      </p>
-    )}
-    {/* Dimensions stay LTR inside the RTL line, or the × and units flip. */}
-    {p.dimensions && (
-      <p className="mt-1.5 text-[14px] text-foreground/45">
-        <span dir="ltr">{p.dimensions}</span>
-      </p>
-    )}
-  </Link>
-);
+/** How many pieces preview on the index before "show the whole range". */
+const PREVIEW_COUNT = 4;
 
 const CollectionSection = ({
   collection: col,
@@ -95,17 +40,23 @@ const CollectionSection = ({
   products: DBProduct[];
   first: boolean;
 }) => {
+  const { to } = useLocalizedPath();
   const band = col.image_url || products[0]?.cover_url || null;
+  const preview = products.slice(0, PREVIEW_COUNT);
+  const hasMore = products.length > PREVIEW_COUNT;
 
   return (
-    // scroll-mt clears the fixed header plus the sticky chips.
-    <section id={col.slug} className="scroll-mt-40 py-14 md:py-24">
-      {/* The editorial moment — one wide photograph per collection. Size
-          contrast lives HERE, not inside the product row: every house the
-          research checked keeps product tiles uniform. */}
-      {band && (
-        <Reveal>
-          <div className="relative aspect-[21/9] md:aspect-[3/1] overflow-hidden rounded-[14px] bg-secondary/50">
+    <section id={col.slug} className="scroll-mt-32 py-14 md:py-24">
+      {/* The name lives ON the photograph — white, as large as the band will
+          carry, centred vertically and pinned to the reading edge. The scrim
+          runs from that edge so the type has something to sit on whatever the
+          picture is doing behind it. */}
+      <Reveal>
+        <Link
+          to={to(`/collections/${col.slug}`)}
+          className="group relative block aspect-[21/9] md:aspect-[3/1] overflow-hidden rounded-[14px] bg-secondary/50"
+        >
+          {band && (
             <img
               src={band}
               alt=""
@@ -114,28 +65,36 @@ const CollectionSection = ({
               decoding="async"
               className="absolute inset-0 w-full h-full object-cover"
             />
+          )}
+          <div
+            aria-hidden="true"
+            className="absolute inset-0"
+            style={{
+              background:
+                "linear-gradient(to left, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.25) 45%, transparent 80%)",
+            }}
+          />
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full px-6 md:px-12">
+              <h2 className="font-display font-semibold text-white text-end leading-[0.95] text-[clamp(34px,8vw,110px)]">
+                {col.name_he}
+              </h2>
+            </div>
           </div>
+        </Link>
+      </Reveal>
+
+      {col.intro && (
+        <Reveal>
+          <p className="mt-6 md:mt-8 max-w-[62ch] text-[18px] md:text-[19px] leading-relaxed text-foreground-soft text-right">
+            {col.intro}
+          </p>
         </Reveal>
       )}
 
-      <Reveal>
-        <div className="mt-7 md:mt-9 mb-9 md:mb-12 text-right">
-          <h2 className="font-display font-bold text-[30px] md:text-[38px] leading-tight text-foreground">
-            {col.name_he}
-          </h2>
-          {col.intro && (
-            <p className="mt-3 max-w-[62ch] text-[18px] md:text-[19px] leading-relaxed text-foreground-soft text-pretty">
-              {col.intro}
-            </p>
-          )}
-        </div>
-      </Reveal>
-
-      {products.length === 0 ? (
-        <p className="text-[18px] text-muted-foreground">בקרוב.</p>
-      ) : (
-        <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-6 md:gap-x-8 gap-y-12 md:gap-y-14">
-          {products.map((p, i) => (
+      {preview.length > 0 && (
+        <ul className="mt-9 md:mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-6 md:gap-x-8 gap-y-12">
+          {preview.map((p, i) => (
             <Reveal key={p.id} delay={(i % 4) * 70}>
               <li>
                 <ProductCard product={p} eager={first && i < 4} />
@@ -144,6 +103,19 @@ const CollectionSection = ({
           ))}
         </ul>
       )}
+
+      <Reveal>
+        <div className="mt-10 md:mt-12 text-center">
+          <Link
+            to={to(`/collections/${col.slug}`)}
+            className="inline-flex items-center justify-center h-12 px-7 rounded-full border border-foreground/25 text-[17px] text-foreground transition-colors duration-200 hover:border-accent hover:text-accent"
+          >
+            {hasMore
+              ? `לכל הפריטים בקולקציית ${col.name_he}`
+              : `לקולקציית ${col.name_he}`}
+          </Link>
+        </div>
+      </Reveal>
     </section>
   );
 };
@@ -194,7 +166,7 @@ const CollectionsPage = () => {
         item: {
           "@type": "Product",
           name: p.name,
-          url: `${SITE}/collections/${p.slug}`,
+          url: `${SITE}/products/${p.slug}`,
         },
       })),
     },
@@ -214,8 +186,6 @@ const CollectionsPage = () => {
         subtitle="כל פריט מיוצר בהזמנה אישית. בלי מחירון — כי אין אצלנו שני פרויקטים זהים."
       />
 
-      {!loading && collections.length > 1 && <ChipNav collections={collections} />}
-
       <div className="container-luxury pb-10 md:pb-16">
         {loading ? (
           <div className="py-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-14">
@@ -232,7 +202,7 @@ const CollectionsPage = () => {
             <p className="text-[20px] text-muted-foreground mb-6">
               הקולקציות בדרך. בינתיים — נשמח להכיר אתכם.
             </p>
-            <Link to={to("/contact")} className="btn-shine inline-flex">
+            <Link to={to("/faq") + "#contact"} className="btn-shine inline-flex">
               צרו קשר
             </Link>
           </div>

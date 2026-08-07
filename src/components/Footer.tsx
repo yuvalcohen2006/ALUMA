@@ -109,7 +109,7 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link to={localized("/contact")} className="link-underline inline-block hover:text-accent transition-smooth">
+                <Link to={localized("/faq") + "#contact"} className="link-underline inline-block hover:text-accent transition-smooth">
                   צרו קשר
                 </Link>
               </li>

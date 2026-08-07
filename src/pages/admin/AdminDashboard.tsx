@@ -226,7 +226,7 @@ const AdminDashboard = () => {
   const pathLabel = (p: string) => {
     if (p === "/") return "דף הבית";
     if (p === "/projects") return "פרויקטים";
-    if (p === "/contact") return "יצירת קשר";
+    if (p === "/faq") return "שאלות ויצירת קשר";
     if (p === "/materials") return "חומרים";
     if (p === "/privacy") return "מדיניות פרטיות";
     if (p === "/designer") return "מעצב";

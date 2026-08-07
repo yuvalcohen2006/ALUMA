@@ -5,6 +5,8 @@ import Layout from "@/components/Layout";
 import SEO from "@/components/SEO";
 import Reveal from "@/components/Reveal";
 import { useLocalizedPath } from "@/lib/useLocalizedPath";
+import Contact from "@/components/Contact";
+import ShowroomBand from "@/components/contact/ShowroomBand";
 import { useTranslation } from "react-i18next";
 
 /**
@@ -152,17 +154,24 @@ const FAQPage = () => {
           <Reveal>
             <p className="mt-14 text-[17px] leading-relaxed text-foreground-soft text-start">
               {t("notFound")}{" "}
-              <Link
-                to={to("/contact")}
+              <a
+                href="#contact"
                 className="text-primary decoration-1 underline-offset-4 hover:underline"
               >
                 {t("talkToUs")}
-              </Link>
+              </a>
               {" "}{t("replyTime")}
             </p>
           </Reveal>
         </div>
       </section>
+
+      {/* Contact sits directly under the questions rather than on a page of
+          its own: someone who read nine answers and still has a question
+          shouldn't have to go looking for the way to ask it. /contact
+          redirects here. */}
+      <Contact />
+      <ShowroomBand />
     </Layout>
   );
 };

@@ -31,6 +31,14 @@
     "accessories": {
       "label": "Accessories",
       "tagline": "Shade, cushions and light."
+    },
+    "cta": {
+      "view": "View collection",
+      "all": "All collections"
+    },
+    "badge": {
+      "hot": "Hot",
+      "popular": "Popular"
     }
   },
   "club": {

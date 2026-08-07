@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Blocks, ClipboardList, Palette, ScanLine } from "lucide-react";
+import { ArrowLeft, Palette, ScanLine } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import Layout from "@/components/Layout";
 import SEO from "@/components/SEO";
@@ -9,7 +9,6 @@ import Reveal from "@/components/Reveal";
 import SectionHeading from "@/components/SectionHeading";
 import ShineButton from "@/components/ui/shine-button";
 import { cn } from "@/lib/utils";
-import { SOFA_UNITS } from "@/data/sofaUnits";
 import { sunbrellaFabrics } from "@/data/sunbrella";
 
 /**
@@ -256,7 +255,7 @@ const DIYPage = () => {
               tone="charcoal"
               subtitle="אין כאן סדר נכון. אפשר להתחיל מהתחנה שהכי מדברת אליכם ולחזור לשאר מתי שתרצו, כל אחת מהן עומדת בפני עצמה."
             >
-              ארבע תחנות עבודה
+              שתי תחנות עבודה
             </SectionHeading>
           </Reveal>
 
@@ -273,64 +272,7 @@ const DIYPage = () => {
               role="list"
               className="mx-auto grid max-w-6xl gap-6 lg:gap-8 lg:grid-cols-2"
             >
-              {/* ---- 01 · the long plank at the head of the bench ---- */}
-              <Station n="01" to="/designer" className="lg:col-span-2">
-                <div className="flex flex-col gap-8 lg:flex-row lg:items-center lg:gap-14">
-                  <div className="lg:w-[40%] lg:shrink-0">
-                    <StationHead icon={Blocks} title="עצבו סלון" />
-
-                    <p className="mt-5 text-[20px] leading-relaxed text-foreground text-pretty">
-                      הרכיבו את מערכת הישיבה שלכם יחידה אחר יחידה: פינות, יחידות
-                      אמצע והדומים. גררו כדי לשנות את הסדר, הוסיפו והורידו יחידות,
-                      והאורך הכולל מתעדכן מולכם בזמן אמת.
-                    </p>
-
-                    <p className="mt-6 text-[18px] leading-relaxed text-muted-foreground">
-                      בסוף: הקומפוזיציה והאורך הכולל נשלחים אלינו בוואטסאפ, ואנחנו
-                      חוזרים אליכם עם הצעת מחיר.
-                    </p>
-
-                    <StationCta to="/designer" className="mt-8">
-                      פתחו את המעצב
-                    </StationCta>
-                  </div>
-
-                  {/* The kit itself, named the way the tool names it. */}
-                  {/* Four columns only from lg, where the plank is wide enough
-                      that a real unit name still fits on one line. */}
-                  <Specimen caption="כל יחידה במידות 1×1 מ׳" className="lg:flex-1">
-                    <ul role="list" className="grid grid-cols-2 lg:grid-cols-4 items-end gap-4">
-                      {SOFA_UNITS.map((u, i) => (
-                        // Wrapper carries the lift so the mirrored units keep
-                        // their own scaleX transform on the image itself.
-                        <li
-                          key={u.id}
-                          className="transition-transform duration-300 ease-out group-hover:-translate-y-1"
-                          style={{ transitionDelay: `${i * 45}ms` }}
-                        >
-                          <img
-                            src={u.image}
-                            alt=""
-                            loading="lazy"
-                            decoding="async"
-                            draggable={false}
-                            width={1024}
-                            height={1024}
-                            className="h-auto w-full object-contain"
-                            style={{ transform: u.mirrored ? "scaleX(-1)" : undefined }}
-                          />
-                          <span className="mt-1 block text-center text-[18px] text-muted-foreground">
-                            {u.nameHe}
-                          </span>
-                        </li>
-                      ))}
-                    </ul>
-                  </Specimen>
-                </div>
-              </Station>
-
-              {/* ---- 02 · short station, right column in RTL ---- */}
-              <Station n="02" to="/fabric">
+              <Station n="01" to="/fabric" className="lg:col-span-2">
                 <StationHead icon={Palette} title="בחרו את הבד" />
 
                 <p className="mt-5 text-[20px] leading-relaxed text-foreground text-pretty">
@@ -364,7 +306,7 @@ const DIYPage = () => {
               </Station>
 
               {/* ---- 03 · short station, left column in RTL ---- */}
-              <Station n="03" to="/ar">
+              <Station n="02" to="/ar" className="lg:col-span-2">
                 <StationHead icon={ScanLine} title="AR, תצוגה במרחב" />
 
                 <p className="mt-5 text-[20px] leading-relaxed text-foreground text-pretty">
@@ -406,52 +348,6 @@ const DIYPage = () => {
                 </StationCta>
               </Station>
 
-              {/* ---- 04 · the long plank that closes the bench ---- */}
-              <Station n="04" to="/questionnaire" className="lg:col-span-2">
-                <div className="flex flex-col gap-8 lg:flex-row lg:items-center lg:gap-14">
-                  <div className="lg:flex-1">
-                    <StationHead icon={ClipboardList} title="שאלון חכם" />
-                    <p className="mt-5 max-w-2xl text-[20px] leading-relaxed text-foreground text-pretty">
-                      ארבעה שלבים קצרים על המרחב, על הסגנון ועל לוח הזמנים שלכם.
-                      בסוף תקבלו המלצה על הקולקציה שמתאימה לכם ביותר, ואנחנו נחזור
-                      אליכם לתאם פגישת אפיון ללא עלות.
-                    </p>
-                  </div>
-
-                  <StationCta to="/questionnaire" className="shrink-0">
-                    התחילו בשאלון
-                  </StationCta>
-                </div>
-
-                {/* The one thing only this plank is wide enough to do: the four
-                    real steps stretched end to end, like a track along the bench.
-                    The connectors take the slack, so the rail always reaches both
-                    edges however long the labels are. It only goes single-line at
-                    lg, where the plank spans both columns — narrower than that the
-                    four chips cannot fit a row and would be clipped by the plank's
-                    overflow-hidden, so they wrap instead. */}
-                <ol className="mt-9 flex flex-wrap items-center gap-3 lg:flex-nowrap">
-                  {questionnaireSteps.map((s, i) => (
-                    <li
-                      key={s}
-                      className="flex items-center gap-3 lg:flex-1 lg:last:flex-none"
-                    >
-                      <span
-                        className="whitespace-nowrap rounded-[10px] border border-border bg-secondary/60 px-4 py-2 text-[18px] text-foreground transition-colors duration-300 group-hover:border-primary/40 group-focus-within:border-primary/40"
-                        style={{ transitionDelay: `${i * 45}ms` }}
-                      >
-                        {s}
-                      </span>
-                      {i < questionnaireSteps.length - 1 && (
-                        <span
-                          className="h-px w-5 shrink-0 lg:w-auto lg:flex-1 bg-primary/45"
-                          aria-hidden="true"
-                        />
-                      )}
-                    </li>
-                  ))}
-                </ol>
-              </Station>
             </ul>
           </Reveal>
         </div>

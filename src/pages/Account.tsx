@@ -140,7 +140,7 @@ const Account = () => {
                 <div className="bg-card border border-border rounded-sm p-10 text-center">
                   <p className="text-muted-foreground mb-4">אין לך עדיין הזמנה פעילה.</p>
                   <Button asChild>
-                    <Link to="/contact">צור קשר להתחלת פרויקט</Link>
+                    <Link to="/faq#contact">צור קשר להתחלת פרויקט</Link>
                   </Button>
                 </div>
               ) : (

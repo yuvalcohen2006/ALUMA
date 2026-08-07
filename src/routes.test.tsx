@@ -85,12 +85,11 @@ describe("public route table", () => {
     expect(matchedLang("/enquiries")).toBe("he");
   });
 
-  it.each(["/about", "/en/about"])("serves the renamed about page at %s", (path) => {
+  it.each(["/about", "/en/about"])("still matches %s so it can redirect to /story", (path) => {
     expect(matchedLeaf(path)).toBe("about");
   });
 
   it.each([
-    ["/designer", "designer"],
     ["/fabric", "fabric"],
     ["/ar", "ar"],
     ["/questionnaire", "questionnaire"],
@@ -99,8 +98,8 @@ describe("public route table", () => {
     expect(matchedLeaf(`/en${path}`)).toBe(leaf);
   });
 
-  it.each(["/diy/scene", "/diy/fabric", "/diy/ar", "/consult"])(
-    "still matches the short-lived nested URL %s so it can redirect back",
+  it.each(["/diy/scene", "/diy/fabric", "/diy/ar", "/consult", "/designer", "/contact"])(
+    "still matches the retired URL %s so it can redirect",
     (path) => {
       expect(matchedLeaf(path)).not.toBe("*");
     }
@@ -124,14 +123,30 @@ describe("public route table", () => {
     }
   );
 
-  it.each(["/story", "/en/story"])("still matches the retired %s URL", (path) => {
-    // Matched, not 404: the route renders a <Navigate> to /about. Losing this
-    // silently breaks every indexed link to the old page.
+  it.each(["/story", "/en/story"])("serves the about page at %s", (path) => {
+    // The page is labelled אודות but keeps the /story URL, which is the one
+    // that was indexed. /about redirects here.
     expect(matchedLeaf(path)).toBe("story");
   });
 
   it("still falls through to the catch-all for unknown paths", () => {
     expect(matchedLeaf("/no-such-page")).toBe("*");
     expect(matchedLeaf("/en/no-such-page")).toBe("*");
+  });
+});
+
+describe("the three-level catalogue", () => {
+  it("separates the index, a collection, and a product", () => {
+    // These used to collide: /collections/:slug was the PRODUCT page, which
+    // left collections with nowhere of their own to live.
+    expect(matchedLeaf("/collections")).toBe("collections");
+    expect(matchedLeaf("/collections/salons")).toBe("collections/:slug");
+    expect(matchedLeaf("/products/salon-monolith")).toBe("products/:slug");
+  });
+
+  it("mirrors all three under /en", () => {
+    expect(matchedLeaf("/en/collections")).toBe("collections");
+    expect(matchedLeaf("/en/collections/salons")).toBe("collections/:slug");
+    expect(matchedLeaf("/en/products/salon-monolith")).toBe("products/:slug");
   });
 });

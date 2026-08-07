@@ -164,7 +164,7 @@ const ARPreview = () => {
                 <p className="text-muted-foreground text-sm mt-1">{active.desc}</p>
               </div>
               <Button asChild variant="default">
-                <a href="/contact">לפרטים על הפריט</a>
+                <a href="/faq#contact">לפרטים על הפריט</a>
               </Button>
             </div>
           </div>

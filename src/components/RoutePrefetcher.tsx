@@ -10,8 +10,8 @@ const RoutePrefetcher = () => {
       // Only the few most-likely next routes. Prefetching every page on load
       // just pulls the whole app back down and defeats the code-splitting.
       import("@/pages/Collections.tsx");
-      import("@/pages/CollectionDetail.tsx");
-      import("@/pages/Contact.tsx");
+      import("@/pages/CollectionPage.tsx");
+      import("@/pages/FAQ.tsx");
     };
 
     const w = window as Window & {

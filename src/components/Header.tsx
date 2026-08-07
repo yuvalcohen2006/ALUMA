@@ -47,12 +47,12 @@ const Header = () => {
     [collections, localized]
   );
 
+  // The owner specified this order reading LEFT to right. In RTL the first
+  // item renders rightmost, so the array is that list reversed. No "home"
+  // entry: the logo already goes home, and a second one is clutter.
   const navLinks = useMemo(
     () => [
-      { label: t("nav.home"), to: localized("/") },
       { label: t("nav.collections"), to: localized("/collections"), submenu: collectionsSub },
-      // Materials and the magazine share one entry — same reader, and each half
-      // looked thin on its own.
       {
         label: t("nav.journal"),
         to: localized("/journal"),
@@ -61,25 +61,21 @@ const Header = () => {
           { label: t("materialsSub.aluminum"), to: localized("/materials/aluminum") },
           { label: t("materialsSub.granitePorcelain"), to: localized("/materials/granite-porcelain") },
           { label: t("materialsSub.polystone"), to: localized("/materials/polystone") },
+          { label: t("nav.projects"), to: localized("/projects") },
         ],
       },
-      { label: t("nav.projects"), to: localized("/projects") },
       {
         label: t("nav.diy"),
         to: localized("/diy"),
+        badge: t("nav.newBadge"),
         submenu: [
-          { label: t("diySub.designer"), to: localized("/designer") },
           { label: t("diySub.fabric"), to: localized("/fabric") },
           { label: t("diySub.ar"), to: localized("/ar") },
-          { label: t("diySub.questionnaire"), to: localized("/questionnaire") },
         ],
       },
       { label: t("nav.faq"), to: localized("/faq") },
       { label: t("nav.club"), to: localized("/club") },
-      // Near the end on purpose: the owner filed the backstory under "nice,
-      // not important", and in RTL later means further left.
       { label: t("nav.story"), to: localized("/story") },
-      { label: t("nav.contact"), to: localized("/contact") },
     ],
     [collectionsSub, t, localized]
   );
@@ -182,6 +178,11 @@ const Header = () => {
                   }
                 >
                   {link.label}
+                  {link.badge && (
+                    <span className="ms-1.5 rounded-full bg-primary/12 px-2 py-0.5 text-[11px] font-medium tracking-[0.06em] text-primary">
+                      {link.badge}
+                    </span>
+                  )}
                   {chevron}
                 </NavLink>
 
@@ -308,6 +309,11 @@ const Header = () => {
                       }
                     >
                       {link.label}
+                      {link.badge && (
+                        <span className="ms-2 rounded-full bg-primary/12 px-2 py-0.5 text-[11px] font-medium tracking-[0.06em] text-primary align-middle">
+                          {link.badge}
+                        </span>
+                      )}
                     </NavLink>
                     {hasSub && (
                       <button

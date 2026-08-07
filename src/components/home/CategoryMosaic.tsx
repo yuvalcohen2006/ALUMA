@@ -13,12 +13,14 @@ import umbrella from "@/assets/categories/umbrella.jpg";
 type Tile = {
   id: string;
   img: string;
+  /** Collection slug the primary button opens. */
+  collection?: string;
+  /** Small terracotta flag in the corner — first two tiles only. */
+  badge?: "hot" | "popular";
   /** Full-bleed row of its own, rather than sharing one with a sibling. */
   wide?: boolean;
   /** White type on the night photographs, charcoal on the morning ones. */
   ink?: "dark" | "light";
-  /** Collection slug to pre-filter on, once the catalogue taxonomy matches. */
-  cat?: string;
 };
 
 /**
@@ -34,8 +36,8 @@ type Tile = {
  *   row 5  כסאות פינות אוכל · אקססוריז    morning
  */
 const tiles: Tile[] = [
-  { id: "lounge", img: loungeSet, wide: true },
-  { id: "fire", img: fireTable, wide: true, ink: "light" },
+  { id: "lounge", img: loungeSet, wide: true, badge: "hot", collection: "salons" },
+  { id: "fire", img: fireTable, wide: true, ink: "light", badge: "popular", collection: "fire-tables" },
   { id: "sunbed", img: sunbed },
   { id: "coffee", img: coffeeTable },
   { id: "bar", img: barChair, ink: "light" },
@@ -66,6 +68,16 @@ const tiles: Tile[] = [
  */
 const TILE_H = "h-[500px] md:h-[490px] lg:h-[580px]";
 
+/* The tile CTA. Rendered as a <span> because the whole tile is already the
+   link — a nested <a> would be invalid markup and a second tab stop for the
+   same destination. */
+const btnBase =
+  "inline-flex h-11 items-center justify-center rounded-full border px-6 text-[16px] transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring";
+const btnDark =
+  "border-foreground/30 text-foreground hover:border-accent hover:bg-accent hover:text-accent-foreground";
+const btnLight =
+  "border-background/50 text-background hover:border-accent hover:bg-accent hover:text-accent-foreground";
+
 const CategoryMosaic = () => {
   const { to } = useLocalizedPath();
   const { t } = useTranslation("home");
@@ -84,15 +96,15 @@ const CategoryMosaic = () => {
               key={t_.id}
               className={t_.wide ? "w-full" : "w-full md:w-[calc(50%-6px)]"}
             >
-              <Link
-                to={t_.cat ? to(`/collections?cat=${t_.cat}`) : to("/collections")}
-                className={`relative block w-full overflow-hidden ${TILE_H} focus-visible:outline-2 focus-visible:outline-offset-[-4px] focus-visible:outline-ring`}
+              {/* The tile itself is NOT a link — the buttons are, the way
+                  Apple's own tiles work. A tile-wide link can only have one
+                  destination, and nesting the buttons inside it would be
+                  invalid markup and a duplicate tab stop for every tile.
+                  No hover on the photograph either: a creeping zoom kept
+                  pulling the eye to whichever tile the cursor rested on. */}
+              <div
+                className={`relative block w-full overflow-hidden ${TILE_H}`}
               >
-                {/* No hover state on purpose: the photographs are the content,
-                    and a creeping zoom under the cursor pulled attention to
-                    whichever tile the mouse happened to rest on. The
-                    focus-visible ring stays — that's keyboard navigation, not
-                    decoration. */}
                 <img
                   src={t_.img}
                   alt={t(`tiles.${t_.id}.label`)}
@@ -101,6 +113,12 @@ const CategoryMosaic = () => {
                   decoding="async"
                   className="absolute inset-0 w-full h-full object-cover"
                 />
+
+                {t_.badge && (
+                  <span className="absolute top-4 end-4 z-10 rounded-full bg-primary px-3 py-1 text-[13px] font-medium tracking-[0.04em] text-primary-foreground">
+                    {t(`tiles.badge.${t_.badge}`)}
+                  </span>
+                )}
 
                 {/* A scrim only where the words are, so the photograph stays
                     the subject. */}
@@ -127,14 +145,35 @@ const CategoryMosaic = () => {
                   {/* Close under the title rather than a step down the scale —
                       the two lines read as one block of type. */}
                   <p
-                    className={`mt-2 text-[26px] lg:text-[34px] leading-[1.25] ${
+                    className={`mt-2 text-[20px] lg:text-[28px] leading-[1.25] ${
                       light ? "text-background/80" : "text-foreground-soft"
                     }`}
                   >
                     {t(`tiles.${t_.id}.tagline`)}
                   </p>
+
+                  {/* Apple's tile CTAs, in our palette: a quiet outline that
+                      fills with terracotta on hover instead of turning blue.
+                      The wide tiles carry two, since they have the room and
+                      they're the ones worth opening. */}
+                  <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+                    <Link
+                      to={t_.collection ? to(`/collections/${t_.collection}`) : to("/collections")}
+                      className={`${btnBase} ${light ? btnLight : btnDark}`}
+                    >
+                      {t("tiles.cta.view")}
+                    </Link>
+                    {t_.wide && (
+                      <Link
+                        to={to("/collections")}
+                        className={`${btnBase} ${light ? btnLight : btnDark}`}
+                      >
+                        {t("tiles.cta.all")}
+                      </Link>
+                    )}
+                  </div>
                 </div>
-              </Link>
+              </div>
             </li>
           );
         })}

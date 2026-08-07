@@ -1,5 +1,5 @@
 import { FormEvent, useState } from "react";
-import { ArrowLeft, Check } from "lucide-react";
+import { Check } from "lucide-react";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
@@ -14,8 +14,7 @@ import clubBg from "@/assets/categories/club-morning.jpg";
  * generated with the whole upper two thirds empty, because unlike a category
  * tile this one needs room for a form as well as a headline.
  *
- * The input is a frosted pill over the sky. 17px matters: iOS Safari zooms
- * the page when a focused field is under 16px, and doesn't zoom back.
+ * The signup is a field and a labelled button side by side over the sky.
  */
 const Newsletter = () => {
   const { t } = useTranslation("home");
@@ -99,14 +98,17 @@ const Newsletter = () => {
               {t("club.thanks")}
             </div>
           ) : (
-            <form onSubmit={onSubmit} className="mx-auto mt-8 max-w-[420px]" noValidate>
+            <form onSubmit={onSubmit} className="mx-auto mt-8 w-full max-w-[520px]" noValidate>
               <label className="sr-only" htmlFor="club-email">
-                כתובת אימייל
+                {t("club.emailPlaceholder")}
               </label>
-              {/* A frosted pill, not an underline: over a bright sky a 1px
-                  hairline all but disappears, and a field people can't find
-                  isn't minimal, it's missing. */}
-              <div className="relative rounded-full bg-white/70 backdrop-blur-md border border-foreground/10 shadow-soft focus-within:border-foreground/35 transition-colors">
+
+              {/* Field and button side by side, both full height, rather than a
+                  button crammed inside the field. The arrow-in-a-circle read as
+                  decoration; a labelled button reads as the thing you press.
+                  17px on the input because iOS Safari zooms the page on focus
+                  below 16px and never zooms back. */}
+              <div className="flex flex-col sm:flex-row gap-3">
                 <input
                   id="club-email"
                   type="email"
@@ -115,20 +117,20 @@ const Newsletter = () => {
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder={t("club.emailPlaceholder")}
                   autoComplete="email"
-                  // Email addresses are Latin, so the text runs LTR — but the
+                  // Email addresses are Latin, so the value runs LTR — but the
                   // field still aligns to the reading edge.
                   dir="ltr"
-                  className="w-full h-[52px] bg-transparent text-[17px] text-foreground text-start ps-6 pe-14 outline-none rounded-full placeholder:text-foreground/45"
+                  className="h-14 flex-1 min-w-0 rounded-full border border-foreground/15 bg-white/80 px-6 text-[17px] text-foreground text-start shadow-soft backdrop-blur-md outline-none transition-colors placeholder:text-foreground/45 focus:border-accent"
                 />
                 <button
                   type="submit"
                   disabled={submitting}
-                  aria-label={t("club.submit")}
-                  className="absolute end-1.5 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-foreground text-background inline-flex items-center justify-center hover:bg-accent disabled:opacity-50 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+                  className="h-14 shrink-0 rounded-full bg-foreground px-8 text-[17px] font-medium text-background transition-colors duration-200 hover:bg-accent disabled:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
                 >
-                  <ArrowLeft className="w-5 h-5 ltr:-scale-x-100" aria-hidden="true" />
+                  {t("club.submit")}
                 </button>
               </div>
+
               <p className="mt-3 text-[13px] text-foreground/55">
                 {t("club.unsubscribe")}
               </p>

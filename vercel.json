@@ -1,0 +1,27 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "framework": "vite",
+  "redirects": [
+    { "source": "/about", "destination": "/story", "permanent": true },
+    { "source": "/en/about", "destination": "/en/story", "permanent": true },
+    { "source": "/materials", "destination": "/journal", "permanent": true },
+    { "source": "/en/materials", "destination": "/en/journal", "permanent": true },
+    { "source": "/blog", "destination": "/journal", "permanent": true },
+    { "source": "/en/blog", "destination": "/en/journal", "permanent": true },
+    { "source": "/blog/:slug", "destination": "/journal/:slug", "permanent": true },
+    { "source": "/en/blog/:slug", "destination": "/en/journal/:slug", "permanent": true },
+    { "source": "/contact", "destination": "/faq", "permanent": true },
+    { "source": "/en/contact", "destination": "/en/faq", "permanent": true },
+    { "source": "/consult", "destination": "/questionnaire", "permanent": true },
+    { "source": "/designer", "destination": "/diy", "permanent": true },
+    { "source": "/diy/scene", "destination": "/diy", "permanent": true },
+    { "source": "/diy/fabric", "destination": "/fabric", "permanent": true },
+    { "source": "/diy/ar", "destination": "/ar", "permanent": true },
+    { "source": "/before-after", "destination": "/projects", "permanent": true },
+    { "source": "/auth", "destination": "/club/auth", "permanent": true },
+    { "source": "/account", "destination": "/club/dashboard", "permanent": true }
+  ],
+  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+}

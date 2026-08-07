@@ -14,7 +14,7 @@ const WhatsAppIcon = ({ className = "" }: { className?: string }) => (
  */
 const MobileActionBar = () => {
   const { pathname } = useLocation();
-  if (pathname === "/contact" || pathname.startsWith("/admin") || pathname === "/auth") return null;
+  if (pathname === "/faq" || pathname.startsWith("/admin") || pathname === "/auth") return null;
 
   return (
     <>

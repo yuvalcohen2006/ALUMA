@@ -310,7 +310,7 @@ const Contact = () => {
     // The top margin is what keeps the sand edge off the hero: PageHero closes
     // on 24px of its own padding, so without it the colour change lands almost
     // on the subtitle's last line.
-    <section id="contact" dir="rtl" className="mt-10 md:mt-12 py-16 md:py-24 bg-secondary">
+    <section id="contact" dir="rtl" className="scroll-mt-28 mt-10 md:mt-12 py-16 md:py-24 bg-secondary">
       <div className="container-luxury">
         {/* Channels before the form, everywhere. Apple's own contact page has
             no form at all — a person deciding on made-to-order furniture wants

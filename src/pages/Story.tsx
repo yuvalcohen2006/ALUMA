@@ -137,7 +137,7 @@ const StoryPage = () => {
             </Reveal>
             <Reveal delay={100}>
               <div className="flex flex-wrap gap-4 shrink-0">
-                <Link to={to("/contact")} className="btn-shine inline-flex items-center gap-2">
+                <Link to={to("/faq") + "#contact"} className="btn-shine inline-flex items-center gap-2">
                   לתיאום ביקור
                   <ArrowLeft className="w-4 h-4 ltr:-scale-x-100" aria-hidden="true" />
                 </Link>

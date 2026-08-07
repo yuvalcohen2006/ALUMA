@@ -154,7 +154,7 @@ const CollectionDetailPage = () => {
       <SEO
         title={`${item.name} | קולקציות | Aluma`}
         description={`${item.name}, ${item.tagline ?? ""}. ${item.description[0] ?? ""}`}
-        path={`/collections/${item.slug}`}
+        path={`/products/${item.slug}`}
         jsonLd={productJsonLd}
       />
 
@@ -360,7 +360,7 @@ const CollectionDetailPage = () => {
             כל פרויקט מתוכנן ומיוצר בהתאם לאופי המרחב עד לפרטים הקטנים ביותר.
           </p>
           <Button asChild size="lg" className="rounded-[10px] text-[18px] px-8">
-            <Link to="/contact" className="inline-flex items-center gap-2">
+            <Link to="/faq#contact" className="inline-flex items-center gap-2">
               להשארת פרטים
               <ArrowLeft className="w-4 h-4" />
             </Link>
@@ -382,7 +382,7 @@ const CollectionDetailPage = () => {
               {related.map((c) => (
                 <Link
                   key={c.slug}
-                  to={`/collections/${c.slug}`}
+                  to={`/products/${c.slug}`}
                   className="group block bg-card rounded-[14px] overflow-hidden border border-border shadow-soft hover:border-primary/60 hover:shadow-luxury hover:-translate-y-1 transition-smooth"
                 >
                   <div className="relative aspect-[4/3] overflow-hidden bg-secondary">

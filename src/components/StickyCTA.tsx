@@ -9,7 +9,7 @@ const StickyCTA = () => {
   const [dismissed, setDismissed] = useState(false);
   const { pathname } = useLocation();
 
-  const hidden = pathname === "/contact";
+  const hidden = pathname === "/faq";
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -59,7 +59,7 @@ const StickyCTA = () => {
             </div>
 
             <Link
-              to="/contact"
+              to="/faq#contact"
               className="relative z-10 shrink-0 inline-flex items-center gap-1.5 md:gap-2 bg-accent/90 hover:bg-accent text-accent-foreground px-3 md:px-6 py-1.5 md:py-2.5 rounded-sm text-xs md:text-base font-medium tracking-wide transition-smooth shadow-soft backdrop-blur-sm"
             >
               השאירו פרטים

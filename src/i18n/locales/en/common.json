@@ -11,7 +11,8 @@
     "contact": "Contact",
     "openMenu": "Open menu",
     "closeMenu": "Close menu",
-    "toggleSubmenu": "Toggle submenu"
+    "toggleSubmenu": "Toggle submenu",
+    "newBadge": "New"
   },
   "diySub": {
     "designer": "Design a lounge",

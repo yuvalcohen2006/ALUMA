@@ -16,12 +16,17 @@
 /blog/*          /journal/:splat      301
 /en/blog/*       /en/journal/:splat   301
 
+# Contact now lives under the Q&A page.
+/contact      /faq        301
+/en/contact   /en/faq     301
+
 # Briefly-lived URLs from the restructure that was rolled back.
 /about        /story      301
 /en/about     /en/story   301
 /consult      /questionnaire      301
 /en/consult   /en/questionnaire   301
-/diy/scene    /designer   301
+/diy/scene    /diy        301
+/designer     /diy        301
 /diy/fabric   /fabric     301
 /diy/ar       /ar         301
 
