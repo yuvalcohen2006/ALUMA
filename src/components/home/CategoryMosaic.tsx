@@ -15,8 +15,6 @@ type Tile = {
   img: string;
   /** Collection slug the primary button opens. */
   collection?: string;
-  /** Small terracotta flag in the corner — first two tiles only. */
-  badge?: "hot" | "popular";
   /** Full-bleed row of its own, rather than sharing one with a sibling. */
   wide?: boolean;
   /** White type on the night photographs, charcoal on the morning ones. */
@@ -36,8 +34,8 @@ type Tile = {
  *   row 5  כסאות פינות אוכל · אקססוריז    morning
  */
 const tiles: Tile[] = [
-  { id: "lounge", img: loungeSet, wide: true, badge: "hot", collection: "salons" },
-  { id: "fire", img: fireTable, wide: true, ink: "light", badge: "popular", collection: "fire-tables" },
+  { id: "lounge", img: loungeSet, wide: true, collection: "salons" },
+  { id: "fire", img: fireTable, wide: true, ink: "light", collection: "fire-tables" },
   { id: "sunbed", img: sunbed },
   { id: "coffee", img: coffeeTable },
   { id: "bar", img: barChair, ink: "light" },
@@ -114,12 +112,6 @@ const CategoryMosaic = () => {
                   className="absolute inset-0 w-full h-full object-cover"
                 />
 
-                {t_.badge && (
-                  <span className="absolute top-4 end-4 z-10 rounded-full bg-primary px-3 py-1 text-[13px] font-medium tracking-[0.04em] text-primary-foreground">
-                    {t(`tiles.badge.${t_.badge}`)}
-                  </span>
-                )}
-
                 {/* A scrim only where the words are, so the photograph stays
                     the subject. */}
                 <div
@@ -156,21 +148,18 @@ const CategoryMosaic = () => {
                       fills with terracotta on hover instead of turning blue.
                       The wide tiles carry two, since they have the room and
                       they're the ones worth opening. */}
-                  <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+                  <div className="mt-6 flex items-center justify-center">
                     <Link
                       to={t_.collection ? to(`/collections/${t_.collection}`) : to("/collections")}
-                      className={`${btnBase} ${light ? btnLight : btnDark}`}
+                      // The two wide tiles share one fixed width so their
+                      // buttons measure identically however long the label is;
+                      // the narrow tiles size to their own text.
+                      className={`${btnBase} ${light ? btnLight : btnDark} ${
+                        t_.wide ? "w-full max-w-[320px]" : ""
+                      }`}
                     >
                       {t("tiles.cta.view")}
                     </Link>
-                    {t_.wide && (
-                      <Link
-                        to={to("/collections")}
-                        className={`${btnBase} ${light ? btnLight : btnDark}`}
-                      >
-                        {t("tiles.cta.all")}
-                      </Link>
-                    )}
                   </div>
                 </div>
               </div>

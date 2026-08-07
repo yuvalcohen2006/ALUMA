@@ -98,7 +98,7 @@ const scrollToShowroom = () => {
 };
 
 const tileClass =
-  "group flex h-full w-full flex-col items-start gap-4 rounded-[14px] border border-foreground/10 bg-background p-6 md:p-7 text-right transition-colors duration-200 hover:bg-white";
+  "group flex h-full w-full flex-col items-start gap-4 rounded-[14px] border border-foreground/10 bg-background p-6 md:p-7 text-start transition-colors duration-200 hover:bg-white";
 
 const ChannelTile = ({ channel }: { channel: Channel }) => {
   const { Icon } = channel;
@@ -125,7 +125,7 @@ const ChannelTile = ({ channel }: { channel: Channel }) => {
             "block font-display font-normal text-[22px] leading-snug text-foreground",
             // A latin string inside an RTL block: flip the element to LTR so the
             // digits read correctly, then pin it back to the right edge.
-            channel.ltr && "text-right",
+            channel.ltr && "text-start",
           )}
           dir={channel.ltr ? "ltr" : undefined}
         >
@@ -192,7 +192,7 @@ const assurances = [
 // grey input is the support-ticket tell this page is escaping.
 const fieldClass = (invalid: boolean) =>
   cn(
-    "w-full rounded-none border-0 border-b bg-transparent px-0 text-[18px] text-foreground text-right",
+    "w-full rounded-none border-0 border-b bg-transparent px-0 text-[18px] text-foreground text-start",
     "placeholder:text-muted-foreground/60 transition-colors focus:ring-0",
     invalid ? "border-destructive/70 focus:border-destructive" : "border-foreground/25 focus:border-accent",
   );
@@ -310,7 +310,7 @@ const Contact = () => {
     // The top margin is what keeps the sand edge off the hero: PageHero closes
     // on 24px of its own padding, so without it the colour change lands almost
     // on the subtitle's last line.
-    <section id="contact" dir="rtl" className="scroll-mt-28 mt-10 md:mt-12 py-16 md:py-24 bg-secondary">
+    <section dir="rtl" className="py-14 md:py-20 bg-secondary">
       <div className="container-luxury">
         {/* Channels before the form, everywhere. Apple's own contact page has
             no form at all — a person deciding on made-to-order furniture wants
@@ -326,13 +326,9 @@ const Contact = () => {
 
           {/* ===== FORM ===== */}
           <Reveal className="min-w-0 max-w-[640px]">
-            <SectionHeading
-              align="start"
-              tone="charcoal"
-              subtitle="ספרו לנו מה החלום שלכם ואנחנו נדאג להגשים לכם אותו."
-            >
-              כתבו לנו
-            </SectionHeading>
+            <p className="text-[18px] leading-relaxed text-foreground-soft">
+              ספרו לנו מה החלום שלכם ואנחנו נדאג להגשים לכם אותו.
+            </p>
 
             {/* Close to the heading (24px) because it belongs to it, and a full
                 36px clear of the form below — related things near, the change
@@ -374,7 +370,7 @@ const Contact = () => {
               {errorList.length > 0 && (
                 <div
                   role="alert"
-                  className="mb-7 rounded-[14px] border border-destructive/40 bg-destructive/5 p-5 text-right"
+                  className="mb-7 rounded-[14px] border border-destructive/40 bg-destructive/5 p-5 text-start"
                 >
                   <p className="flex items-center gap-2.5 text-[18px] font-medium text-destructive">
                     <AlertCircle className="w-5 h-5 shrink-0" aria-hidden="true" />

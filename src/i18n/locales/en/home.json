@@ -33,12 +33,7 @@
       "tagline": "Shade, cushions and light."
     },
     "cta": {
-      "view": "View collection",
-      "all": "All collections"
-    },
-    "badge": {
-      "hot": "Hot",
-      "popular": "Popular"
+      "view": "View collection"
     }
   },
   "club": {

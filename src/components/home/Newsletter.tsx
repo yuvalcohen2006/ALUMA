@@ -117,9 +117,11 @@ const Newsletter = () => {
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder={t("club.emailPlaceholder")}
                   autoComplete="email"
-                  // Email addresses are Latin, so the value runs LTR — but the
-                  // field still aligns to the reading edge.
-                  dir="ltr"
+                  // dir="auto" rather than "ltr": the Hebrew placeholder then
+                  // reads right-to-left like the rest of the page, while a
+                  // typed Latin address still renders left-to-right. Forcing
+                  // ltr threw the placeholder to the wrong edge.
+                  dir="auto"
                   className="h-14 flex-1 min-w-0 rounded-full border border-foreground/15 bg-white/80 px-6 text-[17px] text-foreground text-start shadow-soft backdrop-blur-md outline-none transition-colors placeholder:text-foreground/45 focus:border-accent"
                 />
                 <button

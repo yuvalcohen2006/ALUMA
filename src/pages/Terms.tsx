@@ -55,7 +55,7 @@ const TermsPage = () => {
             </TabsList>
 
             {/* ============ תקנון האתר ============ */}
-            <TabsContent value="terms" className="mt-10 text-right">
+            <TabsContent value="terms" className="mt-10 text-start">
               <H2>כללי ומבוא</H2>
               <P>
                 אתר אינטרנט זה (להלן: "האתר") מופעל על ידי חברת אלומה ריהוט גן (להלן: "החברה").
@@ -82,7 +82,7 @@ const TermsPage = () => {
             </TabsContent>
 
             {/* ============ אספקה ומשלוחים ============ */}
-            <TabsContent value="shipping" className="mt-10 text-right">
+            <TabsContent value="shipping" className="mt-10 text-start">
               <H2>מועדי אספקה</H2>
               <P>
                 מועד אספקת המוצרים הוא עד 30 ימי עסקים ממועד אישור העסקה על ידי חברת האשראי (להלן: "מועד האספקה"), אלא אם צוין אחרת במפורש ובכתב על גבי הזמנת הלקוח.
@@ -106,7 +106,7 @@ const TermsPage = () => {
             </TabsContent>
 
             {/* ============ ביטול והחזרות ============ */}
-            <TabsContent value="returns" className="mt-10 text-right">
+            <TabsContent value="returns" className="mt-10 text-start">
               <H2>זכות הביטול</H2>
               <P>
                 הלקוח רשאי לבטל את בקשתו לקניית מוצרים בהתאם לתנאים הקבועים בחוק הגנת הצרכן ובתקנות הגנת הצרכן (ביטול עסקה), תשע"א-2010, ובהתאם למפורט להלן.
@@ -165,7 +165,7 @@ const TermsPage = () => {
             </TabsContent>
 
             {/* ============ אחריות ותחזוקה ============ */}
-            <TabsContent value="warranty" className="mt-10 text-right">
+            <TabsContent value="warranty" className="mt-10 text-start">
               <H2>פתח דבר</H2>
               <P>
                 חברת אלומה ריהוט גן מברכת אתכם על החלטתכם לרכוש ריהוט גן בחברתנו. אנו מודים לכם על האמון שנתתם במוצרינו, המיוצרים מחומרי גלם איכותיים ובתהליך ייצור קפדני ומבוקר, ומשוכנעים כי תיהנו מחוויית אירוח ופנאי מפנקת בגינתכם לאורך שנים.

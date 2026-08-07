@@ -53,7 +53,7 @@ const StoryPage = () => {
           <div className="grid md:grid-cols-2 gap-10 md:gap-14 items-center max-w-7xl mx-auto">
             {/* Right (RTL first): the paragraph */}
             <Reveal className="order-1">
-              <div className="space-y-3.5 text-foreground text-body text-right max-w-md">
+              <div className="space-y-3.5 text-foreground text-body text-start max-w-md">
                 <p>אלומה נולדה מתוך חיבור בין חומר לאור.</p>
 
                 <p>
@@ -125,7 +125,7 @@ const StoryPage = () => {
       {/* COME MEET IT — the showroom, with the real address and a real door in. */}
       <section className="bg-foreground text-background">
         <div className="container-luxury py-14 md:py-20">
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-8 text-right">
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-8 text-start">
             <Reveal>
               <h2 className="font-display font-bold text-[26px] md:text-[30px] leading-tight">
                 הכי קל להבין את אלומה כשיושבים עליה

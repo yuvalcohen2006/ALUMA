@@ -98,7 +98,7 @@ const AccessibilityWidget = () => {
       type="button"
       onClick={onClick}
       aria-pressed={active}
-      className={`w-full flex items-center justify-between gap-3 px-4 py-3 rounded-sm border transition-smooth text-right ${
+      className={`w-full flex items-center justify-between gap-3 px-4 py-3 rounded-sm border transition-smooth text-start ${
         active
           ? "bg-primary text-primary-foreground border-primary"
           : "bg-card text-foreground border-border hover:border-primary/50"

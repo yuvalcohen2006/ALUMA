@@ -61,7 +61,7 @@ const ConversionCTA = ({
             >
               <Link to={primaryHref}>
                 {primaryLabel}
-                <ArrowLeft className="mr-2 h-4 w-4 group-hover:-translate-x-1 transition-smooth" />
+                <ArrowLeft className="me-2 h-4 w-4 group-hover:-translate-x-1 rtl:group-hover:translate-x-1 transition-smooth" />
               </Link>
             </Button>
             <Button
@@ -71,7 +71,7 @@ const ConversionCTA = ({
               className="rounded-sm px-8 bg-transparent border-primary-foreground/40 text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground"
             >
               <a href={wa} target="_blank" rel="noopener noreferrer">
-                <MessageCircle className="ml-2 h-4 w-4" />
+                <MessageCircle className="ms-2 h-4 w-4" />
                 בוואטסאפ עכשיו
               </a>
             </Button>
@@ -82,7 +82,7 @@ const ConversionCTA = ({
               className="rounded-sm px-8 bg-transparent border-primary-foreground/40 text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground"
             >
               <a href="tel:+972504519062">
-                <Phone className="ml-2 h-4 w-4" />
+                <Phone className="ms-2 h-4 w-4" />
                 חייגו אלינו
               </a>
             </Button>

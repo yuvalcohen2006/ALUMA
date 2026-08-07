@@ -53,26 +53,8 @@ const Header = () => {
   const navLinks = useMemo(
     () => [
       { label: t("nav.collections"), to: localized("/collections"), submenu: collectionsSub },
-      {
-        label: t("nav.journal"),
-        to: localized("/journal"),
-        submenu: [
-          { label: t("materialsSub.sunbrella"), to: localized("/materials/sunbrella") },
-          { label: t("materialsSub.aluminum"), to: localized("/materials/aluminum") },
-          { label: t("materialsSub.granitePorcelain"), to: localized("/materials/granite-porcelain") },
-          { label: t("materialsSub.polystone"), to: localized("/materials/polystone") },
-          { label: t("nav.projects"), to: localized("/projects") },
-        ],
-      },
-      {
-        label: t("nav.diy"),
-        to: localized("/diy"),
-        badge: t("nav.newBadge"),
-        submenu: [
-          { label: t("diySub.fabric"), to: localized("/fabric") },
-          { label: t("diySub.ar"), to: localized("/ar") },
-        ],
-      },
+      { label: t("nav.journal"), to: localized("/journal") },
+      { label: t("nav.diy"), to: localized("/diy"), badge: t("nav.newBadge") },
       { label: t("nav.faq"), to: localized("/faq") },
       { label: t("nav.club"), to: localized("/club") },
       { label: t("nav.story"), to: localized("/story") },
@@ -174,12 +156,15 @@ const Header = () => {
                   // item would read as active on every English page.
                   end={link.to === "/" || link.to === "/en"}
                   className={({ isActive }) =>
-                    `${navItem} ${isActive || isOpen ? navActive : navRest}`
+                    `relative ${navItem} ${isActive || isOpen ? navActive : navRest}`
                   }
                 >
                   {link.label}
+                  {/* Absolutely positioned: an inline badge widened the pill
+                      and pushed every neighbouring item along. This one floats
+                      over the top corner and costs the button no width. */}
                   {link.badge && (
-                    <span className="ms-1.5 rounded-full bg-primary/12 px-2 py-0.5 text-[11px] font-medium tracking-[0.06em] text-primary">
+                    <span className="pointer-events-none absolute -top-0.5 end-0 rounded-full bg-primary px-1.5 py-px text-[10px] font-medium leading-[1.4] text-primary-foreground">
                       {link.badge}
                     </span>
                   )}
@@ -207,7 +192,7 @@ const Header = () => {
                             setPinned(null);
                             setHovered(null);
                           }}
-                          className="block rounded-lg px-4 py-2.5 text-sm text-right text-foreground transition-colors duration-200 hover:bg-secondary/70 hover:text-accent"
+                          className="block rounded-lg px-4 py-2.5 text-sm text-start text-foreground transition-colors duration-200 hover:bg-secondary/70 hover:text-accent"
                         >
                           {sub.label}
                         </Link>
@@ -303,7 +288,7 @@ const Header = () => {
                       end={link.to === "/"}
                       onClick={() => setOpen(false)}
                       className={({ isActive }) =>
-                        `flex-1 font-display text-xl text-right py-3 ${
+                        `flex-1 font-display text-xl text-start py-3 ${
                           isActive ? "text-accent" : "text-foreground hover:text-accent"
                         }`
                       }
@@ -333,14 +318,14 @@ const Header = () => {
                   </div>
 
                   {hasSub && isOpen && (
-                    <div className="flex flex-col py-2 pr-4 gap-1 animate-in fade-in slide-in-from-top-1 duration-200">
+                    <div className="flex flex-col py-2 pe-4 gap-1 animate-in fade-in slide-in-from-top-1 duration-200">
                       {link.submenu!.map((sub) => (
                         <NavLink
                           key={`${link.to}-${sub.to}`}
                           to={sub.to}
                           onClick={() => setOpen(false)}
                           className={({ isActive }) =>
-                            `text-sm tracking-wide text-right py-1.5 ${
+                            `text-sm tracking-wide text-start py-1.5 ${
                               isActive ? "text-accent" : "text-foreground hover:text-accent"
                             }`
                           }

@@ -150,7 +150,7 @@ const ProjectEntry = ({ project: p, index }: { project: Project; index: number }
           <Reveal
             delay={140}
             className={cn(
-              "min-w-0 text-right",
+              "min-w-0 text-start",
               photoRight ? "lg:order-2" : "lg:order-1"
             )}
           >

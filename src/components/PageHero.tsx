@@ -41,7 +41,7 @@ const PageHero = ({ title, subtitle, filterSlot, dark = false }: PageHeroProps) 
           {/* Shrink-to-fit, so the rule (w-full of this wrapper) measures
               exactly as wide as the title. A title too long for the row wraps
               and the rule follows it rather than overflowing the page. */}
-          <div className="min-w-0 text-right">
+          <div className="min-w-0 text-start">
             <h1
               className={`animate-rise-in font-display text-3xl sm:text-4xl md:text-5xl ${
                 dark ? "text-background" : "text-primary"
@@ -67,7 +67,7 @@ const PageHero = ({ title, subtitle, filterSlot, dark = false }: PageHeroProps) 
 
         {subtitle && (
           <p
-            className={`text-body text-right mt-5 max-w-2xl ${
+            className={`text-body text-start mt-5 max-w-2xl ${
               dark ? "text-background/75" : "text-foreground-soft"
             }`}
           >

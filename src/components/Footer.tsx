@@ -29,7 +29,7 @@ const Footer = () => {
         <div dir="rtl" className="grid gap-y-10 md:grid-cols-2 lg:grid-cols-4 lg:gap-y-0 lg:gap-x-8 lg:items-stretch">
 
           {/* Column 1 (rightmost in RTL), Logo + about + socials */}
-          <div className="w-full text-center md:text-right lg:max-w-[320px] lg:pl-8">
+          <div className="w-full text-center md:text-start lg:max-w-[320px] lg:pe-8">
             <img src={alumaLogo} alt="Aluma" loading="lazy" decoding="async" width={400} height={100} className="h-10 w-auto mb-5 mx-auto md:ml-auto brightness-0 invert opacity-90" />
             <p className="text-background/75 text-sm leading-relaxed mb-6">
               אנחנו יוצרים מערכות חוץ שמרגישות כמו סלון יוקרתי תחת כיפת השמיים —
@@ -65,7 +65,7 @@ const Footer = () => {
           </div>
 
           {/* Column 2, Quick navigation */}
-          <div className="w-full text-center md:text-right lg:max-w-[220px] lg:justify-self-center lg:px-8 lg:border-r lg:border-background/15">
+          <div className="w-full text-center md:text-start lg:max-w-[220px] lg:justify-self-center lg:px-8 lg:border-r lg:border-background/15">
             <h4 className="font-display text-xl mb-6">מעבר מהיר</h4>
             <ul className="space-y-3 text-sm text-background/85">
               <li>
@@ -117,7 +117,7 @@ const Footer = () => {
           </div>
 
           {/* Column 3, Materials */}
-          <div className="w-full text-center md:text-right lg:max-w-[220px] lg:justify-self-center lg:px-8 lg:border-r lg:border-background/15">
+          <div className="w-full text-center md:text-start lg:max-w-[220px] lg:justify-self-center lg:px-8 lg:border-r lg:border-background/15">
             <h4 className="font-display text-xl mb-6">החומרים שלנו</h4>
             <ul className="space-y-3 text-sm text-background/85">
               <li>
@@ -144,7 +144,7 @@ const Footer = () => {
           </div>
 
           {/* Column 4 (leftmost in RTL), Contact */}
-          <div className="w-full text-center md:text-right lg:max-w-[240px] lg:justify-self-start lg:pr-8 lg:border-r lg:border-background/15">
+          <div className="w-full text-center md:text-start lg:max-w-[240px] lg:justify-self-start lg:ps-8 lg:border-s lg:border-background/15">
             <h4 className="font-display text-xl mb-6">יצירת קשר</h4>
             <ul className="space-y-4 text-sm text-background/85">
               <li>
@@ -201,7 +201,7 @@ const Footer = () => {
           </div>
         </div>
 
-        <div dir="rtl" className="mt-14 pt-8 border-t border-background/15 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-background/60 text-center md:text-right">
+        <div dir="rtl" className="mt-14 pt-8 border-t border-background/15 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-background/60 text-center md:text-start">
           <div>© {new Date().getFullYear()} Aluma. כל הזכויות שמורות.</div>
           <div className="flex flex-wrap justify-center gap-5">
             <Link to={localized("/accessibility")} className="link-underline inline-block hover:text-accent transition-smooth">

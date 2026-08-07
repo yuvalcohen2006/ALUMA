@@ -49,7 +49,7 @@ const StickyCTA = () => {
               <X className="w-3.5 h-3.5 md:w-4 md:h-4" />
             </button>
 
-            <div className="relative z-10 flex-1 text-right min-w-0 text-foreground">
+            <div className="relative z-10 flex-1 text-start min-w-0 text-foreground">
               <div className="font-display text-sm md:text-lg leading-tight truncate">
                 רוצים הצעת מחיר בהתאמה אישית?
               </div>

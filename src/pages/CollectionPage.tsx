@@ -117,17 +117,17 @@ const CollectionPage = () => {
                 className="absolute inset-0 w-full h-full object-cover"
               />
             )}
+            {/* Direction-aware scrim. `to-r`/`to-l` are physical, so the rtl
+                variant flips it: the dark end must always sit under the text,
+                which `text-start` puts on the right in Hebrew and the left in
+                English. */}
             <div
               aria-hidden="true"
-              className="absolute inset-0"
-              style={{
-                background:
-                  "linear-gradient(to left, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.25) 45%, transparent 80%)",
-              }}
+              className="absolute inset-0 bg-gradient-to-r rtl:bg-gradient-to-l from-black/60 via-black/25 to-transparent"
             />
             <div className="absolute inset-0 flex items-center">
               <div className="w-full px-6 md:px-12">
-                <h1 className="font-display font-semibold text-white text-end leading-[0.95] text-[clamp(40px,9vw,120px)]">
+                <h1 className="font-display font-semibold text-white text-start leading-[0.92] text-[clamp(56px,13vw,180px)]">
                   {collection.name_he}
                 </h1>
               </div>
@@ -136,7 +136,7 @@ const CollectionPage = () => {
 
           {collection.intro && (
             <Reveal>
-              <p className="mt-7 max-w-[62ch] text-[18px] md:text-[19px] leading-relaxed text-foreground-soft text-right">
+              <p className="mt-7 max-w-[62ch] text-[18px] md:text-[19px] leading-relaxed text-foreground-soft text-start">
                 {collection.intro}
               </p>
             </Reveal>
@@ -147,7 +147,7 @@ const CollectionPage = () => {
       <section className="py-14 md:py-20">
         <div className="container-luxury">
           {items.length === 0 ? (
-            <p className="text-[18px] text-muted-foreground text-right">בקרוב.</p>
+            <p className="text-[18px] text-muted-foreground text-start">בקרוב.</p>
           ) : (
             <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-6 md:gap-x-8 gap-y-12 md:gap-y-14">
               {items.map((p, i) => (

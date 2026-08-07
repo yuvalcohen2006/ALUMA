@@ -177,7 +177,7 @@ const Club = () => {
           <div className="grid lg:grid-cols-12 gap-10 lg:gap-14 items-center max-w-7xl mx-auto">
             {/* RTL: first child sits at the right edge */}
             <Reveal className="lg:col-span-7">
-              <div className="text-right">
+              <div className="text-start">
                 <h2 className="font-display font-bold text-[30px] leading-snug text-primary">
                   מה זה מועדון אלומה
                 </h2>
@@ -202,7 +202,7 @@ const Club = () => {
                   empty column the copy beside it gets centred against. It eases
                   back to p-6 on narrow screens so the fixed-width ShineButton
                   never overflows it at 375px. */}
-              <div className="rounded-[14px] border border-border bg-secondary/50 shadow-soft p-6 sm:p-7 md:p-8 text-right">
+              <div className="rounded-[14px] border border-border bg-secondary/50 shadow-soft p-6 sm:p-7 md:p-8 text-start">
                 <img
                   src={alumaLogo}
                   alt="Aluma"
@@ -226,7 +226,7 @@ const Club = () => {
                         // right edge with the rest of the panel.
                         <p
                           dir="ltr"
-                          className="text-[18px] text-foreground mt-4 pt-4 border-t border-border/70 text-right break-all"
+                          className="text-[18px] text-foreground mt-4 pt-4 border-t border-border/70 text-start break-all"
                         >
                           {user.email}
                         </p>
@@ -293,7 +293,7 @@ const Club = () => {
                   // so skipping it on the first item keeps the line between
                   // columns only. Outer padding is trimmed so the row still
                   // measures to the container.
-                  className={`text-right lg:px-8 lg:first:ps-0 lg:last:pe-0 ${
+                  className={`text-start lg:px-8 lg:first:ps-0 lg:last:pe-0 ${
                     i > 0 ? "lg:border-s lg:border-background/20" : ""
                   }`}
                 >
@@ -321,7 +321,7 @@ const Club = () => {
         <div className="container-luxury">
           <div className="grid lg:grid-cols-12 gap-10 lg:gap-14 items-start max-w-7xl mx-auto">
             <Reveal className="lg:col-span-5">
-              <div className="text-right">
+              <div className="text-start">
                 {/* Charcoal, not terracotta: this heading sits on sand beige. */}
                 <SectionHeading tone="charcoal" align="start">
                   שלוש דקות, בלי טפסים ובלי התחייבות
@@ -375,7 +375,7 @@ const Club = () => {
                       )}
                     </div>
 
-                    <div className={`text-right pt-2.5 ${i < steps.length - 1 ? "pb-8" : ""}`}>
+                    <div className={`text-start pt-2.5 ${i < steps.length - 1 ? "pb-8" : ""}`}>
                       <h3 className="font-display font-normal text-[22px] text-foreground leading-snug">
                         {step.title}
                       </h3>

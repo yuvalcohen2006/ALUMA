@@ -53,7 +53,7 @@ const formatRead = (minutes: number | null) => {
 const ARTICLE_BODY = [
   // break-words: a pasted URL is the one thing in CMS copy long enough to push
   // the 375px viewport into horizontal scroll.
-  "max-w-none text-right text-foreground text-body break-words",
+  "max-w-none text-start text-foreground text-body break-words",
 
   // Headings — the site's section/card scale, not the browser's. h1 is mapped
   // too: the page already owns the real h1, but authors paste them in, and an
@@ -93,8 +93,8 @@ const ARTICLE_BODY = [
 
   // Tables are rare in the CMS but arrive completely bare when they do.
   "[&_table]:w-full [&_table]:my-8 [&_table]:text-[18px]",
-  "[&_th]:py-3 [&_th]:text-right [&_th]:font-normal [&_th]:text-foreground",
-  "[&_td]:py-3 [&_td]:text-right [&_td]:border-b [&_td]:border-border",
+  "[&_th]:py-3 [&_th]:text-start [&_th]:font-normal [&_th]:text-foreground",
+  "[&_td]:py-3 [&_td]:text-start [&_td]:border-b [&_td]:border-border",
 
   // The first block sits right under the cover photo and the last one right
   // above the page floor — neither needs its own margin on top of that.

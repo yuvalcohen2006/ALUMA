@@ -124,7 +124,7 @@ const MaterialDetailPage = () => {
                 standard divider. The old centred micro-eyebrow is kept as a
                 plain 18px label — charcoal, not terracotta, because this band
                 is sand. */}
-            <div className="text-right mb-10">
+            <div className="text-start mb-10">
               <p className="text-[18px] text-foreground-soft mb-2">
                 שאלות ותשובות
               </p>

@@ -14,7 +14,7 @@ const PrivacyPage = () => {
       <PageHero title="פרטיות" />
 
       <section className="py-12 md:py-20 bg-background">
-        <div className="container-luxury max-w-3xl space-y-8 text-body text-foreground text-right">
+        <div className="container-luxury max-w-3xl space-y-8 text-body text-foreground text-start">
           <p>
             Aluma מכבדת את פרטיות המשתמשים באתר. מדיניות זו מסבירה איזה מידע
             נאסף, לאיזה שימוש, ואילו זכויות עומדות לרשותכם בנוגע למידע שלכם.

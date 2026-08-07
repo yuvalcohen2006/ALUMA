@@ -45,7 +45,7 @@ const SectionHeading = ({
   as: Tag = "h2",
   className = "",
 }: SectionHeadingProps) => {
-  const alignCls = align === "center" ? "items-center text-center" : "items-start text-right";
+  const alignCls = align === "center" ? "items-center text-center" : "items-start text-start";
   const titleColor = light
     ? "text-background"
     : tone === "charcoal"

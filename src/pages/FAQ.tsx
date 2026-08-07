@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Plus } from "lucide-react";
 import Layout from "@/components/Layout";
@@ -79,6 +79,7 @@ const FaqRow = ({ q, a, id, open, onToggle }: { q: string; a: string; id: string
  */
 const FAQPage = () => {
   const [open, setOpen] = useState<Set<string>>(new Set());
+  const [formOpen, setFormOpen] = useState(false);
   const { to } = useLocalizedPath();
   const { t } = useTranslation("faq");
 
@@ -95,6 +96,13 @@ const FAQPage = () => {
       })),
     ),
   };
+
+  // Arriving on /faq#contact (footer, sticky CTA, the About page) should land
+  // with the form already open — scrolling someone to a closed row and making
+  // them click again is a worse answer than they asked for.
+  useEffect(() => {
+    if (window.location.hash === "#contact") setFormOpen(true);
+  }, []);
 
   const toggle = (id: string) =>
     setOpen((prev) => {
@@ -154,12 +162,16 @@ const FAQPage = () => {
           <Reveal>
             <p className="mt-14 text-[17px] leading-relaxed text-foreground-soft text-start">
               {t("notFound")}{" "}
-              <a
-                href="#contact"
+              <button
+                type="button"
+                onClick={() => {
+                  setFormOpen(true);
+                  document.getElementById("contact")?.scrollIntoView({ block: "start" });
+                }}
                 className="text-primary decoration-1 underline-offset-4 hover:underline"
               >
                 {t("talkToUs")}
-              </a>
+              </button>
               {" "}{t("replyTime")}
             </p>
           </Reveal>
@@ -169,8 +181,45 @@ const FAQPage = () => {
       {/* Contact sits directly under the questions rather than on a page of
           its own: someone who read nine answers and still has a question
           shouldn't have to go looking for the way to ask it. /contact
-          redirects here. */}
-      <Contact />
+          redirects here.
+
+          The form starts closed and opens on the same plus-row the questions
+          use, so the page reads as one list of things you can open rather than
+          nine questions followed by a wall of form. */}
+      <section id="contact" className="scroll-mt-28 bg-background pb-4">
+        <div className="mx-auto max-w-[720px] px-6">
+          <button
+            type="button"
+            onClick={() => setFormOpen((v) => !v)}
+            aria-expanded={formOpen}
+            aria-controls="contact-form-panel"
+            className="flex w-full items-start gap-5 border-b border-foreground/10 py-6 text-start hover:opacity-70 transition-opacity duration-200 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring"
+          >
+            <Plus
+              aria-hidden="true"
+              className={`mt-1 w-5 h-5 shrink-0 text-primary transition-transform duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] ${
+                formOpen ? "rotate-45" : ""
+              }`}
+              strokeWidth={2}
+            />
+            <span className="text-[19px] md:text-[21px] font-medium leading-[1.35] text-foreground">
+              {t("writeToUs")}
+            </span>
+          </button>
+        </div>
+      </section>
+
+      <div
+        id="contact-form-panel"
+        className={`grid transition-[grid-template-rows] duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] ${
+          formOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
+        }`}
+      >
+        <div className="overflow-hidden">
+          <Contact />
+        </div>
+      </div>
+
       <ShowroomBand />
     </Layout>
   );

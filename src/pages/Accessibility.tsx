@@ -14,7 +14,7 @@ const AccessibilityPage = () => {
       <PageHero title="נגישות" />
 
       <section className="py-12 md:py-20 bg-background">
-        <div className="container-luxury max-w-3xl text-foreground space-y-8 text-body text-right">
+        <div className="container-luxury max-w-3xl text-foreground space-y-8 text-body text-start">
           <div>
             <h2 className="font-display text-2xl text-primary mb-3">המחויבות שלנו</h2>
             <p>

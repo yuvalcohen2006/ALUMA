@@ -245,7 +245,7 @@ const FieldChoice = ({
             key={opt}
             type="button"
             onClick={() => onChange(opt)}
-            className={`px-4 py-3 rounded-sm border text-sm text-right transition-smooth ${
+            className={`px-4 py-3 rounded-sm border text-sm text-start transition-smooth ${
               active
                 ? "bg-accent text-accent-foreground border-accent"
                 : "bg-background border-border text-foreground hover:border-accent"

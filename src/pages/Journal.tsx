@@ -76,7 +76,7 @@ const JournalPage = () => {
       <section className="section-pad bg-background">
         <div className="container-luxury">
           <Reveal>
-            <h2 className="font-display font-bold text-[26px] md:text-[30px] text-primary text-right">
+            <h2 className="font-display font-bold text-[26px] md:text-[30px] text-primary text-start">
               פרויקטים
             </h2>
             <SectionRule on="light" variant="hairline" />
@@ -86,7 +86,7 @@ const JournalPage = () => {
             {projects.slice(0, 3).map((p, i) => (
               <Reveal key={p.slug} delay={(i % 3) * 70}>
                 <li>
-                  <Link to={to(`/projects/${p.slug}`)} className="group block text-right">
+                  <Link to={to(`/projects/${p.slug}`)} className="group block text-start">
                     <div className="aspect-[4/3] overflow-hidden rounded-[14px] bg-secondary">
                       <img
                         src={p.cover}

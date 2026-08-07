@@ -143,7 +143,7 @@ const Station = ({ n, to, className, children }: StationProps) => (
     {/* Content floats above the overlay but stays click-through, so a click
         anywhere on the plank still opens the tool. The CTA takes its clicks
         back explicitly. */}
-    <div className="pointer-events-none relative z-[2] flex h-full flex-col text-right">
+    <div className="pointer-events-none relative z-[2] flex h-full flex-col text-start">
       {children}
     </div>
   </li>
@@ -358,7 +358,7 @@ const DIYPage = () => {
         <div className="container-luxury">
           <Reveal>
             <div className="mx-auto grid max-w-6xl items-center gap-10 lg:grid-cols-[minmax(0,1.55fr)_auto_minmax(0,1fr)] lg:gap-14">
-              <div className="text-right">
+              <div className="text-start">
                 <h2 className="font-display font-bold text-[26px] leading-snug text-background">
                   מה שיוצא מכאן מגיע ישירות אלינו
                 </h2>

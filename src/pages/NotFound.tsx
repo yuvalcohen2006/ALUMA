@@ -52,7 +52,7 @@ const NotFound = () => {
               <Link
                 key={p.to}
                 to={p.to}
-                className="group flex items-center justify-between gap-3 bg-card border border-border hover:border-primary/50 hover:shadow-soft rounded-sm px-5 py-3.5 text-right transition-smooth"
+                className="group flex items-center justify-between gap-3 bg-card border border-border hover:border-primary/50 hover:shadow-soft rounded-sm px-5 py-3.5 text-start transition-smooth"
               >
                 <ArrowLeft className="w-4 h-4 text-primary opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0 transition-all" />
                 <span className="font-display text-base text-foreground">{p.label}</span>

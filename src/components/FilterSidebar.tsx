@@ -76,14 +76,14 @@ const FilterSidebar = ({
 
       {/* Right, matching the trigger's position in the page hero. */}
       <SheetContent side="right" aria-describedby={undefined}>
-        <div className="px-6 pt-6 pb-5 border-b border-border text-right">
+        <div className="px-6 pt-6 pb-5 border-b border-border text-start">
           <SheetTitle>סינון</SheetTitle>
           <SheetDescription className="mt-1">
             בחרו מה להציג במסך
           </SheetDescription>
         </div>
 
-        <div className="flex-1 overflow-y-auto px-6 py-6 space-y-8 text-right">
+        <div className="flex-1 overflow-y-auto px-6 py-6 space-y-8 text-start">
           {usable.map((group) => (
             <div key={group.key}>
               <h3 className="font-display text-lg text-foreground mb-3">
@@ -98,7 +98,7 @@ const FilterSidebar = ({
                         type="button"
                         onClick={() => toggle(group.key, option.value)}
                         aria-pressed={checked}
-                        className="w-full flex items-center justify-between gap-3 py-2 text-right transition-smooth group"
+                        className="w-full flex items-center justify-between gap-3 py-2 text-start transition-smooth group"
                       >
                         <span className="flex items-center gap-3">
                           <span
