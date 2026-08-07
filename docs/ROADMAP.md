@@ -738,6 +738,45 @@ project we don't control.
 
 ## STATUS SUMMARY
 
+*Last updated: 2026-08-01 — round five: RTL fix + about rebuild*
+
+**The RTL bug was systemic, not cosmetic.** Collection titles used `text-end`,
+which in RTL resolves to the **LEFT** — the same trap as the original PageHero
+`items-end` bug. Fixed, and then swept: `text-right` → `text-start` across 23
+files (identical rendering in Hebrew, correct under `/en`), plus the last
+physical paddings/borders in the footer, skip link and CTA icons. The scrim
+under collection titles is direction-aware via an `rtl:` gradient variant.
+**Rule for anyone touching this codebase: `end` is not "right".**
+
+Also shipped:
+- Collection titles much larger (clamp ceiling 110→170px index, 120→180px page).
+- Tiles: one button each; the two wide tiles share a fixed 320px width so their
+  buttons measure identically. Hot/popular flags removed.
+- Club input `dir="ltr"` → `dir="auto"` — the forced LTR threw the Hebrew
+  placeholder to the wrong edge.
+- Nav "new" badge is absolutely positioned; inline, it widened the button and
+  pushed every neighbour along. Journal + DIY dropdowns removed.
+- Q&A: the contact form is collapsed behind the same plus-row the questions
+  use; `/faq#contact` opens it on arrival.
+- **About rebuilt from research** (Vitsœ, DEDON, Minotti, Tribù, Herman Miller,
+  Muuto): no hero photograph (the most premium page in that set opens on type
+  alone, and this site's home page is already full-bleed photography); an
+  opening line with a refusal in it; a **"what we don't do" list where a stat
+  strip would go**, since there are no numbers worth printing; 3 photographs;
+  terracotta used exactly once. Portraits captioned with what each person does,
+  not a title. ⚠️ Their parent must keep an explicit `bg-background` and **no
+  `Reveal` wrapper** — `.reveal` sets `transform` + `will-change`, which create
+  a stacking context that makes `mix-blend-multiply` composite against
+  transparency and render the drawings as white boxes.
+
+**Open on the owner:** deploy to Vercel (guide is written) · `/admin` via Google
+sign-in · the Resend key. **Still Hebrew-only under `/en`:** journal,
+collections, projects, about, DIY pages, legal.
+
+---
+
+*Earlier:*
+
 *Last updated: 2026-08-01 — round four: the IA rebuild*
 
 **The site's structure changed, not just its styling.** All shipped.
