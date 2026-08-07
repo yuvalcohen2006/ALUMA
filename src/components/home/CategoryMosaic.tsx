@@ -55,7 +55,9 @@ const tiles: Tile[] = [
  * The geometry is Apple's, from their own stylesheet: fixed tile heights rather
  * than viewport units (vh jitters as mobile browsers show and hide their URL
  * bar), a 12px seam between tiles in the page canvas colour, square corners,
- * and no max-width — the tiles run edge to edge.
+ * and no max-width. The one departure is that the same 12px also runs down
+ * both sides, so the tiles float in a consistent frame instead of butting
+ * against the viewport edge.
  *
  * Where this departs from Apple, it follows what luxury furniture brands do
  * instead: the copy sits ON the photograph rather than in a white band above
@@ -70,9 +72,10 @@ const CategoryMosaic = () => {
 
   return (
     // The canvas colour shows through the 12px seams, so the gaps read as
-    // hairlines rather than as holes. pt-3 puts the same seam between the hero
-    // and the first tile.
-    <section className="bg-background pt-3">
+    // hairlines rather than as holes. The same 12px runs along the top and
+    // both sides, so every tile is framed by an identical margin rather than
+    // being inset from its neighbours but flush with the screen.
+    <section className="bg-background pt-3 px-3">
       <ul className="flex flex-wrap gap-3">
         {tiles.map((t_, i) => {
           const light = t_.ink === "light";
@@ -83,15 +86,20 @@ const CategoryMosaic = () => {
             >
               <Link
                 to={t_.cat ? to(`/collections?cat=${t_.cat}`) : to("/collections")}
-                className={`group relative block w-full overflow-hidden ${TILE_H} focus-visible:outline-2 focus-visible:outline-offset-[-4px] focus-visible:outline-ring`}
+                className={`relative block w-full overflow-hidden ${TILE_H} focus-visible:outline-2 focus-visible:outline-offset-[-4px] focus-visible:outline-ring`}
               >
+                {/* No hover state on purpose: the photographs are the content,
+                    and a creeping zoom under the cursor pulled attention to
+                    whichever tile the mouse happened to rest on. The
+                    focus-visible ring stays — that's keyboard navigation, not
+                    decoration. */}
                 <img
                   src={t_.img}
                   alt={t(`tiles.${t_.id}.label`)}
                   // The first two tiles are above the fold on most screens.
                   loading={i < 2 ? "eager" : "lazy"}
                   decoding="async"
-                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-[900ms] ease-[cubic-bezier(0.28,0.11,0.32,1)] group-hover:scale-[1.03] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+                  className="absolute inset-0 w-full h-full object-cover"
                 />
 
                 {/* A scrim only where the words are, so the photograph stays
@@ -113,11 +121,13 @@ const CategoryMosaic = () => {
                     light ? "text-background" : "text-foreground"
                   }`}
                 >
-                  <h2 className="font-display font-semibold text-[32px] lg:text-[40px] leading-[1.125] lg:leading-[1.1]">
+                  <h2 className="font-display font-semibold text-[36px] lg:text-[48px] leading-[1.1]">
                     {t(`tiles.${t_.id}.label`)}
                   </h2>
+                  {/* Close under the title rather than a step down the scale —
+                      the two lines read as one block of type. */}
                   <p
-                    className={`mt-1 text-[19px] lg:text-[21px] leading-[1.21] lg:leading-[1.238] ${
+                    className={`mt-2 text-[26px] lg:text-[34px] leading-[1.25] ${
                       light ? "text-background/80" : "text-foreground-soft"
                     }`}
                   >

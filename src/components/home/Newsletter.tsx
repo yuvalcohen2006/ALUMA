@@ -54,7 +54,10 @@ const Newsletter = () => {
   };
 
   return (
-    <section className="bg-background py-3">
+    // px-3 matches the mosaic above: this is the ninth tile, so it takes the
+    // same frame. Flush against the viewport while every tile above it is
+    // inset would read as a bug, not a choice.
+    <section className="bg-background p-3">
       <div className="relative h-[500px] md:h-[490px] lg:h-[580px] overflow-hidden">
         <img
           src={clubBg}
@@ -75,7 +78,11 @@ const Newsletter = () => {
         />
 
         <div className="relative z-10 text-center text-foreground px-6 pt-[42px] lg:pt-[52px]">
-          <h2 className="font-display font-semibold text-[32px] lg:text-[40px] leading-[1.125] lg:leading-[1.1]">
+          {/* Title tracks the category tiles so the stack reads as one system.
+              The line under it stays at the smaller size, unlike a category
+              tagline — here it's helper text introducing a form, not the
+              second half of a headline. */}
+          <h2 className="font-display font-semibold text-[36px] lg:text-[48px] leading-[1.1]">
             {t("club.title")}
           </h2>
           <p className="mt-1 text-[19px] lg:text-[21px] leading-[1.21] lg:leading-[1.238] text-foreground-soft">
