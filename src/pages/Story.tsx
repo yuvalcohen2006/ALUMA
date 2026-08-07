@@ -1,12 +1,12 @@
 import Layout from "@/components/Layout";
 import SEO from "@/components/SEO";
-import PageHero from "@/components/PageHero";
 import Reveal from "@/components/Reveal";
 import { Link } from "react-router-dom";
-import { ArrowLeft } from "lucide-react";
 import { useLocalizedPath } from "@/lib/useLocalizedPath";
 import { SITE } from "@/config/site";
 import alumaLogo from "@/assets/aluma-logo.png";
+import craftDetail from "@/assets/about/craft-detail.jpg";
+import terraceDusk from "@/assets/about/terrace-dusk.jpg";
 import storyPortrait from "@/assets/story-portrait.png";
 import storyPortraitRoy from "@/assets/story-portrait-roy.png";
 import storyPortraitIdan from "@/assets/story-portrait-idan.png";
@@ -20,15 +20,49 @@ const breadcrumbs = {
   ],
 };
 
+/** The three of us, described by what we do rather than by a job title. */
+const people = [
+  { src: storyPortraitIdan, alt: "דיוקן קווי, עידן", name: "עידן", does: "מתכנן ומודד את המרחב" },
+  { src: storyPortraitRoy, alt: "דיוקן קווי, רועי", name: "רועי", does: "בוחר את החומרים" },
+  { src: storyPortrait, alt: "דיוקן קווי, בן", name: "בן", does: "מלווה מהסקיצה ועד ההתקנה" },
+];
+
+/**
+ * What we don't do — the single highest-value device for a brand with no
+ * numbers to quote. Refusals cost nothing, are verifiable, and can't be faked;
+ * Vitsœ built its whole identity on this. Every line restates a commitment the
+ * brand already makes elsewhere on the site, phrased as what it rules out.
+ */
+const refusals = [
+  "לא מוכרים ריהוט שלא היינו שמים בחצר שלנו.",
+  "לא עובדים במידות סטנדרטיות. כל פריט נמדד למרחב שלו.",
+  "לא מבטיחים תאריך אספקה לפני שיש לנו אותו.",
+  "לא נעלמים אחרי ההתקנה.",
+];
+
 /**
  * אודות.
  *
- * The heart of the page is unchanged and protected: the brand paragraphs on the
- * right, the wordmark and the three line portraits on the left. What changed is
- * everything around them — the block used to sit alone in a full viewport of
- * white, which read as an unfinished page rather than a quiet one. It now opens
- * the page at its natural height and the showroom band closes it.
- * Real content only; no invented history, no invented numbers.
+ * Built on what premium furniture houses actually do — Vitsœ, DEDON, Minotti,
+ * Tribù — rather than on the template every other brand ships. Three decisions
+ * carry it:
+ *
+ *   1. NO hero photograph. The most premium page of that set (Vitsœ) opens on
+ *      type alone, and this site's home page is already a wall of full-bleed
+ *      photography — repeating that here would make About read as a second
+ *      home page. The opening statement has a refusal in it, which is what
+ *      separates a position from a platitude.
+ *   2. Three photographs total, not seven. The observed range across those
+ *      houses is 3–7, and the restrained end is where the expensive ones sit.
+ *   3. Where numbers would go, refusals go instead. There is no founding year
+ *      worth boasting about and no client count, and a thin stat strip reads
+ *      as padding. What we don't do is free to state and impossible to fake.
+ *
+ * The preserved elements — the brand paragraphs, the wordmark, the three line
+ * portraits — are all still here, placed where the research says they belong:
+ * the wordmark bookends the page (small at the top, large and faint at the
+ * close), the paragraphs are the story, and the portraits sit between the
+ * story and the refusals.
  */
 const StoryPage = () => {
   const { to } = useLocalizedPath();
@@ -37,119 +71,167 @@ const StoryPage = () => {
     <Layout>
       <SEO
         title="אודות | Aluma, ריהוט חוץ בעיצוב אישי"
-        description="אלומה נולדה מתוך חיבור בין חומר לאור. מי אנחנו, איך אנחנו עובדים, ואיפה אפשר לפגוש את הריהוט מקרוב."
+        description="אלומה נולדה מתוך חיבור בין חומר לאור. מי אנחנו, איך אנחנו עובדים, ומה אנחנו לא עושים."
         path="/story"
         jsonLd={breadcrumbs}
       />
 
-      <PageHero
-        title="אודות"
-        subtitle="מי אנחנו, למה אלומה נקראת ככה, ואיפה פוגשים אותנו."
-      />
+      {/* 1 — THE STATEMENT. Type only. */}
+      <section className="bg-background">
+        <div className="mx-auto max-w-[860px] px-6 pt-40 pb-20 md:pt-52 md:pb-28">
+          <Reveal>
+            <img
+              src={alumaLogo}
+              alt="Aluma"
+              className="h-6 md:h-7 w-auto opacity-80 mb-14 md:mb-16"
+            />
+            {/* One sentence with a refusal in it — "ולא", not "and also". A
+                statement that refuses nothing is a platitude. tracking-normal
+                and a loose leading throughout: letter-spacing breaks Hebrew
+                rhythm and is the clearest tell of an un-adapted RTL design. */}
+            <h1 className="font-display font-normal tracking-normal text-foreground text-start text-[30px] leading-[1.3] md:text-[44px] md:leading-[1.25] lg:text-[56px] lg:leading-[1.18] max-w-[22ch]">
+              אנחנו בונים ריהוט שנשאר בחוץ — ולא ריהוט שצריך להכניס.
+            </h1>
+          </Reveal>
+        </div>
+      </section>
 
-      {/* THE PRESERVED HEART — text beside wordmark + portraits. */}
-      <section className="py-10 md:py-16 bg-background">
-        <div className="container-luxury">
-          <div className="grid md:grid-cols-2 gap-10 md:gap-14 items-center max-w-7xl mx-auto">
-            {/* Right (RTL first): the paragraph */}
-            <Reveal className="order-1">
-              <div className="space-y-3.5 text-foreground text-body text-start max-w-md">
-                <p>אלומה נולדה מתוך חיבור בין חומר לאור.</p>
+      {/* 2 — The one homepage-language moment, placed AFTER the statement so it
+          reads as its consequence rather than as decoration. */}
+      <Reveal>
+        <img
+          src={craftDetail}
+          alt="מפגש בין שלדת אלומיניום למשענת טיק"
+          loading="eager"
+          decoding="async"
+          className="w-full aspect-[4/5] md:aspect-[16/9] object-cover"
+        />
+      </Reveal>
 
-                <p>
-                  השם מגיע מהשורש של אלומיניום, חומר חזק, נקי ועמיד, כזה שנועד
-                  לחיות בחוץ בלי לחשוש מהשמש, מהגשם או ממעבר הזמן. ומעבר לחומר,
-                  יש בו גם צליל של אור, אותו אור שמגדיר את חוויית החוץ.
-                </p>
+      {/* 3 — THE STORY. The brand's own paragraphs, with its strongest line
+          promoted out of the block and set as a lead. */}
+      <section className="bg-background">
+        <div className="mx-auto max-w-[860px] px-6 py-24 md:py-32">
+          <Reveal>
+            <p className="max-w-[46ch] text-start text-foreground tracking-normal text-[19px] leading-[1.75] md:text-[21px] md:leading-[1.7]">
+              אלומה נולדה מתוך חיבור בין חומר לאור.
+            </p>
 
-                <p>אלומה היא לא רק ריהוט חוץ, היא הדרך שבה הבית ממשיך החוצה.</p>
+            <div className="mt-10 max-w-[62ch] space-y-6 text-start text-foreground-soft tracking-normal text-[17px] leading-[1.85] md:text-[18px] md:leading-[1.8]">
+              <p>
+                השם מגיע מהשורש של אלומיניום, חומר חזק, נקי ועמיד, כזה שנועד
+                לחיות בחוץ בלי לחשוש מהשמש, מהגשם או ממעבר הזמן. ומעבר לחומר,
+                יש בו גם צליל של אור, אותו אור שמגדיר את חוויית החוץ.
+              </p>
 
-                <p>
-                  אנחנו יוצרים מערכות שמרגישות כמו סלון יוקרתי תחת כיפת השמיים —
-                  מקום לארח, להירגע ולחיות את הרגעים היפים באמת. כל פריט מיוצר
-                  בהתאמה אישית, בקווים נקיים ומדויקים, עם שלדת אלומיניום מתקדמת
-                  ובדים איכותיים העומדים בתנאי החוץ של ישראל.
-                </p>
+              <p>אלומה היא לא רק ריהוט חוץ, היא הדרך שבה הבית ממשיך החוצה.</p>
 
-                <p>
-                  את אולם התצוגה שלנו תוכלו למצוא ביציץ, ואנחנו מזמינים
-                  אתכם להגיע, להתרשם מקרוב ולקבל יחס אישי וחם. נשמח לארח כל מי
-                  שיגיע ולתת לו לחוות את אלומה כמו שהיא באמת.
-                </p>
+              <p>
+                אנחנו יוצרים מערכות שמרגישות כמו סלון יוקרתי תחת כיפת השמיים —
+                מקום לארח, להירגע ולחיות את הרגעים היפים באמת. כל פריט מיוצר
+                בהתאמה אישית, בקווים נקיים ומדויקים, עם שלדת אלומיניום מתקדמת
+                ובדים איכותיים העומדים בתנאי החוץ של ישראל.
+              </p>
+            </div>
+          </Reveal>
+        </div>
+      </section>
 
-                <p className="text-foreground tracking-wide pt-1">
-                  זו לא רק חוויה, זו איכות חיים.
-                </p>
-              </div>
-            </Reveal>
+      {/* 4 — THE PEOPLE.
+          ⚠️ mix-blend-multiply composites against the nearest stacking
+          context, so this section needs its own explicit light background and
+          the portraits' direct parent must carry no transform, opacity, filter
+          or backdrop-blur. The Reveal wrapper is deliberately kept OFF that
+          parent: put a transform on it and the drawings render as white
+          boxes. */}
+      <section className="bg-background">
+        <div className="mx-auto max-w-[860px] px-6 pb-24 md:pb-32">
+          <Reveal>
+            <p className="max-w-[46ch] text-start text-foreground-soft tracking-normal text-[17px] leading-[1.85] md:text-[18px]">
+              שלושתנו. אותם אנשים מהמדידה הראשונה ועד היום שאתם יושבים בחוץ.
+            </p>
+          </Reveal>
 
-            {/* Left: wordmark above the three portraits — the protected block. */}
-            <Reveal delay={120} className="order-2 flex flex-col items-center justify-center">
-              <div className="flex justify-center mb-12 md:mb-[60px]">
+          <div className="mt-12 grid grid-cols-3 gap-3 md:gap-10 bg-background">
+            {people.map((p) => (
+              <div key={p.name} className="bg-background">
                 <img
-                  src={alumaLogo}
-                  alt="Aluma"
-                  className="h-[58px] md:h-[77px] w-auto opacity-90"
+                  src={p.src}
+                  alt={p.alt}
+                  loading="lazy"
+                  className="w-full aspect-[3/4] object-contain object-bottom mix-blend-multiply"
                 />
+                <p className="mt-4 text-start text-[15px] text-foreground">{p.name}</p>
+                {/* A verb, not a job title — what someone does beats
+                    "Co-Founder". This is the substitute for credentials. */}
+                <p className="mt-1 text-start text-[13px] leading-[1.7] text-foreground/55">
+                  {p.does}
+                </p>
               </div>
-              {/* One gradient, 10px deep, along the bottom edge only. An
-                  earlier radial mask clipped the drawings — do not add one. */}
-              <div
-                className="flex items-end justify-center gap-[26px] w-full max-w-[813px] mx-auto"
-                style={{
-                  maskImage:
-                    "linear-gradient(to bottom, #000 calc(100% - 10px), transparent 100%)",
-                  WebkitMaskImage:
-                    "linear-gradient(to bottom, #000 calc(100% - 10px), transparent 100%)",
-                }}
-              >
-                {[
-                  { src: storyPortraitIdan, alt: "דיוקן קווי, עידן", name: "idan" },
-                  { src: storyPortraitRoy, alt: "דיוקן קווי, רועי", name: "roy" },
-                  { src: storyPortrait, alt: "דיוקן קווי, בן", name: "ben" },
-                ].map((p) => (
-                  <img
-                    key={p.name}
-                    src={p.src}
-                    alt={p.alt}
-                    loading="lazy"
-                    className="w-1/3 aspect-square object-contain object-bottom mix-blend-multiply"
-                  />
-                ))}
-              </div>
-            </Reveal>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* COME MEET IT — the showroom, with the real address and a real door in. */}
-      <section className="bg-foreground text-background">
-        <div className="container-luxury py-14 md:py-20">
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-8 text-start">
-            <Reveal>
-              <h2 className="font-display font-bold text-[26px] md:text-[30px] leading-tight">
-                הכי קל להבין את אלומה כשיושבים עליה
-              </h2>
-              <p className="mt-3 text-[18px] leading-relaxed text-background/75 max-w-xl">
-                אולם התצוגה שלנו ב{SITE.address.full}. קפצו לבקר, שבו, תמששו את
-                הבדים — או דברו איתנו קודם.
-              </p>
-            </Reveal>
-            <Reveal delay={100}>
-              <div className="flex flex-wrap gap-4 shrink-0">
-                <Link to={to("/faq") + "#contact"} className="btn-shine inline-flex items-center gap-2">
-                  לתיאום ביקור
-                  <ArrowLeft className="w-4 h-4 ltr:-scale-x-100" aria-hidden="true" />
-                </Link>
-                <Link
-                  to={to("/collections")}
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-[10px] border border-background/35 text-background hover:bg-background/10 transition-smooth"
+      {/* 5 — WHAT WE DON'T DO. Carries the weight a stat strip would carry if
+          there were numbers worth printing. Also the page's single permitted
+          use of terracotta — a third colour used repeatedly is the fastest way
+          to read as a template. */}
+      <section className="bg-secondary">
+        <div className="mx-auto max-w-[860px] px-6 py-24 md:py-32">
+          <Reveal>
+            <h2 className="font-display font-normal tracking-normal text-start text-foreground text-[20px] md:text-[24px] leading-[1.4] border-s-2 border-primary ps-5">
+              מה אנחנו לא עושים
+            </h2>
+            <ul className="mt-10 max-w-[62ch] divide-y divide-foreground/10 border-t border-foreground/10">
+              {refusals.map((line) => (
+                <li
+                  key={line}
+                  className="py-5 text-start text-[17px] leading-[1.8] text-foreground-soft"
                 >
-                  לקולקציות
-                </Link>
-              </div>
-            </Reveal>
-          </div>
+                  {line}
+                </li>
+              ))}
+            </ul>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* 6 — The exhale before the close. */}
+      <Reveal>
+        <img
+          src={terraceDusk}
+          alt=""
+          aria-hidden="true"
+          loading="lazy"
+          decoding="async"
+          className="w-full aspect-[3/2] md:aspect-[21/9] object-cover"
+        />
+      </Reveal>
+
+      {/* 7 — CLOSE. The wordmark returns, larger and faint. Bookending the page
+          with the mark removes any need for a CTA button here. */}
+      <section className="bg-background">
+        <div className="mx-auto max-w-[860px] px-6 py-28 md:py-36 text-center">
+          <Reveal>
+            <p className="mx-auto max-w-[34ch] text-foreground tracking-normal text-[19px] leading-[1.75] md:text-[21px] md:leading-[1.7]">
+              אולם התצוגה שלנו ב{SITE.address.full}. הכי קל להבין את אלומה
+              כשיושבים עליה.
+            </p>
+            <Link
+              to={to("/faq") + "#contact"}
+              className="mt-7 inline-block text-[17px] text-primary underline underline-offset-[6px] decoration-1 hover:text-accent transition-colors"
+            >
+              לתיאום ביקור
+            </Link>
+            <img
+              src={alumaLogo}
+              alt=""
+              aria-hidden="true"
+              loading="lazy"
+              className="mx-auto mt-20 md:mt-24 h-10 md:h-14 w-auto opacity-25"
+            />
+          </Reveal>
         </div>
       </section>
     </Layout>
