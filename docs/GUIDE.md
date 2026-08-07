@@ -248,6 +248,89 @@ personal address and the studio inbox stays empty — which looks exactly like
 
 ---
 
+## 🚀 Put the site online with Vercel (≈10 minutes, no domain needed)
+
+**What this gets you:** a real, live web address like
+`aluma-something.vercel.app` that you can send to anyone — your client, your
+mum, whoever. It has nothing to do with `alumaoutdoor.com`; the old live site
+carries on untouched. You can do this **today**, long before the domain
+transfer in August.
+
+> Everything the deploy needs is already committed in `vercel.json` — the build
+> settings and every URL redirect. You should not have to type any of it.
+
+### Step 1 — make the account
+
+1. Open **vercel.com** → **Sign Up**
+2. Choose **Continue with GitHub** and log in with the GitHub account that owns
+   the `ALUMA` repository
+3. Pick the **Hobby** plan — free, no card
+
+### Step 2 — import the project
+
+1. On the Vercel dashboard click **Add New…** → **Project**
+2. You'll see a list of your GitHub repositories. Find **`ALUMA`** and click
+   **Import**
+   - If it isn't listed, click **Adjust GitHub App Permissions** and give
+     Vercel access to that one repository
+3. On the configuration screen, **leave everything alone**. Framework, build
+   command and output folder are all read from `vercel.json`. If it shows
+   "Vite", "npm run build" and "dist", it's correct.
+
+### Step 3 — the three environment variables ⚠️
+
+**This is the only step where a mistake costs you an afternoon.** Expand
+**Environment Variables** and add these three, exactly:
+
+| Name | Value |
+|---|---|
+| `VITE_SUPABASE_URL` | `https://jzqayfllojeqivwbbuyf.supabase.co` |
+| `VITE_SUPABASE_PROJECT_ID` | `jzqayfllojeqivwbbuyf` |
+| `VITE_SUPABASE_PUBLISHABLE_KEY` | the long `eyJ…` key from `.env` |
+
+All three are safe to put here — they're public values that ship to every
+visitor's browser anyway.
+
+> **Why it matters:** without these the site builds fine and then shows a blank
+> white screen, because the database connection fails before React starts. If
+> that happens, this is why.
+
+### Step 4 — deploy
+
+1. Click **Deploy**
+2. Wait ~2 minutes while the log scrolls
+3. You get a **`.vercel.app`** address. Open it. **Send it to whoever you like.**
+
+### After that: it deploys itself
+
+Every push to `main` rebuilds and republishes automatically, usually inside two
+minutes. Push a change, refresh the link, it's there.
+
+Vercel also builds a **separate preview link for every branch**, so work in
+progress can be reviewed without touching the address you've been sharing.
+
+### If something looks wrong
+
+| What you see | What it means |
+|---|---|
+| Blank white page | The environment variables in Step 3 are missing or wrong. Fix them, then **Deployments → ⋯ → Redeploy** — variables only take effect on a **new build**. |
+| Home page fine, but refreshing `/collections` gives a 404 | `vercel.json` didn't get picked up. Confirm the file is in the repository root on `main`. |
+| Products/articles missing | Expected — the database is empty. See Part 2. |
+| Old content after a push | Hard-refresh (Ctrl+Shift+R). Check the Deployments tab shows your commit. |
+
+### When the domain is ready (after ~11 August)
+
+Vercel → your project → **Settings** → **Domains** → **Add**, enter
+`alumaoutdoor.com`, and Vercel prints the DNS records to enter at name.com.
+**Only do this once you're happy with what's on the `.vercel.app` link** —
+that's the moment the real site changes.
+
+> **Note:** the repository also contains `public/_redirects`, which is
+> Cloudflare's format. It's harmless on Vercel — just ignored. Keeping both
+> means you can host on either without editing anything.
+
+---
+
 ## Job 5 — Move the domain to name.com (⏳ NOT before ~11 August 2026)
 
 **Why the wait:** `alumaoutdoor.com` was registered on 12 June 2026 through
@@ -812,7 +895,7 @@ that unblocks the most work.
 
 3. ✅ DONE  SQL script run — both tables verified
 
-4. Cloudflare env vars checked?       "Cloudflare checked"
+4. Site deployed to Vercel?           the .vercel.app link
 5. Can you get into /admin?           yes / no        (BLOCKER 3)
 6. Resend API key:                    re_...          (BLOCKER 4)
 ```

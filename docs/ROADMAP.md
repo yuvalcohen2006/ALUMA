@@ -738,6 +738,44 @@ project we don't control.
 
 ## STATUS SUMMARY
 
+*Last updated: 2026-08-01 — round four: the IA rebuild*
+
+**The site's structure changed, not just its styling.** All shipped.
+
+- **Navbar** is the owner's order (given left-to-right, so the array is
+  reversed for RTL): collections · שווה לדעת · עשה זאת בעצמך *(new badge)* ·
+  שאלות ותשובות · מועדון · אודות. No home entry — the logo does that job.
+- **Catalogue is three levels now.** `/collections/:slug` used to be a
+  *product*, which left collections homeless. Now: `/collections` (index, one
+  wide named band + one row per range) → `/collections/:slug` (the range in
+  full, new `CollectionPage.tsx`) → `/products/:slug` (the piece). Filter rail
+  deleted. `ProductCard` is shared, exported from `CollectionPage`.
+- **Build-your-own = 2 tools** (fabric, AR). `SofaDesigner` and `sofaUnits.ts`
+  deleted. The questionnaire lives on at `/questionnaire` — it feeds AdminLeads
+  — but is no longer a station.
+- **Contact merged into `/faq`** (`Contact` + `ShowroomBand` render under the
+  questions; `/contact` redirects; links point at `/faq#contact`).
+- **שווה לדעת** = materials + projects. The magazine feed is gone; `/journal/:slug`
+  still routes for any existing article.
+- **Home tiles**: outlined pill CTAs that fill terracotta on hover (Apple's
+  two-CTA pattern, our palette), 1 on narrow / 2 on wide, "hot" + "popular"
+  flags on the first two, taglines −6px. **The tile is no longer a link** — the
+  buttons are, because two buttons need two destinations and nested anchors are
+  invalid markup.
+- **Club field** rebuilt as input + labelled button.
+- **Vercel**: `vercel.json` committed (build config + full redirect map +
+  SPA rewrite). `public/_redirects` kept for Cloudflare; harmless on Vercel.
+  Click-by-click deploy steps are in `docs/GUIDE.md`.
+- Every internal link audited against the route table. 53 tests.
+
+**Open on the owner:** deploy to Vercel and share the link · `/admin` via Google
+sign-in · the Resend key. **Still Hebrew-only under `/en`:** journal,
+collections, projects, about, DIY pages, legal.
+
+---
+
+*Earlier:*
+
 *Last updated: 2026-07-31 night — round three, shipped*
 
 **All owner notes from round three are in**, each pushed separately:
