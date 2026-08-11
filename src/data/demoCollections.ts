@@ -22,6 +22,27 @@ import swingA from "@/assets/collections/gen/swing-a.webp";
 import swingB from "@/assets/collections/gen/swing-b.webp";
 
 /**
+ * Band photographs for the collection headers — a different job from the
+ * product shots above.
+ *
+ * Each is composed so the furniture sits in the LEFT third and the right two
+ * thirds is one calm mid-tone surface: an ochre plaster wall, a cypress hedge,
+ * a burnt-terracotta render, laurel, still teal water. That empty right side is
+ * where the collection's name goes, because CollectionBand carries no scrim —
+ * the negative space the type sits in has to be in the picture itself.
+ *
+ * Two constraints if these are ever reshot or regenerated:
+ *   - Nothing white or blown out on the right. The type is white.
+ *   - Nothing important in the top or bottom eighth. The band is 21:9 on
+ *     mobile but crops to 3:1 on desktop, which eats both edges.
+ */
+import bandSalons from "@/assets/collections/gen/band-salons.webp";
+import bandFire from "@/assets/collections/gen/band-fire-tables.webp";
+import bandBar from "@/assets/collections/gen/band-bar.webp";
+import bandDining from "@/assets/collections/gen/band-dining.webp";
+import bandLounge from "@/assets/collections/gen/band-lounge.webp";
+
+/**
  * Placeholder catalogue — NOT real Aluma products.
  *
  * Twenty invented pieces across five categories, used only to see how the
@@ -38,7 +59,7 @@ export const demoCollections: DBCollection[] = [
     name_he: "סלוני חוץ",
     name_en: "Outdoor Salons",
     intro: "מערכות ישיבה מודולריות שנבנות סביב המרחב שלכם, לא להפך.",
-    image_url: salonCornerA,
+    image_url: bandSalons,
     sort_order: 1,
   },
   {
@@ -47,7 +68,7 @@ export const demoCollections: DBCollection[] = [
     name_he: "שולחנות אש",
     name_en: "Fire Tables",
     intro: "להבה שקטה במרכז הישיבה, שמאריכה את הערב הרבה אחרי השקיעה.",
-    image_url: fireRoundA,
+    image_url: bandFire,
     sort_order: 2,
   },
   {
@@ -56,7 +77,7 @@ export const demoCollections: DBCollection[] = [
     name_he: "פינות בר",
     name_en: "Bar",
     intro: "עמדות בר וכיסאות גבוהים לגג, למרפסת ולחצר.",
-    image_url: barIslandA,
+    image_url: bandBar,
     sort_order: 3,
   },
   {
@@ -65,7 +86,7 @@ export const demoCollections: DBCollection[] = [
     name_he: "פינות אוכל",
     name_en: "Dining",
     intro: "שולחנות בפורצלן ובאבן, עם כיסאות וספסלים שנבנים לצידם.",
-    image_url: diningTableA,
+    image_url: bandDining,
     sort_order: 4,
   },
   {
@@ -74,7 +95,7 @@ export const demoCollections: DBCollection[] = [
     name_he: "שיזוף ונדנדות",
     name_en: "Lounge",
     intro: "מיטות שיזוף ונדנדות תלויות לפינות השקטות של הבית.",
-    image_url: loungerA,
+    image_url: bandLounge,
     sort_order: 5,
   },
 ];
