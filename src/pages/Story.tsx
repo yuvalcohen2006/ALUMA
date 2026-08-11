@@ -6,7 +6,6 @@ import { useLocalizedPath } from "@/lib/useLocalizedPath";
 import { SITE } from "@/config/site";
 import alumaLogo from "@/assets/aluma-logo.png";
 import craftDetail from "@/assets/about/craft-detail.jpg";
-import terraceDusk from "@/assets/about/terrace-dusk.jpg";
 import storyPortrait from "@/assets/story-portrait.png";
 import storyPortraitRoy from "@/assets/story-portrait-roy.png";
 import storyPortraitIdan from "@/assets/story-portrait-idan.png";
@@ -52,8 +51,12 @@ const refusals = [
  *      photography — repeating that here would make About read as a second
  *      home page. The opening statement has a refusal in it, which is what
  *      separates a position from a platitude.
- *   2. Three photographs total, not seven. The observed range across those
- *      houses is 3–7, and the restrained end is where the expensive ones sit.
+ *   2. ONE photograph, plus the three line portraits. The observed range across
+ *      those houses is 3–7 and the restrained end is where the expensive ones
+ *      sit — but this is an about page, not a lookbook, and the home page is
+ *      already a wall of photography. A second full-bleed shot before the close
+ *      bought a screen of scrolling and 600KB to say nothing the first one
+ *      hadn't.
  *   3. Where numbers would go, refusals go instead. There is no founding year
  *      worth boasting about and no client count, and a thin stat strip reads
  *      as padding. What we don't do is free to state and impossible to fake.
@@ -111,7 +114,7 @@ const StoryPage = () => {
       {/* 3 — THE STORY. The brand's own paragraphs, with its strongest line
           promoted out of the block and set as a lead. */}
       <section className="bg-background">
-        <div className="mx-auto max-w-[860px] px-6 py-24 md:py-32">
+        <div className="mx-auto max-w-[860px] px-6 py-20 md:py-24">
           <Reveal>
             <p className="max-w-[46ch] text-start text-foreground tracking-normal text-[19px] leading-[1.75] md:text-[21px] md:leading-[1.7]">
               אלומה נולדה מתוך חיבור בין חומר לאור.
@@ -145,7 +148,7 @@ const StoryPage = () => {
           parent: put a transform on it and the drawings render as white
           boxes. */}
       <section className="bg-background">
-        <div className="mx-auto max-w-[860px] px-6 pb-24 md:pb-32">
+        <div className="mx-auto max-w-[860px] px-6 pb-20 md:pb-24">
           <Reveal>
             <p className="max-w-[46ch] text-start text-foreground-soft tracking-normal text-[17px] leading-[1.85] md:text-[18px]">
               שלושתנו. אותם אנשים מהמדידה הראשונה ועד היום שאתם יושבים בחוץ.
@@ -178,7 +181,7 @@ const StoryPage = () => {
           use of terracotta — a third colour used repeatedly is the fastest way
           to read as a template. */}
       <section className="bg-secondary">
-        <div className="mx-auto max-w-[860px] px-6 py-24 md:py-32">
+        <div className="mx-auto max-w-[860px] px-6 py-20 md:py-24">
           <Reveal>
             <h2 className="font-display font-normal tracking-normal text-start text-foreground text-[20px] md:text-[24px] leading-[1.4] border-s-2 border-primary ps-5">
               מה אנחנו לא עושים
@@ -197,26 +200,22 @@ const StoryPage = () => {
         </div>
       </section>
 
-      {/* 6 — The exhale before the close. */}
-      <Reveal>
-        <img
-          src={terraceDusk}
-          alt=""
-          aria-hidden="true"
-          loading="lazy"
-          decoding="async"
-          className="w-full aspect-[3/2] md:aspect-[21/9] object-cover"
-        />
-      </Reveal>
+      {/* CLOSE. The wordmark returns, larger and faint. Bookending the page
+          with the mark removes any need for a CTA button here.
 
-      {/* 7 — CLOSE. The wordmark returns, larger and faint. Bookending the page
-          with the mark removes any need for a CTA button here. */}
+          A second full-bleed photograph used to sit here as "the exhale before
+          the close". Two of them on one page is one more than the page earns —
+          this is an about page, not a lookbook, and the second one mostly
+          bought 600KB and another screen of scrolling. One photograph, up near
+          the statement where it still means something. */}
       <section className="bg-background">
-        <div className="mx-auto max-w-[860px] px-6 py-28 md:py-36 text-center">
+        <div className="mx-auto max-w-[860px] px-6 py-20 md:py-28 text-center">
           <Reveal>
+            {/* The old line here was "הכי קל להבין את אלומה כשיושבים עליה" —
+                which invites you to sit on a company. Aluma is the brand; the
+                sofa is the thing with cushions. */}
             <p className="mx-auto max-w-[34ch] text-foreground tracking-normal text-[19px] leading-[1.75] md:text-[21px] md:leading-[1.7]">
-              אולם התצוגה שלנו ב{SITE.address.full}. הכי קל להבין את אלומה
-              כשיושבים עליה.
+              אולם התצוגה שלנו ב{SITE.address.full}. תמיד שווה לבוא לשבת.
             </p>
             <Link
               to={to("/faq") + "#contact"}
@@ -229,7 +228,7 @@ const StoryPage = () => {
               alt=""
               aria-hidden="true"
               loading="lazy"
-              className="mx-auto mt-20 md:mt-24 h-10 md:h-14 w-auto opacity-25"
+              className="mx-auto mt-14 md:mt-16 h-10 md:h-14 w-auto opacity-25"
             />
           </Reveal>
         </div>

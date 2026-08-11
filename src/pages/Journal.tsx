@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { ArrowLeft } from "lucide-react";
 import Layout from "@/components/Layout";
 import SEO from "@/components/SEO";
 import PageHero from "@/components/PageHero";
@@ -25,42 +26,58 @@ const JournalPage = () => {
         subtitle="מהחומרים עצמם ועד המרחבים שהם הפכו להיות — מה שכדאי לדעת לפני שבוחרים ריהוט שנשאר בחוץ כל השנה."
       />
 
-      {/* MATERIALS — the home page's tile language, at half scale: the
-          photograph IS the card, two to a row, the name sitting top-centre on
-          the same light scrim the morning tiles use. No fade into the page,
-          no panel, no chrome. */}
+      {/* MATERIALS — caption under the swatch, not over it.
+
+          These cards used to wash a white gradient across the top two-thirds of
+          each photograph to make room for the name. On a material sample that
+          is self-defeating: the texture IS the content, and the scrim bleached
+          exactly the part of it you were meant to be reading — the weave of the
+          Sunbrella, the grain of the granite.
+
+          How the surface houses actually do it, checked one by one: Cosentino
+          Dekton, Farrow & Ball, Little Greene, Caesarstone and Laminam all set
+          the name in a caption BELOW an untouched swatch. The single exception,
+          Benjamin Moore, overlays its label — and can only afford to because
+          its swatch is a flat block of colour rather than a photograph. Ours
+          are photographs.
+
+          So: a clean square crop, four across on a wide screen so they read as
+          one set of four, and the name underneath where it costs the picture
+          nothing. Separation is gap alone on the page colour — none of the five
+          draws a border or a rule between cells either. */}
       <section className="pb-8 bg-background">
         <div className="container-luxury">
-          <ul className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <ul className="grid grid-cols-2 lg:grid-cols-4 gap-x-5 md:gap-x-6 gap-y-10">
             {materials.map((m, i) => (
-              <Reveal key={m.slug} delay={(i % 2) * 80}>
+              <Reveal key={m.slug} delay={(i % 4) * 70}>
                 <li>
                   <Link
                     to={to(`/materials/${m.slug}`)}
-                    className="group relative block h-[240px] md:h-[280px] overflow-hidden rounded-[14px] focus-visible:outline-2 focus-visible:outline-offset-[-4px] focus-visible:outline-ring"
+                    className="group block rounded-[14px] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring"
                   >
-                    <img
-                      src={m.image}
-                      alt={m.name}
-                      loading="lazy"
-                      decoding="async"
-                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.25,0.1,0.25,1)] group-hover:scale-[1.03] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
-                    />
-                    <div
-                      aria-hidden="true"
-                      className="absolute inset-x-0 top-0 h-2/3"
-                      style={{
-                        background:
-                          "linear-gradient(to bottom, rgba(255,255,255,0.78) 0%, rgba(255,255,255,0.28) 55%, transparent 100%)",
-                      }}
-                    />
-                    <div className="relative z-10 text-center px-6 pt-7 text-foreground">
-                      <h3 className="font-display font-semibold text-[24px] md:text-[28px] leading-tight">
-                        {m.name}
-                      </h3>
-                      <p className="mt-1 text-[16px] md:text-[17px] leading-snug text-foreground-soft">
-                        {m.tagline}
-                      </p>
+                    <div className="relative aspect-square overflow-hidden rounded-[14px] bg-secondary/40">
+                      <img
+                        src={m.image}
+                        alt={m.name}
+                        loading="lazy"
+                        decoding="async"
+                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.25,0.1,0.25,1)] group-hover:scale-[1.04] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+                      />
+                    </div>
+                    <div className="mt-4 flex items-start justify-between gap-3 text-start">
+                      <div className="min-w-0">
+                        <h3 className="font-display font-semibold text-[20px] md:text-[22px] leading-tight text-foreground transition-colors duration-200 group-hover:text-accent">
+                          {m.name}
+                        </h3>
+                        <p className="mt-1.5 text-[16px] leading-snug text-foreground-soft">
+                          {m.tagline}
+                        </p>
+                      </div>
+                      {/* Left is forward in Hebrew. */}
+                      <ArrowLeft
+                        className="mt-1.5 h-[18px] w-[18px] shrink-0 text-foreground-soft transition-all duration-200 group-hover:-translate-x-1 group-hover:text-accent"
+                        aria-hidden="true"
+                      />
                     </div>
                   </Link>
                 </li>

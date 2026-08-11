@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import Layout from "@/components/Layout";
 import SEO from "@/components/SEO";
 import Reveal from "@/components/Reveal";
+import CollectionBand from "@/components/CollectionBand";
 import { useCollections, type DBProduct } from "@/hooks/useCollectionsData";
 import { useLocalizedPath } from "@/lib/useLocalizedPath";
 import NotFound from "./NotFound";
@@ -106,33 +107,7 @@ const CollectionPage = () => {
           like a different page loaded. */}
       <section className="pt-24">
         <div className="container-luxury">
-          <div className="relative aspect-[21/9] md:aspect-[3/1] overflow-hidden rounded-[14px] bg-secondary/50">
-            {band && (
-              <img
-                src={band}
-                alt=""
-                aria-hidden="true"
-                loading="eager"
-                decoding="async"
-                className="absolute inset-0 w-full h-full object-cover"
-              />
-            )}
-            {/* Direction-aware scrim. `to-r`/`to-l` are physical, so the rtl
-                variant flips it: the dark end must always sit under the text,
-                which `text-start` puts on the right in Hebrew and the left in
-                English. */}
-            <div
-              aria-hidden="true"
-              className="absolute inset-0 bg-gradient-to-r rtl:bg-gradient-to-l from-black/60 via-black/25 to-transparent"
-            />
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full px-6 md:px-12">
-                <h1 className="font-display font-semibold text-white text-start leading-[0.92] text-[clamp(56px,13vw,180px)]">
-                  {collection.name_he}
-                </h1>
-              </div>
-            </div>
-          </div>
+          <CollectionBand image={band} name={collection.name_he} as="h1" eager />
 
           {collection.intro && (
             <Reveal>

@@ -2,35 +2,35 @@
   "tiles": {
     "lounge": {
       "label": "Lounge Sets",
-      "tagline": "A living room that continues outside."
+      "tagline": "You sit down, you don't get up."
     },
     "fire": {
       "label": "Fire Tables",
-      "tagline": "The evening doesn't end at sunset."
+      "tagline": "It gets cold, everyone stays out."
     },
     "sunbed": {
       "label": "Sun Loungers",
-      "tagline": "The quietest spot in the house."
+      "tagline": "Catching some sun, quietly."
     },
     "coffee": {
       "label": "Coffee Tables",
-      "tagline": "Stone that stays beautiful for years."
+      "tagline": "Morning coffee, outside."
     },
     "bar": {
       "label": "Bar Stools",
-      "tagline": "Stand close, take your time."
+      "tagline": "Where everyone ends up standing."
     },
     "dining": {
       "label": "Dining Sets",
-      "tagline": "Long dinners, under the sky."
+      "tagline": "The lunch that runs long."
     },
     "chairs": {
       "label": "Dining Chairs",
-      "tagline": "Sitting well, outdoors too."
+      "tagline": "Comfortable two hours in."
     },
     "accessories": {
       "label": "Accessories",
-      "tagline": "Shade, cushions and light."
+      "tagline": "Everything that finishes the corner."
     },
     "cta": {
       "view": "View collection"

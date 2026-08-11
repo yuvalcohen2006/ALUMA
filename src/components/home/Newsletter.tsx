@@ -117,11 +117,16 @@ const Newsletter = () => {
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder={t("club.emailPlaceholder")}
                   autoComplete="email"
-                  // dir="auto" rather than "ltr": the Hebrew placeholder then
-                  // reads right-to-left like the rest of the page, while a
-                  // typed Latin address still renders left-to-right. Forcing
-                  // ltr threw the placeholder to the wrong edge.
-                  dir="auto"
+                  // NO dir override here on purpose. dir="auto" looked right but
+                  // does the opposite of what it reads like: on an <input> the
+                  // HTML spec resolves auto from the VALUE, not the placeholder,
+                  // and an empty value has no strong character, so it falls back
+                  // to ltr — which made text-start compute to LEFT and threw the
+                  // Hebrew placeholder to the wrong edge.
+                  // Inheriting from <html dir> instead is also the only version
+                  // that survives the language switch: rtl on /, ltr on /en.
+                  // A typed Latin address still reads left-to-right either way,
+                  // because its letters are strong-LTR and bidi runs them as one.
                   className="h-14 flex-1 min-w-0 rounded-full border border-foreground/15 bg-white/80 px-6 text-[17px] text-foreground text-start shadow-soft backdrop-blur-md outline-none transition-colors placeholder:text-foreground/45 focus:border-accent"
                 />
                 <button

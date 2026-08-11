@@ -1,4 +1,3 @@
-import type { ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { ArrowLeft, Palette, ScanLine } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
@@ -6,45 +5,31 @@ import Layout from "@/components/Layout";
 import SEO from "@/components/SEO";
 import PageHero from "@/components/PageHero";
 import Reveal from "@/components/Reveal";
-import SectionHeading from "@/components/SectionHeading";
-import ShineButton from "@/components/ui/shine-button";
-import { cn } from "@/lib/utils";
+import { useLocalizedPath } from "@/lib/useLocalizedPath";
 import { sunbrellaFabrics } from "@/data/sunbrella";
 
 /**
- * DIY hub — "the workbench".
+ * DIY hub — two doors, one screen.
  *
- * Not a card grid: two long bench planks with two shorter stations clamped
- * between them (wide / two-up / wide). Each plank is stamped with its bench
- * number and carries a framed *specimen* of the tool it opens — the actual
- * modular units with their real names, the actual Sunbrella swatches, a drawn
- * floor plane with the AR reticle, the actual questionnaire steps as a rail —
- * instead of a stock photo. A cursor-tracked lamp warms whichever plank you
- * point at.
+ * This page used to run about four hundred lines: an intro section, a
+ * cursor-tracked lamp, four "bench planks", a rail of questionnaire steps and a
+ * closing charcoal band. It also announced four tools when only two of them
+ * still existed — /designer had already become a redirect back to this very
+ * page, so its own structured data pointed customers at a loop.
  *
- * Heights are left to the content on purpose: the two wide planks size
- * themselves and the two short ones share a row, so no plank can end up with a
- * void in the middle of it.
+ * There are exactly two things you can do here, so the page is exactly two
+ * things: see every fabric in every colour, or stand a piece in your own garden
+ * through the phone. Both fit above the fold side by side, which is the whole
+ * point — a hub you have to scroll is a hub that failed to be a hub.
  *
- * Everything closes on one charcoal band — the single dark section on the page.
+ * Each door shows a specimen of the real thing rather than a stock photo: the
+ * actual Sunbrella swatches, and a drawn floor plane with the AR reticle on it.
  */
 
 const SITE = "https://alumaoutdoor.com";
 
-/** Eight swatches spread across all three Sunbrella families. */
-const swatchSample = sunbrellaFabrics.filter((_, i) => i % 2 === 0).slice(0, 8);
-const swatchRest = sunbrellaFabrics.length - swatchSample.length;
-
-/** The four steps the questionnaire actually walks you through. */
-const questionnaireSteps = ["המרחב", "סגנון ולוח זמנים", "מה לכלול", "פרטי קשר"];
-
-const introFacts = [
-  "בלי הרשמה, בלי עלות",
-  "הכול רץ מהדפדפן",
-  "התוצאה מגיעה אלינו בלחיצה",
-];
-
-const closingFacts = ["בלי עלות", "בלי התחייבות", "מענה תוך 24 שעות"];
+/** Twelve swatches spread across all three Sunbrella families. */
+const swatches = sunbrellaFabrics.filter((_, i) => i % 3 === 0).slice(0, 12);
 
 const breadcrumbs = {
   "@context": "https://schema.org",
@@ -55,341 +40,150 @@ const breadcrumbs = {
   ],
 };
 
+/** Two entries, matching the two that exist. */
 const toolList = {
   "@context": "https://schema.org",
   "@type": "ItemList",
   name: "כלים לתכנון עצמי של ריהוט חוץ",
   inLanguage: "he-IL",
   itemListElement: [
-    { name: "עצבו סלון", url: `${SITE}/designer` },
-    { name: "בחרו את הבד", url: `${SITE}/fabric` },
-    { name: "AR, תצוגה במרחב", url: `${SITE}/ar` },
-    { name: "שאלון חכם", url: `${SITE}/questionnaire` },
-  ].map((t, i) => ({
-    "@type": "ListItem",
-    position: i + 1,
-    name: t.name,
-    url: t.url,
-  })),
+    { name: "בחירת בד וצבע", url: `${SITE}/fabric` },
+    { name: "תצוגה במרחב, AR", url: `${SITE}/ar` },
+  ].map((t, i) => ({ "@type": "ListItem", position: i + 1, name: t.name, url: t.url })),
 };
 
-/**
- * A lamp that follows the cursor across the plank. Written straight onto the
- * element as custom properties so pointing at a station never re-renders React.
- */
-const trackLamp = (e: React.MouseEvent<HTMLElement>) => {
-  const el = e.currentTarget;
-  const r = el.getBoundingClientRect();
-  el.style.setProperty("--lamp-x", `${e.clientX - r.left}px`);
-  el.style.setProperty("--lamp-y", `${e.clientY - r.top}px`);
-};
-
-interface StationProps {
-  /** Stamped bench number, e.g. "01". */
-  n: string;
-  /** Where the whole plank leads. */
+const Door = ({
+  icon: Icon,
+  eyebrow,
+  title,
+  line,
+  cta,
+  to,
+  children,
+}: {
+  icon: LucideIcon;
+  eyebrow: string;
+  title: string;
+  line: string;
+  cta: string;
   to: string;
-  /** Grid placement — the bench layout lives here, not inside the component. */
-  className?: string;
-  children: ReactNode;
-}
-
-/**
- * Shared plank chrome: warm border, lift on hover, the cursor lamp and the
- * stamped number. The transparent overlay link makes the whole plank clickable
- * for the mouse; keyboard and screen readers get the ShineButton inside, which
- * is why the overlay is taken out of the accessibility tree entirely — and why
- * the plank answers to focus-within as well as hover, so tabbing to a station's
- * button lights the same plank a mouse would.
- *
- * Nothing painted above the stamp is opaque (the specimen plates are
- * bg-secondary/50, the button is a 5% wash), so the numeral reads through
- * whatever lands on top of it.
- */
-const Station = ({ n, to, className, children }: StationProps) => (
-  <li
-    onMouseMove={trackLamp}
-    className={cn(
-      "group relative overflow-hidden rounded-[14px] border border-border bg-background p-6 sm:p-8 md:p-9 shadow-soft",
-      "transition-all duration-300 hover:-translate-y-1 hover:border-primary/60 hover:shadow-luxury",
-      "focus-within:-translate-y-1 focus-within:border-primary/60 focus-within:shadow-luxury",
-      className,
-    )}
-  >
-    <span
-      aria-hidden="true"
-      className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-      style={{
-        background:
-          "radial-gradient(260px circle at var(--lamp-x, 50%) var(--lamp-y, 0%), hsl(var(--primary) / 0.12), transparent 72%)",
-      }}
-    />
-
-    {/* Stamped station number, tucked into the far (left, in RTL) corner. */}
-    <span
-      aria-hidden="true"
-      className="pointer-events-none absolute -top-3 end-4 sm:end-6 select-none font-display text-[80px] sm:text-[96px] leading-none text-primary/[0.13] transition-colors duration-300 group-hover:text-primary/25"
-    >
-      {n}
-    </span>
-
+  /** The specimen shown above the words. */
+  children: React.ReactNode;
+}) => (
+  <li>
     <Link
       to={to}
-      tabIndex={-1}
-      aria-hidden="true"
-      className="absolute inset-0 z-[1] rounded-[14px]"
-    />
+      className="group flex h-full flex-col overflow-hidden rounded-[14px] border border-border bg-background transition-all duration-300 hover:-translate-y-1 hover:border-accent/50 hover:shadow-luxury focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring motion-reduce:transition-none motion-reduce:hover:translate-y-0"
+    >
+      <div className="relative h-[190px] md:h-[220px] overflow-hidden bg-secondary/40">
+        {children}
+      </div>
 
-    {/* Content floats above the overlay but stays click-through, so a click
-        anywhere on the plank still opens the tool. The CTA takes its clicks
-        back explicitly. */}
-    <div className="pointer-events-none relative z-[2] flex h-full flex-col text-start">
-      {children}
-    </div>
+      <div className="flex flex-1 flex-col p-6 md:p-8 text-start">
+        <span className="inline-flex items-center gap-2 text-[15px] tracking-[0.06em] text-accent">
+          <Icon className="h-4 w-4" aria-hidden="true" />
+          {eyebrow}
+        </span>
+
+        <h2 className="mt-3 font-display font-semibold text-[26px] md:text-[30px] leading-tight text-foreground">
+          {title}
+        </h2>
+
+        <p className="mt-2.5 text-[17px] md:text-[18px] leading-relaxed text-foreground-soft">
+          {line}
+        </p>
+
+        <span className="mt-6 inline-flex items-center gap-2 text-[18px] text-foreground transition-colors duration-200 group-hover:text-accent">
+          {cta}
+          {/* Left is forward in Hebrew. */}
+          <ArrowLeft
+            className="h-[18px] w-[18px] transition-transform duration-200 group-hover:-translate-x-1"
+            aria-hidden="true"
+          />
+        </span>
+      </div>
+    </Link>
   </li>
 );
 
-/** Icon plate, name and the hairline that stretches when the plank wakes up. */
-const StationHead = ({ icon: Icon, title }: { icon: LucideIcon; title: string }) => (
-  <>
-    <span className="inline-flex h-14 w-14 shrink-0 items-center justify-center rounded-[10px] border border-border bg-secondary text-primary transition-all duration-300 group-hover:border-primary/50 group-hover:bg-primary/10 group-focus-within:border-primary/50 group-focus-within:bg-primary/10">
-      <Icon className="h-7 w-7" strokeWidth={1.6} aria-hidden="true" />
-    </span>
-    <h3 className="mt-6 font-display font-normal text-[22px] leading-snug text-foreground">
-      {title}
-    </h3>
-    <span
-      aria-hidden="true"
-      className="mt-4 block h-[2px] w-14 bg-primary/50 transition-all duration-300 group-hover:w-24 group-focus-within:w-24"
-    />
-  </>
-);
-
-/**
- * The framed specimen a plank carries: a real fragment of the tool it opens,
- * on one shared plate so the stations read as one bench rather than unrelated
- * tiles. Station 04 is the exception — its specimen is the step rail, which
- * runs the plank's full width instead of sitting inside a plate.
- */
-const Specimen = ({
-  caption,
-  className,
-  children,
-}: {
-  caption: string;
-  className?: string;
-  children: ReactNode;
-}) => (
-  <div
-    className={cn(
-      "rounded-[10px] border border-border bg-secondary/50 p-4 transition-colors duration-300 group-hover:border-primary/40 group-focus-within:border-primary/40",
-      className,
-    )}
-  >
-    {children}
-    <p className="mt-3 text-[18px] leading-relaxed text-muted-foreground">{caption}</p>
-  </div>
-);
-
-const StationCta = ({
-  to,
-  className,
-  children,
-}: {
-  to: string;
-  className?: string;
-  children: ReactNode;
-}) => (
-  <div className={cn("pointer-events-auto", className)}>
-    <ShineButton to={to}>
-      {children}
-      <ArrowLeft className="h-4 w-4" aria-hidden="true" />
-    </ShineButton>
-  </div>
-);
-
 const DIYPage = () => {
+  const { to } = useLocalizedPath();
+
   return (
     <Layout>
       <SEO
-        title="עשה זאת בעצמך | כלים לתכנון סלון החוץ שלכם | Aluma"
-        description="ארבעה כלים לתכנון ריהוט החוץ שלכם: מעצב סלון מודולרי, בחירת בד Sunbrella עם תצוגה מיידית, תצוגת AR בגודל אמיתי במרפסת ושאלון חכם להמלצה אישית. הכול מהדפדפן, בלי הרשמה."
+        title="עשה זאת בעצמך | בחירת בד ותצוגה במרחב | Aluma"
+        description="שני כלים שרצים ישר מהדפדפן: לראות כל בד Sunbrella בצבע שלו על ספה אמיתית, או להעמיד רהיט בחצר שלכם דרך מצלמת הטלפון."
         path="/diy"
         jsonLd={[breadcrumbs, toolList]}
       />
 
-      <PageHero title="עשה זאת בעצמך" />
+      <PageHero
+        title="עשה זאת בעצמך"
+        subtitle="שני דברים אפשר לעשות כאן, בלי הרשמה ובלי עלות: לראות איך כל בד נראה בצבע שלו, או להעמיד רהיט בחצר דרך הטלפון."
+      />
 
-      {/* ===== Intro: what this page is for ===== */}
-      <section className="py-14 md:py-20 bg-background">
+      <section className="pb-16 md:pb-24 bg-background">
         <div className="container-luxury">
-          <Reveal>
-            {/* mx-auto, same as the two sections below it — without it this block
-                hugs the right edge in RTL and its left edge misses theirs. */}
-            <div className="mx-auto grid gap-10 lg:grid-cols-[minmax(0,1fr)_auto] lg:gap-16 items-start max-w-6xl">
-              <SectionHeading
-                align="start"
-                subtitle="ריכזנו במקום אחד את הכלים שמאפשרים לכם להתחיל לתכנן עוד לפני שדיברנו איתנו. אפשר להרכיב מערכת ישיבה מודולרית לפי המידות שלכם, לבחור גוון בד ולראות אותו מיד על הספה, להציב רהיט בגודל אמיתי במרפסת דרך מצלמת הטלפון, או פשוט לענות על כמה שאלות ולקבל המלצה. כל כלי עומד בפני עצמו, ואפשר להתחיל מאיפה שנוח לכם."
+          <ul className="grid gap-4 md:grid-cols-2 md:items-stretch">
+            <Reveal>
+              <Door
+                icon={Palette}
+                eyebrow="בדים וצבעים"
+                title="לראות את הבד לפני שבוחרים"
+                line="כל גוון מהמניפה של Sunbrella, על ספה אמיתית ולא על ריבוע קטן. מחליפים צבע ורואים מיד."
+                cta="לבחירת הבד"
+                to={to("/fabric")}
               >
-                מה אפשר לעשות כאן
-              </SectionHeading>
-
-              <ul className="space-y-4 lg:border-s lg:border-border lg:ps-10">
-                {introFacts.map((f) => (
-                  <li key={f} className="flex items-center gap-3 text-[18px] text-foreground">
-                    <span className="h-px w-6 shrink-0 bg-primary/60" aria-hidden="true" />
-                    {f}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* ===== The bench: two long planks with two stations clamped between ===== */}
-      <section className="py-20 md:py-28 bg-secondary">
-        <div className="container-luxury">
-          <Reveal className="mb-12 md:mb-16 flex flex-col items-center">
-            <SectionHeading
-              tone="charcoal"
-              subtitle="אין כאן סדר נכון. אפשר להתחיל מהתחנה שהכי מדברת אליכם ולחזור לשאר מתי שתרצו, כל אחת מהן עומדת בפני עצמה."
-            >
-              שתי תחנות עבודה
-            </SectionHeading>
-          </Reveal>
-
-          <Reveal>
-            {/* A real list, so a screen reader gets "4 items" and the grouping the
-                stamped 01–04 gives everyone else. The numerals themselves stay
-                aria-hidden — the heading says there is no right order, so an <ol>
-                would claim something untrue. Auto-placement handles the layout:
-                the wide planks span both columns, the two short ones share the
-                middle row, so each plank is only ever as tall as its own content.
-                The bench opens at lg — below that two columns would leave a plank
-                too narrow for a 20px paragraph. */}
-            <ul
-              role="list"
-              className="mx-auto grid max-w-6xl gap-6 lg:gap-8 lg:grid-cols-2"
-            >
-              <Station n="01" to="/fabric" className="lg:col-span-2">
-                <StationHead icon={Palette} title="בחרו את הבד" />
-
-                <p className="mt-5 text-[20px] leading-relaxed text-foreground text-pretty">
-                  עברו על מניפת Sunbrella המקורית, לחצו על גוון, וראו מיד איך הספה
-                  נראית איתו.
-                </p>
-
-                {/* Real swatches from the configurator, waking one after another. */}
-                <Specimen
-                  caption={`ועוד ${swatchRest} גוונים במניפה, מ-Canvas לצבעי בסיס, דרך Heritage למרקמים ועד Patterns לדוגמאות ופסים.`}
-                  className="mt-6"
-                >
-                  {/* A fixed 4×2 block rather than a loose row: at the plank's
-                      width a wrapping flex row leaves an orphan swatch on the
-                      second line at some breakpoints, the grid never does. */}
-                  <div className="grid grid-cols-4 gap-2.5">
-                    {swatchSample.map((f, i) => (
-                      <span
-                        key={f.code}
-                        aria-hidden="true"
-                        className="h-12 rounded-[10px] border border-border transition-transform duration-300 ease-out group-hover:-translate-y-1"
-                        style={{ background: f.background, transitionDelay: `${i * 40}ms` }}
-                      />
-                    ))}
-                  </div>
-                </Specimen>
-
-                <StationCta to="/fabric" className="mt-8 lg:mt-auto lg:pt-8">
-                  לבחירת הבד
-                </StationCta>
-              </Station>
-
-              {/* ---- 03 · short station, left column in RTL ---- */}
-              <Station n="02" to="/ar" className="lg:col-span-2">
-                <StationHead icon={ScanLine} title="AR, תצוגה במרחב" />
-
-                <p className="mt-5 text-[20px] leading-relaxed text-foreground text-pretty">
-                  בחרו פריט, כוונו את מצלמת הטלפון לרצפה, והרהיט יופיע לפניכם בגודל
-                  אמיתי, כדי לבדוק שהמידות עובדות עוד לפני שמזמינים.
-                </p>
-
-                {/* Drawn, not photographed: the floor plane the phone finds, with
-                    the placement reticle settling onto it as the plank wakes. */}
-                <Specimen
-                  caption="רץ מהדפדפן בטלפון, בלי אפליקציה. עובד על iPhone מגרסת iOS 12 ומעלה ועל מכשירי אנדרואיד עם תמיכת ARCore."
-                  className="mt-6"
-                >
-                  <div className="relative h-[76px] overflow-hidden rounded-[10px] bg-background/70 [perspective:420px]">
-                    <span
-                      aria-hidden="true"
-                      className="absolute inset-x-[-30%] bottom-0 h-32 origin-bottom opacity-70 transition-opacity duration-500 group-hover:opacity-100 group-focus-within:opacity-100 [transform:rotateX(64deg)]"
-                      style={{
-                        backgroundImage:
-                          "linear-gradient(hsl(var(--primary) / 0.35) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--primary) / 0.35) 1px, transparent 1px)",
-                        backgroundSize: "28px 28px",
-                        maskImage: "linear-gradient(to top, #000 30%, transparent 88%)",
-                        WebkitMaskImage: "linear-gradient(to top, #000 30%, transparent 88%)",
-                      }}
+                {/* Specimen: the real swatch colours, edge to edge. */}
+                <ul className="absolute inset-0 grid grid-cols-6 grid-rows-2">
+                  {swatches.map((f) => (
+                    <li
+                      key={f.code}
+                      title={f.nameHe}
+                      style={{ background: f.background }}
+                      className="transition-transform duration-500 ease-out group-hover:scale-[1.04] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
                     />
-                    <span
-                      aria-hidden="true"
-                      className="absolute left-1/2 top-[58%] h-12 w-12 rounded-full border-2 border-primary/55 transition-transform duration-500 ease-out [transform:translate(-50%,-50%)_rotateX(64deg)_scale(1.3)] group-hover:[transform:translate(-50%,-50%)_rotateX(64deg)_scale(1)] group-focus-within:[transform:translate(-50%,-50%)_rotateX(64deg)_scale(1)]"
-                    />
-                    <span
-                      aria-hidden="true"
-                      className="absolute left-1/2 top-[58%] h-1.5 w-1.5 rounded-full bg-primary/70 [transform:translate(-50%,-50%)]"
-                    />
-                  </div>
-                </Specimen>
-
-                <StationCta to="/ar" className="mt-8 lg:mt-auto lg:pt-8">
-                  פתחו את התצוגה
-                </StationCta>
-              </Station>
-
-            </ul>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* ===== The one dark band: where everything you built ends up ===== */}
-      <section className="py-20 md:py-28 bg-foreground">
-        <div className="container-luxury">
-          <Reveal>
-            <div className="mx-auto grid max-w-6xl items-center gap-10 lg:grid-cols-[minmax(0,1.55fr)_auto_minmax(0,1fr)] lg:gap-14">
-              <div className="text-start">
-                <h2 className="font-display font-bold text-[26px] leading-snug text-background">
-                  מה שיוצא מכאן מגיע ישירות אלינו
-                </h2>
-                <div className="w-20 h-[2px] bg-background/40 mt-5" aria-hidden="true" />
-                <p className="mt-6 text-[20px] leading-relaxed text-background/75 text-pretty">
-                  הקומפוזיציה שהרכבתם, הגוון שבחרתם או התשובות שמילאתם מגיעים אלינו
-                  בדיוק כפי שהם. משם אנחנו לוקחים את זה הלאה: בודקים מידות, מתאימים
-                  חומרים ובדים, וחוזרים אליכם עם הצעה מדויקת למרחב שלכם. ואם נוח
-                  לכם פשוט לדבר לפני שמתחילים, גם זו התחלה טובה.
-                </p>
-              </div>
-
-              <div className="hidden lg:block w-px self-stretch bg-background/15" aria-hidden="true" />
-
-              <div className="flex flex-col items-start gap-7">
-                <ul className="space-y-3">
-                  {closingFacts.map((f) => (
-                    <li key={f} className="flex items-center gap-3 text-[18px] text-background/80">
-                      <span className="h-px w-6 shrink-0 bg-primary/70" aria-hidden="true" />
-                      {f}
-                    </li>
                   ))}
                 </ul>
+              </Door>
+            </Reveal>
 
-                <ShineButton to="/contact" invert>
-                  דברו איתנו
-                  <ArrowLeft className="h-4 w-4" aria-hidden="true" />
-                </ShineButton>
-              </div>
-            </div>
-          </Reveal>
+            <Reveal delay={90}>
+              <Door
+                icon={ScanLine}
+                eyebrow="תצוגה במרחב"
+                title="להעמיד את הרהיט בחצר שלכם"
+                line="פותחים בטלפון, מכוונים את המצלמה לרצפה, והפריט עומד אצלכם בגודל האמיתי שלו — לפני שהזמנתם."
+                cta="פתחו את התצוגה"
+                to={to("/ar")}
+              >
+                {/* Specimen: a floor plane in perspective with the AR reticle
+                    resting on it. Drawn rather than photographed, because the
+                    thing being promised is a measurement, not a mood. */}
+                <div className="absolute inset-0 overflow-hidden bg-foreground">
+                  <div
+                    aria-hidden="true"
+                    className="absolute inset-x-[-40%] bottom-[-30%] h-[150%] opacity-[0.22] transition-transform duration-700 ease-out group-hover:scale-105 motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+                    style={{
+                      transform: "perspective(340px) rotateX(58deg)",
+                      backgroundImage:
+                        "linear-gradient(to right, hsl(var(--background)) 1px, transparent 1px), linear-gradient(to bottom, hsl(var(--background)) 1px, transparent 1px)",
+                      backgroundSize: "44px 44px",
+                    }}
+                  />
+                  <div
+                    aria-hidden="true"
+                    className="absolute left-1/2 top-[58%] h-[54px] w-[132px] -translate-x-1/2 rounded-[50%] border-2 border-background/70"
+                  />
+                  <div
+                    aria-hidden="true"
+                    className="absolute left-1/2 top-[58%] h-[14px] w-[34px] -translate-x-1/2 -translate-y-1/2 rounded-[50%] bg-background/25"
+                  />
+                </div>
+              </Door>
+            </Reveal>
+          </ul>
         </div>
       </section>
     </Layout>

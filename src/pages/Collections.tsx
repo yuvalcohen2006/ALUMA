@@ -1,9 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { ArrowLeft } from "lucide-react";
 import Layout from "@/components/Layout";
 import SEO from "@/components/SEO";
 import PageHero from "@/components/PageHero";
 import Reveal from "@/components/Reveal";
+import CollectionBand from "@/components/CollectionBand";
 import { useCollections, type DBCollection, type DBProduct } from "@/hooks/useCollectionsData";
 import { ProductCard } from "./CollectionPage";
 import { useLocalizedPath } from "@/lib/useLocalizedPath";
@@ -47,37 +49,9 @@ const CollectionSection = ({
 
   return (
     <section id={col.slug} className="scroll-mt-32 py-14 md:py-24">
-      {/* The name lives ON the photograph — white, as large as the band will
-          carry, centred vertically and pinned to the reading edge. The scrim
-          runs from that edge so the type has something to sit on whatever the
-          picture is doing behind it. */}
       <Reveal>
-        <Link
-          to={to(`/collections/${col.slug}`)}
-          className="group relative block aspect-[21/9] md:aspect-[3/1] overflow-hidden rounded-[14px] bg-secondary/50"
-        >
-          {band && (
-            <img
-              src={band}
-              alt=""
-              aria-hidden="true"
-              loading={first ? "eager" : "lazy"}
-              decoding="async"
-              className="absolute inset-0 w-full h-full object-cover"
-            />
-          )}
-          {/* Direction-aware scrim — see CollectionPage. */}
-          <div
-            aria-hidden="true"
-            className="absolute inset-0 bg-gradient-to-r rtl:bg-gradient-to-l from-black/60 via-black/25 to-transparent"
-          />
-          <div className="absolute inset-0 flex items-center">
-            <div className="w-full px-6 md:px-12">
-              <h2 className="font-display font-semibold text-white text-start leading-[0.92] text-[clamp(48px,12vw,170px)]">
-                {col.name_he}
-              </h2>
-            </div>
-          </div>
+        <Link to={to(`/collections/${col.slug}`)} className="group block">
+          <CollectionBand image={band} name={col.name_he} as="h2" eager={first} />
         </Link>
       </Reveal>
 
@@ -101,15 +75,28 @@ const CollectionSection = ({
         </ul>
       )}
 
+      {/* A full-width rule the whole width of the grid, rather than a lone pill
+          floating in the margin under it. The pill had nothing to align to, so
+          it read as something left behind rather than as the way onward. As a
+          ruled row it closes the collection and points at the next thing, and
+          the label says what is actually through it — "עוד מהקולקציה" claimed
+          there was more even when these four were the whole range. */}
       <Reveal>
-        <div className="mt-10 md:mt-12 text-start">
-          <Link
-            to={to(`/collections/${col.slug}`)}
-            className="inline-flex items-center justify-center h-12 px-7 rounded-full border border-foreground/25 text-[17px] text-foreground transition-colors duration-200 hover:border-accent hover:text-accent"
-          >
-            עוד מהקולקציה
-          </Link>
-        </div>
+        <Link
+          to={to(`/collections/${col.slug}`)}
+          className="group/more mt-10 md:mt-12 flex items-center justify-between gap-6 border-t border-foreground/15 pt-6 transition-colors duration-200 hover:border-accent"
+        >
+          <span className="text-[19px] md:text-[21px] text-foreground transition-colors duration-200 group-hover/more:text-accent">
+            {hasMore
+              ? `עוד ${products.length - PREVIEW_COUNT} פריטים ב${col.name_he}`
+              : `לצפייה ב${col.name_he}`}
+          </span>
+          {/* Left is forward in Hebrew. */}
+          <ArrowLeft
+            className="h-5 w-5 shrink-0 text-foreground-soft transition-all duration-200 group-hover/more:-translate-x-1 group-hover/more:text-accent"
+            aria-hidden="true"
+          />
+        </Link>
       </Reveal>
     </section>
   );

@@ -13,8 +13,18 @@ import umbrella from "@/assets/categories/umbrella.jpg";
 type Tile = {
   id: string;
   img: string;
-  /** Collection slug the primary button opens. */
-  collection?: string;
+  /**
+   * Collection slug the button opens. REQUIRED — every tile lands on a real
+   * collection page. Six of the eight used to fall through to the unfiltered
+   * index, so tapping "מיטות שיזוף" gave you the whole catalogue and left you
+   * to find the loungers yourself.
+   *
+   * The catalogue carries five collections against eight tiles, so a few tiles
+   * share a destination. That is the honest mapping rather than a broken one:
+   * a coffee table really is part of the salon sets, and the parasol really
+   * belongs with the loungers.
+   */
+  collection: string;
   /** Full-bleed row of its own, rather than sharing one with a sibling. */
   wide?: boolean;
   /** White type on the night photographs, charcoal on the morning ones. */
@@ -36,12 +46,12 @@ type Tile = {
 const tiles: Tile[] = [
   { id: "lounge", img: loungeSet, wide: true, collection: "salons" },
   { id: "fire", img: fireTable, wide: true, ink: "light", collection: "fire-tables" },
-  { id: "sunbed", img: sunbed },
-  { id: "coffee", img: coffeeTable },
-  { id: "bar", img: barChair, ink: "light" },
-  { id: "dining", img: diningSet, ink: "light" },
-  { id: "chairs", img: diningChair },
-  { id: "accessories", img: umbrella },
+  { id: "sunbed", img: sunbed, collection: "lounge" },
+  { id: "coffee", img: coffeeTable, collection: "salons" },
+  { id: "bar", img: barChair, ink: "light", collection: "bar" },
+  { id: "dining", img: diningSet, ink: "light", collection: "dining" },
+  { id: "chairs", img: diningChair, collection: "dining" },
+  { id: "accessories", img: umbrella, collection: "lounge" },
 ];
 
 /**
@@ -150,7 +160,7 @@ const CategoryMosaic = () => {
                       they're the ones worth opening. */}
                   <div className="mt-6 flex items-center justify-center">
                     <Link
-                      to={t_.collection ? to(`/collections/${t_.collection}`) : to("/collections")}
+                      to={to(`/collections/${t_.collection}`)}
                       // The two wide tiles share one fixed width so their
                       // buttons measure identically however long the label is;
                       // the narrow tiles size to their own text.

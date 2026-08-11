@@ -5,7 +5,6 @@ import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import alumaLogo from "@/assets/aluma-logo.png";
 import { useCollections } from "@/hooks/useCollectionsData";
-import { WhatsAppIcon } from "@/components/WhatsAppButton";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { useLocalizedPath } from "@/lib/useLocalizedPath";
 import { SITE } from "@/config/site";
@@ -38,11 +37,16 @@ const Header = () => {
 
   // No "all collections" entry — the קולקציות button itself goes to the
   // unfiltered page, and filtering happens there in the sidebar.
+  //
+  // Each entry opens that collection's OWN page, not /collections#slug. The
+  // hash version dropped you on the index and scrolled — which looks like a
+  // navigation that failed, since the page you land on is the one you were
+  // already trying to leave.
   const collectionsSub = useMemo(
     () =>
       collections.map((c) => ({
         label: c.name_he,
-        to: localized(`/collections#${c.slug}`),
+        to: localized(`/collections/${c.slug}`),
       })),
     [collections, localized]
   );
@@ -54,7 +58,7 @@ const Header = () => {
     () => [
       { label: t("nav.collections"), to: localized("/collections"), submenu: collectionsSub },
       { label: t("nav.journal"), to: localized("/journal") },
-      { label: t("nav.diy"), to: localized("/diy"), badge: t("nav.newBadge") },
+      { label: t("nav.diy"), to: localized("/diy") },
       { label: t("nav.faq"), to: localized("/faq") },
       { label: t("nav.club"), to: localized("/club") },
       { label: t("nav.story"), to: localized("/story") },
@@ -160,20 +164,15 @@ const Header = () => {
                   }
                 >
                   {link.label}
-                  {/* Absolutely positioned: an inline badge widened the pill
-                      and pushed every neighbouring item along. This one floats
-                      over the top corner and costs the button no width. */}
-                  {link.badge && (
-                    <span className="pointer-events-none absolute -top-0.5 end-0 rounded-full bg-primary px-1.5 py-px text-[10px] font-medium leading-[1.4] text-primary-foreground">
-                      {link.badge}
-                    </span>
-                  )}
                   {chevron}
                 </NavLink>
 
                 {link.submenu && (
                   <div
-                    className={`absolute top-full right-1/2 translate-x-1/2 pt-3 z-50 transition-all duration-200 ease-out ${
+                    // inset-x-0 rather than a centred fixed min-width: the panel
+                    // now measures exactly as wide as the item that opened it,
+                    // which is all the room these short labels need.
+                    className={`absolute top-full inset-x-0 pt-3 z-50 transition-all duration-200 ease-out ${
                       isOpen
                         ? "opacity-100 visible translate-y-0"
                         : "opacity-0 invisible -translate-y-1 pointer-events-none"
@@ -181,7 +180,7 @@ const Header = () => {
                   >
                     <div
                       role="menu"
-                      className="min-w-[240px] rounded-xl border border-border bg-popover p-1.5 shadow-luxury"
+                      className="w-full rounded-xl border border-border bg-popover p-1.5 shadow-luxury"
                     >
                       {link.submenu.map((sub) => (
                         <Link
@@ -210,17 +209,6 @@ const Header = () => {
             <LanguageSwitcher />
           </div>
         )}
-
-        {/* WhatsApp — last child, so RTL places it at the far left of the bar */}
-        <a
-          href="https://wa.me/972504519062"
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="צרו קשר בוואטסאפ"
-          className="hidden lg:flex shrink-0 w-11 h-11 rounded-full bg-[#25D366] text-white items-center justify-center shadow-soft hover:scale-110 transition-smooth"
-        >
-          <WhatsAppIcon className="w-6 h-6" />
-        </a>
 
         {/* Mobile menu button */}
         <div className="lg:hidden relative z-50">
@@ -294,11 +282,6 @@ const Header = () => {
                       }
                     >
                       {link.label}
-                      {link.badge && (
-                        <span className="ms-2 rounded-full bg-primary/12 px-2 py-0.5 text-[11px] font-medium tracking-[0.06em] text-primary align-middle">
-                          {link.badge}
-                        </span>
-                      )}
                     </NavLink>
                     {hasSub && (
                       <button
