@@ -169,10 +169,10 @@ const Header = () => {
 
                 {link.submenu && (
                   <div
-                    // inset-x-0 rather than a centred fixed min-width: the panel
-                    // now measures exactly as wide as the item that opened it,
-                    // which is all the room these short labels need.
-                    className={`absolute top-full inset-x-0 pt-3 z-50 transition-all duration-200 ease-out ${
+                    // Anchored to the trigger's start edge rather than centred
+                    // on it, so the panel lines up with the item that opened it
+                    // and grows inward (leftward in Hebrew) if it has to.
+                    className={`absolute top-full start-0 pt-3 z-50 transition-all duration-200 ease-out ${
                       isOpen
                         ? "opacity-100 visible translate-y-0"
                         : "opacity-0 invisible -translate-y-1 pointer-events-none"
@@ -180,7 +180,12 @@ const Header = () => {
                   >
                     <div
                       role="menu"
-                      className="w-full rounded-xl border border-border bg-popover p-1.5 shadow-luxury"
+                      // min-w-full + w-max: down from a flat min-w-[240px] to
+                      // the trigger's own width, but free to grow rather than
+                      // wrap. Pinned at exactly the trigger width, the longest
+                      // name — שיזוף ונדנדות — broke onto a second line, which
+                      // is worse than the extra few pixels.
+                      className="min-w-full w-max rounded-xl border border-border bg-popover p-1.5 shadow-luxury"
                     >
                       {link.submenu.map((sub) => (
                         <Link
@@ -191,7 +196,7 @@ const Header = () => {
                             setPinned(null);
                             setHovered(null);
                           }}
-                          className="block rounded-lg px-4 py-2.5 text-sm text-start text-foreground transition-colors duration-200 hover:bg-secondary/70 hover:text-accent"
+                          className="block whitespace-nowrap rounded-lg px-3 py-2.5 text-sm text-start text-foreground transition-colors duration-200 hover:bg-secondary/70 hover:text-accent"
                         >
                           {sub.label}
                         </Link>
