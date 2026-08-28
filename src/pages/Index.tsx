@@ -1,6 +1,10 @@
 import Layout from "@/components/Layout";
 import Hero from "@/components/Hero";
-import CategoryMosaic from "@/components/home/CategoryMosaic";
+import BrandStatement from "@/components/home/BrandStatement";
+import FeaturedCollections from "@/components/home/FeaturedCollections";
+import FeaturedProducts from "@/components/home/FeaturedProducts";
+import ProjectsPreview from "@/components/home/ProjectsPreview";
+import Testimonials from "@/components/home/Testimonials";
 import Newsletter from "@/components/home/Newsletter";
 import SEO from "@/components/SEO";
 import { SITE } from "@/config/site";
@@ -67,12 +71,21 @@ const Index = () => {
         path="/"
         jsonLd={[localBusiness, websiteSchema]}
       />
-      {/* Scroll once and you know what is being sold: the range, then one
-          small ask. The reviews came off at the owner's call — placeholder
-          quotes weren't worth the scroll; real ones can earn a section back
-          via the site_reviews table when they exist. */}
+      {/* The client's order, and it is the order every reference brand uses:
+          say who you are before you sell anything. The eight category tiles
+          that used to sit here — the entire catalogue, arriving before a word
+          had been said — move to /collections. Hem delays its category grid to
+          section seven of ten; Hillerstorp shows none at all.
+
+          Sections that have nothing to show render nothing rather than
+          rendering an empty frame, so an unpopulated database simply makes
+          this page shorter. */}
       <Hero />
-      <CategoryMosaic />
+      <BrandStatement />
+      <FeaturedCollections />
+      <FeaturedProducts />
+      <ProjectsPreview />
+      <Testimonials />
       <Newsletter />
     </Layout>
   );

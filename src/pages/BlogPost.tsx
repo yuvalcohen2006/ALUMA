@@ -53,52 +53,52 @@ const formatRead = (minutes: number | null) => {
 const ARTICLE_BODY = [
   // break-words: a pasted URL is the one thing in CMS copy long enough to push
   // the 375px viewport into horizontal scroll.
-  "max-w-none text-start text-foreground text-body break-words",
+"max-w-none text-start text-foreground text-body break-words",
 
   // Headings — the site's section/card scale, not the browser's. h1 is mapped
   // too: the page already owns the real h1, but authors paste them in, and an
   // unmapped one renders at preflight's `font-size: inherit`, i.e. body copy.
-  "[&_h1]:font-display [&_h1]:font-bold [&_h1]:text-[26px] [&_h1]:leading-snug [&_h1]:text-primary [&_h1]:mt-12 [&_h1]:mb-4",
-  "[&_h2]:font-display [&_h2]:font-bold [&_h2]:text-[26px] [&_h2]:leading-snug [&_h2]:text-primary [&_h2]:mt-12 [&_h2]:mb-4",
-  "[&_h3]:font-display [&_h3]:font-normal [&_h3]:text-[22px] [&_h3]:leading-snug [&_h3]:text-foreground [&_h3]:mt-10 [&_h3]:mb-3",
-  "[&_h4]:font-display [&_h4]:font-normal [&_h4]:text-[20px] [&_h4]:leading-snug [&_h4]:text-foreground [&_h4]:mt-8 [&_h4]:mb-3",
+"[&_h1]:font-display [&_h1]:font-bold [&_h1]:text-[26px] [&_h1]:leading-snug [&_h1]:text-primary [&_h1]:mt-12 [&_h1]:mb-4",
+"[&_h2]:font-display [&_h2]:font-bold [&_h2]:text-[26px] [&_h2]:leading-snug [&_h2]:text-primary [&_h2]:mt-12 [&_h2]:mb-4",
+"[&_h3]:font-display [&_h3]:font-normal [&_h3]:text-[22px] [&_h3]:leading-snug [&_h3]:text-foreground [&_h3]:mt-10 [&_h3]:mb-3",
+"[&_h4]:font-display [&_h4]:font-normal [&_h4]:text-[20px] [&_h4]:leading-snug [&_h4]:text-foreground [&_h4]:mt-8 [&_h4]:mb-3",
 
   // Running text.
-  "[&_p]:mb-6 [&_p]:text-pretty",
+"[&_p]:mb-6 [&_p]:text-pretty",
 
   // Lists. Preflight strips markers and padding from ul/ol, so both come back
   // explicitly; ps-6 is logical, so the bullets sit on the right in RTL.
-  "[&_ul]:mb-6 [&_ul]:ps-6 [&_ul]:list-disc",
-  "[&_ol]:mb-6 [&_ol]:ps-6 [&_ol]:list-decimal",
-  "[&_li]:mb-2 [&_li]:text-[18px]",
-  "[&_li::marker]:text-primary/70",
+"[&_ul]:mb-6 [&_ul]:ps-6 [&_ul]:list-disc",
+"[&_ol]:mb-6 [&_ol]:ps-6 [&_ol]:list-decimal",
+"[&_li]:mb-2 [&_li]:text-[18px]",
+"[&_li::marker]:text-primary/70",
 
   // Links inside the copy — terracotta on warm white, underline kept.
-  "[&_a]:text-accent [&_a]:underline [&_a]:underline-offset-4 [&_a]:decoration-accent/40 [&_a]:transition-smooth",
-  "[&_a:hover]:decoration-accent",
-  "[&_strong]:font-bold [&_strong]:text-foreground",
+"[&_a]:text-accent [&_a]:underline [&_a]:underline-offset-4 [&_a]:decoration-accent/40 [&_a]:transition-smooth",
+"[&_a:hover]:decoration-accent",
+"[&_strong]:font-bold [&_strong]:text-foreground",
 
   // Preflight leaves <small> alone, so the browser default (`font-size: smaller`,
   // ~14px) survives — the exact kind of small weird text the pass exists to kill.
-  "[&_small]:text-[18px]",
+"[&_small]:text-[18px]",
 
   // Pull quote — rule on the start (right) edge.
-  "[&_blockquote]:my-8 [&_blockquote]:border-s-2 [&_blockquote]:border-primary/45 [&_blockquote]:ps-6",
-  "[&_blockquote]:text-[20px] [&_blockquote]:leading-relaxed [&_blockquote]:text-foreground-soft",
+"[&_blockquote]:my-8 [&_blockquote]:border-s-2 [&_blockquote]:border-primary/45 [&_blockquote]:ps-6",
+"[&_blockquote]:text-[20px] [&_blockquote]:leading-relaxed [&_blockquote]:text-foreground-soft",
 
   // Media and rules.
-  "[&_img]:w-full [&_img]:rounded-[14px] [&_img]:my-8",
-  "[&_figcaption]:mt-3 [&_figcaption]:text-[18px] [&_figcaption]:text-muted-foreground",
-  "[&_hr]:my-10 [&_hr]:border-border",
+"[&_img]:w-full [&_img]:rounded-[14px] [&_img]:my-8",
+"[&_figcaption]:mt-3 [&_figcaption]:text-[18px] [&_figcaption]:text-muted-foreground",
+"[&_hr]:my-10 [&_hr]:border-border",
 
   // Tables are rare in the CMS but arrive completely bare when they do.
-  "[&_table]:w-full [&_table]:my-8 [&_table]:text-[18px]",
-  "[&_th]:py-3 [&_th]:text-start [&_th]:font-normal [&_th]:text-foreground",
-  "[&_td]:py-3 [&_td]:text-start [&_td]:border-b [&_td]:border-border",
+"[&_table]:w-full [&_table]:my-8 [&_table]:text-[18px]",
+"[&_th]:py-3 [&_th]:text-start [&_th]:font-normal [&_th]:text-foreground",
+"[&_td]:py-3 [&_td]:text-start [&_td]:border-b [&_td]:border-border",
 
   // The first block sits right under the cover photo and the last one right
   // above the page floor — neither needs its own margin on top of that.
-  "[&>:first-child]:mt-0 [&>:last-child]:mb-0",
+"[&>:first-child]:mt-0 [&>:last-child]:mb-0",
 ].join(" ");
 
 /** Layout stand-in while the row loads — same shapes as the article, no copy to read. */
@@ -215,7 +215,7 @@ const BlogPost = () => {
             </div>
           )}
           {post.cover_image_url && (
-            <div className="aspect-[16/9] overflow-hidden rounded-[14px] border border-border shadow-soft mt-10 mb-10 bg-secondary">
+            <div className="aspect-[16/9] overflow-hidden rounded-[14px] border border-border  mt-10 mb-10 bg-secondary">
               <img src={post.cover_image_url} alt={post.title} loading="eager" decoding="async" fetchPriority="high" width={1600} height={900} className="w-full h-full object-cover" />
             </div>
           )}

@@ -1,10 +1,8 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
-import StickyCTA from "@/components/StickyCTA";
 import AccessibilityWidget from "@/components/AccessibilityWidget";
 import CookieConsent from "@/components/CookieConsent";
-import MobileActionBar from "@/components/MobileActionBar";
 import { ReactNode } from "react";
 
 const Layout = ({ children }: { children: ReactNode }) => {
@@ -23,9 +21,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
       </main>
       <Footer />
       <WhatsAppButton />
-      <StickyCTA />
       
-      <MobileActionBar />
       <AccessibilityWidget />
       <CookieConsent />
     </div>

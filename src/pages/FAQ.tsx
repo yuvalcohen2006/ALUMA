@@ -8,16 +8,28 @@ import { useLocalizedPath } from "@/lib/useLocalizedPath";
 import Contact from "@/components/Contact";
 import ShowroomBand from "@/components/contact/ShowroomBand";
 import { useTranslation } from "react-i18next";
+import { supabase } from "@/integrations/supabase/client";
+import { useSiteText } from "@/hooks/useSiteText";
+
+type Faq = { id: string; question: string; answer: string; category: string };
 
 /**
- * Structure only — the copy lives in the faq catalogs (he + en), so this page
- * translates with the rest of the site. i18n keys, not literals.
+ * The questions the page ships with, used until the database answers.
+ *
+ * The client asked to remove "how much does outdoor furniture cost" and to be
+ * able to edit the rest himself, so the real source is the site_faqs table and
+ * this is only the offline fallback — a first paint with content beats a first
+ * paint with a spinner, and a failed query leaves a usable page rather than an
+ * empty one.
  */
-const categories = [
-  { id: "faq-buy", labelKey: "cats.buy", items: ["price", "leadTime", "delivery"] },
-  { id: "faq-materials", labelKey: "cats.materials", items: ["outdoor", "quality", "care"] },
-  { id: "faq-service", labelKey: "cats.service", items: ["warranty", "showroom"] },
-] as const;
+const FALLBACK: Faq[] = [
+  { id: "lead", category: "רכישה ואספקה", question: "כמה זמן לוקח לקבל את ההזמנה?", answer: "זמן האספקה הממוצע נע בין 5 ל-10 שבועות, בהתאם לזמינות הקולקציה ולהיקף ההזמנה." },
+  { id: "delivery", category: "רכישה ואספקה", question: "האם יש הובלה והרכבה?", answer: "הריהוט מסופק לבית הלקוח בתיאום מראש, ומורכב על ידי צוות מקצועי ומנוסה." },
+  { id: "outdoor", category: "חומרים ועמידות", question: "האם הריהוט עמיד לתנאי חוץ?", answer: "כן. שלדת אלומיניום בצביעה בתנור, בדי Sunbrella עמידים ל-UV ולמים, ומשטחי שיש גרניט פורצלן — כל פריט מיועד לשימוש חיצוני בכל עונות השנה." },
+  { id: "care", category: "חומרים ועמידות", question: "איך מתחזקים את הריהוט?", answer: "תחזוקה מינימלית: ניקוי תקופתי במים ובחומרי ניקוי עדינים ישמור על המראה לאורך שנים." },
+  { id: "warranty", category: "אחריות ושירות", question: "מה כוללת האחריות?", answer: "אנו מעניקים אחריות בהתאם לסוג המוצר והרכיבים ממנו הוא מיוצר, וצוות השירות זמין גם לאחר האספקה." },
+  { id: "showroom", category: "אחריות ושירות", question: "האם יש אולם תצוגה?", answer: "אולם התצוגה שלנו ברחוב התמר 78 ביציץ פתוח בתיאום מראש." },
+];
 
 
 
@@ -80,21 +92,50 @@ const FaqRow = ({ q, a, id, open, onToggle }: { q: string; a: string; id: string
 const FAQPage = () => {
   const [open, setOpen] = useState<Set<string>>(new Set());
   const [formOpen, setFormOpen] = useState(false);
+  const [faqs, setFaqs] = useState<Faq[]>(FALLBACK);
   const { to } = useLocalizedPath();
   const { t } = useTranslation("faq");
+  const text = useSiteText();
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const { data } = await supabase
+          .from("site_faqs")
+          .select("id, question, answer, category")
+          .eq("published", true)
+          .order("sort_order", { ascending: true });
+        // Only take over from the shipped copy if the table actually has rows.
+        if (!cancelled && data && data.length > 0) setFaqs(data as Faq[]);
+      } catch {
+        // Keep the fallback.
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  // Group in encounter order so the admin's sort_order decides both the
+  // question order and the order the category headings appear in.
+  const grouped = faqs.reduce<{ category: string; items: Faq[] }[]>((acc, f) => {
+    const bucket = acc.find((g) => g.category === f.category);
+    if (bucket) bucket.items.push(f);
+    else acc.push({ category: f.category, items: [f] });
+    return acc;
+  }, []);
 
   // Regenerated from the catalog in the ACTIVE language, so the structured
   // data always matches what the page shows.
   const faqSchema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    mainEntity: categories.flatMap((c) =>
-      c.items.map((key) => ({
-        "@type": "Question",
-        name: t(`q.${key}.q`),
-        acceptedAnswer: { "@type": "Answer", text: t(`q.${key}.a`) },
-      })),
-    ),
+    mainEntity: faqs.map((f) => ({
+      "@type": "Question",
+      name: f.question,
+      acceptedAnswer: { "@type": "Answer", text: f.answer },
+    })),
   };
 
   // Arriving on /faq#contact (footer, sticky CTA, the About page) should land
@@ -125,33 +166,30 @@ const FAQPage = () => {
           <Reveal>
             {/* Apple's two-beat heading convention, not the word "FAQ". */}
             <h1 className="font-display font-semibold text-[40px] md:text-[56px] leading-[1.08] text-foreground text-start">
-              {t("title")}
+              {text("faq.title", t("title"))}
             </h1>
             <p className="mt-4 max-w-[46ch] text-[17px] md:text-[19px] leading-relaxed text-foreground-soft text-start">
-              {t("subtitle")}
+              {text("faq.subtitle", t("subtitle"))}
             </p>
           </Reveal>
 
           <div className="mt-12 md:mt-16">
-            {categories.map((cat) => (
-              <Reveal key={cat.id}>
-                <section aria-labelledby={cat.id}>
-                  {/* A label, not a tab: small, tracked, terracotta. Hebrew has
-                      no uppercase, so size + color + tracking do that job. */}
-                  <h2
-                    id={cat.id}
-                    className="mt-14 first:mt-0 mb-4 text-[13px] font-semibold tracking-[0.08em] text-primary text-start"
-                  >
-                    {t(cat.labelKey)}
+            {grouped.map((group) => (
+              <Reveal key={group.category}>
+                <section aria-label={group.category}>
+                  {/* A label, not a tab. Hebrew has no uppercase, so size and
+                      colour do that job instead. */}
+                  <h2 className="mt-14 first:mt-0 mb-4 text-label text-muted-foreground text-start">
+                    {group.category}
                   </h2>
-                  {cat.items.map((key) => (
+                  {group.items.map((f) => (
                     <FaqRow
-                      key={key}
-                      id={key}
-                      q={t(`q.${key}.q`)}
-                      a={t(`q.${key}.a`)}
-                      open={open.has(key)}
-                      onToggle={() => toggle(key)}
+                      key={f.id}
+                      id={f.id}
+                      q={f.question}
+                      a={f.answer}
+                      open={open.has(f.id)}
+                      onToggle={() => toggle(f.id)}
                     />
                   ))}
                 </section>

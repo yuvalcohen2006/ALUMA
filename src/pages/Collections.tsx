@@ -7,6 +7,7 @@ import Reveal from "@/components/Reveal";
 import { useCollections, type DBCollection, type DBProduct } from "@/hooks/useCollectionsData";
 import { ProductCard } from "./CollectionPage";
 import { useLocalizedPath } from "@/lib/useLocalizedPath";
+import CategoryGrid from "@/components/CategoryGrid";
 
 const SITE = "https://alumaoutdoor.com";
 
@@ -180,6 +181,13 @@ const CollectionsPage = () => {
         title="קולקציות"
         subtitle="כל פריט מיוצר בהזמנה אישית. בלי מחירון — כי אין אצלנו שני פרויקטים זהים."
       />
+
+      {/* The categories, moved here off the home page. A catalogue page is
+          where a visitor has already decided to browse, so showing the whole
+          range is help rather than noise. */}
+      <section className="container-luxury pt-6 pb-16 md:pb-24">
+        <CategoryGrid />
+      </section>
 
       <div className="container-luxury pb-10 md:pb-16">
         {loading ? (

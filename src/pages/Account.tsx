@@ -146,7 +146,7 @@ const Account = () => {
               ) : (
                 <div className="grid gap-5">
                   {projects.map((p) => (
-                    <article key={p.id} className="bg-card border border-border rounded-sm p-6 hover:shadow-soft transition-smooth">
+                    <article key={p.id} className="bg-card border border-border rounded-sm p-6  transition-smooth">
                       <div className="flex items-start justify-between flex-wrap gap-3 mb-4">
                         <div>
                           <h3 className="font-display text-2xl text-primary">{p.title}</h3>

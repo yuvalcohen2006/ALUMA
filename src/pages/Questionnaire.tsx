@@ -39,14 +39,14 @@ const sizeOptions = ["עד 15 מ״ר", "15–40 מ״ר", "40–80 מ״ר", "מע
 const styleOptions = ["מינימליסטי בהיר", "אורבני כהה", "ים-תיכוני חם", "טרופי / בוטני", "קלאסי יוקרתי"];
 const timelineOptions = ["דחוף (חודש)", "תוך 3 חודשים", "תוך 6 חודשים", "מתכנן/ת לעתיד"];
 const featureOptions = [
-  "סלון חוץ",
-  "פינת אוכל",
-  "מטבח חוץ",
-  "פרגולה / הצללה",
-  "תאורת אווירה",
-  "חימום",
-  "ערסל / נדנדה",
-  "מצעים ושטיחים",
+"סלון חוץ",
+"פינת אוכל",
+"מטבח חוץ",
+"פרגולה / הצללה",
+"תאורת אווירה",
+"חימום",
+"ערסל / נדנדה",
+"מצעים ושטיחים",
 ];
 
 const recommendFor = (a: Answers) => {
@@ -119,7 +119,7 @@ const Questionnaire = () => {
       <section className="py-16 md:py-20">
         <div className="container-luxury max-w-2xl">
           {done ? (
-            <div className="bg-background border border-border rounded-sm p-10 text-center shadow-luxury">
+            <div className="bg-background border border-border rounded-sm p-10 text-center ">
               <div className="w-14 h-14 bg-accent/10 rounded-sm flex items-center justify-center mx-auto mb-6">
                 <Check className="h-7 w-7 text-accent" />
               </div>
@@ -133,7 +133,7 @@ const Questionnaire = () => {
               </a>
             </div>
           ) : (
-            <div className="bg-background border border-border rounded-sm p-8 md:p-10 shadow-soft">
+            <div className="bg-background border border-border rounded-sm p-8 md:p-10 ">
               <div className="mb-8">
                 <div className="flex justify-between text-xs text-muted-foreground mb-2">
                   <span>שלב {step + 1} מתוך {steps.length}</span>
