@@ -56,7 +56,7 @@ const ARPreview = () => {
       document.querySelector('meta[name="description"]') ||
       Object.assign(document.createElement("meta"), { name: "description" });
     (meta as HTMLMetaElement).content =
-      "תצוגת מציאות רבודה, מקמו רהיטי חוץ של Aluma במרפסת או בגינה שלכם דרך הסמארטפון.";
+"תצוגת מציאות רבודה, מקמו רהיטי חוץ של Aluma במרפסת או בגינה שלכם דרך הסמארטפון.";
     if (!meta.parentNode) document.head.appendChild(meta);
 
     // Lazy-load Google's <model-viewer> web component
@@ -70,7 +70,7 @@ const ARPreview = () => {
     const s = document.createElement("script");
     s.type = "module";
     s.src =
-      "https://cdn.jsdelivr.net/npm/@google/model-viewer@3.5.0/dist/model-viewer.min.js";
+"https://cdn.jsdelivr.net/npm/@google/model-viewer@3.5.0/dist/model-viewer.min.js";
     s.dataset.mv = "true";
     s.onload = () => setReady(true);
     document.head.appendChild(s);
@@ -119,7 +119,7 @@ const ARPreview = () => {
           </div>
 
           {/* Model viewer */}
-          <div className="bg-secondary/30 border border-border rounded-sm overflow-hidden shadow-soft">
+          <div className="bg-secondary/30 border border-border rounded-sm overflow-hidden ">
             <div className="aspect-[4/3] md:aspect-[16/10] w-full bg-secondary">
               {ready ? (
                 <model-viewer
@@ -146,7 +146,7 @@ const ARPreview = () => {
                 >
                   <button
                     slot="ar-button"
-                    className="absolute bottom-5 left-1/2 -translate-x-1/2 inline-flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-sm shadow-luxury text-sm font-semibold"
+                    className="absolute bottom-5 left-1/2 -translate-x-1/2 inline-flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-sm  text-sm font-semibold"
                   >
                     <ScanLine className="h-4 w-4" />
                     הציגו במרחב שלי

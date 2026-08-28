@@ -117,7 +117,7 @@ const AuthPage = () => {
       />
       <section className="pt-24 md:pt-28 pb-16 md:pb-24 gradient-cream">
         <div className="container-luxury">
-          <div className="max-w-6xl mx-auto grid lg:grid-cols-2 rounded-sm overflow-hidden shadow-luxury border border-primary/15 bg-background">
+          <div className="max-w-6xl mx-auto grid lg:grid-cols-2 rounded-sm overflow-hidden  border border-primary/15 bg-background">
             {/* LEFT, brand panel */}
             <aside className="relative hidden lg:flex flex-col justify-between p-12 text-primary-foreground overflow-hidden min-h-[640px]">
               <div
@@ -134,7 +134,7 @@ const AuthPage = () => {
                 className="absolute inset-0"
                 style={{
                   background:
-                    "linear-gradient(160deg, hsl(13 39% 22% / 0.88), hsl(13 39% 32% / 0.72))",
+"linear-gradient(160deg, hsl(13 39% 22% / 0.88), hsl(13 39% 32% / 0.72))",
                 }}
               />
 
@@ -187,7 +187,7 @@ const AuthPage = () => {
                     onClick={() => setMode("signup")}
                     className={`flex-1 py-2.5 text-sm rounded-sm transition-smooth ${
                       isSignup
-                        ? "bg-background shadow-soft text-foreground font-medium"
+                        ? "bg-background  text-foreground font-medium"
                         : "text-muted-foreground hover:text-foreground"
                     }`}
                   >
@@ -198,7 +198,7 @@ const AuthPage = () => {
                     onClick={() => setMode("signin")}
                     className={`flex-1 py-2.5 text-sm rounded-sm transition-smooth ${
                       !isSignup
-                        ? "bg-background shadow-soft text-foreground font-medium"
+                        ? "bg-background  text-foreground font-medium"
                         : "text-muted-foreground hover:text-foreground"
                     }`}
                   >
@@ -292,7 +292,7 @@ const AuthPage = () => {
                   <Button
                     type="submit"
                     disabled={busy}
-                    className="w-full h-11 rounded-sm shadow-luxury group"
+                    className="w-full h-11 rounded-sm  group"
                   >
                     {busy ? "רגע..." : isSignup ? "להצטרפות למועדון" : "התחברות"}
                     {!busy && (

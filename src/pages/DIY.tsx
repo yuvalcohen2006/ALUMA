@@ -39,16 +39,16 @@ const swatchRest = sunbrellaFabrics.length - swatchSample.length;
 const questionnaireSteps = ["המרחב", "סגנון ולוח זמנים", "מה לכלול", "פרטי קשר"];
 
 const introFacts = [
-  "בלי הרשמה, בלי עלות",
-  "הכול רץ מהדפדפן",
-  "התוצאה מגיעה אלינו בלחיצה",
+"בלי הרשמה, בלי עלות",
+"הכול רץ מהדפדפן",
+"התוצאה מגיעה אלינו בלחיצה",
 ];
 
 const closingFacts = ["בלי עלות", "בלי התחייבות", "מענה תוך 24 שעות"];
 
 const breadcrumbs = {
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
+"@context": "https://schema.org",
+"@type": "BreadcrumbList",
   itemListElement: [
     { "@type": "ListItem", position: 1, name: "דף הבית", item: `${SITE}/` },
     { "@type": "ListItem", position: 2, name: "עשה זאת בעצמך", item: `${SITE}/diy` },
@@ -56,8 +56,8 @@ const breadcrumbs = {
 };
 
 const toolList = {
-  "@context": "https://schema.org",
-  "@type": "ItemList",
+"@context": "https://schema.org",
+"@type": "ItemList",
   name: "כלים לתכנון עצמי של ריהוט חוץ",
   inLanguage: "he-IL",
   itemListElement: [
@@ -66,7 +66,7 @@ const toolList = {
     { name: "AR, תצוגה במרחב", url: `${SITE}/ar` },
     { name: "שאלון חכם", url: `${SITE}/questionnaire` },
   ].map((t, i) => ({
-    "@type": "ListItem",
+"@type": "ListItem",
     position: i + 1,
     name: t.name,
     url: t.url,
@@ -110,9 +110,9 @@ const Station = ({ n, to, className, children }: StationProps) => (
   <li
     onMouseMove={trackLamp}
     className={cn(
-      "group relative overflow-hidden rounded-[14px] border border-border bg-background p-6 sm:p-8 md:p-9 shadow-soft",
-      "transition-all duration-300 hover:-translate-y-1 hover:border-primary/60 hover:shadow-luxury",
-      "focus-within:-translate-y-1 focus-within:border-primary/60 focus-within:shadow-luxury",
+"group relative overflow-hidden rounded-[14px] border border-border bg-background p-6 sm:p-8 md:p-9 ",
+"transition-all duration-300  hover:border-primary/60 ",
+"focus-within:-translate-y-1 focus-within:border-primary/60 focus-within:shadow-luxury",
       className,
     )}
   >
@@ -121,7 +121,7 @@ const Station = ({ n, to, className, children }: StationProps) => (
       className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
       style={{
         background:
-          "radial-gradient(260px circle at var(--lamp-x, 50%) var(--lamp-y, 0%), hsl(var(--primary) / 0.12), transparent 72%)",
+"radial-gradient(260px circle at var(--lamp-x, 50%) var(--lamp-y, 0%), hsl(var(--primary) / 0.12), transparent 72%)",
       }}
     />
 
@@ -182,7 +182,7 @@ const Specimen = ({
 }) => (
   <div
     className={cn(
-      "rounded-[10px] border border-border bg-secondary/50 p-4 transition-colors duration-300 group-hover:border-primary/40 group-focus-within:border-primary/40",
+"rounded-[10px] border border-border bg-secondary/50 p-4 transition-colors duration-300 group-hover:border-primary/40 group-focus-within:border-primary/40",
       className,
     )}
   >
@@ -293,7 +293,7 @@ const DIYPage = () => {
                       <span
                         key={f.code}
                         aria-hidden="true"
-                        className="h-12 rounded-[10px] border border-border transition-transform duration-300 ease-out group-hover:-translate-y-1"
+                        className="h-12 rounded-[10px] border border-border transition-transform duration-300 ease-out "
                         style={{ background: f.background, transitionDelay: `${i * 40}ms` }}
                       />
                     ))}
@@ -326,7 +326,7 @@ const DIYPage = () => {
                       className="absolute inset-x-[-30%] bottom-0 h-32 origin-bottom opacity-70 transition-opacity duration-500 group-hover:opacity-100 group-focus-within:opacity-100 [transform:rotateX(64deg)]"
                       style={{
                         backgroundImage:
-                          "linear-gradient(hsl(var(--primary) / 0.35) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--primary) / 0.35) 1px, transparent 1px)",
+"linear-gradient(hsl(var(--primary) / 0.35) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--primary) / 0.35) 1px, transparent 1px)",
                         backgroundSize: "28px 28px",
                         maskImage: "linear-gradient(to top, #000 30%, transparent 88%)",
                         WebkitMaskImage: "linear-gradient(to top, #000 30%, transparent 88%)",

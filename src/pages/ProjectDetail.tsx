@@ -40,8 +40,8 @@ const ProjectDetailPage = () => {
         type="article"
         jsonLd={[
           {
-            "@context": "https://schema.org",
-            "@type": "Article",
+"@context": "https://schema.org",
+"@type": "Article",
             headline: project.name,
             description: project.intro,
             image: project.cover,
@@ -50,8 +50,8 @@ const ProjectDetailPage = () => {
             publisher: { "@type": "Organization", name: "Aluma" },
           },
           {
-            "@context": "https://schema.org",
-            "@type": "BreadcrumbList",
+"@context": "https://schema.org",
+"@type": "BreadcrumbList",
             itemListElement: [
               { "@type": "ListItem", position: 1, name: "בית", item: "https://alumaoutdoor.com/" },
               { "@type": "ListItem", position: 2, name: "פרויקטים", item: "https://alumaoutdoor.com/projects" },
@@ -182,7 +182,7 @@ const ProjectDetailPage = () => {
                   key={i}
                   className="group shrink-0 md:shrink snap-start w-[85%] sm:w-[60%] md:w-full"
                 >
-                  <div className="relative overflow-hidden rounded-[14px] border border-border shadow-soft aspect-[4/3] transition-colors duration-500 ease-out group-hover:border-primary/60">
+                  <div className="relative overflow-hidden rounded-[14px] border border-border  aspect-[4/3] transition-colors duration-500 ease-out group-hover:border-primary/60">
                     <img
                       src={img}
                       alt={`${project.name}, תמונה ${i + 1}`}
@@ -231,7 +231,7 @@ const ProjectDetailPage = () => {
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
             {others.map((p) => (
               <Link key={p.slug} to={`/projects/${p.slug}`} className="group block">
-                <div className="relative aspect-[4/3] overflow-hidden rounded-[14px] border border-border mb-4 shadow-soft transition-all duration-500 ease-out group-hover:-translate-y-1 group-hover:shadow-luxury group-hover:border-primary/60">
+                <div className="relative aspect-[4/3] overflow-hidden rounded-[14px] border border-border mb-4  transition-all duration-500 ease-out   group-hover:border-primary/60">
                   <img
                     src={p.cover}
                     alt={p.name}

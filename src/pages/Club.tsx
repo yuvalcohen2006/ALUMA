@@ -71,9 +71,9 @@ const steps = [
 
 /** The quiet promises the club already makes, stated plainly. */
 const terms = [
-  "הצטרפות חינם, בלי התחייבות",
-  "אפשר לצאת בכל רגע",
-  "בלי ספאם ובלי מכירת נתונים",
+"הצטרפות חינם, בלי התחייבות",
+"אפשר לצאת בכל רגע",
+"בלי ספאם ובלי מכירת נתונים",
 ];
 
 const perkVariants: Variants = {
@@ -107,7 +107,7 @@ const AuthGate = ({
 }) => (
   <div
     className={cn(
-      "transition-opacity duration-300",
+"transition-opacity duration-300",
       loading ? "invisible opacity-0" : "opacity-100",
       className,
     )}
@@ -126,7 +126,7 @@ const Club = () => {
   const cta = (align: "start" | "center") => (
     <div
       className={cn(
-        "flex flex-col gap-4",
+"flex flex-col gap-4",
         align === "center" ? "items-center" : "items-start",
       )}
     >
@@ -202,7 +202,7 @@ const Club = () => {
                   empty column the copy beside it gets centred against. It eases
                   back to p-6 on narrow screens so the fixed-width ShineButton
                   never overflows it at 375px. */}
-              <div className="rounded-[14px] border border-border bg-secondary/50 shadow-soft p-6 sm:p-7 md:p-8 text-start">
+              <div className="rounded-[14px] border border-border bg-secondary/50  p-6 sm:p-7 md:p-8 text-start">
                 <img
                   src={alumaLogo}
                   alt="Aluma"
@@ -363,7 +363,7 @@ const Club = () => {
                     <div className="flex flex-col items-center shrink-0">
                       <span
                         aria-hidden="true"
-                        className="grid place-items-center w-14 h-14 rounded-full border border-primary/45 bg-background font-display text-[22px] text-primary shadow-soft"
+                        className="grid place-items-center w-14 h-14 rounded-full border border-primary/45 bg-background font-display text-[22px] text-primary "
                       >
                         {step.n}
                       </span>

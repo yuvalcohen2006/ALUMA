@@ -60,6 +60,22 @@ export default {
         display: ['var(--font-display)'],
         sans: ['var(--font-body)'],
       },
+      // FIVE type roles. The site had grown 26 distinct arbitrary sizes, which
+      // is the single largest contributor to the "everything is shouting"
+      // problem — with that many steps nothing reads as more important than
+      // anything else. Every new or rebuilt surface uses these and nothing
+      // else.
+      //
+      // Leading is deliberately looser than a Latin equivalent: Hebrew has no
+      // ascenders or descenders to create optical space between lines, so the
+      // same value that looks generous in English looks cramped here.
+      fontSize: {
+        display: ["clamp(2.25rem, 5vw, 3.75rem)", { lineHeight: "1.1", letterSpacing: "0" }],
+        heading: ["clamp(1.5rem, 3vw, 1.875rem)", { lineHeight: "1.25", letterSpacing: "0" }],
+        body: ["1.125rem", { lineHeight: "1.75" }],
+        small: ["0.9375rem", { lineHeight: "1.6" }],
+        label: ["0.8125rem", { lineHeight: "1.5" }],
+      },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",

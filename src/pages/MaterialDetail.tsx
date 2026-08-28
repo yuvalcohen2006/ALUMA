@@ -14,7 +14,7 @@ const MaterialDetailPage = () => {
 
   const jsonLdGraph: Record<string, unknown>[] = [
     {
-      "@type": "BreadcrumbList",
+"@type": "BreadcrumbList",
       itemListElement: [
         { "@type": "ListItem", position: 1, name: "בית", item: "https://alumaoutdoor.com/" },
         { "@type": "ListItem", position: 2, name: "חומרים", item: "https://alumaoutdoor.com/materials" },
@@ -24,9 +24,9 @@ const MaterialDetailPage = () => {
   ];
   if (material.faq && material.faq.length > 0) {
     jsonLdGraph.push({
-      "@type": "FAQPage",
+"@type": "FAQPage",
       mainEntity: material.faq.map((f) => ({
-        "@type": "Question",
+"@type": "Question",
         name: f.q,
         acceptedAnswer: { "@type": "Answer", text: f.a },
       })),
@@ -75,7 +75,7 @@ const MaterialDetailPage = () => {
 
       <section className="py-16 md:py-24 bg-background">
         <div className="container-luxury grid md:grid-cols-5 gap-6 md:gap-8 items-stretch">
-          <div className="md:col-span-3 rounded-[14px] border border-border bg-background shadow-soft p-8 md:p-10 flex flex-col">
+          <div className="md:col-span-3 rounded-[14px] border border-border bg-background  p-8 md:p-10 flex flex-col">
             <div className="space-y-6">
               {material.longDesc.map((p, i) => (
                 <p key={i} className="text-foreground text-body">
@@ -84,7 +84,7 @@ const MaterialDetailPage = () => {
               ))}
             </div>
           </div>
-          <aside className="md:col-span-2 rounded-[14px] border border-border bg-background shadow-soft p-8 md:p-10 flex flex-col">
+          <aside className="md:col-span-2 rounded-[14px] border border-border bg-background  p-8 md:p-10 flex flex-col">
             <h2 className="font-display font-bold text-[26px] leading-snug text-foreground">
               מאפיינים
             </h2>

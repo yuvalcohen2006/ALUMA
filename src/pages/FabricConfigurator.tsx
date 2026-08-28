@@ -65,7 +65,7 @@ const FabricConfigurator = () => {
           <div className="grid lg:grid-cols-5 gap-8">
             {/* LEFT: Live preview */}
             <div className="lg:col-span-3 lg:sticky lg:top-28 self-start">
-              <div className="relative bg-secondary border border-border rounded-sm overflow-hidden shadow-soft">
+              <div className="relative bg-secondary border border-border rounded-sm overflow-hidden ">
                 {/* The old preview tinted six hand-positioned rectangles over a
                     photo that 404s in production, so it showed coloured blocks
                     floating on a broken image. Until the per-fabric renders
@@ -131,9 +131,9 @@ const FabricConfigurator = () => {
               {/* Spec strip */}
               <div className="grid grid-cols-3 gap-3 mt-4">
                 {[
-                  "עמיד UV 1500+ שעות",
-                  "דוחה מים ודוחה כתמים",
-                  "אחריות 5 שנים",
+"עמיד UV 1500+ שעות",
+"דוחה מים ודוחה כתמים",
+"אחריות 5 שנים",
                 ].map((s) => (
                   <div
                     key={s}
@@ -179,7 +179,7 @@ const FabricConfigurator = () => {
                       onClick={() => setSelected(f)}
                       className={`group relative aspect-square rounded-sm overflow-hidden border-2 transition-smooth ${
                         isActive
-                          ? "border-accent shadow-luxury scale-[1.03]"
+                          ? "border-accent  scale-[1.03]"
                           : "border-border hover:border-primary/50"
                       }`}
                       aria-pressed={isActive}

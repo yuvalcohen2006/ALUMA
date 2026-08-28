@@ -16,7 +16,7 @@ const WhatsAppButton = () => {
       target="_blank"
       rel="noopener noreferrer"
       aria-label="צרו קשר בוואטסאפ"
-      className="hidden md:flex lg:hidden fixed bottom-6 start-6 z-40 w-14 h-14 rounded-full bg-[#25D366] text-white items-center justify-center shadow-luxury hover:scale-110 transition-smooth"
+      className="fixed bottom-5 end-5 z-40 flex w-12 h-12 rounded-full bg-[#25D366] text-white items-center justify-center shadow-soft transition-opacity duration-200 hover:opacity-85"
     >
       <WhatsAppIcon />
     </a>

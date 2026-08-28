@@ -33,7 +33,7 @@ const ConversionCTA = ({
         className="absolute inset-0 opacity-[0.08]"
         style={{
           backgroundImage:
-            "radial-gradient(circle at 20% 20%, hsl(var(--accent)) 0, transparent 40%), radial-gradient(circle at 80% 80%, hsl(var(--primary-foreground)) 0, transparent 40%)",
+"radial-gradient(circle at 20% 20%, hsl(var(--accent)) 0, transparent 40%), radial-gradient(circle at 80% 80%, hsl(var(--primary-foreground)) 0, transparent 40%)",
         }}
       />
       <div className="container-luxury relative">
@@ -57,7 +57,7 @@ const ConversionCTA = ({
               asChild
               size="lg"
               variant="secondary"
-              className="rounded-sm px-8 shadow-luxury group bg-background text-primary hover:bg-background/90"
+              className="rounded-sm px-8  group bg-background text-primary hover:bg-background/90"
             >
               <Link to={primaryHref}>
                 {primaryLabel}
