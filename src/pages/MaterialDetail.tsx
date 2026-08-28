@@ -133,16 +133,16 @@ const MaterialDetailPage = () => {
               </h2>
               <div className="w-20 h-[2px] bg-foreground/15 mt-5" aria-hidden="true" />
             </div>
-            <div className="space-y-4">
+            <div className="border-t border-foreground/10">
               {material.faq.map((f, i) => (
                 <details
                   key={i}
-                  className="group bg-background border border-border rounded-sm p-6 md:p-7 open:shadow-soft transition-smooth"
+                  className="group border-b border-foreground/10 py-5"
                 >
                   <summary className="cursor-pointer flex items-start justify-between gap-4 font-display font-normal text-body leading-snug text-foreground list-none [&::-webkit-details-marker]:hidden">
                     <span className="flex-1">{f.q}</span>
                     <span
-                      className="shrink-0 w-8 h-8 rounded-sm border border-foreground/15 flex items-center justify-center text-foreground text-body leading-none transition-smooth group-open:rotate-45 group-open:bg-accent group-open:border-accent group-open:text-accent-foreground"
+                      className="shrink-0 w-6 h-6 flex items-center justify-center text-primary text-body leading-none transition-transform duration-300 group-open:rotate-45"
                       aria-hidden="true"
                     >
                       +

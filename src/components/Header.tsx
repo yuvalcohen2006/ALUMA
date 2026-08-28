@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useRef, useState } from "react";
-import { ChevronDown, Menu, X } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { Menu, X } from "lucide-react";
 import { NavLink, Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
@@ -27,12 +27,6 @@ const Header = () => {
   // home.
   const forceBorder = pathname !== "/" && pathname !== "/en";
   const [open, setOpen] = useState(false);
-  const [expanded, setExpanded] = useState<string | null>(null);
-  // Desktop dropdowns: `hovered` opens on pointer-over; `pinned` is a click-locked
-  // menu that stays open after the pointer leaves (until re-click / outside / Esc).
-  const [hovered, setHovered] = useState<string | null>(null);
-  const [pinned, setPinned] = useState<string | null>(null);
-  const navRef = useRef<HTMLElement | null>(null);
   // Six flat links, no dropdowns. Skargaarden runs five; the one reference
   // site that uses a mega-menu (Audo) is also the loudest of the set. The
   // collections dropdown in particular was the client's complaint #3 — he
@@ -71,23 +65,6 @@ const Header = () => {
     };
   }, [open]);
 
-  // A click-pinned desktop dropdown closes on outside click or Escape.
-  useEffect(() => {
-    if (!pinned) return;
-    const onPointerDown = (e: PointerEvent) => {
-      if (navRef.current && !navRef.current.contains(e.target as Node)) setPinned(null);
-    };
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setPinned(null);
-    };
-    document.addEventListener("pointerdown", onPointerDown);
-    document.addEventListener("keydown", onKey);
-    return () => {
-      document.removeEventListener("pointerdown", onPointerDown);
-      document.removeEventListener("keydown", onKey);
-    };
-  }, [pinned]);
-
   return (
     <header
       dir="rtl"
@@ -117,83 +94,30 @@ const Header = () => {
 
         {/* Desktop nav */}
         <nav
-          ref={navRef}
           className="hidden lg:flex flex-1 items-center justify-center gap-0.5 xl:gap-1 2xl:gap-1.5 whitespace-nowrap"
         >
-          {navLinks.map((link) => {
-            // While a menu is pinned open, only that one shows; otherwise hover rules.
-            const isOpen = pinned ? pinned === link.to : hovered === link.to;
-            const chevron = link.submenu ? (
-              <ChevronDown
-                className={`ms-1 h-3.5 w-3.5 opacity-70 transition-transform duration-300 ${
-                  isOpen ? "rotate-180" : ""
-                }`}
-                aria-hidden="true"
-              />
-            ) : null;
-            return (
-              <div
-                key={link.to}
-                className="relative"
-                onMouseEnter={() => setHovered(link.to)}
-                onMouseLeave={() => setHovered((h) => (h === link.to ? null : h))}
-              >
-                {/* Every top-level item navigates. Submenus open on hover (and
-                    stay pinned on click of the chevron area) but never swallow
-                    the click — קולקציות goes to the unfiltered page. */}
-                <NavLink
-                  to={link.to}
-                  // Both language roots are "home"; without /en here the home
-                  // item would read as active on every English page.
-                  end={link.to === "/" || link.to === "/en"}
-                  className={({ isActive }) =>
-                    `relative ${navItem} ${isActive || isOpen ? navActive : navRest}`
-                  }
-                >
-                  {link.label}
-                  {/* Absolutely positioned: an inline badge widened the pill
-                      and pushed every neighbouring item along. This one floats
-                      over the top corner and costs the button no width. */}
-                  {link.badge && (
-                    <span className="pointer-events-none absolute -top-0.5 end-0 rounded-full bg-primary px-1.5 py-px text-label font-medium leading-[1.4] text-primary-foreground">
-                      {link.badge}
-                    </span>
-                  )}
-                  {chevron}
-                </NavLink>
-
-                {link.submenu && (
-                  <div
-                    className={`absolute top-full right-1/2 translate-x-1/2 pt-3 z-50 transition-all duration-200 ease-out ${
-                      isOpen
-                        ? "opacity-100 visible translate-y-0"
-                        : "opacity-0 invisible -translate-y-1 pointer-events-none"
-                    }`}
-                  >
-                    <div
-                      role="menu"
-                      className="min-w-[240px] rounded-sm border border-border bg-popover p-1.5 shadow-luxury"
-                    >
-                      {link.submenu.map((sub) => (
-                        <Link
-                          key={sub.to}
-                          to={sub.to}
-                          role="menuitem"
-                          onClick={() => {
-                            setPinned(null);
-                            setHovered(null);
-                          }}
-                          className="block rounded-sm px-4 py-2.5 text-sm text-start text-foreground transition-colors duration-200 hover:bg-secondary/70 hover:text-accent"
-                        >
-                          {sub.label}
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-            );
-          })}
+          {navLinks.map((link) => (
+            <NavLink
+              key={link.to}
+              to={link.to}
+              // Both language roots are "home"; without /en here the home item
+              // would read as active on every English page.
+              end={link.to === "/" || link.to === "/en"}
+              className={({ isActive }) =>
+                `relative ${navItem} ${isActive ? navActive : navRest}`
+              }
+            >
+              {link.label}
+              {/* Absolutely positioned: an inline badge widened the pill and
+                  pushed every neighbouring item along. This one floats over the
+                  corner and costs the button no width. */}
+              {link.badge && (
+                <span className="pointer-events-none absolute -top-0.5 end-0 rounded-full bg-primary px-1.5 py-px text-label font-medium text-primary-foreground">
+                  {link.badge}
+                </span>
+              )}
+            </NavLink>
+          ))}
         </nav>
 
         {SITE.enableEnglish && (
@@ -262,73 +186,33 @@ const Header = () => {
 
           {/* Scrollable links area */}
           <div className="flex-1 overflow-y-auto px-6 py-6 flex flex-col gap-1">
-            {navLinks.map((link, i) => {
-              const isOpen = expanded === link.to;
-              const hasSub = !!link.submenu;
-              return (
-                <div
-                  key={link.to}
-                  style={{ transitionDelay: open ? `${100 + i * 50}ms` : "0ms" }}
-                  className={`transition-all duration-500 ${
-                    open ? "opacity-100 translate-x-0" : "opacity-0 translate-x-4"
-                  }`}
+            {navLinks.map((link, i) => (
+              <div
+                key={link.to}
+                style={{ transitionDelay: open ? `${100 + i * 50}ms` : "0ms" }}
+                className={`transition-all duration-500 ${
+                  open ? "opacity-100 translate-x-0" : "opacity-0 translate-x-4"
+                }`}
+              >
+                <NavLink
+                  to={link.to}
+                  end={link.to === "/"}
+                  onClick={() => setOpen(false)}
+                  className={({ isActive }) =>
+                    `block border-b border-border/40 font-display text-xl text-start py-3 ${
+                      isActive ? "text-accent" : "text-foreground hover:text-accent"
+                    }`
+                  }
                 >
-                  <div className="flex items-center justify-between gap-2 border-b border-border/40">
-                    <NavLink
-                      to={link.to}
-                      end={link.to === "/"}
-                      onClick={() => setOpen(false)}
-                      className={({ isActive }) =>
-                        `flex-1 font-display text-xl text-start py-3 ${
-                          isActive ? "text-accent" : "text-foreground hover:text-accent"
-                        }`
-                      }
-                    >
-                      {link.label}
-                      {link.badge && (
-                        <span className="ms-2 rounded-full bg-foreground/15 px-2 py-0.5 text-label font-medium tracking-[0.06em] text-primary align-middle">
-                          {link.badge}
-                        </span>
-                      )}
-                    </NavLink>
-                    {hasSub && (
-                      <button
-                        type="button"
-                        onClick={() => setExpanded(isOpen ? null : link.to)}
-                        aria-label={isOpen ? "סגור תת תפריט" : "פתח תת תפריט"}
-                        aria-expanded={isOpen}
-                        className="w-10 h-10 shrink-0 rounded-sm flex items-center justify-center text-primary/70 hover:text-accent hover:bg-secondary/40 transition-smooth"
-                      >
-                        <ChevronDown
-                          className={`h-5 w-5 transition-transform duration-300 ${
-                            isOpen ? "rotate-180" : ""
-                          }`}
-                        />
-                      </button>
-                    )}
-                  </div>
-
-                  {hasSub && isOpen && (
-                    <div className="flex flex-col py-2 pe-4 gap-1 animate-in fade-in slide-in-from-top-1 duration-200">
-                      {link.submenu!.map((sub) => (
-                        <NavLink
-                          key={`${link.to}-${sub.to}`}
-                          to={sub.to}
-                          onClick={() => setOpen(false)}
-                          className={({ isActive }) =>
-                            `text-sm tracking-wide text-start py-1.5 ${
-                              isActive ? "text-accent" : "text-foreground hover:text-accent"
-                            }`
-                          }
-                        >
-                          ← {sub.label}
-                        </NavLink>
-                      ))}
-                    </div>
+                  {link.label}
+                  {link.badge && (
+                    <span className="ms-2 rounded-full bg-foreground/15 px-2 py-0.5 text-label font-medium text-primary align-middle">
+                      {link.badge}
+                    </span>
                   )}
-                </div>
-              );
-            })}
+                </NavLink>
+              </div>
+            ))}
 
             <div
               className="mt-8 flex items-center gap-2"
