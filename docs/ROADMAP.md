@@ -604,7 +604,7 @@ backdrop swapped without re-calibration.
 - [ ] Current models are **Khronos demo assets** (a generic sofa, chair, table)
       and 3 of the 4 have no `.usdz`, so **iOS Quick Look is broken for them**.
       Keep the honest labelling until real models land.
-- [ ] Real assets = an owner purchase, spec'd in `docs/GUIDE.md` Part 3.4.
+- [ ] Real assets = an owner purchase, spec'd in `docs/GUIDE.md`, closing section "Two things I could not finish in code".
       **AI image-to-3D and phone scans are for reference only, never for
       customers** — they hallucinate the unseen back, fill wicker gaps solid, and
       produce proportional rather than metric scale.
@@ -660,7 +660,7 @@ backdrop swapped without re-calibration.
 
 Run in this order.
 
-1. **Check the shoot against `docs/GUIDE.md` Part 3.1** before accepting it.
+1. **Check the shoot against `docs/GUIDE.md` Part 3 (cut-out rules)** before accepting it.
    Specifically: is every wicker/rope gap transparent? Composite a cut-out on
    mid-green and mid-terracotta — any halo or filled gap is a reject.
 2. **Upload** via `/admin/collections` → collections, then products, cover +
@@ -674,7 +674,7 @@ Run in this order.
    Update `src/data/sceneItems.ts` with real cm dimensions from the owner's
    spreadsheet.
 6. **Author the recolour masks** and run `scripts/recolor.md` per fabric.
-7. **Commission the 3 hero GLB+USDZ models** (GUIDE.md Part 3.4) and populate
+7. **Commission the 3 hero GLB+USDZ models** (GUIDE.md closing section) and populate
    `arModels.ts`.
 8. **Swap `public/og-image.jpg`**, re-run Lighthouse, re-check CLS.
 
@@ -712,7 +712,9 @@ project we don't control.
    matters.)
 5. **3+ real customer reviews** — launch blocker; the current ones are invented.
 6. **About-page facts** — founding year, the family's own words, 3 real numbers.
-7. **Domain transfer to name.com** — not before ~11 Aug 2026 (ICANN 60-day lock).
+7. **Domain transfer to name.com** — ✅ **unblocked as of 11 Aug 2026**; the
+   ICANN 60-day lock from the 12 Jun registration has expired. Needs the EPP
+   code out of Lovable. Click-by-click in `docs/GUIDE.md` Job 5.
 8. **The asset shopping list** (GUIDE.md Part 3) — photos, dimensions
    spreadsheet, backdrops, 3D models.
 

@@ -1,189 +1,168 @@
-# Aluma — the human guide
+# Aluma — the setup guide
 
-Everything a person has to do **by hand**, written so you don't need to know
-anything about code, servers or databases.
+**What this is:** every remaining step to take the site from "finished code" to
+"live and ready to hand over", written click by click. It assumes nothing.
 
-There are three parts:
+**How to read it:** do Part 1 in order — each job unlocks the next. Part 2 is
+filling the site with real content. Part 3 is the photography you still need
+from a photographer.
 
-| Part | Who does it | What it covers |
-|---|---|---|
-| **Part 1 — Manual setup** | Yuval (the site owner) | Accounts, keys and the domain. One-time jobs. |
-| **Part 2 — Adding content** | Whoever manages the website day to day | Products, photos, projects, articles, reviews. Repeatable. |
-| **Part 3 — The asset shopping list** | Yuval + the photographer | Exactly what photos and files are needed, and why. |
+**The golden rule:** if a screen doesn't look like what's written here, **stop
+and ask me** rather than guessing. These websites change their layouts, and
+clicking the wrong thing is much harder to undo than to avoid.
 
-**Golden rule:** if a screen doesn't look like what's written here, **stop and
-ask** rather than guessing. These services change their layouts, and clicking
-the wrong thing in the wrong place is much harder to undo than to avoid.
-
----
----
-
-# 🖐️ PART 1 — MANUAL SETUP (things only Yuval can do)
-
-These are the jobs that need a human with passwords. Nothing here can be done
-from inside the code. They're in priority order.
+**A note on the words used below:**
+- *Click* = press the left mouse button once.
+- *The address bar* = the wide box at the very top of your browser window where
+  web addresses appear.
+- *Copy* = hold `Ctrl` and press `C`. On a Mac, `Cmd` and `C`.
+- *Paste* = hold `Ctrl` and press `V`. On a Mac, `Cmd` and `V`.
 
 ---
+---
 
-## ✅ BLOCKER 1 — SOLVED: the database is `jzqayfllojeqivwbbuyf`
+# PART 1 — THE FIVE JOBS
 
-**Nothing to do here. Kept for the record.**
+Do these in order. About 45 minutes of work, plus a wait for the domain.
 
-There were two Supabase projects and the repo disagreed about which was live.
-Resolved on 2026-07-31: **`jzqayfllojeqivwbbuyf` is ours.** The other one,
-`yvxynsonjmcppaxflmvz`, sits in an account we cannot even open — it is not ours
-and nothing points at it any more.
-
-`.env`, `.env.example` and `index.html` are all pointed at the right project,
-and the anon key is in place.
+| # | Job | Time | Why it matters |
+|---|---|---|---|
+| 1 | Run one SQL script | 5 min | Without it, three admin screens error when you save |
+| 2 | Get into the admin | 10 min | You can't add products without it |
+| 3 | Turn on emails | 10 min | Without it, contact-form messages reach nobody |
+| 4 | Put the site online | 10 min | Gives you a link to share |
+| 5 | Connect the domain | 20 min + wait | Makes it the real alumaoutdoor.com |
 
 ---
 
-## ✅ BLOCKER 2 — SOLVED: the anon key is in
+## JOB 1 — Run one SQL script (5 minutes)
 
-**Nothing to do here.** The key is in `.env` (which is never committed) and
-verified working against the live project.
+**What this does:** creates three new storage areas in the database — one for
+editable texts, one for the questions and answers, and one for product colours.
+Until you do this, three screens in the admin will show an error when you try
+to save.
 
-> Cloudflare keeps a separate copy of these settings — see the audit below.
+**This is safe.** It only adds new things. It cannot delete or damage anything
+that already exists, and running it twice does nothing the second time.
 
----
+### The steps
 
-## ✅ STEP 1 — SOLVED: SQL script run
+1. Open your browser — Chrome, Safari, Edge, any of them.
+2. Click once in the **address bar** at the top. The text in it will highlight.
+3. Type **`supabase.com/dashboard`** and press `Enter`.
+4. Log in if it asks.
+5. You'll see a list of projects. Click the one called **aluma**.
+   - ⚠️ Now look at the address bar. It must contain
+     **`jzqayfllojeqivwbbuyf`**. If it says something else you're in the wrong
+     project — go back and choose the other one.
+6. Down the **far left** of the screen is a narrow strip of small icons. Find
+   the one labelled **SQL Editor** and click it.
+7. Click the green **+ New query** button near the top left.
+8. You now have a big empty white box. Leave it a moment.
+9. **In a separate window**, open the project folder on your computer and find
+   this file:
 
-Confirmed 2026-07-31 — `site_reviews` and `site_projects` both answer correctly
-now. `site_projects` went from rejecting visitors to serving them.
+   ```
+   supabase/migrations/20260801120000_cms_texts_faqs_variants.sql
+   ```
 
----
+   Open it with Notepad (Windows) or TextEdit (Mac).
+10. Click anywhere inside that file, press `Ctrl+A` to select everything, then
+    `Ctrl+C` to copy.
+11. Go back to the Supabase tab, click inside the big white box, and press
+    `Ctrl+V`. The box fills with text.
+12. Click the green **Run** button at the bottom right, or press `Ctrl+Enter`.
+13. After a moment you should see **Success. No rows returned.**
 
-## 🔎 Is anything still wired to the old project?
+### Check it worked
 
-You asked. I checked every way a site can be attached to a Supabase project.
-**Nine of ten are confirmed clean; one is yours to check.**
+1. Click **+ New query** again.
+2. Paste this in:
 
-### Confirmed pointing at the live project ✅
+   ```sql
+   select
+     (select count(*) from public.site_texts)       as texts,
+     (select count(*) from public.site_faqs)        as questions,
+     (select count(*) from public.product_variants) as colours;
+   ```
 
-| What | How I know |
+3. Click **Run**.
+4. You should see a small table reading **texts: 13**, **questions: 7**,
+   **colours: 0**.
+
+Zero colours is correct — you haven't added any yet.
+
+**✅ Tell me: "Job 1 done, 13 and 7."**
+
+### If something goes wrong
+
+| Message on screen | What it means |
 |---|---|
-| The website's database settings | `.env` repointed and verified with your key |
-| The connection hint in the page header | `index.html` repointed |
-| The command-line tool's link | `supabase/config.toml` already said `jzqay…` |
-| **The contact-form function** | I POSTed it an empty form; it replied with its own Hebrew validation error. A function that isn't there returns "not found" — I checked that too, against a made-up name |
-| **The branded-email function** | Live, correctly refusing an unsigned request |
-| **The admin-invite function** | Live, correctly refusing an unauthenticated one |
-| **All four photo buckets** | `site-collections`, `site-projects`, `site-hero`, `blog-images` all exist here |
-| Existing data | Every table is empty, so no old links are stored in any row |
-| The whole codebase | No file references the old project any more |
-
-### One booby-trap found and defused 💣
-
-A database script from June set an article's cover photo to an image **in the
-old project's storage**. It hadn't gone off yet (no articles exist), but the
-first time anyone published an article with that name, the site would have been
-serving a photo out of a project we don't control — which would break the day
-that project is paused. Emptied out, with the explanation kept in the file.
-
-### The one thing I can't check from here ⚠️
-
-**Cloudflare keeps its own copy of the database settings.** Your laptop is
-correct; the published website has a separate set, and I have no way to read
-them.
-
-1. **dash.cloudflare.com** → Workers & Pages → **aluma** → Settings →
-   **Environment variables**
-2. All three must say `jzqayfllojeqivwbbuyf`:
-   - `VITE_SUPABASE_URL` = `https://jzqayfllojeqivwbbuyf.supabase.co`
-   - `VITE_SUPABASE_PROJECT_ID` = `jzqayfllojeqivwbbuyf`
-   - `VITE_SUPABASE_PUBLISHABLE_KEY` = the `eyJ…` key
-3. **If you change anything → Deployments → Retry deployment.** Environment
-   variables only take effect on a fresh build; editing them alone does nothing.
-
-**Tell me: "Cloudflare checked."**
-
-### Two more you'll set up later, on the live project
-
-Not problems — just make sure you do them on **`jzqayfllojeqivwbbuyf`** and not
-the old one, since both would look identical while you're doing them:
-
-- The **Send Email Hook** (Authentication → Hooks). Its URL must start
-  `https://jzqayfllojeqivwbbuyf.supabase.co/...`
-- The **secrets** (`RESEND_API_KEY` and friends). These live per-project.
-
-### About the old project itself
-
-You don't need to do anything with it, and **don't delete it yet.**
-
-That defused script tells us it once held real article images, so there may be
-content in it worth keeping. If you can get back into that other account,
-worth a look before you retire it: any real articles, product photos or
-customer records in there won't come across on their own — the two projects
-share nothing.
-
-Once the site is live and you're happy, pausing it is tidy. There's no rush,
-and nothing here depends on it.
+| `relation "public.has_role" does not exist` | Wrong Supabase project. Go back to step 5. |
+| `permission denied` | You're logged in with an account that doesn't own this project. |
+| Anything red you don't recognise | Screenshot it and send it to me. Nothing is half-broken — the script either fully works or fully doesn't. |
 
 ---
 
-## ⚠️ The one genuinely dangerous thing in this whole document
+## JOB 2 — Get into the admin (10 minutes)
 
-While you're in the API settings, you'll see a second key labelled
-**`service_role`**, usually behind a "Reveal" button.
+**What this does:** makes your account an administrator, so you can add
+products, projects and photos.
 
-**Never copy, paste, screenshot or send that key to anybody — including me.**
+### ⚠️ Read this first — it will save you half an hour
 
-It bypasses every security rule in the database. Anyone holding it can read
-every customer's phone number and delete every table. The `anon` key is the
-opposite: it is *designed* to be public, it already ships inside the website's
-code where anyone can read it, and it's safe to send.
+Your Supabase project requires people to **confirm their email address**
+before they can log in. Email isn't switched on yet — that's Job 3.
 
-> Rule of thumb: **`anon` = safe to publish. `service_role` = treat like your
-> bank password.**
+So if you sign up with an email and password right now, you'll sit waiting for
+a confirmation message that can never arrive.
 
----
+**Use the Google button instead.** It skips email confirmation entirely.
 
-## ⛔ BLOCKER 3 — Make yourself an admin
+### Step A — create your account
 
-**Why:** the admin panel (where you upload products) checks whether your account
-is on an approved list. Being the owner isn't enough — there has to be a row in
-a permissions table saying so. Without it, every upload is rejected.
+1. You need the site running on your computer. Open the project folder. Hold
+   `Shift`, right-click on empty space inside the folder, and choose
+   **"Open PowerShell window here"** (or "Open Terminal here" on a Mac).
+2. Type this and press `Enter`:
 
-> ### ⚠️ Read this first — it will save you half an hour
->
-> I checked your project's settings: **new accounts have to confirm their email
-> address before they can log in.** Email isn't working yet (that's Blocker 4).
->
-> So if you sign up with an email and password right now, you'll be stuck
-> waiting for a confirmation message that can never arrive.
->
-> **Two ways round it. Pick either.**
+   ```
+   npm run dev
+   ```
 
-### Option A — sign up with Google (easiest)
+3. Wait until it prints a line containing **`localhost:8080`**.
+4. Open your browser and go to **`localhost:8080`**.
+5. Click the address bar and change it to **`localhost:8080/club/auth`**, then
+   press `Enter`. (You can also get there by clicking **מועדון** in the menu
+   and then the join button — same page.)
+6. Click the **Google** button.
+7. Choose **outdooraluma@gmail.com**.
 
-Google sign-in is already switched on for your project, and it skips email
-confirmation entirely.
+You're signed in now — but not yet an admin.
 
-1. Run the site — either `npm run dev` and open **http://localhost:8080**, or
-   use your `.pages.dev` address.
-2. Click **מועדון** → **הצטרפות** → the **Google** button.
-3. Sign in with **outdooraluma@gmail.com**.
+#### If the Google button gives an error
 
-Then jump to "Make that account an admin" below.
+It means Google sign-in hasn't been switched on for this Supabase project yet.
+Setting it up properly needs a Google Cloud account and takes half an hour. You
+don't need to. Do this instead — it takes two minutes:
 
-### Option B — email and password, then confirm it by hand
+1. Go to the Supabase tab.
+2. In the left icon strip click **Authentication**.
+3. Look for **Sign In / Providers** (older versions call it **Providers**), and
+   open the **Email** section.
+4. Find the switch called **Confirm email** and turn it **off**.
+5. Click **Save**.
+6. Go back to the site and sign up normally with an email and a password. You
+   won't be asked to confirm anything.
 
-1. Sign up on the site with **outdooraluma@gmail.com** and a password. It will
-   tell you to check your email. Ignore that — nothing will arrive yet.
-2. **supabase.com/dashboard** → the aluma project → **Authentication** (the
-   little person icon) → **Users**.
-3. Find your address in the list, click the **⋯** menu at the end of its row,
-   and choose **Confirm email** (sometimes shown as "Send confirmation" —
-   you want the one that confirms it outright).
-4. Now you can log in on the site.
+⚠️ Turn **Confirm email** back **on** once Job 3 is done — otherwise anyone can
+register with an email address they don't own.
 
-### Make that account an admin
+### Step B — make that account an admin
 
-1. **supabase.com/dashboard** → the aluma project → **SQL Editor** →
-   **New query**.
-2. Paste this exactly, and click **Run**:
+1. Go back to the Supabase tab.
+2. Click **SQL Editor** in the left icon strip, then **+ New query**.
+3. Paste this in exactly:
 
    ```sql
    insert into public.user_roles (user_id, role)
@@ -191,783 +170,394 @@ Then jump to "Make that account an admin" below.
    on conflict do nothing;
    ```
 
-3. **It must say `Success. 1 row`** (or similar).
+4. Click **Run**.
+5. It should say **Success** and mention **1 row**.
 
-   **If it says 0 rows**, the account doesn't exist yet — the sign-up above
-   didn't complete. Go back and check the address is exactly
-   `outdooraluma@gmail.com`.
+   **If it says 0 rows**, the account doesn't exist — the Google sign-in in
+   Step A didn't complete. Go back and do it again.
 
-4. Go to **/admin** on the site. You should be in.
+### Step C — check it
 
-**Then tell me: "I'm in /admin."**
+1. Go back to the site tab.
+2. Click the address bar and change it to **`localhost:8080/admin`**, then
+   press `Enter`.
+3. You should see a page headed **ברוכים הבאים לניהול האתר** with eight cards.
 
-> Once email is working (Blocker 4), sign-ups confirm themselves normally. This
-> only applies to the first account, made before email exists.
+That page is your instruction manual — it explains every job inside the admin,
+step by step, in Hebrew.
 
----
-
-## ⛔ BLOCKER 4 — Resend (the service that sends emails)
-
-**Why:** when someone fills in the contact form, something has to actually
-deliver that message to your inbox. That's Resend. Without it, form
-submissions are saved to the database but **nobody gets notified**.
-
-### The important detail most people get wrong
-
-Until we own the domain (see Part 1, Job 5), Resend runs in **test mode**. In
-test mode it will **only deliver email to the address the Resend account was
-created with.**
-
-So: **create the Resend account with `outdooraluma@gmail.com`.**
-
-If you create it with a personal address, every test email goes to that
-personal address and the studio inbox stays empty — which looks exactly like
-"the contact form is broken."
-
-> ⚠️ Older versions of these notes said to sign up with `yuval.cohen006@gmail.com`.
-> **That instruction is out of date.** Use `outdooraluma@gmail.com`.
-
-### Steps
-
-1. Open **resend.com** → **Sign up** (top right).
-2. Sign up with **outdooraluma@gmail.com**.
-3. If it asks for a region, pick **EU (Ireland)**.
-4. It will push you to "Add a Domain" — **skip it**. There's an "I'll do this
-   later" link, or just click **API Keys** in the sidebar. We can't verify a
-   domain we don't own yet, and test emails work fine without one.
-5. Sidebar → **API Keys** → **Create API Key**.
-   - **Name:** `aluma-dev`
-   - **Permission:** **Sending access**
-6. Click **Add**. A long key starting **`re_`** appears.
-
-⚠️ **Copy it immediately.** Resend shows it once and never again.
-
-### What to send
-
-> The `re_…` key
+**✅ Tell me: "Job 2 done, I'm in /admin."**
 
 ---
 
-## 🚀 Put the site online with Vercel (≈10 minutes, no domain needed)
+## JOB 3 — Turn on emails (10 minutes)
 
-**What this gets you:** a real, live web address like
-`aluma-something.vercel.app` that you can send to anyone — your client, your
-mum, whoever. It has nothing to do with `alumaoutdoor.com`; the old live site
-carries on untouched. You can do this **today**, long before the domain
-transfer in August.
+**What this does:** when somebody fills in the contact form, the message gets
+emailed to you. Without this, messages are saved in the database but **nobody
+is told they arrived**.
 
-> Everything the deploy needs is already committed in `vercel.json` — the build
-> settings and every URL redirect. You should not have to type any of it.
+### The detail everybody gets wrong
 
-### Step 1 — make the account
+Until the domain is connected (Job 5), the email service runs in **test mode**.
+In test mode it delivers **only to the exact address the account was created
+with**.
 
-1. Open **vercel.com** → **Sign Up**
-2. Choose **Continue with GitHub** and log in with the GitHub account that owns
-   the `ALUMA` repository
-3. Pick the **Hobby** plan — free, no card
+**So create the account with `outdooraluma@gmail.com`.** If you use a personal
+address, every test email goes there and the studio inbox stays empty — which
+looks exactly like "the contact form is broken".
 
-### Step 2 — import the project
+### Step A — make the account
 
-1. On the Vercel dashboard click **Add New…** → **Project**
-2. You'll see a list of your GitHub repositories. Find **`ALUMA`** and click
-   **Import**
+1. Go to **`resend.com`**.
+2. Click **Sign Up**, top right.
+3. Sign up using **outdooraluma@gmail.com**.
+4. If it asks for a region, choose **EU (Ireland)**.
+5. It will push you to "Add a Domain". **Skip it.** Look for a link saying
+   *"I'll do this later"*, or just click **API Keys** in the left menu. We
+   can't verify a domain we don't own yet, and test emails work without one.
+
+### Step B — create the key
+
+1. In the left menu click **API Keys**.
+2. Click **Create API Key**.
+3. Fill in:
+   - **Name:** `aluma`
+   - **Permission:** choose **Sending access**
+4. Click **Add**.
+5. A long code appears starting with **`re_`**.
+
+⚠️ **Copy it immediately.** Resend shows it once and never again. Paste it into
+a note on your computer.
+
+### Step C — give the key to the site
+
+This is done in Supabase, not in Resend.
+
+1. Go back to the Supabase tab.
+2. In the left icon strip click **Edge Functions**.
+3. Click **Secrets**. (In some versions it's under **Project Settings → Edge
+   Functions → Secrets** instead — either place is the same list.)
+4. Click **Add new secret** and fill in:
+   - **Name:** `RESEND_API_KEY`
+   - **Value:** paste the `re_...` code
+5. Click **Save**.
+6. Click **Add new secret** again:
+   - **Name:** `OWNER_EMAIL`
+   - **Value:** `outdooraluma@gmail.com`
+7. Click **Save**.
+
+Names must be typed exactly — capital letters and underscores included.
+
+### Check it worked
+
+1. Go to the site (`localhost:8080`) and click **שאלות ותשובות** in the menu.
+2. Scroll to the bottom, click **כתבו לנו** to open the form, fill it in with
+   your own details, and send.
+3. Within a minute an email should arrive at outdooraluma@gmail.com.
+
+If nothing arrives, go to **resend.com → Logs**. If the message is listed there
+as blocked, it's the test-mode rule from above — you signed up with a different
+address.
+
+**✅ Tell me: "Job 3 done, email arrived."**
+
+---
+
+## JOB 4 — Put the site online (10 minutes)
+
+**What this does:** gives you a real web address like `aluma-xyz.vercel.app`
+that you can send to anyone. It does **not** touch alumaoutdoor.com — the old
+site keeps running exactly as it is.
+
+### ⚠️ The one thing you must not skip
+
+All the new work lives on a branch called **`calm-rebuild`**, not on `main`.
+Vercel publishes `main` by default. **If you skip step 7, you will deploy the
+old version of the site and wonder why nothing changed.**
+
+### The steps
+
+1. Go to **`vercel.com`**.
+2. Click **Sign Up**.
+3. Choose **Continue with GitHub** and log in with the GitHub account that owns
+   the ALUMA code.
+4. Choose the **Hobby** plan — free, no card needed.
+5. On the dashboard click **Add New…** then **Project**.
+6. You'll see your GitHub repositories. Find **ALUMA** and click **Import**.
    - If it isn't listed, click **Adjust GitHub App Permissions** and give
-     Vercel access to that one repository
-3. On the configuration screen, **leave everything alone**. Framework, build
-   command and output folder are all read from `vercel.json`. If it shows
-   "Vite", "npm run build" and "dist", it's correct.
+     Vercel access to that one repository.
+7. **⚠️ THE IMPORTANT BIT — the branch.** Look for a setting called
+   **Git Branch** on the setup screen. Set it to:
 
-### Step 3 — the three environment variables ⚠️
+   ```
+   calm-rebuild
+   ```
 
-**This is the only step where a mistake costs you an afternoon.** Expand
-**Environment Variables** and add these three, exactly:
+   Some versions of Vercel don't offer this until after the first deploy. If
+   you can't find it now, carry on, and immediately after deploying go to
+   **Settings → Git → Production Branch**, change it to `calm-rebuild`, then go
+   to **Deployments → ⋯ → Redeploy**.
 
-| Name | Value |
-|---|---|
-| `VITE_SUPABASE_URL` | `https://jzqayfllojeqivwbbuyf.supabase.co` |
-| `VITE_SUPABASE_PROJECT_ID` | `jzqayfllojeqivwbbuyf` |
-| `VITE_SUPABASE_PUBLISHABLE_KEY` | the long `eyJ…` key from `.env` |
+8. **Leave everything else alone.** The build settings come from a file already
+   in the project. If the screen shows "Vite", "npm run build" and "dist",
+   that's correct.
+9. Find **Environment Variables** and expand it. Add these three, one at a
+   time — type the name in the left box, paste the value in the right box,
+   click **Add**:
 
-All three are safe to put here — they're public values that ship to every
-visitor's browser anyway.
+   | Name | Value |
+   |---|---|
+   | `VITE_SUPABASE_URL` | `https://jzqayfllojeqivwbbuyf.supabase.co` |
+   | `VITE_SUPABASE_PROJECT_ID` | `jzqayfllojeqivwbbuyf` |
+   | `VITE_SUPABASE_PUBLISHABLE_KEY` | the long `eyJ…` key — it's in the `.env` file in the project folder |
 
-> **Why it matters:** without these the site builds fine and then shows a blank
-> white screen, because the database connection fails before React starts. If
-> that happens, this is why.
+   All three are safe to store here. They're public values that get sent to
+   every visitor's browser anyway.
 
-### Step 4 — deploy
+10. Click **Deploy**.
+11. Wait about two minutes while text scrolls past.
+12. You'll get an address ending in **`.vercel.app`**. Click it.
 
-1. Click **Deploy**
-2. Wait ~2 minutes while the log scrolls
-3. You get a **`.vercel.app`** address. Open it. **Send it to whoever you like.**
+### After this, it updates itself
 
-### After that: it deploys itself
+Every time code is pushed to `calm-rebuild`, Vercel rebuilds and republishes
+within about two minutes. You don't have to do anything.
 
-Every push to `main` rebuilds and republishes automatically, usually inside two
-minutes. Push a change, refresh the link, it's there.
-
-Vercel also builds a **separate preview link for every branch**, so work in
-progress can be reviewed without touching the address you've been sharing.
+**✅ Send me the `.vercel.app` address.**
 
 ### If something looks wrong
 
 | What you see | What it means |
 |---|---|
-| Blank white page | The environment variables in Step 3 are missing or wrong. Fix them, then **Deployments → ⋯ → Redeploy** — variables only take effect on a **new build**. |
-| Home page fine, but refreshing `/collections` gives a 404 | `vercel.json` didn't get picked up. Confirm the file is in the repository root on `main`. |
-| Products/articles missing | Expected — the database is empty. See Part 2. |
-| Old content after a push | Hard-refresh (Ctrl+Shift+R). Check the Deployments tab shows your commit. |
-
-### When the domain is ready (after ~11 August)
-
-Vercel → your project → **Settings** → **Domains** → **Add**, enter
-`alumaoutdoor.com`, and Vercel prints the DNS records to enter at name.com.
-**Only do this once you're happy with what's on the `.vercel.app` link** —
-that's the moment the real site changes.
-
-> **Note:** the repository also contains `public/_redirects`, which is
-> Cloudflare's format. It's harmless on Vercel — just ignored. Keeping both
-> means you can host on either without editing anything.
+| A completely blank white page | The three environment variables in step 9 are missing or mistyped. Fix them, then **Deployments → ⋯ → Redeploy** — variables only take effect on a **new build**. |
+| It looks like the old version of the site | Step 7. The production branch is still `main`. |
+| Home page works but `/collections` gives a 404 | The `vercel.json` file wasn't picked up. Tell me. |
+| No products or projects anywhere | Expected — the database is empty. That's Part 2. |
 
 ---
 
-## Job 5 — Move the domain to name.com (⏳ NOT before ~11 August 2026)
+## JOB 5 — Connect the domain (20 minutes, then a wait)
 
-**Why the wait:** `alumaoutdoor.com` was registered on 12 June 2026 through
-Lovable. ICANN — the global body that governs domain names — **forbids
-transferring any domain for 60 days after registration**. Nothing anyone can
-do changes that. Attempting it early just produces an error.
+**✅ This is now unblocked.** The domain was registered on 12 June 2026, and
+ICANN blocks transfers for 60 days after registration. That expired on
+**11 August**. It is now **28 August**, so you can go ahead.
 
-**The goal:** the domain ends up registered at **name.com**, in an account
-owned by **outdooraluma@gmail.com**, so the client controls their own domain
-rather than it living inside someone else's Lovable workspace.
+### ⚠️ Before you touch anything
 
-### ⚠️ Step 0 — BEFORE YOU TOUCH ANYTHING: save the DNS records
+**Write down every DNS record the domain currently has.** If you lose them,
+email to that domain stops working, and reconstructing them is genuinely
+painful.
 
-This is the step people skip and then spend two days recovering from.
+1. Log in wherever the domain lives now (Lovable).
+2. Find the DNS settings for **alumaoutdoor.com**.
+3. **Screenshot every row.** All of them — A, CNAME, MX, TXT.
+4. Save those screenshots somewhere you won't lose them.
 
-Go to wherever the domain's DNS currently lives (Lovable's dashboard, or
-Cloudflare if it's already delegated) and **screenshot or copy every single
-record in the list.** There will be rows with types like `A`, `CNAME`, `MX`,
-`TXT`.
+### Step A — get permission to move it
 
-**Why:** moving a domain can wipe its records. If you lose the `MX` and `TXT`
-records, **email stops being delivered** and it is not obvious that it's
-broken — messages just silently vanish. With a screenshot you can rebuild them
-in ten minutes.
+Whoever administers the Lovable workspace needs to either:
 
-### Step 1 — Create the name.com account
+- **Release it (best).** Ask them to unlock the domain and send you the **EPP
+  code** — also called an authorisation or transfer code. It looks like a short
+  jumble of letters and symbols.
+- **Or delegate DNS.** They keep ownership but point the domain where you say.
+  Faster, but you don't own it.
 
-1. Go to **name.com** → **Sign Up**.
-2. Use **outdooraluma@gmail.com**.
+If there's no self-service option, open a support ticket asking for "domain
+unlock and EPP/auth code for alumaoutdoor.com". Under ICANN rules they must
+provide it.
+
+### Step B — transfer it to name.com
+
+1. Go to **`name.com`**.
+2. Click **Sign Up**. Use **outdooraluma@gmail.com**.
 3. Verify the email they send you.
-4. Turn on two-factor authentication when offered. This account controls the
-   business's entire web presence.
+4. Find **Transfers** in the menu.
+5. Type **alumaoutdoor.com** and start the transfer.
+6. Paste in the **EPP code** from Step A.
+7. Pay. A transfer includes an extra year of registration, so it isn't a wasted
+   fee.
+8. You'll get a confirmation email — click the link in it to approve.
+9. **Now wait.** Transfers take up to 5–7 days. Nothing to do meanwhile.
 
-### Step 2 — Get the domain released from Lovable
+### Step C — point it at the site
 
-You need two things from whoever administers the Lovable workspace:
+Once name.com says the transfer is complete:
 
-- The domain **unlocked** for transfer
-- The **EPP code** (also called an "authorisation code" or "auth code") — a
-  password-like string that proves you're allowed to move the domain
+1. Go to **vercel.com** and open your project.
+2. Click **Settings**, then **Domains**.
+3. Type **alumaoutdoor.com** and click **Add**.
+4. Vercel shows you one or two DNS records to create.
+5. Go to name.com, open the domain, find **DNS Records**, and add exactly what
+   Vercel showed you.
+6. **Also re-create every record from your screenshots** — especially anything
+   starting with `MX` or mentioning `notify`. Those are email.
+7. Back in Vercel, wait for the domain to turn green. Can take up to an hour.
 
-Look in Lovable under **Project → Settings → Domains → alumaoutdoor.com**.
-There is usually a "Transfer out" or "Unlock" option that reveals the code.
+### Step D — switch email to the real address
 
-**If there's no self-serve option, open a support ticket** saying:
+1. Go to **resend.com** → **Domains** → **Add Domain**.
+2. Enter **`notify.alumaoutdoor.com`** — the `notify.` part matters. Keeping
+   email on a subdomain means a future spam problem can never damage the main
+   domain's reputation.
+3. Resend shows DNS records. Add them at name.com.
+4. Click **Verify**.
+5. Tell me it's verified and I'll run one command to switch the sender over.
 
-> "I am the registrant for alumaoutdoor.com. Please unlock the domain for
-> transfer and provide the EPP/authorisation code."
-
-They are required to comply under ICANN rules. Don't accept "we can't do that."
-
-### Step 3 — Start the transfer at name.com
-
-1. name.com → **Transfers** (in the top menu).
-2. Enter `alumaoutdoor.com`.
-3. Paste the EPP code.
-4. Pay. **A transfer always includes one extra year of registration** — so this
-   isn't a fee, it's a renewal you'd have paid anyway.
-
-### Step 4 — Approve it
-
-An approval email goes to the domain's registered contact address. Click the
-approve link. The transfer then completes on its own within **5–7 days**.
-
-### Step 5 — Point the domain at the website
-
-Once name.com shows the domain as yours:
-
-1. name.com → the domain → **Nameservers**.
-2. Change them to **Cloudflare's** nameservers. (Add `alumaoutdoor.com` as a
-   site in the same Cloudflare account that hosts the website — Cloudflare will
-   show you the two nameserver addresses to paste in.)
-3. In Cloudflare DNS, **re-create every record from your Step 0 screenshot.**
-4. Cloudflare → Workers & Pages → the `aluma` project → **Custom domains** →
-   **Set up a custom domain** → `alumaoutdoor.com`.
-
-**This is the moment the live site actually switches over.** Only do it when
-you're happy with what's on the preview URL.
-
-### Step 6 — Switch email to the real address
-
-1. Resend → **Domains** → **Add Domain** → enter **`notify.alumaoutdoor.com`**
-   (the subdomain, not the bare domain).
-   > Why a subdomain: the bare domain points at the website. Keeping email on
-   > `notify.` avoids any clash, and means a future spam problem can never
-   > damage the main domain's reputation.
-2. Resend shows a table of DNS records — add each one in Cloudflare DNS.
-3. Click **Verify**.
-4. Tell me it's verified, and I run the one command that flips the sender from
-   the test address to `noreply@notify.alumaoutdoor.com`. No code change needed.
-
-### Step 7 — Check it actually works
-
-- Load `alumaoutdoor.com` — the new site should appear.
-- Submit the contact form — the message should arrive at
-  **outdooraluma@gmail.com**, and *not* in the spam folder.
-- If it lands in spam, tell me; that's a DNS record needing adjustment, not a
-  disaster.
-
----
-
-## Job 6 — Content only you can provide
-
-These aren't technical, but the site cannot launch honestly without them.
-
-| What | Why it's blocking | Where it goes |
-|---|---|---|
-| **3+ real customer reviews** (name, city, one or two sentences) | The reviews currently on the homepage are **invented placeholders**. Publishing made-up named customer reviews is deceptive advertising. They must be replaced before the real domain goes live. | Admin → reviews screen (built in Phase 5) |
-| **The "about" story facts** — what year Aluma started, the family's own words, 3 real numbers (years in business, families served, showroom size) | The About page is built around a first-person letter and three proof numbers. Placeholder text there reads as fake. | Sent to me, I place it |
-| **Real product photos + dimensions** | See Part 3 below. | Admin → קולקציות ומוצרים |
+**✅ Tell me: "Domain moved" and "Resend verified".**
 
 ---
 ---
 
-# PART 2 — ADDING CONTENT (the day-to-day job)
+# PART 2 — FILLING THE SITE
 
-Written for whoever is managing the website's content. **You do not need to
-know anything technical.** Everything happens in a web page.
+Everything here happens inside the admin. Go to your site address, add
+**`/admin`** to the end, and press `Enter`.
 
-## Getting in
+That page is itself a guide — eight cards, each explaining one job in Hebrew.
+This section is the short version.
 
-1. Go to the website and add **`/admin`** to the end of the address.
-   (For example `https://aluma.pages.dev/admin`.)
-2. Log in with the account that was made an admin (see Part 1, Blocker 3).
-3. You'll see a menu down the side:
+### 1. Products — the site is empty without these
 
-| Menu item | What it's for |
-|---|---|
-| **סטטיסטיקות** | Visitor numbers. Read-only. |
-| **ניהול מועדון** | The list of club members. |
-| **הזמנות לקוחות** | Customer projects and their status. |
-| **פניות** | **Messages from the contact form and the consultation questionnaire.** Check this regularly — these are leads. |
-| **פרויקטים בגלריה** | Past projects shown on the site. |
-| **קולקציות ומוצרים** | **The product catalogue. The main one.** |
-| **תמונת ראשי** | The big photo at the top of the homepage. |
-| **מגזין** | Articles. |
-| **חברי צוות** | Who else can log into this admin panel. |
-| **הגדרות אתר** | Site settings. |
+1. In the admin menu click **קולקציות ומוצרים**.
+2. Create a **collection** first — a family like "סלונים". Name and photo.
+3. Inside it, add a **product**: name, one-line description, main photo.
+4. Make sure the **פורסם** switch is on, and save. If it's off, nothing you
+   entered appears on the site.
 
----
+**Order matters:** the homepage shows the first 3 collections and first 6
+products. Whatever you add first is what visitors see.
 
-## 📦 Adding products (the most important task)
+### 2. Colours for a product
 
-Products live inside **collections**. A collection is a group — "סלוני חוץ",
-"שולחנות אוכל", "שולחנות אש". You make the collection first, then add
-products into it.
+The feature where clicking a colour dot changes the product photo.
 
-### Step A — Make a collection
+1. Open a product you've **already saved** — the option doesn't appear until
+   the product exists.
+2. Scroll to **גימורים**.
+3. Click **גימור חדש**.
+4. Type the colour name, pick the dot colour, and upload a photo of that
+   product **in that colour**.
+5. Repeat for each colour.
 
-1. Sidebar → **קולקציות ומוצרים**.
-2. Top of the page → click **קולקציה חדשה**.
-3. Fill in:
-   - **שם הקולקציה** — the name customers see, e.g. `סלוני חוץ`
-   - **תיאור קצר** — one sentence. Optional.
-   - **תמונת קולקציה** — one photo representing the whole group.
-4. Leave **פורסם** switched **off** for now.
-   > **Why:** "פורסם" means "live on the public website". Keeping it off while
-   > you work means half-finished content never appears to customers. Turn it
-   > on when the collection is complete.
-5. Click save.
+### 3. Projects
 
-### Step B — Add a product
+Menu → **פרויקטים**. Name, location, description, photos. The homepage shows
+three.
 
-1. Find your collection in the list and expand it.
-2. Click **מוצר חדש**.
-3. Fill in:
+### 4. Reviews
 
-| Field | What to write |
-|---|---|
-| **שם מוצר** | The product name. Required. |
-| **משפט פתיחה (Tagline)** | One short line, like a subtitle. |
-| **על המוצר** | The description. **Leave a blank line between paragraphs** — each block becomes its own paragraph on the site. |
-| **חומרים** | **One material per line.** Don't use commas — press Enter between them. |
-| **מידות בסיס** | Free text, e.g. `אורך 240 ס״מ · עומק 92 ס״מ` |
-| **תמונת כיסוי** | The main photo. This is what shows in the catalogue grid. |
-| **גלריה** | Additional photos. You can select several at once. |
+Menu → **המלצות לקוחות**. The homepage section stays **invisible** until at
+least one review is published — deliberately, so an empty site doesn't show an
+empty box.
 
-4. Click save.
+⚠️ Only real quotes from real customers who agreed to be quoted.
 
-### Step C — Photos
+### 5. Texts
 
-- Click the upload area, pick the file from your computer, wait for it to
-  finish. The photo is stored permanently — you don't need to keep the original
-  anywhere special (though you should anyway).
-- **Best format:** JPG or WebP, roughly **2000 pixels** on the long side.
-- **Too small** (under ~1000px) looks blurry on modern phone screens.
-- **Too big** (over ~4000px) makes the site slow to load and costs you visitors.
+Menu → **טקסטים באתר**. Every editable sentence, labelled by where it appears.
+If you clear a box the site returns to its original wording — you cannot break
+anything from here.
 
-### Step D — Reordering
+### 6. Questions and answers
 
-Drag the **⠿ handle** on the left of each row. The order you see is the order
-customers see. It saves automatically.
-
-### Step E — Go live
-
-Switch **פורסם** on for the product, and for its collection. Refresh the public
-site. It should appear.
-
-**If it doesn't appear:** 99% of the time it's one of these, in order of
-likelihood:
-1. **פורסם** is off on the product, or on its parent collection.
-2. You're looking at the site while it's running in demo mode (a developer
-   setting — tell me and I'll check).
-3. You're logged into the wrong Supabase project (see Blocker 1).
-
----
-
-## 🏗️ Adding a project (past work)
-
-Sidebar → **פרויקטים בגלריה**. Same pattern: title, location, description,
-cover photo, gallery, **פורסם** switch.
-
-> **This is now live.** The public projects page reads this screen. While the
-> table is empty it falls back to six example projects so the page is never
-> blank — the moment you publish one real project here, all six examples
-> disappear and only yours show. So publish them in a batch, not one at a time.
->
-> The same rule applies to **products** and **articles**: the site shows
-> placeholder content only while its table is empty, and the placeholders leave
-> as soon as one real item is published. You never have to switch anything off.
-
----
-
-## 📰 Adding a magazine article
-
-Sidebar → **מגזין**. Title, excerpt, cover image, body text, **פורסם**.
-
-The web address (slug) is generated from the Hebrew title automatically. If it
-complains it can't make one, type a short English word in the slug field.
-
----
-
-## ⭐ Adding a review
-
-**This is a launch blocker.** The three reviews on the homepage right now are
-**invented** — they were written to test the design. Publishing made-up reviews
-with made-up customer names is deceptive advertising, so they have to be
-replaced before the site goes on the real domain.
-
-**The good news:** the moment you add real ones, the fake ones vanish on their
-own. No code change, no request to me.
-
-### For now, add them in Supabase directly
-
-*(A friendlier screen in the admin panel is coming; until then this takes about
-two minutes per review.)*
-
-1. supabase.com/dashboard → the correct project → **Table Editor** (grid icon).
-2. Find **`site_reviews`** in the list on the left and click it.
-3. Click **Insert** → **Insert row**.
-4. Fill in only these four:
-
-| Field | What to put | Example |
-|---|---|---|
-| **quote** | What the customer said. Keep it to 1–3 sentences — long quotes get visually cut off. | `הצוות ליווה אותנו מהסקיצה ועד ההתקנה. הסלון מרגיש יוקרתי, והבד לא דהה גם אחרי קיץ שלם.` |
-| **name** | Their name | `נועה ב.` |
-| **meta** | Their town, or what they bought | `הרצליה` |
-| **published** | Switch it to **true** | ✅ |
-
-   Leave `id`, `created_at` and `sort_order` alone — they fill themselves.
-   (`sort_order` is only for controlling the order later; smaller numbers show
-   first.)
-5. Click **Save**.
-6. Repeat until you have **at least three**. Refresh the homepage — yours will
-   be there.
-
-> **⚠️ Get permission first.** Ask the customer before publishing their words
-> and their name. A first name plus an initial (`נועה ב.`) is usually the
-> comfortable middle ground.
-
----
-
-## 🖼️ Changing the homepage's big photo
-
-Sidebar → **תמונת ראשי**. Upload a desktop version (wide) and a mobile version
-(tall). Use the tallest, most beautiful outdoor shot you have — this is the
-first thing every visitor sees.
+Menu → **שאלות ותשובות**. Edit, add, reorder. Unticking **מפורסם** hides one.
 
 ---
 ---
 
-# PART 3 — THE ASSET SHOPPING LIST
+# PART 3 — THE PHOTOGRAPHY YOU STILL NEED
 
-**This is the "before we can build the good stuff" list.**
+The site works with AI-generated placeholder images, but they aren't your
+furniture. This is what to hand a photographer.
 
-Three of the site's best features — the scene builder (drop furniture into a
-photo of a patio), AR (point your phone at your garden and see the sofa there),
-and colour switching (see the same sofa in 8 fabrics) — are built and waiting,
-but they are running on **placeholder images**. They cannot look real until
-real assets exist.
+## The rules that matter most
 
-**Give this section to your photographer.** The specifications are not
-fussiness; each one exists because breaking it produces a visibly broken
-result, and the reason is written next to each.
+Give the photographer this list word for word:
 
----
+- **One identical camera setup for every product.** Same camera, same lens,
+  same height, same distance. Tape the tripod legs to the floor.
+- **Camera height 120cm**, measured to the middle of the lens.
+- **Camera perfectly level** — not tilted down. Use a spirit level.
+- **Lens 85–100mm equivalent.** Never wide-angle; it bends straight lines.
+- **Aperture f/8–f/11** so the whole piece is sharp.
+- **Soft even light** from a large softbox upper-left, plus fill. No hard
+  shadows. Identical for every product.
+- **Pure white background, lit brighter than the product.** This is what lets
+  the retoucher cut cleanly through the gaps in rope and wicker.
+- A **colour checker card** shot at the start of each product.
 
-## Part 3.1 — The product photo shoot
-
-### The non-negotiable rules (read these first)
-
-**1. One camera setup for the entire catalogue.**
-Same camera, same lens, same height, same distance. Tape the tripod legs to the
-floor. Write the settings down so a re-shoot in six months matches.
-> **Why:** the website places all these products into the same scene. If one
-> chair was shot from slightly higher than the sofa next to it, viewers can't
-> say why, but the picture feels wrong. Consistency between products matters
-> more than any individual setting.
-
-**2. Camera height: 120 cm from the floor** (to the middle of the lens), ±10 cm.
-> Roughly chest height. High enough to see seat surfaces, low enough to still
-> look like a human's view.
-
-**3. Camera perfectly level — 0° tilt.** Use a spirit level or the camera's
-electronic level.
-> **Why:** the website calculates how big to draw each product based on where
-> you place it, using the geometry of a level camera. A tilted camera breaks
-> that maths and furniture starts floating or sinking into the ground.
-> **If you follow only one instruction on this page, make it this one.**
-
-**4. Lens: 85–100 mm** (full-frame equivalent). **Never wide-angle.**
-> Wide lenses bend straight lines. A bent sofa arm can't be un-bent later.
-
-**5. Aperture f/8–f/11**, so the whole piece is sharp front to back.
-
-**6. Soft, even light. No hard shadows.** One large softbox from the
-**upper left**, plus fill. Identical for every product.
-> **Why:** the website draws a shadow under each item, always from the same
-> direction. If products disagree about where the light is, the scene falls apart.
-
-**7. Background: pure white seamless, lit brighter than the product.**
-> **Why (this is the clever bit):** your furniture has rope, wicker and slats
-> with *gaps* in it. Those gaps must end up see-through in the final file. If
-> the background is bright white shining through the gaps, cutting it out is
-> almost automatic. If it's grey or a room, someone has to hand-cut hundreds of
-> tiny holes and it will cost you a fortune and still look wrong.
-> **Do not use a green screen** — green light spills onto teak and cream
-> cushions and leaves a colour cast on every edge.
-
-**8. Photograph a colour-checker card** in one frame per product, at the start.
-> Lets us match every product's colours to one standard afterwards, free.
-
-### What to shoot, per product
+## Per product
 
 | | Shot | Which products |
 |---|---|---|
-| 1 | **Three-quarter from the front-LEFT** (turned ~35°) | **Every product** |
-| 2 | **Three-quarter from the front-RIGHT** (~35° the other way) | All sofas, chairs, loungers, daybeds |
-| 3 | **Straight-on from the front** | **Every product** |
-| 4 | **Directly overhead**, camera level | Every product (used for the top-down plan view) |
-| 5 | **Three-quarter from behind** | The 3–5 hero products only |
-| 6 | **The same shot with its natural shadow left in**, on light grey | The 3–5 hero products only |
-| 7 | Close-ups of weave, grain, stitching | 3–4 per product, for the product pages |
+| 1 | Three-quarter from the front-**left**, turned about 35° | All |
+| 2 | Three-quarter from the front-**right** | All seating and loungers |
+| 3 | Straight-on front | All |
+| 4 | Close-up details — weave, grain, stitching | All, 3 or 4 each |
 
-**Why two three-quarter angles?** Customers place furniture along both sides of
-a patio. With only one angle, everything faces the same way and the scene looks
-like a sticker sheet.
-Round tables, planters and fire pits are symmetrical — one angle is fine.
+**Quality:** RAW capture, minimum 4000 pixels on the long side. Delivered as
+cut-outs at 2400 pixels, PNG with transparency.
 
-**Realistic total:** ~25 products × 3 angles ≈ **75 cut-outs**, plus ~10 extra
-for the hero pieces. Call it **85 finished images**.
+**Cut-out rules — say these explicitly:**
+- Every gap between slats, rope and wicker must be **see-through**, not filled.
+- Soft 1-pixel edge, **no white glow** around the product.
+- Feet and legs complete, not trimmed off.
+- Test: place the cut-out on a green background and on a terracotta one. If you
+  can see a white outline, reject it.
 
-### Quality and delivery
+## The information sheet — as important as the photos
 
-- Shoot **RAW**, minimum **4000 pixels** on the long side.
-- Deliver cut-outs as **PNG with transparency**, **2400 pixels** long side.
-- File naming: `productname_angle_colour.png`, e.g. `sorrento-3seat_fl45_charcoal.png`
-  (angles: `front`, `fl45`, `fr45`, `rl45`, `top`).
+One row per product:
 
-### The cut-out brief (give this to the retoucher, word for word)
+**Product name · Width (cm) · Depth (cm) · Height (cm) · Seat height (cm) ·
+Available colours · Category**
 
-1. **Every gap between slats, rope and wicker must be transparent**, not filled
-   in. Zoom to 200% on the seat back and armrests to check.
-2. Soft edge, about **1 pixel** of feather, plus colour decontamination — **no
-   white halo**.
-3. Legs and feet complete, not trimmed off.
-4. **No shadow in the product file.** (Shadows are delivered separately, for
-   hero pieces only.)
-5. **The acceptance test:** place the cut-out on a mid-green background and on a
-   mid-terracotta background. If you can see a pale outline, or any weave gap is
-   filled, **it's rejected.** Those are patio colours — that's where it'll be seen.
+Without exact centimetres the site can't size things correctly.
 
-### Colour variants — photograph or fake?
+## Colour variants
 
-- **Cushion fabric colours: photograph ONE**, then we generate the rest
-  digitally. (~$15–30 each, versus $100–300 to re-shoot an angle.)
-- **Frame materials — teak vs aluminium vs rope: PHOTOGRAPH EVERY ONE.**
-  > These change the shape, the shine and the outline of the piece. Faking them
-  > digitally does not survive a customer looking closely, and this is a luxury
-  > brand where they will.
-
----
-
-## Part 3.2 — The product information sheet
-
-**A spreadsheet. As important as the photographs.** One row per product:
-
-| Column | Example |
-|---|---|
-| SKU / product code | `SOR-3S-CHR` |
-| Product name | ספה סורנטו 3 מושבים |
-| **Width in cm** | 218 |
-| **Depth in cm** | 92 |
-| **Overall height in cm** | 74 |
-| **Seat height in cm** | 42 |
-| Available colours / finishes | פחם, חול, טיק |
-| Category | ישיבה / שולחן / מיטת שיזוף / תאורה / אביזר |
-| Sits on | floor / tabletop |
-
-> **Why this is not optional:** the scene builder draws each product at its true
-> size relative to the patio. Without real centimetres it has to guess, and a
-> guessed sofa is either a doll's-house toy or a bus. This spreadsheet is what
-> makes the feature trustworthy — a customer deciding whether a set fits their
-> balcony is relying on these numbers.
-
----
-
-## Part 3.3 — The backdrops (the gardens and patios)
-
-These are the scenes customers drop furniture into.
-
-**How many:** **3 minimum** to launch. **6–8 makes it feel like a real product.**
-Suggested set: stone terrace · timber deck · poolside · rooftop with a city
-view · lawn and garden · covered pergola · courtyard · plus one plain studio
-backdrop.
-
-**Recommendation: generate most of these with AI, photograph 1–2 for real.**
-> **Why:** you need aspirational locations — a Mykonos rooftop, a villa
-> poolside — that you will never get access to, and hiring those locations
-> would cost more than the entire rest of the project. AI handles those well.
-> But shoot your showroom or a real customer installation for real: one
-> authentic location anchors the whole set.
-
-**If photographing, the specs are:**
-
-- Camera at **135 cm**, on a tripod, **perfectly level**.
-- Wide-ish lens (24–35 mm), **f/8–f/11**, everything sharp.
-- **The middle of the floor completely empty** — no furniture, rugs or pots
-  where we'll be placing items.
-- The floor should fill the **bottom 55–65%** of the frame.
-- Even light — **overcast or open shade is ideal**.
-- Minimum **6000 pixels** wide.
-
-**⚠️ And the one thing photographers never think to do — please ask explicitly:**
-
-> **Take one extra frame of each scene with a 1-metre measuring rod standing
-> upright at three marked spots on the floor** (near, middle, far).
-
-> **Why:** that single extra photo lets us calibrate the scene's scale exactly
-> instead of estimating it by eye. It is the difference between furniture that
-> sits convincingly on the ground and furniture that hovers. It costs 30
-> seconds per scene.
-
----
-
-## Part 3.3b — ⚙️ Note on the scene builder
-
-The drag-and-drop scene builder was rolled back on 2026-07-31 along with the
-rest of the redesign, so nothing on the site needs these assets today. The code
-and its tests are kept in the project's history and can be brought back.
-
-**If we do revive it**, the one thing worth capturing *now*, while a retoucher
-still has your product files open, is the **ground-contact point** on each
-cut-out — the spot where the furniture meets the floor. It costs seconds per
-image at that moment and is a day's work to measure afterwards across eighty-five
-of them. Everything else it needs is already in the shot list and the dimensions
-spreadsheet below.
-
----
-
-## Part 3.4 — 3D models for AR ("see it in your garden")
-
-**Only 3 products at launch.** Pick the signature sofa, the signature lounger,
-and the signature dining set.
-
-### Why not AI, and why not a phone scan?
-
-You can generate 3D models from a photo with AI in about a minute, and you can
-scan furniture with a phone app. **Both are genuinely useful here — but not as
-the thing customers see.**
-
-- **AI 3D models** invent the parts they can't see. The back of the sofa becomes
-  guesswork, wicker gaps get filled in solid, and the size comes out wrong
-  because these tools think in proportions, not centimetres.
-- **Phone scans** fail exactly where your furniture lives: thin rope, open
-  frames, gaps and glossy powder-coating. You get webbing across the holes and
-  blobby legs. They also bake the showroom's lighting into the model, so the
-  sofa carries the shop's shadows into someone's sunny garden.
-
-**Where they ARE worth doing:** scan each hero product yourself with **Polycam**
-(free, ~20 minutes each) and **send the scan to the 3D studio as reference.**
-Studios charge 30–60% extra when they're working from poor reference material.
-This one step often pays for itself.
-
-### What to send the studio
-
-- The full photo set from Part 3.1
-- The manufacturer's technical drawings with dimensions
-- Fabric and finish swatch photos with their codes
-- Your Polycam scans
-
-### What to demand back — put this in the order, not as an afterthought
-
-| Requirement | Value |
-|---|---|
-| Formats | **Both `.glb` and `.usdz`** per product |
-| Size | Under **4 MB** each |
-| Detail | Under **60,000 triangles** |
-| Textures | 1024×1024 or 2048×2048 |
-| **Scale** | **True real-world size in metres**, within 2% of the spec sheet |
-| Pivot point | Centre of the footprint, **on the ground** |
-| Lighting | **None baked into the textures** |
-| Proof | Screenshots of it working on both an iPhone and an Android phone |
-
-> **Why "in the original order":** the industry pattern is a €50 model that
-> becomes €450 once you pay separately for re-texturing, AR conversion and
-> revisions. Ordering "AR-optimised, GLB + USDZ delivered" up front costs 30–50%
-> more on the quote and far less in total.
-
-**Expected cost:** **$250–500 per product** if all three are ordered together.
-**Roughly $750–1,500 total**, 2–3 weeks.
-
----
-
-## Part 3.5 — Budget, and what to buy first
-
-| Item | Rough cost |
-|---|---|
-| Product shoot, ~25 products, 3–4 days | Negotiate a **flat day rate** — far cheaper than per-product pricing at this volume |
-| Professional cut-outs, ~85 images | **$250–1,000** |
-| Fabric colour variants (digital) | **$300–900** |
-| AI backdrops ×8, generated and cleaned up | **$320–640** |
-| 3D/AR models ×3 | **$750–1,500** |
-
-**If the budget is tight, buy in this order.** Each one unlocks the next:
-
-1. **Product photos + the dimensions spreadsheet** — nothing works without these
-2. **Professional cut-outs** — this is what makes it look real instead of cheap
-3. **3 backdrops**
-4. **Colour variants**
-5. **More backdrops** (up to 8)
-6. **AR models** — genuinely fine to do after launch
+Photograph **one** version of each product. Fabric colours can be recoloured
+digitally, which is far cheaper than reshooting. But **do photograph
+separately** when the frame material changes — teak versus aluminium versus
+rope genuinely look different.
 
 ---
 ---
 
-# 📬 WHAT TO SEND ME TO WRAP THIS UP
+# 📬 WHAT TO SEND ME
 
-Copy this list into a message and fill it in. **You don't need all of it at
-once** — send each block as you get it and I'll act on it. They're in the order
-that unblocks the most work.
-
-**Never send:** the Supabase `service_role` key, or any database password.
-
----
-
-## Block A — unlocks everything (do this first)
+Copy this into a message and fill it in as you go. You don't need it all at
+once.
 
 ```
-1. ✅ DONE  Supabase project:  jzqayfllojeqivwbbuyf
-2. ✅ DONE  Anon key received and verified
-
-3. ✅ DONE  SQL script run — both tables verified
-
-4. Site deployed to Vercel?           the .vercel.app link
-5. Can you get into /admin?           yes / no        (BLOCKER 3)
-6. Resend API key:                    re_...          (BLOCKER 4)
+JOB 1  SQL script run?              "13 and 7" / something else
+JOB 2  Can you reach /admin?        yes / no
+JOB 3  Test email arrived?          yes / no
+JOB 4  Your Vercel address:         https://..........vercel.app
+JOB 5  Domain moved to name.com?    yes / not yet
+JOB 5  notify. subdomain verified?  yes / not yet
 ```
 
-**Until 3–6 land, nothing that touches the database or sends email can be
-finished or tested** — including confirming that the contact form actually
-delivers to outdooraluma@gmail.com.
+**Never send me:** the Supabase `service_role` key, or any database password.
+The `anon` key is fine — it's designed to be public and already ships inside
+the website's code.
 
 ---
 
-## Block B — content that's blocking launch
+# Two things I could not finish in code
 
-```
-5. Three real customer reviews. For each:
-      what they said (1–3 sentences):
-      their name (or first name + initial):
-      their town, or what they bought:
-      do we have their permission to publish it?  yes / no
+Being straight with you so nothing surprises you in front of the customer.
 
-6. The About page letter — 120–180 words in your own voice, answering:
-      why did you start Aluma?
-      what do you refuse to compromise on?
-      (I'll format it. Write it however it comes out — messy is fine.)
+**The AR feature shows generic furniture.** The "view it in your space" tool
+loads sample 3D models from Google — a generic sofa, chair and table, not your
+products. That isn't a bug I can fix: real 3D models have to be commissioned
+from a studio, roughly $250–500 per product and 2–3 weeks. The page now says
+plainly that the models are demonstrations. **If you'd rather it didn't appear
+at all until then, say so and I'll hide it** — that may be the safer choice for
+a handover.
 
-7. Three numbers we can prove, for the About page. For example:
-      years in business:
-      families / projects delivered:
-      showroom size in m²:
-      (If you'd rather not publish numbers, say so and I'll drop that band.)
-
-8. Is "Aluma" a family business, and are Idan, Roy and Ben the founders?
-      (I've deliberately not claimed either on the site, because I don't know.)
-```
-
----
-
-## Block C — the photo shoot (the big one)
-
-```
-9.  Product photos, per the shot list in Part 3.1
-10. The product information spreadsheet (Part 3.2) — the cm dimensions
-11. Go/no-go on commissioning 3 AR models (Part 3.4, ~$750–1,500)
-```
-
-Send Block C whenever it's ready — the scene builder, the AR viewer and the
-fabric colour previews are all built to switch from placeholders to your real
-products without further design work.
-
----
-
-## Block D — after ~11 August
-
-```
-14. Domain transferred to name.com?              yes / no
-15. notify.alumaoutdoor.com verified in Resend?  yes / no
-```
-
-Then I flip the email sender to the real address and attach the domain to the
-live site.
-
----
-
-## Quick answers I also need at some point
-
-```
-16. Is Aluma a family business, and are Idan, Roy and Ben the founders?
-    (Nothing on the site claims either, because I don't know.)
-17. Anything on the new homepage, About page or "שווה לדעת" you want
-    changed?
-```
-
----
-
-*Companion file: `docs/ROADMAP.md` tracks the build itself — what's done, what's
-next. This file is only about the things a human has to do by hand.*
+**The English site is partly translated.** The menu, the homepage and the Q&A
+page are done. Other pages still show Hebrew when someone switches to English.
+Tell me which you want: I finish the translations, or I hide the language
+switcher until they're done.
