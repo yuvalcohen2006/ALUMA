@@ -20,6 +20,7 @@ const Collections = lazy(() => import("./pages/Collections.tsx"));
 const CollectionDetail = lazy(() => import("./pages/CollectionDetail.tsx"));
 const CollectionPage = lazy(() => import("./pages/CollectionPage.tsx"));
 const Journal = lazy(() => import("./pages/Journal.tsx"));
+const Materials = lazy(() => import("./pages/Materials.tsx"));
 const MaterialDetail = lazy(() => import("./pages/MaterialDetail.tsx"));
 const Projects = lazy(() => import("./pages/Projects.tsx"));
 const ProjectDetail = lazy(() => import("./pages/ProjectDetail.tsx"));
@@ -64,7 +65,7 @@ export const publicRoutes = (
         old index is retired. */}
     <Route path="journal" element={<Journal />} />
     <Route path="journal/:slug" element={<BlogPost />} />
-    <Route path="materials" element={<Navigate to="../journal" replace />} />
+    <Route path="materials" element={<Materials />} />
     <Route path="materials/:slug" element={<MaterialDetail />} />
     <Route path="blog" element={<Navigate to="../journal" replace />} />
     <Route path="blog/:slug" element={<LegacyBlogPostRedirect />} />

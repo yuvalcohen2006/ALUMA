@@ -7,10 +7,8 @@
 # exist as in-app <Navigate> routes in src/routes.tsx, which is what handles
 # link clicks inside the SPA — those never reach the edge at all.
 
-# Materials + magazine merged into "שווה לדעת". The material DETAIL pages stay
-# live, so /materials/* must NOT be caught here.
-/materials       /journal      301
-/en/materials    /en/journal   301
+# The magazine folded into "שווה לדעת". /materials is a page in its own right
+# again, so it must NOT be redirected here.
 /blog            /journal      301
 /en/blog         /en/journal   301
 /blog/*          /journal/:splat      301

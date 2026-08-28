@@ -115,70 +115,17 @@ const AuthPage = () => {
         description="מועדון אלומה, מעקב הזמנה, מועדפים והטבות בלעדיות."
         path="/club/auth"
       />
-      <section className="pt-24 md:pt-28 pb-16 md:pb-24 gradient-cream">
-        <div className="container-luxury">
-          <div className="max-w-6xl mx-auto grid lg:grid-cols-2 rounded-sm overflow-hidden  border border-primary/15 bg-background">
-            {/* LEFT, brand panel */}
-            <aside className="relative hidden lg:flex flex-col justify-between p-12 text-primary-foreground overflow-hidden min-h-[640px]">
-              <div
-                aria-hidden
-                className="absolute inset-0"
-                style={{
-                  backgroundImage: `url(${heroSalon})`,
-                  backgroundSize: "cover",
-                  backgroundPosition: "center",
-                }}
-              />
-              <div
-                aria-hidden
-                className="absolute inset-0"
-                style={{
-                  background:
-"linear-gradient(160deg, hsl(13 39% 22% / 0.88), hsl(13 39% 32% / 0.72))",
-                }}
-              />
-
-              <div className="relative">
-                <img src={alumaLogo} alt="Aluma" className="h-12 w-auto brightness-0 invert opacity-95" />
-                <p className="mt-3 text-[11px] tracking-[0.4em] uppercase opacity-70">
-                  Aluma Private Club
-                </p>
+      {/* Deliberately plain. A signup is a moment of intent, and every
+          decoration around it — the cream gradient, the bordered card, the
+          illustrated brand panel beside the fields — was competing with the
+          three inputs that actually matter. */}
+      <section className="bg-background pt-40 pb-24 md:pt-52 md:pb-32">
+        <div className="mx-auto max-w-[440px] px-6">
+              {/* One wordmark, quiet, at every width — the desktop layout used
+                  to hide it behind an illustrated side panel. */}
+              <div className="text-center mb-10">
+                <img src={alumaLogo} alt="Aluma" className="h-9 w-auto mx-auto opacity-90" />
               </div>
-
-              <div className="relative">
-                <h2 className="font-display text-3xl xl:text-4xl leading-tight text-balance mb-6">
-                  עולם שקט של שירות,
-                  <br />
-                  שנתפר במידה שלכם.
-                </h2>
-                <div className="w-16 h-px bg-primary-foreground/40 mb-6" />
-                <ul className="space-y-4">
-                  {sidePerks.map(({ icon: Icon, text }) => (
-                    <li key={text} className="flex items-start gap-3 text-sm opacity-95 font-normal leading-relaxed">
-                      <span className="mt-0.5 inline-flex items-center justify-center w-8 h-8 rounded-sm bg-primary-foreground/10 backdrop-blur border border-primary-foreground/20 shrink-0">
-                        <Icon className="w-4 h-4" />
-                      </span>
-                      <span>{text}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <div className="relative text-[11px] tracking-[0.25em] uppercase opacity-70">
-                חינם · בלי התחייבות · יציאה בכל רגע
-              </div>
-            </aside>
-
-            {/* RIGHT, form */}
-            <div className="p-8 md:p-12 lg:p-14 bg-background">
-              <div className="max-w-sm mx-auto">
-                {/* Mobile logo */}
-                <div className="lg:hidden text-center mb-8">
-                  <img src={alumaLogo} alt="Aluma" className="h-12 w-auto mx-auto mb-2" />
-                  <p className="text-[10px] tracking-[0.4em] uppercase text-foreground">
-                    Aluma Private Club
-                  </p>
-                </div>
 
                 {/* Mode toggle pills */}
                 <div className="inline-flex w-full rounded-sm bg-secondary/60 p-1 mb-8 border border-border">
@@ -319,9 +266,6 @@ const AuthPage = () => {
                 >
                   ← על המועדון
                 </Link>
-              </div>
-            </div>
-          </div>
         </div>
       </section>
     </Layout>
