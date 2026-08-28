@@ -37,7 +37,7 @@ class ErrorBoundary extends Component<Props, State> {
           <div className="font-display text-6xl md:text-7xl text-primary/20 leading-none mb-4">
             !
           </div>
-          <h1 className="font-display text-2xl md:text-3xl text-primary leading-tight mb-3">
+          <h1 className="font-display text-2xl md:text-3xl text-foreground leading-tight mb-3">
             משהו השתבש
           </h1>
           <p className="text-muted-foreground text-sm md:text-base leading-relaxed mb-8">
@@ -53,7 +53,7 @@ class ErrorBoundary extends Component<Props, State> {
             </button>
             <button
               onClick={this.reset}
-              className="inline-flex items-center justify-center border border-primary/40 text-primary hover:bg-secondary px-6 py-3 rounded-sm tracking-wide transition-smooth"
+              className="inline-flex items-center justify-center border border-foreground/15 text-primary hover:bg-secondary px-6 py-3 rounded-sm tracking-wide transition-smooth"
             >
               חזרה לדף הבית
             </button>

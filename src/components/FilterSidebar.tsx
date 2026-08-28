@@ -64,11 +64,11 @@ const FilterSidebar = ({
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
-      <SheetTrigger className="inline-flex items-center gap-2 h-11 px-5 rounded-sm border border-primary/30 text-primary hover:bg-primary hover:text-primary-foreground transition-smooth text-[18px]">
+      <SheetTrigger className="inline-flex items-center gap-2 h-11 px-5 rounded-sm border border-foreground/15 text-primary hover:bg-primary hover:text-primary-foreground transition-smooth text-body">
         <SlidersHorizontal className="w-4 h-4" />
         <span>סינון</span>
         {activeCount > 0 && (
-          <span className="inline-flex items-center justify-center min-w-6 h-6 px-2 rounded-full bg-primary text-primary-foreground text-[18px]">
+          <span className="inline-flex items-center justify-center min-w-6 h-6 px-2 rounded-full bg-primary text-primary-foreground text-body">
             {activeCount}
           </span>
         )}
@@ -102,16 +102,16 @@ const FilterSidebar = ({
                       >
                         <span className="flex items-center gap-3">
                           <span
-                            className={`flex items-center justify-center w-[18px] h-[18px] rounded-[3px] border transition-smooth ${
+                            className={`flex items-center justify-center w-[18px] h-[18px] rounded-sm border transition-smooth ${
                               checked
                                 ? "bg-primary border-primary text-primary-foreground"
-                                : "border-primary/40 group-hover:border-primary"
+                                : "border-foreground/15 group-hover:border-primary"
                             }`}
                           >
                             {checked && <Check className="w-3 h-3" strokeWidth={3} />}
                           </span>
                           <span
-                            className={`text-[18px] transition-smooth ${
+                            className={`text-body transition-smooth ${
                               checked ? "text-foreground" : "text-foreground-soft group-hover:text-foreground"
                             }`}
                           >
@@ -119,7 +119,7 @@ const FilterSidebar = ({
                           </span>
                         </span>
                         {option.count !== undefined && (
-                          <span className="text-[18px] text-muted-foreground tabular-nums">
+                          <span className="text-body text-muted-foreground tabular-nums">
                             {option.count}
                           </span>
                         )}
@@ -136,7 +136,7 @@ const FilterSidebar = ({
           <button
             type="button"
             onClick={() => setOpen(false)}
-            className="flex-1 h-11 rounded-sm bg-primary text-primary-foreground text-[18px] hover:opacity-90 transition-smooth"
+            className="flex-1 h-11 rounded-sm bg-primary text-primary-foreground text-body hover:opacity-90 transition-smooth"
           >
             הצג {resultCount} תוצאות
           </button>
@@ -144,7 +144,7 @@ const FilterSidebar = ({
             type="button"
             onClick={clearAll}
             disabled={activeCount === 0}
-            className="h-11 px-4 text-[18px] text-foreground-soft hover:text-primary transition-smooth disabled:opacity-40 disabled:hover:text-foreground-soft"
+            className="h-11 px-4 text-body text-foreground-soft hover:text-primary transition-smooth disabled:opacity-40 disabled:hover:text-foreground-soft"
           >
             נקה הכל
           </button>

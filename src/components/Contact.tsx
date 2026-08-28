@@ -60,7 +60,7 @@ const channels: Channel[] = [
   {
     key: "phone",
     Icon: Phone,
-    iconClass: "bg-primary/10 text-accent",
+    iconClass: "bg-foreground/15 text-accent",
     title: SITE.phone.display,
     ltr: true,
     line: "מדברים איתנו ישירות, בשעות הפעילות",
@@ -69,7 +69,7 @@ const channels: Channel[] = [
   {
     key: "email",
     Icon: Mail,
-    iconClass: "bg-primary/10 text-accent",
+    iconClass: "bg-foreground/15 text-accent",
     title: SITE.email,
     ltr: true,
     // Deliberately not the 24-hour promise: that line already sits, word for
@@ -81,7 +81,7 @@ const channels: Channel[] = [
   {
     key: "showroom",
     Icon: MapPin,
-    iconClass: "bg-primary/10 text-accent",
+    iconClass: "bg-foreground/15 text-accent",
     title: `אולם התצוגה ב${SITE.address.city}`,
     // The street stays on the tile. This is the one channel whose whole subject
     // is "where", and a visitor scanning the four tiles should get the answer
@@ -98,7 +98,7 @@ const scrollToShowroom = () => {
 };
 
 const tileClass =
-  "group flex h-full w-full flex-col items-start gap-4 rounded-[14px] border border-foreground/10 bg-background p-6 md:p-7 text-start transition-colors duration-200 hover:bg-white";
+"group flex h-full w-full flex-col items-start gap-4 rounded-sm border border-foreground/10 bg-background p-6 md:p-7 text-start transition-colors duration-200 hover:bg-white";
 
 const ChannelTile = ({ channel }: { channel: Channel }) => {
   const { Icon } = channel;
@@ -112,7 +112,7 @@ const ChannelTile = ({ channel }: { channel: Channel }) => {
     <>
       <span
         className={cn(
-          "shrink-0 w-12 h-12 rounded-[10px] flex items-center justify-center transition-transform duration-300 group-hover:scale-[1.06]",
+"shrink-0 w-12 h-12 rounded-sm flex items-center justify-center transition-transform duration-300 group-hover:scale-[1.06]",
           channel.iconClass,
         )}
       >
@@ -122,7 +122,7 @@ const ChannelTile = ({ channel }: { channel: Channel }) => {
       <span className="min-w-0 flex-1">
         <span
           className={cn(
-            "block font-display font-normal text-[22px] leading-snug text-foreground",
+"block font-display font-normal text-body leading-snug text-foreground",
             // A latin string inside an RTL block: flip the element to LTR so the
             // digits read correctly, then pin it back to the right edge.
             channel.ltr && "text-start",
@@ -131,7 +131,7 @@ const ChannelTile = ({ channel }: { channel: Channel }) => {
         >
           {channel.title}
         </span>
-        <span className="block text-[18px] leading-snug text-muted-foreground mt-1.5">
+        <span className="block text-body leading-snug text-muted-foreground mt-1.5">
           {channel.line}
         </span>
       </span>
@@ -139,7 +139,7 @@ const ChannelTile = ({ channel }: { channel: Channel }) => {
       {/* RTL: forward points left */}
       <Cue
         className={cn(
-          "w-5 h-5 shrink-0 text-primary/60 transition-all duration-300 group-hover:text-primary",
+"w-5 h-5 shrink-0 text-primary/60 transition-all duration-300 group-hover:text-primary",
           jumps ? "group-hover:translate-y-0.5" : "group-hover:-translate-x-1",
         )}
         aria-hidden="true"
@@ -178,9 +178,9 @@ const FIELD_LABELS: Record<string, string> = {
 };
 
 const assurances = [
-  "מענה תוך 24 שעות בימי עסקים",
-  "ייעוץ ללא עלות וללא התחייבות",
-  "פרטיכם נשמרים אצלנו בלבד",
+"מענה תוך 24 שעות בימי עסקים",
+"ייעוץ ללא עלות וללא התחייבות",
+"פרטיכם נשמרים אצלנו בלבד",
 ];
 
 // Tall, generously padded fields. Radius is the site's control radius (10px,
@@ -192,15 +192,15 @@ const assurances = [
 // grey input is the support-ticket tell this page is escaping.
 const fieldClass = (invalid: boolean) =>
   cn(
-    "w-full rounded-none border-0 border-b bg-transparent px-0 text-[18px] text-foreground text-start",
-    "placeholder:text-muted-foreground/60 transition-colors focus:ring-0",
+"w-full rounded-none border-0 border-b bg-transparent px-0 text-body text-foreground text-start",
+"placeholder:text-muted-foreground/60 transition-colors focus:ring-0",
     invalid ? "border-destructive/70 focus:border-destructive" : "border-foreground/25 focus:border-accent",
   );
 
-const labelClass = "block text-[14px] tracking-[0.04em] text-foreground-soft mb-1.5";
+const labelClass = "block text-label tracking-[0.04em] text-foreground-soft mb-1.5";
 
 const FieldError = ({ id, message }: { id: string; message: string }) => (
-  <p id={id} className="mt-2.5 flex items-start gap-2.5 text-[18px] leading-snug text-destructive">
+  <p id={id} className="mt-2.5 flex items-start gap-2.5 text-body leading-snug text-destructive">
     {/* 18px at leading-snug is a ~25px line box; a 18px glyph centres on it at
         3px, not at the 6px a plain spacing step would give. */}
     <AlertCircle className="w-[18px] h-[18px] mt-[3px] shrink-0" aria-hidden="true" />
@@ -326,14 +326,14 @@ const Contact = () => {
 
           {/* ===== FORM ===== */}
           <Reveal className="min-w-0 max-w-[640px]">
-            <p className="text-[18px] leading-relaxed text-foreground-soft">
+            <p className="text-body leading-relaxed text-foreground-soft">
               ספרו לנו מה החלום שלכם ואנחנו נדאג להגשים לכם אותו.
             </p>
 
             {/* Close to the heading (24px) because it belongs to it, and a full
                 36px clear of the form below — related things near, the change
                 of gear far. */}
-            <ul className="mt-6 flex flex-col gap-3 text-[18px] text-foreground-soft">
+            <ul className="mt-6 flex flex-col gap-3 text-body text-foreground-soft">
               {assurances.map((a) => (
                 <li key={a} className="flex items-center gap-3">
                   {/* Deeper terracotta, not primary: this band is sand, where
@@ -370,13 +370,13 @@ const Contact = () => {
               {errorList.length > 0 && (
                 <div
                   role="alert"
-                  className="mb-7 rounded-[14px] border border-destructive/40 bg-destructive/5 p-5 text-start"
+                  className="mb-7 rounded-sm border border-destructive/40 bg-destructive/5 p-5 text-start"
                 >
-                  <p className="flex items-center gap-2.5 text-[18px] font-medium text-destructive">
+                  <p className="flex items-center gap-2.5 text-body font-medium text-destructive">
                     <AlertCircle className="w-5 h-5 shrink-0" aria-hidden="true" />
                     לא הצלחנו לשלוח, יש לתקן את השדות המסומנים
                   </p>
-                  <ul className="mt-3 space-y-1.5 text-[18px] leading-snug text-destructive">
+                  <ul className="mt-3 space-y-1.5 text-body leading-snug text-destructive">
                     {errorList.map(([key, message]) => (
                       <li key={key}>
                         {FIELD_LABELS[key] ?? key}: {message}
@@ -394,7 +394,7 @@ const Contact = () => {
                     on sand, where text-accent measures ~3.3:1 — under AA for
                     18px. On sand the ink is charcoal and the terracotta stays
                     in the rules, exactly as the projects index does it. */}
-                <p className="text-[18px] leading-snug text-muted-foreground">
+                <p className="text-body leading-snug text-muted-foreground">
                   השדות המסומנים ב־<span className="font-medium text-foreground">*</span> הם שדות
                   חובה
                 </p>
@@ -491,7 +491,7 @@ const Contact = () => {
                   aria-busy={submitting}
                   // min-w holds the width across the label swap, so the row
                   // does not jump the moment you press send.
-                  className="group inline-flex h-14 w-full sm:w-auto sm:min-w-[13rem] items-center justify-center gap-3 rounded-full bg-foreground px-10 text-[18px] font-medium text-background transition-colors duration-300 hover:bg-accent disabled:cursor-not-allowed disabled:opacity-60"
+                  className="group inline-flex h-14 w-full sm:w-auto sm:min-w-[13rem] items-center justify-center gap-3 rounded-full bg-foreground px-10 text-body font-medium text-background transition-colors duration-300 hover:bg-accent disabled:cursor-not-allowed disabled:opacity-60"
                 >
                   {submitting ? (
                     <>
@@ -509,7 +509,7 @@ const Contact = () => {
                   )}
                 </button>
 
-                <p className="text-[18px] leading-relaxed text-muted-foreground sm:max-w-[22rem]">
+                <p className="text-body leading-relaxed text-muted-foreground sm:max-w-[22rem]">
                   בשליחת הטופס הינכם מאשרים את{" "}
                   {/* Sand again: charcoal ink, and a standing underline rather
                       than the hover-grown one, because this is a link buried

@@ -21,7 +21,7 @@ const Footer = () => {
   // Light-grey wash plus a small lift on hover — the old version flipped to a
   // solid white block, which was far too loud against the charcoal footer.
   const iconBox =
-    "w-10 h-10 rounded-[10px] border border-background/25 text-background/80 flex items-center justify-center transition-all duration-300 hover:bg-background/15 hover:text-background hover:border-background/50 hover:-translate-y-0.5 hover:shadow-soft";
+"w-10 h-10 rounded-sm border border-background/25 text-background/80 flex items-center justify-center transition-all duration-300 hover:bg-background/15 hover:text-background hover:border-background/50 hover:-translate-y-0.5 hover:shadow-soft";
 
   return (
     <footer dir="rtl" className="bg-footer text-background [&_svg]:[stroke-width:1.25]">
@@ -183,7 +183,7 @@ const Footer = () => {
             </ul>
 
             <div className="mt-8 pt-6 border-t border-background/20 max-w-[240px] mx-auto md:mx-0 md:max-w-none">
-              <div className="text-sm font-semibold mb-2">שעות פעילות</div>
+              <div className="text-sm font-medium mb-2">שעות פעילות</div>
               <div className="text-sm space-y-1 font-normal">
                 <div className="flex justify-center md:justify-between gap-4">
                   <span>א׳ – ה׳</span>

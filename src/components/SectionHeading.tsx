@@ -57,7 +57,7 @@ const SectionHeading = ({
 
   return (
     <div className={`flex flex-col ${alignCls} ${className}`}>
-      <Tag className={`font-display font-bold text-[38px] leading-snug ${titleColor}`}>
+      <Tag className={`font-display font-medium text-display leading-snug ${titleColor}`}>
         {children}
       </Tag>
 
@@ -74,7 +74,7 @@ const SectionHeading = ({
 
       {hasSubtitle && (
         <p
-          className={`text-[20px] font-normal leading-relaxed max-w-2xl text-pretty ${
+          className={`text-body font-normal leading-relaxed max-w-2xl text-pretty ${
             // Without a rule the subtitle would sit right under the title, so it
             // carries the gap itself.
             divider ? "" : "mt-7"

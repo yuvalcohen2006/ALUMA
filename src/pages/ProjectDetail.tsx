@@ -19,7 +19,7 @@ const ProjectDetailPage = () => {
     if (loading) {
       return (
         <Layout>
-          <div className="min-h-[60vh] flex items-center justify-center text-[20px] text-muted-foreground">
+          <div className="min-h-[60vh] flex items-center justify-center text-body text-muted-foreground">
             טוען…
           </div>
         </Layout>
@@ -66,7 +66,7 @@ const ProjectDetailPage = () => {
         <div className="container-luxury">
           <Link
             to="/projects"
-            className="group inline-flex items-center gap-2 text-[18px] text-muted-foreground hover:text-primary transition-smooth"
+            className="group inline-flex items-center gap-2 text-body text-muted-foreground hover:text-primary transition-smooth"
           >
             <ArrowRight
               className="w-[18px] h-[18px] transition-transform duration-300 ease-out group-hover:translate-x-1"
@@ -83,19 +83,19 @@ const ProjectDetailPage = () => {
           {/* RIGHT COLUMN, text */}
           <div className="md:col-span-2 order-2 md:order-1">
             <div className="mb-8 md:mb-10">
-              <h1 className="font-display text-3xl sm:text-4xl md:text-5xl leading-tight mb-4 text-primary">
+              <h1 className="font-display text-3xl sm:text-4xl md:text-5xl leading-tight mb-4 text-foreground">
                 {project.name}
               </h1>
               {/* No italic: Assistant ships no true Hebrew italic, so the browser
                   fakes an oblique that slants the letterforms badly. The lead
                   reads at 20px in the softer charcoal instead. */}
-              <p className="text-[20px] leading-relaxed text-foreground-soft text-pretty mb-6">
+              <p className="text-body leading-relaxed text-foreground-soft text-pretty mb-6">
                 {project.intro}
               </p>
               {/* Each chip is conditional: projects entered through the CMS
                   carry no year or area, and an icon with nothing beside it
                   reads as a rendering fault. */}
-              <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-[18px] text-muted-foreground">
+              <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-body text-muted-foreground">
                 {project.location && (
                   <span className="inline-flex items-center gap-2">
                     <MapPin className="w-[18px] h-[18px] text-accent shrink-0" aria-hidden="true" />
@@ -118,11 +118,11 @@ const ProjectDetailPage = () => {
             </div>
 
             {project.story.length > 0 && (
-            <div className="border border-border rounded-[14px] p-6 md:p-8 mb-6 md:mb-8">
-              <h2 className="font-display font-bold text-[26px] leading-snug text-primary">
+            <div className="border border-border rounded-sm p-6 md:p-8 mb-6 md:mb-8">
+              <h2 className="font-display font-medium text-heading leading-snug text-foreground">
                 על הפרויקט
               </h2>
-              <div className="w-20 h-[2px] bg-primary/55 mt-5" aria-hidden="true" />
+              <div className="w-20 h-[2px] bg-foreground/15 mt-5" aria-hidden="true" />
               {/* The paragraphs used to render with no gap between them and ran
                   together as one block. */}
               <div className="mt-6 space-y-4">
@@ -139,14 +139,14 @@ const ProjectDetailPage = () => {
                 scope nor materials, and an empty bordered box with two headings
                 and nothing under them looks broken rather than sparse. */}
             {(project.scope.length > 0 || project.materials.length > 0) && (
-            <div className="border border-border rounded-[14px] p-6 md:p-8">
-              <h2 className="font-display font-bold text-[26px] leading-snug text-primary">
+            <div className="border border-border rounded-sm p-6 md:p-8">
+              <h2 className="font-display font-medium text-heading leading-snug text-foreground">
                 הפרויקט כולל
               </h2>
-              <div className="w-20 h-[2px] bg-primary/55 mt-5" aria-hidden="true" />
+              <div className="w-20 h-[2px] bg-foreground/15 mt-5" aria-hidden="true" />
               <ul className="mt-6 space-y-4 mb-8">
                 {project.scope.map((s) => (
-                  <li key={s} className="flex gap-3 text-[18px] leading-relaxed text-foreground">
+                  <li key={s} className="flex gap-3 text-body leading-relaxed text-foreground">
                     <Check className="w-[18px] h-[18px] text-accent mt-[6px] shrink-0" aria-hidden="true" />
                     <span>{s}</span>
                   </li>
@@ -154,10 +154,10 @@ const ProjectDetailPage = () => {
               </ul>
               {project.materials.length > 0 && (
               <div className="pt-6 border-t border-border">
-                <h3 className="font-display font-normal text-[22px] text-foreground">
+                <h3 className="font-display font-normal text-body text-foreground">
                   חומרים
                 </h3>
-                <div className="mt-4 space-y-2 text-[18px] leading-relaxed text-foreground">
+                <div className="mt-4 space-y-2 text-body leading-relaxed text-foreground">
                   {project.materials.map((m, i) => (
                     <div key={i} className="flex items-center gap-3">
                       <span
@@ -182,7 +182,7 @@ const ProjectDetailPage = () => {
                   key={i}
                   className="group shrink-0 md:shrink snap-start w-[85%] sm:w-[60%] md:w-full"
                 >
-                  <div className="relative overflow-hidden rounded-[14px] border border-border  aspect-[4/3] transition-colors duration-500 ease-out group-hover:border-primary/60">
+                  <div className="relative overflow-hidden rounded-sm border border-border  aspect-[4/3] transition-colors duration-500 ease-out group-hover:border-foreground/15">
                     <img
                       src={img}
                       alt={`${project.name}, תמונה ${i + 1}`}
@@ -202,7 +202,7 @@ const ProjectDetailPage = () => {
       <section className="py-20 md:py-24 gradient-cream">
         <div className="container-luxury">
           <div className="flex flex-col items-center text-center">
-            <p className="text-[18px] text-muted-foreground mb-4">מגשימים חלום</p>
+            <p className="text-body text-muted-foreground mb-4">מגשימים חלום</p>
             <SectionHeading
               tone="charcoal"
               subtitle="כל פרויקט מתוכנן ומיוצר בהתאם לאופי המרחב עד לפרטים הקטנים ביותר."
@@ -223,15 +223,15 @@ const ProjectDetailPage = () => {
       <section className="py-16 md:py-24 bg-background">
         <div className="container-luxury">
           <div className="flex flex-col items-center text-center mb-10 md:mb-12">
-            <h2 className="font-display font-bold text-[26px] leading-snug text-primary">
+            <h2 className="font-display font-medium text-heading leading-snug text-foreground">
               פרויקטים נוספים
             </h2>
-            <div className="w-20 h-[2px] bg-primary/55 mt-5" aria-hidden="true" />
+            <div className="w-20 h-[2px] bg-foreground/15 mt-5" aria-hidden="true" />
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
             {others.map((p) => (
               <Link key={p.slug} to={`/projects/${p.slug}`} className="group block">
-                <div className="relative aspect-[4/3] overflow-hidden rounded-[14px] border border-border mb-4  transition-all duration-500 ease-out   group-hover:border-primary/60">
+                <div className="relative aspect-[4/3] overflow-hidden rounded-sm border border-border mb-4  transition-all duration-500 ease-out   group-hover:border-foreground/15">
                   <img
                     src={p.cover}
                     alt={p.name}
@@ -240,7 +240,7 @@ const ProjectDetailPage = () => {
                     className="absolute inset-0 w-full h-full object-cover transition-transform duration-600 ease-out group-hover:scale-[1.06]"
                   />
                 </div>
-                <h3 className="font-display font-normal text-[22px] text-foreground group-hover:text-accent transition-smooth flex items-center gap-2">
+                <h3 className="font-display font-normal text-body text-foreground group-hover:text-accent transition-smooth flex items-center gap-2">
                   {p.name}
                   <ArrowLeft
                     className="w-[18px] h-[18px] shrink-0 transition-transform duration-300 ease-out group-hover:-translate-x-1"

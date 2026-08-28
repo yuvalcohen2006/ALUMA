@@ -55,7 +55,7 @@ const CollectionSection = ({
       <Reveal>
         <Link
           to={to(`/collections/${col.slug}`)}
-          className="group relative block aspect-[21/9] md:aspect-[3/1] overflow-hidden rounded-[14px] bg-secondary/50"
+          className="group relative block aspect-[21/9] md:aspect-[3/1] overflow-hidden rounded-sm bg-secondary/50"
         >
           {band && (
             <img
@@ -74,7 +74,7 @@ const CollectionSection = ({
           />
           <div className="absolute inset-0 flex items-center">
             <div className="w-full px-6 md:px-12">
-              <h2 className="font-display font-semibold text-white text-start leading-[0.92] text-[clamp(48px,12vw,170px)]">
+              <h2 className="font-display font-medium text-white text-start leading-[0.92] text-[clamp(48px,12vw,170px)]">
                 {col.name_he}
               </h2>
             </div>
@@ -84,7 +84,7 @@ const CollectionSection = ({
 
       {col.intro && (
         <Reveal>
-          <p className="mt-6 md:mt-8 max-w-[62ch] text-[18px] md:text-[19px] leading-relaxed text-foreground-soft text-start">
+          <p className="mt-6 md:mt-8 max-w-[62ch] text-body leading-relaxed text-foreground-soft text-start">
             {col.intro}
           </p>
         </Reveal>
@@ -106,7 +106,7 @@ const CollectionSection = ({
         <div className="mt-10 md:mt-12 text-start">
           <Link
             to={to(`/collections/${col.slug}`)}
-            className="inline-flex items-center justify-center h-12 px-7 rounded-full border border-foreground/25 text-[17px] text-foreground transition-colors duration-200 hover:border-accent hover:text-accent"
+            className="inline-flex items-center justify-center h-12 px-7 rounded-full border border-foreground/25 text-small text-foreground transition-colors duration-200 hover:border-accent hover:text-accent"
           >
             עוד מהקולקציה
           </Link>
@@ -147,20 +147,20 @@ const CollectionsPage = () => {
   }, [collections, products]);
 
   const collectionSchema = {
-    "@context": "https://schema.org",
-    "@type": "CollectionPage",
+"@context": "https://schema.org",
+"@type": "CollectionPage",
     name: "קולקציות Aluma",
     description: "סלוני חוץ, פינות אוכל ושולחנות אש בייצור אישי.",
     url: `${SITE}/collections`,
     inLanguage: "he-IL",
     mainEntity: {
-      "@type": "ItemList",
+"@type": "ItemList",
       numberOfItems: products.length,
       itemListElement: products.map((p, i) => ({
-        "@type": "ListItem",
+"@type": "ListItem",
         position: i + 1,
         item: {
-          "@type": "Product",
+"@type": "Product",
           name: p.name,
           url: `${SITE}/products/${p.slug}`,
         },
@@ -194,15 +194,15 @@ const CollectionsPage = () => {
           <div className="py-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-14">
             {[0, 1, 2, 3].map((i) => (
               <div key={i} className="animate-pulse space-y-4">
-                <div className="aspect-square rounded-[14px] bg-secondary" />
-                <div className="h-5 w-2/3 mx-auto rounded-[10px] bg-secondary" />
-                <div className="h-4 w-full rounded-[10px] bg-secondary" />
+                <div className="aspect-square rounded-sm bg-secondary" />
+                <div className="h-5 w-2/3 mx-auto rounded-sm bg-secondary" />
+                <div className="h-4 w-full rounded-sm bg-secondary" />
               </div>
             ))}
           </div>
         ) : collections.length === 0 ? (
           <div className="py-24 text-center">
-            <p className="text-[20px] text-muted-foreground mb-6">
+            <p className="text-body text-muted-foreground mb-6">
               הקולקציות בדרך. בינתיים — נשמח להכיר אתכם.
             </p>
             <Link to={to("/faq") + "#contact"} className="btn-shine inline-flex">

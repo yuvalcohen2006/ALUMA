@@ -21,7 +21,7 @@ export const ProductCard = ({ product: p, eager }: { product: DBProduct; eager: 
   const { to } = useLocalizedPath();
   return (
     <Link to={to(`/products/${p.slug}`)} className="group block text-center">
-      <div className="relative aspect-square overflow-hidden rounded-[14px] bg-secondary/50">
+      <div className="relative aspect-square overflow-hidden rounded-sm bg-secondary/50">
         {p.cover_url && (
           <img
             src={p.cover_url}
@@ -34,16 +34,16 @@ export const ProductCard = ({ product: p, eager }: { product: DBProduct; eager: 
           />
         )}
       </div>
-      <h3 className="mt-5 font-display font-medium text-[21px] leading-snug text-foreground transition-colors duration-300 group-hover:text-accent">
+      <h3 className="mt-5 font-display font-medium text-body leading-snug text-foreground transition-colors duration-300 group-hover:text-accent">
         {p.name}
       </h3>
       {p.tagline && (
-        <p className="mt-1 text-[16px] leading-relaxed text-muted-foreground text-pretty">
+        <p className="mt-1 text-small leading-relaxed text-muted-foreground text-pretty">
           {p.tagline}
         </p>
       )}
       {p.dimensions && (
-        <p className="mt-1.5 text-[14px] text-foreground/45">
+        <p className="mt-1.5 text-label text-foreground/45">
           {/* Dimensions stay LTR inside the RTL line, or the × and the units
               end up on the wrong side. */}
           <span dir="ltr">{p.dimensions}</span>
@@ -69,10 +69,10 @@ const CollectionPage = () => {
       <Layout>
         <div className="container-luxury pt-40 pb-24">
           <div className="animate-pulse space-y-8">
-            <div className="aspect-[21/9] md:aspect-[3/1] rounded-[14px] bg-secondary" />
+            <div className="aspect-[21/9] md:aspect-[3/1] rounded-sm bg-secondary" />
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
               {[0, 1, 2, 3].map((i) => (
-                <div key={i} className="aspect-square rounded-[14px] bg-secondary" />
+                <div key={i} className="aspect-square rounded-sm bg-secondary" />
               ))}
             </div>
           </div>
@@ -93,8 +93,8 @@ const CollectionPage = () => {
         path={`/collections/${collection.slug}`}
         image={band || undefined}
         jsonLd={{
-          "@context": "https://schema.org",
-          "@type": "CollectionPage",
+"@context": "https://schema.org",
+"@type": "CollectionPage",
           name: collection.name_he,
           url: `${SITE}/collections/${collection.slug}`,
           inLanguage: "he-IL",
@@ -106,7 +106,7 @@ const CollectionPage = () => {
           like a different page loaded. */}
       <section className="pt-24">
         <div className="container-luxury">
-          <div className="relative aspect-[21/9] md:aspect-[3/1] overflow-hidden rounded-[14px] bg-secondary/50">
+          <div className="relative aspect-[21/9] md:aspect-[3/1] overflow-hidden rounded-sm bg-secondary/50">
             {band && (
               <img
                 src={band}
@@ -127,7 +127,7 @@ const CollectionPage = () => {
             />
             <div className="absolute inset-0 flex items-center">
               <div className="w-full px-6 md:px-12">
-                <h1 className="font-display font-semibold text-white text-start leading-[0.92] text-[clamp(56px,13vw,180px)]">
+                <h1 className="font-display font-medium text-white text-start leading-[0.92] text-[clamp(56px,13vw,180px)]">
                   {collection.name_he}
                 </h1>
               </div>
@@ -136,7 +136,7 @@ const CollectionPage = () => {
 
           {collection.intro && (
             <Reveal>
-              <p className="mt-7 max-w-[62ch] text-[18px] md:text-[19px] leading-relaxed text-foreground-soft text-start">
+              <p className="mt-7 max-w-[62ch] text-body leading-relaxed text-foreground-soft text-start">
                 {collection.intro}
               </p>
             </Reveal>
@@ -147,7 +147,7 @@ const CollectionPage = () => {
       <section className="py-14 md:py-20">
         <div className="container-luxury">
           {items.length === 0 ? (
-            <p className="text-[18px] text-muted-foreground text-start">בקרוב.</p>
+            <p className="text-body text-muted-foreground text-start">בקרוב.</p>
           ) : (
             <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-6 md:gap-x-8 gap-y-12 md:gap-y-14">
               {items.map((p, i) => (
@@ -164,7 +164,7 @@ const CollectionPage = () => {
             <div className="mt-16 md:mt-20 text-center">
               <Link
                 to={to("/collections")}
-                className="inline-flex items-center justify-center h-12 px-7 rounded-full border border-foreground/25 text-[17px] text-foreground transition-colors duration-200 hover:border-accent hover:text-accent"
+                className="inline-flex items-center justify-center h-12 px-7 rounded-full border border-foreground/25 text-small text-foreground transition-colors duration-200 hover:border-accent hover:text-accent"
               >
                 לכל הקולקציות
               </Link>

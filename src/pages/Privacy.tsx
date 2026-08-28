@@ -21,7 +21,7 @@ const PrivacyPage = () => {
           </p>
 
           <div>
-            <h2 className="font-display text-2xl text-primary mb-3">המידע שאנו אוספים</h2>
+            <h2 className="font-display text-2xl text-foreground mb-3">המידע שאנו אוספים</h2>
             <ul className="list-disc pr-6 space-y-2 marker:text-primary/50">
               <li>פרטים שאתם מוסרים מרצונכם בטופס יצירת הקשר: שם, טלפון, מייל ותוכן ההודעה.</li>
               <li>מידע טכני אנונימי הנאסף אוטומטית: סוג דפדפן, מערכת הפעלה, רזולוציה ועמודים שבהם ביקרתם.</li>
@@ -30,7 +30,7 @@ const PrivacyPage = () => {
           </div>
 
           <div>
-            <h2 className="font-display text-2xl text-primary mb-3">השימוש במידע</h2>
+            <h2 className="font-display text-2xl text-foreground mb-3">השימוש במידע</h2>
             <ul className="list-disc pr-6 space-y-2 marker:text-primary/50">
               <li>יצירת קשר חוזר לצורך מתן הצעת מחיר ושירות.</li>
               <li>שיפור האתר, הקולקציות והשירות.</li>
@@ -40,7 +40,7 @@ const PrivacyPage = () => {
           </div>
 
           <div>
-            <h2 className="font-display text-2xl text-primary mb-3">שיתוף מידע</h2>
+            <h2 className="font-display text-2xl text-foreground mb-3">שיתוף מידע</h2>
             <p>
               איננו מוכרים, משכירים או מעבירים מידע אישי לצדדים שלישיים, פרט
               לספקי שירות הפועלים מטעמנו (כגון שירותי מייל, אחסון ענן או
@@ -50,7 +50,7 @@ const PrivacyPage = () => {
           </div>
 
           <div>
-            <h2 className="font-display text-2xl text-primary mb-3">עוגיות (Cookies)</h2>
+            <h2 className="font-display text-2xl text-foreground mb-3">עוגיות (Cookies)</h2>
             <p>
               האתר עושה שימוש בעוגיות לצורך ניתוח תעבורה, שמירת העדפות (למשל
               הגדרות תפריט הנגישות) ושיפור החוויה. ניתן לחסום עוגיות דרך הגדרות
@@ -59,7 +59,7 @@ const PrivacyPage = () => {
           </div>
 
           <div>
-            <h2 className="font-display text-2xl text-primary mb-3">אבטחת מידע</h2>
+            <h2 className="font-display text-2xl text-foreground mb-3">אבטחת מידע</h2>
             <p>
               אנו נוקטים באמצעי אבטחה סבירים ומקובלים בענף לשמירת המידע. עם
               זאת, אין מערכת מאובטחת לחלוטין, ואיננו יכולים להבטיח מניעה מוחלטת
@@ -68,7 +68,7 @@ const PrivacyPage = () => {
           </div>
 
           <div>
-            <h2 className="font-display text-2xl text-primary mb-3">הזכויות שלכם</h2>
+            <h2 className="font-display text-2xl text-foreground mb-3">הזכויות שלכם</h2>
             <p>
               בהתאם לחוק הגנת הפרטיות, התשמ״א-1981, עומדת לכם הזכות לעיין במידע
               האישי שמוחזק עליכם, לבקש את תיקונו או מחיקתו, ולהסיר עצמכם מרשימת
@@ -80,7 +80,7 @@ const PrivacyPage = () => {
             </p>
           </div>
 
-          <div className="pt-4 border-t border-border text-[18px] text-muted-foreground">
+          <div className="pt-4 border-t border-border text-body text-muted-foreground">
             עודכן לאחרונה: {new Date().toLocaleDateString("he-IL")}.
           </div>
         </div>

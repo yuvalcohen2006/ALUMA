@@ -143,7 +143,7 @@ const Club = () => {
           </ShineButton>
           <Link
             to="/club/auth"
-            className="link-underline text-[18px] text-foreground-soft hover:text-accent transition-smooth"
+            className="link-underline text-body text-foreground-soft hover:text-accent transition-smooth"
           >
             כבר חברים? התחברות
           </Link>
@@ -178,16 +178,16 @@ const Club = () => {
             {/* RTL: first child sits at the right edge */}
             <Reveal className="lg:col-span-7">
               <div className="text-start">
-                <h2 className="font-display font-bold text-[30px] leading-snug text-primary">
+                <h2 className="font-display font-medium text-heading leading-snug text-foreground">
                   מה זה מועדון אלומה
                 </h2>
-                <div className="w-20 h-[2px] bg-primary/55 mt-5" aria-hidden="true" />
+                <div className="w-20 h-[2px] bg-foreground/15 mt-5" aria-hidden="true" />
 
-                <p className="text-[20px] leading-relaxed text-foreground mt-6 text-pretty">
+                <p className="text-body leading-relaxed text-foreground mt-6 text-pretty">
                   מועדון אלומה הוא לא תוכנית נקודות. זו דלת אחורית לעולם של מעצבים,
                   קולקציות מוקדמות ושירות אישי, למי שרואה את החוץ של הבית כמו את הפנים.
                 </p>
-                <p className="text-[20px] leading-relaxed text-foreground-soft mt-5 text-pretty">
+                <p className="text-body leading-relaxed text-foreground-soft mt-5 text-pretty">
                   החברות במועדון אלומה חינמית לחלוטין ואישית, לא נשלח לכם ספאם,
                   לא נמכור את הנתונים ולא נציק לכם בטלפון.
                 </p>
@@ -202,7 +202,7 @@ const Club = () => {
                   empty column the copy beside it gets centred against. It eases
                   back to p-6 on narrow screens so the fixed-width ShineButton
                   never overflows it at 375px. */}
-              <div className="rounded-[14px] border border-border bg-secondary/50  p-6 sm:p-7 md:p-8 text-start">
+              <div className="rounded-sm border border-border bg-secondary/50  p-6 sm:p-7 md:p-8 text-start">
                 <img
                   src={alumaLogo}
                   alt="Aluma"
@@ -212,13 +212,13 @@ const Club = () => {
                 />
 
                 <AuthGate loading={loading} className="mt-5">
-                  <h3 className="font-display font-normal text-[22px] text-foreground">
+                  <h3 className="font-display font-normal text-body text-foreground">
                     {user ? "אתם כבר בפנים" : "החברות פתוחה, ובחינם"}
                   </h3>
 
                   {user ? (
                     <>
-                      <p className="text-[18px] text-foreground-soft leading-relaxed mt-3">
+                      <p className="text-body text-foreground-soft leading-relaxed mt-3">
                         החשבון מחובר. כל מה שסימנתם ועקבתם אחריו מחכה באזור האישי שלכם.
                       </p>
                       {user.email && (
@@ -226,7 +226,7 @@ const Club = () => {
                         // right edge with the rest of the panel.
                         <p
                           dir="ltr"
-                          className="text-[18px] text-foreground mt-4 pt-4 border-t border-border/70 text-start break-all"
+                          className="text-body text-foreground mt-4 pt-4 border-t border-border/70 text-start break-all"
                         >
                           {user.email}
                         </p>
@@ -244,7 +244,7 @@ const Club = () => {
                             strokeWidth={2.5}
                             aria-hidden="true"
                           />
-                          <span className="text-[18px] leading-relaxed text-foreground">
+                          <span className="text-body leading-relaxed text-foreground">
                             {t}
                           </span>
                         </li>
@@ -299,14 +299,14 @@ const Club = () => {
                 >
                   {/* Reading matter, not a card — nothing here is clickable, so
                       nothing here reacts to the pointer. */}
-                  <span className="inline-flex items-center justify-center w-14 h-14 rounded-[14px] border border-background/20 bg-background/10 text-background">
+                  <span className="inline-flex items-center justify-center w-14 h-14 rounded-sm border border-background/20 bg-background/10 text-background">
                     <Icon className="w-6 h-6" aria-hidden="true" />
                   </span>
 
-                  <h3 className="font-display font-normal text-[22px] text-background mt-5 leading-snug">
+                  <h3 className="font-display font-normal text-body text-background mt-5 leading-snug">
                     {perk.title}
                   </h3>
-                  <p className="text-[20px] leading-relaxed text-background/75 mt-3 text-pretty">
+                  <p className="text-body leading-relaxed text-background/75 mt-3 text-pretty">
                     {perk.text}
                   </p>
                 </motion.li>
@@ -326,9 +326,9 @@ const Club = () => {
                 <SectionHeading tone="charcoal" align="start">
                   שלוש דקות, בלי טפסים ובלי התחייבות
                 </SectionHeading>
-                <div className="w-20 h-[2px] bg-primary/55 mt-5" aria-hidden="true" />
+                <div className="w-20 h-[2px] bg-foreground/15 mt-5" aria-hidden="true" />
 
-                <p className="text-[20px] leading-relaxed text-foreground mt-6 text-pretty">
+                <p className="text-body leading-relaxed text-foreground mt-6 text-pretty">
                   ההרשמה נעשית פעם אחת, ומשם החשבון פשוט זוכר אתכם, את מה שאהבתם
                   ואת הפרויקט שפתחתם איתנו.
                 </p>
@@ -363,23 +363,23 @@ const Club = () => {
                     <div className="flex flex-col items-center shrink-0">
                       <span
                         aria-hidden="true"
-                        className="grid place-items-center w-14 h-14 rounded-full border border-primary/45 bg-background font-display text-[22px] text-primary "
+                        className="grid place-items-center w-14 h-14 rounded-full border border-foreground/15 bg-background font-display text-body text-primary "
                       >
                         {step.n}
                       </span>
                       {i < steps.length - 1 && (
                         <span
-                          className="w-px flex-1 min-h-[36px] bg-primary/30 mt-3"
+                          className="w-px flex-1 min-h-[36px] bg-foreground/15 mt-3"
                           aria-hidden="true"
                         />
                       )}
                     </div>
 
                     <div className={`text-start pt-2.5 ${i < steps.length - 1 ? "pb-8" : ""}`}>
-                      <h3 className="font-display font-normal text-[22px] text-foreground leading-snug">
+                      <h3 className="font-display font-normal text-body text-foreground leading-snug">
                         {step.title}
                       </h3>
-                      <p className="text-[20px] leading-relaxed text-foreground-soft mt-2 text-pretty">
+                      <p className="text-body leading-relaxed text-foreground-soft mt-2 text-pretty">
                         {step.text}
                       </p>
                     </div>

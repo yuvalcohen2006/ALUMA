@@ -52,10 +52,12 @@
     --font-display: 'Heebo', system-ui, sans-serif;
     --font-body: 'Assistant', system-ui, sans-serif;
 
-    /* One middle-ground corner radius for the whole site (was 0.25rem, which made
-       the most-used rounded-sm collapse to 0px — hence the boxiness). At 14px the
-       scale lands sm:10 / md:12 / lg:14, matching the materials-photo corners. */
-    --radius: 0.875rem;
+    /* One small radius for the whole site. This drives every shadcn primitive
+       too (lg = radius, md = radius-2, sm = radius-4), so lowering it here is
+       what collapses the last of the nine corner treatments the public pages
+       had grown. 14px read as a "card" everywhere; 8px reads as a control, and
+       photographs are square-cornered now regardless. */
+    --radius: 0.5rem;
 
     /* Solid sand — NEVER a gradient between the neutral backgrounds (clean lines only) */
     --gradient-cream: hsl(34 34% 87%);

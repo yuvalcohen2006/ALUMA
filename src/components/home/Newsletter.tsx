@@ -72,7 +72,7 @@ const Newsletter = () => {
           className="absolute inset-x-0 top-0 h-1/2"
           style={{
             background:
-              "linear-gradient(to bottom, rgba(255,255,255,0.72) 0%, rgba(255,255,255,0.25) 55%, transparent 100%)",
+"linear-gradient(to bottom, rgba(255,255,255,0.72) 0%, rgba(255,255,255,0.25) 55%, transparent 100%)",
           }}
         />
 
@@ -81,16 +81,16 @@ const Newsletter = () => {
               The line under it stays at the smaller size, unlike a category
               tagline — here it's helper text introducing a form, not the
               second half of a headline. */}
-          <h2 className="font-display font-semibold text-[36px] lg:text-[48px] leading-[1.1]">
+          <h2 className="font-display font-medium text-display">
             {t("club.title")}
           </h2>
-          <p className="mt-1 text-[19px] lg:text-[21px] leading-[1.21] lg:leading-[1.238] text-foreground-soft">
+          <p className="mt-1 text-body text-foreground-soft">
             {t("club.subtitle")}
           </p>
 
           {subscribed ? (
             <div
-              className="mt-8 inline-flex items-center gap-2 text-[19px]"
+              className="mt-8 inline-flex items-center gap-2 text-body"
               role="status"
               aria-live="polite"
             >
@@ -122,18 +122,18 @@ const Newsletter = () => {
                   // typed Latin address still renders left-to-right. Forcing
                   // ltr threw the placeholder to the wrong edge.
                   dir="auto"
-                  className="h-14 flex-1 min-w-0 rounded-full border border-foreground/15 bg-white/80 px-6 text-[17px] text-foreground text-start shadow-soft backdrop-blur-md outline-none transition-colors placeholder:text-foreground/45 focus:border-accent"
+                  className="h-14 flex-1 min-w-0 rounded-full border border-foreground/15 bg-white/80 px-6 text-small text-foreground text-start shadow-soft backdrop-blur-md outline-none transition-colors placeholder:text-foreground/45 focus:border-accent"
                 />
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="h-14 shrink-0 rounded-full bg-foreground px-8 text-[17px] font-medium text-background transition-colors duration-200 hover:bg-accent disabled:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+                  className="h-14 shrink-0 rounded-full bg-foreground px-8 text-small font-medium text-background transition-colors duration-200 hover:bg-accent disabled:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
                 >
                   {t("club.submit")}
                 </button>
               </div>
 
-              <p className="mt-3 text-[13px] text-foreground/55">
+              <p className="mt-3 text-label text-foreground/55">
                 {t("club.unsubscribe")}
               </p>
             </form>

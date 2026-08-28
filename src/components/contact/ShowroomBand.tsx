@@ -86,7 +86,7 @@ const GOOGLE_MAPS = `https://www.google.com/maps/search/?api=1&query=${mapsQuery
 const WAZE = `https://waze.com/ul?q=${mapsQuery}&navigate=yes`;
 
 const navPill =
-"inline-flex items-center gap-2.5 rounded-[10px] border border-background/30 px-5 py-3 text-[18px] text-background/90 transition-all duration-300 hover:bg-background/10 hover:border-background/60 hover:-translate-y-0.5";
+"inline-flex items-center gap-2.5 rounded-sm border border-background/30 px-5 py-3 text-body text-background/90 transition-all duration-300 hover:bg-background/10 hover:border-background/60 hover:-translate-y-0.5";
 
 /**
  * The one dark band on the page.
@@ -129,10 +129,10 @@ const ShowroomBand = () => {
                   spacing step would land on. */}
               <MapPin className="w-6 h-6 shrink-0 text-primary mt-[3px]" aria-hidden="true" />
               <div className="min-w-0">
-                <p className="font-display font-normal text-[22px] leading-snug text-background">
+                <p className="font-display font-normal text-body leading-snug text-background">
                   {SITE.address.full}
                 </p>
-                <p className="text-[18px] leading-snug text-background/70 mt-1.5">
+                <p className="text-body leading-snug text-background/70 mt-1.5">
                   ביקור בתיאום מראש
                 </p>
               </div>
@@ -152,14 +152,14 @@ const ShowroomBand = () => {
 
           {/* Hours — left column */}
           <Reveal delay={120} className="order-2 min-w-0">
-            <div className="rounded-[14px] border border-background/15 bg-background/[0.06] p-6 md:p-8 ">
+            <div className="rounded-sm border border-background/15 bg-background/[0.06] p-6 md:p-8 ">
               {/* Title flush to the card's content edge, exactly like every
                   other title on the site, with the clock parked in the opposite
                   corner. Leading with the icon pushed the title 32px inwards
                   and left the rule beneath it measuring from the icon rather
                   than from the word — and left the far corner empty. */}
               <div className="flex items-center justify-between gap-4">
-                <h3 className="font-display font-normal text-[22px] leading-snug text-background">
+                <h3 className="font-display font-normal text-body leading-snug text-background">
                   שעות פעילות
                 </h3>
                 <Clock className="w-6 h-6 shrink-0 text-primary" aria-hidden="true" />
@@ -168,7 +168,7 @@ const ShowroomBand = () => {
 
               <div
                 className={cn(
-"mt-6 inline-flex flex-wrap items-center gap-x-3 gap-y-1 rounded-[10px] border px-4 py-2.5 text-[18px]",
+"mt-6 inline-flex flex-wrap items-center gap-x-3 gap-y-1 rounded-sm border px-4 py-2.5 text-body",
                   status.open
                     ? "border-[#25D366]/45 bg-[#25D366]/10 text-background"
                     : "border-background/25 bg-background/[0.06] text-background/85",
@@ -203,14 +203,14 @@ const ShowroomBand = () => {
                     <li
                       key={row.label}
                       className={cn(
-"flex flex-wrap items-center justify-between gap-x-4 gap-y-1.5 -mx-6 md:-mx-8 px-6 md:px-8 py-3 text-[18px] transition-colors duration-300",
+"flex flex-wrap items-center justify-between gap-x-4 gap-y-1.5 -mx-6 md:-mx-8 px-6 md:px-8 py-3 text-body transition-colors duration-300",
                         isToday ? "bg-background/10 text-background" : "text-background/70",
                       )}
                     >
                       <span className="flex items-center gap-2.5 whitespace-nowrap">
                         {row.label}
                         {isToday && (
-                          <span className="rounded-full bg-primary px-2.5 py-0.5 text-[18px] leading-snug text-primary-foreground">
+                          <span className="rounded-full bg-primary px-2.5 py-0.5 text-body leading-snug text-primary-foreground">
                             היום
                           </span>
                         )}
@@ -226,7 +226,7 @@ const ShowroomBand = () => {
               {/* Same full-width treatment as the rows above, so the card
                   closes on one clean edge-to-edge rule rather than a hairline
                   that stops short of the band sitting right above it. */}
-              <p className="mt-6 -mx-6 md:-mx-8 px-6 md:px-8 pt-5 border-t border-background/15 text-[18px] leading-relaxed text-background/70">
+              <p className="mt-6 -mx-6 md:-mx-8 px-6 md:px-8 pt-5 border-t border-background/15 text-body leading-relaxed text-background/70">
                 ניתן להגיע לאולם התצוגה בתיאום מראש, בטלפון{" "}
                 <a href={`tel:${SITE.phone.tel}`} className="link-underline text-background" dir="ltr">
                   {SITE.phone.display}

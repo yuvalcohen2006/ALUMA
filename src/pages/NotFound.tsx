@@ -39,7 +39,7 @@ const NotFound = () => {
           <div className="font-display text-7xl md:text-9xl text-primary/20 leading-none mb-4">
             404
           </div>
-          <h1 className="font-display text-3xl sm:text-4xl md:text-5xl text-primary leading-tight mb-5">
+          <h1 className="font-display text-3xl sm:text-4xl md:text-5xl text-foreground leading-tight mb-5">
             נראה שהלכתם <span className="italic">לאיבוד</span>
           </h1>
           <p className="text-body text-foreground mb-10">
@@ -52,7 +52,7 @@ const NotFound = () => {
               <Link
                 key={p.to}
                 to={p.to}
-                className="group flex items-center justify-between gap-3 bg-card border border-border hover:border-primary/50  rounded-sm px-5 py-3.5 text-start transition-smooth"
+                className="group flex items-center justify-between gap-3 bg-card border border-border hover:border-foreground/15  rounded-sm px-5 py-3.5 text-start transition-smooth"
               >
                 <ArrowLeft className="w-4 h-4 text-primary opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0 transition-all" />
                 <span className="font-display text-base text-foreground">{p.label}</span>

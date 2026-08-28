@@ -44,7 +44,7 @@ const PageHero = ({ title, subtitle, filterSlot, dark = false }: PageHeroProps) 
           <div className="min-w-0 text-start">
             <h1
               className={`animate-rise-in font-display text-3xl sm:text-4xl md:text-5xl ${
-                dark ? "text-background" : "text-primary"
+                dark ? "text-background" : "text-foreground"
               }`}
             >
               {title}

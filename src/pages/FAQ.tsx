@@ -55,7 +55,7 @@ const FaqRow = ({ q, a, id, open, onToggle }: { q: string; a: string; id: string
         }`}
         strokeWidth={2}
       />
-      <span className="text-[19px] md:text-[21px] font-medium leading-[1.35] text-foreground">
+      <span className="text-body font-medium leading-[1.35] text-foreground">
         {q}
       </span>
     </button>
@@ -71,7 +71,7 @@ const FaqRow = ({ q, a, id, open, onToggle }: { q: string; a: string; id: string
     >
       <div className="overflow-hidden">
         <p
-          className={`ps-10 pb-8 pt-1 max-w-[62ch] text-[16px] md:text-[17px] leading-[1.6] text-foreground-soft transition-opacity duration-300 ${
+          className={`ps-10 pb-8 pt-1 max-w-[62ch] text-small text-foreground-soft transition-opacity duration-300 ${
             open ? "opacity-100 delay-75" : "opacity-0"
           }`}
         >
@@ -129,10 +129,10 @@ const FAQPage = () => {
   // Regenerated from the catalog in the ACTIVE language, so the structured
   // data always matches what the page shows.
   const faqSchema = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
+"@context": "https://schema.org",
+"@type": "FAQPage",
     mainEntity: faqs.map((f) => ({
-      "@type": "Question",
+"@type": "Question",
       name: f.question,
       acceptedAnswer: { "@type": "Answer", text: f.answer },
     })),
@@ -165,10 +165,10 @@ const FAQPage = () => {
         <div className="mx-auto max-w-[720px] px-6">
           <Reveal>
             {/* Apple's two-beat heading convention, not the word "FAQ". */}
-            <h1 className="font-display font-semibold text-[40px] md:text-[56px] leading-[1.08] text-foreground text-start">
+            <h1 className="font-display font-medium text-display text-foreground text-start">
               {text("faq.title", t("title"))}
             </h1>
-            <p className="mt-4 max-w-[46ch] text-[17px] md:text-[19px] leading-relaxed text-foreground-soft text-start">
+            <p className="mt-4 max-w-[46ch] text-small leading-relaxed text-foreground-soft text-start">
               {text("faq.subtitle", t("subtitle"))}
             </p>
           </Reveal>
@@ -198,7 +198,7 @@ const FAQPage = () => {
           </div>
 
           <Reveal>
-            <p className="mt-14 text-[17px] leading-relaxed text-foreground-soft text-start">
+            <p className="mt-14 text-small leading-relaxed text-foreground-soft text-start">
               {t("notFound")}{" "}
               <button
                 type="button"
@@ -240,7 +240,7 @@ const FAQPage = () => {
               }`}
               strokeWidth={2}
             />
-            <span className="text-[19px] md:text-[21px] font-medium leading-[1.35] text-foreground">
+            <span className="text-body font-medium leading-[1.35] text-foreground">
               {t("writeToUs")}
             </span>
           </button>

@@ -129,7 +129,7 @@ const CollectionDetailPage = () => {
   if (loading) {
     return (
       <Layout>
-        <div className="min-h-[60vh] flex items-center justify-center text-[20px] text-muted-foreground">
+        <div className="min-h-[60vh] flex items-center justify-center text-body text-muted-foreground">
           טוען…
         </div>
       </Layout>
@@ -140,10 +140,10 @@ const CollectionDetailPage = () => {
     return (
       <Layout>
         <div className="min-h-[60vh] flex flex-col items-center justify-center gap-5 text-center px-6">
-          <p className="text-[20px] leading-relaxed text-muted-foreground max-w-md">
+          <p className="text-body leading-relaxed text-muted-foreground max-w-md">
             אירעה שגיאה בטעינת הפריט. בדקו את החיבור ונסו שוב.
           </p>
-          <Button onClick={load} variant="outline" className="rounded-[10px] text-[18px] px-6">
+          <Button onClick={load} variant="outline" className="rounded-sm text-body px-6">
             נסו שוב
           </Button>
         </div>
@@ -198,7 +198,7 @@ const CollectionDetailPage = () => {
         <div className="container-luxury">
           <Link
             to="/collections"
-            className="inline-flex items-center gap-2 text-[18px] text-muted-foreground hover:text-accent transition-smooth"
+            className="inline-flex items-center gap-2 text-body text-muted-foreground hover:text-accent transition-smooth"
           >
             <ArrowRight className="w-4 h-4" />
             <span>חזרה לקולקציות</span>
@@ -210,17 +210,17 @@ const CollectionDetailPage = () => {
       <section className="pb-8 md:pb-12 bg-background">
         <div className="container-luxury text-center">
           {item.tag && (
-            <div className="inline-block px-4 py-1.5 mb-5 bg-secondary text-foreground text-[18px] rounded-[10px]">
+            <div className="inline-block px-4 py-1.5 mb-5 bg-secondary text-foreground text-body rounded-sm">
               {item.tag}
             </div>
           )}
           <div className="flex items-center justify-center gap-3 mb-3">
-            <h1 className="font-display text-3xl sm:text-4xl md:text-5xl leading-tight text-primary">
+            <h1 className="font-display text-3xl sm:text-4xl md:text-5xl leading-tight text-foreground">
               {item.name}
             </h1>
           </div>
           {item.tagline && (
-            <p className="text-[20px] leading-relaxed italic text-foreground-soft max-w-2xl mx-auto">
+            <p className="text-body leading-relaxed italic text-foreground-soft max-w-2xl mx-auto">
               {item.tagline}
             </p>
           )}
@@ -270,11 +270,11 @@ const CollectionDetailPage = () => {
             )}
 
             {item.description.length > 0 && (
-              <div className="border border-border bg-card rounded-[14px]  p-6 md:p-8">
-                <h2 className="font-display font-bold text-[26px] leading-snug text-foreground">
+              <div className="border border-border bg-card rounded-sm  p-6 md:p-8">
+                <h2 className="font-display font-medium text-heading leading-snug text-foreground">
                   על המוצר
                 </h2>
-                <div className="w-20 h-[2px] bg-primary/55 mt-5 mb-6" aria-hidden="true" />
+                <div className="w-20 h-[2px] bg-foreground/15 mt-5 mb-6" aria-hidden="true" />
                 <div className="space-y-5">
                   {item.description.map((p, i) => (
                     <p key={i} className="text-foreground text-body">
@@ -286,16 +286,16 @@ const CollectionDetailPage = () => {
             )}
 
             {item.highlights.length > 0 && (
-              <div className="border border-border bg-card rounded-[14px]  p-6 md:p-8">
-                <h2 className="font-display font-bold text-[26px] leading-snug text-foreground">
+              <div className="border border-border bg-card rounded-sm  p-6 md:p-8">
+                <h2 className="font-display font-medium text-heading leading-snug text-foreground">
                   נקודות עיצוב
                 </h2>
-                <div className="w-20 h-[2px] bg-primary/55 mt-5 mb-6" aria-hidden="true" />
+                <div className="w-20 h-[2px] bg-foreground/15 mt-5 mb-6" aria-hidden="true" />
                 <ul className="space-y-4">
                   {item.highlights.map((h) => (
                     <li key={h.title} className="flex gap-3">
                       <Check className="w-5 h-5 text-accent mt-1 shrink-0" />
-                      <div className="text-foreground font-normal text-[18px] leading-relaxed">
+                      <div className="text-foreground font-normal text-body leading-relaxed">
                         {h.title}{h.desc && <span className="text-muted-foreground">, {h.desc}</span>}
                       </div>
                     </li>
@@ -305,15 +305,15 @@ const CollectionDetailPage = () => {
             )}
 
             {(item.materials.length > 0 || item.dimensions) && (
-              <div className="border border-border bg-card rounded-[14px]  p-6 md:p-8">
+              <div className="border border-border bg-card rounded-sm  p-6 md:p-8">
                 {item.materials.length > 0 && (
                   <div className="flex items-start gap-3 mb-6">
                     <Layers className="w-5 h-5 text-accent mt-1.5 shrink-0" />
                     <div className="min-w-0">
-                      <div className="font-display font-normal text-[22px] text-foreground mb-3">
+                      <div className="font-display font-normal text-body text-foreground mb-3">
                         חומרים
                       </div>
-                      <div className="text-foreground font-normal text-[18px] leading-relaxed space-y-1.5">
+                      <div className="text-foreground font-normal text-body leading-relaxed space-y-1.5">
                         {item.materials.map((m, i) => (
                           <div key={i} className="flex items-center gap-2.5">
                             <span className="w-1.5 h-1.5 rounded-full bg-accent shrink-0" />
@@ -328,10 +328,10 @@ const CollectionDetailPage = () => {
                   <div className={`flex items-start gap-3 ${item.materials.length > 0 ? 'pt-6 border-t border-border' : ''}`}>
                     <Ruler className="w-5 h-5 text-accent mt-1.5 shrink-0" />
                     <div className="min-w-0">
-                      <div className="font-display font-normal text-[22px] text-foreground mb-3">
+                      <div className="font-display font-normal text-body text-foreground mb-3">
                         מידות בסיס
                       </div>
-                      <div className="text-foreground font-normal text-[18px] leading-relaxed">
+                      <div className="text-foreground font-normal text-body leading-relaxed">
                         {item.dimensions}
                       </div>
                     </div>
@@ -341,7 +341,7 @@ const CollectionDetailPage = () => {
             )}
 
             {item.description.length === 0 && item.highlights.length === 0 && item.materials.length === 0 && !item.dimensions && (
-              <div className="border border-border bg-card rounded-[14px]  p-6 md:p-8 min-h-[400px] flex items-center justify-center text-muted-foreground text-[18px]">
+              <div className="border border-border bg-card rounded-sm  p-6 md:p-8 min-h-[400px] flex items-center justify-center text-muted-foreground text-body">
                 בקרוב פרטים נוספים
               </div>
             )}
@@ -355,7 +355,7 @@ const CollectionDetailPage = () => {
             <div className="md:hidden flex overflow-x-auto gap-4 snap-x -mx-5 px-5 sm:-mx-6 sm:px-6 pb-2">
               {galleryImages.map((img, i) => (
                 <div key={i} className="shrink-0 snap-start w-[85%] sm:w-[60%]">
-                  <div className="relative overflow-hidden rounded-[14px]  aspect-[4/3] bg-secondary">
+                  <div className="relative overflow-hidden rounded-sm  aspect-[4/3] bg-secondary">
                     <img
                       src={img}
                       alt={`${item.name}, תמונה ${i + 1}`}
@@ -372,7 +372,7 @@ const CollectionDetailPage = () => {
             <div className="hidden md:flex gap-4 h-full">
               {/* Main image (appears on the right within left column, RTL) */}
               <div className="flex-1 order-1">
-                <div className="relative overflow-hidden rounded-[14px]  h-full min-h-[500px] max-h-[720px] bg-secondary/30">
+                <div className="relative overflow-hidden rounded-sm  h-full min-h-[500px] max-h-[720px] bg-secondary/30">
                   {galleryImages[activeImage] && (
                     <img
                       src={galleryImages[activeImage]}
@@ -396,7 +396,7 @@ const CollectionDetailPage = () => {
                       type="button"
                       onClick={() => setActiveImage(i)}
                       aria-label={`תמונה ${i + 1}`}
-                      className={`relative aspect-square shrink-0 overflow-hidden rounded-[10px] transition-smooth ${
+                      className={`relative aspect-square shrink-0 overflow-hidden rounded-sm transition-smooth ${
                         activeImage === i
                           ? "ring-2 ring-accent opacity-100"
                           : "ring-1 ring-border opacity-70 hover:opacity-100 hover:ring-primary/60"
@@ -423,15 +423,15 @@ const CollectionDetailPage = () => {
       <section className="py-20 md:py-24 gradient-cream">
         <div className="container-luxury flex flex-col items-center text-center">
           {/* Charcoal, not terracotta: this block sits on sand beige. */}
-          <p className="text-[18px] text-foreground-soft mb-4">מגשימים חלום</p>
+          <p className="text-body text-foreground-soft mb-4">מגשימים חלום</p>
           <h2 className="font-display font-normal text-3xl md:text-5xl text-foreground leading-tight">
             השאירו פרטים
           </h2>
-          <div className="w-20 h-[2px] bg-primary/55 my-5" aria-hidden="true" />
-          <p className="text-[20px] font-normal leading-relaxed text-foreground max-w-xl mx-auto mb-10">
+          <div className="w-20 h-[2px] bg-foreground/15 my-5" aria-hidden="true" />
+          <p className="text-body font-normal leading-relaxed text-foreground max-w-xl mx-auto mb-10">
             כל פרויקט מתוכנן ומיוצר בהתאם לאופי המרחב עד לפרטים הקטנים ביותר.
           </p>
-          <Button asChild size="lg" className="rounded-[10px] text-[18px] px-8">
+          <Button asChild size="lg" className="rounded-sm text-body px-8">
             <Link to="/faq#contact" className="inline-flex items-center gap-2">
               להשארת פרטים
               <ArrowLeft className="w-4 h-4" />
@@ -445,17 +445,17 @@ const CollectionDetailPage = () => {
         <section className="py-16 md:py-24 bg-background">
           <div className="container-luxury">
             <div className="flex flex-col items-center text-center mb-10 md:mb-12">
-              <h2 className="font-display font-bold text-[26px] leading-snug text-primary">
+              <h2 className="font-display font-medium text-heading leading-snug text-foreground">
                 עוד מהקולקציה
               </h2>
-              <div className="w-20 h-[2px] bg-primary/55 mt-5" aria-hidden="true" />
+              <div className="w-20 h-[2px] bg-foreground/15 mt-5" aria-hidden="true" />
             </div>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
               {related.map((c) => (
                 <Link
                   key={c.slug}
                   to={`/products/${c.slug}`}
-                  className="group block bg-card rounded-[14px] overflow-hidden border border-border  hover:border-primary/60  transition-smooth"
+                  className="group block bg-card rounded-sm overflow-hidden border border-border  hover:border-foreground/15  transition-smooth"
                 >
                   <div className="relative aspect-[4/3] overflow-hidden bg-secondary">
                     {c.cover_url && (
@@ -470,13 +470,13 @@ const CollectionDetailPage = () => {
                       />
                     )}
                     {c.tag && (
-                      <div className="absolute top-4 right-4 px-3.5 py-1.5 bg-background/90 backdrop-blur-sm rounded-[10px] text-[18px] text-foreground">
+                      <div className="absolute top-4 right-4 px-3.5 py-1.5 bg-background/90 backdrop-blur-sm rounded-sm text-body text-foreground">
                         {c.tag}
                       </div>
                     )}
                   </div>
                   <div className="p-6">
-                    <h3 className="font-display font-normal text-[22px] text-primary group-hover:text-accent transition-smooth flex items-center gap-2">
+                    <h3 className="font-display font-normal text-body text-foreground group-hover:text-accent transition-smooth flex items-center gap-2">
                       {c.name}
                       <ArrowLeft className="w-4 h-4 shrink-0" />
                     </h3>

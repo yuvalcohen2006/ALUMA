@@ -101,7 +101,7 @@ const AccessibilityWidget = () => {
       className={`w-full flex items-center justify-between gap-3 px-4 py-3 rounded-sm border transition-smooth text-start ${
         active
           ? "bg-primary text-primary-foreground border-primary"
-          : "bg-card text-foreground border-border hover:border-primary/50"
+          : "bg-card text-foreground border-border hover:border-foreground/15"
       }`}
     >
       <span className="text-sm font-medium">{label}</span>
@@ -169,7 +169,7 @@ const AccessibilityWidget = () => {
                     onClick={() =>
                       update({ fontScale: Math.max(0.85, settings.fontScale - 0.1) })
                     }
-                    className="w-11 h-11 rounded-sm border border-border bg-card hover:border-primary/50 flex items-center justify-center"
+                    className="w-11 h-11 rounded-sm border border-border bg-card hover:border-foreground/15 flex items-center justify-center"
                   >
                     <Minus className="w-4 h-4" />
                   </button>
@@ -182,7 +182,7 @@ const AccessibilityWidget = () => {
                     onClick={() =>
                       update({ fontScale: Math.min(1.5, settings.fontScale + 0.1) })
                     }
-                    className="w-11 h-11 rounded-sm border border-border bg-card hover:border-primary/50 flex items-center justify-center"
+                    className="w-11 h-11 rounded-sm border border-border bg-card hover:border-foreground/15 flex items-center justify-center"
                   >
                     <Plus className="w-4 h-4" />
                   </button>

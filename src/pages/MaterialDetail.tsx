@@ -64,7 +64,7 @@ const MaterialDetailPage = () => {
               <h1 className="font-display text-3xl sm:text-4xl md:text-5xl leading-tight mb-4 max-w-3xl">
                 {material.name}
               </h1>
-              <p className="text-[20px] leading-relaxed text-background/85 max-w-2xl">
+              <p className="text-body leading-relaxed text-background/85 max-w-2xl">
                 {material.tagline}
               </p>
             </div>
@@ -75,7 +75,7 @@ const MaterialDetailPage = () => {
 
       <section className="py-16 md:py-24 bg-background">
         <div className="container-luxury grid md:grid-cols-5 gap-6 md:gap-8 items-stretch">
-          <div className="md:col-span-3 rounded-[14px] border border-border bg-background  p-8 md:p-10 flex flex-col">
+          <div className="md:col-span-3 rounded-sm border border-border bg-background  p-8 md:p-10 flex flex-col">
             <div className="space-y-6">
               {material.longDesc.map((p, i) => (
                 <p key={i} className="text-foreground text-body">
@@ -84,11 +84,11 @@ const MaterialDetailPage = () => {
               ))}
             </div>
           </div>
-          <aside className="md:col-span-2 rounded-[14px] border border-border bg-background  p-8 md:p-10 flex flex-col">
-            <h2 className="font-display font-bold text-[26px] leading-snug text-foreground">
+          <aside className="md:col-span-2 rounded-sm border border-border bg-background  p-8 md:p-10 flex flex-col">
+            <h2 className="font-display font-medium text-heading leading-snug text-foreground">
               מאפיינים
             </h2>
-            <div className="w-20 h-[2px] bg-primary/55 mt-5" aria-hidden="true" />
+            <div className="w-20 h-[2px] bg-foreground/15 mt-5" aria-hidden="true" />
             {/* Title and explanation on their own lines, the way the materials
                 index sets them — the old comma-joined run was what forced the
                 whole list down to 15px. */}
@@ -101,11 +101,11 @@ const MaterialDetailPage = () => {
                     aria-hidden="true"
                   />
                   <div>
-                    <p className="text-[20px] font-normal leading-snug text-foreground">
+                    <p className="text-body font-normal leading-snug text-foreground">
                       {f.title}
                     </p>
                     {f.desc && (
-                      <p className="text-[18px] leading-snug text-muted-foreground mt-1.5">
+                      <p className="text-body leading-snug text-muted-foreground mt-1.5">
                         {f.desc}
                       </p>
                     )}
@@ -125,30 +125,30 @@ const MaterialDetailPage = () => {
                 plain 18px label — charcoal, not terracotta, because this band
                 is sand. */}
             <div className="text-start mb-10">
-              <p className="text-[18px] text-foreground-soft mb-2">
+              <p className="text-body text-foreground-soft mb-2">
                 שאלות ותשובות
               </p>
-              <h2 className="font-display font-bold text-[26px] leading-snug text-foreground">
+              <h2 className="font-display font-medium text-heading leading-snug text-foreground">
                 מה שחשוב לדעת על {material.name}
               </h2>
-              <div className="w-20 h-[2px] bg-primary/55 mt-5" aria-hidden="true" />
+              <div className="w-20 h-[2px] bg-foreground/15 mt-5" aria-hidden="true" />
             </div>
             <div className="space-y-4">
               {material.faq.map((f, i) => (
                 <details
                   key={i}
-                  className="group bg-background border border-border rounded-[14px] p-6 md:p-7 open:shadow-soft transition-smooth"
+                  className="group bg-background border border-border rounded-sm p-6 md:p-7 open:shadow-soft transition-smooth"
                 >
-                  <summary className="cursor-pointer flex items-start justify-between gap-4 font-display font-normal text-[22px] leading-snug text-foreground list-none [&::-webkit-details-marker]:hidden">
+                  <summary className="cursor-pointer flex items-start justify-between gap-4 font-display font-normal text-body leading-snug text-foreground list-none [&::-webkit-details-marker]:hidden">
                     <span className="flex-1">{f.q}</span>
                     <span
-                      className="shrink-0 w-8 h-8 rounded-[10px] border border-primary/50 flex items-center justify-center text-foreground text-[20px] leading-none transition-smooth group-open:rotate-45 group-open:bg-accent group-open:border-accent group-open:text-accent-foreground"
+                      className="shrink-0 w-8 h-8 rounded-sm border border-foreground/15 flex items-center justify-center text-foreground text-body leading-none transition-smooth group-open:rotate-45 group-open:bg-accent group-open:border-accent group-open:text-accent-foreground"
                       aria-hidden="true"
                     >
                       +
                     </span>
                   </summary>
-                  <p className="mt-4 text-[20px] leading-relaxed text-foreground-soft">
+                  <p className="mt-4 text-body leading-relaxed text-foreground-soft">
                     {f.a}
                   </p>
                 </details>
@@ -162,7 +162,7 @@ const MaterialDetailPage = () => {
       <div className="py-16 md:py-20 bg-background flex justify-center">
         <Link
           to="/materials"
-          className="inline-flex items-center gap-2.5 text-[18px] font-normal text-primary border border-primary/60 hover:bg-primary hover:text-primary-foreground hover:border-primary transition-smooth rounded-[10px] px-8 py-3.5"
+          className="inline-flex items-center gap-2.5 text-body font-normal text-primary border border-foreground/15 hover:bg-primary hover:text-primary-foreground hover:border-primary transition-smooth rounded-sm px-8 py-3.5"
         >
           <ArrowRight className="w-5 h-5" aria-hidden="true" />
           חזרה לחומרים

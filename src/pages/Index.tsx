@@ -10,30 +10,30 @@ import SEO from "@/components/SEO";
 import { SITE } from "@/config/site";
 
 const localBusiness = {
-  "@context": "https://schema.org",
-  "@type": "FurnitureStore",
+"@context": "https://schema.org",
+"@type": "FurnitureStore",
   name: "Aluma",
   description:
-    "Aluma מתמחה בריהוט גן וריהוט חוץ יוקרתי בעיצוב אישי, סלוני חוץ, שולחנות גן ופינות אוכל מאלומיניום פרימיום, בדי Sunbrella ושיש גרניט פורצלן.",
+"Aluma מתמחה בריהוט גן וריהוט חוץ יוקרתי בעיצוב אישי, סלוני חוץ, שולחנות גן ופינות אוכל מאלומיניום פרימיום, בדי Sunbrella ושיש גרניט פורצלן.",
   url: "https://alumaoutdoor.com/",
   telephone: "+972-50-451-9062",
   email: SITE.email,
   image: "https://alumaoutdoor.com/og-image.jpg",
   address: {
-    "@type": "PostalAddress",
+"@type": "PostalAddress",
     streetAddress: "התמר 78",
     addressLocality: "יציץ",
     addressCountry: "IL",
   },
   openingHoursSpecification: [
     {
-      "@type": "OpeningHoursSpecification",
+"@type": "OpeningHoursSpecification",
       dayOfWeek: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday"],
       opens: "08:30",
       closes: "18:00",
     },
     {
-      "@type": "OpeningHoursSpecification",
+"@type": "OpeningHoursSpecification",
       dayOfWeek: "Friday",
       opens: "08:30",
       closes: "12:00",
@@ -50,15 +50,15 @@ const localBusiness = {
 };
 
 const websiteSchema = {
-  "@context": "https://schema.org",
-  "@type": "WebSite",
+"@context": "https://schema.org",
+"@type": "WebSite",
   name: "Aluma",
   url: "https://alumaoutdoor.com/",
   inLanguage: "he-IL",
   potentialAction: {
-    "@type": "SearchAction",
+"@type": "SearchAction",
     target: "https://alumaoutdoor.com/collections?q={search_term_string}",
-    "query-input": "required name=search_term_string",
+"query-input": "required name=search_term_string",
   },
 };
 

@@ -110,9 +110,9 @@ const Station = ({ n, to, className, children }: StationProps) => (
   <li
     onMouseMove={trackLamp}
     className={cn(
-"group relative overflow-hidden rounded-[14px] border border-border bg-background p-6 sm:p-8 md:p-9 ",
-"transition-all duration-300  hover:border-primary/60 ",
-"focus-within:-translate-y-1 focus-within:border-primary/60 focus-within:shadow-luxury",
+"group relative overflow-hidden rounded-sm border border-border bg-background p-6 sm:p-8 md:p-9 ",
+"transition-all duration-300  hover:border-foreground/15 ",
+"focus-within:-translate-y-1 focus-within:border-foreground/15 focus-within:shadow-luxury",
       className,
     )}
   >
@@ -128,7 +128,7 @@ const Station = ({ n, to, className, children }: StationProps) => (
     {/* Stamped station number, tucked into the far (left, in RTL) corner. */}
     <span
       aria-hidden="true"
-      className="pointer-events-none absolute -top-3 end-4 sm:end-6 select-none font-display text-[80px] sm:text-[96px] leading-none text-primary/[0.13] transition-colors duration-300 group-hover:text-primary/25"
+      className="pointer-events-none absolute -top-3 end-4 sm:end-6 select-none font-display text-display leading-none text-primary/[0.13] transition-colors duration-300 group-hover:text-primary/25"
     >
       {n}
     </span>
@@ -137,7 +137,7 @@ const Station = ({ n, to, className, children }: StationProps) => (
       to={to}
       tabIndex={-1}
       aria-hidden="true"
-      className="absolute inset-0 z-[1] rounded-[14px]"
+      className="absolute inset-0 z-[1] rounded-sm"
     />
 
     {/* Content floats above the overlay but stays click-through, so a click
@@ -152,15 +152,15 @@ const Station = ({ n, to, className, children }: StationProps) => (
 /** Icon plate, name and the hairline that stretches when the plank wakes up. */
 const StationHead = ({ icon: Icon, title }: { icon: LucideIcon; title: string }) => (
   <>
-    <span className="inline-flex h-14 w-14 shrink-0 items-center justify-center rounded-[10px] border border-border bg-secondary text-primary transition-all duration-300 group-hover:border-primary/50 group-hover:bg-primary/10 group-focus-within:border-primary/50 group-focus-within:bg-primary/10">
+    <span className="inline-flex h-14 w-14 shrink-0 items-center justify-center rounded-sm border border-border bg-secondary text-primary transition-all duration-300 group-hover:border-foreground/15 group-hover:bg-foreground/15 group-focus-within:border-foreground/15 group-focus-within:bg-foreground/15">
       <Icon className="h-7 w-7" strokeWidth={1.6} aria-hidden="true" />
     </span>
-    <h3 className="mt-6 font-display font-normal text-[22px] leading-snug text-foreground">
+    <h3 className="mt-6 font-display font-normal text-body leading-snug text-foreground">
       {title}
     </h3>
     <span
       aria-hidden="true"
-      className="mt-4 block h-[2px] w-14 bg-primary/50 transition-all duration-300 group-hover:w-24 group-focus-within:w-24"
+      className="mt-4 block h-[2px] w-14 bg-foreground/15 transition-all duration-300 group-hover:w-24 group-focus-within:w-24"
     />
   </>
 );
@@ -182,12 +182,12 @@ const Specimen = ({
 }) => (
   <div
     className={cn(
-"rounded-[10px] border border-border bg-secondary/50 p-4 transition-colors duration-300 group-hover:border-primary/40 group-focus-within:border-primary/40",
+"rounded-sm border border-border bg-secondary/50 p-4 transition-colors duration-300 group-hover:border-foreground/15 group-focus-within:border-foreground/15",
       className,
     )}
   >
     {children}
-    <p className="mt-3 text-[18px] leading-relaxed text-muted-foreground">{caption}</p>
+    <p className="mt-3 text-body leading-relaxed text-muted-foreground">{caption}</p>
   </div>
 );
 
@@ -236,8 +236,8 @@ const DIYPage = () => {
 
               <ul className="space-y-4 lg:border-s lg:border-border lg:ps-10">
                 {introFacts.map((f) => (
-                  <li key={f} className="flex items-center gap-3 text-[18px] text-foreground">
-                    <span className="h-px w-6 shrink-0 bg-primary/60" aria-hidden="true" />
+                  <li key={f} className="flex items-center gap-3 text-body text-foreground">
+                    <span className="h-px w-6 shrink-0 bg-foreground/15" aria-hidden="true" />
                     {f}
                   </li>
                 ))}
@@ -275,7 +275,7 @@ const DIYPage = () => {
               <Station n="01" to="/fabric" className="lg:col-span-2">
                 <StationHead icon={Palette} title="בחרו את הבד" />
 
-                <p className="mt-5 text-[20px] leading-relaxed text-foreground text-pretty">
+                <p className="mt-5 text-body leading-relaxed text-foreground text-pretty">
                   עברו על מניפת Sunbrella המקורית, לחצו על גוון, וראו מיד איך הספה
                   נראית איתו.
                 </p>
@@ -293,7 +293,7 @@ const DIYPage = () => {
                       <span
                         key={f.code}
                         aria-hidden="true"
-                        className="h-12 rounded-[10px] border border-border transition-transform duration-300 ease-out "
+                        className="h-12 rounded-sm border border-border transition-transform duration-300 ease-out "
                         style={{ background: f.background, transitionDelay: `${i * 40}ms` }}
                       />
                     ))}
@@ -309,7 +309,7 @@ const DIYPage = () => {
               <Station n="02" to="/ar" className="lg:col-span-2">
                 <StationHead icon={ScanLine} title="AR, תצוגה במרחב" />
 
-                <p className="mt-5 text-[20px] leading-relaxed text-foreground text-pretty">
+                <p className="mt-5 text-body leading-relaxed text-foreground text-pretty">
                   בחרו פריט, כוונו את מצלמת הטלפון לרצפה, והרהיט יופיע לפניכם בגודל
                   אמיתי, כדי לבדוק שהמידות עובדות עוד לפני שמזמינים.
                 </p>
@@ -320,7 +320,7 @@ const DIYPage = () => {
                   caption="רץ מהדפדפן בטלפון, בלי אפליקציה. עובד על iPhone מגרסת iOS 12 ומעלה ועל מכשירי אנדרואיד עם תמיכת ARCore."
                   className="mt-6"
                 >
-                  <div className="relative h-[76px] overflow-hidden rounded-[10px] bg-background/70 [perspective:420px]">
+                  <div className="relative h-[76px] overflow-hidden rounded-sm bg-background/70 [perspective:420px]">
                     <span
                       aria-hidden="true"
                       className="absolute inset-x-[-30%] bottom-0 h-32 origin-bottom opacity-70 transition-opacity duration-500 group-hover:opacity-100 group-focus-within:opacity-100 [transform:rotateX(64deg)]"
@@ -334,7 +334,7 @@ const DIYPage = () => {
                     />
                     <span
                       aria-hidden="true"
-                      className="absolute left-1/2 top-[58%] h-12 w-12 rounded-full border-2 border-primary/55 transition-transform duration-500 ease-out [transform:translate(-50%,-50%)_rotateX(64deg)_scale(1.3)] group-hover:[transform:translate(-50%,-50%)_rotateX(64deg)_scale(1)] group-focus-within:[transform:translate(-50%,-50%)_rotateX(64deg)_scale(1)]"
+                      className="absolute left-1/2 top-[58%] h-12 w-12 rounded-full border-2 border-foreground/15 transition-transform duration-500 ease-out [transform:translate(-50%,-50%)_rotateX(64deg)_scale(1.3)] group-hover:[transform:translate(-50%,-50%)_rotateX(64deg)_scale(1)] group-focus-within:[transform:translate(-50%,-50%)_rotateX(64deg)_scale(1)]"
                     />
                     <span
                       aria-hidden="true"
@@ -359,11 +359,11 @@ const DIYPage = () => {
           <Reveal>
             <div className="mx-auto grid max-w-6xl items-center gap-10 lg:grid-cols-[minmax(0,1.55fr)_auto_minmax(0,1fr)] lg:gap-14">
               <div className="text-start">
-                <h2 className="font-display font-bold text-[26px] leading-snug text-background">
+                <h2 className="font-display font-medium text-heading leading-snug text-background">
                   מה שיוצא מכאן מגיע ישירות אלינו
                 </h2>
                 <div className="w-20 h-[2px] bg-background/40 mt-5" aria-hidden="true" />
-                <p className="mt-6 text-[20px] leading-relaxed text-background/75 text-pretty">
+                <p className="mt-6 text-body leading-relaxed text-background/75 text-pretty">
                   הקומפוזיציה שהרכבתם, הגוון שבחרתם או התשובות שמילאתם מגיעים אלינו
                   בדיוק כפי שהם. משם אנחנו לוקחים את זה הלאה: בודקים מידות, מתאימים
                   חומרים ובדים, וחוזרים אליכם עם הצעה מדויקת למרחב שלכם. ואם נוח
@@ -376,7 +376,7 @@ const DIYPage = () => {
               <div className="flex flex-col items-start gap-7">
                 <ul className="space-y-3">
                   {closingFacts.map((f) => (
-                    <li key={f} className="flex items-center gap-3 text-[18px] text-background/80">
+                    <li key={f} className="flex items-center gap-3 text-body text-background/80">
                       <span className="h-px w-6 shrink-0 bg-primary/70" aria-hidden="true" />
                       {f}
                     </li>

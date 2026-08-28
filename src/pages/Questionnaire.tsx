@@ -123,7 +123,7 @@ const Questionnaire = () => {
               <div className="w-14 h-14 bg-accent/10 rounded-sm flex items-center justify-center mx-auto mb-6">
                 <Check className="h-7 w-7 text-accent" />
               </div>
-              <h2 className="font-display text-2xl text-primary mb-4">ההמלצה שלנו עבורך</h2>
+              <h2 className="font-display text-2xl text-foreground mb-4">ההמלצה שלנו עבורך</h2>
               <p className="text-foreground text-lg mb-8 leading-relaxed">{done}</p>
               <p className="text-sm text-muted-foreground mb-6">
                 נחזור אליך תוך 24 שעות לתאם פגישת אפיון ללא עלות.

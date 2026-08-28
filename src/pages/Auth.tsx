@@ -153,7 +153,7 @@ const AuthPage = () => {
                   </button>
                 </div>
 
-                <h1 className="font-display text-3xl md:text-4xl text-primary mb-2 leading-tight">
+                <h1 className="font-display text-3xl md:text-4xl text-foreground mb-2 leading-tight">
                   {isSignup ? "ברוכים הבאים למועדון" : "ברוכים השבים"}
                 </h1>
                 <p className="text-sm text-muted-foreground mb-8 font-normal leading-relaxed">
@@ -167,7 +167,7 @@ const AuthPage = () => {
                   variant="outline"
                   onClick={onGoogle}
                   disabled={googleBusy}
-                  className="w-full h-11 rounded-sm flex items-center justify-center gap-3 border-primary/25 hover:border-primary hover:bg-secondary/40"
+                  className="w-full h-11 rounded-sm flex items-center justify-center gap-3 border-foreground/15 hover:border-primary hover:bg-secondary/40"
                 >
                   <GoogleIcon />
                   <span className="text-sm">
@@ -175,7 +175,7 @@ const AuthPage = () => {
                   </span>
                 </Button>
 
-                <div className="flex items-center gap-3 text-[11px] tracking-[0.2em] uppercase text-muted-foreground my-6">
+                <div className="flex items-center gap-3 text-label tracking-[0.2em] uppercase text-muted-foreground my-6">
                   <div className="flex-1 h-px bg-border" />
                   <span>או במייל</span>
                   <div className="flex-1 h-px bg-border" />
@@ -248,7 +248,7 @@ const AuthPage = () => {
                   </Button>
                 </form>
 
-                <p className="text-[11px] text-muted-foreground text-center mt-6 leading-relaxed">
+                <p className="text-label text-muted-foreground text-center mt-6 leading-relaxed">
                   בהצטרפות אתם מאשרים את{" "}
                   <Link to="/terms" className="text-foreground hover:text-accent underline underline-offset-2">
                     תנאי השימוש

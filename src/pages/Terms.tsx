@@ -10,13 +10,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
  * ============================================================ */
 
 const H2 = ({ children }: { children: React.ReactNode }) => (
-  <h2 className="font-display text-2xl md:text-3xl text-primary mt-12 mb-5 leading-tight">
+  <h2 className="font-display text-2xl md:text-3xl text-foreground mt-12 mb-5 leading-tight">
     {children}
   </h2>
 );
 
 const H3 = ({ children }: { children: React.ReactNode }) => (
-  <h3 className="font-display text-xl md:text-2xl text-primary mt-8 mb-3 leading-snug">
+  <h3 className="font-display text-xl md:text-2xl text-foreground mt-8 mb-3 leading-snug">
     {children}
   </h3>
 );
@@ -294,7 +294,7 @@ const TermsPage = () => {
             </TabsContent>
           </Tabs>
 
-          <div className="pt-10 mt-12 border-t border-border text-[18px] text-muted-foreground text-center">
+          <div className="pt-10 mt-12 border-t border-border text-body text-muted-foreground text-center">
             עודכן לאחרונה: {new Date().toLocaleDateString("he-IL")}
           </div>
         </div>

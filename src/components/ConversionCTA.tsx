@@ -40,7 +40,7 @@ const ConversionCTA = ({
         <div className="max-w-4xl mx-auto text-center">
           <div className="inline-flex items-center gap-2 border border-primary-foreground/25 rounded-sm px-4 py-1.5 mb-6">
             <Sparkles className="h-3.5 w-3.5 text-accent" />
-            <span className="text-[11px] tracking-[0.35em] uppercase opacity-90">
+            <span className="text-label tracking-[0.35em] uppercase opacity-90">
               {eyebrow}
             </span>
           </div>

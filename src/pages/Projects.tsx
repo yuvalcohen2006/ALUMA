@@ -18,21 +18,21 @@ const SITE = "https://alumaoutdoor.com";
 // Built from whatever the page actually loaded, so a CMS-managed list is what
 // gets described to crawlers rather than the static fallback.
 const buildCollectionSchema = (list: Project[]) => ({
-  "@context": "https://schema.org",
-  "@type": "CollectionPage",
+"@context": "https://schema.org",
+"@type": "CollectionPage",
   name: "פרויקטים של Aluma",
   description:
-    "גלריית פרויקטים נבחרים של Aluma, סלוני חוץ ומרחבי חוץ יוקרתיים בוילות, פנטהאוזים ובתי יוקרה בישראל.",
+"גלריית פרויקטים נבחרים של Aluma, סלוני חוץ ומרחבי חוץ יוקרתיים בוילות, פנטהאוזים ובתי יוקרה בישראל.",
   url: `${SITE}/projects`,
   inLanguage: "he-IL",
   mainEntity: {
-    "@type": "ItemList",
+"@type": "ItemList",
     numberOfItems: list.length,
     itemListElement: list.map((p, i) => ({
-      "@type": "ListItem",
+"@type": "ListItem",
       position: i + 1,
       item: {
-        "@type": "CreativeWork",
+"@type": "CreativeWork",
         name: p.name,
         url: `${SITE}/projects/${p.slug}`,
       },
@@ -77,7 +77,7 @@ const jumpToEntry = (slug: string) => {
 /** Thin terracotta rule between meta values. */
 const MetaRule = ({ className }: { className?: string }) => (
   <span
-    className={cn("w-px h-4 bg-primary/45 shrink-0", className)}
+    className={cn("w-px h-4 bg-foreground/15 shrink-0", className)}
     aria-hidden="true"
   />
 );
@@ -121,7 +121,7 @@ const ProjectEntry = ({ project: p, index }: { project: Project; index: number }
       >
         <div
           className={cn(
-            "grid gap-8 lg:gap-14 xl:gap-16 items-center",
+"grid gap-8 lg:gap-14 xl:gap-16 items-center",
             photoRight
               ? "lg:grid-cols-[1.4fr_1fr]"
               : "lg:grid-cols-[1fr_1.4fr]"
@@ -131,7 +131,7 @@ const ProjectEntry = ({ project: p, index }: { project: Project; index: number }
           <Reveal
             className={cn("min-w-0", photoRight ? "lg:order-1" : "lg:order-2")}
           >
-            <div className="relative aspect-[4/3] overflow-hidden rounded-[14px]">
+            <div className="relative aspect-[4/3] overflow-hidden rounded-sm">
               <div className="absolute inset-0 transition-transform duration-600 ease-out group-hover:scale-[1.06]">
                 <img
                   src={p.cover}
@@ -150,7 +150,7 @@ const ProjectEntry = ({ project: p, index }: { project: Project; index: number }
           <Reveal
             delay={140}
             className={cn(
-              "min-w-0 text-start",
+"min-w-0 text-start",
               photoRight ? "lg:order-2" : "lg:order-1"
             )}
           >
@@ -161,12 +161,12 @@ const ProjectEntry = ({ project: p, index }: { project: Project; index: number }
             <span
               aria-hidden="true"
               dir="ltr"
-              className="block text-start text-[13px] font-medium tracking-[0.14em] tabular-nums text-primary"
+              className="block text-start text-label font-medium tracking-[0.14em] tabular-nums text-primary"
             >
               {folio(index + 1)}
             </span>
 
-            <h2 className="font-display font-semibold text-[32px] md:text-[40px] leading-[1.1] text-foreground mt-3 transition-colors duration-300 group-hover:text-accent">
+            <h2 className="font-display font-medium text-heading text-foreground mt-3 transition-colors duration-300 group-hover:text-accent">
               {p.name}
             </h2>
 
@@ -176,7 +176,7 @@ const ProjectEntry = ({ project: p, index }: { project: Project; index: number }
                 a line (the left margin in RTL, where it reads as a
                 continuation tick) and never orphan one at the right margin
                 where the eye starts the next line. */}
-            <div className="mt-4 flex flex-wrap items-center gap-y-2 text-[18px] text-muted-foreground">
+            <div className="mt-4 flex flex-wrap items-center gap-y-2 text-body text-muted-foreground">
               {meta.map((m, i) => (
                 <span
                   key={`${i}-${m}`}
@@ -188,13 +188,13 @@ const ProjectEntry = ({ project: p, index }: { project: Project; index: number }
               ))}
             </div>
 
-            <p className="mt-6 text-[20px] leading-relaxed text-foreground text-pretty">
+            <p className="mt-6 text-body leading-relaxed text-foreground text-pretty">
               {p.intro}
             </p>
 
             {/* Rule grows from the right (the RTL start) on row hover. */}
             <span className="inline-block mt-8">
-              <span className="inline-flex items-center gap-2 text-[18px] text-accent">
+              <span className="inline-flex items-center gap-2 text-body text-accent">
                 לצפייה בפרויקט
                 <ArrowLeft
                   className="w-[18px] h-[18px] transition-transform duration-300 ease-out group-hover:-translate-x-1"
@@ -289,7 +289,7 @@ const ProjectsPage = () => {
               aria-label="מפתח הפרויקטים"
               className="rail-scroll flex md:flex-wrap items-center gap-x-7 gap-y-3 overflow-x-auto md:overflow-visible pb-2 md:pb-0"
             >
-              <span className="shrink-0 text-[18px] text-muted-foreground">
+              <span className="shrink-0 text-body text-muted-foreground">
                 {activeCount > 0
                   ? `מציגים ${visible.length} מתוך ${projects.length} פרויקטים`
                   : "מפתח הפרויקטים"}
@@ -311,12 +311,12 @@ const ProjectsPage = () => {
                   }}
                   className="group shrink-0 inline-flex items-baseline gap-2"
                 >
-                  <span className="font-display text-[18px] tabular-nums text-foreground/70 transition-colors duration-300 group-hover:text-foreground">
+                  <span className="font-display text-body tabular-nums text-foreground/70 transition-colors duration-300 group-hover:text-foreground">
                     {folio(i + 1)}
                   </span>
                   {/* Underline grows from the right — the RTL start — matching
                       the .link-underline grammar used site-wide. */}
-                  <span className="relative text-[18px] text-foreground">
+                  <span className="relative text-body text-foreground">
                     {p.name}
                     <span
                       aria-hidden="true"
@@ -335,13 +335,13 @@ const ProjectsPage = () => {
         <div className="container-luxury">
           {visible.length === 0 ? (
             <Reveal className="max-w-xl mx-auto text-center py-24 md:py-32">
-              <p className="text-[20px] leading-relaxed text-foreground-soft">
+              <p className="text-body leading-relaxed text-foreground-soft">
                 אין פרויקטים שמתאימים לסינון שבחרתם.
               </p>
               <button
                 type="button"
                 onClick={clearFilters}
-                className="mt-6 text-[18px] text-accent link-underline transition-smooth"
+                className="mt-6 text-body text-accent link-underline transition-smooth"
               >
                 נקה את הסינון
               </button>

@@ -12,8 +12,8 @@ import storyPortraitRoy from "@/assets/story-portrait-roy.png";
 import storyPortraitIdan from "@/assets/story-portrait-idan.png";
 
 const breadcrumbs = {
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
+"@context": "https://schema.org",
+"@type": "BreadcrumbList",
   itemListElement: [
     { "@type": "ListItem", position: 1, name: "דף הבית", item: "https://alumaoutdoor.com/" },
     { "@type": "ListItem", position: 2, name: "אודות", item: "https://alumaoutdoor.com/story" },
@@ -34,10 +34,10 @@ const people = [
  * brand already makes elsewhere on the site, phrased as what it rules out.
  */
 const refusals = [
-  "לא מוכרים ריהוט שלא היינו שמים בחצר שלנו.",
-  "לא עובדים במידות סטנדרטיות. כל פריט נמדד למרחב שלו.",
-  "לא מבטיחים תאריך אספקה לפני שיש לנו אותו.",
-  "לא נעלמים אחרי ההתקנה.",
+"לא מוכרים ריהוט שלא היינו שמים בחצר שלנו.",
+"לא עובדים במידות סטנדרטיות. כל פריט נמדד למרחב שלו.",
+"לא מבטיחים תאריך אספקה לפני שיש לנו אותו.",
+"לא נעלמים אחרי ההתקנה.",
 ];
 
 /**
@@ -89,7 +89,7 @@ const StoryPage = () => {
                 statement that refuses nothing is a platitude. tracking-normal
                 and a loose leading throughout: letter-spacing breaks Hebrew
                 rhythm and is the clearest tell of an un-adapted RTL design. */}
-            <h1 className="font-display font-normal tracking-normal text-foreground text-start text-[30px] leading-[1.3] md:text-[44px] md:leading-[1.25] lg:text-[56px] lg:leading-[1.18] max-w-[22ch]">
+            <h1 className="font-display font-normal tracking-normal text-foreground text-start text-display max-w-[22ch]">
               אנחנו בונים ריהוט שנשאר בחוץ — ולא ריהוט שצריך להכניס.
             </h1>
           </Reveal>
@@ -113,11 +113,11 @@ const StoryPage = () => {
       <section className="bg-background">
         <div className="mx-auto max-w-[860px] px-6 py-24 md:py-32">
           <Reveal>
-            <p className="max-w-[46ch] text-start text-foreground tracking-normal text-[19px] leading-[1.75] md:text-[21px] md:leading-[1.7]">
+            <p className="max-w-[46ch] text-start text-foreground tracking-normal text-body">
               אלומה נולדה מתוך חיבור בין חומר לאור.
             </p>
 
-            <div className="mt-10 max-w-[62ch] space-y-6 text-start text-foreground-soft tracking-normal text-[17px] leading-[1.85] md:text-[18px] md:leading-[1.8]">
+            <div className="mt-10 max-w-[62ch] space-y-6 text-start text-foreground-soft tracking-normal text-small">
               <p>
                 השם מגיע מהשורש של אלומיניום, חומר חזק, נקי ועמיד, כזה שנועד
                 לחיות בחוץ בלי לחשוש מהשמש, מהגשם או ממעבר הזמן. ומעבר לחומר,
@@ -147,7 +147,7 @@ const StoryPage = () => {
       <section className="bg-background">
         <div className="mx-auto max-w-[860px] px-6 pb-24 md:pb-32">
           <Reveal>
-            <p className="max-w-[46ch] text-start text-foreground-soft tracking-normal text-[17px] leading-[1.85] md:text-[18px]">
+            <p className="max-w-[46ch] text-start text-foreground-soft tracking-normal text-small">
               שלושתנו. אותם אנשים מהמדידה הראשונה ועד היום שאתם יושבים בחוץ.
             </p>
           </Reveal>
@@ -161,10 +161,10 @@ const StoryPage = () => {
                   loading="lazy"
                   className="w-full aspect-[3/4] object-contain object-bottom mix-blend-multiply"
                 />
-                <p className="mt-4 text-start text-[15px] text-foreground">{p.name}</p>
+                <p className="mt-4 text-start text-small text-foreground">{p.name}</p>
                 {/* A verb, not a job title — what someone does beats
-                    "Co-Founder". This is the substitute for credentials. */}
-                <p className="mt-1 text-start text-[13px] leading-[1.7] text-foreground/55">
+"Co-Founder". This is the substitute for credentials. */}
+                <p className="mt-1 text-start text-label text-foreground/55">
                   {p.does}
                 </p>
               </div>
@@ -180,14 +180,14 @@ const StoryPage = () => {
       <section className="bg-secondary">
         <div className="mx-auto max-w-[860px] px-6 py-24 md:py-32">
           <Reveal>
-            <h2 className="font-display font-normal tracking-normal text-start text-foreground text-[20px] md:text-[24px] leading-[1.4] border-s-2 border-primary ps-5">
+            <h2 className="font-display font-normal tracking-normal text-start text-foreground text-body border-s-2 border-primary ps-5">
               מה אנחנו לא עושים
             </h2>
             <ul className="mt-10 max-w-[62ch] divide-y divide-foreground/10 border-t border-foreground/10">
               {refusals.map((line) => (
                 <li
                   key={line}
-                  className="py-5 text-start text-[17px] leading-[1.8] text-foreground-soft"
+                  className="py-5 text-start text-small text-foreground-soft"
                 >
                   {line}
                 </li>
@@ -214,13 +214,13 @@ const StoryPage = () => {
       <section className="bg-background">
         <div className="mx-auto max-w-[860px] px-6 py-28 md:py-36 text-center">
           <Reveal>
-            <p className="mx-auto max-w-[34ch] text-foreground tracking-normal text-[19px] leading-[1.75] md:text-[21px] md:leading-[1.7]">
+            <p className="mx-auto max-w-[34ch] text-foreground tracking-normal text-body">
               אולם התצוגה שלנו ב{SITE.address.full}. הכי קל להבין את אלומה
               כשיושבים עליה.
             </p>
             <Link
               to={to("/faq") + "#contact"}
-              className="mt-7 inline-block text-[17px] text-primary underline underline-offset-[6px] decoration-1 hover:text-accent transition-colors"
+              className="mt-7 inline-block text-small text-primary underline underline-offset-[6px] decoration-1 hover:text-accent transition-colors"
             >
               לתיאום ביקור
             </Link>

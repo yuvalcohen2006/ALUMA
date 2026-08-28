@@ -12,7 +12,7 @@ import { SITE } from "@/config/site";
 // Desktop nav link: a barely-rounded light-grey pill that fades in on hover, with
 // the label sitting in soft charcoal and deepening as it fills.
 const navItem =
-  "inline-flex items-center rounded-[10px] px-2.5 xl:px-3.5 py-2 text-sm xl:text-[15px] 2xl:text-base font-medium tracking-wide transition-colors duration-300";
+"inline-flex items-center rounded-sm px-2.5 xl:px-3.5 py-2 text-sm 2xl:text-base font-medium tracking-wide transition-colors duration-300";
 const navRest = "text-foreground-soft hover:bg-foreground/[0.07] hover:text-foreground";
 const navActive = "bg-foreground/[0.09] text-foreground";
 
@@ -155,7 +155,7 @@ const Header = () => {
                       and pushed every neighbouring item along. This one floats
                       over the top corner and costs the button no width. */}
                   {link.badge && (
-                    <span className="pointer-events-none absolute -top-0.5 end-0 rounded-full bg-primary px-1.5 py-px text-[10px] font-medium leading-[1.4] text-primary-foreground">
+                    <span className="pointer-events-none absolute -top-0.5 end-0 rounded-full bg-primary px-1.5 py-px text-label font-medium leading-[1.4] text-primary-foreground">
                       {link.badge}
                     </span>
                   )}
@@ -172,7 +172,7 @@ const Header = () => {
                   >
                     <div
                       role="menu"
-                      className="min-w-[240px] rounded-xl border border-border bg-popover p-1.5 shadow-luxury"
+                      className="min-w-[240px] rounded-sm border border-border bg-popover p-1.5 shadow-luxury"
                     >
                       {link.submenu.map((sub) => (
                         <Link
@@ -183,7 +183,7 @@ const Header = () => {
                             setPinned(null);
                             setHovered(null);
                           }}
-                          className="block rounded-lg px-4 py-2.5 text-sm text-start text-foreground transition-colors duration-200 hover:bg-secondary/70 hover:text-accent"
+                          className="block rounded-sm px-4 py-2.5 text-sm text-start text-foreground transition-colors duration-200 hover:bg-secondary/70 hover:text-accent"
                         >
                           {sub.label}
                         </Link>
@@ -286,7 +286,7 @@ const Header = () => {
                     >
                       {link.label}
                       {link.badge && (
-                        <span className="ms-2 rounded-full bg-primary/12 px-2 py-0.5 text-[11px] font-medium tracking-[0.06em] text-primary align-middle">
+                        <span className="ms-2 rounded-full bg-foreground/15 px-2 py-0.5 text-label font-medium tracking-[0.06em] text-primary align-middle">
                           {link.badge}
                         </span>
                       )}
@@ -339,14 +339,14 @@ const Header = () => {
                 transform: open ? "translateY(0)" : "translateY(16px)",
               }}
             >
-              <span className="h-px flex-1 bg-primary/30" />
+              <span className="h-px flex-1 bg-foreground/15" />
               <span
-                className="text-[9px] tracking-[0.2em] uppercase text-foreground whitespace-nowrap"
+                className="text-label tracking-[0.2em] uppercase text-foreground whitespace-nowrap"
                 dir="ltr"
               >
                 Where outdoor becomes lifestyle
               </span>
-              <span className="h-px flex-1 bg-primary/30" />
+              <span className="h-px flex-1 bg-foreground/15" />
             </div>
           </div>
         </nav>

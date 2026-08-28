@@ -88,10 +88,10 @@ const ARPreview = () => {
       <main className="pt-32 pb-20">
         <section className="container mx-auto px-6 max-w-6xl">
           <div className="text-center mb-12">
-            <span className="text-[10px] tracking-[0.3em] uppercase text-accent">
+            <span className="text-label tracking-[0.3em] uppercase text-accent">
               AR · Augmented Reality
             </span>
-            <h1 className="font-display text-4xl md:text-6xl text-primary mt-3 mb-4">
+            <h1 className="font-display text-4xl md:text-6xl text-foreground mt-3 mb-4">
               תראו את הרהיט במרחב שלכם
             </h1>
             <p className="text-foreground max-w-2xl mx-auto leading-relaxed">
@@ -110,7 +110,7 @@ const ARPreview = () => {
                 className={`px-5 py-2.5 rounded-sm text-sm font-medium transition-smooth border ${
                   active.id === p.id
                     ? "bg-primary text-primary-foreground border-primary"
-                    : "bg-background text-foreground border-border hover:border-primary/60"
+                    : "bg-background text-foreground border-border hover:border-foreground/15"
                 }`}
               >
                 {p.name}
@@ -146,7 +146,7 @@ const ARPreview = () => {
                 >
                   <button
                     slot="ar-button"
-                    className="absolute bottom-5 left-1/2 -translate-x-1/2 inline-flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-sm  text-sm font-semibold"
+                    className="absolute bottom-5 left-1/2 -translate-x-1/2 inline-flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-sm  text-sm font-medium"
                   >
                     <ScanLine className="h-4 w-4" />
                     הציגו במרחב שלי
@@ -206,10 +206,11 @@ const ARPreview = () => {
           <div className="mt-10 flex items-start gap-3 bg-secondary/40 border border-border rounded-sm p-5">
             <Info className="h-5 w-5 text-accent shrink-0 mt-0.5" />
             <p className="text-sm text-muted-foreground leading-relaxed">
-              <strong className="text-foreground">הערה:</strong> המודלים הנוכחיים
-              הם דגמים גנריים לצורכי הדגמה. בשבועות הקרובים נחליף אותם בסריקות
-              3D של הקולקציות של Aluma עצמן, כך תוכלו לראות בדיוק את הבד, הגוון
-              והמידות הסופיות במרפסת שלכם.
+              <strong className="text-foreground">שימו לב:</strong> הדגמים
+              המוצגים כאן הם דגמי הדגמה כלליים, לא הריהוט שלנו. הם נועדו להראות
+              איך התצוגה במרחב עובדת. כשיהיו לנו מודלים תלת-ממדיים של הקולקציות
+              עצמן, תוכלו לראות כאן את הבד, הגוון והמידות המדויקות.
+              התצוגה במרחב עובדת מהטלפון — באייפון דרך Safari, ובאנדרואיד דרך Chrome.
             </p>
           </div>
         </section>

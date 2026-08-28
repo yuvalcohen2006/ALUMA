@@ -149,7 +149,7 @@ const Account = () => {
                     <article key={p.id} className="bg-card border border-border rounded-sm p-6  transition-smooth">
                       <div className="flex items-start justify-between flex-wrap gap-3 mb-4">
                         <div>
-                          <h3 className="font-display text-2xl text-primary">{p.title}</h3>
+                          <h3 className="font-display text-2xl text-foreground">{p.title}</h3>
                           {p.location && (
                             <p className="text-sm text-muted-foreground flex items-center gap-1 mt-1">
                               <MapPin className="w-3.5 h-3.5" />

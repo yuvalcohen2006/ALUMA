@@ -12,7 +12,7 @@ interface SectionLabelProps {
 const SectionLabel = ({ he, as: Tag = "div", className = "" }: SectionLabelProps) => {
   return (
     <Tag
-      className={`inline-flex items-center tracking-[0.35em] uppercase font-semibold text-primary ${className}`}
+      className={`inline-flex items-center tracking-[0.35em] uppercase font-medium text-primary ${className}`}
     >
       {he}
     </Tag>

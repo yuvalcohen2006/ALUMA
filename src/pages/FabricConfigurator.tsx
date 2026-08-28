@@ -49,10 +49,10 @@ const FabricConfigurator = () => {
         <section className="container mx-auto px-6 max-w-7xl">
           {/* Hero */}
           <div className="text-center mb-12">
-            <span className="text-[10px] tracking-[0.3em] uppercase text-accent">
+            <span className="text-label tracking-[0.3em] uppercase text-accent">
               Sunbrella · Fabric Configurator
             </span>
-            <h1 className="font-display text-4xl md:text-6xl text-primary mt-3 mb-4">
+            <h1 className="font-display text-4xl md:text-6xl text-foreground mt-3 mb-4">
               בחרו את הבד למניפה שלכם
             </h1>
             <p className="text-foreground max-w-2xl mx-auto leading-relaxed">
@@ -89,7 +89,7 @@ const FabricConfigurator = () => {
                     className="h-28 w-full rounded-sm border border-border transition-all duration-500"
                     style={{ background: selected.background }}
                   />
-                  <p className="mt-3 text-[15px] leading-relaxed text-muted-foreground">
+                  <p className="mt-3 text-small leading-relaxed text-muted-foreground">
                     זהו הגוון עצמו. תצוגה של הבד על המוצר תיווצר מצילומי המוצרים
                     שלנו — עד אז, מוזמנים להזמין דוגמית בד אמיתית.
                   </p>
@@ -97,7 +97,7 @@ const FabricConfigurator = () => {
 
                 <div className="p-5 border-t border-border flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                   <div>
-                    <div className="text-[10px] tracking-[0.25em] uppercase text-accent">
+                    <div className="text-label tracking-[0.25em] uppercase text-accent">
                       Sunbrella · {selected.family}
                     </div>
                     <div className="font-display text-xl text-foreground mt-1">
@@ -157,7 +157,7 @@ const FabricConfigurator = () => {
                     className={`px-4 py-2 rounded-sm text-sm font-medium transition-smooth border ${
                       family === fam
                         ? "bg-primary text-primary-foreground border-primary"
-                        : "bg-background text-foreground border-border hover:border-primary/60"
+                        : "bg-background text-foreground border-border hover:border-foreground/15"
                     }`}
                   >
                     {familyLabelsHe[fam]}
@@ -180,7 +180,7 @@ const FabricConfigurator = () => {
                       className={`group relative aspect-square rounded-sm overflow-hidden border-2 transition-smooth ${
                         isActive
                           ? "border-accent  scale-[1.03]"
-                          : "border-border hover:border-primary/50"
+                          : "border-border hover:border-foreground/15"
                       }`}
                       aria-pressed={isActive}
                       aria-label={`${f.nameHe} ${f.code}`}
@@ -194,7 +194,7 @@ const FabricConfigurator = () => {
                           <Check className="h-3 w-3" />
                         </span>
                       )}
-                      <span className="absolute inset-x-0 bottom-0 bg-background/85 backdrop-blur-sm text-[10px] text-foreground text-center py-1 leading-tight">
+                      <span className="absolute inset-x-0 bottom-0 bg-background/85 backdrop-blur-sm text-label text-foreground text-center py-1 leading-tight">
                         {f.nameHe}
                       </span>
                     </button>
@@ -202,7 +202,7 @@ const FabricConfigurator = () => {
                 })}
               </div>
 
-              <p className="text-[11px] text-muted-foreground mt-5 leading-relaxed">
+              <p className="text-label text-muted-foreground mt-5 leading-relaxed">
                 * הצבעים על המסך הם קירוב חזותי. הגוון, המרקם והמשקל הסופיים
                 נקבעים מול המניפה הפיזית, נשמח להביא אליכם אותה בפגישה.
               </p>

@@ -30,7 +30,7 @@ const LanguageSwitcher = ({ className = "" }: { className?: string }) => {
       lang={other}
       // 44px minimum hit area, per touch-target guidance — the visible chip is
       // smaller, the padding makes up the difference.
-      className={`inline-flex items-center gap-2 min-h-[44px] px-3 text-[15px] text-foreground/80 hover:text-accent transition-smooth focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring ${className}`}
+      className={`inline-flex items-center gap-2 min-h-[44px] px-3 text-small text-foreground/80 hover:text-accent transition-smooth focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring ${className}`}
       aria-label={
         other === "en" ? "Switch to English" : "מעבר לעברית"
       }
