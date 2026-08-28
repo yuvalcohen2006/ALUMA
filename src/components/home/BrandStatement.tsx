@@ -1,4 +1,5 @@
 import Reveal from "@/components/Reveal";
+import { useSiteText } from "@/hooks/useSiteText";
 
 /**
  * The warm-up the client said was missing: *"אין סיקרון של הלקוח, צריך לשים
@@ -10,21 +11,25 @@ import Reveal from "@/components/Reveal";
  * no image, no button, no rule, no icons. Restraint is the whole point: this
  * section earns the right to show product by not selling anything itself.
  */
-const BrandStatement = () => (
+const BrandStatement = () => {
+  const t = useSiteText();
+  return (
   <section className="bg-background">
     <div className="mx-auto max-w-[860px] px-6 py-20 md:py-28 lg:py-36">
       <Reveal>
         <p className="max-w-[46ch] text-start text-heading font-normal tracking-normal text-foreground">
-          אלומה נולדה מתוך חיבור בין חומר לאור.
+          {t("home.statement.lead", "אלומה נולדה מתוך חיבור בין חומר לאור.")}
         </p>
         <p className="mt-6 max-w-[58ch] text-start text-body tracking-normal text-foreground-soft">
-          אנחנו מתכננים ומייצרים ריהוט חוץ בהתאמה אישית — שלדת אלומיניום, בדי
-          Sunbrella ומשטחי אבן שנבחרו כדי לעמוד בשמש, במלח ובגשם של ישראל. כל
-          פריט נמדד למרחב שהוא נכנס אליו, ונשאר בחוץ כל השנה.
+          {t(
+            "home.statement.body",
+            "אנחנו מתכננים ומייצרים ריהוט חוץ בהתאמה אישית — שלדת אלומיניום, בדי Sunbrella ומשטחי אבן שנבחרו כדי לעמוד בשמש, במלח ובגשם של ישראל. כל פריט נמדד למרחב שהוא נכנס אליו, ונשאר בחוץ כל השנה.",
+          )}
         </p>
       </Reveal>
     </div>
   </section>
-);
+  );
+};
 
 export default BrandStatement;

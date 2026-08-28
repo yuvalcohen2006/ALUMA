@@ -11,9 +11,18 @@ import { trackPixel } from "@/lib/pixel";
 
 const SITE = "https://alumaoutdoor.com";
 
+type ProductVariant = {
+  id: string;
+  name: string;
+  swatch: string | null;
+  image_url: string | null;
+};
+
 const CollectionDetailPage = () => {
   const { slug } = useParams();
   const [item, setItem] = useState<DBProduct | null>(null);
+  const [variants, setVariants] = useState<ProductVariant[]>([]);
+  const [activeVariant, setActiveVariant] = useState<string | null>(null);
   const [related, setRelated] = useState<DBProduct[]>([]);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState(false);
@@ -84,6 +93,26 @@ const CollectionDetailPage = () => {
   }, [slug]);
 
   useEffect(() => {
+    if (!item?.id) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const { data } = await supabase
+          .from("product_variants")
+          .select("id, name, swatch, image_url")
+          .eq("product_id", item.id)
+          .order("sort_order", { ascending: true });
+        if (!cancelled && data) setVariants(data as ProductVariant[]);
+      } catch {
+        // No finishes is the normal case for most products.
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [item?.id]);
+
+  useEffect(() => {
     load();
   }, [load]);
 
@@ -124,11 +153,17 @@ const CollectionDetailPage = () => {
 
   if (!item) return <NotFound />;
 
-  const galleryImages = item.gallery && item.gallery.length > 0
-    ? item.gallery
-    : item.cover_url
-      ? [item.cover_url]
-      : [];
+  const selected = variants.find((v) => v.id === activeVariant) ?? null;
+
+  // A chosen finish replaces the lead photograph and nothing else — the rest
+  // of the gallery still shows the piece from its other angles.
+  const galleryImages = selected?.image_url
+    ? [selected.image_url, ...(item.gallery ?? []).filter((g) => g !== selected.image_url)]
+    : item.gallery && item.gallery.length > 0
+      ? item.gallery
+      : item.cover_url
+        ? [item.cover_url]
+        : [];
 
   const productJsonLd = {
 "@context": "https://schema.org",
@@ -197,6 +232,43 @@ const CollectionDetailPage = () => {
         <div className="container-luxury grid md:grid-cols-5 gap-8 md:gap-12 items-stretch">
           {/* RIGHT COLUMN, text */}
           <div className="md:col-span-2 order-2 md:order-1 flex flex-col gap-6 md:gap-8">
+            {/* Finishes. Each swatch carries its own photograph, so choosing
+                one changes the picture rather than just tinting a square.
+                Shown only when a product actually has finishes loaded — most
+                have none, and an empty picker is worse than no picker. */}
+            {variants.length > 0 && (
+              <div>
+                <p className="text-label text-muted-foreground">
+                  גימור{selected ? `: ${selected.name}` : ""}
+                </p>
+                <ul className="mt-3 flex flex-wrap gap-3">
+                  {variants.map((v) => {
+                    const isActive = v.id === activeVariant;
+                    return (
+                      <li key={v.id}>
+                        <button
+                          type="button"
+                          onClick={() => setActiveVariant(isActive ? null : v.id)}
+                          aria-pressed={isActive}
+                          // The colour alone must not carry the state: a ring
+                          // AND the label above tell you what is selected.
+                          title={v.name}
+                          className={`h-9 w-9 rounded-full border transition-colors ${
+                            isActive
+                              ? "border-foreground ring-2 ring-foreground ring-offset-2 ring-offset-background"
+                              : "border-foreground/20 hover:border-foreground/50"
+                          }`}
+                          style={v.swatch ? { backgroundColor: v.swatch } : undefined}
+                        >
+                          <span className="sr-only">{v.name}</span>
+                        </button>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            )}
+
             {item.description.length > 0 && (
               <div className="border border-border bg-card rounded-[14px]  p-6 md:p-8">
                 <h2 className="font-display font-bold text-[26px] leading-snug text-foreground">

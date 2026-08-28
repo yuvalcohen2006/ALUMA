@@ -13,22 +13,33 @@ import {
   Crown,
   ClipboardList,
   Users,
+  HelpCircle,
+  Type,
+  MessageSquare,
+  Quote,
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 
 const LEADS_SEEN_KEY = "aluma_admin_leads_seen_at";
 
+// Ordered by how often someone actually needs it, not by how the database is
+// organised. The guide sits first because it is where /admin lands and where
+// anyone unsure should start.
 const navItems = [
-  { to: "/admin", label: "סטטיסטיקות", icon: BarChart3, end: true },
+  { to: "/admin", label: "מדריך", icon: HelpCircle, end: true },
+  { to: "/admin/collections", label: "קולקציות ומוצרים", icon: Package },
+  { to: "/admin/projects", label: "פרויקטים", icon: FolderOpen },
+  { to: "/admin/texts", label: "טקסטים באתר", icon: Type },
+  { to: "/admin/faqs", label: "שאלות ותשובות", icon: MessageSquare },
+  { to: "/admin/reviews", label: "המלצות לקוחות", icon: Quote },
+  { to: "/admin/hero", label: "תמונה ראשית", icon: ImageIcon },
+  { to: "/admin/leads", label: "פניות", icon: Inbox, badge: "leads" as const },
   { to: "/admin/club", label: "ניהול מועדון", icon: Crown },
   { to: "/admin/orders", label: "הזמנות לקוחות", icon: ClipboardList },
-  { to: "/admin/leads", label: "פניות", icon: Inbox, badge: "leads" as const },
-  { to: "/admin/projects", label: "פרויקטים בגלריה", icon: FolderOpen },
-  { to: "/admin/collections", label: "קולקציות ומוצרים", icon: Package },
-  { to: "/admin/hero", label: "תמונת ראשי", icon: ImageIcon },
   { to: "/admin/blog", label: "מגזין", icon: FileText },
   { to: "/admin/team", label: "חברי צוות", icon: Users },
+  { to: "/admin/stats", label: "סטטיסטיקות", icon: BarChart3 },
   { to: "/admin/settings", label: "הגדרות אתר", icon: Settings },
 ];
 

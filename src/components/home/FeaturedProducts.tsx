@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import Reveal from "@/components/Reveal";
 import { useCollections } from "@/hooks/useCollectionsData";
 import { useLocalizedPath } from "@/lib/useLocalizedPath";
+import { useSiteText } from "@/hooks/useSiteText";
 
 /** Six pieces, three across. Three columns rather than four: four reads dense,
  *  and density is the thing the client asked us to remove. */
@@ -19,6 +20,7 @@ const MAX = 6;
 const FeaturedProducts = () => {
   const { products, loading } = useCollections();
   const { to } = useLocalizedPath();
+  const t = useSiteText();
   const shown = products.slice(0, MAX);
 
   if (loading || shown.length === 0) return null;
@@ -28,7 +30,7 @@ const FeaturedProducts = () => {
       <div className="mx-auto max-w-[1440px] px-5 md:px-10 lg:px-16 py-20 md:py-28 lg:py-36">
         <Reveal>
           <h2 className="text-start text-heading font-normal tracking-normal text-foreground">
-            מוצרים נבחרים
+            {t("home.products.title", "מוצרים נבחרים")}
           </h2>
         </Reveal>
 

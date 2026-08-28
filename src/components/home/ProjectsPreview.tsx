@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import Reveal from "@/components/Reveal";
 import { useProjects } from "@/hooks/useProjectsData";
 import { useLocalizedPath } from "@/lib/useLocalizedPath";
+import { useSiteText } from "@/hooks/useSiteText";
 
 const MAX = 3;
 
@@ -15,6 +16,7 @@ const MAX = 3;
 const ProjectsPreview = () => {
   const { projects } = useProjects();
   const { to } = useLocalizedPath();
+  const t = useSiteText();
   const shown = projects.slice(0, MAX);
 
   if (shown.length === 0) return null;
@@ -24,7 +26,7 @@ const ProjectsPreview = () => {
       <div className="mx-auto max-w-[1440px] px-5 md:px-10 lg:px-16 py-20 md:py-28 lg:py-36">
         <Reveal>
           <h2 className="text-start text-heading font-normal tracking-normal text-foreground">
-            פרויקטים
+            {t("home.projects.title", "פרויקטים")}
           </h2>
         </Reveal>
 

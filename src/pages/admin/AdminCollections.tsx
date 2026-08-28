@@ -45,6 +45,7 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { uploadFile } from "@/lib/admin-storage";
+import ProductFinishes from "./ProductFinishes";
 
 type Collection = {
   id: string;
@@ -659,6 +660,17 @@ const AdminCollections = () => {
                   </label>
                 </div>
               </div>
+
+              {/* Finishes live in their own table keyed by product_id, so they
+                  can only be attached once the product row exists. */}
+              {editProd.id ? (
+                <ProductFinishes productId={editProd.id as string} />
+              ) : (
+                <p className="text-xs text-muted-foreground">
+                  שמרו את המוצר כדי להוסיף לו גימורים וצבעים.
+                </p>
+              )}
+
               <div className="flex items-center gap-2">
                 <Switch
                   checked={editCol.published ?? true}
@@ -827,6 +839,17 @@ const AdminCollections = () => {
                   </label>
                 </div>
               </div>
+
+              {/* Finishes live in their own table keyed by product_id, so they
+                  can only be attached once the product row exists. */}
+              {editProd.id ? (
+                <ProductFinishes productId={editProd.id as string} />
+              ) : (
+                <p className="text-xs text-muted-foreground">
+                  שמרו את המוצר כדי להוסיף לו גימורים וצבעים.
+                </p>
+              )}
+
               <div className="flex items-center gap-2">
                 <Switch
                   checked={editProd.published ?? true}

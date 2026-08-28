@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import Reveal from "@/components/Reveal";
 import { useCollections } from "@/hooks/useCollectionsData";
 import { useLocalizedPath } from "@/lib/useLocalizedPath";
+import { useSiteText } from "@/hooks/useSiteText";
 
 /** Three, not eight. Audo shows four; Skargaarden uses text links; Hillerstorp
  *  shows none at all. Eight tiles was more than any reference brand puts on a
@@ -12,6 +13,7 @@ const MAX = 3;
 const FeaturedCollections = () => {
   const { collections, loading } = useCollections();
   const { to } = useLocalizedPath();
+  const t = useSiteText();
   const shown = collections.slice(0, MAX);
 
   // Nothing to show is a reason to render nothing, not to render a hole.
@@ -22,7 +24,7 @@ const FeaturedCollections = () => {
       <div className="mx-auto max-w-[1440px] px-5 md:px-10 lg:px-16 py-20 md:py-28 lg:py-36">
         <Reveal>
           <h2 className="text-start text-heading font-normal tracking-normal text-foreground">
-            קולקציות נבחרות
+            {t("home.collections.title", "קולקציות נבחרות")}
           </h2>
         </Reveal>
 

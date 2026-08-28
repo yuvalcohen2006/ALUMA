@@ -6,6 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import RouteFallback from "@/components/RouteFallback";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import { AuthProvider } from "@/hooks/useAuth";
+import { SiteTextProvider } from "@/hooks/useSiteText";
 import SiteTracker from "@/components/SiteTracker";
 import ScrollToTop from "@/components/ScrollToTop";
 import RoutePrefetcher from "@/components/RoutePrefetcher";
@@ -15,6 +16,10 @@ import { publicRoutes } from "./routes";
 import "@/i18n";
 
 const AdminDashboard = lazy(() => import("./pages/admin/AdminDashboard.tsx"));
+const AdminGuide = lazy(() => import("./pages/admin/AdminGuide.tsx"));
+const AdminTexts = lazy(() => import("./pages/admin/AdminTexts.tsx"));
+const AdminFaqs = lazy(() => import("./pages/admin/AdminFaqs.tsx"));
+const AdminReviews = lazy(() => import("./pages/admin/AdminReviews.tsx"));
 const AdminProjects = lazy(() => import("./pages/admin/AdminProjects.tsx"));
 const AdminCollections = lazy(() => import("./pages/admin/AdminCollections.tsx"));
 const AdminHero = lazy(() => import("./pages/admin/AdminHero.tsx"));
@@ -33,6 +38,7 @@ const App = () => (
       <TooltipProvider>
         <Sonner />
         <AuthProvider>
+          <SiteTextProvider>
           <BrowserRouter>
             <ScrollToTop />
             <RoutePrefetcher />
@@ -41,7 +47,11 @@ const App = () => (
               <Routes>
                 {/* Admin is Hebrew-only and deliberately outside the language
                     tree — the CMS has one audience and does not need /en. */}
-                <Route path="/admin" element={<AdminGuard><AdminDashboard /></AdminGuard>} />
+                <Route path="/admin" element={<AdminGuard><AdminGuide /></AdminGuard>} />
+                <Route path="/admin/stats" element={<AdminGuard><AdminDashboard /></AdminGuard>} />
+                <Route path="/admin/texts" element={<AdminGuard><AdminTexts /></AdminGuard>} />
+                <Route path="/admin/faqs" element={<AdminGuard><AdminFaqs /></AdminGuard>} />
+                <Route path="/admin/reviews" element={<AdminGuard><AdminReviews /></AdminGuard>} />
                 <Route path="/admin/club" element={<AdminGuard><AdminClub /></AdminGuard>} />
                 <Route path="/admin/customers" element={<AdminGuard><Navigate to="/admin/club" replace /></AdminGuard>} />
                 <Route path="/admin/orders" element={<AdminGuard><AdminOrders /></AdminGuard>} />
@@ -67,6 +77,7 @@ const App = () => (
               </Routes>
             </Suspense>
           </BrowserRouter>
+          </SiteTextProvider>
         </AuthProvider>
       </TooltipProvider>
     </QueryClientProvider>
