@@ -4,7 +4,6 @@ import { NavLink, Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import alumaLogo from "@/assets/aluma-logo.png";
-import { useCollections } from "@/hooks/useCollectionsData";
 import { WhatsAppIcon } from "@/components/WhatsAppButton";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { useLocalizedPath } from "@/lib/useLocalizedPath";
@@ -34,32 +33,24 @@ const Header = () => {
   const [hovered, setHovered] = useState<string | null>(null);
   const [pinned, setPinned] = useState<string | null>(null);
   const navRef = useRef<HTMLElement | null>(null);
-  const { collections } = useCollections();
-
-  // No "all collections" entry — the קולקציות button itself goes to the
-  // unfiltered page, and filtering happens there in the sidebar.
-  const collectionsSub = useMemo(
-    () =>
-      collections.map((c) => ({
-        label: c.name_he,
-        to: localized(`/collections#${c.slug}`),
-      })),
-    [collections, localized]
-  );
-
-  // The owner specified this order reading LEFT to right. In RTL the first
-  // item renders rightmost, so the array is that list reversed. No "home"
-  // entry: the logo already goes home, and a second one is clutter.
+  // Six flat links, no dropdowns. Skargaarden runs five; the one reference
+  // site that uses a mega-menu (Audo) is also the loudest of the set. The
+  // collections dropdown in particular was the client's complaint #3 — he
+  // wanted the page, not a list unfolding beneath the cursor.
+  //
+  // Order is his, given left-to-right; in RTL the first item renders rightmost,
+  // so this array is that list reversed. שווה לדעת is not here: he called it
+  // "really a side-thing", so it lives in the footer.
   const navLinks = useMemo(
     () => [
-      { label: t("nav.collections"), to: localized("/collections"), submenu: collectionsSub },
-      { label: t("nav.journal"), to: localized("/journal") },
-      { label: t("nav.diy"), to: localized("/diy"), badge: t("nav.newBadge") },
+      { label: t("nav.collections"), to: localized("/collections") },
+      { label: t("nav.projects"), to: localized("/projects") },
+      { label: t("nav.diy"), to: localized("/diy") },
       { label: t("nav.faq"), to: localized("/faq") },
       { label: t("nav.club"), to: localized("/club") },
       { label: t("nav.story"), to: localized("/story") },
     ],
-    [collectionsSub, t, localized]
+    [t, localized]
   );
 
 
