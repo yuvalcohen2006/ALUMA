@@ -5,7 +5,7 @@ import SEO from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { Check, MessageCircle, Sparkles } from "lucide-react";
 import salonPhoto from "@/assets/collections/salon-monolith.jpg";
-import { SITE } from "@/config/site";
+import { useSiteContact } from "@/hooks/useSiteContact";
 import {
   sunbrellaFabrics,
   families,
@@ -22,6 +22,8 @@ const familyLabelsHe: Record<string, string> = {
 
 const FabricConfigurator = () => {
   const [family, setFamily] = useState<(typeof families)[number]>("Canvas");
+  // Live contact facts, falling back to src/config/site.ts.
+  const SITE = useSiteContact();
   const [selected, setSelected] = useState<SunbrellaFabric>(
     sunbrellaFabrics[0]
   );

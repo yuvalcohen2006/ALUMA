@@ -7,6 +7,7 @@ import RouteFallback from "@/components/RouteFallback";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import { AuthProvider } from "@/hooks/useAuth";
 import { SiteTextProvider } from "@/hooks/useSiteText";
+import { SiteContactProvider } from "@/hooks/useSiteContact";
 import SiteTracker from "@/components/SiteTracker";
 import ScrollToTop from "@/components/ScrollToTop";
 import RoutePrefetcher from "@/components/RoutePrefetcher";
@@ -39,6 +40,7 @@ const App = () => (
         <Sonner />
         <AuthProvider>
           <SiteTextProvider>
+          <SiteContactProvider>
           <BrowserRouter>
             <ScrollToTop />
             <RoutePrefetcher />
@@ -77,6 +79,7 @@ const App = () => (
               </Routes>
             </Suspense>
           </BrowserRouter>
+          </SiteContactProvider>
           </SiteTextProvider>
         </AuthProvider>
       </TooltipProvider>

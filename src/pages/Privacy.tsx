@@ -1,9 +1,11 @@
 import Layout from "@/components/Layout";
 import SEO from "@/components/SEO";
 import PageHero from "@/components/PageHero";
-import { SITE } from "@/config/site";
+import { useSiteContact } from "@/hooks/useSiteContact";
 
 const PrivacyPage = () => {
+  // Live contact facts, falling back to src/config/site.ts.
+  const SITE = useSiteContact();
   return (
     <Layout>
       <SEO

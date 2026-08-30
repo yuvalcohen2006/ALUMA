@@ -14,7 +14,8 @@ import {
 import { toast } from "sonner";
 import { contactSchema } from "@/lib/contactSchema";
 import { supabase } from "@/integrations/supabase/client";
-import { SITE } from "@/config/site";
+import { useSiteContact } from "@/hooks/useSiteContact";
+import type { SiteContact } from "@/lib/site-contact";
 import { WhatsAppIcon } from "@/components/WhatsAppButton";
 import SectionHeading from "@/components/SectionHeading";
 import Reveal from "@/components/Reveal";
@@ -46,7 +47,7 @@ type Channel = {
   external?: boolean;
 };
 
-const channels: Channel[] = [
+const channelsFor = (SITE: SiteContact): Channel[] => [
   {
     key: "whatsapp",
     Icon: WhatsAppIcon,
@@ -213,6 +214,9 @@ const MIN_FILL_MS = 2_500;
 
 const Contact = () => {
   const navigate = useNavigate();
+  // Phone, address and social links as set in /admin/settings, over the ones
+  // the site ships with.
+  const channels = channelsFor(useSiteContact());
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
   const formMountedAt = useRef<number>(Date.now());

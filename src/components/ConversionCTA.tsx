@@ -1,3 +1,4 @@
+import { useSiteContact } from "@/hooks/useSiteContact";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, MessageCircle, Phone, Sparkles } from "lucide-react";
@@ -24,7 +25,8 @@ const ConversionCTA = ({
   primaryLabel = "לקבלת הצעת מחיר אישית",
   whatsappMessage = "היי, שיחקתי עם הכלי באתר ואשמח לדבר על פרויקט.",
 }: ConversionCTAProps) => {
-  const wa = `https://wa.me/972504519062?text=${encodeURIComponent(whatsappMessage)}`;
+  const SITE = useSiteContact();
+  const wa = SITE.whatsapp.link(whatsappMessage);
 
   return (
     <section className="py-16 md:py-24 bg-primary text-primary-foreground relative overflow-hidden">
@@ -81,7 +83,7 @@ const ConversionCTA = ({
               variant="outline"
               className="rounded-sm px-8 bg-transparent border-primary-foreground/40 text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground"
             >
-              <a href="tel:+972504519062">
+              <a href={`tel:${SITE.phone.tel}`}>
                 <Phone className="ms-2 h-4 w-4" />
                 חייגו אלינו
               </a>

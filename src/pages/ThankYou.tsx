@@ -1,3 +1,4 @@
+import { useSiteContact } from "@/hooks/useSiteContact";
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
@@ -7,6 +8,8 @@ import Footer from "@/components/Footer";
 import alumaLogo from "@/assets/aluma-logo.png";
 
 const ThankYou = () => {
+  // Live contact facts, falling back to src/config/site.ts.
+  const SITE = useSiteContact();
   useEffect(() => {
     // Conversion event for analytics (gtag/fbq if loaded later)
     try {
@@ -49,7 +52,7 @@ const ThankYou = () => {
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-10">
             <a
-              href="https://wa.me/972504519062"
+              href={SITE.whatsapp.href}
               target="_blank"
               rel="noreferrer"
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#1ebd5a] text-white px-6 py-3 rounded-sm text-body transition-smooth"
@@ -58,7 +61,7 @@ const ThankYou = () => {
               שלחו לנו ב-Whatsapp
             </a>
             <a
-              href="tel:0504519062"
+              href={`tel:${SITE.phone.tel}`}
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground px-6 py-3 rounded-sm text-body transition-smooth"
             >
               <Phone className="w-4 h-4" />

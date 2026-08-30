@@ -3,7 +3,7 @@ import SEO from "@/components/SEO";
 import Reveal from "@/components/Reveal";
 import { Link } from "react-router-dom";
 import { useLocalizedPath } from "@/lib/useLocalizedPath";
-import { SITE } from "@/config/site";
+import { useSiteContact } from "@/hooks/useSiteContact";
 import alumaLogo from "@/assets/aluma-logo.png";
 import craftDetail from "@/assets/about/craft-detail.jpg";
 import terraceDusk from "@/assets/about/terrace-dusk.jpg";
@@ -65,6 +65,8 @@ const refusals = [
  * story and the refusals.
  */
 const StoryPage = () => {
+  // Live contact facts, falling back to src/config/site.ts.
+  const SITE = useSiteContact();
   const { to } = useLocalizedPath();
 
   return (

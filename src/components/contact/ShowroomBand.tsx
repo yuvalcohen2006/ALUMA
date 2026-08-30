@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Clock, MapPin, Navigation } from "lucide-react";
 import SectionHeading from "@/components/SectionHeading";
 import Reveal from "@/components/Reveal";
-import { SITE } from "@/config/site";
+import { useSiteContact } from "@/hooks/useSiteContact";
 import { cn } from "@/lib/utils";
 
 /* ---------------------------------------------------------------------------
@@ -81,9 +81,14 @@ const readStatus = (): Status => {
   return { open: false, day, label: "סגור כעת", detail: "", time: "" };
 };
 
-const mapsQuery = encodeURIComponent(`${SITE.address.street} ${SITE.address.city}`);
-const GOOGLE_MAPS = `https://www.google.com/maps/search/?api=1&query=${mapsQuery}`;
-const WAZE = `https://waze.com/ul?q=${mapsQuery}&navigate=yes`;
+/** Both map links search the same string, so they are built together. */
+const mapLinks = (street: string, city: string) => {
+  const q = encodeURIComponent(`${street} ${city}`);
+  return {
+    google: `https://www.google.com/maps/search/?api=1&query=${q}`,
+    waze: `https://waze.com/ul?q=${q}&navigate=yes`,
+  };
+};
 
 const navPill =
 "inline-flex items-center gap-2.5 rounded-sm border border-background/30 px-5 py-3 text-body text-background/90 transition-all duration-300 hover:bg-background/10 hover:border-background/60 hover:-translate-y-0.5";
@@ -98,6 +103,9 @@ const navPill =
  */
 const ShowroomBand = () => {
   const [status, setStatus] = useState<Status>(readStatus);
+  // Live contact facts, falling back to src/config/site.ts.
+  const SITE = useSiteContact();
+  const { google: GOOGLE_MAPS, waze: WAZE } = mapLinks(SITE.address.street, SITE.address.city);
 
   // A minute is plenty: the card only ever crosses one boundary at a time.
   useEffect(() => {

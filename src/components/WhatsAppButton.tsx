@@ -1,3 +1,5 @@
+import { useSiteContact } from "@/hooks/useSiteContact";
+
 /** Brand glyph, shared by the floating button and the navbar entry. */
 export const WhatsAppIcon = ({ className = "w-7 h-7" }: { className?: string }) => (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className={className}>
@@ -12,9 +14,11 @@ export const WhatsAppIcon = ({ className = "w-7 h-7" }: { className?: string }) 
  * the opposite corner from the accessibility button (`end-5`).
  */
 const WhatsAppButton = () => {
+  const { href } = useSiteContact().whatsapp;
+
   return (
     <a
-      href="https://wa.me/972504519062"
+      href={href}
       target="_blank"
       rel="noopener noreferrer"
       aria-label="צרו קשר בוואטסאפ"

@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { Phone, Mail, MapPin, Instagram, Facebook } from "lucide-react";
 import alumaLogo from "@/assets/aluma-logo.png";
-import { SITE } from "@/config/site";
+import { useSiteContact } from "@/hooks/useSiteContact";
 import { useLocalizedPath } from "@/lib/useLocalizedPath";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 
@@ -18,6 +18,8 @@ const WhatsAppIcon = ({ className = "" }: { className?: string }) => (
 
 const Footer = () => {
   const { to: localized } = useLocalizedPath();
+  // Live contact facts, falling back to src/config/site.ts.
+  const SITE = useSiteContact();
   // Light-grey wash plus a small lift on hover — the old version flipped to a
   // solid white block, which was far too loud against the charcoal footer.
   const iconBox =
@@ -39,11 +41,11 @@ const Footer = () => {
               <a href={`mailto:${SITE.email}`} aria-label="Email" className={iconBox}>
                 <Mail className="w-4 h-4" />
               </a>
-              <a href="tel:+972504519062" aria-label="Phone" className={iconBox}>
+              <a href={`tel:${SITE.phone.tel}`} aria-label="Phone" className={iconBox}>
                 <Phone className="w-4 h-4" />
               </a>
               <a
-                href="https://wa.me/972504519062"
+                href={SITE.whatsapp.href}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="WhatsApp"
@@ -149,16 +151,16 @@ const Footer = () => {
             <ul className="space-y-4 text-sm text-background/85">
               <li>
                 <a
-                  href="tel:+972504519062"
+                  href={`tel:${SITE.phone.tel}`}
                   className="flex items-center gap-3 justify-center md:justify-start hover:text-accent transition-smooth"
                 >
                   <Phone className="w-4 h-4 shrink-0" />
-                  <span dir="ltr">050-451-9062</span>
+                  <span dir="ltr">{SITE.phone.display}</span>
                 </a>
               </li>
               <li className="flex items-center gap-3 justify-center md:justify-start">
                 <MapPin className="w-4 h-4 shrink-0" />
-                <span>התמר 78, יציץ.</span>
+                <span>{SITE.address.full}.</span>
               </li>
               <li>
                 <a
@@ -171,7 +173,7 @@ const Footer = () => {
               </li>
               <li>
                 <a
-                  href="https://wa.me/972504519062"
+                  href={SITE.whatsapp.href}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-3 justify-center md:justify-start hover:text-accent transition-smooth"

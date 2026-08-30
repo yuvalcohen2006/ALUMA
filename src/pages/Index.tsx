@@ -7,22 +7,23 @@ import ProjectsPreview from "@/components/home/ProjectsPreview";
 import Testimonials from "@/components/home/Testimonials";
 import Newsletter from "@/components/home/Newsletter";
 import SEO from "@/components/SEO";
-import { SITE } from "@/config/site";
+import { useSiteContact } from "@/hooks/useSiteContact";
+import type { SiteContact } from "@/lib/site-contact";
 
-const localBusiness = {
+const localBusinessFor = (SITE: SiteContact) => ({
 "@context": "https://schema.org",
 "@type": "FurnitureStore",
   name: "Aluma",
   description:
 "Aluma מתמחה בריהוט גן וריהוט חוץ יוקרתי בעיצוב אישי, סלוני חוץ, שולחנות גן ופינות אוכל מאלומיניום פרימיום, בדי Sunbrella ושיש גרניט פורצלן.",
   url: "https://alumaoutdoor.com/",
-  telephone: "+972-50-451-9062",
+  telephone: SITE.phone.tel,
   email: SITE.email,
   image: "https://alumaoutdoor.com/og-image.jpg",
   address: {
 "@type": "PostalAddress",
-    streetAddress: "התמר 78",
-    addressLocality: "יציץ",
+    streetAddress: SITE.address.street,
+    addressLocality: SITE.address.city,
     addressCountry: "IL",
   },
   openingHoursSpecification: [
@@ -47,7 +48,7 @@ const localBusiness = {
     { "@type": "Offer", itemOffered: { "@type": "Product", name: "פינות אוכל לגינה" } },
     { "@type": "Offer", itemOffered: { "@type": "Product", name: "ריהוט מרפסת" } },
   ],
-};
+});
 
 const websiteSchema = {
 "@context": "https://schema.org",
@@ -63,6 +64,7 @@ const websiteSchema = {
 };
 
 const Index = () => {
+  const localBusiness = localBusinessFor(useSiteContact());
   return (
     <Layout>
       <SEO

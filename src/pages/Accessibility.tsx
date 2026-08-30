@@ -1,9 +1,11 @@
 import Layout from "@/components/Layout";
 import SEO from "@/components/SEO";
 import PageHero from "@/components/PageHero";
-import { SITE } from "@/config/site";
+import { useSiteContact } from "@/hooks/useSiteContact";
 
 const AccessibilityPage = () => {
+  // Live contact facts, falling back to src/config/site.ts.
+  const SITE = useSiteContact();
   return (
     <Layout>
       <SEO
@@ -57,7 +59,7 @@ const AccessibilityPage = () => {
               לשירותכם:
             </p>
             <ul className="mt-3 space-y-1 text-foreground">
-              <li>טלפון: <a href="tel:0504519062" className="text-foreground underline hover:text-accent" dir="ltr">050-451-9062</a></li>
+              <li>טלפון: <a href={`tel:${SITE.phone.tel}`} className="text-foreground underline hover:text-accent" dir="ltr">{SITE.phone.display}</a></li>
               <li>דוא״ל: <a href={`mailto:${SITE.email}`} className="text-foreground underline hover:text-accent" dir="ltr">{SITE.email}</a></li>
               <li>כתובת: התמר 78, יציץ</li>
             </ul>
