@@ -9,14 +9,17 @@ That Vercel site is publishing the **`main`** branch. All the work of the last
 weeks is on a branch called **`calm-rebuild`**. So `aluma-three.vercel.app` is
 showing an older version of the site.
 
-That's why the contact form looks unfinished, why the write-to-us section
-behaves oddly, and why the layout has problems you've already reported as
-fixed. **They are fixed — on the branch Vercel isn't publishing.** Job 1 is
-one setting, and it changes all of it at once.
+That's why the contact form looks unfinished, why the collection names are
+printed enormous across the photographs, and why the layout has problems
+you've already reported as fixed. **They are fixed — on the branch Vercel
+isn't publishing.** Job 1 is one setting, and it changes all of it at once.
+
+The setting is not where it used to be, which is why you couldn't find it.
+Job 1 says exactly where it moved to.
 
 | # | Job | Time | Why |
 |---|---|---|---|
-| 1 | Point Vercel at the right branch | 2 min | Everything else you're seeing depends on this |
+| 1 | Point Vercel at the right branch | 3 min | Everything else you're seeing depends on this |
 | 2 | Run one small SQL script | 3 min | Adds the price field |
 | 3 | Turn on emails | 10 min | Contact-form messages reach nobody without it |
 | 4 | Move the domain to Namecheap | 20 min + wait | You have the code — this is ready to go |
@@ -24,38 +27,59 @@ one setting, and it changes all of it at once.
 ---
 ---
 
-# JOB 1 — Point Vercel at the right branch (2 minutes)
+# JOB 1 — Point Vercel at the right branch (3 minutes)
+
+**You couldn't find it because it moved.** It used to live under Settings →
+Git. Vercel now keeps it under **Environments**. Here is exactly where.
 
 1. Go to **`vercel.com`** and sign in.
 2. Click the project — the one serving **aluma-three.vercel.app**.
-3. Click **Settings** in the top row of tabs.
-4. In the left menu click **Git**.
-5. Find the box labelled **Production Branch**. It currently says `main`.
-6. Change it to exactly:
+3. Click **Settings** in the row of tabs across the top.
+4. In the menu down the left, click **Environments**.
+   - Not "Git". Git is still there, and the branch setting is no longer in it.
+5. You'll see a list with **Production** at the top. Click **Production**.
+6. Scroll to the section headed **Branch Tracking**.
+7. There's a box showing `main`. Clear it and type exactly:
 
    ```
    calm-rebuild
    ```
 
-7. Click **Save**.
+8. Click **Save**.
 
-**Changing the setting does not rebuild the site.** You have to trigger one:
+### Now force a rebuild
 
-8. Click the **Deployments** tab at the top.
-9. Find the newest deployment in the list. On its right there's a **⋯** button.
-10. Click it, then click **Redeploy**.
-11. In the box that appears, click **Redeploy** again to confirm.
-12. Wait about two minutes.
+Saving changes the setting but does **not** rebuild the site — Vercel waits
+for the next push. Make it build now:
 
-## Check it worked
+9. Click the **Deployments** tab at the top.
+10. The newest deployment is the first row. At its right end there's a **⋯**
+    button (three dots). Click it.
+11. Click **Redeploy**.
+12. A box appears. Click **Redeploy** in it to confirm.
+13. Wait about two minutes. The row shows **Building**, then **Ready**.
 
-Open **aluma-three.vercel.app/faq**. You should see the questions, and at the
-bottom a **contact form that is already open** — not a row you have to click.
-If it's still a row you click, the redeploy hasn't finished or the branch
-didn't save. Check Settings → Git again.
+### Check it worked
 
-**✅ Tell me: "Job 1 done" — and tell me if anything still looks wrong, because
-from then on we're both looking at the same site.**
+Open **aluma-three.vercel.app/faq**.
+
+- The contact form at the bottom should be **already open** — not a row you
+  click to expand.
+- Scroll to the collections: the collection name should sit **above** each
+  photograph as normal text, not as a huge word printed over the picture.
+
+If either is still the old way, the redeploy hasn't finished, or step 7 didn't
+save. Go back to Settings → Environments → Production and check the box still
+says `calm-rebuild`.
+
+### If you can't find "Environments" at all
+
+Some accounts still show the older layout. In that case:
+**Settings → Git → Production Branch**, change it there, then do steps 9–13.
+Either location works — it's the same setting.
+
+**✅ Tell me: "Job 1 done."** From then on we're both looking at the same site,
+which matters more than anything else on this list.
 
 ---
 ---
