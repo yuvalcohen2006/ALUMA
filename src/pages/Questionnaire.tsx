@@ -135,7 +135,7 @@ const Questionnaire = () => {
           ) : (
             <div className="bg-background border border-border rounded-sm p-8 md:p-10 ">
               <div className="mb-8">
-                <div className="flex justify-between text-xs text-muted-foreground mb-2">
+                <div className="flex justify-between text-label text-muted-foreground mb-2">
                   <span>שלב {step + 1} מתוך {steps.length}</span>
                   <span>{steps[step]}</span>
                 </div>

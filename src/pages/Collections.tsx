@@ -43,50 +43,38 @@ const CollectionSection = ({
   first: boolean;
 }) => {
   const { to } = useLocalizedPath();
-  const band = col.image_url || products[0]?.cover_url || null;
   const preview = products.slice(0, PREVIEW_COUNT);
   const hasMore = products.length > PREVIEW_COUNT;
 
   return (
     <section id={col.slug} className="scroll-mt-32 py-14 md:py-24">
-      {/* The photograph is a second, redundant click target for the heading
-          below it. Hidden from assistive tech and skipped by the keyboard on
-          purpose — otherwise every collection would announce two identical
-          links, and tabbing the page would take twice as long for no gain. */}
+      {/* An editorial section head: the name, the way through on the far
+          edge, and one hairline under both. The 3:1 photograph that used to
+          open every section was decoration — the products below are the
+          content, and four of them say more about a collection than one
+          cropped band ever did. */}
       <Reveal>
-        <Link
-          to={to(`/collections/${col.slug}`)}
-          aria-hidden="true"
-          tabIndex={-1}
-          className="group relative block aspect-[21/9] md:aspect-[3/1] overflow-hidden rounded-sm bg-secondary/50"
-        >
-          {band && (
-            <img
-              src={band}
-              alt=""
-              aria-hidden="true"
-              loading={first ? "eager" : "lazy"}
-              decoding="async"
-              className="absolute inset-0 w-full h-full object-cover"
-            />
-          )}
-        </Link>
-      </Reveal>
-
-      {/* The name reads on the page, not out of the photograph. A 170px word
-          over a darkened image was the loudest thing on the site, and the
-          scrim it needed was fighting the picture underneath it. */}
-      <Reveal>
-        <h2 className="mt-5 text-start text-heading font-normal tracking-normal text-foreground">
-          <Link to={to(`/collections/${col.slug}`)} className="hover:text-accent transition-colors">
-            {col.name_he}
+        <div className="flex items-baseline justify-between gap-6 border-b border-foreground/12 pb-5">
+          <h2 className="text-start text-heading font-normal tracking-normal text-foreground">
+            <Link
+              to={to(`/collections/${col.slug}`)}
+              className="transition-colors hover:text-accent"
+            >
+              {col.name_he}
+            </Link>
+          </h2>
+          <Link
+            to={to(`/collections/${col.slug}`)}
+            className="shrink-0 whitespace-nowrap text-small text-muted-foreground transition-colors hover:text-foreground"
+          >
+            {products.length > 0 ? `${products.length} פריטים` : "לצפייה"}
           </Link>
-        </h2>
+        </div>
       </Reveal>
 
       {col.intro && (
         <Reveal>
-          <p className="mt-6 md:mt-8 max-w-[62ch] text-body leading-relaxed text-foreground-soft text-start">
+          <p className="mt-6 max-w-[62ch] text-start text-body leading-relaxed text-foreground-soft">
             {col.intro}
           </p>
         </Reveal>
@@ -104,16 +92,18 @@ const CollectionSection = ({
         </ul>
       )}
 
-      <Reveal>
-        <div className="mt-10 md:mt-12 text-start">
-          <Link
-            to={to(`/collections/${col.slug}`)}
-            className="inline-flex items-center justify-center h-12 px-7 rounded-full border border-foreground/25 text-small text-foreground transition-colors duration-200 hover:border-accent hover:text-accent"
-          >
-            עוד מהקולקציה
-          </Link>
-        </div>
-      </Reveal>
+      {hasMore && (
+        <Reveal>
+          <div className="mt-10 text-start">
+            <Link
+              to={to(`/collections/${col.slug}`)}
+              className="text-small text-foreground underline underline-offset-[6px] decoration-1 transition-colors hover:text-accent"
+            >
+              כל הפריטים בקולקציה
+            </Link>
+          </div>
+        </Reveal>
+      )}
     </section>
   );
 };

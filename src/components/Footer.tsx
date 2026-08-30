@@ -197,14 +197,14 @@ const Footer = () => {
                   <span dir="ltr">08:30 – 12:00</span>
                 </div>
               </div>
-              <div className="text-xs text-background/70 mt-3">
+              <div className="text-label text-background/70 mt-3">
                 ניתן להגיע לאולם התצוגה בתיאום מראש
               </div>
             </div>
           </div>
         </div>
 
-        <div dir="rtl" className="mt-14 pt-8 border-t border-background/15 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-background/60 text-center md:text-start">
+        <div dir="rtl" className="mt-14 pt-8 border-t border-background/15 flex flex-col md:flex-row justify-between items-center gap-4 text-label text-background/60 text-center md:text-start">
           <div>© {new Date().getFullYear()} Aluma. כל הזכויות שמורות.</div>
           <div className="flex flex-wrap justify-center gap-5">
             <Link to={localized("/accessibility")} className="link-underline inline-block hover:text-accent transition-smooth">
@@ -219,7 +219,7 @@ const Footer = () => {
             {/* Repeated here as well as in the navbar: visitors who don't find
                 a language control at the top look for it in the footer. */}
             {SITE.enableEnglish && (
-              <LanguageSwitcher className="min-h-0 px-0 text-xs text-background/60 hover:text-accent" />
+              <LanguageSwitcher className="min-h-0 px-0 text-label text-background/60 hover:text-accent" />
             )}
           </div>
         </div>

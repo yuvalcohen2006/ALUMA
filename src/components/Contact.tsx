@@ -16,6 +16,7 @@ import { contactSchema } from "@/lib/contactSchema";
 import { supabase } from "@/integrations/supabase/client";
 import { useSiteContact } from "@/hooks/useSiteContact";
 import { mailtoLink } from "@/lib/mailto";
+import { submitErrorMessage } from "@/lib/submitError";
 import type { SiteContact } from "@/lib/site-contact";
 import { WhatsAppIcon } from "@/components/WhatsAppButton";
 import SectionHeading from "@/components/SectionHeading";
@@ -283,19 +284,8 @@ const Contact = () => {
       });
 
       if (error) {
-        // Try to extract structured error message from edge function response
         const ctx = (error as { context?: Response }).context;
-        let serverMsg = "שגיאה בשליחה. נסו שוב או צרו קשר בטלפון.";
-        if (ctx) {
-          try {
-            const body = await ctx.json();
-            if (body?.error) serverMsg = body.error;
-            if (ctx.status === 429) serverMsg = body?.error ?? "נשלחו יותר מדי פניות. נסו שוב מאוחר יותר.";
-          } catch {
-            /* ignore */
-          }
-        }
-        toast.error(serverMsg);
+        toast.error(await submitErrorMessage(ctx));
       } else if (result?.ok) {
         form.reset();
         formMountedAt.current = Date.now();

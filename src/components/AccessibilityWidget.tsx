@@ -160,7 +160,7 @@ const AccessibilityWidget = () => {
             <div className="p-5 space-y-5">
               {/* Font size */}
               <div>
-                <div className="text-xs tracking-wider uppercase text-muted-foreground mb-2">
+                <div className="text-label tracking-wider uppercase text-muted-foreground mb-2">
                   גודל טקסט
                 </div>
                 <div className="flex items-center gap-2">

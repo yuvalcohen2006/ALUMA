@@ -73,8 +73,8 @@ export default {
         display: ["clamp(2.25rem, 5vw, 3.75rem)", { lineHeight: "1.1", letterSpacing: "0" }],
         heading: ["clamp(1.5rem, 3vw, 1.875rem)", { lineHeight: "1.25", letterSpacing: "0" }],
         body: ["1.125rem", { lineHeight: "1.75" }],
-        small: ["0.9375rem", { lineHeight: "1.6" }],
-        label: ["0.8125rem", { lineHeight: "1.5" }],
+        small: ["1rem", { lineHeight: "1.65" }],
+        label: ["0.875rem", { lineHeight: "1.5" }],
       },
       borderRadius: {
         lg: "var(--radius)",

@@ -5,8 +5,6 @@ import { Link } from "react-router-dom";
 import { useLocalizedPath } from "@/lib/useLocalizedPath";
 import { useSiteContact } from "@/hooks/useSiteContact";
 import alumaLogo from "@/assets/aluma-logo.png";
-import craftDetail from "@/assets/about/craft-detail.jpg";
-import terraceDusk from "@/assets/about/terrace-dusk.jpg";
 import storyPortrait from "@/assets/story-portrait.png";
 import storyPortraitRoy from "@/assets/story-portrait-roy.png";
 import storyPortraitIdan from "@/assets/story-portrait-idan.png";
@@ -97,18 +95,6 @@ const StoryPage = () => {
           </Reveal>
         </div>
       </section>
-
-      {/* 2 — The one homepage-language moment, placed AFTER the statement so it
-          reads as its consequence rather than as decoration. */}
-      <Reveal>
-        <img
-          src={craftDetail}
-          alt="מפגש בין שלדת אלומיניום למשענת טיק"
-          loading="eager"
-          decoding="async"
-          className="w-full aspect-[4/5] md:aspect-[16/9] object-cover"
-        />
-      </Reveal>
 
       {/* 3 — THE STORY. The brand's own paragraphs, with its strongest line
           promoted out of the block and set as a lead. */}
@@ -201,18 +187,6 @@ const StoryPage = () => {
           </Reveal>
         </div>
       </section>
-
-      {/* 6 — The exhale before the close. */}
-      <Reveal>
-        <img
-          src={terraceDusk}
-          alt=""
-          aria-hidden="true"
-          loading="lazy"
-          decoding="async"
-          className="w-full aspect-[3/2] md:aspect-[21/9] object-cover"
-        />
-      </Reveal>
 
       {/* 7 — CLOSE. The wordmark returns, larger and faint. Bookending the page
           with the mark removes any need for a CTA button here. */}

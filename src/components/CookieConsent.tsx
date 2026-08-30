@@ -45,7 +45,7 @@ const CookieConsent = () => {
         <h3 className="font-display text-base md:text-lg text-foreground mb-1">
           העדפות פרטיות
         </h3>
-        <p className="text-xs md:text-sm text-muted-foreground leading-relaxed mb-3">
+        <p className="text-label md:text-sm text-muted-foreground leading-relaxed mb-3">
           האתר משתמש בעוגיות לשיפור החוויה ולניתוח תעבורה.
           לפרטים נוספים ראו{" "}
           <Link to="/privacy" className="text-foreground underline underline-offset-2">
@@ -58,14 +58,14 @@ const CookieConsent = () => {
             variant="ghost"
             size="sm"
             onClick={() => decide("declined")}
-            className="text-xs h-9"
+            className="text-label h-9"
           >
             רק חיוניות
           </Button>
           <Button
             size="sm"
             onClick={() => decide("accepted")}
-            className="bg-accent hover:bg-accent/90 text-accent-foreground text-xs h-9 px-5 rounded-sm"
+            className="bg-accent hover:bg-accent/90 text-accent-foreground text-label h-9 px-5 rounded-sm"
           >
             אישור
           </Button>

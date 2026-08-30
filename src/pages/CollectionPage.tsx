@@ -76,7 +76,8 @@ const CollectionPage = () => {
       <Layout>
         <div className="container-luxury pt-40 pb-24">
           <div className="animate-pulse space-y-8">
-            <div className="aspect-[21/9] md:aspect-[3/1] rounded-sm bg-secondary" />
+            <div className="h-12 w-2/3 max-w-[420px] rounded-sm bg-secondary" />
+            <div className="h-5 w-full max-w-[560px] rounded-sm bg-secondary" />
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
               {[0, 1, 2, 3].map((i) => (
                 <div key={i} className="aspect-square rounded-sm bg-secondary" />
@@ -90,7 +91,6 @@ const CollectionPage = () => {
 
   if (!collection) return <NotFound />;
 
-  const band = collection.image_url || items[0]?.cover_url || null;
 
   return (
     <Layout>
@@ -108,37 +108,24 @@ const CollectionPage = () => {
         }}
       />
 
-      {/* The band, with the collection name over it — the same device the
-          index uses, so arriving here feels like the card opened rather than
-          like a different page loaded. */}
-      <section className="pt-24">
+      {/* A page header, not a hero. The 3:1 photograph that opened this page
+          said nothing the products below do not say better, and it pushed the
+          first real thing on the page below the fold. */}
+      <section className="pt-36 pb-10 md:pt-44 md:pb-14">
         <div className="container-luxury">
-          {/* Title above the band, at the page's own display size. It used to
-              sit inside the photograph at up to 180px, which needed a scrim to
-              stay legible and made every collection page shout. */}
-          <h1 className="mb-6 text-start text-display font-normal tracking-normal text-foreground">
+          <h1 className="text-start text-display font-normal tracking-normal text-foreground">
             {collection.name_he}
           </h1>
-          <div className="relative aspect-[21/9] md:aspect-[3/1] overflow-hidden rounded-sm bg-secondary/50">
-            {band && (
-              <img
-                src={band}
-                alt=""
-                aria-hidden="true"
-                loading="eager"
-                decoding="async"
-                className="absolute inset-0 w-full h-full object-cover"
-              />
-            )}
-          </div>
 
           {collection.intro && (
-            <Reveal>
-              <p className="mt-7 max-w-[62ch] text-body leading-relaxed text-foreground-soft text-start">
-                {collection.intro}
-              </p>
-            </Reveal>
+            <p className="mt-6 max-w-[62ch] text-start text-body leading-relaxed text-foreground-soft">
+              {collection.intro}
+            </p>
           )}
+
+          <p className="mt-8 border-t border-foreground/12 pt-5 text-start text-small text-muted-foreground">
+            {items.length} פריטים
+          </p>
         </div>
       </section>
 

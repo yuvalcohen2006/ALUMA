@@ -105,7 +105,7 @@ const FabricConfigurator = () => {
                     <div className="font-display text-xl text-foreground mt-1">
                       {selected.nameHe}
                     </div>
-                    <div className="text-xs text-muted-foreground mt-0.5" dir="ltr">
+                    <div className="text-label text-muted-foreground mt-0.5" dir="ltr">
                       {selected.name} · {selected.code}
                     </div>
                   </div>
@@ -139,7 +139,7 @@ const FabricConfigurator = () => {
                 ].map((s) => (
                   <div
                     key={s}
-                    className="bg-secondary/40 border border-border rounded-sm p-3 text-center text-xs text-muted-foreground"
+                    className="bg-secondary/40 border border-border rounded-sm p-3 text-center text-label text-muted-foreground"
                   >
                     <Sparkles className="h-3.5 w-3.5 inline text-accent mr-1" />
                     {s}
@@ -167,7 +167,7 @@ const FabricConfigurator = () => {
                 ))}
               </div>
 
-              <div className="text-xs text-muted-foreground mb-3">
+              <div className="text-label text-muted-foreground mb-3">
                 {filtered.length} דגימות במשפחה זו
               </div>
 

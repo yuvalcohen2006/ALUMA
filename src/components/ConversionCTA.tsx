@@ -90,7 +90,7 @@ const ConversionCTA = ({
             </Button>
           </div>
 
-          <p className="mt-8 text-xs opacity-70">
+          <p className="mt-8 text-label opacity-70">
             ייעוץ ראשוני חינם · תשובה תוך יום עסקים · ללא התחייבות
           </p>
         </div>

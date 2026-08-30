@@ -2,9 +2,9 @@ import type { ReactNode } from "react";
 
 interface PageHeroProps {
   title: ReactNode;
-  /** One quiet line under the divider. */
+  /** One quiet line under the title. */
   subtitle?: ReactNode;
-  /** Filter trigger, pinned to the edge opposite the title. */
+  /** Filter trigger, stacked under the title on the same edge. */
   filterSlot?: ReactNode;
   /**
    * Charcoal band with a white title, for pages that run dark end to end —
@@ -14,69 +14,53 @@ interface PageHeroProps {
 }
 
 /**
- * Shared top band for every interior page.
+ * The top of every interior page.
  *
- * Lifted wholesale from the Our Story page: no sand slab, no decoration — the
- * page just opens on the background it lives on, with the title set right
- * against the container edge and a hairline under it that measures exactly as
- * wide as the words. Title carries its presence through size, not weight or
- * ornament. Header.tsx forces its border off the home page since there's no
- * band left anywhere to separate it from the page.
+ * No slab, no photograph, no rule: the page opens on its own background with
+ * the title set against the container edge, and the space under it does the
+ * separating. This is the shape the About, Q&A and materials pages already
+ * had; those three looked settled and everything using this component did not,
+ * which was the whole difference.
+ *
+ * Sizes come from the five-role scale rather than raw Tailwind steps. A header
+ * hand-set to `text-5xl` drifts from the display role the moment either
+ * changes, and drifted headers are most of what "inconsistent" means.
+ *
+ * `pt` clears the fixed header (~96px) and then adds the page's own opening
+ * space; Header.tsx drops its border on pages that open like this.
  */
-const PageHero = ({ title, subtitle, filterSlot, dark = false }: PageHeroProps) => {
-  return (
-    <section className={`pt-[127px] pb-4 md:pb-6 ${dark ? "bg-foreground" : "bg-background"}`}>
-      <div className="container-luxury">
-        {/* Everything is right-aligned: the page is dir="rtl", so the title,
-            its rule and the filter trigger all sit against the same edge. The
-            trigger is stacked under the title rather than opposite it, so it
-            stays on the right without crowding the heading — and on the same
-            side as the drawer it opens.
-
-            items-START, not items-end: in a column flex the cross axis is the
-            INLINE axis, so under dir="rtl" `items-end` resolves to the LEFT
-            edge. That one word used to push the title, its rule and the filter
-            button to the wrong side of every interior page. */}
-        <div className="flex flex-col items-start">
-          {/* Shrink-to-fit, so the rule (w-full of this wrapper) measures
-              exactly as wide as the title. A title too long for the row wraps
-              and the rule follows it rather than overflowing the page. */}
-          <div className="min-w-0 text-start">
-            <h1
-              className={`animate-rise-in font-display text-3xl sm:text-4xl md:text-5xl ${
-                dark ? "text-background" : "text-foreground"
-              }`}
-            >
-              {title}
-            </h1>
-            {/* Title-width, so it measures exactly as wide as the words and a
-                wrapping title takes the rule with it. Colour comes from the
-                shared accent token — same mark as the one under a centred
-                SectionHeading, so the site has one rule vocabulary. */}
-            <span
-              className="block w-full h-px mt-4"
-              style={{
-                background: dark ? "var(--rule-accent-on-dark)" : "var(--rule-accent)",
-              }}
-              aria-hidden="true"
-            />
-          </div>
-
-          {filterSlot && <div className="shrink-0 mt-5">{filterSlot}</div>}
-        </div>
+const PageHero = ({ title, subtitle, filterSlot, dark = false }: PageHeroProps) => (
+  <section
+    className={`pt-36 pb-14 md:pt-44 md:pb-20 ${dark ? "bg-foreground" : "bg-background"}`}
+  >
+    <div className="container-luxury">
+      {/* items-START, not items-end: in a column flex the cross axis is the
+          INLINE axis, so under dir="rtl" `items-end` resolves to the LEFT
+          edge. That one word used to push the title and the filter button to
+          the wrong side of every interior page. */}
+      <div className="flex flex-col items-start">
+        <h1
+          className={`text-start text-display font-normal tracking-normal ${
+            dark ? "text-background" : "text-foreground"
+          }`}
+        >
+          {title}
+        </h1>
 
         {subtitle && (
           <p
-            className={`text-body text-start mt-5 max-w-2xl ${
+            className={`mt-6 max-w-[58ch] text-start text-body leading-relaxed ${
               dark ? "text-background/75" : "text-foreground-soft"
             }`}
           >
             {subtitle}
           </p>
         )}
+
+        {filterSlot && <div className="mt-8 shrink-0">{filterSlot}</div>}
       </div>
-    </section>
-  );
-};
+    </div>
+  </section>
+);
 
 export default PageHero;

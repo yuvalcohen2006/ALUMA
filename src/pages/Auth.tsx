@@ -185,7 +185,7 @@ const AuthPage = () => {
                   {isSignup && (
                     <>
                       <div className="space-y-1.5">
-                        <Label htmlFor="fullName" className="text-xs text-foreground">שם מלא</Label>
+                        <Label htmlFor="fullName" className="text-label text-foreground">שם מלא</Label>
                         <Input
                           id="fullName"
                           value={fullName}
@@ -196,7 +196,7 @@ const AuthPage = () => {
                         />
                       </div>
                       <div className="space-y-1.5">
-                        <Label htmlFor="phone" className="text-xs text-foreground">טלפון</Label>
+                        <Label htmlFor="phone" className="text-label text-foreground">טלפון</Label>
                         <Input
                           id="phone"
                           type="tel"
@@ -210,7 +210,7 @@ const AuthPage = () => {
                     </>
                   )}
                   <div className="space-y-1.5">
-                    <Label htmlFor="email" className="text-xs text-foreground">אימייל</Label>
+                    <Label htmlFor="email" className="text-label text-foreground">אימייל</Label>
                     <Input
                       id="email"
                       type="email"
@@ -223,7 +223,7 @@ const AuthPage = () => {
                     />
                   </div>
                   <div className="space-y-1.5">
-                    <Label htmlFor="password" className="text-xs text-foreground">סיסמה</Label>
+                    <Label htmlFor="password" className="text-label text-foreground">סיסמה</Label>
                     <Input
                       id="password"
                       type="password"
@@ -262,7 +262,7 @@ const AuthPage = () => {
 
                 <Link
                   to="/club"
-                  className="mt-6 block text-center text-xs text-muted-foreground hover:text-accent tracking-[0.15em] uppercase"
+                  className="mt-6 block text-center text-label text-muted-foreground hover:text-accent tracking-[0.15em] uppercase"
                 >
                   ← על המועדון
                 </Link>

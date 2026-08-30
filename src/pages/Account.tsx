@@ -104,7 +104,7 @@ const Account = () => {
         <div className="container-luxury">
           <div className="flex items-start justify-between flex-wrap gap-4">
             <div>
-              <SectionLabel he="מועדון אלומה" en="My Club" className="text-xs mb-4" />
+              <SectionLabel he="מועדון אלומה" en="My Club" className="text-label mb-4" />
               <h1 className="font-display text-3xl md:text-5xl text-foreground">
                 שלום {profile.full_name || "חבר יקר"}
               </h1>
@@ -157,13 +157,13 @@ const Account = () => {
                             </p>
                           )}
                         </div>
-                        <span className="text-xs tracking-wider uppercase px-3 py-1 rounded-sm bg-accent/10 text-accent">
+                        <span className="text-label tracking-wider uppercase px-3 py-1 rounded-sm bg-accent/10 text-accent">
                           {statusLabels[p.status] || p.status}
                         </span>
                       </div>
                       {p.description && <p className="text-sm text-muted-foreground mb-4">{p.description}</p>}
                       <div className="space-y-2">
-                        <div className="flex justify-between text-xs text-muted-foreground">
+                        <div className="flex justify-between text-label text-muted-foreground">
                           <span>התקדמות</span>
                           <span>{p.progress}%</span>
                         </div>
@@ -175,7 +175,7 @@ const Account = () => {
                           <span className="text-muted-foreground">אבן דרך הבאה:</span>
                           <span className="text-foreground font-medium">{p.next_milestone}</span>
                           {p.next_milestone_date && (
-                            <span className="text-xs text-muted-foreground mr-auto">
+                            <span className="text-label text-muted-foreground mr-auto">
                               {new Date(p.next_milestone_date).toLocaleDateString("he-IL")}
                             </span>
                           )}
@@ -210,7 +210,7 @@ const Account = () => {
                 <div className="space-y-2">
                   <Label>אימייל</Label>
                   <Input value={user.email ?? ""} disabled dir="ltr" />
-                  <p className="text-xs text-muted-foreground">לשינוי אימייל צור קשר</p>
+                  <p className="text-label text-muted-foreground">לשינוי אימייל צור קשר</p>
                 </div>
                 <Button type="submit" disabled={savingProfile}>
                   {savingProfile ? "שומר..." : "שמור שינויים"}

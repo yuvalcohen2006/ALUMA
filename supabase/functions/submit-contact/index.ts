@@ -46,7 +46,10 @@ const BodySchema = z.object({
 });
 
 const RATE_WINDOW_MS = 60 * 60 * 1000; // 1 hour
-const RATE_MAX = 3; // max 3 submissions per IP per hour
+// Ten, not three. Three punished the owner testing their own form, and a
+// household or an office behind one address shares an IP — the limit has to
+// stop a script, not a family.
+const RATE_MAX = 10;
 
 const hashIp = async (ip: string, salt: string) => {
   const data = new TextEncoder().encode(`${salt}:${ip}`);
@@ -111,7 +114,7 @@ Deno.serve(async (req) => {
       console.error("rate count error", countErr);
     } else if ((count ?? 0) >= RATE_MAX) {
       return new Response(
-        JSON.stringify({ error: "נשלחו יותר מדי פניות מהכתובת שלך. נסו שוב מאוחר יותר." }),
+        JSON.stringify({ error: "נשלחו יותר מדי פניות מהכתובת הזו. נסו שוב בעוד שעה, או פשוט התקשרו." }),
         { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } },
       );
     }
