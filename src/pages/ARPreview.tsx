@@ -9,7 +9,7 @@ import Layout from "@/components/Layout";
 const products = [
   {
     id: "modular-sofa-3m",
-    name: "ספה מודולרית 3×1 מ׳",
+    name: "ספה מודולרית ⁦3×1⁩ מ׳",
     desc: "ספה מודולרית 3 יחידות, רוחב 3 מטר, עומק 1 מטר. תצוגת AR בגודל אמיתי.",
     glb: "https://modelviewer.dev/shared-assets/models/glTF-Sample-Assets/Models/Sofa/glTF-Binary/Sofa.glb",
     usdz: "",
@@ -37,7 +37,7 @@ const products = [
   {
     id: "table",
     name: "שולחן Stone Top",
-    desc: "שולחן חוץ עם משטח גרניט פורצלן 220x100.",
+    desc: "שולחן חוץ עם משטח גרניט פורצלן ⁦220x100⁩.",
     glb: "https://modelviewer.dev/shared-assets/models/glTF-Sample-Assets/Models/Table/glTF-Binary/Table.glb",
     usdz: "",
     poster: "",

@@ -9,6 +9,8 @@ import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { UserPlus, Trash2, MailCheck, Clock, Shield, KeyRound } from "lucide-react";
 import { checkNewPassword } from "@/lib/password";
+import { isolateLtr } from "@/lib/bidi";
+import Ltr from "@/components/Ltr";
 
 type Contact = {
   phone?: string;
@@ -166,7 +168,9 @@ const AdminSettings = () => {
 
     setPw("");
     setPw2("");
-    toast.success("הסיסמה נקבעה. אפשר להיכנס איתה בפעם הבאה מ-/admin/login");
+    toast.success(
+      `הסיסמה נקבעה. אפשר להיכנס איתה בפעם הבאה מ-${isolateLtr("/admin/login")}`,
+    );
   };
 
   const fields: {
@@ -237,7 +241,7 @@ const AdminSettings = () => {
           <p className="text-sm leading-relaxed text-muted-foreground">
             אם נכנסתם עם Google ואתם רוצים להפסיק להיות תלויים בו, קבעו כאן סיסמה.
             מהרגע הזה אפשר להיכנס לפאנל עם האימייל והסיסמה מהמסך של
-            <span dir="ltr" className="mx-1">/admin/login</span>.
+            <Ltr className="mx-1">/admin/login</Ltr>.
           </p>
 
           <div className="mt-5 grid gap-4 md:grid-cols-2">

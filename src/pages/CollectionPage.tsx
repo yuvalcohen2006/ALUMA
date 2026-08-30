@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import { formatPrice } from "@/lib/price";
+import Ltr from "@/components/Ltr";
 import { Link, useParams } from "react-router-dom";
 import Layout from "@/components/Layout";
 import SEO from "@/components/SEO";
@@ -53,7 +54,7 @@ export const ProductCard = ({ product: p, eager }: { product: DBProduct; eager: 
         <p className="mt-1.5 text-label text-foreground/45">
           {/* Dimensions stay LTR inside the RTL line, or the × and the units
               end up on the wrong side. */}
-          <span dir="ltr">{p.dimensions}</span>
+          <Ltr>{p.dimensions}</Ltr>
         </p>
       )}
     </Link>

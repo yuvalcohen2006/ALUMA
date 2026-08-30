@@ -9,6 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { normaliseProduct, type DBProduct } from "@/hooks/useCollectionsData";
 import { trackPixel } from "@/lib/pixel";
 import { formatPrice } from "@/lib/price";
+import Ltr from "@/components/Ltr";
 import { useProductGallery, type ProductVariant } from "@/hooks/useProductGallery";
 
 const SITE = "https://alumaoutdoor.com";
@@ -319,7 +320,9 @@ const CollectionDetailPage = () => {
                         מידות בסיס
                       </div>
                       <div className="text-foreground font-normal text-body leading-relaxed">
-                        {item.dimensions}
+                        {/* Isolated: "320 × 260" in a Hebrew line
+                            displays as "260 × 320" without it. */}
+                        <Ltr>{item.dimensions}</Ltr>
                       </div>
                     </div>
                   </div>
