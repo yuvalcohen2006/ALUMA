@@ -23,25 +23,47 @@ import { supabase } from "@/integrations/supabase/client";
 
 const LEADS_SEEN_KEY = "aluma_admin_leads_seen_at";
 
-// Ordered by how often someone actually needs it, not by how the database is
-// organised. The guide sits first because it is where /admin lands and where
-// anyone unsure should start.
-const navItems = [
-  { to: "/admin", label: "מדריך", icon: HelpCircle, end: true },
-  { to: "/admin/collections", label: "קולקציות ומוצרים", icon: Package },
-  { to: "/admin/projects", label: "פרויקטים", icon: FolderOpen },
-  { to: "/admin/texts", label: "טקסטים באתר", icon: Type },
-  { to: "/admin/faqs", label: "שאלות ותשובות", icon: MessageSquare },
-  { to: "/admin/reviews", label: "המלצות לקוחות", icon: Quote },
-  { to: "/admin/hero", label: "תמונה ראשית", icon: ImageIcon },
-  { to: "/admin/leads", label: "פניות", icon: Inbox, badge: "leads" as const },
-  { to: "/admin/club", label: "ניהול מועדון", icon: Crown },
-  { to: "/admin/orders", label: "הזמנות לקוחות", icon: ClipboardList },
-  { to: "/admin/blog", label: "מגזין", icon: FileText },
-  { to: "/admin/team", label: "חברי צוות", icon: Users },
-  { to: "/admin/stats", label: "סטטיסטיקות", icon: BarChart3 },
-  { to: "/admin/settings", label: "הגדרות אתר", icon: Settings },
+/**
+ * Grouped, because fourteen flat links is a list you read every time instead
+ * of a shape you learn once. The groups answer three different questions:
+ * what's on the site, who wrote to us, and how is this thing set up.
+ */
+const navGroups = [
+  {
+    label: null,
+    items: [{ to: "/admin", label: "מה בא לכם לעשות?", icon: HelpCircle, end: true }],
+  },
+  {
+    label: "התוכן של האתר",
+    items: [
+      { to: "/admin/collections", label: "קולקציות ומוצרים", icon: Package },
+      { to: "/admin/projects", label: "פרויקטים", icon: FolderOpen },
+      { to: "/admin/hero", label: "תמונה ראשית", icon: ImageIcon },
+      { to: "/admin/texts", label: "טקסטים באתר", icon: Type },
+      { to: "/admin/faqs", label: "שאלות ותשובות", icon: MessageSquare },
+      { to: "/admin/reviews", label: "המלצות לקוחות", icon: Quote },
+      { to: "/admin/blog", label: "מגזין", icon: FileText },
+    ],
+  },
+  {
+    label: "מה שהגיע מהאתר",
+    items: [
+      { to: "/admin/leads", label: "פניות", icon: Inbox, badge: "leads" as const },
+      { to: "/admin/orders", label: "הזמנות לקוחות", icon: ClipboardList },
+      { to: "/admin/club", label: "חברי מועדון", icon: Crown },
+      { to: "/admin/stats", label: "סטטיסטיקות", icon: BarChart3 },
+    ],
+  },
+  {
+    label: "הגדרות",
+    items: [
+      { to: "/admin/settings", label: "פרטי קשר וסיסמה", icon: Settings },
+      { to: "/admin/team", label: "מי עוד מנהל", icon: Users },
+    ],
+  },
 ];
+
+const navItems = navGroups.flatMap((g) => g.items);
 
 const AdminLayout = ({ children }: { children: ReactNode }) => {
   const { signOut, user } = useAuth();
@@ -105,13 +127,18 @@ const AdminLayout = ({ children }: { children: ReactNode }) => {
         end={item.end}
         className={({ isActive }) =>
           mobile
-            ? `flex items-center gap-1.5 px-3 py-1.5 rounded-sm text-xs whitespace-nowrap transition-colors ${
-                isActive ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"
-              }`
-            : `flex items-center gap-3 px-3 py-2.5 rounded-md text-sm transition-colors ${
+            ? `flex items-center gap-1.5 px-3 h-9 rounded-sm text-xs whitespace-nowrap transition-colors ${
                 isActive
-                  ? "bg-primary text-primary-foreground"
-                  : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                  ? "bg-foreground text-background"
+                  : "bg-muted text-muted-foreground"
+              }`
+            // Ink on a tint, plus a bar on the reading edge — the terracotta
+            // fill made whichever screen you were on the loudest thing in the
+            // room, every time.
+            : `relative flex items-center gap-3 px-3 h-10 rounded-sm text-sm transition-colors ${
+                isActive
+                  ? "bg-foreground/[0.06] text-foreground font-medium before:absolute before:inset-inline-start-0 before:inset-block-2 before:w-[3px] before:rounded-full before:bg-foreground before:content-['']"
+                  : "text-muted-foreground hover:bg-foreground/[0.04] hover:text-foreground"
               }`
         }
       >
@@ -131,43 +158,53 @@ const AdminLayout = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <div className="min-h-dvh bg-muted/40" dir="rtl">
+    <div className="min-h-dvh bg-secondary/40" dir="rtl">
       <div className="flex min-h-dvh">
         {/* Sidebar */}
         <aside className="hidden md:flex w-64 shrink-0 flex-col border-l border-border bg-card">
-          <div className="px-6 py-7 border-b border-border">
-            <p className="text-[10px] tracking-[0.3em] text-foreground uppercase mb-1">
-              Aluma Admin
-            </p>
-            <h2 className="font-display text-2xl text-foreground">לוח בקרה</h2>
+          <div className="px-6 py-6 border-b border-border">
+            <p className="text-[10px] tracking-[0.3em] text-muted-foreground uppercase">Aluma</p>
+            <h2 className="mt-1 font-display text-xl text-foreground">ניהול האתר</h2>
           </div>
 
-          <nav className="flex-1 px-3 py-5 space-y-1">
-            {navItems.map((item) => renderItem(item))}
+          <nav className="flex-1 overflow-y-auto px-3 py-5">
+            {navGroups.map((group, i) => (
+              <div key={group.label ?? "top"} className={i > 0 ? "mt-6" : ""}>
+                {group.label && (
+                  <h3 className="px-3 pb-2 text-[11px] font-medium tracking-wide text-muted-foreground/70">
+                    {group.label}
+                  </h3>
+                )}
+                <div className="space-y-0.5">{group.items.map((item) => renderItem(item))}</div>
+              </div>
+            ))}
           </nav>
 
-          <div className="px-3 py-4 border-t border-border space-y-1">
+          <div className="border-t border-border px-3 py-4">
+            {user?.email && (
+              <div className="px-3 pb-3">
+                <p className="text-[11px] text-muted-foreground">מחוברים בתור</p>
+                <p className="truncate text-[13px] text-foreground" dir="ltr" title={user.email}>
+                  {user.email}
+                </p>
+              </div>
+            )}
             <a
               href="/"
               target="_blank"
               rel="noreferrer"
-              className="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
+              className="flex h-10 items-center gap-3 rounded-sm px-3 text-sm text-muted-foreground transition-colors hover:bg-foreground/[0.04] hover:text-foreground"
             >
               <ExternalLink className="w-4 h-4" />
-              <span>צפייה באתר</span>
+              <span>לראות את האתר</span>
             </a>
             <button
               onClick={handleLogout}
-              className="w-full flex items-center gap-3 px-3 py-2.5 rounded-md text-sm text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
+              className="flex h-10 w-full items-center gap-3 rounded-sm px-3 text-sm text-muted-foreground transition-colors hover:bg-foreground/[0.04] hover:text-foreground"
             >
               <LogOut className="w-4 h-4" />
-              <span>התנתק</span>
+              <span>יציאה</span>
             </button>
-            {user?.email && (
-              <div className="px-3 pt-3 text-[11px] text-muted-foreground truncate" title={user.email}>
-                {user.email}
-              </div>
-            )}
           </div>
         </aside>
 
@@ -181,7 +218,7 @@ const AdminLayout = ({ children }: { children: ReactNode }) => {
             >
               <LogOut className="w-5 h-5" />
             </button>
-            <h2 className="font-display text-lg">לוח בקרה</h2>
+            <h2 className="font-display text-lg">ניהול האתר</h2>
           </div>
           <div className="flex overflow-x-auto gap-1 px-2 pb-2">
             {navItems.map((item) => renderItem(item, true))}

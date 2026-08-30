@@ -7,7 +7,8 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
-import { UserPlus, Trash2, MailCheck, Clock, Shield } from "lucide-react";
+import { UserPlus, Trash2, MailCheck, Clock, Shield, KeyRound } from "lucide-react";
+import { checkNewPassword } from "@/lib/password";
 
 type Contact = {
   phone?: string;
@@ -41,6 +42,9 @@ const AdminSettings = () => {
   const [admins, setAdmins] = useState<AdminMember[]>([]);
   const [invites, setInvites] = useState<Invitation[]>([]);
   const [inviteEmail, setInviteEmail] = useState("");
+  const [pw, setPw] = useState("");
+  const [pw2, setPw2] = useState("");
+  const [savingPw, setSavingPw] = useState(false);
   const [inviting, setInviting] = useState(false);
   const [me, setMe] = useState<string | null>(null);
 
@@ -146,6 +150,25 @@ const AdminSettings = () => {
 
   if (loading) return <AdminLayout>טוען…</AdminLayout>;
 
+  /**
+   * Sets a password on the account that is already signed in. No email is
+   * involved, which matters: the first admin account was created with Google
+   * and there was no other way to give it a password.
+   */
+  const savePassword = async () => {
+    const problem = checkNewPassword(pw, pw2);
+    if (problem) return toast.error(problem);
+
+    setSavingPw(true);
+    const { error } = await supabase.auth.updateUser({ password: pw });
+    setSavingPw(false);
+    if (error) return toast.error(error.message);
+
+    setPw("");
+    setPw2("");
+    toast.success("הסיסמה נקבעה. אפשר להיכנס איתה בפעם הבאה מ-/admin/login");
+  };
+
   const fields: {
     key: keyof Contact;
     label: string;
@@ -202,6 +225,54 @@ const AdminSettings = () => {
           {saving ? "שומר…" : "שמירה"}
         </Button>
       </div>
+
+      <Card className="mt-10">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <KeyRound className="w-4 h-4" />
+            הסיסמה שלכם
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="text-sm leading-relaxed text-muted-foreground">
+            אם נכנסתם עם Google ואתם רוצים להפסיק להיות תלויים בו, קבעו כאן סיסמה.
+            מהרגע הזה אפשר להיכנס לפאנל עם האימייל והסיסמה מהמסך של
+            <span dir="ltr" className="mx-1">/admin/login</span>.
+          </p>
+
+          <div className="mt-5 grid gap-4 md:grid-cols-2">
+            <div>
+              <Label htmlFor="new-password">סיסמה חדשה</Label>
+              <Input
+                id="new-password"
+                type="password"
+                dir="ltr"
+                autoComplete="new-password"
+                value={pw}
+                onChange={(e) => setPw(e.target.value)}
+              />
+              <p className="mt-1 text-xs text-muted-foreground">8 תווים לפחות.</p>
+            </div>
+            <div>
+              <Label htmlFor="new-password-again">שוב, כדי לוודא</Label>
+              <Input
+                id="new-password-again"
+                type="password"
+                dir="ltr"
+                autoComplete="new-password"
+                value={pw2}
+                onChange={(e) => setPw2(e.target.value)}
+              />
+            </div>
+          </div>
+
+          <div className="mt-5 flex justify-end">
+            <Button onClick={savePassword} disabled={savingPw || !pw}>
+              {savingPw ? "שומר…" : "קביעת סיסמה"}
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Team management */}
       <Card className="mt-12">

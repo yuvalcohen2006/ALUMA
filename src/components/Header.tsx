@@ -5,6 +5,8 @@ import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import alumaLogo from "@/assets/aluma-logo.png";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
+import AccountMenu from "@/components/AccountMenu";
+import { useAuth } from "@/hooks/useAuth";
 import { useLocalizedPath } from "@/lib/useLocalizedPath";
 import { SITE } from "@/config/site";
 
@@ -16,6 +18,7 @@ const navRest = "text-foreground-soft hover:bg-foreground/[0.07] hover:text-fore
 const navActive = "bg-foreground/[0.09] text-foreground";
 
 const Header = () => {
+  const { user } = useAuth();
   const [scrolled, setScrolled] = useState(false);
   const { pathname } = useLocation();
   const { t } = useTranslation();
@@ -119,11 +122,12 @@ const Header = () => {
           ))}
         </nav>
 
-        {SITE.enableEnglish && (
-          <div className="hidden lg:flex shrink-0">
-            <LanguageSwitcher />
-          </div>
-        )}
+        {/* Signed-in proof sits at the inline end, beside the switcher —
+            the far LEFT under RTL, which is where an account chip lives. */}
+        <div className="hidden lg:flex shrink-0 items-center gap-2">
+          <AccountMenu />
+          {SITE.enableEnglish && <LanguageSwitcher />}
+        </div>
 
         {/* Mobile menu button */}
         <div className="lg:hidden relative z-50">
@@ -201,6 +205,25 @@ const Header = () => {
                 </NavLink>
               </div>
             ))}
+
+            {/* The same signed-in proof the desktop bar carries. The chip
+                itself is desktop-only; in the drawer there is room for the
+                links to stand on their own. */}
+            {user && (
+              <div className="mt-8 border-t border-border/40 pt-5">
+                <p className="text-label text-muted-foreground">מחוברים בתור</p>
+                <p className="truncate text-small text-foreground" dir="ltr">
+                  {user.email}
+                </p>
+                <NavLink
+                  to={localized("/club/dashboard")}
+                  onClick={() => setOpen(false)}
+                  className="mt-3 block text-start font-display text-lg text-foreground hover:text-accent"
+                >
+                  האזור האישי
+                </NavLink>
+              </div>
+            )}
 
             <div
               className="mt-8 flex items-center gap-2"

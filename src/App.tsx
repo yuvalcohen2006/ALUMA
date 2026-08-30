@@ -18,6 +18,7 @@ import "@/i18n";
 
 const AdminDashboard = lazy(() => import("./pages/admin/AdminDashboard.tsx"));
 const AdminGuide = lazy(() => import("./pages/admin/AdminGuide.tsx"));
+const AdminLogin = lazy(() => import("./pages/admin/AdminLogin.tsx"));
 const AdminTexts = lazy(() => import("./pages/admin/AdminTexts.tsx"));
 const AdminFaqs = lazy(() => import("./pages/admin/AdminFaqs.tsx"));
 const AdminReviews = lazy(() => import("./pages/admin/AdminReviews.tsx"));
@@ -49,6 +50,9 @@ const App = () => (
               <Routes>
                 {/* Admin is Hebrew-only and deliberately outside the language
                     tree — the CMS has one audience and does not need /en. */}
+                {/* The door itself sits OUTSIDE the guard, or the guard
+                    would redirect the login page to itself. */}
+                <Route path="/admin/login" element={<AdminLogin />} />
                 <Route path="/admin" element={<AdminGuard><AdminGuide /></AdminGuard>} />
                 <Route path="/admin/stats" element={<AdminGuard><AdminDashboard /></AdminGuard>} />
                 <Route path="/admin/texts" element={<AdminGuard><AdminTexts /></AdminGuard>} />

@@ -1,183 +1,189 @@
 import { Link } from "react-router-dom";
 import {
-  FileText,
+  ArrowLeft,
   FolderOpen,
   HelpCircle,
   Image as ImageIcon,
+  Inbox,
   MessageSquareQuote,
   Palette,
-  Users,
+  Phone,
+  Type,
 } from "lucide-react";
+import AdminLayout from "./AdminLayout";
 
-type Task = {
-  icon: typeof FileText;
+type Card = {
+  icon: typeof FolderOpen;
   title: string;
-  what: string;
-  steps: string[];
+  /** One line, the way you'd say it out loud. */
+  blurb: string;
+  /** What you can actually do in there. Short phrases, not instructions. */
+  can: string[];
+  /** The thing people go looking for in the wrong place. */
+  cant: string;
   to: string;
-  cta: string;
 };
 
 /**
  * The landing screen for /admin.
  *
- * The client asked that opening the admin gives "a full quick guide on how to
- * use things, what to click in order to edit texts, photos or anything else".
- * So this is not a dashboard of numbers — it is a set of instructions, one per
- * job someone might arrive wanting to do, each ending in the button that
- * starts it.
+ * Not a dashboard of numbers — the person opening this wants to change one
+ * thing and get on with their day. So: what each screen is for, what you can
+ * do there, and the one thing people will go looking for there and not find.
  *
- * Written for somebody who has never seen a CMS: no jargon, every step is a
- * thing you can see on screen, and each card says what the visitor will end up
- * seeing on the public site.
+ * The "not from here" line matters as much as the rest. Most of the time
+ * somebody is stuck, it is because they are on the right-looking screen for
+ * the wrong job.
  */
-const TASKS: Task[] = [
+const CARDS: Card[] = [
   {
     icon: FolderOpen,
-    title: "להוסיף מוצר",
-    what: "מוצר חדש יופיע בעמוד הקולקציות, ואם הוא מהראשונים — גם בדף הבית.",
-    steps: [
-      'נכנסים ל"קולקציות" בתפריט הימני.',
-      "בוחרים את הקולקציה שאליה שייך המוצר, או יוצרים קולקציה חדשה.",
-      'לוחצים "מוצר חדש", ממלאים שם ותיאור קצר.',
-      "מעלים תמונה ראשית — זו התמונה שתופיע ברשימה.",
-      "אפשר להעלות עוד תמונות לגלריה של עמוד המוצר.",
-      'מסמנים "מפורסם" ושומרים.',
+    title: "קולקציות ומוצרים",
+    blurb: "הרהיטים עצמם. זה הדבר הראשון למלא — בלי מוצרים האתר די ריק.",
+    can: [
+      "להוסיף קולקציה (משפחה של רהיטים, למשל סלונים)",
+      "להוסיף מוצר בתוך קולקציה, עם תמונות",
+      "לשנות שם, תיאור ותמונות של מוצר קיים",
+      "להוריד מוצר מהאתר בלי למחוק אותו",
     ],
+    cant: "אין מחירים באתר, אז אין מה למלא שם.",
     to: "/admin/collections",
-    cta: "לניהול הקולקציות",
   },
   {
     icon: Palette,
-    title: "להוסיף צבעים למוצר (עם תמונה לכל צבע)",
-    what: "בעמוד המוצר יופיעו עיגולי צבע. לחיצה על צבע מחליפה את התמונה של המוצר.",
-    steps: [
-      'נכנסים ל"קולקציות", ופותחים את המוצר.',
-      'בתחתית העמוד יש אזור "גימורים".',
-      'לוחצים "גימור חדש", כותבים את שם הצבע (למשל "חול").',
-      "בוחרים את גוון העיגול, ומעלים תמונה של המוצר בצבע הזה.",
-      "חוזרים על זה לכל צבע. הסדר נקבע לפי מספר הסדר.",
+    title: "צבעים וגימורים",
+    blurb: "עיגולי הצבע בעמוד המוצר. לחיצה על צבע מחליפה את התמונה.",
+    can: [
+      "להוסיף צבע למוצר, עם תמונה של המוצר בצבע הזה",
+      "לבחור את גוון העיגול שמופיע באתר",
+      "לשנות את הסדר שלהם",
     ],
+    cant: "זה יושב בתוך המוצר עצמו — קודם שומרים מוצר, ואז מוסיפים לו צבעים.",
     to: "/admin/collections",
-    cta: "לניהול הקולקציות",
   },
   {
     icon: ImageIcon,
-    title: "להוסיף פרויקט",
-    what: 'הפרויקטים מופיעים בעמוד "פרויקטים" ושלושה מהם בדף הבית.',
-    steps: [
-      'נכנסים ל"פרויקטים" בתפריט.',
-      'לוחצים "פרויקט חדש".',
-      "ממלאים שם, מיקום ותיאור קצר.",
-      "מעלים תמונה ראשית ותמונות נוספות לגלריה.",
-      'מסמנים "מפורסם" ושומרים.',
-    ],
-    to: "/admin/projects",
-    cta: "לניהול הפרויקטים",
+    title: "התמונה הראשית",
+    blurb: "התמונה הגדולה שרואים ראשונה בדף הבית, והמשפט שעליה.",
+    can: ["להחליף את התמונה", "לשנות את הכותרת והמשפט מתחתיה", "לשנות את הכפתור ולאן הוא מוביל"],
+    cant: "שאר דף הבית נבנה לבד מהמוצרים והפרויקטים שהזנתם.",
+    to: "/admin/hero",
   },
   {
-    icon: FileText,
-    title: "לשנות טקסטים באתר",
-    what: "כותרות ופסקאות בדף הבית ובעמודים הראשיים.",
-    steps: [
-      'נכנסים ל"טקסטים".',
-      "כל שדה מסומן לפי המקום שבו הוא מופיע באתר.",
-      'משנים את הטקסט ולוחצים "שמירה" ליד אותו שדה.',
-      "אם תמחקו טקסט לגמרי, האתר יחזור לנוסח המקורי. אי אפשר לשבור כלום.",
-    ],
+    icon: FolderOpen,
+    title: "פרויקטים",
+    blurb: "עבודות שכבר עשיתם. שלושה מהם מופיעים גם בדף הבית.",
+    can: ["להוסיף פרויקט עם תמונות", "לכתוב איפה זה ומה היה שם", "לשנות את הסדר"],
+    cant: "לא צריך למלא הכול — מה שריק פשוט לא מופיע.",
+    to: "/admin/projects",
+  },
+  {
+    icon: Type,
+    title: "טקסטים באתר",
+    blurb: "כותרות ומשפטים בעמודים הראשיים, כל אחד מסומן איפה הוא מופיע.",
+    can: ["לשנות כותרות ומשפטי פתיחה", "למחוק טקסט כדי לחזור לנוסח המקורי"],
+    cant: "התפריט למעלה והתחתית של האתר לא נערכים מכאן.",
     to: "/admin/texts",
-    cta: "לעריכת הטקסטים",
   },
   {
     icon: HelpCircle,
-    title: "לערוך שאלות ותשובות",
-    what: 'השאלות בעמוד "שאלות ותשובות".',
-    steps: [
-      'נכנסים ל"שאלות ותשובות".',
-      "עורכים שאלה או תשובה קיימת, או מוסיפים חדשה.",
-      "הקטגוריה היא הכותרת שמעל קבוצת שאלות — אפשר להשתמש בקיימות או להמציא חדשה.",
-      'שאלה בלי סימון "מפורסם" לא תופיע באתר.',
-    ],
+    title: "שאלות ותשובות",
+    blurb: 'העמוד של "שאלות ותשובות", כולל הקטגוריות שמעל כל קבוצה.',
+    can: ["לערוך שאלה או תשובה", "להוסיף שאלה חדשה", "להסתיר שאלה בלי למחוק"],
+    cant: "הטופס בתחתית העמוד קבוע, רק השאלות משתנות.",
     to: "/admin/faqs",
-    cta: "לעריכת השאלות",
   },
   {
     icon: MessageSquareQuote,
-    title: "להוסיף המלצות לקוחות",
-    what: "ההמלצות מופיעות בתחתית דף הבית. אין המלצות — הקטע פשוט לא מופיע.",
-    steps: [
-      'נכנסים ל"המלצות".',
-      "מוסיפים ציטוט, שם הלקוח, ואיפה הפרויקט.",
-      "חשוב: להוסיף רק המלצות אמיתיות שקיבלתם עליהן אישור.",
-      'מסמנים "מפורסם" ושומרים.',
-    ],
+    title: "המלצות לקוחות",
+    blurb: "הציטוטים בדף הבית. כל עוד אין אף אחד, האזור הזה פשוט לא מופיע.",
+    can: ["להוסיף ציטוט עם שם", "להסתיר או למחוק"],
+    cant: "רק דברים שלקוחות באמת אמרו והסכימו שתפרסמו.",
     to: "/admin/reviews",
-    cta: "לניהול ההמלצות",
   },
   {
-    icon: ImageIcon,
-    title: "להחליף את התמונה הראשית",
-    what: "התמונה הגדולה בראש דף הבית.",
-    steps: [
-      'נכנסים ל"תמונה ראשית".',
-      "מעלים תמונה לרוחב למחשב, ותמונה לגובה לנייד.",
-      "שומרים.",
-    ],
-    to: "/admin/hero",
-    cta: "להחלפת התמונה",
+    icon: Phone,
+    title: "פרטי הקשר",
+    blurb: "טלפון, וואטסאפ, כתובת ורשתות. מה שתשנו כאן מתחלף בכל האתר.",
+    can: ["להחליף מספר טלפון או וואטסאפ", "לשנות כתובת ואימייל", "להוסיף הערה על שעות הפעילות"],
+    cant: "שעות הפתיחה עצמן קבועות בקוד — אפשר להוסיף עליהן הערה.",
+    to: "/admin/settings",
   },
   {
-    icon: Users,
-    title: "לראות פניות מהאתר",
-    what: "כל מי שמילא טופס יצירת קשר או השאיר פרטים.",
-    steps: ['נכנסים ל"פניות" בתפריט.', "הרשימה מסודרת מהחדש לישן."],
+    icon: Inbox,
+    title: "פניות מהאתר",
+    blurb: "מי כתב לכם דרך הטופס. גם מגיע לאימייל, זה פשוט המקום שלא מתפספס.",
+    can: ["לקרוא פניות", "לראות מתי הגיעו"],
+    cant: "לענות עונים מהאימייל או מהוואטסאפ, לא מכאן.",
     to: "/admin/leads",
-    cta: "לפניות",
   },
 ];
 
 const AdminGuide = () => (
-  <div className="max-w-4xl">
-    <h1 className="text-2xl font-semibold text-foreground">ברוכים הבאים לניהול האתר</h1>
-    <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted-foreground">
-      כל מה שאפשר לשנות באתר נמצא כאן. בחרו למטה מה אתם רוצים לעשות — לכל משימה
-      יש הסבר קצר וכפתור שלוקח אתכם ישר למקום הנכון. שינויים מופיעים באתר מיד
-      אחרי שמירה (לפעמים צריך לרענן את העמוד).
-    </p>
+  <AdminLayout>
+    <div className="max-w-5xl">
+      <header>
+        <h1 className="font-display text-3xl text-foreground">מה בא לכם לעשות?</h1>
+        <p className="mt-3 max-w-[62ch] text-[15px] leading-relaxed text-muted-foreground">
+          כל מה שאפשר לשנות באתר נמצא כאן. כל כרטיס למטה הוא מסך אחד בתפריט —
+          מה יש בו, ומה דווקא לא. שינוי נשמר ומופיע באתר מיד.
+        </p>
+        <p className="mt-3 max-w-[62ch] text-[15px] leading-relaxed text-muted-foreground">
+          אי אפשר לשבור כלום מכאן. שום דבר לא נמחק בלי לשאול אתכם קודם.
+        </p>
+      </header>
 
-    <div className="mt-8 grid gap-5 sm:grid-cols-2">
-      {TASKS.map((task) => (
-        <section key={task.title} className="rounded-lg border border-border p-5">
-          <div className="flex items-center gap-2.5">
-            <task.icon className="h-5 w-5 text-primary" aria-hidden="true" />
-            <h2 className="font-medium text-foreground">{task.title}</h2>
-          </div>
-          <p className="mt-2 text-sm text-muted-foreground">{task.what}</p>
-
-          <ol className="mt-4 space-y-1.5 text-sm text-foreground/80">
-            {task.steps.map((step, i) => (
-              <li key={step} className="flex gap-2">
-                <span className="text-muted-foreground tabular-nums">{i + 1}.</span>
-                <span>{step}</span>
-              </li>
-            ))}
-          </ol>
-
+      <div className="mt-9 grid gap-4 sm:grid-cols-2">
+        {CARDS.map((card) => (
           <Link
-            to={task.to}
-            className="mt-4 inline-block text-sm text-primary underline underline-offset-4 hover:text-accent"
+            key={card.title}
+            to={card.to}
+            className="group flex flex-col rounded-sm border border-border bg-card p-5 transition-colors hover:border-foreground/25 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
           >
-            {task.cta} ←
-          </Link>
-        </section>
-      ))}
-    </div>
+            <div className="flex items-center gap-2.5">
+              <card.icon
+                className="h-[18px] w-[18px] text-muted-foreground transition-colors group-hover:text-foreground"
+                aria-hidden="true"
+              />
+              <h2 className="font-medium text-foreground">{card.title}</h2>
+            </div>
 
-    <p className="mt-10 text-sm text-muted-foreground">
-      משהו לא ברור או לא עובד? עדיף לשאול מאשר לנחש — שום דבר כאן לא נמחק לתמיד
-      בלי לשאול אתכם קודם.
-    </p>
-  </div>
+            <p className="mt-2.5 text-sm leading-relaxed text-muted-foreground">{card.blurb}</p>
+
+            <ul className="mt-4 space-y-1.5">
+              {card.can.map((line) => (
+                <li key={line} className="flex gap-2.5 text-sm leading-relaxed text-foreground/85">
+                  {/* A dot, not a tick: these are options, not a checklist. */}
+                  <span
+                    aria-hidden="true"
+                    className="mt-[9px] h-1 w-1 shrink-0 rounded-full bg-foreground/30"
+                  />
+                  <span>{line}</span>
+                </li>
+              ))}
+            </ul>
+
+            <p className="mt-4 border-t border-border pt-3.5 text-[13px] leading-relaxed text-muted-foreground">
+              <span className="text-foreground/70">לא מכאן: </span>
+              {card.cant}
+            </p>
+
+            <span className="mt-4 inline-flex items-center gap-1.5 text-sm text-foreground">
+              פתיחה
+              <ArrowLeft
+                className="h-3.5 w-3.5 transition-transform duration-200 group-hover:-translate-x-1"
+                aria-hidden="true"
+              />
+            </span>
+          </Link>
+        ))}
+      </div>
+
+      <p className="mt-10 max-w-[62ch] text-sm leading-relaxed text-muted-foreground">
+        משהו לא ברור או לא מתנהג כמו שציפיתם? עדיף לשאול מאשר לנחש.
+      </p>
+    </div>
+  </AdminLayout>
 );
 
 export default AdminGuide;
