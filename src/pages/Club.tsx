@@ -18,7 +18,6 @@ import SectionHeading from "@/components/SectionHeading";
 import ShineButton from "@/components/ui/shine-button";
 import { useAuth } from "@/hooks/useAuth";
 import { cn } from "@/lib/utils";
-import alumaLogo from "@/assets/aluma-logo.png";
 
 /**
  * Club — the membership page.
@@ -165,103 +164,11 @@ const Club = () => {
         subtitle="עולם שקט של שירות, שנתפר במידה שלכם."
       />
 
-      {/* ── 1. What the club is — copy on the right, membership panel on the left ──
-          Opens tight under the hero: the hero band is the same warm white as this
-          section, so a generous top padding here would read as one continuous
-          empty screen rather than as breathing room. */}
-      <section className="pt-8 pb-14 md:pt-10 md:pb-20 bg-background">
-        <div className="container-luxury">
-          {/* 7xl rather than a narrower cap: the grid then measures to the
-              container on every screen a visitor actually has, and only
-              ultra-wide displays ever see the cap engage. */}
-          <div className="grid lg:grid-cols-12 gap-10 lg:gap-14 items-center max-w-7xl mx-auto">
-            {/* RTL: first child sits at the right edge */}
-            <Reveal className="lg:col-span-7">
-              <div className="text-start">
-                <h2 className="font-display font-medium text-heading leading-snug text-foreground">
-                  מה זה מועדון אלומה
-                </h2>
-                <div className="w-20 h-[2px] bg-foreground/15 mt-5" aria-hidden="true" />
-
-                <p className="text-body leading-relaxed text-foreground mt-6 text-pretty">
-                  מועדון אלומה הוא לא תוכנית נקודות. זו דלת אחורית לעולם של מעצבים,
-                  קולקציות מוקדמות ושירות אישי, למי שרואה את החוץ של הבית כמו את הפנים.
-                </p>
-                <p className="text-body leading-relaxed text-foreground-soft mt-5 text-pretty">
-                  החברות במועדון אלומה חינמית לחלוטין ואישית, לא נשלח לכם ספאם,
-                  לא נמכור את הנתונים ולא נציק לכם בטלפון.
-                </p>
-              </div>
-            </Reveal>
-
-            <Reveal className="lg:col-span-5" delay={120}>
-              {/* No hover state: the panel is a container, not a link, and the
-                  house rule is that only things you can click react to the
-                  pointer. Padding tops out at p-8 — this is the tallest thing
-                  in the row, so every millimetre it carries is a millimetre of
-                  empty column the copy beside it gets centred against. It eases
-                  back to p-6 on narrow screens so the fixed-width ShineButton
-                  never overflows it at 375px. */}
-              <div className="rounded-sm border border-border bg-secondary/50  p-6 sm:p-7 md:p-8 text-start">
-                <img
-                  src={alumaLogo}
-                  alt="Aluma"
-                  className="h-10 w-auto opacity-90"
-                  loading="lazy"
-                  decoding="async"
-                />
-
-                <AuthGate loading={loading} className="mt-5">
-                  <h3 className="font-display font-normal text-body text-foreground">
-                    {user ? "אתם כבר בפנים" : "החברות פתוחה, ובחינם"}
-                  </h3>
-
-                  {user ? (
-                    <>
-                      <p className="text-body text-foreground-soft leading-relaxed mt-3">
-                        החשבון מחובר. כל מה שסימנתם ועקבתם אחריו מחכה באזור האישי שלכם.
-                      </p>
-                      {user.email && (
-                        // Latin text, so it reads LTR — but still parked on the
-                        // right edge with the rest of the panel.
-                        <p
-                          dir="ltr"
-                          className="text-body text-foreground mt-4 pt-4 border-t border-border/70 text-start break-all"
-                        >
-                          {user.email}
-                        </p>
-                      )}
-                    </>
-                  ) : (
-                    <ul className="mt-5 space-y-3">
-                      {terms.map((t) => (
-                        <li
-                          key={t}
-                          className="flex items-start gap-3 border-t border-border/70 pt-3 first:border-t-0 first:pt-0"
-                        >
-                          <Check
-                            className="w-[18px] h-[18px] mt-1.5 shrink-0 text-primary"
-                            strokeWidth={2.5}
-                            aria-hidden="true"
-                          />
-                          <span className="text-body leading-relaxed text-foreground">
-                            {t}
-                          </span>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-
-                  <div className="mt-7">{cta("start")}</div>
-                </AuthGate>
-              </div>
-            </Reveal>
-          </div>
-        </div>
-      </section>
-
-      {/* ── 2. The one dark band: benefits as a hairline-separated ledger row ── */}
-      <section className="py-14 md:py-20 bg-foreground text-background">
+      {/* ── 1. The one dark band: benefits as a hairline-separated ledger row ──
+          The hero closes tight (pb-4), which was fine when a white section
+          followed it. A colour change needs air before it or the hero reads as
+          clipped, and the margin shows the page's own background. */}
+      <section className="mt-10 md:mt-16 py-14 md:py-20 bg-foreground text-background">
         <div className="container-luxury">
           <Reveal className="flex flex-col items-center mb-10 md:mb-14">
             <SectionHeading
@@ -316,7 +223,7 @@ const Club = () => {
         </div>
       </section>
 
-      {/* ── 3. Joining — a numbered spine, with the pitch alongside it ── */}
+      {/* ── 2. Joining — a numbered spine, and the only ask on the page ── */}
       <section className="py-14 md:py-20 bg-secondary">
         <div className="container-luxury">
           <div className="grid lg:grid-cols-12 gap-10 lg:gap-14 items-start max-w-7xl mx-auto">
@@ -333,14 +240,30 @@ const Club = () => {
                   ואת הפרויקט שפתחתם איתנו.
                 </p>
 
+                {/* The promises sit next to the button rather than in a
+                    panel of their own — they are what makes the click easy,
+                    so they belong within a glance of it. */}
                 {!user && (
-                  <AuthGate loading={loading} className="mt-7">
-                    <ShineButton to="/club/auth?mode=signup">
-                      להצטרפות מיידית
-                      <ArrowLeft className="w-4 h-4" aria-hidden="true" />
-                    </ShineButton>
-                  </AuthGate>
+                  <ul className="mt-7 space-y-3">
+                    {terms.map((t) => (
+                      <li key={t} className="flex items-start gap-3">
+                        <Check
+                          className="w-[18px] h-[18px] mt-1 shrink-0 text-primary"
+                          strokeWidth={2.5}
+                          aria-hidden="true"
+                        />
+                        <span className="text-body leading-relaxed text-foreground">{t}</span>
+                      </li>
+                    ))}
+                  </ul>
                 )}
+
+                {/* The page's single call to action. It used to appear three
+                    times over four sections, which read as nagging rather
+                    than as an offer. */}
+                <AuthGate loading={loading} className="mt-8">
+                  {cta("start")}
+                </AuthGate>
               </div>
             </Reveal>
 
@@ -391,41 +314,6 @@ const Club = () => {
         </div>
       </section>
 
-      {/* ── 4. Close ── */}
-      <section className="py-14 md:py-20 bg-background">
-        <div className="container-luxury">
-          <Reveal>
-            <div className="max-w-2xl mx-auto flex flex-col items-center text-center">
-              {/* Purely decorative here: the brand is already named by the
-                  header and the heading right below, so an alt would only make
-                  a screen reader say "Aluma" a third time. */}
-              <img
-                src={alumaLogo}
-                alt=""
-                aria-hidden="true"
-                className="h-12 w-auto opacity-90"
-                loading="lazy"
-                decoding="async"
-              />
-
-              <AuthGate loading={loading} className="mt-6 flex flex-col items-center">
-                <SectionHeading
-                  align="center"
-                  subtitle={
-                    user
-                      ? "אזור החברים שלכם מחכה, מועדפים, סטטוסים והזמנות במקום אחד."
-                      : "הצטרפות חינם, בלי התחייבות. בכל רגע אפשר לצאת."
-                  }
-                >
-                  {user ? "טוב לראות אתכם שוב." : "הבית שלכם ראוי לזה."}
-                </SectionHeading>
-
-                <div className="mt-7">{cta("center")}</div>
-              </AuthGate>
-            </div>
-          </Reveal>
-        </div>
-      </section>
     </Layout>
   );
 };

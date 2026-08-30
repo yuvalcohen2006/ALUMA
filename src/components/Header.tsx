@@ -4,7 +4,6 @@ import { NavLink, Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import alumaLogo from "@/assets/aluma-logo.png";
-import { WhatsAppIcon } from "@/components/WhatsAppButton";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { useLocalizedPath } from "@/lib/useLocalizedPath";
 import { SITE } from "@/config/site";
@@ -125,17 +124,6 @@ const Header = () => {
             <LanguageSwitcher />
           </div>
         )}
-
-        {/* WhatsApp — last child, so RTL places it at the far left of the bar */}
-        <a
-          href="https://wa.me/972504519062"
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="צרו קשר בוואטסאפ"
-          className="hidden lg:flex shrink-0 w-11 h-11 rounded-full bg-[#25D366] text-white items-center justify-center shadow-soft hover:scale-110 transition-smooth"
-        >
-          <WhatsAppIcon className="w-6 h-6" />
-        </a>
 
         {/* Mobile menu button */}
         <div className="lg:hidden relative z-50">

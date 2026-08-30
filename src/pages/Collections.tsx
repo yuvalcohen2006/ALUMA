@@ -7,6 +7,7 @@ import Reveal from "@/components/Reveal";
 import { useCollections, type DBCollection, type DBProduct } from "@/hooks/useCollectionsData";
 import { ProductCard } from "./CollectionPage";
 import { useLocalizedPath } from "@/lib/useLocalizedPath";
+import { useSiteText } from "@/hooks/useSiteText";
 import CategoryGrid from "@/components/CategoryGrid";
 
 const SITE = "https://alumaoutdoor.com";
@@ -120,6 +121,7 @@ const CollectionsPage = () => {
   const { collections, products, loading } = useCollections();
   const { hash } = useLocation();
   const { to } = useLocalizedPath();
+  const text = useSiteText();
   const [scrolledTo, setScrolledTo] = useState<string | null>(null);
 
   // An incoming #slug (the header's dropdown links here) can only be honoured
@@ -178,8 +180,11 @@ const CollectionsPage = () => {
       />
 
       <PageHero
-        title="קולקציות"
-        subtitle="כל פריט מיוצר בהזמנה אישית. בלי מחירון — כי אין אצלנו שני פרויקטים זהים."
+        title={text("collections.title", "קולקציות")}
+        subtitle={text(
+          "collections.subtitle",
+          "כל פריט מיוצר בהזמנה אישית. בלי מחירון — כי אין אצלנו שני פרויקטים זהים.",
+        )}
       />
 
       {/* The categories, moved here off the home page. A catalogue page is

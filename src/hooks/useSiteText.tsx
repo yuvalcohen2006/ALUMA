@@ -1,5 +1,7 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
+import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
+import { DEFAULT_LANGUAGE } from "@/i18n";
 
 type TextMap = Record<string, string>;
 
@@ -52,8 +54,13 @@ export const SiteTextProvider = ({ children }: { children: ReactNode }) => {
  */
 export function useSiteText() {
   const texts = useContext(SiteTextContext);
+  const { i18n } = useTranslation();
+  // The admin panel is Hebrew-only, so every value in `site_texts` is Hebrew.
+  // Applying it to /en would put Hebrew headings on a page the owner never
+  // sees, so English stays on the catalogue the component was given.
+  const editable = i18n.resolvedLanguage === DEFAULT_LANGUAGE;
   return useMemo(
-    () => (key: string, fallback: string) => texts[key] ?? fallback,
-    [texts],
+    () => (key: string, fallback: string) => (editable ? texts[key] ?? fallback : fallback),
+    [texts, editable],
   );
 }

@@ -4,6 +4,7 @@ import SEO from "@/components/SEO";
 import Reveal from "@/components/Reveal";
 import { materials } from "@/data/materials";
 import { useLocalizedPath } from "@/lib/useLocalizedPath";
+import { useSiteText } from "@/hooks/useSiteText";
 
 /**
  * The materials, as narrative rather than as a spec sheet.
@@ -23,6 +24,7 @@ import { useLocalizedPath } from "@/lib/useLocalizedPath";
  */
 const MaterialsPage = () => {
   const { to } = useLocalizedPath();
+  const text = useSiteText();
 
   return (
     <Layout>
@@ -36,11 +38,13 @@ const MaterialsPage = () => {
         <div className="mx-auto max-w-[860px] px-6 pt-40 pb-16 md:pt-52 md:pb-24">
           <Reveal>
             <h1 className="text-start text-display font-normal tracking-normal text-foreground">
-              החומרים
+              {text("materials.title", "החומרים")}
             </h1>
             <p className="mt-6 max-w-[58ch] text-start text-body tracking-normal text-foreground-soft">
-              ההחלטה הראשונה בכל פריט היא לא הצורה, אלא החומר. אלה הארבעה שאנחנו
-              בונים איתם, ומה כל אחד מהם עושה אחרי כמה שנים בחוץ.
+              {text(
+                "materials.subtitle",
+                "ההחלטה הראשונה בכל פריט היא לא הצורה, אלא החומר. אלה הארבעה שאנחנו בונים איתם, ומה כל אחד מהם עושה אחרי כמה שנים בחוץ.",
+              )}
             </p>
           </Reveal>
         </div>

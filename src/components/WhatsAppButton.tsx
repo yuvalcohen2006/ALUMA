@@ -6,8 +6,10 @@ export const WhatsAppIcon = ({ className = "w-7 h-7" }: { className?: string }) 
 );
 
 /**
- * Floating fallback for tablet widths only. From lg up the same action lives in
- * the navbar (top-left), so this hides to avoid showing it twice.
+ * The one WhatsApp entry point on the site, at every width.
+ *
+ * `start-5` is the RIGHT corner under RTL — where the client asked for it, and
+ * the opposite corner from the accessibility button (`end-5`).
  */
 const WhatsAppButton = () => {
   return (
@@ -16,7 +18,7 @@ const WhatsAppButton = () => {
       target="_blank"
       rel="noopener noreferrer"
       aria-label="צרו קשר בוואטסאפ"
-      className="fixed bottom-5 end-5 z-40 flex w-12 h-12 rounded-full bg-[#25D366] text-white items-center justify-center shadow-soft transition-opacity duration-200 hover:opacity-85"
+      className="fixed bottom-5 start-5 z-40 flex w-12 h-12 rounded-full bg-[#25D366] text-white items-center justify-center shadow-soft transition-opacity duration-200 hover:opacity-85"
     >
       <WhatsAppIcon />
     </a>

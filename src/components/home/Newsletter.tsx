@@ -3,6 +3,7 @@ import { Check } from "lucide-react";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
+import { useSiteText } from "@/hooks/useSiteText";
 import clubBg from "@/assets/categories/club-morning.jpg";
 
 /**
@@ -18,6 +19,8 @@ import clubBg from "@/assets/categories/club-morning.jpg";
  */
 const Newsletter = () => {
   const { t } = useTranslation("home");
+  // Editable in the admin, but only in Hebrew — /en keeps its translation.
+  const text = useSiteText();
   const [email, setEmail] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [subscribed, setSubscribed] = useState(
@@ -82,10 +85,10 @@ const Newsletter = () => {
               tagline — here it's helper text introducing a form, not the
               second half of a headline. */}
           <h2 className="font-display font-medium text-display">
-            {t("club.title")}
+            {text("club.title", t("club.title"))}
           </h2>
           <p className="mt-1 text-body text-foreground-soft">
-            {t("club.subtitle")}
+            {text("club.subtitle", t("club.subtitle"))}
           </p>
 
           {subscribed ? (

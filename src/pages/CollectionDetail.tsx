@@ -8,25 +8,19 @@ import NotFound from "./NotFound";
 import { supabase } from "@/integrations/supabase/client";
 import type { DBProduct } from "@/hooks/useCollectionsData";
 import { trackPixel } from "@/lib/pixel";
+import { useProductGallery, type ProductVariant } from "@/hooks/useProductGallery";
 
 const SITE = "https://alumaoutdoor.com";
-
-type ProductVariant = {
-  id: string;
-  name: string;
-  swatch: string | null;
-  image_url: string | null;
-};
 
 const CollectionDetailPage = () => {
   const { slug } = useParams();
   const [item, setItem] = useState<DBProduct | null>(null);
   const [variants, setVariants] = useState<ProductVariant[]>([]);
-  const [activeVariant, setActiveVariant] = useState<string | null>(null);
   const [related, setRelated] = useState<DBProduct[]>([]);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState(false);
-  const [activeImage, setActiveImage] = useState(0);
+  const { images: galleryImages, activeImage, setActiveImage, selected, activeVariant, selectVariant } =
+    useProductGallery(item, variants);
 
   const load = useCallback(async () => {
     if (!slug) return;
@@ -153,18 +147,6 @@ const CollectionDetailPage = () => {
 
   if (!item) return <NotFound />;
 
-  const selected = variants.find((v) => v.id === activeVariant) ?? null;
-
-  // A chosen finish replaces the lead photograph and nothing else — the rest
-  // of the gallery still shows the piece from its other angles.
-  const galleryImages = selected?.image_url
-    ? [selected.image_url, ...(item.gallery ?? []).filter((g) => g !== selected.image_url)]
-    : item.gallery && item.gallery.length > 0
-      ? item.gallery
-      : item.cover_url
-        ? [item.cover_url]
-        : [];
-
   const productJsonLd = {
 "@context": "https://schema.org",
 "@type": "Product",
@@ -248,7 +230,7 @@ const CollectionDetailPage = () => {
                       <li key={v.id}>
                         <button
                           type="button"
-                          onClick={() => setActiveVariant(isActive ? null : v.id)}
+                          onClick={() => selectVariant(isActive ? null : v.id)}
                           aria-pressed={isActive}
                           // The colour alone must not carry the state: a ring
                           // AND the label above tell you what is selected.
