@@ -1,11 +1,18 @@
 import { useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { DirectionProvider } from "@radix-ui/react-direction";
 import { LANGUAGE_DIR, type Language } from "@/i18n";
 
 /**
  * Wraps one language's route tree and keeps i18next and the <html> element in
  * step with it.
+ *
+ * Radix reads direction from React context and from nowhere else — not from
+ * CSS, not from the html element's dir attribute — so the primitives need the
+ * provider here or their arrow keys, typeahead and menu placement stay
+ * left-to-right on a right-to-left page. Nothing looks wrong; it just behaves
+ * backwards for anyone using a keyboard.
  *
  * `dir` and `lang` are also set by an inline script in index.html before React
  * mounts — without that the first paint is LTR and visibly snaps into place on
@@ -21,7 +28,11 @@ const LangShell = ({ lang }: { lang: Language }) => {
     document.documentElement.dir = LANGUAGE_DIR[lang];
   }, [lang, i18n]);
 
-  return <Outlet />;
+  return (
+    <DirectionProvider dir={LANGUAGE_DIR[lang]}>
+      <Outlet />
+    </DirectionProvider>
+  );
 };
 
 export default LangShell;

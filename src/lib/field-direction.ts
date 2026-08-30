@@ -24,3 +24,19 @@ export const latinFieldProps = {
     e.currentTarget.dir = directionFor(e.currentTarget.value);
   },
 };
+
+/**
+ * Which way a field should read when its value could be either language.
+ *
+ * This is the case the W3C calls out as the defining CMS problem: content
+ * arrives from a database or a person, and nobody knows its direction at
+ * authoring time. The answer there is `dir="auto"`, which infers direction
+ * from the first strong character.
+ *
+ * The one thing `auto` gets wrong is the empty field: with no strong
+ * character it falls back to left-to-right, which parks the cursor on the
+ * wrong edge of a Hebrew form. So: right-to-left until there is something to
+ * judge, and `auto` from then on.
+ */
+export const contentDirection = (value: string): "rtl" | "auto" =>
+  value.trim() ? "auto" : "rtl";

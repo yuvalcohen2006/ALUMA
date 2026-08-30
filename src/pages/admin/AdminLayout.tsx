@@ -20,6 +20,7 @@ import {
   Quote,
   type LucideIcon,
 } from "lucide-react";
+import { DirectionProvider } from "@radix-ui/react-direction";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -170,6 +171,9 @@ const AdminLayout = ({ children }: { children: ReactNode }) => {
   };
 
   return (
+    // The CMS sits outside the language tree, so it carries its own
+    // direction context. Radix will not pick it up from the dir attribute.
+    <DirectionProvider dir="rtl">
     <div className="min-h-dvh bg-secondary/40" dir="rtl">
       <div className="flex min-h-dvh">
         {/* Sidebar */}
@@ -256,6 +260,7 @@ const AdminLayout = ({ children }: { children: ReactNode }) => {
         </main>
       </div>
     </div>
+    </DirectionProvider>
   );
 };
 

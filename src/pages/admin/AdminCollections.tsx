@@ -7,6 +7,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { formatPrice, parsePriceInput } from "@/lib/price";
+// A product may be "ספה מודולרית" or "Sunbrella Lounge" — the field cannot know.
+import { contentDirection } from "@/lib/field-direction";
 import {
   Dialog,
   DialogContent,
@@ -629,6 +631,7 @@ const AdminCollections = () => {
                 <Label htmlFor="col-name">שם הקולקציה *</Label>
                 <Input
                   id="col-name"
+                  dir={contentDirection(editCol.name_he || "")}
                   value={editCol.name_he || ""}
                   onChange={(e) => setEditCol({ ...editCol, name_he: e.target.value })}
                   placeholder="למשל: סלוני חוץ"
@@ -643,6 +646,7 @@ const AdminCollections = () => {
                 <Label htmlFor="col-intro">תיאור קצר</Label>
                 <Textarea
                   id="col-intro"
+                  dir={contentDirection(editCol.intro || "")}
                   rows={3}
                   value={editCol.intro || ""}
                   onChange={(e) => setEditCol({ ...editCol, intro: e.target.value })}
@@ -706,6 +710,7 @@ const AdminCollections = () => {
                 <Label htmlFor="prod-name">שם מוצר *</Label>
                 <Input
                   id="prod-name"
+                  dir={contentDirection(editProd.name || "")}
                   value={editProd.name || ""}
                   onChange={(e) => setEditProd({ ...editProd, name: e.target.value })}
                 />
@@ -719,6 +724,7 @@ const AdminCollections = () => {
                 <Label htmlFor="prod-tagline">משפט פתיחה</Label>
                 <Input
                   id="prod-tagline"
+                  dir={contentDirection(editProd.tagline || "")}
                   value={editProd.tagline || ""}
                   onChange={(e) => setEditProd({ ...editProd, tagline: e.target.value })}
                 />

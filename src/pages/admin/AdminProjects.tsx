@@ -18,6 +18,7 @@ import { Plus, Pencil, Trash2, Upload, X, GripVertical } from "lucide-react";
 import { toast } from "sonner";
 import { uploadFile } from "@/lib/admin-storage";
 import PhotoSpec from "@/components/admin/PhotoSpec";
+import { contentDirection } from "@/lib/field-direction";
 
 type Project = {
   id: string;
@@ -216,7 +217,8 @@ const AdminProjects = () => {
               <div>
                 <Label>כותרת *</Label>
                 <Input
-                  value={editing.title || ""}
+                  dir={contentDirection(editing.title || "")}
+                value={editing.title || ""}
                   onChange={(e) => setEditing({ ...editing, title: e.target.value })}
                 />
                 {editing.id && (
@@ -229,7 +231,8 @@ const AdminProjects = () => {
                 <div>
                   <Label>מיקום</Label>
                   <Input
-                    value={editing.location || ""}
+                    dir={contentDirection(editing.location || "")}
+                value={editing.location || ""}
                     onChange={(e) => setEditing({ ...editing, location: e.target.value })}
                   />
                 </div>

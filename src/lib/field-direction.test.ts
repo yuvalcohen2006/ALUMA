@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { directionFor, latinFieldProps } from "./field-direction";
+import { contentDirection, directionFor, latinFieldProps } from "./field-direction";
 
 /**
  * A field on a Hebrew page that holds a Latin value — an email, a phone
@@ -45,5 +45,25 @@ describe("latinFieldProps", () => {
     el.value = "";
     latinFieldProps.onInput({ currentTarget: el } as never);
     expect(el.dir).toBe("rtl");
+  });
+});
+
+/**
+ * The other half of the problem, and the one the standards call the defining
+ * CMS case: a field whose value could be either language. A product might be
+ * "ספה מודולרית" or "Sunbrella Lounge", and the admin cannot know which.
+ */
+describe("contentDirection", () => {
+  it("faces right while empty, because the interface is Hebrew", () => {
+    // dir="auto" alone would fall back to left-to-right on an empty field and
+    // put the cursor on the wrong edge of a Hebrew form.
+    expect(contentDirection("")).toBe("rtl");
+    expect(contentDirection("   ")).toBe("rtl");
+  });
+
+  it("hands direction to the browser once there is something to judge", () => {
+    expect(contentDirection("ספה")).toBe("auto");
+    expect(contentDirection("Sunbrella Lounge")).toBe("auto");
+    expect(contentDirection("2024")).toBe("auto");
   });
 });
