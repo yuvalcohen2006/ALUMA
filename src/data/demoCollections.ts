@@ -302,6 +302,9 @@ export const demoProducts: DBProduct[] = Object.entries(seeds).flatMap(
       ],
       materials: s.materials,
       dimensions: s.dimensions,
+      // The placeholder catalogue is deliberately unpriced, like the real one.
+      price: null,
+      price_note: null,
       cover_url: s.cover,
       gallery: [s.cover],
     }))

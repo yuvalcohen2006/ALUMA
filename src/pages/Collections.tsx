@@ -9,6 +9,7 @@ import { ProductCard } from "./CollectionPage";
 import { useLocalizedPath } from "@/lib/useLocalizedPath";
 import { useSiteText } from "@/hooks/useSiteText";
 import CategoryGrid from "@/components/CategoryGrid";
+import { useTranslation } from "react-i18next";
 
 const SITE = "https://alumaoutdoor.com";
 
@@ -43,6 +44,7 @@ const CollectionSection = ({
   first: boolean;
 }) => {
   const { to } = useLocalizedPath();
+  const { t } = useTranslation("catalogue");
   const preview = products.slice(0, PREVIEW_COUNT);
   const hasMore = products.length > PREVIEW_COUNT;
 
@@ -67,7 +69,7 @@ const CollectionSection = ({
             to={to(`/collections/${col.slug}`)}
             className="shrink-0 whitespace-nowrap text-small text-muted-foreground transition-colors hover:text-foreground"
           >
-            {products.length > 0 ? `${products.length} פריטים` : "לצפייה"}
+            {products.length > 0 ? t("itemCount", { count: products.length }) : t("view")}
           </Link>
         </div>
       </Reveal>
@@ -99,7 +101,7 @@ const CollectionSection = ({
               to={to(`/collections/${col.slug}`)}
               className="text-small text-foreground underline underline-offset-[6px] decoration-1 transition-colors hover:text-accent"
             >
-              כל הפריטים בקולקציה
+              {t("allInCollection")}
             </Link>
           </div>
         </Reveal>
@@ -109,6 +111,7 @@ const CollectionSection = ({
 };
 
 const CollectionsPage = () => {
+  const { t } = useTranslation("catalogue");
   const { collections, products, loading } = useCollections();
   const { hash } = useLocation();
   const { to } = useLocalizedPath();
@@ -164,8 +167,8 @@ const CollectionsPage = () => {
   return (
     <Layout>
       <SEO
-        title="קולקציות | ריהוט חוץ בייצור אישי | Aluma"
-        description="הקולקציות של Aluma: סלוני חוץ, פינות אוכל, שולחנות אש ועוד — כל פריט מיוצר בהזמנה אישית, בחומרים שנבנו לחוץ של ישראל."
+        title={t("seo.collectionsTitle")}
+        description={t("seo.collectionsDescription")}
         path="/collections"
         jsonLd={collectionSchema}
       />

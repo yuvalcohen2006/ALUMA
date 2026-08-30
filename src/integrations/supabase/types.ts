@@ -424,6 +424,8 @@ export type Database = {
       }
       site_collection_products: {
         Row: {
+          price: number | null
+          price_note: string | null
           collection_id: string
           cover_url: string | null
           created_at: string
@@ -442,6 +444,8 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          price?: number | null
+          price_note?: string | null
           collection_id: string
           cover_url?: string | null
           created_at?: string
@@ -460,6 +464,8 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          price?: number | null
+          price_note?: string | null
           collection_id?: string
           cover_url?: string | null
           created_at?: string
@@ -574,6 +580,129 @@ export type Database = {
           title?: string
           updated_at?: string
           views?: number
+        }
+        Relationships: []
+      }
+      product_variants: {
+        Row: {
+          created_at: string
+          id: string
+          image_url: string | null
+          name: string
+          product_id: string
+          sort_order: number
+          swatch: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          image_url?: string | null
+          name: string
+          product_id: string
+          sort_order?: number
+          swatch?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          image_url?: string | null
+          name?: string
+          product_id?: string
+          sort_order?: number
+          swatch?: string | null
+        }
+        Relationships: []
+      }
+      site_faqs: {
+        Row: {
+          answer: string
+          category: string
+          created_at: string
+          id: string
+          published: boolean
+          question: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          answer: string
+          category?: string
+          created_at?: string
+          id?: string
+          published?: boolean
+          question: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          answer?: string
+          category?: string
+          created_at?: string
+          id?: string
+          published?: boolean
+          question?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      site_reviews: {
+        Row: {
+          created_at: string
+          id: string
+          meta: string | null
+          name: string
+          published: boolean
+          quote: string
+          sort_order: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          meta?: string | null
+          name: string
+          published?: boolean
+          quote: string
+          sort_order?: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          meta?: string | null
+          name?: string
+          published?: boolean
+          quote?: string
+          sort_order?: number
+        }
+        Relationships: []
+      }
+      site_texts: {
+        Row: {
+          hint: string | null
+          key: string
+          label: string
+          multiline: boolean
+          sort_order: number
+          updated_at: string
+          value: string
+        }
+        Insert: {
+          hint?: string | null
+          key: string
+          label?: string
+          multiline?: boolean
+          sort_order?: number
+          updated_at?: string
+          value?: string
+        }
+        Update: {
+          hint?: string | null
+          key?: string
+          label?: string
+          multiline?: boolean
+          sort_order?: number
+          updated_at?: string
+          value?: string
         }
         Relationships: []
       }

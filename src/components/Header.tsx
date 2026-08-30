@@ -37,7 +37,7 @@ const Header = () => {
   // Order is his, given left-to-right; in RTL the first item renders rightmost,
   // so this array is that list reversed. שווה לדעת is not here: he called it
   // "really a side-thing", so it lives in the footer.
-  const navLinks = useMemo(
+  const navLinks: { label: string; to: string; badge?: string }[] = useMemo(
     () => [
       { label: t("nav.collections"), to: localized("/collections") },
       { label: t("nav.projects"), to: localized("/projects") },

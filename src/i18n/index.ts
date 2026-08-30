@@ -7,6 +7,12 @@ import heHome from "./locales/he/home.json";
 import enHome from "./locales/en/home.json";
 import heFaq from "./locales/he/faq.json";
 import enFaq from "./locales/en/faq.json";
+import heCatalogue from "./locales/he/catalogue.json";
+import enCatalogue from "./locales/en/catalogue.json";
+import heJournal from "./locales/he/journal.json";
+import enJournal from "./locales/en/journal.json";
+import heProjects from "./locales/he/projects.json";
+import enProjects from "./locales/en/projects.json";
 
 /**
  * Two languages, so both catalogues are imported eagerly rather than fetched.
@@ -41,8 +47,22 @@ export function languageFromPath(pathname: string): Language {
 
 i18n.use(initReactI18next).init({
   resources: {
-    he: { common: heCommon, home: heHome, faq: heFaq },
-    en: { common: enCommon, home: enHome, faq: enFaq },
+    he: {
+      common: heCommon,
+      home: heHome,
+      faq: heFaq,
+      catalogue: heCatalogue,
+      journal: heJournal,
+      projects: heProjects,
+    },
+    en: {
+      common: enCommon,
+      home: enHome,
+      faq: enFaq,
+      catalogue: enCatalogue,
+      journal: enJournal,
+      projects: enProjects,
+    },
   },
   lng: DEFAULT_LANGUAGE,
   fallbackLng: DEFAULT_LANGUAGE,

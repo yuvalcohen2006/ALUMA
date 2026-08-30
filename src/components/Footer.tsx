@@ -2,6 +2,8 @@ import { Link } from "react-router-dom";
 import { Phone, Mail, MapPin, Instagram, Facebook } from "lucide-react";
 import alumaLogo from "@/assets/aluma-logo.png";
 import { useSiteContact } from "@/hooks/useSiteContact";
+// The switcher flag is a build-time setting, not something the owner edits.
+import { SITE as SITE_CONFIG } from "@/config/site";
 import { mailtoLink } from "@/lib/mailto";
 import { useLocalizedPath } from "@/lib/useLocalizedPath";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
@@ -218,7 +220,7 @@ const Footer = () => {
             </Link>
             {/* Repeated here as well as in the navbar: visitors who don't find
                 a language control at the top look for it in the footer. */}
-            {SITE.enableEnglish && (
+            {SITE_CONFIG.enableEnglish && (
               <LanguageSwitcher className="min-h-0 px-0 text-label text-background/60 hover:text-accent" />
             )}
           </div>

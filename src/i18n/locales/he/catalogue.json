@@ -1,0 +1,24 @@
+{
+  "seo": {
+    "collectionsTitle": "קולקציות | ריהוט חוץ בייצור אישי | Aluma",
+    "collectionsDescription": "הקולקציות של Aluma: סלוני חוץ, פינות אוכל, שולחנות אש ועוד — כל פריט מיוצר בהזמנה אישית, בחומרים שנבנו לחוץ של ישראל.",
+    "collectionSuffix": "קולקציות | Aluma",
+    "collectionFallback": "קולקציית {{name}} של Aluma — ריהוט חוץ בייצור אישי."
+  },
+  "itemCount_one": "פריט אחד",
+  "itemCount_other": "{{count}} פריטים",
+  "view": "לצפייה",
+  "allInCollection": "כל הפריטים בקולקציה",
+  "allCollections": "לכל הקולקציות",
+  "comingSoon": "בקרוב.",
+  "empty": {
+    "title": "הקולקציות בדרך. בינתיים — נשמח להכיר אתכם.",
+    "cta": "צרו קשר"
+  },
+  "product": {
+    "finish": "גימור",
+    "materials": "חומרים",
+    "dimensions": "מידות",
+    "related": "עוד מהקולקציה"
+  }
+}

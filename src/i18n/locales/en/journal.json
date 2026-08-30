@@ -1,0 +1,17 @@
+{
+  "seo": {
+    "title": "Worth knowing | Aluma",
+    "description": "What our outdoor furniture is made of, and what to know before choosing pieces that stay outside all year.",
+    "materialsTitle": "Materials | Aluma",
+    "materialsDescription": "Sunbrella fabrics, powder-coated aluminium, porcelain stoneware and PolyStone — what each material does outdoors, and how it ages."
+  },
+  "title": "Worth knowing",
+  "subtitle": "What to know before choosing furniture that stays outside all year.",
+  "moreOnMaterials": "More about the materials",
+  "fromMagazine": "From the magazine",
+  "readMinutes": "{{count}} min read",
+  "materials": {
+    "title": "The materials",
+    "subtitle": "The first decision in any piece isn't the shape, it's the material. These are the four we build with, and what each one does after a few years outdoors."
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "seo": {
+    "collectionsTitle": "Collections | Made-to-order outdoor furniture | Aluma",
+    "collectionsDescription": "Aluma's collections: outdoor lounges, dining settings, fire tables and more — every piece made to order, in materials built for the Israeli outdoors.",
+    "collectionSuffix": "Collections | Aluma",
+    "collectionFallback": "The {{name}} collection by Aluma — outdoor furniture made to order."
+  },
+  "itemCount_one": "1 piece",
+  "itemCount_other": "{{count}} pieces",
+  "view": "View",
+  "allInCollection": "Everything in this collection",
+  "allCollections": "All collections",
+  "comingSoon": "Coming soon.",
+  "empty": {
+    "title": "The collections are on their way. In the meantime, we'd like to meet you.",
+    "cta": "Get in touch"
+  },
+  "product": {
+    "finish": "Finish",
+    "materials": "Materials",
+    "dimensions": "Dimensions",
+    "related": "More from this collection"
+  }
+}

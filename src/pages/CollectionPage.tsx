@@ -8,6 +8,7 @@ import Reveal from "@/components/Reveal";
 import { useCollections, type DBProduct } from "@/hooks/useCollectionsData";
 import { useLocalizedPath } from "@/lib/useLocalizedPath";
 import NotFound from "./NotFound";
+import { useTranslation } from "react-i18next";
 
 const SITE = "https://alumaoutdoor.com";
 
@@ -67,6 +68,7 @@ const CollectionPage = () => {
   const { to } = useLocalizedPath();
 
   const collection = collections.find((c) => c.slug === slug);
+  const { t } = useTranslation("catalogue");
   const items = useMemo(
     () => (collection ? products.filter((p) => p.collection_id === collection.id) : []),
     [collection, products],
@@ -96,10 +98,14 @@ const CollectionPage = () => {
   return (
     <Layout>
       <SEO
-        title={`${collection.name_he} | קולקציות | Aluma`}
-        description={collection.intro || `קולקציית ${collection.name_he} של Aluma — ריהוט חוץ בייצור אישי.`}
+        title={`${collection.name_he} | ${t("seo.collectionSuffix")}`}
+        description={
+          collection.intro || t("seo.collectionFallback", { name: collection.name_he })
+        }
         path={`/collections/${collection.slug}`}
-        image={band || undefined}
+        // The band photograph is gone; the first product is the
+        // representative image for a share card now.
+        image={collection.image_url || items[0]?.cover_url || undefined}
         jsonLd={{
 "@context": "https://schema.org",
 "@type": "CollectionPage",

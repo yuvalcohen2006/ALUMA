@@ -18,18 +18,27 @@ import {
   Type,
   MessageSquare,
   Quote,
+  type LucideIcon,
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 
 const LEADS_SEEN_KEY = "aluma_admin_leads_seen_at";
 
+type NavItem = {
+  to: string;
+  label: string;
+  icon: LucideIcon;
+  end?: boolean;
+  badge?: "leads";
+};
+
 /**
  * Grouped, because fourteen flat links is a list you read every time instead
  * of a shape you learn once. The groups answer three different questions:
  * what's on the site, who wrote to us, and how is this thing set up.
  */
-const navGroups = [
+const navGroups: { label: string | null; items: NavItem[] }[] = [
   {
     label: null,
     items: [{ to: "/admin", label: "מה בא לכם לעשות?", icon: HelpCircle, end: true }],
@@ -64,7 +73,7 @@ const navGroups = [
   },
 ];
 
-const navItems = navGroups.flatMap((g) => g.items);
+const navItems: NavItem[] = navGroups.flatMap((g) => g.items);
 
 const AdminLayout = ({ children }: { children: ReactNode }) => {
   const { signOut, user } = useAuth();
@@ -120,7 +129,7 @@ const AdminLayout = ({ children }: { children: ReactNode }) => {
     navigate("/");
   };
 
-  const renderItem = (item: (typeof navItems)[number], mobile = false) => {
+  const renderItem = (item: NavItem, mobile = false) => {
     const Icon = item.icon;
     const showBadge = item.badge === "leads" && newLeads > 0;
     return (
