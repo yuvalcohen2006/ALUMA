@@ -1,6 +1,4 @@
 import { useMemo, useState } from "react";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { Check, MessageCircle, Sparkles } from "lucide-react";
@@ -13,6 +11,7 @@ import {
 } from "@/data/sunbrella";
 import { trackPixel } from "@/lib/pixel";
 import ConversionCTA from "@/components/ConversionCTA";
+import Layout from "@/components/Layout";
 
 const familyLabelsHe: Record<string, string> = {
   Canvas: "Canvas · צבעי בסיס",
@@ -39,15 +38,14 @@ const FabricConfigurator = () => {
   const whatsappUrl = `${SITE.whatsapp.href}?text=${waText}`;
 
   return (
-    <div className="min-h-screen bg-background">
+    <Layout>
       <SEO
         title="בחרו את הבד, קונפיגורטור בדי Sunbrella לסלוני חוץ | Aluma"
         description="בחרו צבע ומרקם של בד Sunbrella וראו תצוגה מקדימה מיידית על ספת חוץ של Aluma. עשרות גוונים, עמיד UV, חיוני לריהוט גן ומרפסת."
         path="/fabric"
       />
-      <Header />
 
-      <main className="pt-32 pb-20">
+      <div className="pt-32 pb-20">
         <section className="container mx-auto px-6 max-w-7xl">
           {/* Hero */}
           <div className="text-center mb-12">
@@ -211,16 +209,14 @@ const FabricConfigurator = () => {
             </div>
           </div>
         </section>
-      </main>
+      </div>
 
       <ConversionCTA
         title="מצאתם את הבד. עכשיו נביא לכם את המניפה."
         subtitle="נשלח אליכם דגימות פיזיות ונרכיב הצעה סגורה, כדי שתראו ותרגישו לפני שמחליטים."
         whatsappMessage="היי, בחרתי בד בסטודיו של אלומה ואשמח לקבל דגימות והצעת מחיר."
       />
-
-      <Footer />
-    </div>
+    </Layout>
   );
 };
 

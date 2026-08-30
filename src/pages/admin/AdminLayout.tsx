@@ -1,6 +1,7 @@
 import { ReactNode, useEffect, useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import {
+  ArrowRight,
   BarChart3,
   FolderOpen,
   Settings,
@@ -68,6 +69,8 @@ const navItems = navGroups.flatMap((g) => g.items);
 const AdminLayout = ({ children }: { children: ReactNode }) => {
   const { signOut, user } = useAuth();
   const navigate = useNavigate();
+  // The landing screen IS the menu; a link back to it from itself is noise.
+  const onGuide = useLocation().pathname.replace(/\/$/, "") === "/admin";
   const [newLeads, setNewLeads] = useState(0);
 
   useEffect(() => {
@@ -227,7 +230,18 @@ const AdminLayout = ({ children }: { children: ReactNode }) => {
 
         {/* Main */}
         <main className="flex-1 min-w-0 pt-28 md:pt-0">
-          <div className="px-5 md:px-10 py-8 md:py-10 max-w-7xl mx-auto">
+          <div className="mx-auto max-w-7xl px-5 py-8 md:px-10 md:py-10">
+            {!onGuide && (
+              <NavLink
+                to="/admin"
+                end
+                className="mb-6 inline-flex h-10 items-center gap-2 rounded-sm px-3 -ms-3 text-sm text-muted-foreground transition-colors hover:bg-foreground/[0.04] hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+              >
+                {/* RTL: back points right. */}
+                <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                חזרה לתפריט
+              </NavLink>
+            )}
             {children}
           </div>
         </main>

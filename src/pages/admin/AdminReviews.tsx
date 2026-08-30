@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import AdminLayout from "./AdminLayout";
 
 type Review = {
   id: string;
@@ -84,13 +85,20 @@ const AdminReviews = () => {
     setReviews((list) => list.filter((r) => r.id !== id));
   };
 
-  if (loading) return <p className="text-muted-foreground">טוען…</p>;
+  // Inside the shell: a bare loading line left the screen with no way out.
+  if (loading)
+    return (
+      <AdminLayout>
+        <p className="text-muted-foreground">טוען…</p>
+      </AdminLayout>
+    );
 
   return (
-    <div className="max-w-3xl">
+    <AdminLayout>
+      <div className="max-w-3xl">
       <div className="flex items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-semibold text-foreground">המלצות לקוחות</h1>
+          <h1 className="font-display text-3xl text-foreground">המלצות לקוחות</h1>
           <p className="mt-2 text-sm text-muted-foreground">
             ההמלצות מופיעות בתחתית דף הבית. כל עוד אין כאן המלצות מפורסמות,
             הקטע פשוט לא מופיע באתר — אין צורך למלא כלום בינתיים.
@@ -170,7 +178,8 @@ const AdminReviews = () => {
           </div>
         ))}
       </div>
-    </div>
+      </div>
+    </AdminLayout>
   );
 };
 

@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { Smartphone, Box, ScanLine, Info } from "lucide-react";
+import Layout from "@/components/Layout";
 
 // Demo products, placeholder GLB/USDZ models hosted on modelviewer.dev.
 // Replace `glb` / `usdz` URLs later with Aluma's own scanned models.
@@ -77,15 +76,14 @@ const ARPreview = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background">
+    <Layout>
       <SEO
         title="תצוגת AR, ראו ריהוט חוץ במציאות רבודה | Aluma"
         description="הציבו ספות, כורסאות ושולחנות חוץ של Aluma בגינה או במרפסת שלכם בעזרת תצוגת AR ישירות מהדפדפן בטלפון."
         path="/ar"
       />
-      <Header />
 
-      <main className="pt-32 pb-20">
+      <div className="pt-32 pb-20">
         <section className="container mx-auto px-6 max-w-6xl">
           <div className="text-center mb-12">
             <span className="text-label tracking-[0.3em] uppercase text-accent">
@@ -214,10 +212,8 @@ const ARPreview = () => {
             </p>
           </div>
         </section>
-      </main>
-
-      <Footer />
-    </div>
+      </div>
+    </Layout>
   );
 };
 

@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import AdminLayout from "./AdminLayout";
 
 type Faq = {
   id: string;
@@ -88,13 +89,20 @@ const AdminFaqs = () => {
     toast.success("נמחק");
   };
 
-  if (loading) return <p className="text-muted-foreground">טוען…</p>;
+  // Inside the shell: a bare loading line left the screen with no way out.
+  if (loading)
+    return (
+      <AdminLayout>
+        <p className="text-muted-foreground">טוען…</p>
+      </AdminLayout>
+    );
 
   return (
-    <div className="max-w-3xl">
+    <AdminLayout>
+      <div className="max-w-3xl">
       <div className="flex items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-semibold text-foreground">שאלות ותשובות</h1>
+          <h1 className="font-display text-3xl text-foreground">שאלות ותשובות</h1>
           <p className="mt-2 text-sm text-muted-foreground">
             אלה השאלות שמופיעות בעמוד "שאלות ותשובות". שאלה שאינה מסומנת
             "מפורסם" לא תופיע באתר.
@@ -168,7 +176,8 @@ const AdminFaqs = () => {
           <option key={c} value={c} />
         ))}
       </datalist>
-    </div>
+      </div>
+    </AdminLayout>
   );
 };
 
