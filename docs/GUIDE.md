@@ -1,5 +1,20 @@
 # Aluma — what's left
 
+> ## 🚨 DO THIS FIRST — Google sign-in is broken until you do
+>
+> **Symptom:** signing in with Google throws *"Firefox can't connect to the
+> server at localhost:3000"*.
+>
+> **Cause:** Supabase's **Site URL** is still the factory default
+> `http://localhost:3000`. The site asks Supabase to send people back to the
+> Vercel address; that address isn't on Supabase's allowlist, so Supabase
+> ignores it and falls back to the Site URL instead.
+>
+> **This is not in the code.** No deploy fixes it. It is one screen in
+> Supabase — Job 1 below, 90 seconds. It works the moment you save; nothing
+> needs rebuilding.
+
+
 Checked against the live project on 30 August. Everything below is either
 "done, nothing to do" or a job with steps.
 
