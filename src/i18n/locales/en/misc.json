@@ -1,0 +1,27 @@
+{
+  "notFound": {
+    "seoTitle": "Page not found (404) | Aluma",
+    "seoDescription": "The page you were looking for isn't on the Aluma site. Head back to the home page to browse our outdoor lounge collections and projects.",
+    "titleLead": "Looks like you got",
+    "titleEmphasis": "lost",
+    "body": "The page you wanted has been removed, or the link is wrong. No harm done — here are a few places worth a look:",
+    "home": "Back to the home page",
+    "links": {
+      "collections": "Collections",
+      "projects": "Projects",
+      "materials": "Our materials",
+      "story": "About",
+      "faq": "Questions & answers",
+      "contact": "Get in touch"
+    }
+  },
+  "thankYou": {
+    "seoTitle": "Thank you | Aluma",
+    "title": "Thank you for getting in touch",
+    "body": "We have your message and we'll come back to you shortly — usually within 24 hours on a working day.",
+    "meanwhile": "In the meantime, have a look at our projects, or write to us directly on WhatsApp.",
+    "whatsapp": "Message us on WhatsApp",
+    "call": "Call us",
+    "projects": "See our projects"
+  }
+}

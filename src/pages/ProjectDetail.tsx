@@ -7,9 +7,11 @@ import ShineButton from "@/components/ui/shine-button";
 import { useProject } from "@/hooks/useProjectsData";
 import { ArrowLeft, ArrowRight, Check, MapPin, Calendar, Maximize2 } from "lucide-react";
 import NotFound from "./NotFound";
+import { useTranslation } from "react-i18next";
 
 const ProjectDetailPage = () => {
   const { slug } = useParams();
+  const { t } = useTranslation("catalogue");
   const { project, projects, loading } = useProject(slug);
 
   // Don't render a 404 while the CMS query is still in flight — the fallback
@@ -20,7 +22,7 @@ const ProjectDetailPage = () => {
       return (
         <Layout>
           <div className="min-h-[60vh] flex items-center justify-center text-body text-muted-foreground">
-            טוען…
+            {t("loading")}
           </div>
         </Layout>
       );
@@ -72,7 +74,7 @@ const ProjectDetailPage = () => {
               className="w-[18px] h-[18px] transition-transform duration-300 ease-out group-hover:translate-x-1"
               aria-hidden="true"
             />
-            חזרה לפרויקטים
+            {t("backToProjects")}
           </Link>
         </div>
       </section>
@@ -120,7 +122,7 @@ const ProjectDetailPage = () => {
             {project.story.length > 0 && (
             <div className="border border-border rounded-sm p-6 md:p-8 mb-6 md:mb-8">
               <h2 className="font-display font-medium text-heading leading-snug text-foreground">
-                על הפרויקט
+                {t("aboutProject")}
               </h2>
               <div className="w-20 h-[2px] bg-foreground/15 mt-5" aria-hidden="true" />
               {/* The paragraphs used to render with no gap between them and ran
@@ -141,7 +143,7 @@ const ProjectDetailPage = () => {
             {(project.scope.length > 0 || project.materials.length > 0) && (
             <div className="border border-border rounded-sm p-6 md:p-8">
               <h2 className="font-display font-medium text-heading leading-snug text-foreground">
-                הפרויקט כולל
+                {t("projectIncludes")}
               </h2>
               <div className="w-20 h-[2px] bg-foreground/15 mt-5" aria-hidden="true" />
               <ul className="mt-6 space-y-4 mb-8">
@@ -155,7 +157,7 @@ const ProjectDetailPage = () => {
               {project.materials.length > 0 && (
               <div className="pt-6 border-t border-border">
                 <h3 className="font-display font-normal text-body text-foreground">
-                  חומרים
+                  {t("sections.materials")}
                 </h3>
                 <div className="mt-4 space-y-2 text-body leading-relaxed text-foreground">
                   {project.materials.map((m, i) => (
@@ -207,11 +209,11 @@ const ProjectDetailPage = () => {
               tone="charcoal"
               subtitle="כל פרויקט מתוכנן ומיוצר בהתאם לאופי המרחב עד לפרטים הקטנים ביותר."
             >
-              השאירו פרטים
+              {t("leaveDetails")}
             </SectionHeading>
             <div className="mt-9">
               <ShineButton to="/contact">
-                להשארת פרטים
+                {t("leaveDetailsCta")}
                 <ArrowLeft className="w-[18px] h-[18px]" aria-hidden="true" />
               </ShineButton>
             </div>

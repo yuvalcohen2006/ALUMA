@@ -5,8 +5,10 @@ import { Helmet } from "react-helmet-async";
 import { Check, ArrowLeft, Phone, MessageCircle } from "lucide-react";
 import alumaLogo from "@/assets/aluma-logo.png";
 import Layout from "@/components/Layout";
+import { useTranslation } from "react-i18next";
 
 const ThankYou = () => {
+  const { t } = useTranslation("misc");
   // Live contact facts, falling back to src/config/site.ts.
   const SITE = useSiteContact();
   useEffect(() => {
@@ -26,7 +28,7 @@ const ThankYou = () => {
   return (
     <Layout>
       <Helmet>
-        <title>תודה על פנייתכם | Aluma</title>
+        <title>{t("thankYou.seoTitle")}</title>
         <meta name="robots" content="noindex,follow" />
         <link rel="canonical" href="https://alumaoutdoor.com/thank-you" />
       </Helmet>
@@ -39,14 +41,12 @@ const ThankYou = () => {
           <img src={alumaLogo} alt="Aluma" className="h-10 w-auto mx-auto mb-6 opacity-90" />
 
           <h1 className="font-display text-3xl sm:text-4xl md:text-5xl text-foreground mb-3 leading-tight">
-            תודה רבה על פנייתכם
+            {t("thankYou.title")}
           </h1>
           <p className="text-body text-foreground mb-2">
-            קיבלנו את ההודעה ונחזור אליכם בהקדם, בדרך כלל תוך 24 שעות בימי עסקים.
-          </p>
+            {t("thankYou.body")}</p>
           <p className="text-body text-muted-foreground mb-10">
-            בינתיים, אתם מוזמנים להתרשם מהפרויקטים שלנו או לכתוב לנו ישירות בוואטסאפ.
-          </p>
+            {t("thankYou.meanwhile")}</p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-10">
             <a
@@ -56,14 +56,14 @@ const ThankYou = () => {
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#1ebd5a] text-white px-6 py-3 rounded-sm text-body transition-smooth"
             >
               <MessageCircle className="w-4 h-4" />
-              שלחו לנו ב-Whatsapp
+              {t("thankYou.whatsapp")}
             </a>
             <a
               href={`tel:${SITE.phone.tel}`}
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground px-6 py-3 rounded-sm text-body transition-smooth"
             >
               <Phone className="w-4 h-4" />
-              חיוג ישיר
+              {t("thankYou.call")}
             </a>
           </div>
 
@@ -72,7 +72,7 @@ const ThankYou = () => {
               to="/projects"
               className="text-foreground hover:text-accent transition-smooth inline-flex items-center gap-1.5"
             >
-              צפו בפרויקטים שלנו
+              {t("thankYou.projects")}
               <ArrowLeft className="w-3.5 h-3.5" />
             </Link>
             <span className="hidden sm:inline text-border">|</span>

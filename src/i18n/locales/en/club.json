@@ -1,0 +1,31 @@
+{
+  "seo": {
+    "title": "Aluma Club",
+    "description": "Join the Aluma customer club — order tracking, saved pieces, early access to collections and members-only benefits."
+  },
+  "title": "Aluma Club",
+  "subtitle": "A quiet world of service, cut to your measure.",
+  "perksTitle": "What you get",
+  "perksSubtitle": "Four benefits built around how Aluma customers actually work with us — from the moment you choose a piece to years after it's delivered.",
+  "perks": {
+    "tracking": { "title": "Live project tracking", "desc": "See your order status, milestones and progress as they happen, without picking up the phone." },
+    "favorites": { "title": "Saved pieces", "desc": "Mark collections, fabrics and configurations. Everything is kept and synced across your devices." },
+    "early": { "title": "Early access", "desc": "New collections, exclusive finishes and invitations to private launches, before anyone else." },
+    "vip": { "title": "Personal service", "desc": "A designer who knows your project, a tidy record of every conversation, and priority on service requests." }
+  },
+  "joinTitle": "Three minutes, no forms, no commitment",
+  "joinBody": "You sign up once, and from then on the account simply remembers you, what you liked, and the project you started with us.",
+  "steps": {
+    "signup": { "title": "Sign up", "desc": "One minute — name, email and phone. No long forms." },
+    "verify": { "title": "Quick verification", "desc": "We verify the account and set up your personal profile." },
+    "open": { "title": "Everything opens up", "desc": "Saved pieces, project tracking, benefits and private invitations." }
+  },
+  "terms": {
+    "free": "Free to join, no commitment",
+    "leave": "Leave whenever you like",
+    "noSpam": "No spam, and we never sell your details"
+  },
+  "join": "Join the club",
+  "dashboard": "Go to my account",
+  "alreadyMember": "Already a member? Sign in"
+}

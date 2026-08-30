@@ -20,5 +20,22 @@
     "materials": "Materials",
     "dimensions": "Dimensions",
     "related": "More from this collection"
-  }
+  },
+  "loading": "Loading…",
+  "loadError": "We couldn't load this piece. Check your connection and try again.",
+  "retry": "Try again",
+  "quoteOnly": "Priced per individual quote",
+  "sections": {
+    "about": "About this piece",
+    "highlights": "Design notes",
+    "materials": "Materials",
+    "dimensions": "Base dimensions",
+    "more": "More details soon"
+  },
+  "leaveDetails": "Leave your details",
+  "leaveDetailsCta": "Leave your details",
+  "bespokeNote": "Every project is designed and made to suit the character of its space, down to the smallest detail.",
+  "backToProjects": "Back to projects",
+  "aboutProject": "About this project",
+  "projectIncludes": "This project includes"
 }

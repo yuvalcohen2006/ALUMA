@@ -12,6 +12,7 @@ import { useFilterParams } from "@/hooks/useFilterParams";
 import { type Project } from "@/data/projects";
 import { useProjects } from "@/hooks/useProjectsData";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "react-i18next";
 
 const SITE = "https://alumaoutdoor.com";
 
@@ -95,6 +96,7 @@ const MetaRule = ({ className }: { className?: string }) => (
  * stays calm rather than flickering to a different image under the cursor.
  */
 const ProjectEntry = ({ project: p, index }: { project: Project; index: number }) => {
+  const { t } = useTranslation("projects");
   const photoRight = index % 2 === 0;
   const meta = [p.location, p.tag, p.year, p.area].filter(Boolean);
 
@@ -195,7 +197,7 @@ const ProjectEntry = ({ project: p, index }: { project: Project; index: number }
             {/* Rule grows from the right (the RTL start) on row hover. */}
             <span className="inline-block mt-8">
               <span className="inline-flex items-center gap-2 text-body text-accent">
-                לצפייה בפרויקט
+                {t("viewProject")}
                 <ArrowLeft
                   className="w-[18px] h-[18px] transition-transform duration-300 ease-out group-hover:-translate-x-1"
                   aria-hidden="true"
@@ -214,6 +216,7 @@ const ProjectEntry = ({ project: p, index }: { project: Project; index: number }
 };
 
 const ProjectsPage = () => {
+  const { t } = useTranslation("projects");
   const { projects } = useProjects();
   const { value, setValue, activeCount } = useFilterParams(["type", "area"]);
   const selectedTypes = value.type;

@@ -5,6 +5,7 @@ import Reveal from "@/components/Reveal";
 import { materials } from "@/data/materials";
 import { useLocalizedPath } from "@/lib/useLocalizedPath";
 import { useSiteText } from "@/hooks/useSiteText";
+import { useTranslation } from "react-i18next";
 
 /**
  * The materials, as narrative rather than as a spec sheet.
@@ -25,12 +26,13 @@ import { useSiteText } from "@/hooks/useSiteText";
 const MaterialsPage = () => {
   const { to } = useLocalizedPath();
   const text = useSiteText();
+  const { t } = useTranslation("journal");
 
   return (
     <Layout>
       <SEO
-        title="חומרים | Aluma"
-        description="בדי Sunbrella, אלומיניום בציפוי אבקה, שיש גרניט פורצלן ו-PolyStone — מה כל חומר עושה בחוץ, ואיך הוא מזדקן."
+        title={t("seo.materialsTitle")}
+        description={t("seo.materialsDescription")}
         path="/materials"
       />
 
@@ -38,7 +40,7 @@ const MaterialsPage = () => {
         <div className="mx-auto max-w-[860px] px-6 pt-40 pb-16 md:pt-52 md:pb-24">
           <Reveal>
             <h1 className="text-start text-display font-normal tracking-normal text-foreground">
-              {text("materials.title", "החומרים")}
+              {text("materials.title", t("materials.title"))}
             </h1>
             <p className="mt-6 max-w-[58ch] text-start text-body tracking-normal text-foreground-soft">
               {text(

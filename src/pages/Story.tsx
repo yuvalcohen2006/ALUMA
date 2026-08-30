@@ -8,6 +8,7 @@ import alumaLogo from "@/assets/aluma-logo.png";
 import storyPortrait from "@/assets/story-portrait.png";
 import storyPortraitRoy from "@/assets/story-portrait-roy.png";
 import storyPortraitIdan from "@/assets/story-portrait-idan.png";
+import { useTranslation } from "react-i18next";
 
 const breadcrumbs = {
 "@context": "https://schema.org",
@@ -19,11 +20,12 @@ const breadcrumbs = {
 };
 
 /** The three of us, described by what we do rather than by a job title. */
-const people = [
-  { src: storyPortraitIdan, alt: "דיוקן קווי, עידן", name: "עידן", does: "מתכנן ומודד את המרחב" },
-  { src: storyPortraitRoy, alt: "דיוקן קווי, רועי", name: "רועי", does: "בוחר את החומרים" },
-  { src: storyPortrait, alt: "דיוקן קווי, בן", name: "בן", does: "מלווה מהסקיצה ועד ההתקנה" },
-];
+/** Drawings and order here; names and roles in the catalogue. */
+const PEOPLE = [
+  { src: storyPortraitIdan, key: "idan" },
+  { src: storyPortraitRoy, key: "roy" },
+  { src: storyPortrait, key: "ben" },
+] as const;
 
 /**
  * What we don't do — the single highest-value device for a brand with no
@@ -31,12 +33,7 @@ const people = [
  * Vitsœ built its whole identity on this. Every line restates a commitment the
  * brand already makes elsewhere on the site, phrased as what it rules out.
  */
-const refusals = [
-"לא מוכרים ריהוט שלא היינו שמים בחצר שלנו.",
-"לא עובדים במידות סטנדרטיות. כל פריט נמדד למרחב שלו.",
-"לא מבטיחים תאריך אספקה לפני שיש לנו אותו.",
-"לא נעלמים אחרי ההתקנה.",
-];
+const REFUSALS = ["one", "two", "three", "four"] as const;
 
 /**
  * אודות.
@@ -63,6 +60,7 @@ const refusals = [
  * story and the refusals.
  */
 const StoryPage = () => {
+  const { t } = useTranslation("about");
   // Live contact facts, falling back to src/config/site.ts.
   const SITE = useSiteContact();
   const { to } = useLocalizedPath();
@@ -70,8 +68,8 @@ const StoryPage = () => {
   return (
     <Layout>
       <SEO
-        title="אודות | Aluma, ריהוט חוץ בעיצוב אישי"
-        description="אלומה נולדה מתוך חיבור בין חומר לאור. מי אנחנו, איך אנחנו עובדים, ומה אנחנו לא עושים."
+        title={t("seo.title")}
+        description={t("seo.description")}
         path="/story"
         jsonLd={breadcrumbs}
       />
@@ -90,8 +88,7 @@ const StoryPage = () => {
                 and a loose leading throughout: letter-spacing breaks Hebrew
                 rhythm and is the clearest tell of an un-adapted RTL design. */}
             <h1 className="font-display font-normal tracking-normal text-foreground text-start text-display max-w-[22ch]">
-              אנחנו בונים ריהוט שנשאר בחוץ — ולא ריהוט שצריך להכניס.
-            </h1>
+              {t("statement")}</h1>
           </Reveal>
         </div>
       </section>
@@ -102,24 +99,17 @@ const StoryPage = () => {
         <div className="mx-auto max-w-[860px] px-6 py-24 md:py-32">
           <Reveal>
             <h2 className="max-w-[46ch] text-start text-heading font-normal tracking-normal text-foreground">
-              אלומה נולדה מתוך חיבור בין חומר לאור.
+              {t("storyLead")}
             </h2>
 
             <div className="mt-10 max-w-[62ch] space-y-6 text-start text-foreground-soft tracking-normal text-small">
               <p>
-                השם מגיע מהשורש של אלומיניום, חומר חזק, נקי ועמיד, כזה שנועד
-                לחיות בחוץ בלי לחשוש מהשמש, מהגשם או ממעבר הזמן. ומעבר לחומר,
-                יש בו גם צליל של אור, אותו אור שמגדיר את חוויית החוץ.
-              </p>
+                {t("story.one")}</p>
 
-              <p>אלומה היא לא רק ריהוט חוץ, היא הדרך שבה הבית ממשיך החוצה.</p>
+              <p>{t("story.two")}</p>
 
               <p>
-                אנחנו יוצרים מערכות שמרגישות כמו סלון יוקרתי תחת כיפת השמיים —
-                מקום לארח, להירגע ולחיות את הרגעים היפים באמת. כל פריט מיוצר
-                בהתאמה אישית, בקווים נקיים ומדויקים, עם שלדת אלומיניום מתקדמת
-                ובדים איכותיים העומדים בתנאי החוץ של ישראל.
-              </p>
+                {t("story.three")}</p>
             </div>
           </Reveal>
         </div>
@@ -136,27 +126,26 @@ const StoryPage = () => {
         <div className="mx-auto max-w-[860px] px-6 pb-24 md:pb-32">
           <Reveal>
             <h2 className="text-start text-heading font-normal tracking-normal text-foreground">
-              שלושתנו
+              {t("peopleTitle")}
             </h2>
             <p className="mt-4 max-w-[46ch] text-start text-small tracking-normal text-foreground-soft">
-              אותם אנשים מהמדידה הראשונה ועד היום שאתם יושבים בחוץ.
-            </p>
+              {t("peopleBody")}</p>
           </Reveal>
 
           <div className="mt-12 grid grid-cols-1 sm:grid-cols-3 gap-10 sm:gap-6 md:gap-10 bg-background">
-            {people.map((p) => (
-              <div key={p.name} className="mx-auto w-full max-w-[260px] sm:max-w-none bg-background">
+            {PEOPLE.map((p) => (
+              <div key={p.key} className="mx-auto w-full max-w-[260px] sm:max-w-none bg-background">
                 <img
                   src={p.src}
-                  alt={p.alt}
+                  alt={t(`people.${p.key}.alt`)}
                   loading="lazy"
                   className="w-full aspect-[3/4] object-contain object-bottom mix-blend-multiply"
                 />
-                <p className="mt-4 text-start text-small text-foreground">{p.name}</p>
+                <p className="mt-4 text-start text-small text-foreground">{t(`people.${p.key}.name`)}</p>
                 {/* A verb, not a job title — what someone does beats
 "Co-Founder". This is the substitute for credentials. */}
                 <p className="mt-1 text-start text-label text-foreground/55">
-                  {p.does}
+                  {t(`people.${p.key}.does`)}
                 </p>
               </div>
             ))}
@@ -172,15 +161,15 @@ const StoryPage = () => {
         <div className="mx-auto max-w-[860px] px-6 py-24 md:py-32">
           <Reveal>
             <h2 className="text-start text-heading font-normal tracking-normal text-foreground">
-              מה אנחנו לא עושים
+              {t("refusalsTitle")}
             </h2>
             <ul className="mt-10 max-w-[62ch] divide-y divide-foreground/10 border-t border-foreground/10">
-              {refusals.map((line) => (
+              {REFUSALS.map((line) => (
                 <li
                   key={line}
                   className="py-5 text-start text-small text-foreground-soft"
                 >
-                  {line}
+                  {t(`refusals.${line}`)}
                 </li>
               ))}
             </ul>
@@ -194,14 +183,13 @@ const StoryPage = () => {
         <div className="mx-auto max-w-[860px] px-6 py-28 md:py-36 text-center">
           <Reveal>
             <p className="mx-auto max-w-[34ch] text-heading font-normal leading-snug tracking-normal text-foreground">
-              אולם התצוגה שלנו ב{SITE.address.full}. הכי קל להבין את אלומה
-              כשיושבים עליה.
+              {t("close", { address: SITE.address.full })}
             </p>
             <Link
               to={to("/faq") + "#contact"}
               className="mt-7 inline-block text-small text-primary underline underline-offset-[6px] decoration-1 hover:text-accent transition-colors"
             >
-              לתיאום ביקור
+              {t("visitCta")}
             </Link>
             <img
               src={alumaLogo}

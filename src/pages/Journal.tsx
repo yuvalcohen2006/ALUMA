@@ -7,6 +7,7 @@ import Reveal from "@/components/Reveal";
 import { materials } from "@/data/materials";
 import { useLocalizedPath } from "@/lib/useLocalizedPath";
 import { supabase } from "@/integrations/supabase/client";
+import { useTranslation } from "react-i18next";
 
 type Article = {
   id: string;
@@ -20,6 +21,7 @@ type Article = {
 const JournalPage = () => {
   const { to } = useLocalizedPath();
   const [articles, setArticles] = useState<Article[]>([]);
+  const { t } = useTranslation("journal");
 
   // Whatever has been published in the admin's מגזין screen. The client called
   // this page a side thing, so an empty magazine renders nothing at all rather
@@ -47,14 +49,14 @@ const JournalPage = () => {
   return (
     <Layout>
       <SEO
-        title="שווה לדעת | Aluma"
-        description="החומרים שמהם עשוי ריהוט החוץ שלנו, ומה שכדאי לדעת לפני שבוחרים ריהוט שנשאר בחוץ כל השנה."
+        title={t("seo.title")}
+        description={t("seo.description")}
         path="/journal"
       />
 
       <PageHero
-        title="שווה לדעת"
-        subtitle="מה שכדאי לדעת לפני שבוחרים ריהוט שנשאר בחוץ כל השנה."
+        title={t("title")}
+        subtitle={t("subtitle")}
       />
 
       {/* Materials get a card each, linking to the page that actually
@@ -88,7 +90,7 @@ const JournalPage = () => {
               to={to("/materials")}
               className="text-small text-foreground underline underline-offset-[6px] decoration-1 hover:text-accent transition-colors"
             >
-              עוד על החומרים
+              {t("moreOnMaterials")}
             </Link>
           </div>
         </div>
@@ -102,7 +104,7 @@ const JournalPage = () => {
           <div className="mx-auto max-w-[1440px] px-5 md:px-10 lg:px-16 py-20 md:py-28">
             <Reveal>
               <h2 className="text-start text-heading font-normal tracking-normal text-foreground">
-                מהמגזין
+                {t("fromMagazine")}
               </h2>
             </Reveal>
 
@@ -124,7 +126,7 @@ const JournalPage = () => {
                       )}
                       {(a.tag || a.read_minutes) && (
                         <p className="mt-3 text-label text-muted-foreground">
-                          {[a.tag, a.read_minutes ? `${a.read_minutes} דקות קריאה` : null]
+                          {[a.tag, a.read_minutes ? t("readMinutes", { count: a.read_minutes }) : null]
                             .filter(Boolean)
                             .join(" · ")}
                         </p>

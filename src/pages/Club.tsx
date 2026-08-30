@@ -18,6 +18,7 @@ import SectionHeading from "@/components/SectionHeading";
 import ShineButton from "@/components/ui/shine-button";
 import { useAuth } from "@/hooks/useAuth";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "react-i18next";
 
 /**
  * Club — the membership page.
@@ -39,41 +40,16 @@ import { cn } from "@/lib/utils";
  * Matches the density the Blog page runs at.
  */
 
-const perks = [
-  {
-    icon: ClipboardCheck,
-    title: "מעקב פרויקט חי",
-    text: "צפו בסטטוס ההזמנה, אבני דרך והתקדמות בזמן אמת, בלי להרים טלפון.",
-  },
-  {
-    icon: Heart,
-    title: "מועדפים חכמים",
-    text: "סמנו קולקציות, בדים וקונפיגורציות. הכל נשמר ומסונכרן בין המכשירים.",
-  },
-  {
-    icon: Sparkles,
-    title: "גישה מוקדמת",
-    text: "קולקציות חדשות, גוונים בלעדיים והזמנות לאירועי לונץ׳ פרטיים, לפני כולם.",
-  },
-  {
-    icon: ShieldCheck,
-    title: "שירות VIP אישי",
-    text: "מעצב מלווה, היסטוריית תקשורת מסודרת ותיעדוף בבקשות שירות ותחזוקה.",
-  },
-];
+/** Icons and order live here; the words live in the catalogue. */
+const PERKS = [
+  { icon: ClipboardCheck, key: "tracking" },
+  { icon: Heart, key: "favorites" },
+  { icon: Sparkles, key: "early" },
+  { icon: ShieldCheck, key: "vip" },
+] as const;
 
-const steps = [
-  { n: "01", title: "הרשמה", text: "דקה אחת, שם, מייל וטלפון. בלי טפסים ארוכים." },
-  { n: "02", title: "אימות מהיר", text: "מאמתים את החשבון ומעצבים את הפרופיל האישי שלכם." },
-  { n: "03", title: "עולם שלם נפתח", text: "מועדפים, מעקב פרויקט, הטבות והזמנות פרטיות." },
-];
-
-/** The quiet promises the club already makes, stated plainly. */
-const terms = [
-"הצטרפות חינם, בלי התחייבות",
-"אפשר לצאת בכל רגע",
-"בלי ספאם ובלי מכירת נתונים",
-];
+const STEPS = ["signup", "verify", "open"] as const;
+const TERMS = ["free", "leave", "noSpam"] as const;
 
 const perkVariants: Variants = {
   hidden: { opacity: 0, y: 24 },
@@ -116,6 +92,7 @@ const AuthGate = ({
 );
 
 const Club = () => {
+  const { t } = useTranslation("club");
   const { user, loading } = useAuth();
   const reduceMotion = useReducedMotion();
 
@@ -154,14 +131,14 @@ const Club = () => {
   return (
     <Layout>
       <SEO
-        title="מועדון אלומה | Aluma Club"
-        description="הצטרפו למועדון הלקוחות של Aluma, מעקב הזמנה, מועדפים, גישה מוקדמת לקולקציות והטבות בלעדיות."
+        title={t("seo.title")}
+        description={t("seo.description")}
         path="/club"
       />
 
       <PageHero
-        title="מועדון אלומה"
-        subtitle="עולם שקט של שירות, שנתפר במידה שלכם."
+        title={t("title")}
+        subtitle={t("subtitle")}
       />
 
       {/* ── 1. The one dark band: benefits as a hairline-separated ledger row ──
@@ -174,9 +151,9 @@ const Club = () => {
             <SectionHeading
               light
               align="center"
-              subtitle="ארבע הטבות שנבנו סביב איך שלקוחות אלומה באמת עובדים איתנו, מהרגע שבחרתם דגם ועד שנים אחרי המסירה."
+              subtitle={t("perksSubtitle")}
             >
-              מה מקבלים כשמצטרפים
+              {t("perksTitle")}
             </SectionHeading>
           </Reveal>
 
@@ -186,11 +163,11 @@ const Club = () => {
               block on the page that gets straightforwardly better with width,
               since every extra pixel lands in the copy rather than in margins. */}
           <ul className="grid gap-x-10 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 lg:gap-x-0 max-w-7xl mx-auto">
-            {perks.map((perk, i) => {
+            {PERKS.map((perk, i) => {
               const Icon = perk.icon;
               return (
                 <motion.li
-                  key={perk.title}
+                  key={perk.key}
                   custom={i}
                   variants={perkVariants}
                   initial={reduceMotion ? "show" : "hidden"}
@@ -211,10 +188,10 @@ const Club = () => {
                   </span>
 
                   <h3 className="font-display font-normal text-body text-background mt-5 leading-snug">
-                    {perk.title}
+                    {t(`perks.${perk.key}.title`)}
                   </h3>
                   <p className="text-small leading-relaxed text-background/75 mt-3 text-pretty">
-                    {perk.text}
+                    {t(`perks.${perk.key}.desc`)}
                   </p>
                 </motion.li>
               );
@@ -231,28 +208,26 @@ const Club = () => {
               <div className="text-start">
                 {/* Charcoal, not terracotta: this heading sits on sand beige. */}
                 <SectionHeading tone="charcoal" align="start">
-                  שלוש דקות, בלי טפסים ובלי התחייבות
+                  {t("joinTitle")}
                 </SectionHeading>
                 <div className="w-20 h-[2px] bg-foreground/15 mt-5" aria-hidden="true" />
 
                 <p className="text-small leading-relaxed text-foreground-soft mt-6 text-pretty">
-                  ההרשמה נעשית פעם אחת, ומשם החשבון פשוט זוכר אתכם, את מה שאהבתם
-                  ואת הפרויקט שפתחתם איתנו.
-                </p>
+                  {t("joinBody")}</p>
 
                 {/* The promises sit next to the button rather than in a
                     panel of their own — they are what makes the click easy,
                     so they belong within a glance of it. */}
                 {!user && (
                   <ul className="mt-7 space-y-3">
-                    {terms.map((t) => (
-                      <li key={t} className="flex items-start gap-3">
+                    {TERMS.map((term) => (
+                      <li key={term} className="flex items-start gap-3">
                         <Check
                           className="w-[18px] h-[18px] mt-1 shrink-0 text-primary"
                           strokeWidth={2.5}
                           aria-hidden="true"
                         />
-                        <span className="text-small leading-relaxed text-foreground">{t}</span>
+                        <span className="text-small leading-relaxed text-foreground">{t(`terms.${term}`)}</span>
                       </li>
                     ))}
                   </ul>
@@ -278,8 +253,8 @@ const Club = () => {
                   entirely, and the visible 01/02/03 is aria-hidden, so this is
                   what carries the ordering to a screen reader. */}
               <ol role="list" className="max-w-2xl">
-                {steps.map((step, i) => (
-                  <li key={step.n} className="flex gap-6 md:gap-8">
+                {STEPS.map((step, i) => (
+                  <li key={step} className="flex gap-6 md:gap-8">
                     {/* Badge column, right in RTL, with the spine dropping to the next step.
                         The numeral is decorative — the <ol> already announces the order,
                         so reading "01" out loud on top of it would just double up. */}
@@ -288,9 +263,9 @@ const Club = () => {
                         aria-hidden="true"
                         className="grid place-items-center w-12 h-12 rounded-full border border-foreground/15 bg-background font-display text-small text-foreground/50"
                       >
-                        {step.n}
+                        {String(i + 1).padStart(2, "0")}
                       </span>
-                      {i < steps.length - 1 && (
+                      {i < STEPS.length - 1 && (
                         <span
                           className="w-px flex-1 min-h-[36px] bg-foreground/15 mt-3"
                           aria-hidden="true"
@@ -298,12 +273,12 @@ const Club = () => {
                       )}
                     </div>
 
-                    <div className={`text-start pt-2.5 ${i < steps.length - 1 ? "pb-8" : ""}`}>
+                    <div className={`text-start pt-2.5 ${i < STEPS.length - 1 ? "pb-8" : ""}`}>
                       <h3 className="font-display font-normal text-body text-foreground leading-snug">
-                        {step.title}
+                        {t(`steps.${step}.title`)}
                       </h3>
                       <p className="text-small leading-relaxed text-foreground-soft mt-2 text-pretty">
-                        {step.text}
+                        {t(`steps.${step}.desc`)}
                       </p>
                     </div>
                   </li>

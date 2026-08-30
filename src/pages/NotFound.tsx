@@ -3,18 +3,23 @@ import { useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import Layout from "@/components/Layout";
 import { ArrowLeft } from "lucide-react";
+import { useTranslation } from "react-i18next";
+import { useLocalizedPath } from "@/lib/useLocalizedPath";
 
-const popular = [
-  { to: "/collections", label: "קולקציות" },
-  { to: "/projects", label: "פרויקטים" },
-  { to: "/materials", label: "החומרים שלנו" },
-  { to: "/story", label: "אודות" },
-  { to: "/faq", label: "שאלות ותשובות" },
-  { to: "/contact", label: "צרו קשר" },
-];
+/** Paths are localised at render; the labels come from the catalogue. */
+const POPULAR = [
+  ["/collections", "collections"],
+  ["/projects", "projects"],
+  ["/materials", "materials"],
+  ["/story", "story"],
+  ["/faq", "faq"],
+  ["/faq#contact", "contact"],
+] as const;
 
 const NotFound = () => {
   const location = useLocation();
+  const { t } = useTranslation("misc");
+  const { to } = useLocalizedPath();
 
   useEffect(() => {
     console.error("404 Error: User attempted to access non-existent route:", location.pathname);
@@ -23,10 +28,10 @@ const NotFound = () => {
   return (
     <Layout>
       <Helmet>
-        <title>הדף לא נמצא (404) | Aluma</title>
+        <title>{t("notFound.seoTitle")}</title>
         <meta
           name="description"
-          content="הדף שחיפשתם לא נמצא באתר Aluma. חזרו לדף הבית כדי לעיין בקולקציות סלוני החוץ והפרויקטים שלנו."
+          content={t("notFound.seoDescription")}
         />
         <meta name="robots" content="noindex,follow" />
       </Helmet>
@@ -40,31 +45,32 @@ const NotFound = () => {
             404
           </div>
           <h1 className="font-display text-3xl sm:text-4xl md:text-5xl text-foreground leading-tight mb-5">
-            נראה שהלכתם <span className="italic">לאיבוד</span>
+            {t("notFound.titleLead")} <span className="italic">{t("notFound.titleEmphasis")}</span>
           </h1>
           <p className="text-body text-foreground mb-10">
-            הדף שחיפשתם הוסר או שהקישור שגוי. אבל אל דאגה, הנה כמה מהדפים
-            הפופולריים שלנו שיכולים לעניין אתכם:
+            {t("notFound.body")}
           </p>
 
           <div className="grid sm:grid-cols-2 gap-3 max-w-md mx-auto mb-10">
-            {popular.map((p) => (
+            {POPULAR.map(([path, key]) => (
               <Link
-                key={p.to}
-                to={p.to}
+                key={path}
+                to={to(path)}
                 className="group flex items-center justify-between gap-3 bg-card border border-border hover:border-foreground/15  rounded-sm px-5 py-3.5 text-start transition-smooth"
               >
                 <ArrowLeft className="w-4 h-4 text-primary opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0 transition-all" />
-                <span className="font-display text-base text-foreground">{p.label}</span>
+                <span className="font-display text-base text-foreground">
+                  {t(`notFound.links.${key}`)}
+                </span>
               </Link>
             ))}
           </div>
 
           <Link
-            to="/"
+            to={to("/")}
             className="inline-flex items-center gap-2 bg-primary hover:bg-accent text-primary-foreground px-8 py-3 rounded-sm tracking-wide transition-smooth"
           >
-            חזרה לדף הבית
+            {t("notFound.home")}
             <ArrowLeft className="w-4 h-4" />
           </Link>
         </div>

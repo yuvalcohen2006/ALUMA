@@ -20,5 +20,22 @@
     "materials": "חומרים",
     "dimensions": "מידות",
     "related": "עוד מהקולקציה"
-  }
+  },
+  "loading": "טוען…",
+  "loadError": "אירעה שגיאה בטעינת הפריט. בדקו את החיבור ונסו שוב.",
+  "retry": "נסו שוב",
+  "quoteOnly": "מחיר לפי הצעת מחיר אישית",
+  "sections": {
+    "about": "על המוצר",
+    "highlights": "נקודות עיצוב",
+    "materials": "חומרים",
+    "dimensions": "מידות בסיס",
+    "more": "בקרוב פרטים נוספים"
+  },
+  "leaveDetails": "השאירו פרטים",
+  "leaveDetailsCta": "להשארת פרטים",
+  "bespokeNote": "כל פרויקט מתוכנן ומיוצר בהתאם לאופי המרחב עד לפרטים הקטנים ביותר.",
+  "backToProjects": "חזרה לפרויקטים",
+  "aboutProject": "על הפרויקט",
+  "projectIncludes": "הפרויקט כולל"
 }

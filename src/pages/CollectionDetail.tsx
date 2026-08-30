@@ -11,11 +11,13 @@ import { trackPixel } from "@/lib/pixel";
 import { formatPrice } from "@/lib/price";
 import Ltr from "@/components/Ltr";
 import { useProductGallery, type ProductVariant } from "@/hooks/useProductGallery";
+import { useTranslation } from "react-i18next";
 
 const SITE = "https://alumaoutdoor.com";
 
 const CollectionDetailPage = () => {
   const { slug } = useParams();
+  const { t } = useTranslation("catalogue");
   const [item, setItem] = useState<DBProduct | null>(null);
   const [variants, setVariants] = useState<ProductVariant[]>([]);
   const [related, setRelated] = useState<DBProduct[]>([]);
@@ -120,7 +122,7 @@ const CollectionDetailPage = () => {
     return (
       <Layout>
         <div className="min-h-[60vh] flex items-center justify-center text-body text-muted-foreground">
-          טוען…
+          {t("loading")}
         </div>
       </Layout>
     );
@@ -131,10 +133,10 @@ const CollectionDetailPage = () => {
       <Layout>
         <div className="min-h-[60vh] flex flex-col items-center justify-center gap-5 text-center px-6">
           <p className="text-body leading-relaxed text-muted-foreground max-w-md">
-            אירעה שגיאה בטעינת הפריט. בדקו את החיבור ונסו שוב.
+            {t("loadError")}
           </p>
           <Button onClick={load} variant="outline" className="rounded-sm text-body px-6">
-            נסו שוב
+            {t("retry")}
           </Button>
         </div>
       </Layout>
@@ -158,7 +160,7 @@ const CollectionDetailPage = () => {
       // invalid structured data, so we signal pre-order and omit the price.
       availability: "https://schema.org/PreOrder",
       url: `${SITE}/contact`,
-      description: "מחיר לפי הצעת מחיר אישית",
+      description: t("quoteOnly"),
     },
   };
 
@@ -227,7 +229,7 @@ const CollectionDetailPage = () => {
             {variants.length > 0 && (
               <div>
                 <p className="text-label text-muted-foreground">
-                  גימור{selected ? `: ${selected.name}` : ""}
+                  {t("product.finish")}{selected ? `: ${selected.name}` : ""}
                 </p>
                 <ul className="mt-3 flex flex-wrap gap-3">
                   {variants.map((v) => {
@@ -260,7 +262,7 @@ const CollectionDetailPage = () => {
             {item.description.length > 0 && (
               <div className="border border-border bg-card rounded-sm  p-6 md:p-8">
                 <h2 className="font-display font-medium text-heading leading-snug text-foreground">
-                  על המוצר
+                  {t("sections.about")}
                 </h2>
                 <div className="w-20 h-[2px] bg-foreground/15 mt-5 mb-6" aria-hidden="true" />
                 <div className="space-y-5">
@@ -276,7 +278,7 @@ const CollectionDetailPage = () => {
             {item.highlights.length > 0 && (
               <div className="border border-border bg-card rounded-sm  p-6 md:p-8">
                 <h2 className="font-display font-medium text-heading leading-snug text-foreground">
-                  נקודות עיצוב
+                  {t("sections.highlights")}
                 </h2>
                 <div className="w-20 h-[2px] bg-foreground/15 mt-5 mb-6" aria-hidden="true" />
                 <ul className="space-y-4">
@@ -299,7 +301,7 @@ const CollectionDetailPage = () => {
                     <Layers className="w-5 h-5 text-accent mt-1.5 shrink-0" />
                     <div className="min-w-0">
                       <div className="font-display font-normal text-body text-foreground mb-3">
-                        חומרים
+                        {t("sections.materials")}
                       </div>
                       <div className="text-foreground font-normal text-body leading-relaxed space-y-1.5">
                         {item.materials.map((m, i) => (
@@ -317,7 +319,7 @@ const CollectionDetailPage = () => {
                     <Ruler className="w-5 h-5 text-accent mt-1.5 shrink-0" />
                     <div className="min-w-0">
                       <div className="font-display font-normal text-body text-foreground mb-3">
-                        מידות בסיס
+                        {t("sections.dimensions")}
                       </div>
                       <div className="text-foreground font-normal text-body leading-relaxed">
                         {/* Isolated: "320 × 260" in a Hebrew line
@@ -332,7 +334,7 @@ const CollectionDetailPage = () => {
 
             {item.description.length === 0 && item.highlights.length === 0 && item.materials.length === 0 && !item.dimensions && (
               <div className="border border-border bg-card rounded-sm  p-6 md:p-8 min-h-[400px] flex items-center justify-center text-muted-foreground text-body">
-                בקרוב פרטים נוספים
+                {t("sections.more")}
               </div>
             )}
           </div>
@@ -415,15 +417,15 @@ const CollectionDetailPage = () => {
           {/* Charcoal, not terracotta: this block sits on sand beige. */}
           <p className="text-body text-foreground-soft mb-4">מגשימים חלום</p>
           <h2 className="font-display font-normal text-3xl md:text-5xl text-foreground leading-tight">
-            השאירו פרטים
+            {t("leaveDetails")}
           </h2>
           <div className="w-20 h-[2px] bg-foreground/15 my-5" aria-hidden="true" />
           <p className="text-body font-normal leading-relaxed text-foreground max-w-xl mx-auto mb-10">
-            כל פרויקט מתוכנן ומיוצר בהתאם לאופי המרחב עד לפרטים הקטנים ביותר.
+            {t("bespokeNote")}
           </p>
           <Button asChild size="lg" className="rounded-sm text-body px-8">
             <Link to="/faq#contact" className="inline-flex items-center gap-2">
-              להשארת פרטים
+              {t("leaveDetailsCta")}
               <ArrowLeft className="w-4 h-4" />
             </Link>
           </Button>
@@ -436,7 +438,7 @@ const CollectionDetailPage = () => {
           <div className="container-luxury">
             <div className="flex flex-col items-center text-center mb-10 md:mb-12">
               <h2 className="font-display font-medium text-heading leading-snug text-foreground">
-                עוד מהקולקציה
+                {t("product.related")}
               </h2>
               <div className="w-20 h-[2px] bg-foreground/15 mt-5" aria-hidden="true" />
             </div>
