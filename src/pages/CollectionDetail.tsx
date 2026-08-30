@@ -8,6 +8,7 @@ import NotFound from "./NotFound";
 import { supabase } from "@/integrations/supabase/client";
 import type { DBProduct } from "@/hooks/useCollectionsData";
 import { trackPixel } from "@/lib/pixel";
+import { formatPrice } from "@/lib/price";
 import { useProductGallery, type ProductVariant } from "@/hooks/useProductGallery";
 
 const SITE = "https://alumaoutdoor.com";
@@ -32,7 +33,7 @@ const CollectionDetailPage = () => {
     const { data, error } = await supabase
       .from("site_collection_products")
       .select(
-"id, collection_id, slug, name, tag, tagline, description, highlights, materials, dimensions, cover_url, gallery"
+"id, collection_id, slug, name, tag, tagline, description, highlights, materials, dimensions, cover_url, gallery, price, price_note"
       )
       .eq("slug", slug)
       .eq("published", true)
@@ -74,7 +75,7 @@ const CollectionDetailPage = () => {
       setItem(p);
       const { data: rel } = await supabase
         .from("site_collection_products")
-        .select("id, collection_id, slug, name, tag, tagline, description, highlights, materials, dimensions, cover_url, gallery")
+        .select("id, collection_id, slug, name, tag, tagline, description, highlights, materials, dimensions, cover_url, gallery, price, price_note")
         .eq("collection_id", p.collection_id)
         .eq("published", true)
         .neq("id", p.id)
@@ -204,6 +205,16 @@ const CollectionDetailPage = () => {
           {item.tagline && (
             <p className="text-body leading-relaxed italic text-foreground-soft max-w-2xl mx-auto">
               {item.tagline}
+            </p>
+          )}
+          {/* Only when there is one. Most pieces are made to order and carry
+              no price at all, and an empty price line reads as an error. */}
+          {formatPrice(item.price) && (
+            <p className="text-body text-foreground">
+              {item.price_note && (
+                <span className="text-foreground-soft">{item.price_note} </span>
+              )}
+              <span dir="ltr">{formatPrice(item.price)}</span>
             </p>
           )}
         </div>

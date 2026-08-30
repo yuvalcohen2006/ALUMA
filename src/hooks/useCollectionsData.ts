@@ -24,6 +24,9 @@ export type DBProduct = {
   dimensions: string | null;
   cover_url: string | null;
   gallery: string[];
+  /** Optional — most pieces are made to order and carry no price. */
+  price: number | null;
+  price_note: string | null;
 };
 
 export function useCollections() {
@@ -42,7 +45,7 @@ export function useCollections() {
         supabase
           .from("site_collection_products")
           .select(
-            "id, collection_id, slug, name, tag, tagline, description, highlights, materials, dimensions, cover_url, gallery"
+            "id, collection_id, slug, name, tag, tagline, description, highlights, materials, dimensions, cover_url, gallery, price, price_note"
           )
           .eq("published", true)
           .order("sort_order"),

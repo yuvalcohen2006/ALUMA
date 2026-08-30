@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import { formatPrice } from "@/lib/price";
 import { Link, useParams } from "react-router-dom";
 import Layout from "@/components/Layout";
 import SEO from "@/components/SEO";
@@ -40,6 +41,12 @@ export const ProductCard = ({ product: p, eager }: { product: DBProduct; eager: 
       {p.tagline && (
         <p className="mt-1 text-small leading-relaxed text-muted-foreground text-pretty">
           {p.tagline}
+        </p>
+      )}
+      {formatPrice(p.price) && (
+        <p className="mt-1.5 text-small text-foreground">
+          {p.price_note && <span className="text-foreground-soft">{p.price_note} </span>}
+          <span dir="ltr">{formatPrice(p.price)}</span>
         </p>
       )}
       {p.dimensions && (

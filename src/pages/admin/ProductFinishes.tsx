@@ -6,6 +6,7 @@ import { uploadFile } from "@/lib/admin-storage";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import PhotoSpec from "@/components/admin/PhotoSpec";
 
 type Variant = {
   id: string;
@@ -110,6 +111,10 @@ const ProductFinishes = ({ productId }: { productId: string }) => {
       <p className="mt-1 text-xs text-muted-foreground">
         כל גימור מופיע כעיגול צבע בעמוד המוצר. לחיצה עליו מחליפה את תמונת המוצר.
       </p>
+
+      <div className="mt-3">
+        <PhotoSpec spec="finish" />
+      </div>
 
       <div className="mt-3 space-y-3">
         {variants.length === 0 && (

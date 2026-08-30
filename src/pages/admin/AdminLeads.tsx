@@ -49,7 +49,7 @@ const AdminLeads = () => {
   return (
     <AdminLayout>
       <header className="mb-8">
-        <h1 className="font-display text-3xl text-primary">לידים</h1>
+        <h1 className="font-display text-3xl text-foreground">פניות מהאתר</h1>
         <p className="text-muted-foreground mt-1">פניות מטופס יצירת קשר ומשאלון התאמה</p>
       </header>
 

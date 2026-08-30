@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
+import { formatPrice, parsePriceInput } from "@/lib/price";
 import {
   Dialog,
   DialogContent,
@@ -46,6 +47,7 @@ import {
 import { CSS } from "@dnd-kit/utilities";
 import { uploadFile } from "@/lib/admin-storage";
 import ProductFinishes from "./ProductFinishes";
+import PhotoSpec from "@/components/admin/PhotoSpec";
 
 type Collection = {
   id: string;
@@ -71,6 +73,8 @@ type Product = {
   dimensions: string | null;
   cover_url: string | null;
   gallery: any;
+  price: number | null;
+  price_note: string | null;
   sort_order: number;
   published: boolean;
 };
@@ -179,6 +183,8 @@ const emptyProduct: Partial<Product> = {
   dimensions: "",
   cover_url: "",
   gallery: [],
+  price: null,
+  price_note: "",
   sort_order: 0,
   published: true,
 };
@@ -453,6 +459,8 @@ const AdminCollections = () => {
       dimensions: editProd.dimensions || null,
       cover_url: editProd.cover_url || null,
       gallery: editProd.gallery || [],
+      price: editProd.price ?? null,
+      price_note: editProd.price_note || null,
       sort_order: nextSort,
       published: editProd.published ?? true,
     };
@@ -520,6 +528,8 @@ const AdminCollections = () => {
           קולקציה חדשה
         </Button>
       </header>
+
+      <PhotoSpec spec="product" />
 
       {loading ? (
         <p className="text-muted-foreground">טוען…</p>
@@ -616,8 +626,9 @@ const AdminCollections = () => {
           {editCol && (
             <div className="space-y-4">
               <div>
-                <Label>שם הקולקציה *</Label>
+                <Label htmlFor="col-name">שם הקולקציה *</Label>
                 <Input
+                  id="col-name"
                   value={editCol.name_he || ""}
                   onChange={(e) => setEditCol({ ...editCol, name_he: e.target.value })}
                   placeholder="למשל: סלוני חוץ"
@@ -629,8 +640,9 @@ const AdminCollections = () => {
                 )}
               </div>
               <div>
-                <Label>תיאור קצר</Label>
+                <Label htmlFor="col-intro">תיאור קצר</Label>
                 <Textarea
+                  id="col-intro"
                   rows={3}
                   value={editCol.intro || ""}
                   onChange={(e) => setEditCol({ ...editCol, intro: e.target.value })}
@@ -638,6 +650,9 @@ const AdminCollections = () => {
               </div>
               <div>
                 <Label>תמונת קולקציה</Label>
+                <div className="mt-2">
+                  <PhotoSpec spec="collection" />
+                </div>
                 <div className="flex items-center gap-3 mt-2">
                   {editCol.image_url && (
                     <img
@@ -660,16 +675,6 @@ const AdminCollections = () => {
                   </label>
                 </div>
               </div>
-
-              {/* Finishes live in their own table keyed by product_id, so they
-                  can only be attached once the product row exists. */}
-              {editProd.id ? (
-                <ProductFinishes productId={editProd.id as string} />
-              ) : (
-                <p className="text-xs text-muted-foreground">
-                  שמרו את המוצר כדי להוסיף לו גימורים וצבעים.
-                </p>
-              )}
 
               <div className="flex items-center gap-2">
                 <Switch
@@ -698,8 +703,9 @@ const AdminCollections = () => {
           {editProd && (
             <div className="space-y-4">
               <div>
-                <Label>שם מוצר *</Label>
+                <Label htmlFor="prod-name">שם מוצר *</Label>
                 <Input
+                  id="prod-name"
                   value={editProd.name || ""}
                   onChange={(e) => setEditProd({ ...editProd, name: e.target.value })}
                 />
@@ -710,8 +716,9 @@ const AdminCollections = () => {
                 )}
               </div>
               <div>
-                <Label>משפט פתיחה (Tagline)</Label>
+                <Label htmlFor="prod-tagline">משפט פתיחה</Label>
                 <Input
+                  id="prod-tagline"
                   value={editProd.tagline || ""}
                   onChange={(e) => setEditProd({ ...editProd, tagline: e.target.value })}
                 />
@@ -774,14 +781,52 @@ const AdminCollections = () => {
                   />
                 </div>
                 <div>
-                  <Label>מידות בסיס</Label>
+                  <Label htmlFor="prod-dimensions">מידות בסיס</Label>
                   <Input
+                    id="prod-dimensions"
                     value={editProd.dimensions || ""}
                     onChange={(e) =>
                       setEditProd({ ...editProd, dimensions: e.target.value })
                     }
                     placeholder="אורך 240 ס״מ · עומק 92 ס״מ"
                   />
+                </div>
+              </div>
+
+              {/* Optional on purpose: leaving both empty shows no price at
+                  all, which is the normal case for a made-to-order piece. */}
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <Label htmlFor="prod-price">מחיר (לא חובה)</Label>
+                  <Input
+                    id="prod-price"
+                    inputMode="decimal"
+                    dir="ltr"
+                    defaultValue={editProd.price ?? ""}
+                    onBlur={(e) =>
+                      setEditProd({ ...editProd, price: parsePriceInput(e.target.value) })
+                    }
+                    placeholder="12400"
+                  />
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    {formatPrice(editProd.price)
+                      ? `יופיע באתר: ${formatPrice(editProd.price)}`
+                      : "אם תשאירו ריק, לא יופיע מחיר בכלל."}
+                  </p>
+                </div>
+                <div>
+                  <Label htmlFor="prod-price-note">הערה ליד המחיר</Label>
+                  <Input
+                    id="prod-price-note"
+                    value={editProd.price_note || ""}
+                    onChange={(e) =>
+                      setEditProd({ ...editProd, price_note: e.target.value })
+                    }
+                    placeholder="החל מ־"
+                  />
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    למשל "החל מ־" או "כולל הובלה".
+                  </p>
                 </div>
               </div>
               <div>

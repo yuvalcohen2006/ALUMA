@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Upload } from "lucide-react";
 import { toast } from "sonner";
 import { uploadFile } from "@/lib/admin-storage";
+import PhotoSpec from "@/components/admin/PhotoSpec";
 
 type Hero = {
   title_he?: string;
@@ -60,11 +61,13 @@ const AdminHero = () => {
   return (
     <AdminLayout>
       <header className="mb-8">
-        <h1 className="font-display text-3xl text-foreground">הירו ראשי</h1>
+        <h1 className="font-display text-3xl text-foreground">התמונה הראשית</h1>
         <p className="text-muted-foreground mt-1">
           תמונה ותוכן הבאנר הראשי בדף הבית. אפשר להגדיר תמונה נפרדת לדסקטופ ולמובייל.
         </p>
       </header>
+
+      <PhotoSpec spec="hero" />
 
       <div className="grid lg:grid-cols-2 gap-6">
         <Card>

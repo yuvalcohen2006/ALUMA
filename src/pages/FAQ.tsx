@@ -91,7 +91,6 @@ const FaqRow = ({ q, a, id, open, onToggle }: { q: string; a: string; id: string
  */
 const FAQPage = () => {
   const [open, setOpen] = useState<Set<string>>(new Set());
-  const [formOpen, setFormOpen] = useState(false);
   const [faqs, setFaqs] = useState<Faq[]>(FALLBACK);
   const { to } = useLocalizedPath();
   const { t } = useTranslation("faq");
@@ -138,13 +137,6 @@ const FAQPage = () => {
     })),
   };
 
-  // Arriving on /faq#contact (footer, sticky CTA, the About page) should land
-  // with the form already open — scrolling someone to a closed row and making
-  // them click again is a worse answer than they asked for.
-  useEffect(() => {
-    if (window.location.hash === "#contact") setFormOpen(true);
-  }, []);
-
   const toggle = (id: string) =>
     setOpen((prev) => {
       const next = new Set(prev);
@@ -170,6 +162,18 @@ const FAQPage = () => {
             </h1>
             <p className="mt-4 max-w-[46ch] text-small leading-relaxed text-foreground-soft text-start">
               {text("faq.subtitle", t("subtitle"))}
+            </p>
+            {/* Straight to the form. Somebody who came here to ask something
+                should not have to read nine answers first to find out where
+                the asking happens. A real anchor, so it works with the back
+                button and can be copied as a link. */}
+            <p className="mt-5 text-start">
+              <a
+                href="#contact"
+                className="text-small text-foreground underline underline-offset-[6px] decoration-1 hover:text-accent transition-colors"
+              >
+                {t("writeToUs")} ↓
+              </a>
             </p>
           </Reveal>
 
@@ -200,16 +204,12 @@ const FAQPage = () => {
           <Reveal>
             <p className="mt-14 text-small leading-relaxed text-foreground-soft text-start">
               {t("notFound")}{" "}
-              <button
-                type="button"
-                onClick={() => {
-                  setFormOpen(true);
-                  document.getElementById("contact")?.scrollIntoView({ block: "start" });
-                }}
-                className="text-primary decoration-1 underline-offset-4 hover:underline"
+              <a
+                href="#contact"
+                className="text-foreground decoration-1 underline underline-offset-4 hover:text-accent transition-colors"
               >
                 {t("talkToUs")}
-              </button>
+              </a>
               {" "}{t("replyTime")}
             </p>
           </Reveal>
@@ -221,42 +221,18 @@ const FAQPage = () => {
           shouldn't have to go looking for the way to ask it. /contact
           redirects here.
 
-          The form starts closed and opens on the same plus-row the questions
-          use, so the page reads as one list of things you can open rather than
-          nine questions followed by a wall of form. */}
-      <section id="contact" className="scroll-mt-28 bg-background pb-4">
+          It used to hide behind the same plus-row the questions use, which
+          read as one tidy list and worked badly — the row looked like a
+          heading, and the fields stayed in the tab order while invisible. */}
+      <section id="contact" className="scroll-mt-28 bg-background pt-2">
         <div className="mx-auto max-w-[720px] px-6">
-          <button
-            type="button"
-            onClick={() => setFormOpen((v) => !v)}
-            aria-expanded={formOpen}
-            aria-controls="contact-form-panel"
-            className="flex w-full items-start gap-5 border-b border-foreground/10 py-6 text-start hover:opacity-70 transition-opacity duration-200 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring"
-          >
-            <Plus
-              aria-hidden="true"
-              className={`mt-1 w-5 h-5 shrink-0 text-primary transition-transform duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] ${
-                formOpen ? "rotate-45" : ""
-              }`}
-              strokeWidth={2}
-            />
-            <span className="text-body font-medium leading-[1.35] text-foreground">
-              {t("writeToUs")}
-            </span>
-          </button>
+          <h2 className="border-b border-foreground/10 pb-6 text-start text-body font-medium text-foreground">
+            {t("writeToUs")}
+          </h2>
         </div>
       </section>
 
-      <div
-        id="contact-form-panel"
-        className={`grid transition-[grid-template-rows] duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] ${
-          formOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
-        }`}
-      >
-        <div className="overflow-hidden">
-          <Contact />
-        </div>
-      </div>
+      <Contact />
 
       <ShowroomBand />
     </Layout>

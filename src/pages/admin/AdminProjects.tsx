@@ -17,6 +17,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Plus, Pencil, Trash2, Upload, X, GripVertical } from "lucide-react";
 import { toast } from "sonner";
 import { uploadFile } from "@/lib/admin-storage";
+import PhotoSpec from "@/components/admin/PhotoSpec";
 
 type Project = {
   id: string;
@@ -153,13 +154,15 @@ const AdminProjects = () => {
       <header className="flex items-center justify-between mb-8">
         <div>
           <h1 className="font-display text-3xl text-foreground">פרויקטים</h1>
-          <p className="text-muted-foreground mt-1">ניהול הפרויקטים שמוצגים באתר</p>
+          <p className="text-muted-foreground mt-1">עבודות שכבר עשיתם. שלוש מהן מופיעות גם בדף הבית.</p>
         </div>
         <Button onClick={() => setEditing({ ...empty })}>
           <Plus className="w-4 h-4 ml-2" />
           פרויקט חדש
         </Button>
       </header>
+
+      <PhotoSpec spec="project" />
 
       {loading ? (
         <p className="text-muted-foreground">טוען…</p>

@@ -11,6 +11,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { Plus, Pencil, Trash2, Upload } from "lucide-react";
 import { toast } from "sonner";
 import { uploadFile } from "@/lib/admin-storage";
+import PhotoSpec from "@/components/admin/PhotoSpec";
 
 type Post = {
   id: string;
@@ -115,14 +116,16 @@ const AdminBlog = () => {
     <AdminLayout>
       <header className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="font-display text-3xl text-primary">מגזין</h1>
-          <p className="text-muted-foreground mt-1">ניהול פוסטים בבלוג</p>
+          <h1 className="font-display text-3xl text-foreground">מגזין</h1>
+          <p className="text-muted-foreground mt-1">כתבות שמופיעות בעמוד "שווה לדעת".</p>
         </div>
         <Button onClick={() => setEditing({ ...empty })}>
           <Plus className="w-4 h-4 ml-2" />
           פוסט חדש
         </Button>
       </header>
+
+      <PhotoSpec spec="article" />
 
       {loading ? (
         <p>טוען…</p>
