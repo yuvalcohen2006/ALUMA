@@ -8,8 +8,16 @@ import {
   MessageSquareQuote,
   Palette,
   Phone,
+  Sparkles,
   Type,
 } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import AdminLayout from "./AdminLayout";
 
 type Card = {
@@ -17,124 +25,117 @@ type Card = {
   title: string;
   /** One line, the way you'd say it out loud. */
   blurb: string;
-  /** What you can actually do in there. Short phrases, not instructions. */
-  can: string[];
-  /** The thing people go looking for in the wrong place. */
-  cant: string;
+  /** The setting worth getting right here. Omitted where there isn't one. */
+  tip?: string;
   to: string;
 };
 
 /**
  * The landing screen for /admin.
  *
- * Not a dashboard of numbers — the person opening this wants to change one
- * thing and get on with their day. So: what each screen is for, what you can
- * do there, and the one thing people will go looking for there and not find.
- *
- * The "not from here" line matters as much as the rest. Most of the time
- * somebody is stuck, it is because they are on the right-looking screen for
- * the wrong job.
+ * Someone opening this wants to change one thing and get on with their day.
+ * So: what each screen is for, in a sentence, and the one setting worth
+ * getting right. Everything else is on the screen itself when they get there.
  */
 const CARDS: Card[] = [
   {
     icon: FolderOpen,
     title: "קולקציות ומוצרים",
-    blurb: "הרהיטים עצמם. זה הדבר הראשון למלא — בלי מוצרים האתר די ריק.",
-    can: [
-      "להוסיף קולקציה (משפחה של רהיטים, למשל סלונים)",
-      "להוסיף מוצר בתוך קולקציה, עם תמונות",
-      "לשנות שם, תיאור ותמונות של מוצר קיים",
-      "להוריד מוצר מהאתר בלי למחוק אותו",
-      "להוסיף מחיר, אם בא לכם — זה לא חובה",
-    ],
-    cant: "מחיר שנשאר ריק פשוט לא מופיע. אין מחירון באתר.",
+    blurb: "הרהיטים עצמם. בלי אלה האתר די ריק, אז כדאי להתחיל כאן.",
+    tip: "תמונות מרובעות, 1600 × 1600. הראשונות שתוסיפו הן אלה שיופיעו בדף הבית.",
     to: "/admin/collections",
   },
   {
     icon: Palette,
     title: "צבעים וגימורים",
-    blurb: "עיגולי הצבע בעמוד המוצר. לחיצה על צבע מחליפה את התמונה.",
-    can: [
-      "להוסיף צבע למוצר, עם תמונה של המוצר בצבע הזה",
-      "לבחור את גוון העיגול שמופיע באתר",
-      "לשנות את הסדר שלהם",
-    ],
-    cant: "זה יושב בתוך המוצר עצמו — קודם שומרים מוצר, ואז מוסיפים לו צבעים.",
+    blurb: "עיגולי הצבע בעמוד המוצר. לוחצים על צבע, התמונה מתחלפת.",
+    tip: "צלמו כל צבע מאותה זווית, אחרת הרהיט קופץ כשמחליפים.",
     to: "/admin/collections",
   },
   {
     icon: ImageIcon,
     title: "התמונה הראשית",
-    blurb: "התמונה הגדולה שרואים ראשונה בדף הבית, והמשפט שעליה.",
-    can: ["להחליף את התמונה", "לשנות את הכותרת והמשפט מתחתיה", "לשנות את הכפתור ולאן הוא מוביל"],
-    cant: "שאר דף הבית נבנה לבד מהמוצרים והפרויקטים שהזנתם.",
+    blurb: "התמונה הגדולה בכניסה לאתר, והמשפט שעליה.",
+    tip: "2400 × 1350, לרוחב. בטלפון היא נחתכת לגובה, אז שימו את העיקר במרכז.",
     to: "/admin/hero",
   },
   {
     icon: FolderOpen,
     title: "פרויקטים",
-    blurb: "עבודות שכבר עשיתם. שלושה מהם מופיעים גם בדף הבית.",
-    can: ["להוסיף פרויקט עם תמונות", "לכתוב איפה זה ומה היה שם", "לשנות את הסדר"],
-    cant: "לא צריך למלא הכול — מה שריק פשוט לא מופיע.",
+    blurb: "עבודות שכבר עשיתם. שלוש מהן מופיעות גם בדף הבית.",
+    tip: "2000 × 1333, לרוחב. תמונות מהטלפון לגובה ייחתכו.",
     to: "/admin/projects",
   },
   {
     icon: Type,
     title: "טקסטים באתר",
-    blurb: "כותרות ומשפטים בעמודים הראשיים, כל אחד מסומן איפה הוא מופיע.",
-    can: ["לשנות כותרות ומשפטי פתיחה", "למחוק טקסט כדי לחזור לנוסח המקורי"],
-    cant: "התפריט למעלה והתחתית של האתר לא נערכים מכאן.",
+    blurb: "כותרות ומשפטים בעמודים הראשיים. כל שדה מסומן איפה הוא מופיע.",
+    tip: "מחקתם טקסט? האתר חוזר לנוסח המקורי. אי אפשר לשבור.",
     to: "/admin/texts",
   },
   {
     icon: HelpCircle,
     title: "שאלות ותשובות",
-    blurb: 'העמוד של "שאלות ותשובות", כולל הקטגוריות שמעל כל קבוצה.',
-    can: ["לערוך שאלה או תשובה", "להוסיף שאלה חדשה", "להסתיר שאלה בלי למחוק"],
-    cant: "הטופס בתחתית העמוד קבוע, רק השאלות משתנות.",
+    blurb: "העמוד של השאלות הנפוצות, כולל הכותרות מעל כל קבוצה.",
     to: "/admin/faqs",
   },
   {
     icon: MessageSquareQuote,
     title: "המלצות לקוחות",
-    blurb: "הציטוטים בדף הבית. כל עוד אין אף אחד, האזור הזה פשוט לא מופיע.",
-    can: ["להוסיף ציטוט עם שם", "להסתיר או למחוק"],
-    cant: "רק דברים שלקוחות באמת אמרו והסכימו שתפרסמו.",
+    blurb: "הציטוטים בדף הבית. כשאין אף אחד, האזור פשוט לא מופיע.",
+    tip: "רק דברים שלקוחות באמת אמרו והסכימו שתפרסמו.",
     to: "/admin/reviews",
   },
   {
     icon: Phone,
     title: "פרטי הקשר",
-    blurb: "טלפון, וואטסאפ, כתובת ורשתות. מה שתשנו כאן מתחלף בכל האתר.",
-    can: ["להחליף מספר טלפון או וואטסאפ", "לשנות כתובת ואימייל", "להוסיף הערה על שעות הפעילות"],
-    cant: "שעות הפתיחה עצמן קבועות בקוד — אפשר להוסיף עליהן הערה.",
+    blurb: "טלפון, וואטסאפ, כתובת ורשתות — מתחלף בכל האתר בבת אחת.",
     to: "/admin/settings",
   },
   {
     icon: Inbox,
     title: "פניות מהאתר",
-    blurb: "מי כתב לכם דרך הטופס. גם מגיע לאימייל, זה פשוט המקום שלא מתפספס.",
-    can: ["לקרוא פניות", "לראות מתי הגיעו"],
-    cant: "לענות עונים מהאימייל או מהוואטסאפ, לא מכאן.",
+    blurb: "מי כתב לכם דרך הטופס. מגיע גם למייל, זה פשוט לא מתפספס כאן.",
     to: "/admin/leads",
   },
+];
+
+/** The four things worth knowing before touching anything. */
+const BASICS = [
+  ["איך עובדים", "בוחרים מסך מהתפריט, משנים, שומרים. זהו."],
+  ["מתי זה עולה לאתר", "מיד. שומרים, מרעננים את האתר, זה שם."],
+  ["מה זה פורסם", "מתג שקובע אם משהו נראה באתר. כבוי = שמור אצלכם, לא באתר."],
+  ["אפשר לשבור משהו?", "לא. שום דבר לא נמחק בלי לשאול, וטקסט שנמחק חוזר לנוסח המקורי."],
 ];
 
 const AdminGuide = () => (
   <AdminLayout>
     <div className="max-w-5xl">
-      <header>
+      <header className="flex flex-wrap items-center justify-between gap-4">
         <h1 className="font-display text-3xl text-foreground">מה בא לכם לעשות?</h1>
-        <p className="mt-3 max-w-[62ch] text-[15px] leading-relaxed text-muted-foreground">
-          כל מה שאפשר לשנות באתר נמצא כאן. כל כרטיס למטה הוא מסך אחד בתפריט —
-          מה יש בו, ומה דווקא לא. שינוי נשמר ומופיע באתר מיד.
-        </p>
-        <p className="mt-3 max-w-[62ch] text-[15px] leading-relaxed text-muted-foreground">
-          אי אפשר לשבור כלום מכאן. שום דבר לא נמחק בלי לשאול אתכם קודם.
-        </p>
+
+        <Dialog>
+          <DialogTrigger className="inline-flex items-center gap-2 rounded-sm border border-border px-4 py-2.5 text-sm text-foreground transition-colors hover:bg-secondary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring">
+            <Sparkles className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
+            חדשים כאן?
+          </DialogTrigger>
+          <DialogContent dir="rtl" className="max-w-md">
+            <DialogHeader>
+              <DialogTitle className="text-start">מה אפשר לעשות כאן</DialogTitle>
+            </DialogHeader>
+            <dl className="space-y-4 text-start">
+              {BASICS.map(([q, a]) => (
+                <div key={q}>
+                  <dt className="text-sm font-medium text-foreground">{q}</dt>
+                  <dd className="mt-1 text-sm leading-relaxed text-muted-foreground">{a}</dd>
+                </div>
+              ))}
+            </dl>
+          </DialogContent>
+        </Dialog>
       </header>
 
-      <div className="mt-9 grid gap-4 sm:grid-cols-2">
+      <div className="mt-8 grid gap-4 sm:grid-cols-2">
         {CARDS.map((card) => (
           <Link
             key={card.title}
@@ -151,25 +152,11 @@ const AdminGuide = () => (
 
             <p className="mt-2.5 text-sm leading-relaxed text-muted-foreground">{card.blurb}</p>
 
-            <ul className="mt-4 space-y-1.5">
-              {card.can.map((line) => (
-                <li key={line} className="flex gap-2.5 text-sm leading-relaxed text-foreground/85">
-                  {/* A dot, not a tick: these are options, not a checklist. */}
-                  <span
-                    aria-hidden="true"
-                    className="mt-[9px] h-1 w-1 shrink-0 rounded-full bg-foreground/30"
-                  />
-                  <span>{line}</span>
-                </li>
-              ))}
-            </ul>
+            {card.tip && (
+              <p className="mt-3 text-sm leading-relaxed text-foreground/70">{card.tip}</p>
+            )}
 
-            <p className="mt-4 border-t border-border pt-3.5 text-[13px] leading-relaxed text-muted-foreground">
-              <span className="text-foreground/70">לא מכאן: </span>
-              {card.cant}
-            </p>
-
-            <span className="mt-4 inline-flex items-center gap-1.5 text-sm text-foreground">
+            <span className="mt-auto pt-4 inline-flex items-center gap-1.5 text-sm text-foreground">
               פתיחה
               <ArrowLeft
                 className="h-3.5 w-3.5 transition-transform duration-200 group-hover:-translate-x-1"
@@ -179,10 +166,6 @@ const AdminGuide = () => (
           </Link>
         ))}
       </div>
-
-      <p className="mt-10 max-w-[62ch] text-sm leading-relaxed text-muted-foreground">
-        משהו לא ברור או לא מתנהג כמו שציפיתם? עדיף לשאול מאשר לנחש.
-      </p>
     </div>
   </AdminLayout>
 );
