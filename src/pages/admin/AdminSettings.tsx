@@ -146,21 +146,35 @@ const AdminSettings = () => {
 
   if (loading) return <AdminLayout>טוען…</AdminLayout>;
 
-  const fields: { key: keyof Contact; label: string; placeholder?: string; dir?: "ltr" | "rtl" }[] = [
-    { key: "phone", label: "טלפון", dir: "ltr" },
-    { key: "whatsapp", label: "WhatsApp (כולל קידומת מדינה)", placeholder: "972501234567", dir: "ltr" },
+  const fields: {
+    key: keyof Contact;
+    label: string;
+    hint?: string;
+    placeholder?: string;
+    dir?: "ltr" | "rtl";
+  }[] = [
+    { key: "phone", label: "טלפון", hint: "כמו שהייתם כותבים אותו — עם מקפים או בלי", dir: "ltr" },
+    { key: "whatsapp", label: "WhatsApp", hint: "רק אם הוא שונה מהטלפון. אם ריק, נשתמש במספר הטלפון", dir: "ltr" },
     { key: "email", label: "אימייל", dir: "ltr" },
-    { key: "address", label: "כתובת" },
+    { key: "address", label: "כתובת", hint: "רחוב, עיר", placeholder: "התמר 78, יציץ" },
     { key: "instagram", label: "Instagram URL", dir: "ltr" },
     { key: "facebook", label: "Facebook URL", dir: "ltr" },
-    { key: "hours", label: "שעות פעילות" },
+    // The weekly table itself is in the code; this line is the exception to it.
+    {
+      key: "hours",
+      label: "הערה על שעות הפעילות",
+      hint: "מופיע מעל שעות הפתיחה באתר. לדוגמה: סגור בין 10 ל-15 באוגוסט. השאירו ריק אם אין מה להודיע.",
+    },
   ];
 
   return (
     <AdminLayout>
       <header className="mb-8">
         <h1 className="font-display text-3xl text-primary">הגדרות אתר</h1>
-        <p className="text-muted-foreground mt-1">פרטי יצירת קשר ורשתות חברתיות שמופיעים באתר</p>
+        <p className="text-muted-foreground mt-1">
+          פרטי יצירת קשר ורשתות חברתיות. מה שתשנו כאן מתעדכן בכל מקום באתר —
+          בתחתית העמוד, בעמוד יצירת הקשר ובכפתור הוואטסאפ.
+        </p>
       </header>
 
       <Card>
@@ -171,6 +185,7 @@ const AdminSettings = () => {
           {fields.map((f) => (
             <div key={f.key}>
               <Label>{f.label}</Label>
+              {f.hint && <p className="text-xs text-muted-foreground mt-1">{f.hint}</p>}
               <Input
                 dir={f.dir}
                 placeholder={f.placeholder}

@@ -234,6 +234,19 @@ const ShowroomBand = () => {
               {/* Same full-width treatment as the rows above, so the card
                   closes on one clean edge-to-edge rule rather than a hairline
                   that stops short of the band sitting right above it. */}
+              {/* Whatever the owner typed into /admin/settings — a holiday
+                  closure, a change of hours for a season. It sits above the
+                  standing note because it is the exception, and the exception
+                  is what someone needs to read first. */}
+              {SITE.hours && (
+                <p
+                  data-testid="hours-note"
+                  className="mt-6 -mx-6 md:-mx-8 px-6 md:px-8 pt-5 border-t border-background/15 text-body leading-relaxed text-background"
+                >
+                  {SITE.hours}
+                </p>
+              )}
+
               <p className="mt-6 -mx-6 md:-mx-8 px-6 md:px-8 pt-5 border-t border-background/15 text-body leading-relaxed text-background/70">
                 ניתן להגיע לאולם התצוגה בתיאום מראש, בטלפון{" "}
                 <a href={`tel:${SITE.phone.tel}`} className="link-underline text-background" dir="ltr">

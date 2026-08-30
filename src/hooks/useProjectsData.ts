@@ -26,11 +26,12 @@ type Row = {
   location: string | null;
   category: string | null;
   description: string | null;
+  meta_description: string | null;
   cover_url: string | null;
   gallery: unknown;
 };
 
-const toProject = (r: Row): Project => ({
+export const toProject = (r: Row): Project => ({
   slug: r.slug,
   name: r.title,
   location: r.location ?? "",
@@ -40,6 +41,9 @@ const toProject = (r: Row): Project => ({
   cover: r.cover_url ?? "",
   gallery: Array.isArray(r.gallery) ? (r.gallery as string[]) : [],
   intro: r.description ?? "",
+  // Written in the admin's SEO field; the project's own opening line is a
+  // better fallback than nothing at all.
+  metaDescription: r.meta_description ?? r.description ?? "",
   story: r.description ? [r.description] : [],
   scope: [],
   materials: [],
@@ -55,7 +59,7 @@ export function useProjects() {
       try {
         const { data, error } = await supabase
           .from("site_projects")
-          .select("slug, title, location, category, description, cover_url, gallery")
+          .select("slug, title, location, category, description, meta_description, cover_url, gallery")
           .eq("published", true)
           .order("sort_order", { ascending: true });
         if (cancelled) return;

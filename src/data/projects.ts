@@ -15,6 +15,8 @@ export interface Project {
   cover: string;
   gallery: string[];
   intro: string;
+  /** Search-engine description. Optional — the intro stands in when unset. */
+  metaDescription?: string;
   story: string[];
   scope: string[];
   materials: string[];

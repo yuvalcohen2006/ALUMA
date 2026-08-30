@@ -34,7 +34,7 @@ const ProjectDetailPage = () => {
     <Layout>
       <SEO
         title={`${project.name} | פרויקטים | Aluma`}
-        description={project.intro}
+        description={project.metaDescription || project.intro}
         path={`/projects/${project.slug}`}
         image={project.cover}
         type="article"
