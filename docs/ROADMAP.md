@@ -740,7 +740,45 @@ project we don't control.
 
 ## STATUS SUMMARY
 
-*Last updated: 2026-08-01 — round five: RTL fix + about rebuild*
+*Last updated: 2026-08-30 — round six: admin-integration bug sweep (TDD)*
+
+**The sweep asked one question of every admin screen: if the owner changes
+this, does the site change?** Three said no, and all three failed silently —
+the save succeeded, the toast said "נשמר", nothing moved. That is worse than
+an error, because it looks like success.
+
+- **Six of thirteen editable texts had no reader.** `collections.*`,
+  `materials.*` and `club.*` were listed in /admin/texts, labelled by where
+  they appear, and consumed by nothing. Wired up.
+- **Site texts now apply to Hebrew only.** The admin is Hebrew-only, so its
+  values are Hebrew; the club card is translated, and an override would have
+  put Hebrew headings on `/en`.
+- **The settings screen saved a phone number nothing read.** Contact facts
+  came from `src/config/site.ts`, and eleven links across five files had the
+  number typed straight in, answering to neither. All of it now runs through
+  `mergeContact()` (admin over config), with `hours` reframed as the note it
+  can actually be.
+- **The magazine published into the void.** Articles were readable at
+  `/journal/:slug` and listed nowhere. שווה לדעת lists them now.
+- **Choosing a colour finish did not show that colour** — the gallery was
+  rebuilt but the index into it was not, and clearing a finish could blank the
+  main photograph. Now a tested hook.
+- **Project meta-descriptions** were saved and never selected back.
+- **The two floating buttons were both on the left**, and the comments in both
+  files claimed the opposite. WhatsApp took the right corner; the duplicate
+  navbar entry is gone.
+- **The club page asked you to join three times** across four sections. Two
+  sections, one ask.
+
+**Three contract tests now guard the class** rather than the instances:
+`cms-contract` (no editable key without a reader), `admin-contract` (no admin
+screen writing a table no public file reads — with the back-office tables and
+their RLS scoping documented), and `contact-facts` (no phone number written
+outside the config). 112 tests, typecheck and build clean.
+
+---
+
+*Round five: RTL fix + about rebuild*
 
 **The RTL bug was systemic, not cosmetic.** Collection titles used `text-end`,
 which in RTL resolves to the **LEFT** — the same trap as the original PageHero
