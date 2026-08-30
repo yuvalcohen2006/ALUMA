@@ -29,6 +29,24 @@ export type DBProduct = {
   price_note: string | null;
 };
 
+/**
+ * A product row as the pages expect it.
+ *
+ * The four list columns are JSON, and a row can come back with any of them
+ * null — from a hand-edited row, or one saved before the column existed. The
+ * product page calls `.length` on all four, so a null there is a white screen
+ * on a real product. Anything that is not already an array becomes an empty
+ * one; a bare string is NOT a one-item list, or every `.map` over it would
+ * spread it into characters.
+ */
+export const normaliseProduct = (p: any): DBProduct => ({
+  ...p,
+  description: Array.isArray(p?.description) ? p.description : [],
+  highlights: Array.isArray(p?.highlights) ? p.highlights : [],
+  materials: Array.isArray(p?.materials) ? p.materials : [],
+  gallery: Array.isArray(p?.gallery) ? p.gallery : [],
+});
+
 export function useCollections() {
   const [collections, setCollections] = useState<DBCollection[]>([]);
   const [products, setProducts] = useState<DBProduct[]>([]);
@@ -51,13 +69,7 @@ export function useCollections() {
           .order("sort_order"),
       ]);
       const loadedCollections = (cols as DBCollection[]) || [];
-      const loadedProducts = ((prods as any[]) || []).map((p) => ({
-        ...p,
-        description: Array.isArray(p.description) ? p.description : [],
-        highlights: Array.isArray(p.highlights) ? p.highlights : [],
-        materials: Array.isArray(p.materials) ? p.materials : [],
-        gallery: Array.isArray(p.gallery) ? p.gallery : [],
-      })) as DBProduct[];
+      const loadedProducts = ((prods as any[]) || []).map(normaliseProduct);
 
       // Real data ALWAYS wins when it exists. The placeholder catalogue only
       // fills an empty page, so there is nothing to judge a layout against.

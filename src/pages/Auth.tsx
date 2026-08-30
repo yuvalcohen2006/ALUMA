@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
+import { directionFor } from "@/lib/field-direction";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
 import { trackPixel } from "@/lib/pixel";
@@ -231,7 +232,9 @@ const AuthPage = () => {
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       required
-                      dir="ltr"
+                      // The prompt is Hebrew; the password is not. Forcing ltr
+                      // parked "לפחות 8 תווים" against the left edge.
+                      dir={directionFor(password)}
                       className="h-11 rounded-sm"
                       placeholder="לפחות 8 תווים"
                     />

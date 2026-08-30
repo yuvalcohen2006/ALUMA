@@ -17,6 +17,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useSiteContact } from "@/hooks/useSiteContact";
 import { mailtoLink } from "@/lib/mailto";
 import { submitErrorMessage } from "@/lib/submitError";
+import { latinFieldProps } from "@/lib/field-direction";
 import type { SiteContact } from "@/lib/site-contact";
 import { WhatsAppIcon } from "@/components/WhatsAppButton";
 import SectionHeading from "@/components/SectionHeading";
@@ -429,7 +430,9 @@ const Contact = () => {
                       autoComplete="tel"
                       inputMode="tel"
                       placeholder="טלפון נייד לחזרה"
-                      dir="rtl"
+                      // Hebrew prompt while empty, digits left-to-right once
+                      // typed. See lib/field-direction.
+                      {...latinFieldProps}
                       aria-invalid={!!errors.phone}
                       aria-describedby={errors.phone ? "contact-phone-error" : undefined}
                       className={cn(fieldClass(!!errors.phone), "h-14")}
@@ -449,7 +452,7 @@ const Contact = () => {
                     maxLength={255}
                     autoComplete="email"
                     placeholder="כתובת מייל"
-                    dir="rtl"
+                    {...latinFieldProps}
                     aria-invalid={!!errors.email}
                     aria-describedby={errors.email ? "contact-email-error" : undefined}
                     className={cn(fieldClass(!!errors.email), "h-14")}

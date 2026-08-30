@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft, ArrowRight, Check, Ruler, Layers } from "lucide-react";
 import NotFound from "./NotFound";
 import { supabase } from "@/integrations/supabase/client";
-import type { DBProduct } from "@/hooks/useCollectionsData";
+import { normaliseProduct, type DBProduct } from "@/hooks/useCollectionsData";
 import { trackPixel } from "@/lib/pixel";
 import { formatPrice } from "@/lib/price";
 import { useProductGallery, type ProductVariant } from "@/hooks/useProductGallery";
@@ -65,13 +65,7 @@ const CollectionDetailPage = () => {
     }
 
     if (data) {
-      const p: DBProduct = {
-        ...(data as any),
-        description: Array.isArray((data as any).description) ? (data as any).description : [],
-        highlights: Array.isArray((data as any).highlights) ? (data as any).highlights : [],
-        materials: Array.isArray((data as any).materials) ? (data as any).materials : [],
-        gallery: Array.isArray((data as any).gallery) ? (data as any).gallery : [],
-      };
+      const p = normaliseProduct(data);
       setItem(p);
       const { data: rel } = await supabase
         .from("site_collection_products")
@@ -80,7 +74,7 @@ const CollectionDetailPage = () => {
         .eq("published", true)
         .neq("id", p.id)
         .limit(3);
-      setRelated(((rel as any[]) || []) as DBProduct[]);
+      setRelated(((rel as any[]) || []).map(normaliseProduct));
     } else {
       setItem(null);
     }
