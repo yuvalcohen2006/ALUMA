@@ -12,10 +12,8 @@ export type PhotoSpec = {
   what: string;
   /** The shape the site crops to. */
   shape: string;
-  /** The smallest file that still looks sharp on a good screen. */
-  minSize: string;
-  /** Where it appears, so the crop makes sense. */
-  usedFor: string;
+  /** The one size to aim for. Not a range — a range is a decision. */
+  size: string;
   /** The one mistake this particular photo invites. */
   watchOut: string;
 };
@@ -24,47 +22,41 @@ export const PHOTO_SPECS = {
   hero: {
     what: "התמונה הגדולה בדף הבית",
     shape: "לרוחב, בערך 16:9",
-    minSize: "2400 × 1350 פיקסלים",
-    usedFor: "ממלאת את כל המסך בכניסה לאתר",
+    size: "2400 × 1350",
     watchOut:
       "בטלפון האתר חותך אותה לגובה, אז מה שחשוב צריך להיות במרכז — לא בקצה הימני או השמאלי.",
   },
   collection: {
     what: "תמונת קולקציה",
     shape: "מרובעת או קצת לגובה",
-    minSize: "1600 × 1600 פיקסלים",
-    usedFor: "גם כריבוע לגובה ברשימת הקולקציות, וגם כפס רחב בראש עמוד הקולקציה",
+    size: "1600 × 1600",
     watchOut:
       "אותה תמונה נחתכת לשתי צורות שונות מאוד. השאירו אוויר מסביב לרהיט, אחרת בפס הרחב הוא ייחתך.",
   },
   product: {
     what: "תמונת מוצר",
     shape: "מרובעת",
-    minSize: "1600 × 1600 פיקסלים",
-    usedFor: "ברשימת המוצרים, בדף הבית ובגלריה של עמוד המוצר",
+    size: "1600 × 1600",
     watchOut:
       "השאירו מרווח קטן מסביב לרהיט. האתר חותך את התמונה קצת אחרת בכל מקום, ורהיט שנוגע בקצה ייראה קטוע.",
   },
   finish: {
     what: "תמונה של מוצר בצבע מסוים",
     shape: "מרובעת, בדיוק כמו תמונת המוצר",
-    minSize: "1600 × 1600 פיקסלים",
-    usedFor: "מחליפה את התמונה הראשית כשלוחצים על עיגול הצבע",
+    size: "1600 × 1600",
     watchOut:
       "צלמו מאותה זווית ומאותו מרחק כמו התמונה הרגילה — אחרת הרהיט 'קופץ' כשמחליפים צבע.",
   },
   project: {
     what: "תמונת פרויקט",
     shape: "לרוחב, בערך 3:2",
-    minSize: "2000 × 1333 פיקסלים",
-    usedFor: "ברשימת הפרויקטים, בדף הבית ובגלריה של הפרויקט",
+    size: "2000 × 1333",
     watchOut: "תמונות מהטלפון לגובה ייחתכו כאן. עדיף לצלם לרוחב.",
   },
   article: {
     what: "תמונת כתבה",
     shape: "לרוחב, בערך 3:2",
-    minSize: "1600 × 1067 פיקסלים",
-    usedFor: "בראש הכתבה",
+    size: "1600 × 1067",
     watchOut: "טקסט בתוך התמונה לא ייקרא בטלפון. עדיף תמונה בלי כיתוב.",
   },
 } as const satisfies Record<string, PhotoSpec>;

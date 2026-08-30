@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Phone, Mail, MapPin, Instagram, Facebook } from "lucide-react";
 import alumaLogo from "@/assets/aluma-logo.png";
 import { useSiteContact } from "@/hooks/useSiteContact";
+import { mailtoLink } from "@/lib/mailto";
 import { useLocalizedPath } from "@/lib/useLocalizedPath";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 
@@ -38,7 +39,7 @@ const Footer = () => {
               מקום לארח, להירגע, ולחיות את הרגעים היפים באמת.
             </p>
             <div className="flex gap-3 justify-center md:justify-end flex-row-reverse">
-              <a href={`mailto:${SITE.email}`} aria-label="Email" className={iconBox}>
+              <a href={mailtoLink(SITE.email, "פנייה מהאתר")} aria-label="Email" className={iconBox}>
                 <Mail className="w-4 h-4" />
               </a>
               <a href={`tel:${SITE.phone.tel}`} aria-label="Phone" className={iconBox}>
@@ -164,7 +165,7 @@ const Footer = () => {
               </li>
               <li>
                 <a
-                  href={`mailto:${SITE.email}`}
+                  href={mailtoLink(SITE.email, "פנייה מהאתר")}
                   className="flex items-center gap-3 justify-center md:justify-start hover:text-accent transition-smooth"
                 >
                   <Mail className="w-4 h-4 shrink-0" />

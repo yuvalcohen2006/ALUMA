@@ -49,13 +49,15 @@ const CollectionSection = ({
 
   return (
     <section id={col.slug} className="scroll-mt-32 py-14 md:py-24">
-      {/* The name lives ON the photograph — white, as large as the band will
-          carry, centred vertically and pinned to the reading edge. The scrim
-          runs from that edge so the type has something to sit on whatever the
-          picture is doing behind it. */}
+      {/* The photograph is a second, redundant click target for the heading
+          below it. Hidden from assistive tech and skipped by the keyboard on
+          purpose — otherwise every collection would announce two identical
+          links, and tabbing the page would take twice as long for no gain. */}
       <Reveal>
         <Link
           to={to(`/collections/${col.slug}`)}
+          aria-hidden="true"
+          tabIndex={-1}
           className="group relative block aspect-[21/9] md:aspect-[3/1] overflow-hidden rounded-sm bg-secondary/50"
         >
           {band && (
@@ -68,19 +70,18 @@ const CollectionSection = ({
               className="absolute inset-0 w-full h-full object-cover"
             />
           )}
-          {/* Direction-aware scrim — see CollectionPage. */}
-          <div
-            aria-hidden="true"
-            className="absolute inset-0 bg-gradient-to-r rtl:bg-gradient-to-l from-black/60 via-black/25 to-transparent"
-          />
-          <div className="absolute inset-0 flex items-center">
-            <div className="w-full px-6 md:px-12">
-              <h2 className="font-display font-medium text-white text-start leading-[0.92] text-[clamp(48px,12vw,170px)]">
-                {col.name_he}
-              </h2>
-            </div>
-          </div>
         </Link>
+      </Reveal>
+
+      {/* The name reads on the page, not out of the photograph. A 170px word
+          over a darkened image was the loudest thing on the site, and the
+          scrim it needed was fighting the picture underneath it. */}
+      <Reveal>
+        <h2 className="mt-5 text-start text-heading font-normal tracking-normal text-foreground">
+          <Link to={to(`/collections/${col.slug}`)} className="hover:text-accent transition-colors">
+            {col.name_he}
+          </Link>
+        </h2>
       </Reveal>
 
       {col.intro && (

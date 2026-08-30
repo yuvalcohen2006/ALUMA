@@ -46,7 +46,7 @@ describe("photo guidance", () => {
 
   it("gives every spec a real size, not a placeholder", () => {
     for (const [key, spec] of Object.entries(PHOTO_SPECS)) {
-      expect(spec.minSize, key).toMatch(/\d{3,}\s*×\s*\d{3,}/);
+      expect(spec.size, key).toMatch(/^\d{3,}\s*×\s*\d{3,}$/);
       expect(spec.watchOut.length, key).toBeGreaterThan(20);
     }
   });

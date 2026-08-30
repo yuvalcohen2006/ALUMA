@@ -803,7 +803,10 @@ const AdminCollections = () => {
                     inputMode="decimal"
                     dir="ltr"
                     defaultValue={editProd.price ?? ""}
-                    onBlur={(e) =>
+                    // onChange, not onBlur: clicking Save with the cursor still
+                    // in the box would have saved the value from before you
+                    // typed. Uncontrolled, so parsing never fights the typing.
+                    onChange={(e) =>
                       setEditProd({ ...editProd, price: parsePriceInput(e.target.value) })
                     }
                     placeholder="12400"

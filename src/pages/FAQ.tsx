@@ -50,7 +50,7 @@ const FaqRow = ({ q, a, id, open, onToggle }: { q: string; a: string; id: string
     >
       <Plus
         aria-hidden="true"
-        className={`mt-1 w-5 h-5 shrink-0 text-primary transition-transform duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] ${
+        className={`mt-1 w-[18px] h-[18px] shrink-0 text-foreground/40 group-hover:text-foreground transition-[transform,color] duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] ${
           open ? "rotate-45" : ""
         }`}
         strokeWidth={2}
@@ -226,7 +226,7 @@ const FAQPage = () => {
           heading, and the fields stayed in the tab order while invisible. */}
       <section id="contact" className="scroll-mt-28 bg-background pt-2">
         <div className="mx-auto max-w-[720px] px-6">
-          <h2 className="border-b border-foreground/10 pb-6 text-start text-body font-medium text-foreground">
+          <h2 className="pt-16 text-start text-heading font-normal tracking-normal text-foreground">
             {t("writeToUs")}
           </h2>
         </div>

@@ -125,3 +125,29 @@ describe("links that leave the site", () => {
     expect(offenders).toEqual([]);
   });
 });
+
+describe("links a screen reader has to announce", () => {
+  it("never leaves one with nothing to announce", () => {
+    // A <Link> whose only child is an aria-hidden image announces as "link"
+    // and nothing else. Either it gets a label, or — when a real heading link
+    // sits beside it — it is hidden and skipped as a duplicate.
+    const offenders: string[] = [];
+    for (const file of publicFiles) {
+      const src = readFileSync(join(ROOT, file), "utf8");
+      for (const [block] of src.matchAll(/<Link\b[\s\S]{0,900}?<\/Link>/g)) {
+        const open = block.slice(0, block.indexOf(">") + 1);
+        if (/aria-hidden=\{?["']?true/.test(open)) continue;
+        if (/aria-label=/.test(open)) continue;
+        const inner = block.slice(block.indexOf(">") + 1, block.lastIndexOf("</Link>"));
+        const hasText = /[A-Za-z\u0590-\u05FF]{2,}/.test(
+          inner.replace(/<[^>]*>/g, " ").replace(/\{[^}]*\}/g, " "),
+        );
+        const hasExpression = /\{[^}]+\}/.test(inner);
+        if (!hasText && !hasExpression) {
+          offenders.push(`${file}: ${open.replace(/\s+/g, " ").slice(0, 70)}`);
+        }
+      }
+    }
+    expect(offenders).toEqual([]);
+  });
+});

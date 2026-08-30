@@ -115,9 +115,9 @@ const StoryPage = () => {
       <section className="bg-background">
         <div className="mx-auto max-w-[860px] px-6 py-24 md:py-32">
           <Reveal>
-            <p className="max-w-[46ch] text-start text-foreground tracking-normal text-body">
+            <h2 className="max-w-[46ch] text-start text-heading font-normal tracking-normal text-foreground">
               אלומה נולדה מתוך חיבור בין חומר לאור.
-            </p>
+            </h2>
 
             <div className="mt-10 max-w-[62ch] space-y-6 text-start text-foreground-soft tracking-normal text-small">
               <p>
@@ -149,14 +149,17 @@ const StoryPage = () => {
       <section className="bg-background">
         <div className="mx-auto max-w-[860px] px-6 pb-24 md:pb-32">
           <Reveal>
-            <p className="max-w-[46ch] text-start text-foreground-soft tracking-normal text-small">
-              שלושתנו. אותם אנשים מהמדידה הראשונה ועד היום שאתם יושבים בחוץ.
+            <h2 className="text-start text-heading font-normal tracking-normal text-foreground">
+              שלושתנו
+            </h2>
+            <p className="mt-4 max-w-[46ch] text-start text-small tracking-normal text-foreground-soft">
+              אותם אנשים מהמדידה הראשונה ועד היום שאתם יושבים בחוץ.
             </p>
           </Reveal>
 
-          <div className="mt-12 grid grid-cols-3 gap-3 md:gap-10 bg-background">
+          <div className="mt-12 grid grid-cols-1 sm:grid-cols-3 gap-10 sm:gap-6 md:gap-10 bg-background">
             {people.map((p) => (
-              <div key={p.name} className="bg-background">
+              <div key={p.name} className="mx-auto w-full max-w-[260px] sm:max-w-none bg-background">
                 <img
                   src={p.src}
                   alt={p.alt}
@@ -182,7 +185,7 @@ const StoryPage = () => {
       <section className="bg-secondary">
         <div className="mx-auto max-w-[860px] px-6 py-24 md:py-32">
           <Reveal>
-            <h2 className="font-display font-normal tracking-normal text-start text-foreground text-body border-s-2 border-primary ps-5">
+            <h2 className="text-start text-heading font-normal tracking-normal text-foreground">
               מה אנחנו לא עושים
             </h2>
             <ul className="mt-10 max-w-[62ch] divide-y divide-foreground/10 border-t border-foreground/10">
@@ -216,7 +219,7 @@ const StoryPage = () => {
       <section className="bg-background">
         <div className="mx-auto max-w-[860px] px-6 py-28 md:py-36 text-center">
           <Reveal>
-            <p className="mx-auto max-w-[34ch] text-foreground tracking-normal text-body">
+            <p className="mx-auto max-w-[34ch] text-heading font-normal leading-snug tracking-normal text-foreground">
               אולם התצוגה שלנו ב{SITE.address.full}. הכי קל להבין את אלומה
               כשיושבים עליה.
             </p>

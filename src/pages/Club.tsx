@@ -142,7 +142,7 @@ const Club = () => {
           </ShineButton>
           <Link
             to="/club/auth"
-            className="link-underline text-body text-foreground-soft hover:text-accent transition-smooth"
+            className="link-underline text-small text-foreground-soft hover:text-accent transition-smooth"
           >
             כבר חברים? התחברות
           </Link>
@@ -213,7 +213,7 @@ const Club = () => {
                   <h3 className="font-display font-normal text-body text-background mt-5 leading-snug">
                     {perk.title}
                   </h3>
-                  <p className="text-body leading-relaxed text-background/75 mt-3 text-pretty">
+                  <p className="text-small leading-relaxed text-background/75 mt-3 text-pretty">
                     {perk.text}
                   </p>
                 </motion.li>
@@ -235,7 +235,7 @@ const Club = () => {
                 </SectionHeading>
                 <div className="w-20 h-[2px] bg-foreground/15 mt-5" aria-hidden="true" />
 
-                <p className="text-body leading-relaxed text-foreground mt-6 text-pretty">
+                <p className="text-small leading-relaxed text-foreground-soft mt-6 text-pretty">
                   ההרשמה נעשית פעם אחת, ומשם החשבון פשוט זוכר אתכם, את מה שאהבתם
                   ואת הפרויקט שפתחתם איתנו.
                 </p>
@@ -252,7 +252,7 @@ const Club = () => {
                           strokeWidth={2.5}
                           aria-hidden="true"
                         />
-                        <span className="text-body leading-relaxed text-foreground">{t}</span>
+                        <span className="text-small leading-relaxed text-foreground">{t}</span>
                       </li>
                     ))}
                   </ul>
@@ -286,7 +286,7 @@ const Club = () => {
                     <div className="flex flex-col items-center shrink-0">
                       <span
                         aria-hidden="true"
-                        className="grid place-items-center w-14 h-14 rounded-full border border-foreground/15 bg-background font-display text-body text-primary "
+                        className="grid place-items-center w-12 h-12 rounded-full border border-foreground/15 bg-background font-display text-small text-foreground/50"
                       >
                         {step.n}
                       </span>
@@ -302,7 +302,7 @@ const Club = () => {
                       <h3 className="font-display font-normal text-body text-foreground leading-snug">
                         {step.title}
                       </h3>
-                      <p className="text-body leading-relaxed text-foreground-soft mt-2 text-pretty">
+                      <p className="text-small leading-relaxed text-foreground-soft mt-2 text-pretty">
                         {step.text}
                       </p>
                     </div>

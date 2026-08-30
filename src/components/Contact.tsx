@@ -15,6 +15,7 @@ import { toast } from "sonner";
 import { contactSchema } from "@/lib/contactSchema";
 import { supabase } from "@/integrations/supabase/client";
 import { useSiteContact } from "@/hooks/useSiteContact";
+import { mailtoLink } from "@/lib/mailto";
 import type { SiteContact } from "@/lib/site-contact";
 import { WhatsAppIcon } from "@/components/WhatsAppButton";
 import SectionHeading from "@/components/SectionHeading";
@@ -77,7 +78,9 @@ const channelsFor = (SITE: SiteContact): Channel[] => [
     // word, in the assurances beside the form — two identical sentences a few
     // centimetres apart read as a copy-paste slip.
     line: "נוח לשליחת מידות, תוכניות וקבצים",
-    href: `mailto:${SITE.email}`,
+    // Prefilled, like the WhatsApp tile beside it. A bare mailto: opens an
+    // empty window, and the visitor has to invent an opening line.
+    href: mailtoLink(SITE.email, "פנייה מהאתר", "היי,\n\nאשמח לשמוע על ריהוט חוץ בהתאמה אישית.\n\nשם:\nטלפון:\n"),
   },
   {
     key: "showroom",

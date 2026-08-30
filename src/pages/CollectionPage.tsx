@@ -113,6 +113,12 @@ const CollectionPage = () => {
           like a different page loaded. */}
       <section className="pt-24">
         <div className="container-luxury">
+          {/* Title above the band, at the page's own display size. It used to
+              sit inside the photograph at up to 180px, which needed a scrim to
+              stay legible and made every collection page shout. */}
+          <h1 className="mb-6 text-start text-display font-normal tracking-normal text-foreground">
+            {collection.name_he}
+          </h1>
           <div className="relative aspect-[21/9] md:aspect-[3/1] overflow-hidden rounded-sm bg-secondary/50">
             {band && (
               <img
@@ -124,21 +130,6 @@ const CollectionPage = () => {
                 className="absolute inset-0 w-full h-full object-cover"
               />
             )}
-            {/* Direction-aware scrim. `to-r`/`to-l` are physical, so the rtl
-                variant flips it: the dark end must always sit under the text,
-                which `text-start` puts on the right in Hebrew and the left in
-                English. */}
-            <div
-              aria-hidden="true"
-              className="absolute inset-0 bg-gradient-to-r rtl:bg-gradient-to-l from-black/60 via-black/25 to-transparent"
-            />
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full px-6 md:px-12">
-                <h1 className="font-display font-medium text-white text-start leading-[0.92] text-[clamp(56px,13vw,180px)]">
-                  {collection.name_he}
-                </h1>
-              </div>
-            </div>
           </div>
 
           {collection.intro && (
