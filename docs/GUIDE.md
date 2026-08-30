@@ -1,7 +1,14 @@
 # Aluma — what's left
 
-**Where you are:** database set up, you're inside `/admin`, and there's a
-Vercel deployment at `aluma-three.vercel.app`.
+**Where you are:** jobs 1–3 done. Vercel is on `calm-rebuild`, the price
+script has run, and emails are on. The domain transfer is paid for and
+waiting.
+
+**Two things left:** let the transfer finish (Job 4 — mostly waiting), and
+fill the site with real products and photos (Part 2). You can hand the
+customer the Vercel link today — see **Handing it over before the domain
+lands**, which has one Supabase setting you must change first or their
+sign-in will fail.
 
 **Read this first — it explains most of what looks broken.**
 
@@ -219,16 +226,48 @@ Keep your saved copy anyway until the site is live and green.
 8. Namecheap emails you a confirmation. **Click the link in it.** The transfer
    does not start until you do.
 
-## Step B — wait
+## Step B — wait (and ignore the missing email)
 
-Transfers take **up to 5–7 days**. Usually faster. There's nothing to do
-meanwhile, and **the current site keeps working the whole time** — the DNS
-doesn't change until you change it.
+**If it says "awaiting email confirmation" and no email arrived — you are
+fine. Do nothing.**
 
-You may get an email from Lovable asking to confirm the transfer out.
-Approving it makes this finish in hours instead of days.
+Namecheap's own documentation: *"Transfers that have reached this stage are
+automatically confirmed within 5 days,"* plus 24–48 hours for the registry to
+finish. The confirmation email is a way to go **faster**, not a requirement.
+Miss it and the transfer still completes.
 
-**⏸️ Stop here until Namecheap says the domain is yours.**
+**The "Transfer status id should be 11" error** when you press *Resend* means
+the transfer has already moved past the stage where that email applies. There
+is nothing left to resend. It is not a failure, and pressing it again will
+keep returning the same thing.
+
+### If you want it to finish sooner
+
+The fastest lever is on the **other** side, not Namecheap's:
+
+1. Log in to **Lovable**.
+2. Find the domain / transfer section for alumaoutdoor.com.
+3. Look for an outgoing transfer waiting on you, and **approve** it.
+
+A losing registrar that approves ends the wait in hours instead of days. If
+there's no such option, open a ticket asking them to *"approve the pending
+outbound transfer for alumaoutdoor.com"*.
+
+### Also worth one look
+
+The confirmation email goes to the **registrant address on the WHOIS record**
+— which is held at Lovable, not necessarily your Namecheap account address.
+Check the spam folder of outdooraluma@gmail.com and of any address Lovable
+might have on file.
+
+### When to actually worry
+
+If **7 days** pass with no change, open Namecheap live chat, say the transfer
+is stuck, and quote the *"Transfer status id should be 11"* error. That is a
+support problem, not something you can fix from the dashboard.
+
+**The current site keeps working the whole time.** DNS doesn't change until
+you change it in Step C.
 
 ## Step C — point the domain at the site
 
@@ -272,6 +311,61 @@ Only once Namecheap shows alumaoutdoor.com in your **Domain List**:
 5. Tell me it's verified and I'll switch the sender over.
 
 **✅ Tell me: "Domain moved" and "Resend verified".**
+
+---
+---
+
+# HANDING IT OVER BEFORE THE DOMAIN LANDS
+
+**Yes — give the customer the `.vercel.app` link now.** Everything they enter
+carries across to alumaoutdoor.com automatically. Nothing gets re-typed.
+
+**Why:** the products, projects, photos and texts live in the database, not in
+the website. The Vercel address and the future alumaoutdoor.com are the same
+site reading the same database. Attaching the domain later just points a name
+at what's already running.
+
+## One thing to do first, or their sign-in will fail
+
+The site sends people to Google to sign in and Google has to be told where to
+send them back. Right now that list probably only has `localhost`.
+
+1. Go to **`supabase.com/dashboard`** → the **aluma** project.
+2. Far-left icon strip → **Authentication**.
+3. Click **URL Configuration**.
+4. **Site URL** — set it to your Vercel address, in full:
+
+   ```
+   https://aluma-three.vercel.app
+   ```
+
+5. **Redirect URLs** — click **Add URL** and add both of these, one at a time:
+
+   ```
+   https://aluma-three.vercel.app/**
+   http://localhost:8080/**
+   ```
+
+   The `/**` matters — it means "any page on this site".
+6. Click **Save**.
+
+When the real domain is live, come back and add `https://alumaoutdoor.com/**`
+the same way, then change **Site URL** to it. Leave the Vercel one in the list;
+two entries do no harm.
+
+**Without this**, signing in to `/admin` or to the club from the Vercel address
+bounces back to localhost and looks broken.
+
+## What to tell the customer
+
+- The address is temporary and will become alumaoutdoor.com. Their work moves
+  with it.
+- **Contact-form emails only reach outdooraluma@gmail.com for now** — that's
+  the test-mode rule from Job 3, and it lifts when the domain is verified.
+  Nothing is lost meanwhile: every message is saved and readable in
+  **/admin → פניות מהאתר**.
+- Don't share the `.vercel.app` link publicly — post it to customers only once
+  it's the real domain, so search engines index the right one.
 
 ---
 ---
