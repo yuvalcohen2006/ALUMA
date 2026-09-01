@@ -246,7 +246,7 @@ const AuthPage = () => {
                   >
                     {busy ? "רגע..." : isSignup ? "להצטרפות למועדון" : "התחברות"}
                     {!busy && (
-                      <ArrowLeft className="mr-2 h-4 w-4 group-hover:-translate-x-1 transition-smooth" />
+                      <ArrowLeft className="me-2 h-4 w-4 group-hover:-translate-x-1 transition-smooth" />
                     )}
                   </Button>
                 </form>

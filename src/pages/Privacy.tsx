@@ -24,7 +24,7 @@ const PrivacyPage = () => {
 
           <div>
             <h2 className="font-display text-2xl text-foreground mb-3">המידע שאנו אוספים</h2>
-            <ul className="list-disc pr-6 space-y-2 marker:text-primary/50">
+            <ul className="list-disc ps-6 space-y-2 marker:text-primary/50">
               <li>פרטים שאתם מוסרים מרצונכם בטופס יצירת הקשר: שם, טלפון, מייל ותוכן ההודעה.</li>
               <li>מידע טכני אנונימי הנאסף אוטומטית: סוג דפדפן, מערכת הפעלה, רזולוציה ועמודים שבהם ביקרתם.</li>
               <li>נתוני אנליטיקה לצורך שיפור חוויית המשתמש (Google Analytics וכלים דומים).</li>
@@ -33,7 +33,7 @@ const PrivacyPage = () => {
 
           <div>
             <h2 className="font-display text-2xl text-foreground mb-3">השימוש במידע</h2>
-            <ul className="list-disc pr-6 space-y-2 marker:text-primary/50">
+            <ul className="list-disc ps-6 space-y-2 marker:text-primary/50">
               <li>יצירת קשר חוזר לצורך מתן הצעת מחיר ושירות.</li>
               <li>שיפור האתר, הקולקציות והשירות.</li>
               <li>שליחת עדכונים שיווקיים, רק אם נתתם לכך הסכמה מפורשת.</li>

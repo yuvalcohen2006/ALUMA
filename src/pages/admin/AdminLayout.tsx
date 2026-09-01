@@ -150,7 +150,7 @@ const AdminLayout = ({ children }: { children: ReactNode }) => {
             // room, every time.
             : `relative flex items-center gap-3 px-3 h-10 rounded-sm text-sm transition-colors ${
                 isActive
-                  ? "bg-foreground/[0.06] text-foreground font-medium before:absolute before:inset-inline-start-0 before:inset-block-2 before:w-[3px] before:rounded-full before:bg-foreground before:content-['']"
+                  ? "bg-foreground/[0.06] text-foreground font-medium before:absolute before:start-0 before:inset-y-2 before:w-[3px] before:rounded-full before:bg-foreground before:content-['']"
                   : "text-muted-foreground hover:bg-foreground/[0.04] hover:text-foreground"
               }`
         }

@@ -28,7 +28,7 @@ const P = ({ children }: { children: React.ReactNode }) => (
 );
 
 const UL = ({ children }: { children: React.ReactNode }) => (
-  <ul className="list-disc pr-6 space-y-3 text-foreground text-body mb-6 marker:text-primary/50">
+  <ul className="list-disc ps-6 space-y-3 text-foreground text-body mb-6 marker:text-primary/50">
     {children}
   </ul>
 );

@@ -35,7 +35,7 @@ const Footer = () => {
 
           {/* Column 1 (rightmost in RTL), Logo + about + socials */}
           <div className="w-full text-center md:text-start lg:max-w-[320px] lg:pe-8">
-            <img src={alumaLogo} alt="Aluma" loading="lazy" decoding="async" width={400} height={100} className="h-10 w-auto mb-5 mx-auto md:ml-auto brightness-0 invert opacity-90" />
+            <img src={alumaLogo} alt="Aluma" loading="lazy" decoding="async" width={400} height={100} className="h-10 w-auto mb-5 mx-auto md:ms-auto brightness-0 invert opacity-90" />
             <p className="text-background/75 text-sm leading-relaxed mb-6">
               אנחנו יוצרים מערכות חוץ שמרגישות כמו סלון יוקרתי תחת כיפת השמיים —
               מקום לארח, להירגע, ולחיות את הרגעים היפים באמת.

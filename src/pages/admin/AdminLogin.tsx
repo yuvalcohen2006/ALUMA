@@ -140,14 +140,18 @@ const AdminLogin = () => {
               autoComplete="current-password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className={`${field} pe-12`}
+              // pr-12, not pe-12. Logical properties resolve against THIS
+              // element's own direction, and this input is dir="ltr" — so
+              // padding-inline-end landed on the right while the button sat
+              // on the page's inline-end (the left). The eye ended up on top
+              // of the text. Both are physical here, and agree.
+              className={`${field} pr-12`}
             />
             <button
               type="button"
               onClick={() => setShowPassword((v) => !v)}
               aria-label={showPassword ? "הסתרת הסיסמה" : "הצגת הסיסמה"}
-              className="absolute inset-inline-end-0 top-0 grid h-12 w-12 place-items-center text-muted-foreground hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
-              style={{ insetInlineEnd: 0 }}
+              className="absolute right-0 top-0 grid h-12 w-12 place-items-center text-muted-foreground hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
             >
               {showPassword ? <EyeOff className="w-[18px] h-[18px]" /> : <Eye className="w-[18px] h-[18px]" />}
             </button>

@@ -175,7 +175,7 @@ const Account = () => {
                           <span className="text-muted-foreground">אבן דרך הבאה:</span>
                           <span className="text-foreground font-medium">{p.next_milestone}</span>
                           {p.next_milestone_date && (
-                            <span className="text-label text-muted-foreground mr-auto">
+                            <span className="text-label text-muted-foreground ms-auto">
                               {new Date(p.next_milestone_date).toLocaleDateString("he-IL")}
                             </span>
                           )}

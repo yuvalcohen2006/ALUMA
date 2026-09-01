@@ -29,7 +29,7 @@ const AccessibilityPage = () => {
 
           <div>
             <h2 className="font-display text-2xl text-foreground mb-3">התאמות הנגישות באתר</h2>
-            <ul className="list-disc pr-6 space-y-2 marker:text-primary/50">
+            <ul className="list-disc ps-6 space-y-2 marker:text-primary/50">
               <li>תפריט נגישות צף בפינה השמאלית התחתונה בכל עמוד.</li>
               <li>אפשרות להגדלה והקטנה של גודל הטקסט.</li>
               <li>מצב ניגודיות גבוהה לקריאה נוחה יותר.</li>
