@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { readFileSync } from "node:fs";
+import { readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 
 /**
@@ -16,6 +16,16 @@ import { join } from "node:path";
  */
 
 const ROOT = process.cwd();
+
+function sourceFiles(dir: string): string[] {
+  const out: string[] = [];
+  for (const entry of readdirSync(join(ROOT, dir), { withFileTypes: true })) {
+    const path = `${dir}/${entry.name}`;
+    if (entry.isDirectory()) out.push(...sourceFiles(path));
+    else if (/\.tsx?$/.test(entry.name) && !/\.test\./.test(entry.name)) out.push(path);
+  }
+  return out;
+}
 
 /** Screens whose rows were deliberately compacted. */
 const ROW_FILES = [
@@ -38,6 +48,40 @@ describe("icon-only controls", () => {
           offenders.push(`${file}: ${block.slice(0, 60).replace(/\s+/g, " ")}`);
         }
       }
+    }
+    expect(offenders).toEqual([]);
+  });
+});
+
+/**
+ * The site draws one focus ring for everything, in a base layer. A Tailwind
+ * `outline-none` utility sits in the utilities layer and therefore wins — so
+ * writing it anywhere silently removes the ring for keyboard users unless
+ * something else is put back in its place.
+ */
+describe("focus rings", () => {
+  it("are never removed without a replacement", () => {
+    const offenders: string[] = [];
+    for (const file of sourceFiles("src")) {
+      readFileSync(join(ROOT, file), "utf8")
+        .split(/\r?\n/)
+        .forEach((line, i) => {
+          const trimmed = line.trimStart();
+          if (trimmed.startsWith("//") || trimmed.startsWith("*")) return;
+          if (!/\boutline-none\b/.test(line)) return;
+          // Fine when the indicator is drawn some other way — on a
+          // pseudo-element, as an explicit outline, as shadcn's ring, or as a
+          // background highlight, which is the convention for a listbox
+          // option — or when the element is only focused programmatically.
+          if (
+            /after:outline|focus-visible:outline-\d|focus-visible:ring|focus:bg-|tabIndex=\{-1\}|focus:outline-none/.test(
+              line,
+            )
+          ) {
+            return;
+          }
+          offenders.push(`${file}:${i + 1}`);
+        });
     }
     expect(offenders).toEqual([]);
   });

@@ -126,7 +126,7 @@ const Newsletter = () => {
                   // left edge of a right-to-left page. Decide it here instead
                   // — Hebrew prompt while empty, Latin address once typed.
                   dir={email ? "ltr" : "rtl"}
-                  className="h-14 flex-1 min-w-0 rounded-full border border-foreground/15 bg-white/80 px-6 text-small text-foreground text-start shadow-soft backdrop-blur-md outline-none transition-colors placeholder:text-foreground/45 focus:border-accent"
+                  className="h-14 flex-1 min-w-0 rounded-full border border-foreground/15 bg-white/80 px-6 text-small text-foreground text-start shadow-soft backdrop-blur-md transition-colors placeholder:text-foreground/45 focus:border-accent"
                 />
                 <button
                   type="submit"
