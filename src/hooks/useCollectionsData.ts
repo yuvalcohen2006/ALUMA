@@ -71,27 +71,10 @@ export function useCollections() {
       const loadedCollections = (cols as DBCollection[]) || [];
       const loadedProducts = ((prods as any[]) || []).map(normaliseProduct);
 
-      // Real data ALWAYS wins when it exists. The placeholder catalogue only
-      // fills an empty page, so there is nothing to judge a layout against.
-      //
-      // Two earlier versions of this were both wrong. The original discarded
-      // live data in dev unless `?live=1` was in the URL, so uploading real
-      // products still showed the fake ones. The fix over-corrected to
-      // opt-in-only, which meant an empty database rendered an empty catalogue
-      // and the page looked broken.
-      //
-      // Falling back on zero rows gets both: upload one real product and the
-      // placeholders vanish on their own. `VITE_USE_DEMO_DATA=0` forces them
-      // off if you specifically want to see the empty state.
-      const demoAllowed = import.meta.env.VITE_USE_DEMO_DATA !== "0";
-      if (demoAllowed && loadedProducts.length === 0) {
-        const { demoCollections, demoProducts } = await import("@/data/demoCollections");
-        setCollections(demoCollections);
-        setProducts(demoProducts);
-        setLoading(false);
-        return;
-      }
-
+      // No placeholder catalogue any more. It existed so an empty database
+      // did not render an empty page, and it earned its keep — but the shop is
+      // stocked now, and fake furniture that outlives the real thing is how a
+      // customer ends up looking at products nobody sells.
       setCollections(loadedCollections);
       setProducts(loadedProducts);
       setLoading(false);

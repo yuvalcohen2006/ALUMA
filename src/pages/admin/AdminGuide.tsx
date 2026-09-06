@@ -3,161 +3,74 @@ import {
   ArrowLeft,
   FolderOpen,
   HelpCircle,
-  Image as ImageIcon,
-  Inbox,
   MessageSquareQuote,
+  Package,
   Phone,
-  Sparkles,
   Type,
 } from "lucide-react";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import AdminLayout from "./AdminLayout";
 
-type Card = {
-  icon: typeof FolderOpen;
+type Block = {
+  icon: typeof Package;
   title: string;
-  /** One line, the way you'd say it out loud. */
-  blurb: string;
-  /** The setting worth getting right here. Omitted where there isn't one. */
-  tip?: string;
   to: string;
 };
 
 /**
- * The landing screen for /admin.
+ * The way in — six places to go, and nothing else.
  *
- * Someone opening this wants to change one thing and get on with their day.
- * So: what each screen is for, in a sentence, and the one setting worth
- * getting right. Everything else is on the screen itself when they get there.
+ * This screen used to explain each area in three lines before you could reach
+ * it, which is reading you do once and then scroll past forever. The
+ * explanations moved onto the screens themselves, where they are read at the
+ * moment they are needed rather than the moment they are not.
+ *
+ * The hero image and the enquiries screens are gone from here as well. Neither
+ * is somewhere the shop's owner sets out to go; both are still in the sidebar.
  */
-const CARDS: Card[] = [
-  {
-    icon: FolderOpen,
-    title: "קולקציות ומוצרים",
-    blurb: "הרהיטים עצמם. בלי אלה האתר די ריק, אז כדאי להתחיל כאן.",
-    tip: "תמונות מרובעות, ⁦1600 × 1600⁩. הצבעים של כל רהיט נמצאים בתוך הרהיט עצמו.",
-    to: "/admin/collections",
-  },
-  {
-    icon: ImageIcon,
-    title: "התמונה הראשית",
-    blurb: "התמונה הגדולה בכניסה לאתר, והמשפט שעליה.",
-    tip: "⁦2400 × 1350⁩, לרוחב. בטלפון היא נחתכת לגובה, אז שימו את העיקר במרכז.",
-    to: "/admin/hero",
-  },
-  {
-    icon: FolderOpen,
-    title: "פרויקטים",
-    blurb: "עבודות שכבר עשיתם. שלוש מהן מופיעות גם בדף הבית.",
-    tip: "⁦2000 × 1333⁩, לרוחב. תמונות מהטלפון לגובה ייחתכו.",
-    to: "/admin/projects",
-  },
-  {
-    icon: Type,
-    title: "טקסטים באתר",
-    blurb: "כותרות ומשפטים בעמודים הראשיים. כל שדה מסומן איפה הוא מופיע.",
-    tip: "מחקתם טקסט? האתר חוזר לנוסח המקורי. אי אפשר לשבור.",
-    to: "/admin/texts",
-  },
-  {
-    icon: HelpCircle,
-    title: "שאלות ותשובות",
-    blurb: "העמוד של השאלות הנפוצות, כולל הכותרות מעל כל קבוצה.",
-    to: "/admin/faqs",
-  },
-  {
-    icon: MessageSquareQuote,
-    title: "המלצות לקוחות",
-    blurb: "הציטוטים בדף הבית. כשאין אף אחד, האזור פשוט לא מופיע.",
-    tip: "רק דברים שלקוחות באמת אמרו והסכימו שתפרסמו.",
-    to: "/admin/reviews",
-  },
-  {
-    icon: Phone,
-    title: "פרטי הקשר",
-    blurb: "טלפון, וואטסאפ, כתובת ורשתות — מתחלף בכל האתר בבת אחת.",
-    to: "/admin/settings",
-  },
-  {
-    icon: Inbox,
-    title: "פניות מהאתר",
-    blurb: "מי כתב לכם דרך הטופס. מגיע גם למייל, זה פשוט לא מתפספס כאן.",
-    to: "/admin/leads",
-  },
-];
-
-/** The four things worth knowing before touching anything. */
-const BASICS = [
-  ["איך עובדים", "בוחרים מסך מהתפריט, משנים, שומרים. זהו."],
-  ["מתי זה עולה לאתר", "מיד. שומרים, מרעננים את האתר, זה שם."],
-  ["מה זה פורסם", "מתג שקובע אם משהו נראה באתר. כבוי = שמור אצלכם, לא באתר."],
-  ["אפשר לשבור משהו?", "לא. שום דבר לא נמחק בלי לשאול, וטקסט שנמחק חוזר לנוסח המקורי."],
+const BLOCKS: Block[] = [
+  { icon: Package, title: "קולקציות ומוצרים", to: "/admin/collections" },
+  { icon: FolderOpen, title: "פרויקטים", to: "/admin/projects" },
+  { icon: Type, title: "טקסטים באתר", to: "/admin/texts" },
+  { icon: MessageSquareQuote, title: "המלצות לקוחות", to: "/admin/reviews" },
+  { icon: HelpCircle, title: "שאלות ותשובות", to: "/admin/faqs" },
+  { icon: Phone, title: "פרטי הקשר", to: "/admin/settings" },
 ];
 
 const AdminGuide = () => (
   <AdminLayout>
-    <div className="max-w-5xl">
-      <header className="flex flex-wrap items-center justify-between gap-4">
-        <h1 className="font-display text-3xl text-foreground">מה בא לכם לעשות?</h1>
+    <div className="max-w-4xl">
+      <h1 className="font-display text-3xl text-foreground">מה בא לכם לעשות?</h1>
 
-        <Dialog>
-          <DialogTrigger className="inline-flex items-center gap-2 rounded-sm border border-border px-4 py-2.5 text-sm text-foreground transition-colors hover:bg-secondary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring">
-            <Sparkles className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
-            חדשים כאן?
-          </DialogTrigger>
-          <DialogContent dir="rtl" className="max-w-md">
-            <DialogHeader>
-              <DialogTitle className="text-start">מה אפשר לעשות כאן</DialogTitle>
-            </DialogHeader>
-            <dl className="space-y-4 text-start">
-              {BASICS.map(([q, a]) => (
-                <div key={q}>
-                  <dt className="text-sm font-medium text-foreground">{q}</dt>
-                  <dd className="mt-1 text-sm leading-relaxed text-muted-foreground">{a}</dd>
-                </div>
-              ))}
-            </dl>
-          </DialogContent>
-        </Dialog>
-      </header>
+      <nav aria-label="אזורי הניהול" className="mt-8">
+        {/* One hairline grid, not six floating cards. The tiles share their
+            edges — the 1px gaps sit over a border-coloured ground, so the gaps
+            ARE the rules — and the block reads as one object with six doors
+            rather than six things competing for attention. */}
+        <ul className="grid gap-px overflow-hidden rounded-sm border border-border bg-border sm:grid-cols-2">
+          {BLOCKS.map((b) => (
+            <li key={b.to}>
+              <Link
+                to={b.to}
+                className="group flex h-full items-center gap-4 bg-card px-6 py-7 transition-colors hover:bg-secondary focus-visible:relative focus-visible:z-10 focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-ring"
+              >
+                <span
+                  aria-hidden="true"
+                  className="grid h-11 w-11 shrink-0 place-items-center rounded-sm bg-secondary text-foreground/70 transition-colors group-hover:bg-primary group-hover:text-primary-foreground"
+                >
+                  <b.icon className="h-5 w-5" />
+                </span>
 
-      <div className="mt-8 grid gap-4 sm:grid-cols-2">
-        {CARDS.map((card) => (
-          <Link
-            key={card.title}
-            to={card.to}
-            className="group flex flex-col rounded-sm border border-border bg-card p-5 transition-colors hover:border-foreground/25 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
-          >
-            <div className="flex items-center gap-2.5">
-              <card.icon
-                className="h-[18px] w-[18px] text-muted-foreground transition-colors group-hover:text-foreground"
-                aria-hidden="true"
-              />
-              <h2 className="font-medium text-foreground">{card.title}</h2>
-            </div>
+                <span className="flex-1 text-base font-medium text-foreground">{b.title}</span>
 
-            <p className="mt-2.5 text-sm leading-relaxed text-muted-foreground">{card.blurb}</p>
-
-            {card.tip && (
-              <p className="mt-3 text-sm leading-relaxed text-foreground/70">{card.tip}</p>
-            )}
-
-            <span className="mt-auto pt-4 inline-flex items-center gap-1.5 text-sm text-foreground">
-              פתיחה
-              <ArrowLeft
-                className="h-3.5 w-3.5 transition-transform duration-200 group-hover:-translate-x-1"
-                aria-hidden="true"
-              />
-            </span>
-          </Link>
-        ))}
-      </div>
+                <ArrowLeft
+                  aria-hidden="true"
+                  className="h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-200 group-hover:-translate-x-1 group-hover:text-foreground"
+                />
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </nav>
     </div>
   </AdminLayout>
 );

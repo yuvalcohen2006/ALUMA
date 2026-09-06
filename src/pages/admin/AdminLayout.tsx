@@ -174,10 +174,10 @@ const AdminLayout = ({ children }: { children: ReactNode }) => {
     // The CMS sits outside the language tree, so it carries its own
     // direction context. Radix will not pick it up from the dir attribute.
     <DirectionProvider dir="rtl">
-    <div className="min-h-dvh bg-secondary/40" dir="rtl">
+    <div className="admin-theme min-h-dvh bg-background" dir="rtl">
       <div className="flex min-h-dvh">
         {/* Sidebar */}
-        <aside className="hidden md:flex w-64 shrink-0 flex-col border-l border-border bg-card">
+        <aside className="hidden md:flex w-64 shrink-0 flex-col border-l border-border bg-secondary">
           <div className="px-6 py-6 border-b border-border">
             <p className="text-[10px] tracking-[0.3em] text-muted-foreground uppercase">Aluma</p>
             <h2 className="mt-1 font-display text-xl text-foreground">ניהול האתר</h2>

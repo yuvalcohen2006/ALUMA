@@ -68,3 +68,17 @@ describe("collection links", () => {
     expect(offenders).toEqual([]);
   });
 });
+
+describe("product photographs", () => {
+  it("are never cropped on the product page", () => {
+    // The photographs are square by spec. The main image boxes are not always
+    // square, so object-cover silently cut the top and bottom off the
+    // furniture — on the one page whose entire job is showing the furniture.
+    const src = readFileSync(join(ROOT, "src/pages/CollectionDetail.tsx"), "utf8");
+    const mainImages = [...src.matchAll(/galleryImages\[[^\]]+\][\s\S]{0,400}?className="([^"]+)"/g)];
+    expect(mainImages.length).toBeGreaterThan(0);
+    for (const [, cls] of mainImages) {
+      expect(cls, "main product image must not crop").not.toMatch(/object-cover/);
+    }
+  });
+});

@@ -31,8 +31,6 @@ const CollectionDetailPage = () => {
     setLoading(true);
     setLoadError(false);
 
-    const demoAllowed = import.meta.env.VITE_USE_DEMO_DATA !== "0";
-
     const { data, error } = await supabase
       .from("site_collection_products")
       .select(
@@ -48,25 +46,6 @@ const CollectionDetailPage = () => {
       setLoading(false);
       return;
     }
-    // Mirrors useCollectionsData: the index falls back to the placeholder
-    // catalogue while the database is empty, so detail pages have to resolve
-    // from it too — otherwise every placeholder product 404s the moment it is
-    // clicked. A real row always wins.
-    if (!data && demoAllowed) {
-      const { demoProducts } = await import("@/data/demoCollections");
-      const found = demoProducts.find((p) => p.slug === slug) ?? null;
-      if (found) {
-        setItem(found);
-        setRelated(
-          demoProducts
-            .filter((p) => p.collection_id === found.collection_id && p.id !== found.id)
-            .slice(0, 3)
-        );
-        setLoading(false);
-        return;
-      }
-    }
-
     if (data) {
       const p = normaliseProduct(data);
       setItem(p);
@@ -347,13 +326,18 @@ const CollectionDetailPage = () => {
             <div className="md:hidden flex overflow-x-auto gap-4 snap-x -mx-5 px-5 sm:-mx-6 sm:px-6 pb-2">
               {galleryImages.map((img, i) => (
                 <div key={i} className="shrink-0 snap-start w-[85%] sm:w-[60%]">
-                  <div className="relative overflow-hidden rounded-sm  aspect-[4/3] bg-secondary">
+                  {/* Square and contained. The box used to be 4:3 with
+                      object-cover, so a square photograph — which is the size
+                      the admin asks for — had its top and bottom cut off.
+                      Furniture is the subject here; cropping it is not a
+                      style choice. */}
+                  <div className="relative overflow-hidden rounded-sm aspect-square bg-secondary">
                     <img
                       src={img}
                       alt={`${item.name}, תמונה ${i + 1}`}
                       loading={i === 0 ? "eager" : "lazy"}
                       decoding="async"
-                      className="absolute inset-0 w-full h-full object-cover"
+                      className="absolute inset-0 h-full w-full object-contain p-4"
                     />
                   </div>
                 </div>
@@ -364,14 +348,17 @@ const CollectionDetailPage = () => {
             <div className="hidden md:flex gap-4 h-full">
               {/* Main image (appears on the right within left column, RTL) */}
               <div className="flex-1 order-1">
-                <div className="relative overflow-hidden rounded-sm  h-full min-h-[500px] max-h-[720px] bg-secondary/30">
+                {/* object-contain, not cover: the photographs are square by
+                    spec and this box is tall, so cover ate the top and bottom
+                    of every piece. The mat behind it does the framing. */}
+                <div className="relative overflow-hidden rounded-sm h-full min-h-[500px] max-h-[720px] bg-secondary/30">
                   {galleryImages[activeImage] && (
                     <img
                       src={galleryImages[activeImage]}
                       alt={`${item.name}, תמונה ${activeImage + 1}`}
                       loading="eager"
                       decoding="async"
-                      className="absolute inset-0 w-full h-full object-cover transition-opacity duration-500"
+                      className="absolute inset-0 h-full w-full object-contain p-6 transition-opacity duration-500"
                       key={activeImage}
                     />
                   )}

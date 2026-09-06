@@ -99,7 +99,7 @@ const AdminLogin = () => {
     "focus-visible:outline-ring transition-colors";
 
   return (
-    <div dir="rtl" className="min-h-dvh grid place-items-center bg-secondary px-5 py-12">
+    <div dir="rtl" className="admin-theme min-h-dvh grid place-items-center bg-secondary px-5 py-12">
       <div className="w-full max-w-[400px]">
         <div className="flex flex-col items-center text-center">
           <img src={alumaLogo} alt="Aluma" className="h-9 w-auto opacity-90" />
