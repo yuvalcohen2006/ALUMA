@@ -47,8 +47,15 @@
     <meta name="twitter:title" content="Aluma, ריהוט חוץ יוקרתי בעיצוב אישי" />
     <meta name="twitter:description" content="אלומה נולדה מתוך חיבור בין חומר לאור. כל פריט מיוצר בהתאמה אישית, עיצוב, נוחות ועמידות מוחלטת לתנאי חוץ." />
     <meta name="twitter:image" content="https://alumaoutdoor.com/og-image.jpg" />
-    <link rel="icon" type="image/png" href="/favicon.png" />
-    <link rel="apple-touch-icon" href="/favicon.png" />
+    <!-- .ico first, and it must exist as a real file: crawlers request
+         /favicon.ico by name, and the SPA rewrite used to answer with HTML —
+         a 200 that is not an image, which reads as a broken icon and leaves
+         whatever was cached before it in place. -->
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/icon-32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/icon-16.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
 
     <script type="application/ld+json">
     {
