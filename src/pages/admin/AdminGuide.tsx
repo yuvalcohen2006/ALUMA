@@ -6,7 +6,6 @@ import {
   Image as ImageIcon,
   Inbox,
   MessageSquareQuote,
-  Palette,
   Phone,
   Sparkles,
   Type,
@@ -42,14 +41,7 @@ const CARDS: Card[] = [
     icon: FolderOpen,
     title: "קולקציות ומוצרים",
     blurb: "הרהיטים עצמם. בלי אלה האתר די ריק, אז כדאי להתחיל כאן.",
-    tip: "תמונות מרובעות, ⁦1600 × 1600⁩. הראשונות שתוסיפו הן אלה שיופיעו בדף הבית.",
-    to: "/admin/collections",
-  },
-  {
-    icon: Palette,
-    title: "צבעים וגימורים",
-    blurb: "עיגולי הצבע בעמוד המוצר. לוחצים על צבע, התמונה מתחלפת.",
-    tip: "צלמו כל צבע מאותה זווית, אחרת הרהיט קופץ כשמחליפים.",
+    tip: "תמונות מרובעות, ⁦1600 × 1600⁩. הצבעים של כל רהיט נמצאים בתוך הרהיט עצמו.",
     to: "/admin/collections",
   },
   {

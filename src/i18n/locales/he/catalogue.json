@@ -5,8 +5,6 @@
     "collectionSuffix": "קולקציות | Aluma",
     "collectionFallback": "קולקציית {{name}} של Aluma — ריהוט חוץ בייצור אישי."
   },
-  "itemCount_one": "פריט אחד",
-  "itemCount_other": "{{count}} פריטים",
   "view": "לצפייה",
   "allInCollection": "כל הפריטים בקולקציה",
   "allCollections": "לכל הקולקציות",
@@ -37,5 +35,9 @@
   "bespokeNote": "כל פרויקט מתוכנן ומיוצר בהתאם לאופי המרחב עד לפרטים הקטנים ביותר.",
   "backToProjects": "חזרה לפרויקטים",
   "aboutProject": "על הפרויקט",
-  "projectIncludes": "הפרויקט כולל"
+  "projectIncludes": "הפרויקט כולל",
+  "itemCount_one": "פריט אחד",
+  "itemCount_two": "שני פריטים",
+  "itemCount_many": "{{count}} פריטים",
+  "itemCount_other": "{{count}} פריטים"
 }

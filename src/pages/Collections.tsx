@@ -5,10 +5,8 @@ import SEO from "@/components/SEO";
 import PageHero from "@/components/PageHero";
 import Reveal from "@/components/Reveal";
 import { useCollections, type DBCollection, type DBProduct } from "@/hooks/useCollectionsData";
-import { ProductCard } from "./CollectionPage";
 import { useLocalizedPath } from "@/lib/useLocalizedPath";
 import { useSiteText } from "@/hooks/useSiteText";
-import CategoryGrid from "@/components/CategoryGrid";
 import { useTranslation } from "react-i18next";
 
 const SITE = "https://alumaoutdoor.com";
@@ -34,79 +32,66 @@ const SITE = "https://alumaoutdoor.com";
 /** How many pieces preview on the index before "show the whole range". */
 const PREVIEW_COUNT = 4;
 
-const CollectionSection = ({
+/**
+ * One collection, as a card: its own photograph, its name, how many pieces
+ * are in it.
+ *
+ * This replaces two things that were both wrong. A hand-written grid of eight
+ * "category" tiles sat above the page with stock photographs and invented
+ * slugs — every one of them a 404 or a link back to this page. Below it, each
+ * collection re-listed four of its own products, so the index repeated most
+ * of the catalogue before you had chosen anything.
+ *
+ * A collection is a choice, not a shelf. The card shows what it looks like and
+ * how big it is, and the collection's own page has the pieces.
+ */
+const CollectionCard = ({
   collection: col,
-  products,
-  first,
+  count,
+  eager,
 }: {
   collection: DBCollection;
-  products: DBProduct[];
-  first: boolean;
+  count: number;
+  eager: boolean;
 }) => {
   const { to } = useLocalizedPath();
   const { t } = useTranslation("catalogue");
-  const preview = products.slice(0, PREVIEW_COUNT);
-  const hasMore = products.length > PREVIEW_COUNT;
+  const cover = col.image_url;
 
   return (
-    <section id={col.slug} className="scroll-mt-32 py-14 md:py-24">
-      {/* An editorial section head: the name, the way through on the far
-          edge, and one hairline under both. The 3:1 photograph that used to
-          open every section was decoration — the products below are the
-          content, and four of them say more about a collection than one
-          cropped band ever did. */}
-      <Reveal>
-        <div className="flex items-baseline justify-between gap-6 border-b border-foreground/12 pb-5">
-          <h2 className="text-start text-heading font-normal tracking-normal text-foreground">
-            <Link
-              to={to(`/collections/${col.slug}`)}
-              className="transition-colors hover:text-accent"
-            >
-              {col.name_he}
-            </Link>
-          </h2>
-          <Link
-            to={to(`/collections/${col.slug}`)}
-            className="shrink-0 whitespace-nowrap text-small text-muted-foreground transition-colors hover:text-foreground"
-          >
-            {products.length > 0 ? t("itemCount", { count: products.length }) : t("view")}
-          </Link>
+    <li>
+      <Link
+        to={to(`/collections/${col.slug}`)}
+        className="group block text-start focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring"
+      >
+        <div className="aspect-[4/5] overflow-hidden bg-secondary">
+          {cover ? (
+            <img
+              src={cover}
+              alt=""
+              loading={eager ? "eager" : "lazy"}
+              decoding="async"
+              className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.02]"
+            />
+          ) : (
+            // A collection with no photograph yet still gets a tile of the
+            // right shape, so the grid never collapses into a ragged row.
+            <div className="grid h-full w-full place-items-center">
+              <span className="font-display text-heading text-foreground/20">
+                {col.name_he.charAt(0)}
+              </span>
+            </div>
+          )}
         </div>
-      </Reveal>
 
-      {col.intro && (
-        <Reveal>
-          <p className="mt-6 max-w-[62ch] text-start text-body leading-relaxed text-foreground-soft">
-            {col.intro}
-          </p>
-        </Reveal>
-      )}
-
-      {preview.length > 0 && (
-        <ul className="mt-9 md:mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-6 md:gap-x-8 gap-y-12">
-          {preview.map((p, i) => (
-            <Reveal key={p.id} delay={(i % 4) * 70}>
-              <li>
-                <ProductCard product={p} eager={first && i < 4} />
-              </li>
-            </Reveal>
-          ))}
-        </ul>
-      )}
-
-      {hasMore && (
-        <Reveal>
-          <div className="mt-10 text-start">
-            <Link
-              to={to(`/collections/${col.slug}`)}
-              className="text-small text-foreground underline underline-offset-[6px] decoration-1 transition-colors hover:text-accent"
-            >
-              {t("allInCollection")}
-            </Link>
-          </div>
-        </Reveal>
-      )}
-    </section>
+        <h2 className="mt-4 text-body text-foreground transition-colors group-hover:text-accent">
+          {col.name_he}
+        </h2>
+        <p className="mt-1 text-small text-muted-foreground">
+          {t("itemCount", { count })}
+        </p>
+      </Link>
+    </li>
   );
 };
 
@@ -181,44 +166,43 @@ const CollectionsPage = () => {
         )}
       />
 
-      {/* The categories, moved here off the home page. A catalogue page is
-          where a visitor has already decided to browse, so showing the whole
-          range is help rather than noise. */}
-      <section className="container-luxury pt-6 pb-16 md:pb-24">
-        <CategoryGrid />
-      </section>
-
-      <div className="container-luxury pb-10 md:pb-16">
+      <div className="container-luxury pb-24 md:pb-32">
         {loading ? (
-          <div className="py-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-14">
-            {[0, 1, 2, 3].map((i) => (
-              <div key={i} className="animate-pulse space-y-4">
-                <div className="aspect-square rounded-sm bg-secondary" />
-                <div className="h-5 w-2/3 mx-auto rounded-sm bg-secondary" />
-                <div className="h-4 w-full rounded-sm bg-secondary" />
-              </div>
+          <ul className="grid grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-12">
+            {[0, 1, 2, 3, 4, 5].map((i) => (
+              <li key={i} className="animate-pulse space-y-4">
+                <div className="aspect-[4/5] bg-secondary" />
+                <div className="h-5 w-2/3 rounded-sm bg-secondary" />
+              </li>
             ))}
-          </div>
+          </ul>
         ) : collections.length === 0 ? (
-          <div className="py-24 text-center">
-            <p className="text-body text-muted-foreground mb-6">
-              הקולקציות בדרך. בינתיים — נשמח להכיר אתכם.
+          <div className="py-24 text-start">
+            <p className="max-w-[46ch] text-body text-muted-foreground">
+              {t("empty.title")}
             </p>
-            <Link to={to("/faq") + "#contact"} className="btn-shine inline-flex">
-              צרו קשר
+            <Link
+              to={to("/faq") + "#contact"}
+              className="mt-6 inline-block text-small text-foreground underline underline-offset-[6px] decoration-1 transition-colors hover:text-accent"
+            >
+              {t("empty.cta")}
             </Link>
           </div>
         ) : (
-          collections.map((c, i) => (
-            <CollectionSection
-              key={c.id}
-              collection={c}
-              products={bySlug.get(c.slug) ?? []}
-              first={i === 0}
-            />
-          ))
+          <ul className="grid grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-12">
+            {collections.map((c, i) => (
+              <Reveal key={c.id} delay={(i % 3) * 70}>
+                <CollectionCard
+                  collection={c}
+                  count={products.filter((p) => p.collection_id === c.id).length}
+                  eager={i < 3}
+                />
+              </Reveal>
+            ))}
+          </ul>
         )}
       </div>
+
     </Layout>
   );
 };

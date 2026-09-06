@@ -1,189 +1,139 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Plus, Upload, X } from "lucide-react";
 import { toast } from "sonner";
-import { supabase } from "@/integrations/supabase/client";
 import { uploadFile } from "@/lib/admin-storage";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import PhotoSpec from "@/components/admin/PhotoSpec";
+import { contentDirection } from "@/lib/field-direction";
+import type { DraftVariant } from "@/lib/variant-sync";
 
-type Variant = {
-  id: string;
-  name: string;
-  swatch: string | null;
-  image_url: string | null;
-  sort_order: number;
+/** What a new piece of furniture starts with, so the list is never empty. */
+export const DEFAULT_VARIANT: DraftVariant = {
+  name: "לבן",
+  swatch: "#FFFFFF",
+  image_url: null,
 };
 
 /**
- * The finishes for one product — the feature the client described as
- * "different photos of the furniture that toggle when the customer changes
- * colour".
+ * The colours of one piece of furniture.
  *
- * Each row is a colour: a name, the dot the visitor clicks, and the photograph
- * of this product in that finish. Selecting the swatch on the product page
- * swaps the lead image to this one.
+ * Controlled: it holds nothing of its own and writes nothing on its own. The
+ * product form owns the list and saves it alongside everything else.
  *
- * Rows save themselves as you go rather than joining the parent form's save,
- * because they belong to a different table and a half-saved product with
- * orphaned finishes is worse than a couple of extra round trips.
+ * That is the whole point. These rows used to write themselves to the database
+ * as you clicked, which meant a product had to exist before it could have any
+ * colours — so adding furniture was two jobs with a "save this first" message
+ * between them. Now it is one form: name it, photograph it, give it its
+ * colours, save once.
  */
-const ProductFinishes = ({ productId }: { productId: string }) => {
-  const [variants, setVariants] = useState<Variant[]>([]);
-  const [busy, setBusy] = useState(false);
+const ProductFinishes = ({
+  value,
+  onChange,
+}: {
+  value: DraftVariant[];
+  onChange: (next: DraftVariant[]) => void;
+}) => {
+  const [uploading, setUploading] = useState<number | null>(null);
 
-  const load = async () => {
-    const { data } = await supabase
-      .from("product_variants")
-      .select("id, name, swatch, image_url, sort_order")
-      .eq("product_id", productId)
-      .order("sort_order", { ascending: true });
-    setVariants((data as Variant[]) ?? []);
-  };
+  const patch = (i: number, changes: Partial<DraftVariant>) =>
+    onChange(value.map((v, n) => (n === i ? { ...v, ...changes } : v)));
 
-  useEffect(() => {
-    if (productId) load();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [productId]);
+  const add = () => onChange([...value, { name: "", swatch: "#cbbba4", image_url: null }]);
 
-  const add = async () => {
-    setBusy(true);
-    const { error } = await supabase.from("product_variants").insert({
-      product_id: productId,
-      name: "גימור חדש",
-      swatch: "#cbbba4",
-      sort_order: (variants.at(-1)?.sort_order ?? 0) + 10,
-    });
-    setBusy(false);
-    if (error) return toast.error("לא הצלחנו להוסיף גימור");
-    load();
-  };
+  const remove = (i: number) => onChange(value.filter((_, n) => n !== i));
 
-  const patch = (id: string, changes: Partial<Variant>) =>
-    setVariants((list) => list.map((v) => (v.id === id ? { ...v, ...changes } : v)));
-
-  const save = async (v: Variant) => {
-    setBusy(true);
-    const { error } = await supabase
-      .from("product_variants")
-      .update({
-        name: v.name,
-        swatch: v.swatch,
-        image_url: v.image_url,
-        sort_order: v.sort_order,
-      })
-      .eq("id", v.id);
-    setBusy(false);
-    if (error) return toast.error("השמירה נכשלה");
-    toast.success("הגימור נשמר");
-  };
-
-  const remove = async (id: string) => {
-    if (!confirm("למחוק את הגימור?")) return;
-    const { error } = await supabase.from("product_variants").delete().eq("id", id);
-    if (error) return toast.error("המחיקה נכשלה");
-    setVariants((list) => list.filter((v) => v.id !== id));
-  };
-
-  const upload = async (v: Variant, file: File) => {
-    setBusy(true);
+  const upload = async (i: number, file: File) => {
+    setUploading(i);
     try {
       const { url } = await uploadFile("site-collections", file);
-      patch(v.id, { image_url: url });
-      await supabase.from("product_variants").update({ image_url: url }).eq("id", v.id);
-      toast.success("התמונה הועלתה");
+      patch(i, { image_url: url });
     } catch {
       toast.error("העלאת התמונה נכשלה");
     } finally {
-      setBusy(false);
+      setUploading(null);
     }
   };
 
   return (
     <div>
-      <div className="flex items-center justify-between">
-        <Label>גימורים</Label>
-        <Button type="button" size="sm" variant="outline" onClick={add} disabled={busy}>
-          <Plus className="w-4 h-4 ms-1" /> גימור חדש
+      <div className="flex items-center justify-between gap-4">
+        <Label>צבעים</Label>
+        <Button type="button" size="sm" variant="outline" onClick={add}>
+          <Plus className="w-4 h-4 ms-1" /> צבע נוסף
         </Button>
       </div>
-      <p className="mt-1 text-xs text-muted-foreground">
-        כל גימור מופיע כעיגול צבע בעמוד המוצר. לחיצה עליו מחליפה את תמונת המוצר.
+
+      <p className="mt-1 text-sm text-muted-foreground">
+        כל צבע הוא עיגול בעמוד המוצר. לוחצים עליו — התמונה מתחלפת לצבע הזה.
       </p>
 
       <div className="mt-3">
         <PhotoSpec spec="finish" />
       </div>
 
-      <div className="mt-3 space-y-3">
-        {variants.length === 0 && (
-          <p className="text-xs text-muted-foreground">אין גימורים למוצר הזה.</p>
-        )}
-
-        {variants.map((v) => (
-          <div key={v.id} className="flex flex-wrap items-center gap-2 border border-border rounded p-2">
-            <div className="relative w-14 h-14 shrink-0">
-              {v.image_url ? (
-                <img src={v.image_url} alt="" className="w-full h-full object-cover rounded" />
-              ) : (
-                <label className="w-full h-full border-2 border-dashed border-border rounded flex items-center justify-center cursor-pointer hover:bg-muted">
-                  <Upload className="w-4 h-4 text-muted-foreground" />
-                  <input
-                    type="file"
-                    accept="image/*"
-                    className="hidden"
-                    onChange={(e) => e.target.files?.[0] && upload(v, e.target.files[0])}
-                  />
-                </label>
-              )}
-              {v.image_url && (
-                <button
-                  type="button"
-                  onClick={() => patch(v.id, { image_url: null })}
-                  className="absolute top-0 left-0 bg-destructive text-destructive-foreground rounded-sm p-0.5"
-                  aria-label="הסרת תמונה"
-                >
-                  <X className="w-3 h-3" />
-                </button>
-              )}
-            </div>
-
-            <Input
-              value={v.name}
-              onChange={(e) => patch(v.id, { name: e.target.value })}
-              className="w-32"
-              aria-label="שם הגימור"
-            />
-            <input
-              type="color"
-              value={v.swatch ?? "#cbbba4"}
-              onChange={(e) => patch(v.id, { swatch: e.target.value })}
-              className="h-9 w-12 rounded border border-border bg-background"
-              aria-label="צבע העיגול"
-            />
-            <Input
-              type="number"
-              value={v.sort_order}
-              onChange={(e) => patch(v.id, { sort_order: Number(e.target.value) })}
-              className="w-20"
-              aria-label="סדר"
-            />
-            <Button type="button" size="sm" onClick={() => save(v)} disabled={busy}>
-              שמירה
-            </Button>
-            <Button
-              type="button"
-              size="sm"
-              variant="ghost"
-              className="text-destructive"
-              onClick={() => remove(v.id)}
+      {value.length === 0 ? (
+        <p className="rounded-sm border border-dashed border-border px-4 py-6 text-center text-sm text-muted-foreground">
+          אין צבעים למוצר הזה. אפשר להשאיר ככה — אז פשוט לא יופיעו עיגולי צבע.
+        </p>
+      ) : (
+        <ul className="space-y-3">
+          {value.map((v, i) => (
+            <li
+              key={i}
+              className="flex flex-wrap items-center gap-3 rounded-sm border border-border p-3"
             >
-              <X className="w-4 h-4" />
-            </Button>
-          </div>
-        ))}
-      </div>
+              <input
+                type="color"
+                value={v.swatch}
+                onChange={(e) => patch(i, { swatch: e.target.value })}
+                aria-label={`הגוון של ${v.name || "הצבע"}`}
+                className="h-10 w-10 shrink-0 cursor-pointer rounded-sm border border-border bg-transparent p-1"
+              />
+
+              <Input
+                value={v.name}
+                dir={contentDirection(v.name)}
+                onChange={(e) => patch(i, { name: e.target.value })}
+                placeholder="שם הצבע, למשל: חול"
+                aria-label="שם הצבע"
+                className="h-10 min-w-[9rem] flex-1"
+              />
+
+              {v.image_url && (
+                <img
+                  src={v.image_url}
+                  alt=""
+                  className="h-10 w-10 shrink-0 rounded-sm object-cover"
+                />
+              )}
+
+              <label className="inline-flex h-10 shrink-0 cursor-pointer items-center gap-2 rounded-sm border border-border px-3 text-sm hover:bg-secondary">
+                <Upload className="h-4 w-4" />
+                {uploading === i ? "מעלה…" : v.image_url ? "החלפת תמונה" : "תמונה בצבע הזה"}
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={(e) => e.target.files?.[0] && upload(i, e.target.files[0])}
+                />
+              </label>
+
+              <Button
+                type="button"
+                size="icon"
+                variant="ghost"
+                onClick={() => remove(i)}
+                aria-label={`מחיקת ${v.name || "הצבע"}`}
+                className="shrink-0 text-muted-foreground hover:text-destructive"
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 };

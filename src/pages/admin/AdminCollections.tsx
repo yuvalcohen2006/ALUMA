@@ -48,7 +48,8 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { uploadFile } from "@/lib/admin-storage";
-import ProductFinishes from "./ProductFinishes";
+import ProductFinishes, { DEFAULT_VARIANT } from "./ProductFinishes";
+import { planVariantSync, type DraftVariant } from "@/lib/variant-sync";
 import PhotoSpec from "@/components/admin/PhotoSpec";
 
 type Collection = {
@@ -332,6 +333,10 @@ const AdminCollections = () => {
 
   const [editCol, setEditCol] = useState<Partial<Collection> | null>(null);
   const [editProd, setEditProd] = useState<Partial<Product> | null>(null);
+  // The colours of the product being edited, and what they looked like when
+  // the dialog opened — the difference is what gets written on save.
+  const [variants, setVariants] = useState<DraftVariant[]>([]);
+  const [savedVariants, setSavedVariants] = useState<(DraftVariant & { id: string })[]>([]);
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
 
@@ -466,14 +471,87 @@ const AdminCollections = () => {
       sort_order: nextSort,
       published: editProd.published ?? true,
     };
-    const { error } = editProd.id
-      ? await supabase.from("site_collection_products").update(payload).eq("id", editProd.id)
-      : await supabase.from("site_collection_products").insert(payload);
+    // The product row first: a colour needs something to belong to, and this
+    // is what lets the form offer colours before the product exists.
+    let productId = editProd.id as string | undefined;
+    if (productId) {
+      const { error } = await supabase
+        .from("site_collection_products")
+        .update(payload)
+        .eq("id", productId);
+      if (error) {
+        setSaving(false);
+        return toast.error(error.message);
+      }
+    } else {
+      const { data, error } = await supabase
+        .from("site_collection_products")
+        .insert(payload)
+        .select("id")
+        .single();
+      if (error || !data) {
+        setSaving(false);
+        return toast.error(error?.message ?? "השמירה נכשלה");
+      }
+      productId = data.id;
+    }
+
+    const plan = planVariantSync(savedVariants, variants, productId);
+    const results = await Promise.all([
+      plan.inserts.length
+        ? supabase.from("product_variants").insert(plan.inserts)
+        : Promise.resolve({ error: null }),
+      ...plan.updates.map((u) =>
+        supabase
+          .from("product_variants")
+          .update({
+            name: u.name,
+            swatch: u.swatch,
+            image_url: u.image_url,
+            sort_order: u.sort_order,
+          })
+          .eq("id", u.id),
+      ),
+      plan.deletes.length
+        ? supabase.from("product_variants").delete().in("id", plan.deletes)
+        : Promise.resolve({ error: null }),
+    ]);
+
     setSaving(false);
-    if (error) return toast.error(error.message);
+    const failed = results.find((r) => r.error);
+    if (failed) {
+      // The product itself is saved; say so, or they will save it twice.
+      return toast.error("המוצר נשמר, אבל חלק מהצבעים לא. נסו לשמור שוב.");
+    }
     toast.success("נשמר");
     setEditProd(null);
+    setVariants([]);
+    setSavedVariants([]);
     load();
+  };
+
+  /** Open the product form, with its colours already loaded. */
+  const openProduct = async (product: Partial<Product>) => {
+    setEditProd(product);
+    if (!product.id) {
+      // A new piece starts with one colour so the list is never an empty box.
+      setVariants([{ ...DEFAULT_VARIANT }]);
+      setSavedVariants([]);
+      return;
+    }
+    const { data } = await supabase
+      .from("product_variants")
+      .select("id, name, swatch, image_url")
+      .eq("product_id", product.id)
+      .order("sort_order", { ascending: true });
+    const rows = (data ?? []).map((v) => ({
+      id: v.id,
+      name: v.name,
+      swatch: v.swatch ?? "#cbbba4",
+      image_url: v.image_url,
+    }));
+    setSavedVariants(rows);
+    setVariants(rows.map((r) => ({ ...r })));
   };
 
   const deleteProduct = async (id: string) => {
@@ -575,7 +653,7 @@ const AdminCollections = () => {
                             size="sm"
                             variant="outline"
                             onClick={() =>
-                              setEditProd({ ...emptyProduct, collection_id: c.id })
+                              openProduct({ ...emptyProduct, collection_id: c.id })
                             }
                           >
                             <Plus className="w-4 h-4 ml-1" />
@@ -601,7 +679,7 @@ const AdminCollections = () => {
                                   <SortableProductRow
                                     key={p.id}
                                     product={p}
-                                    onEdit={() => setEditProd(p)}
+                                    onEdit={() => openProduct(p)}
                                     onDelete={() => deleteProduct(p.id)}
                                   />
                                 ))}
@@ -699,7 +777,15 @@ const AdminCollections = () => {
       </Dialog>
 
       {/* ===== PRODUCT DIALOG ===== */}
-      <Dialog open={!!editProd} onOpenChange={(o) => !o && setEditProd(null)}>
+      <Dialog
+        open={!!editProd}
+        onOpenChange={(o) => {
+          if (o) return;
+          setEditProd(null);
+          setVariants([]);
+          setSavedVariants([]);
+        }}
+      >
         <DialogContent className="max-w-2xl max-h-[90vh] overflow-auto" dir="rtl">
           <DialogHeader>
             <DialogTitle>{editProd?.id ? "עריכת מוצר" : "מוצר חדש"}</DialogTitle>
@@ -896,13 +982,7 @@ const AdminCollections = () => {
 
               {/* Finishes live in their own table keyed by product_id, so they
                   can only be attached once the product row exists. */}
-              {editProd.id ? (
-                <ProductFinishes productId={editProd.id as string} />
-              ) : (
-                <p className="text-xs text-muted-foreground">
-                  שמרו את המוצר כדי להוסיף לו גימורים וצבעים.
-                </p>
-              )}
+              <ProductFinishes value={variants} onChange={setVariants} />
 
               <div className="flex items-center gap-2">
                 <Switch
