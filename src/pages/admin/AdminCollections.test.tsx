@@ -35,9 +35,9 @@ const renderScreen = () =>
 describe("collections and products", () => {
   it("opens the new-collection dialog instead of taking the panel down", async () => {
     renderScreen();
-    await waitFor(() => expect(screen.getByRole("button", { name: /קולקציה חדשה/ })).toBeTruthy());
+    await waitFor(() => expect(screen.getByRole("button", { name: /הקולקציה הראשונה/ })).toBeTruthy());
 
-    await userEvent.setup().click(screen.getByRole("button", { name: /קולקציה חדשה/ }));
+    await userEvent.setup().click(screen.getByRole("button", { name: /הקולקציה הראשונה/ }));
 
     expect(await screen.findByRole("dialog")).toBeTruthy();
     expect(screen.getByLabelText(/שם הקולקציה/)).toBeTruthy();
@@ -45,12 +45,12 @@ describe("collections and products", () => {
 
   it("does not ask about product finishes while creating a collection", async () => {
     renderScreen();
-    await waitFor(() => expect(screen.getByRole("button", { name: /קולקציה חדשה/ })).toBeTruthy());
-    await userEvent.setup().click(screen.getByRole("button", { name: /קולקציה חדשה/ }));
+    await waitFor(() => expect(screen.getByRole("button", { name: /הקולקציה הראשונה/ })).toBeTruthy());
+    await userEvent.setup().click(screen.getByRole("button", { name: /הקולקציה הראשונה/ }));
 
     const dialog = await screen.findByRole("dialog");
     // Colours belong to a product. A collection has none, and offering them
     // here is what dragged the null product into this dialog.
-    expect(dialog.textContent).not.toMatch(/גימור/);
+    expect(dialog.textContent).not.toMatch(/גימור|צבע/);
   });
 });

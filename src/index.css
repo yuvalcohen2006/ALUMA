@@ -52,9 +52,9 @@
        The CMS is a tool, not the brand. The site's warm sand background is
        right for furniture photography and wrong for a person reading forms all
        morning: it tints every white photograph they upload and makes it hard
-       to judge a cut-out. So the panel gets a pure white ground, the same
-       charcoal ink, neutral greys with no warm cast, and dark walnut instead
-       of terracotta for the few things that need emphasis.
+       to judge a cut-out. So the panel is pure white and charcoal and nothing
+       else — no terracotta, no wood, no third hue. Emphasis is carried by the
+       ink itself, which is the only way a two-colour interface can carry it.
 
        Scoped to a class rather than a media query or a route check, so the
        public site is untouched and the two can never drift into each other. */
@@ -71,8 +71,8 @@
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 16%;
 
-    /* Dark walnut. Used sparingly: the active nav item, a primary button. */
-    --primary: 24 24% 25%;
+    /* Charcoal. The only ink, doing the work a colour would otherwise do. */
+    --primary: 0 0% 16%;
     --primary-foreground: 0 0% 100%;
 
     /* The faintest neutral panel — separation without a colour cast. */
@@ -82,12 +82,12 @@
     --muted: 0 0% 96%;
     --muted-foreground: 0 0% 42%;
 
-    --accent: 24 26% 32%;
+    --accent: 0 0% 28%;
     --accent-foreground: 0 0% 100%;
 
     --border: 0 0% 90%;
     --input: 0 0% 88%;
-    --ring: 24 24% 25%;
+    --ring: 0 0% 16%;
   }
 
   :root {

@@ -264,9 +264,7 @@ const AdminProductEdit = () => {
           {/* ── What the product is ─────────────────────────────────── */}
           <div className="space-y-8 lg:col-span-2">
             <section className="rounded-sm border border-border bg-card p-6">
-              <h2 className="text-base font-medium text-foreground">שם ותיאור</h2>
-
-              <div className="mt-5 space-y-5">
+              <div className="space-y-5">
                 <div>
                   <Label htmlFor="p-name">שם המוצר</Label>
                   <Input
@@ -285,9 +283,6 @@ const AdminProductEdit = () => {
                     value={product.tagline ?? ""}
                     onChange={(e) => patch({ tagline: e.target.value })}
                   />
-                  <p className="mt-1 text-sm text-muted-foreground">
-                    שורה אחת שמופיעה מתחת לשם.
-                  </p>
                 </div>
 
                 <div>
@@ -305,16 +300,12 @@ const AdminProductEdit = () => {
                       })
                     }
                   />
-                  <p className="mt-1 text-sm text-muted-foreground">
-                    שורה ריקה בין פסקאות.
-                  </p>
                 </div>
               </div>
             </section>
 
             <section className="rounded-sm border border-border bg-card p-6">
-              <h2 className="text-base font-medium text-foreground">תמונות</h2>
-              <div className="mt-4">
+              <div>
                 <PhotoSpec spec="product" />
               </div>
 
@@ -346,9 +337,6 @@ const AdminProductEdit = () => {
                 </div>
 
                 <div className="min-w-[12rem] flex-1">
-                  <p className="text-sm text-muted-foreground">
-                    תמונות נוספות — מופיעות בגלריה של עמוד המוצר.
-                  </p>
                   <ul className="mt-3 flex flex-wrap gap-2">
                     {gallery.map((g, i) => (
                       <li key={g} className="relative">
@@ -391,8 +379,7 @@ const AdminProductEdit = () => {
             </section>
 
             <section className="rounded-sm border border-border bg-card p-6">
-              <h2 className="text-base font-medium text-foreground">פרטים</h2>
-              <div className="mt-5 space-y-5">
+              <div className="space-y-5">
                 <div>
                   <Label>חומרים</Label>
                   <BufferedTextarea
@@ -408,7 +395,6 @@ const AdminProductEdit = () => {
                       })
                     }
                   />
-                  <p className="mt-1 text-sm text-muted-foreground">חומר אחד בכל שורה.</p>
                 </div>
 
                 <div>
@@ -458,9 +444,7 @@ const AdminProductEdit = () => {
           {/* ── What is true about it ───────────────────────────────── */}
           <aside className="space-y-6">
             <section className="rounded-sm border border-border bg-card p-6">
-              <h2 className="text-base font-medium text-foreground">סטטוס</h2>
-
-              <div className="mt-4 flex items-center gap-3">
+              <div className="flex items-center gap-3">
                 <Switch
                   id="p-published"
                   checked={product.published ?? true}
@@ -470,13 +454,9 @@ const AdminProductEdit = () => {
                   {product.published ?? true ? "מופיע באתר" : "מוסתר"}
                 </Label>
               </div>
-              <p className="mt-2 text-sm text-muted-foreground">
-                כבוי = נשמר אצלכם, לא מופיע ללקוחות.
-              </p>
             </section>
 
             <section className="rounded-sm border border-border bg-card p-6">
-              <h2 className="text-base font-medium text-foreground">קולקציה</h2>
               <select
                 value={product.collection_id ?? ""}
                 onChange={(e) => patch({ collection_id: e.target.value })}
@@ -493,11 +473,7 @@ const AdminProductEdit = () => {
 
             {!isNew && (
               <section className="rounded-sm border border-destructive/30 bg-card p-6">
-                <h2 className="text-base font-medium text-foreground">מחיקה</h2>
-                <p className="mt-2 text-sm text-muted-foreground">
-                  אם רק לא רוצים שיופיע — כבו את הסטטוס למעלה במקום למחוק.
-                </p>
-                <Button variant="outline" onClick={remove} className="mt-4 w-full">
+                <Button variant="outline" onClick={remove} className="w-full">
                   <Trash2 className="ms-2 h-4 w-4" />
                   מחיקת המוצר
                 </Button>
