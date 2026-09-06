@@ -286,8 +286,9 @@ const AdminProductEdit = () => {
                 </div>
 
                 <div>
-                  <Label>על המוצר</Label>
+                  <Label htmlFor="p-about">על המוצר</Label>
                   <BufferedTextarea
+                    id="p-about"
                     rows={5}
                     initial={((product.description as string[]) ?? []).join("\n\n")}
                     placeholder={"פסקה ראשונה…\n\nפסקה שנייה…"}
@@ -381,8 +382,9 @@ const AdminProductEdit = () => {
             <section className="rounded-sm border border-border bg-card p-6">
               <div className="space-y-5">
                 <div>
-                  <Label>חומרים</Label>
+                  <Label htmlFor="p-materials">חומרים</Label>
                   <BufferedTextarea
+                    id="p-materials"
                     rows={3}
                     initial={((product.materials as string[]) ?? []).join("\n")}
                     placeholder={"אלומיניום\nבד Sunbrella"}
@@ -398,8 +400,9 @@ const AdminProductEdit = () => {
                 </div>
 
                 <div>
-                  <Label>מידות</Label>
+                  <Label htmlFor="p-dims">מידות</Label>
                   <BufferedInput
+                    id="p-dims"
                     initial={product.dimensions ?? ""}
                     placeholder="אורך 240 ס״מ · עומק 92 ס״מ"
                     onCommit={(v) => patch({ dimensions: v })}

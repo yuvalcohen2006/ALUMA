@@ -31,11 +31,14 @@ export type Product = {
 
 
 export function BufferedTextarea({
+  id,
   initial,
   onCommit,
   rows = 4,
   placeholder,
 }: {
+  /** So a <Label htmlFor> can actually reach it. */
+  id?: string;
   initial: string;
   onCommit: (raw: string) => void;
   rows?: number;
@@ -51,6 +54,7 @@ export function BufferedTextarea({
   }, [initial]);
   return (
     <Textarea
+      id={id}
       rows={rows}
       value={val}
       placeholder={placeholder}
@@ -61,10 +65,12 @@ export function BufferedTextarea({
 }
 
 export function BufferedInput({
+  id,
   initial,
   onCommit,
   placeholder,
 }: {
+  id?: string;
   initial: string;
   onCommit: (raw: string) => void;
   placeholder?: string;
@@ -79,6 +85,7 @@ export function BufferedInput({
   }, [initial]);
   return (
     <Input
+      id={id}
       value={val}
       placeholder={placeholder}
       onChange={(e) => setVal(e.target.value)}

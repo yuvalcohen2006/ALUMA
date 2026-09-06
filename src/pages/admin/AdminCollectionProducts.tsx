@@ -66,7 +66,7 @@ function ProductRow({
         {...attributes}
         {...listeners}
         aria-label={`שינוי הסדר של ${p.name}`}
-        className="relative z-10 shrink-0 cursor-grab touch-none rounded-sm p-1 text-muted-foreground/50 transition-colors hover:text-foreground active:cursor-grabbing"
+        className="relative z-10 grid h-11 w-8 shrink-0 cursor-grab touch-none place-items-center rounded-sm text-muted-foreground/50 transition-colors hover:text-foreground active:cursor-grabbing"
       >
         <GripVertical className="h-4 w-4" />
       </button>
@@ -99,7 +99,7 @@ function ProductRow({
         <Link
           to={`/admin/products/${p.id}`}
           aria-label={`עריכת ${p.name}`}
-          className="grid h-9 w-9 place-items-center rounded-sm text-muted-foreground transition-colors hover:bg-foreground hover:text-background focus-visible:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+          className="grid h-11 w-11 place-items-center rounded-sm text-muted-foreground transition-colors hover:bg-foreground hover:text-background focus-visible:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
         >
           <Pencil className="h-4 w-4" />
         </Link>
@@ -107,7 +107,7 @@ function ProductRow({
           type="button"
           onClick={onDelete}
           aria-label={`מחיקת ${p.name}`}
-          className="grid h-9 w-9 place-items-center rounded-sm text-muted-foreground transition-colors hover:bg-destructive hover:text-destructive-foreground focus-visible:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+          className="grid h-11 w-11 place-items-center rounded-sm text-muted-foreground transition-colors hover:bg-destructive hover:text-destructive-foreground focus-visible:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
         >
           <Trash2 className="h-4 w-4" />
         </button>

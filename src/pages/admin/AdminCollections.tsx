@@ -241,7 +241,7 @@ function SortableCollectionCard({
         {...attributes}
         {...listeners}
         aria-label={`שינוי הסדר של ${c.name_he}`}
-        className="relative z-10 shrink-0 cursor-grab touch-none rounded-sm p-1 text-muted-foreground/50 transition-colors hover:text-foreground active:cursor-grabbing"
+        className="relative z-10 grid h-11 w-8 shrink-0 cursor-grab touch-none place-items-center rounded-sm text-muted-foreground/50 transition-colors hover:text-foreground active:cursor-grabbing"
       >
         <GripVertical className="h-4 w-4" />
       </button>
@@ -278,7 +278,7 @@ function SortableCollectionCard({
           type="button"
           onClick={onEdit}
           aria-label={`עריכת ${c.name_he}`}
-          className="grid h-9 w-9 place-items-center rounded-sm text-muted-foreground transition-colors hover:bg-foreground hover:text-background focus-visible:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+          className="grid h-11 w-11 place-items-center rounded-sm text-muted-foreground transition-colors hover:bg-foreground hover:text-background focus-visible:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
         >
           <Pencil className="h-4 w-4" />
         </button>
@@ -286,7 +286,7 @@ function SortableCollectionCard({
           type="button"
           onClick={onDelete}
           aria-label={`מחיקת ${c.name_he}`}
-          className="grid h-9 w-9 place-items-center rounded-sm text-muted-foreground transition-colors hover:bg-destructive hover:text-destructive-foreground focus-visible:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+          className="grid h-11 w-11 place-items-center rounded-sm text-muted-foreground transition-colors hover:bg-destructive hover:text-destructive-foreground focus-visible:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
         >
           <Trash2 className="h-4 w-4" />
         </button>
@@ -320,7 +320,7 @@ function SortableProductRow({
       <button
         {...attributes}
         {...listeners}
-        className="cursor-grab active:cursor-grabbing p-1.5 text-muted-foreground hover:text-primary touch-none"
+        className="grid h-11 w-8 shrink-0 cursor-grab touch-none place-items-center rounded-sm text-muted-foreground/50 transition-colors hover:text-foreground active:cursor-grabbing"
         aria-label="גרור לסידור מחדש"
       >
         <GripVertical className="w-4 h-4" />
@@ -568,7 +568,7 @@ const AdminCollections = () => {
                 />
               </div>
               <div>
-                <Label>תמונת קולקציה</Label>
+                <Label htmlFor="col-cover">תמונת קולקציה</Label>
                 <div className="mt-2">
                   <PhotoSpec spec="collection" />
                 </div>
