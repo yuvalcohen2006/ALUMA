@@ -36,3 +36,7 @@ supabase/.temp/
 
 # Scratch space for local diagnostics
 .tmp/
+
+# Scratch probes written by audit agents
+src/**/__tmp_*
+src/**/__audit_*
