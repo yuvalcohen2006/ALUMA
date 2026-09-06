@@ -33,3 +33,6 @@ dist-ssr
 
 # Supabase CLI local state (project ref, pooler connection string)
 supabase/.temp/
+
+# Scratch space for local diagnostics
+.tmp/

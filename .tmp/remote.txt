@@ -1,6 +1,0 @@
-charts-DAqa8D6U.js
-index-C6GDhr3K.js
-query-Yhi1Qszl.js
-react-vendor-C_EHGOx3.js
-router-BNNtotXt.js
-supabase-Bcw6FzAw.js
