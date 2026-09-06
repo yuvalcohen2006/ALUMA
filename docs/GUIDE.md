@@ -12,7 +12,7 @@ Checked against the live site and the live database on 6 September.
 | Contact-form emails | ✅ arriving |
 | Sign-in on the real domain | ⚠️ **Job 1 — 2 minutes** |
 | Projects, reviews, colours | ⚠️ **Job 2 — still empty** |
-| Email from the real domain | 🔜 Job 3, optional |
+| Email from the real domain | ⚠️ **Job 3 — setting up fresh** |
 
 ---
 ---
@@ -96,22 +96,111 @@ against real content.
 ---
 ---
 
-# JOB 3 — Email from your own domain (optional, 10 minutes)
+# JOB 3 — Email from your own domain
 
-Contact-form messages already reach **outdooraluma@gmail.com**. This only
-changes who they appear to come *from*, so it can wait.
+Written against Resend's current documentation, September 2026. Their setup
+changed this year, so anything you read elsewhere may be out of date.
 
-1. **resend.com** → **Domains** → **Add Domain**.
-2. Enter **`notify.alumaoutdoor.com`**. The `notify.` prefix matters — mail on
-   a subdomain means a future spam problem can never damage the main domain.
-3. Resend shows DNS records. Add each at **namecheap.com** → **Domain List**
-   → **MANAGE** → **Advanced DNS**.
-   - Namecheap's **Host** field wants only the part *before*
-     `.alumaoutdoor.com`. If Resend says `send.notify.alumaoutdoor.com`, type
-     `send.notify`.
-4. Back in Resend, click **Verify**.
+**Start fresh.** Delete the old Resend account or just ignore it — you will
+create a new API key at the end either way, and the old one stops working the
+moment we swap it.
 
-**✅ Tell me "Resend verified" and I will switch the sender over.**
+## Before you start — one thing to know
+
+Until the domain is verified, Resend is in **test mode** and delivers **only to
+the address you signed up with**. So if you register with your personal email,
+test sends land there, not in the studio inbox. That restriction disappears the
+moment the domain verifies — so signing up personally is fine, it just means
+the halfway point looks odd.
+
+Where the site's own messages land is a separate setting (`OWNER_EMAIL` in
+Supabase, currently outdooraluma@gmail.com) and it does not change.
+
+---
+
+## Step A — the account (2 minutes)
+
+1. Go to **resend.com** → **Sign Up**.
+2. Use whichever email you like. Verify it when they email you.
+
+## Step B — add the domain (5 minutes)
+
+1. In the left menu click **Domains**, then **Add Domain**.
+2. Type the subdomain — **not** the bare domain:
+
+   ```
+   notify.alumaoutdoor.com
+   ```
+
+   Resend's own recommendation: *"We recommend sending your emails from one or
+   more subdomains instead of your root domain to isolate your sending
+   reputation."* If our mail ever gets marked as spam, it can never damage
+   alumaoutdoor.com itself.
+3. It asks for a **region**. Choose the one closest to your customers —
+   **eu-west-1 (Ireland)** for Israel.
+4. If it offers a **custom Return-Path**, skip it. The default is fine.
+5. Click **Add**.
+
+You now get a table of DNS records. **Leave this tab open.**
+
+## Step C — put those records into Namecheap (10 minutes)
+
+⚠️ **Copy and paste every value.** Resend's most common support case is a DKIM
+key typed by hand with a character missing.
+
+1. New tab → **namecheap.com** → **Domain List** → **MANAGE** next to
+   alumaoutdoor.com → the **Advanced DNS** tab.
+2. For each row Resend shows, click **ADD NEW RECORD**.
+
+**The one thing Namecheap does differently:** the **Host** field wants only the
+part *before* `.alumaoutdoor.com`. Resend shows the whole name; you type the
+front of it.
+
+| Resend shows | You type in Host |
+|---|---|
+| `notify.alumaoutdoor.com` | `notify` |
+| `send.notify.alumaoutdoor.com` | `send.notify` |
+| `resend._domainkey.alumaoutdoor.com` | `resend._domainkey` |
+
+You will get two or three records. Which ones depends on when the domain was
+created — newer domains get **CNAME** records, older ones get **TXT and MX**.
+Add whatever Resend actually shows you.
+
+**If one of them is an MX record**, Namecheap has a gotcha: the **priority**
+column has no label. It is the empty box after Value. Put **10** in it.
+
+Set **TTL** to **Automatic** on every record, and click the **green tick** to
+save each one.
+
+## Step D — verify
+
+1. Back in Resend, click **Verify**.
+2. Their stated timing: *"often verify within 15 minutes"*, and DNS *"can
+   occasionally take up to 72 hours"*. If it fails, wait and press **Restart
+   verification** — it is almost always propagation, not a mistake.
+
+## Step E — the key
+
+Only once the domain shows **Verified**:
+
+1. Left menu → **API Keys** → **Create API Key**.
+2. **Name:** `aluma`. **Permission:** **Sending access**.
+3. Click **Add**. Copy the `re_...` code immediately — Resend shows it once.
+
+**✅ Send me the `re_...` key and I will swap it in.**
+
+## Step F — DMARC, after it all works
+
+Not required for verification, and not urgent. Once mail is flowing, add one
+more TXT record at Namecheap:
+
+- **Host:** `_dmarc`
+- **Value:** `v=DMARC1; p=none; rua=mailto:outdooraluma@gmail.com;`
+
+`p=none` only watches and reports. Resend: *"It's a best practice to use
+quarantine or reject, but only do this once you know your messages are
+delivering."* Tell me when it has been running a couple of weeks and we can
+tighten it.
 
 ---
 ---
@@ -148,7 +237,8 @@ Windows; click once and press **Cmd+I** on a Mac. Look for "Dimensions".
 JOB 1  Supabase Site URL updated?     yes / no
 JOB 2  Projects added?                yes / not yet
 JOB 2  Colours on any product?        yes / not yet
-JOB 3  notify. subdomain verified?    yes / not yet / skipping
+JOB 3  Resend domain verified?        yes / not yet
+JOB 3  New API key:                   re_...
 ```
 
 **Never send me** the Supabase `service_role` key or any database password.
