@@ -123,7 +123,7 @@ const AdminOrders = () => {
     <AdminLayout>
       <header className="flex items-center justify-between flex-wrap gap-4 mb-8">
         <div>
-          <p className="text-[10px] tracking-[0.3em] text-foreground uppercase mb-1">Orders</p>
+          <p className="text-xs tracking-[0.3em] text-foreground uppercase mb-1">Orders</p>
           <h1 className="font-display text-3xl">הזמנות לקוחות</h1>
           <p className="text-sm text-muted-foreground mt-1">כאן הלקוח רואה את סטטוס ההזמנה שלו באזור האישי</p>
         </div>

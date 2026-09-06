@@ -73,9 +73,9 @@ function ProductRow({
       </button>
 
       {p.cover_url ? (
-        <img src={p.cover_url} alt="" className="h-14 w-14 shrink-0 rounded-sm object-cover" />
+        <img src={p.cover_url} alt="" className="h-[60px] w-[60px] shrink-0 rounded-sm bg-secondary object-contain" />
       ) : (
-        <div className="grid h-14 w-14 shrink-0 place-items-center rounded-sm bg-secondary">
+        <div className="grid h-[60px] w-[60px] shrink-0 place-items-center rounded-sm bg-secondary">
           <Package className="h-4 w-4 text-muted-foreground" />
         </div>
       )}

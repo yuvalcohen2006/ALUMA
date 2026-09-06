@@ -158,7 +158,7 @@ const AdminLayout = ({ children }: { children: ReactNode }) => {
         <Icon className={mobile ? "w-3.5 h-3.5" : "w-4 h-4 shrink-0"} />
         <span>{item.label}</span>
         <span
-          className={`mr-auto inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-sm text-[10px] font-semibold bg-accent text-accent-foreground transition-opacity ${
+          className={`mr-auto inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-sm text-xs font-semibold bg-accent text-accent-foreground transition-opacity ${
             showBadge ? "opacity-100" : "opacity-0"
           } ${mobile ? "ml-1" : ""}`}
           aria-label={`${newLeads} פניות חדשות`}
@@ -179,7 +179,7 @@ const AdminLayout = ({ children }: { children: ReactNode }) => {
         {/* Sidebar */}
         <aside className="hidden md:flex w-64 shrink-0 flex-col border-l border-border bg-secondary">
           <div className="px-6 py-6 border-b border-border">
-            <p className="text-[10px] tracking-[0.3em] text-muted-foreground uppercase">Aluma</p>
+            <p className="text-xs tracking-[0.3em] text-muted-foreground uppercase">Aluma</p>
             <h2 className="mt-1 font-display text-xl text-foreground">ניהול האתר</h2>
           </div>
 
@@ -187,7 +187,7 @@ const AdminLayout = ({ children }: { children: ReactNode }) => {
             {navGroups.map((group, i) => (
               <div key={group.label ?? "top"} className={i > 0 ? "mt-6" : ""}>
                 {group.label && (
-                  <h3 className="px-3 pb-2 text-[11px] font-medium tracking-wide text-muted-foreground/70">
+                  <h3 className="px-3 pb-2 text-xs font-medium tracking-wide text-muted-foreground/70">
                     {group.label}
                   </h3>
                 )}
@@ -199,7 +199,7 @@ const AdminLayout = ({ children }: { children: ReactNode }) => {
           <div className="border-t border-border px-3 py-4">
             {user?.email && (
               <div className="px-3 pb-3">
-                <p className="text-[11px] text-muted-foreground">מחוברים בתור</p>
+                <p className="text-xs text-muted-foreground">מחוברים בתור</p>
                 <p className="truncate text-[13px] text-foreground" dir="ltr" title={user.email}>
                   {user.email}
                 </p>

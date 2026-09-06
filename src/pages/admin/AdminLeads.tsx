@@ -81,14 +81,14 @@ const AdminLeads = () => {
                   <tbody>
                     {leads.map((l) => (
                       <tr key={l.id} className="border-t border-border">
-                        <td className="p-3 whitespace-nowrap text-xs text-muted-foreground">
+                        <td className="p-3 whitespace-nowrap text-muted-foreground">
                           {new Date(l.created_at).toLocaleString("he-IL")}
                         </td>
                         <td className="p-3">{l.name}</td>
                         <td className="p-3">{l.phone}</td>
                         <td className="p-3">{l.email || "—"}</td>
                         <td className="p-3 max-w-md truncate">{l.message || "—"}</td>
-                        <td className="p-3 text-xs text-muted-foreground">{l.source || "—"}</td>
+                        <td className="p-3 text-muted-foreground">{l.source || "—"}</td>
                       </tr>
                     ))}
                     {!leads.length && (
@@ -125,7 +125,7 @@ const AdminLeads = () => {
                   <tbody>
                     {quiz.map((l) => (
                       <tr key={l.id} className="border-t border-border">
-                        <td className="p-3 whitespace-nowrap text-xs text-muted-foreground">
+                        <td className="p-3 whitespace-nowrap text-muted-foreground">
                           {new Date(l.created_at).toLocaleString("he-IL")}
                         </td>
                         <td className="p-3">{l.contact_name}</td>

@@ -251,10 +251,10 @@ function SortableCollectionCard({
         <img
           src={c.image_url}
           alt=""
-          className="h-14 w-14 shrink-0 rounded-sm object-cover"
+          className="h-[60px] w-[60px] shrink-0 rounded-sm bg-secondary object-contain"
         />
       ) : (
-        <div className="grid h-14 w-14 shrink-0 place-items-center rounded-sm bg-secondary">
+        <div className="grid h-[60px] w-[60px] shrink-0 place-items-center rounded-sm bg-secondary">
           <Package className="h-4 w-4 text-muted-foreground" />
         </div>
       )}
@@ -299,61 +299,6 @@ function SortableCollectionCard({
     </li>
   );
 }
-
-function SortableProductRow({
-  product: p,
-  onEdit,
-  onDelete,
-}: {
-  product: Product;
-  onEdit: () => void;
-  onDelete: () => void;
-}) {
-  const { attributes, listeners, setNodeRef, transform, transition, isDragging } =
-    useSortable({ id: p.id });
-  const style = {
-    transform: CSS.Transform.toString(transform),
-    transition,
-    opacity: isDragging ? 0.6 : 1,
-  };
-  return (
-    <div
-      ref={setNodeRef}
-      style={style}
-      className="flex items-center gap-2 bg-background rounded p-3"
-    >
-      <button
-        {...attributes}
-        {...listeners}
-        className="grid h-11 w-8 shrink-0 cursor-grab touch-none place-items-center rounded-sm text-muted-foreground/50 transition-colors hover:text-foreground active:cursor-grabbing"
-        aria-label="גרור לסידור מחדש"
-      >
-        <GripVertical className="w-4 h-4" />
-      </button>
-      {p.cover_url ? (
-        <img src={p.cover_url} alt={p.name} className="w-12 h-12 object-cover rounded" />
-      ) : (
-        <div className="w-12 h-12 bg-muted rounded" />
-      )}
-      <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-2">
-          <span className="font-medium text-sm truncate">{p.name}</span>
-          {!p.published && (
-            <span className="text-[10px] bg-muted px-1.5 py-0.5 rounded">טיוטה</span>
-          )}
-        </div>
-        <span className="text-[11px] text-muted-foreground">{p.tag || "—"}</span>
-      </div>
-      <Button variant="ghost" size="icon" onClick={onEdit}>
-        <Pencil className="w-3.5 h-3.5" />
-      </Button>
-      <Button variant="ghost" size="icon" onClick={onDelete}>
-        <Trash2 className="w-3.5 h-3.5 text-destructive" />
-      </Button>
-    </div>
-  );
-}
-
 
 
 const AdminCollections = () => {
@@ -563,7 +508,7 @@ const AdminCollections = () => {
                   placeholder="למשל: סלוני חוץ"
                 />
                 {!editCol.id && editCol.name_he && (
-                  <p className="text-[11px] text-muted-foreground mt-1">
+                  <p className="text-xs text-muted-foreground mt-1">
                     כתובת אוטומטית: <span dir="ltr">/collections#{slugify(editCol.name_he)}</span>
                   </p>
                 )}
