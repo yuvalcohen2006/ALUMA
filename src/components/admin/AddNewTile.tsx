@@ -26,9 +26,9 @@ const AddNewTile = ({
       </span>
       <span
         aria-hidden="true"
-        className="mt-3 grid h-12 w-12 place-items-center rounded-sm border border-transparent text-foreground/35 transition-all duration-200 group-hover:border-foreground/15 group-hover:bg-background group-hover:text-foreground"
+        className="mt-2.5 grid h-10 w-10 place-items-center rounded-sm border border-transparent text-foreground/35 transition-all duration-200 group-hover:border-foreground/15 group-hover:bg-background group-hover:text-foreground"
       >
-        <Plus className="h-6 w-6" strokeWidth={1.5} />
+        <Plus className="h-5 w-5" strokeWidth={1.5} />
       </span>
     </>
   );
@@ -36,8 +36,8 @@ const AddNewTile = ({
   /* The dash tightens and the ground lifts on hover — the slot filling in
      slightly, rather than a colour change announcing itself. */
   const className =
-    "group flex min-h-[11rem] w-full flex-col items-center justify-center rounded-sm " +
-    "border-2 border-dashed border-border p-6 text-center transition-all duration-200 " +
+    "group flex min-h-[7.5rem] w-full flex-col items-center justify-center rounded-sm " +
+    "border-2 border-dashed border-border p-5 text-center transition-all duration-200 " +
     "hover:border-foreground/30 hover:bg-secondary " +
     "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring";
 

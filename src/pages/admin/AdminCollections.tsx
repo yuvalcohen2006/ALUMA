@@ -251,10 +251,10 @@ function SortableCollectionCard({
         <img
           src={c.image_url}
           alt=""
-          className="h-11 w-11 shrink-0 rounded-sm object-cover"
+          className="h-14 w-14 shrink-0 rounded-sm object-cover"
         />
       ) : (
-        <div className="grid h-11 w-11 shrink-0 place-items-center rounded-sm bg-secondary">
+        <div className="grid h-14 w-14 shrink-0 place-items-center rounded-sm bg-secondary">
           <Package className="h-4 w-4 text-muted-foreground" />
         </div>
       )}
@@ -263,14 +263,14 @@ function SortableCollectionCard({
         <Link
           to={href}
           /* The stretched pseudo-element is the whole-row target. */
-          className="text-[15px] font-medium text-foreground after:absolute after:inset-y-0 after:start-0 after:end-[104px] after:content-[''] focus-visible:outline-none focus-visible:after:outline focus-visible:after:outline-2 focus-visible:after:outline-offset-[-2px] focus-visible:after:outline-ring"
+          className="text-base font-medium text-foreground after:absolute after:inset-y-0 after:start-0 after:end-[112px] after:content-[''] focus-visible:outline-none focus-visible:after:outline focus-visible:after:outline-2 focus-visible:after:outline-offset-[-2px] focus-visible:after:outline-ring"
         >
           {c.name_he}
         </Link>
         {/* The number needs its noun. Bare, it read as "0 ·" — a digit and a
             dangling separator, announced between a link and two buttons with
             nothing to say what it counts. */}
-        <p className="truncate text-sm text-muted-foreground">
+        <p className="mt-0.5 truncate text-sm text-muted-foreground">
           {productsCount} מוצרים
           {!c.published && " · מוסתר"}
         </p>
@@ -504,7 +504,7 @@ const AdminCollections = () => {
       {loading ? (
         <p className="text-muted-foreground">טוען…</p>
       ) : collections.length === 0 ? (
-        <div className="max-w-sm">
+        <div className="max-w-[15rem]">
           <AddNewTile label="הקולקציה הראשונה" onClick={() => setEditCol({ ...emptyCollection })} />
         </div>
       ) : (
@@ -523,7 +523,7 @@ const AdminCollections = () => {
             items={collections.map((c) => c.id)}
             strategy={verticalListSortingStrategy}
           >
-            <ul role="list" className="overflow-hidden rounded-sm border border-border">
+            <ul role="list" className="max-w-3xl overflow-hidden rounded-sm border border-border">
               {collections.map((c) => (
                 <SortableCollectionCard
                   key={c.id}
@@ -540,7 +540,7 @@ const AdminCollections = () => {
       )}
 
       {collections.length > 0 && (
-        <div className="mt-6 max-w-sm">
+        <div className="mt-6 max-w-[15rem]">
           <AddNewTile label="קולקציה חדשה" onClick={() => setEditCol({ ...emptyCollection })} />
         </div>
       )}

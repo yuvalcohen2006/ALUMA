@@ -73,9 +73,9 @@ function ProductRow({
       </button>
 
       {p.cover_url ? (
-        <img src={p.cover_url} alt="" className="h-11 w-11 shrink-0 rounded-sm object-cover" />
+        <img src={p.cover_url} alt="" className="h-14 w-14 shrink-0 rounded-sm object-cover" />
       ) : (
-        <div className="grid h-11 w-11 shrink-0 place-items-center rounded-sm bg-secondary">
+        <div className="grid h-14 w-14 shrink-0 place-items-center rounded-sm bg-secondary">
           <Package className="h-4 w-4 text-muted-foreground" />
         </div>
       )}
@@ -83,12 +83,12 @@ function ProductRow({
       <div className="min-w-0 flex-1">
         <Link
           to={`/admin/products/${p.id}`}
-          className="text-[15px] font-medium text-foreground after:absolute after:inset-y-0 after:start-0 after:end-[104px] after:content-[''] focus-visible:outline-none focus-visible:after:outline focus-visible:after:outline-2 focus-visible:after:outline-offset-[-2px] focus-visible:after:outline-ring"
+          className="text-base font-medium text-foreground after:absolute after:inset-y-0 after:start-0 after:end-[112px] after:content-[''] focus-visible:outline-none focus-visible:after:outline focus-visible:after:outline-2 focus-visible:after:outline-offset-[-2px] focus-visible:after:outline-ring"
         >
           {p.name}
         </Link>
         {(price || !p.published) && (
-          <p className="truncate text-sm text-muted-foreground">
+          <p className="mt-0.5 truncate text-sm text-muted-foreground">
             {price && <Ltr>{price}</Ltr>}
             {price && !p.published && " · "}
             {!p.published && "מוסתר"}
@@ -214,7 +214,7 @@ const AdminCollectionProducts = () => {
               </DndContext>
             )}
 
-            <div className="mt-6 max-w-sm">
+            <div className="mt-6 max-w-[15rem]">
               <AddNewTile
                 to={`/admin/products/new?collection=${id}`}
                 label={rows.length ? "מוצר חדש" : "המוצר הראשון"}
