@@ -15,8 +15,17 @@ import { join } from "node:path";
 const ROOT = process.cwd();
 const DIR = "src/pages/admin";
 
-/** Not screens: the shell itself, the login page, and an in-dialog panel. */
-const NOT_A_SCREEN = ["AdminLayout.tsx", "AdminLogin.tsx", "ProductFinishes.tsx"];
+/**
+ * Not screens: the shell itself, the login page, the colours panel that sits
+ * inside the product form, and the module of pieces the catalogue screens
+ * share.
+ */
+const NOT_A_SCREEN = [
+  "AdminLayout.tsx",
+  "AdminLogin.tsx",
+  "ProductFinishes.tsx",
+  "catalogue-shared.tsx",
+];
 
 const screens = readdirSync(join(ROOT, DIR))
   .filter((f) => /\.tsx$/.test(f) && !/\.test\./.test(f) && !NOT_A_SCREEN.includes(f));

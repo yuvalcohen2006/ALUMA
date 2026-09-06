@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import AdminLayout from "./AdminLayout";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -326,17 +327,13 @@ function SortableProductRow({
 
 
 const AdminCollections = () => {
+  const nav = useNavigate();
   const [collections, setCollections] = useState<Collection[]>([]);
   const [products, setProducts] = useState<Record<string, Product[]>>({});
   const [openId, setOpenId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
   const [editCol, setEditCol] = useState<Partial<Collection> | null>(null);
-  const [editProd, setEditProd] = useState<Partial<Product> | null>(null);
-  // The colours of the product being edited, and what they looked like when
-  // the dialog opened — the difference is what gets written on save.
-  const [variants, setVariants] = useState<DraftVariant[]>([]);
-  const [savedVariants, setSavedVariants] = useState<(DraftVariant & { id: string })[]>([]);
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
 
@@ -444,116 +441,6 @@ const AdminCollections = () => {
   };
 
   /* ---- Product CRUD ---- */
-  const saveProduct = async () => {
-    if (!editProd) return;
-    if (!editProd.name) return toast.error("חובה להזין שם מוצר");
-    if (!editProd.collection_id) return toast.error("חסרה קולקציה");
-    setSaving(true);
-    const finalSlug = editProd.id ? editProd.slug! : slugify(editProd.name!);
-    const list = products[editProd.collection_id] || [];
-    const nextSort = editProd.id
-      ? editProd.sort_order ?? 0
-      : (list[list.length - 1]?.sort_order ?? -1) + 1;
-    const payload = {
-      collection_id: editProd.collection_id,
-      slug: finalSlug,
-      name: editProd.name,
-      tag: editProd.tag || null,
-      tagline: editProd.tagline || null,
-      description: editProd.description || [],
-      highlights: editProd.highlights || [],
-      materials: editProd.materials || [],
-      dimensions: editProd.dimensions || null,
-      cover_url: editProd.cover_url || null,
-      gallery: editProd.gallery || [],
-      price: editProd.price ?? null,
-      price_note: editProd.price_note || null,
-      sort_order: nextSort,
-      published: editProd.published ?? true,
-    };
-    // The product row first: a colour needs something to belong to, and this
-    // is what lets the form offer colours before the product exists.
-    let productId = editProd.id as string | undefined;
-    if (productId) {
-      const { error } = await supabase
-        .from("site_collection_products")
-        .update(payload)
-        .eq("id", productId);
-      if (error) {
-        setSaving(false);
-        return toast.error(error.message);
-      }
-    } else {
-      const { data, error } = await supabase
-        .from("site_collection_products")
-        .insert(payload)
-        .select("id")
-        .single();
-      if (error || !data) {
-        setSaving(false);
-        return toast.error(error?.message ?? "השמירה נכשלה");
-      }
-      productId = data.id;
-    }
-
-    const plan = planVariantSync(savedVariants, variants, productId);
-    const results = await Promise.all([
-      plan.inserts.length
-        ? supabase.from("product_variants").insert(plan.inserts)
-        : Promise.resolve({ error: null }),
-      ...plan.updates.map((u) =>
-        supabase
-          .from("product_variants")
-          .update({
-            name: u.name,
-            swatch: u.swatch,
-            image_url: u.image_url,
-            sort_order: u.sort_order,
-          })
-          .eq("id", u.id),
-      ),
-      plan.deletes.length
-        ? supabase.from("product_variants").delete().in("id", plan.deletes)
-        : Promise.resolve({ error: null }),
-    ]);
-
-    setSaving(false);
-    const failed = results.find((r) => r.error);
-    if (failed) {
-      // The product itself is saved; say so, or they will save it twice.
-      return toast.error("המוצר נשמר, אבל חלק מהצבעים לא. נסו לשמור שוב.");
-    }
-    toast.success("נשמר");
-    setEditProd(null);
-    setVariants([]);
-    setSavedVariants([]);
-    load();
-  };
-
-  /** Open the product form, with its colours already loaded. */
-  const openProduct = async (product: Partial<Product>) => {
-    setEditProd(product);
-    if (!product.id) {
-      // A new piece starts with one colour so the list is never an empty box.
-      setVariants([{ ...DEFAULT_VARIANT }]);
-      setSavedVariants([]);
-      return;
-    }
-    const { data } = await supabase
-      .from("product_variants")
-      .select("id, name, swatch, image_url")
-      .eq("product_id", product.id)
-      .order("sort_order", { ascending: true });
-    const rows = (data ?? []).map((v) => ({
-      id: v.id,
-      name: v.name,
-      swatch: v.swatch ?? "#cbbba4",
-      image_url: v.image_url,
-    }));
-    setSavedVariants(rows);
-    setVariants(rows.map((r) => ({ ...r })));
-  };
-
   const deleteProduct = async (id: string) => {
     if (!confirm("למחוק מוצר זה?")) return;
     const { error } = await supabase.from("site_collection_products").delete().eq("id", id);
@@ -563,12 +450,11 @@ const AdminCollections = () => {
   };
 
   /* ---- Uploads ---- */
-  const uploadCover = async (file: File, target: "col" | "prod") => {
+  const uploadCover = async (file: File) => {
     setUploading(true);
     try {
       const { url } = await uploadFile("site-collections", file);
-      if (target === "col") setEditCol((e) => ({ ...e!, image_url: url }));
-      else setEditProd((e) => ({ ...e!, cover_url: url }));
+      setEditCol((e) => ({ ...e!, image_url: url }));
       toast.success("הועלה");
     } catch (e: any) {
       toast.error(e.message);
@@ -577,22 +463,6 @@ const AdminCollections = () => {
     }
   };
 
-  const uploadGallery = async (files: FileList) => {
-    setUploading(true);
-    try {
-      const urls: string[] = [];
-      for (const f of Array.from(files)) {
-        const { url } = await uploadFile("site-collections", f);
-        urls.push(url);
-      }
-      setEditProd((e) => ({ ...e!, gallery: [...((e?.gallery as string[]) || []), ...urls] }));
-      toast.success(`${urls.length} תמונות נוספו`);
-    } catch (e: any) {
-      toast.error(e.message);
-    } finally {
-      setUploading(false);
-    }
-  };
 
   return (
     <AdminLayout>
@@ -653,7 +523,7 @@ const AdminCollections = () => {
                             size="sm"
                             variant="outline"
                             onClick={() =>
-                              openProduct({ ...emptyProduct, collection_id: c.id })
+                              nav(`/admin/products/new?collection=${c.id}`)
                             }
                           >
                             <Plus className="w-4 h-4 ml-1" />
@@ -679,7 +549,7 @@ const AdminCollections = () => {
                                   <SortableProductRow
                                     key={p.id}
                                     product={p}
-                                    onEdit={() => openProduct(p)}
+                                    onEdit={() => nav(`/admin/products/${p.id}`)}
                                     onDelete={() => deleteProduct(p.id)}
                                   />
                                 ))}
@@ -751,7 +621,7 @@ const AdminCollections = () => {
                       accept="image/*"
                       className="hidden"
                       onChange={(e) =>
-                        e.target.files?.[0] && uploadCover(e.target.files[0], "col")
+                        e.target.files?.[0] && uploadCover(e.target.files[0])
                       }
                     />
                   </label>
@@ -777,230 +647,6 @@ const AdminCollections = () => {
       </Dialog>
 
       {/* ===== PRODUCT DIALOG ===== */}
-      <Dialog
-        open={!!editProd}
-        onOpenChange={(o) => {
-          if (o) return;
-          setEditProd(null);
-          setVariants([]);
-          setSavedVariants([]);
-        }}
-      >
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-auto" dir="rtl">
-          <DialogHeader>
-            <DialogTitle>{editProd?.id ? "עריכת מוצר" : "מוצר חדש"}</DialogTitle>
-          </DialogHeader>
-          {editProd && (
-            <div className="space-y-4">
-              <div>
-                <Label htmlFor="prod-name">שם מוצר *</Label>
-                <Input
-                  id="prod-name"
-                  dir={contentDirection(editProd.name || "")}
-                  value={editProd.name || ""}
-                  onChange={(e) => setEditProd({ ...editProd, name: e.target.value })}
-                />
-                {!editProd.id && editProd.name && (
-                  <p className="text-[11px] text-muted-foreground mt-1">
-                    כתובת אוטומטית: <span dir="ltr">/collections/{slugify(editProd.name)}</span>
-                  </p>
-                )}
-              </div>
-              <div>
-                <Label htmlFor="prod-tagline">משפט פתיחה</Label>
-                <Input
-                  id="prod-tagline"
-                  dir={contentDirection(editProd.tagline || "")}
-                  value={editProd.tagline || ""}
-                  onChange={(e) => setEditProd({ ...editProd, tagline: e.target.value })}
-                />
-              </div>
-              <div>
-                <Label>על המוצר (פסקה לכל שורה ריקה)</Label>
-                <BufferedTextarea
-                  rows={5}
-                  initial={((editProd.description as string[]) || []).join("\n\n")}
-                  placeholder={"פסקה ראשונה...\n\nפסקה שנייה..."}
-                  onCommit={(raw) =>
-                    setEditProd({
-                      ...editProd,
-                      description: raw
-                        .split(/\n\s*\n/)
-                        .map((s) => s.trim())
-                        .filter(Boolean),
-                    })
-                  }
-                />
-              </div>
-              <div>
-                <Label>נקודות עיצוב (שורה לכל נקודה, בפורמט: כותרת | תיאור)</Label>
-                <BufferedTextarea
-                  rows={4}
-                  initial={((editProd.highlights as any[]) || [])
-                    .map((h) => `${h.title} | ${h.desc}`)
-                    .join("\n")}
-                  placeholder="עץ אקליפטוס FSC | מעובד וחתום, מתאים לחוץ קבוע"
-                  onCommit={(raw) =>
-                    setEditProd({
-                      ...editProd,
-                      highlights: raw
-                        .split("\n")
-                        .map((line) => {
-                          const [title, ...rest] = line.split("|");
-                          return { title: (title || "").trim(), desc: rest.join("|").trim() };
-                        })
-                        .filter((h) => h.title),
-                    })
-                  }
-                />
-              </div>
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <Label>חומרים (שורה לכל חומר)</Label>
-                  <BufferedTextarea
-                    rows={3}
-                    initial={((editProd.materials as string[]) || []).join("\n")}
-                    placeholder="עץ אקליפטוס FSC&#10;אלומיניום אלחוש 6061&#10;בדים נושמים לחוץ"
-                    onCommit={(raw) =>
-                      setEditProd({
-                        ...editProd,
-                        materials: raw
-                          .split("\n")
-                          .map((s) => s.trim())
-                          .filter(Boolean),
-                      })
-                    }
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="prod-dimensions">מידות בסיס</Label>
-                  <Input
-                    id="prod-dimensions"
-                    value={editProd.dimensions || ""}
-                    onChange={(e) =>
-                      setEditProd({ ...editProd, dimensions: e.target.value })
-                    }
-                    placeholder="אורך 240 ס״מ · עומק 92 ס״מ"
-                  />
-                </div>
-              </div>
-
-              {/* Optional on purpose: leaving both empty shows no price at
-                  all, which is the normal case for a made-to-order piece. */}
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <Label htmlFor="prod-price">מחיר (לא חובה)</Label>
-                  <Input
-                    id="prod-price"
-                    inputMode="decimal"
-                    dir="ltr"
-                    defaultValue={editProd.price ?? ""}
-                    // onChange, not onBlur: clicking Save with the cursor still
-                    // in the box would have saved the value from before you
-                    // typed. Uncontrolled, so parsing never fights the typing.
-                    onChange={(e) =>
-                      setEditProd({ ...editProd, price: parsePriceInput(e.target.value) })
-                    }
-                    placeholder="12400"
-                  />
-                  <p className="mt-1 text-xs text-muted-foreground">
-                    {formatPrice(editProd.price)
-                      ? `יופיע באתר: ${formatPrice(editProd.price)}`
-                      : "אם תשאירו ריק, לא יופיע מחיר בכלל."}
-                  </p>
-                </div>
-                <div>
-                  <Label htmlFor="prod-price-note">הערה ליד המחיר</Label>
-                  <Input
-                    id="prod-price-note"
-                    value={editProd.price_note || ""}
-                    onChange={(e) =>
-                      setEditProd({ ...editProd, price_note: e.target.value })
-                    }
-                    placeholder="החל מ־"
-                  />
-                  <p className="mt-1 text-xs text-muted-foreground">
-                    למשל "החל מ־" או "כולל הובלה".
-                  </p>
-                </div>
-              </div>
-              <div>
-                <Label>תמונת כיסוי</Label>
-                <div className="flex items-center gap-3 mt-2">
-                  {editProd.cover_url && (
-                    <img
-                      src={editProd.cover_url}
-                      alt=""
-                      className="w-24 h-24 object-cover rounded"
-                    />
-                  )}
-                  <label className="inline-flex items-center gap-2 px-3 py-2 border border-border rounded cursor-pointer hover:bg-muted text-sm">
-                    <Upload className="w-4 h-4" />
-                    {editProd.cover_url ? "החלפה" : "העלאה"}
-                    <input
-                      type="file"
-                      accept="image/*"
-                      className="hidden"
-                      onChange={(e) =>
-                        e.target.files?.[0] && uploadCover(e.target.files[0], "prod")
-                      }
-                    />
-                  </label>
-                </div>
-              </div>
-              <div>
-                <Label>גלריה</Label>
-                <div className="grid grid-cols-4 gap-2 mt-2">
-                  {((editProd.gallery as string[]) || []).map((url, i) => (
-                    <div key={i} className="relative aspect-square">
-                      <img src={url} alt="" className="w-full h-full object-cover rounded" />
-                      <button
-                        onClick={() =>
-                          setEditProd({
-                            ...editProd,
-                            gallery: (editProd.gallery as string[]).filter((_, idx) => idx !== i),
-                          })
-                        }
-                        className="absolute top-1 left-1 bg-destructive text-destructive-foreground rounded-sm p-1"
-                      >
-                        <X className="w-3 h-3" />
-                      </button>
-                    </div>
-                  ))}
-                  <label className="aspect-square border-2 border-dashed border-border rounded flex items-center justify-center cursor-pointer hover:bg-muted">
-                    <Upload className="w-5 h-5 text-muted-foreground" />
-                    <input
-                      type="file"
-                      accept="image/*"
-                      multiple
-                      className="hidden"
-                      onChange={(e) => e.target.files && uploadGallery(e.target.files)}
-                    />
-                  </label>
-                </div>
-              </div>
-
-              {/* Finishes live in their own table keyed by product_id, so they
-                  can only be attached once the product row exists. */}
-              <ProductFinishes value={variants} onChange={setVariants} />
-
-              <div className="flex items-center gap-2">
-                <Switch
-                  checked={editProd.published ?? true}
-                  onCheckedChange={(v) => setEditProd({ ...editProd, published: v })}
-                />
-                <Label className="!mt-0">פורסם</Label>
-              </div>
-            </div>
-          )}
-          <DialogFooter className="gap-2">
-            <Button variant="outline" onClick={() => setEditProd(null)}>ביטול</Button>
-            <Button onClick={saveProduct} disabled={saving || uploading}>
-              {saving ? "שומר…" : "שמירה"}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
     </AdminLayout>
   );
 };
