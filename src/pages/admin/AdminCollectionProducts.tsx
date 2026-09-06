@@ -20,6 +20,7 @@ import {
 import { CSS } from "@dnd-kit/utilities";
 import { toast } from "sonner";
 import AdminLayout from "./AdminLayout";
+import { dragAnnouncements, dragInstructions, sortableHandleAttributes } from "./dnd-a11y";
 import AddNewTile from "@/components/admin/AddNewTile";
 import { supabase } from "@/integrations/supabase/client";
 import Ltr from "@/components/Ltr";
@@ -49,7 +50,7 @@ function ProductRow({
   onDelete: () => void;
 }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } =
-    useSortable({ id: p.id });
+    useSortable({ id: p.id , attributes: sortableHandleAttributes });
   const price = formatPrice(p.price);
 
   return (
@@ -82,7 +83,7 @@ function ProductRow({
       <div className="min-w-0 flex-1">
         <Link
           to={`/admin/products/${p.id}`}
-          className="text-[15px] font-medium text-foreground after:absolute after:inset-0 after:content-[''] focus-visible:outline-none focus-visible:after:outline-2 focus-visible:after:outline-offset-[-2px] focus-visible:after:outline-ring"
+          className="text-[15px] font-medium text-foreground after:absolute after:inset-y-0 after:start-0 after:end-[104px] after:content-[''] focus-visible:outline-none focus-visible:after:outline focus-visible:after:outline-2 focus-visible:after:outline-offset-[-2px] focus-visible:after:outline-ring"
         >
           {p.name}
         </Link>
@@ -95,7 +96,7 @@ function ProductRow({
         )}
       </div>
 
-      <div className="relative z-10 flex shrink-0 items-center gap-1 opacity-0 transition-opacity group-hover:opacity-100 focus-within:opacity-100">
+      <div className="relative z-10 flex shrink-0 items-center gap-1 opacity-0 transition-opacity group-hover:opacity-100 focus-within:opacity-100 [@media(hover:none)]:opacity-100">
         <Link
           to={`/admin/products/${p.id}`}
           aria-label={`עריכת ${p.name}`}
@@ -193,12 +194,18 @@ const AdminCollectionProducts = () => {
                 sensors={sensors}
                 collisionDetection={closestCenter}
                 onDragEnd={onDragEnd}
+                accessibility={{
+                  announcements: dragAnnouncements(
+                    (id) => rows.find((r) => r.id === id)?.name ?? "פריט",
+                  ),
+                  screenReaderInstructions: dragInstructions,
+                }}
               >
                 <SortableContext
                   items={rows.map((r) => r.id)}
                   strategy={verticalListSortingStrategy}
                 >
-                  <ul className="mt-8 overflow-hidden rounded-sm border border-border">
+                  <ul role="list" className="mt-8 overflow-hidden rounded-sm border border-border">
                     {rows.map((r) => (
                       <ProductRow key={r.id} product={r} onDelete={() => remove(r)} />
                     ))}

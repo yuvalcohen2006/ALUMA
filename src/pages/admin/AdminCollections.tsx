@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AdminLayout from "./AdminLayout";
+import { dragAnnouncements, dragInstructions, sortableHandleAttributes } from "./dnd-a11y";
 import AddNewTile from "@/components/admin/AddNewTile";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -223,7 +224,7 @@ function SortableCollectionCard({
   onDelete: () => void;
 }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } =
-    useSortable({ id: c.id });
+    useSortable({ id: c.id , attributes: sortableHandleAttributes });
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
@@ -262,18 +263,22 @@ function SortableCollectionCard({
         <Link
           to={href}
           /* The stretched pseudo-element is the whole-row target. */
-          className="text-[15px] font-medium text-foreground after:absolute after:inset-0 after:content-[''] focus-visible:outline-none focus-visible:after:outline-2 focus-visible:after:outline-offset-[-2px] focus-visible:after:outline-ring"
+          className="text-[15px] font-medium text-foreground after:absolute after:inset-y-0 after:start-0 after:end-[104px] after:content-[''] focus-visible:outline-none focus-visible:after:outline focus-visible:after:outline-2 focus-visible:after:outline-offset-[-2px] focus-visible:after:outline-ring"
         >
           {c.name_he}
         </Link>
+        {/* The number needs its noun. Bare, it read as "0 ·" — a digit and a
+            dangling separator, announced between a link and two buttons with
+            nothing to say what it counts. */}
         <p className="truncate text-sm text-muted-foreground">
-          {productsCount} · {c.published ? "" : "מוסתר"}
+          {productsCount} מוצרים
+          {!c.published && " · מוסתר"}
         </p>
       </div>
 
       {/* Above the stretched link, so they stay clickable and keep their own
           hit area. Revealed on hover, always present for the keyboard. */}
-      <div className="relative z-10 flex shrink-0 items-center gap-1 opacity-0 transition-opacity group-hover:opacity-100 focus-within:opacity-100">
+      <div className="relative z-10 flex shrink-0 items-center gap-1 opacity-0 transition-opacity group-hover:opacity-100 focus-within:opacity-100 [@media(hover:none)]:opacity-100">
         <button
           type="button"
           onClick={onEdit}
@@ -507,12 +512,18 @@ const AdminCollections = () => {
           sensors={dndSensors}
           collisionDetection={closestCenter}
           onDragEnd={onCollectionDragEnd}
+          accessibility={{
+            announcements: dragAnnouncements(
+              (id) => collections.find((c) => c.id === id)?.name_he ?? "פריט",
+            ),
+            screenReaderInstructions: dragInstructions,
+          }}
         >
           <SortableContext
             items={collections.map((c) => c.id)}
             strategy={verticalListSortingStrategy}
           >
-            <ul className="overflow-hidden rounded-sm border border-border">
+            <ul role="list" className="overflow-hidden rounded-sm border border-border">
               {collections.map((c) => (
                 <SortableCollectionCard
                   key={c.id}
