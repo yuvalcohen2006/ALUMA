@@ -13,12 +13,15 @@ import { ArrowLeft } from "lucide-react";
  *
  *   image      scale 1.03            600ms   the slowest, so it settles last
  *   grade      opacity 0 → 1         400ms   gives the zoom something to move against
- *   rule       scaleX 0 → 1          250ms   drawn from the reading start
- *   arrow      fade + 4px forward    250ms   75ms behind the rule
+ *   arrow      fade + 4px forward    250ms
  *
  * plus the siblings settling back to 58% (see .tile-grid in index.css). The
- * stagger is the point: the small type-level moves resolve well before the
- * photograph stops, so it reads as one considered gesture instead of a block.
+ * stagger is the point: the small moves resolve well before the photograph
+ * stops, so it reads as one considered gesture instead of a block.
+ *
+ * A rule used to draw itself under the title as well, and it came out: with the
+ * siblings already dimming and an arrow already arriving, a fourth signal on the
+ * same gesture was one too many. Three things saying "this one" is emphasis.
  *
  * Every moving property is transform or opacity — nothing here can cause a
  * reflow. Everything answers to focus-visible as well as hover, because with
@@ -28,7 +31,7 @@ import { ArrowLeft } from "lucide-react";
  * Direction: logical properties, or a custom property where CSS has no logical
  * keyword — transform has neither an origin nor a translation that knows about
  * the inline axis. Tailwind's rtl:/ltr: variants are deliberately NOT used; see
- * the note on --tile-line-origin in index.css for why they are unsafe here.
+ * the note on --tile-arrow-travel in index.css for why they are unsafe here.
  */
 
 const ASPECT = {
@@ -125,7 +128,6 @@ const TileCard = ({
             "linear-gradient(to top, rgb(0 0 0 / 0.20) 0%, rgb(0 0 0 / 0.06) 32%, transparent 62%)",
         }}
       />
-
     </div>
 
     <div className="relative mt-5">
@@ -148,18 +150,6 @@ const TileCard = ({
 
       {meta && <p className="mt-1 line-clamp-1 text-label text-muted-foreground">{meta}</p>}
       {extra}
-
-      {/*
-        The rule draws itself from the reading start. --tile-line-origin is set
-        on [dir] in index.css because transform-origin has no logical keyword.
-      */}
-      <span
-        aria-hidden="true"
-        className="absolute -bottom-3 inset-x-0 h-px scale-x-0 bg-foreground/70
-                   origin-[var(--tile-line-origin)] transition-transform duration-250 ease-hover
-                   group-hover:scale-x-100 group-focus-visible:scale-x-100
-                   motion-reduce:transition-none"
-      />
     </div>
   </Link>
 );

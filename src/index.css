@@ -183,8 +183,9 @@
 /* Scroll-reveal utility (paired with useReveal hook) */
 @layer utilities {
   /*
-     transform-origin has no logical keyword, so the rule under a tile title
-     cannot be told to grow "from the reading start" in CSS alone. Tailwind's
+     transform has no logical keyword — neither an origin nor a translation
+     knows about the inline axis, so a tile's arrow cannot be told to travel
+     "forward" in CSS alone. Tailwind's
      rtl:/ltr: variants are not usable either: Layout hardcodes <main dir="rtl">
      while /en sets <html dir="ltr">, so an element inside main on an English
      route matches BOTH `[dir=ltr] *` and `[dir=rtl] *` and the winner is
@@ -194,12 +195,10 @@
      the element is really laid out on.
   */
   [dir="rtl"] {
-    --tile-line-origin: 100% 50%;
     --tile-arrow-travel: -4px; /* forward is LEFT */
     --tile-arrow-flip: 0deg;   /* ArrowLeft already points forward */
   }
   [dir="ltr"] {
-    --tile-line-origin: 0% 50%;
     --tile-arrow-travel: 4px;
     --tile-arrow-flip: 180deg;
   }
