@@ -124,3 +124,24 @@ grant insert, update, delete on public.site_home_highlights to authenticated;
 -- That is the worst kind of failure, because it looks like success.
 
 delete from public.site_texts where key = 'collections.subtitle';
+
+-- ────────────────────────────────────── 5. The closing line on the home page
+--
+-- The projects strip now ends on an offer rather than a link: three projects
+-- with the last one dissolving, then "and many others / the next one could be
+-- yours". That copy is the owner's to change, so it goes in site_texts like
+-- every other visible sentence rather than being frozen in a component.
+--
+-- on conflict do nothing: safe to run twice, and it never overwrites a line
+-- the owner has already edited.
+
+insert into public.site_texts (key, value, label, hint, multiline, sort_order) values
+  ('home.projects.more', 'ועוד רבים אחרים.',
+   'דף הבית - אחרי הפרויקטים', 'המשפט שמופיע אחרי שלושת הפרויקטים', false, 51),
+  ('home.projects.invite', 'הפרויקט הבא יכול להיות שלכם.',
+   'דף הבית - הזמנה ליצירת קשר', null, false, 52),
+  ('home.projects.cta', 'דברו איתנו',
+   'דף הבית - כפתור יצירת קשר בפרויקטים', null, false, 53),
+  ('home.projects.all', 'כל הפרויקטים',
+   'דף הבית - קישור לכל הפרויקטים', null, false, 54)
+on conflict (key) do nothing;

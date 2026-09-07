@@ -1,4 +1,3 @@
-import { useCallback, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import Layout from "@/components/Layout";
@@ -7,8 +6,6 @@ import PageHero from "@/components/PageHero";
 import Reveal from "@/components/Reveal";
 import SectionHeading from "@/components/SectionHeading";
 import ShineButton from "@/components/ui/shine-button";
-import FilterSidebar, { type FilterGroup } from "@/components/FilterSidebar";
-import { useFilterParams } from "@/hooks/useFilterParams";
 import { type Project } from "@/data/projects";
 import { useProjects } from "@/hooks/useProjectsData";
 import { cn } from "@/lib/utils";
@@ -41,39 +38,9 @@ const buildCollectionSchema = (list: Project[]) => ({
   },
 });
 
-// Built from the data rather than hardcoded, so values arriving from the CMS
-// show up in the drawer without a code change.
-const uniqueSorted = (values: string[]) =>
-  Array.from(new Set(values)).sort((a, b) => a.localeCompare(b, "he"));
-
 /** Folio number, printed-portfolio style: 1 → "01". */
 const folio = (n: number) => String(n).padStart(2, "0");
 
-/**
- * Contents-strip jump. A real `#slug` href is kept on the anchor (copy/middle
- * click still work), but the click is handled here so no history entry is
- * pushed — a hash push can flip react-router's navigation type and make
- * ScrollToTop yank the page back to the top mid-jump.
- *
- * `behavior: "instant"` rather than `"auto"` for the reduced-motion path:
- * index.css sets `html { scroll-behavior: smooth }`, and per CSSOM `"auto"`
- * defers to that CSS property — so `"auto"` would still animate. Only
- * `"instant"` actually overrides it.
- *
- * Focus follows the jump (the entry is a programmatic focus target) so a
- * keyboard user carries on tabbing from the project they picked instead of
- * from the strip. `preventScroll` keeps the focus call from re-scrolling and
- * cancelling the smooth animation.
- */
-const jumpToEntry = (slug: string) => {
-  const el = document.getElementById(slug);
-  if (!el) return;
-  const reduced =
-    typeof window.matchMedia === "function" &&
-    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  el.scrollIntoView({ behavior: reduced ? "instant" : "smooth", block: "start" });
-  el.focus({ preventScroll: true });
-};
 
 /** Thin terracotta rule between meta values. */
 const MetaRule = ({ className }: { className?: string }) => (
@@ -98,11 +65,17 @@ const MetaRule = ({ className }: { className?: string }) => (
 const ProjectEntry = ({ project: p, index }: { project: Project; index: number }) => {
   const { t } = useTranslation("projects");
   const photoRight = index % 2 === 0;
-  const meta = [p.location, p.tag, p.year, p.area].filter(Boolean);
+  // Two values, not four. Across fourteen architecture and furniture indexes
+  // the median card carries five or six words of metadata and the near-
+  // universal pair is place plus year — type and area are exactly what the
+  // references drop. Four values also wrapped at 375px, which is what the
+  // rule-inside-the-item trick below was working around.
+  const meta = [p.location, p.year].filter(Boolean);
 
   return (
-    // tabIndex/-1 + outline-none: a target for jumpToEntry's focus move, never
-    // a tab stop of its own and never a stray focus ring.
+    // tabIndex/-1 + outline-none: the id is still a deep-link target, so the
+    // element has to be focusable without ever becoming a tab stop or drawing
+    // a stray ring.
     <article
       id={p.slug}
       tabIndex={-1}
@@ -133,8 +106,13 @@ const ProjectEntry = ({ project: p, index }: { project: Project; index: number }
           <Reveal
             className={cn("min-w-0", photoRight ? "lg:order-1" : "lg:order-2")}
           >
+            {/* The photograph does not move. Not one of the fourteen reference
+                indexes transforms its project image on hover — at this size a
+                zoom reads as a slideshow effect rather than as a response, and
+                a 1.06 scale on a 900px band is a lot of pixels resampling. The
+                title underline and the cue below carry the hover instead. */}
             <div className="relative aspect-[4/3] overflow-hidden rounded-sm">
-              <div className="absolute inset-0 transition-transform duration-600 ease-out group-hover:scale-[1.06]">
+              <div className="absolute inset-0">
                 <img
                   src={p.cover}
                   alt={`${p.name} | Aluma`}
@@ -168,7 +146,7 @@ const ProjectEntry = ({ project: p, index }: { project: Project; index: number }
               {folio(index + 1)}
             </span>
 
-            <h2 className="font-display font-medium text-heading text-foreground mt-3 transition-colors duration-300 group-hover:text-accent">
+            <h2 className="mt-3 font-display text-heading font-medium text-foreground decoration-1 underline-offset-[6px] group-hover:underline">
               {p.name}
             </h2>
 
@@ -190,13 +168,11 @@ const ProjectEntry = ({ project: p, index }: { project: Project; index: number }
               ))}
             </div>
 
-            {/* Clamped, not shortened. Six projects each carried a 57-61 word
-                intro in full, which is 355 words of unbroken paragraph down
-                one page — and the project's own page opens with the same text.
-                Nothing is lost; the index stops being a wall. */}
-            <p className="mt-6 line-clamp-3 text-body leading-relaxed text-foreground text-pretty">
-              {p.intro}
-            </p>
+            {/* No paragraph. It was clamped to three lines first, which was
+                the wrong fix — none of the fourteen reference indexes carries
+                a paragraph per project at all. The index says which projects
+                exist and where; the project's own page is where it is
+                described, and it opens with this exact text. */}
 
             {/* Rule grows from the right (the RTL start) on row hover. */}
             <span className="inline-block mt-8">
@@ -222,48 +198,11 @@ const ProjectEntry = ({ project: p, index }: { project: Project; index: number }
 const ProjectsPage = () => {
   const { t } = useTranslation("projects");
   const { projects } = useProjects();
-  const { value, setValue, activeCount } = useFilterParams(["type", "area"]);
-  const selectedTypes = value.type;
-  const selectedAreas = value.area;
-
-  const visible = useMemo(
-    () =>
-      projects.filter(
-        (p) =>
-          (!selectedTypes.length || selectedTypes.includes(p.tag)) &&
-          (!selectedAreas.length || selectedAreas.includes(p.location))
-      ),
-    [projects, selectedTypes, selectedAreas]
-  );
-
-  const filterGroups: FilterGroup[] = useMemo(
-    () => [
-      {
-        key: "type",
-        label: "סוג מרחב",
-        options: uniqueSorted(projects.map((p) => p.tag)).map((tag) => ({
-          value: tag,
-          label: tag,
-          count: projects.filter((p) => p.tag === tag).length,
-        })),
-      },
-      {
-        key: "area",
-        label: "אזור",
-        options: uniqueSorted(projects.map((p) => p.location)).map((loc) => ({
-          value: loc,
-          label: loc,
-          count: projects.filter((p) => p.location === loc).length,
-        })),
-      },
-    ],
-    [projects]
-  );
-
-  const clearFilters = useCallback(
-    () => setValue({ type: [], area: [] }),
-    [setValue]
-  );
+  // No filtering. Six projects is an order of magnitude below where any
+  // comparable portfolio keeps a filter — the reference sites that have one
+  // carry 37, 57 and 109 projects, and every site at Aluma's scale shows the
+  // work and nothing else. A filter over six items mostly advertises that
+  // there are only six.
 
   return (
     <Layout>
@@ -276,90 +215,22 @@ const ProjectsPage = () => {
       <PageHero
         title="פרויקטים"
         subtitle="מבחר עבודות שתכננו, ייצרנו והרכבנו: מרפסות פנורמיות, גגות עירוניים, חצרות משפחתיות ומתחמי בריכה."
-        filterSlot={
-          <FilterSidebar
-            groups={filterGroups}
-            value={value}
-            onChange={setValue}
-            activeCount={activeCount}
-            resultCount={visible.length}
-          />
-        }
       />
 
-      {/* CONTENTS STRIP — the table of contents of the portfolio. A tinted band
-          that scrolls sideways on phones and wraps on desktop. */}
-      {visible.length > 0 && (
-        <section className="mt-10 md:mt-12 bg-secondary border-y border-border">
-          <div className="container-luxury py-6 md:py-7">
-            <nav
-              aria-label="מפתח הפרויקטים"
-              className="rail-scroll flex md:flex-wrap items-center gap-x-7 gap-y-3 overflow-x-auto md:overflow-visible pb-2 md:pb-0"
-            >
-              <span className="shrink-0 text-body text-muted-foreground">
-                {activeCount > 0
-                  ? `מציגים ${visible.length} מתוך ${projects.length} פרויקטים`
-                  : "מפתח הפרויקטים"}
-              </span>
-              <MetaRule />
-
-              {/* Charcoal ink, not terracotta. Re-measured against the white
-                  palette: primary lands 3.1:1 on this band and accent 4.0:1,
-                  both under the 4.5:1 AA floor for 18px text. The verdict is
-                  unchanged, only the arithmetic — terracotta stays where it
-                  belongs here, in the rules. */}
-              {visible.map((p, i) => (
-                <a
-                  key={p.slug}
-                  href={`#${p.slug}`}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    jumpToEntry(p.slug);
-                  }}
-                  className="group shrink-0 inline-flex items-baseline gap-2"
-                >
-                  <span className="font-display text-body tabular-nums text-foreground/70 transition-colors duration-300 group-hover:text-foreground">
-                    {folio(i + 1)}
-                  </span>
-                  {/* Underline grows from the right — the RTL start — matching
-                      the .link-underline grammar used site-wide. */}
-                  <span className="relative text-body text-foreground">
-                    {p.name}
-                    <span
-                      aria-hidden="true"
-                      className="absolute right-0 -bottom-1 h-px w-0 bg-foreground/60 transition-[width] duration-300 ease-out group-hover:w-full"
-                    />
-                  </span>
-                </a>
-              ))}
-            </nav>
-          </div>
-        </section>
-      )}
+      {/* The contents strip that used to sit here is gone — a jump-link index
+          over six projects, on a page whose whole job is to show six
+          projects. None of the fourteen reference portfolios carries in-page
+          navigation over its own work at this scale; the ones that carry any
+          chrome above the grid have 57 and 109 projects. */}
 
       {/* THE INDEX */}
       <section className="bg-background pb-6 md:pb-10">
         <div className="container-luxury">
-          {visible.length === 0 ? (
-            <Reveal className="max-w-xl mx-auto text-center py-24 md:py-32">
-              <p className="text-body leading-relaxed text-foreground-soft">
-                אין פרויקטים שמתאימים לסינון שבחרתם.
-              </p>
-              <button
-                type="button"
-                onClick={clearFilters}
-                className="mt-6 text-body text-accent link-underline transition-smooth"
-              >
-                נקה את הסינון
-              </button>
-            </Reveal>
-          ) : (
-            <div className="divide-y divide-border">
-              {visible.map((p, i) => (
-                <ProjectEntry key={p.slug} project={p} index={i} />
-              ))}
-            </div>
-          )}
+          <div className="divide-y divide-border">
+            {projects.map((p, i) => (
+              <ProjectEntry key={p.slug} project={p} index={i} />
+            ))}
+          </div>
         </div>
       </section>
 

@@ -73,6 +73,12 @@ type Props = {
    * lib/emblems.ts for why, and cap it with capEmblems() before you get here.
    */
   emblem?: Emblem | null;
+  /**
+   * Dissolves the photograph toward the end of the row, for the last tile in a
+   * preview strip. Lands on the image frame only: a mask clips its element's
+   * focus ring, so it must never reach the <a>.
+   */
+  fade?: boolean;
 };
 
 const TileCard = ({
@@ -88,6 +94,7 @@ const TileCard = ({
   align = "start",
   as: Heading = "h3",
   emblem = null,
+  fade = false,
 }: Props) => {
   const { lang } = useLocalizedPath();
   return (
@@ -109,7 +116,11 @@ const TileCard = ({
       not clip a transform-scaled child to a rounded overflow-hidden ancestor,
       so without both the corners leak during the zoom on iOS only.
     */}
-    <div className={`relative isolate overflow-hidden rounded-sm bg-muted ${ASPECT[aspect]}`}>
+    <div
+      className={`relative isolate overflow-hidden rounded-sm bg-muted ${ASPECT[aspect]} ${
+        fade ? "tile-fade" : ""
+      }`}
+    >
       {!image && fallback}
       {image && (
         <img
