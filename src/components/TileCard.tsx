@@ -1,6 +1,8 @@
 import type { ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
+import { emblemLabel, type Emblem } from "@/lib/emblems";
+import { useLocalizedPath } from "@/lib/useLocalizedPath";
 
 /**
  * One tile: a photograph, a name under it, and a hover that is choreographed
@@ -66,6 +68,11 @@ type Props = {
   align?: "start" | "center";
   /** `h2` where the tile is the page's primary list of things. */
   as?: "h2" | "h3";
+  /**
+   * One word under the name. Bare text, not a pill over the photograph — see
+   * lib/emblems.ts for why, and cap it with capEmblems() before you get here.
+   */
+  emblem?: Emblem | null;
 };
 
 const TileCard = ({
@@ -80,7 +87,10 @@ const TileCard = ({
   fallback,
   align = "start",
   as: Heading = "h3",
-}: Props) => (
+  emblem = null,
+}: Props) => {
+  const { lang } = useLocalizedPath();
+  return (
   /*
    * The focus ring is never suppressed here. The base layer already rings a
    * focused <a>, and the whole lockup IS the link — a ring drawn tightly around
@@ -150,8 +160,21 @@ const TileCard = ({
 
       {meta && <p className="mt-1 line-clamp-1 text-label text-muted-foreground">{meta}</p>}
       {extra}
+
+      {/*
+        Last inside the link, which is where Net-a-Porter puts it and why it
+        needs no scrim: nothing sits over the photograph, so nothing has to win
+        a contrast fight with it. Charcoal at normal weight against the muted
+        metadata above — differentiated by colour and position, not by a box.
+        Never terracotta: it measures 3.3:1 on white and fails AA in every
+        direction.
+      */}
+      {emblem && (
+        <p className="mt-1.5 text-label text-foreground">{emblemLabel(emblem, lang)}</p>
+      )}
     </div>
   </Link>
-);
+  );
+};
 
 export default TileCard;

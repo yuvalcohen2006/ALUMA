@@ -18,6 +18,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
+import { EMBLEM_OPTIONS } from "@/lib/emblems";
+import { hasBothNames } from "@/lib/localized-name";
 import PhotoSpec from "@/components/admin/PhotoSpec";
 import { formatPrice, parsePriceInput } from "@/lib/price";
 import { contentDirection } from "@/lib/field-direction";
@@ -144,6 +146,12 @@ const AdminProductEdit = () => {
     if (!product) return;
     if (!product.name?.trim()) return toast.error("צריך שם למוצר");
     if (!product.collection_id) return toast.error("צריך לבחור קולקציה");
+    // Enforced only for a PUBLISHED row, so a draft can be saved half-finished
+    // and come back to. Blocking every save would mean the English name had to
+    // be decided before the photograph.
+    if ((product.published ?? true) && !hasBothNames(product.name, product.name_en)) {
+      return toast.error("כדי לפרסם צריך שם בעברית וגם באנגלית");
+    }
 
     setSaving(true);
     const payload = {
@@ -160,6 +168,8 @@ const AdminProductEdit = () => {
       gallery: product.gallery || [],
       price: product.price ?? null,
       price_note: product.price_note || null,
+      name_en: product.name_en?.trim() || null,
+      emblem: product.emblem || null,
       sort_order: product.sort_order ?? 0,
       published: product.published ?? true,
     };
@@ -275,14 +285,49 @@ const AdminProductEdit = () => {
           <div className="space-y-8 lg:col-span-2">
             <section className="rounded-sm border border-border bg-card p-6">
               <div className="space-y-5">
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div>
+                    <Label htmlFor="p-name">שם המוצר</Label>
+                    <Input
+                      id="p-name"
+                      dir={contentDirection(product.name ?? "")}
+                      value={product.name ?? ""}
+                      onChange={(e) => patch({ name: e.target.value })}
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="p-name-en">השם באנגלית</Label>
+                    <Input
+                      id="p-name-en"
+                      dir="ltr"
+                      value={product.name_en ?? ""}
+                      onChange={(e) => patch({ name_en: e.target.value })}
+                    />
+                    <p className="mt-1.5 text-sm text-muted-foreground">
+                      נדרש כדי לפרסם. זה מה שיופיע למי שגולש באנגלית.
+                    </p>
+                  </div>
+                </div>
+
                 <div>
-                  <Label htmlFor="p-name">שם המוצר</Label>
-                  <Input
-                    id="p-name"
-                    dir={contentDirection(product.name ?? "")}
-                    value={product.name ?? ""}
-                    onChange={(e) => patch({ name: e.target.value })}
-                  />
+                  <Label htmlFor="p-emblem">תווית</Label>
+                  <select
+                    id="p-emblem"
+                    value={product.emblem ?? ""}
+                    onChange={(e) => patch({ emblem: e.target.value || null })}
+                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                  >
+                    <option value="">ללא</option>
+                    {EMBLEM_OPTIONS.map((o) => (
+                      <option key={o.value} value={o.value}>
+                        {o.label}
+                      </option>
+                    ))}
+                  </select>
+                  <p className="mt-1.5 text-sm text-muted-foreground">
+                    מילה אחת מתחת לשם המוצר בדף הבית. האתר מציג תווית אחת בלבד בכל
+                    שורה — ככל שיש פחות, כך היא נראית יותר.
+                  </p>
                 </div>
 
                 <div>

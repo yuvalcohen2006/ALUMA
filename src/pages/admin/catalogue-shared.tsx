@@ -15,6 +15,8 @@ export type Product = {
   collection_id: string;
   slug: string;
   name: string;
+  name_en: string | null;
+  emblem: string | null;
   tag: string | null;
   tagline: string | null;
   description: any;
@@ -121,6 +123,8 @@ export const slugify = (s: string) => {
 
 export const emptyProduct: Partial<Product> = {
   name: "",
+  name_en: "",
+  emblem: null,
   tag: "",
   tagline: "",
   description: [],

@@ -16,6 +16,8 @@ export type DBProduct = {
   collection_id: string;
   slug: string;
   name: string;
+  name_en: string | null;
+  emblem: string | null;
   tag: string | null;
   tagline: string | null;
   description: string[];
@@ -63,13 +65,20 @@ export function useCollections() {
         supabase
           .from("site_collection_products")
           .select(
-            "id, collection_id, slug, name, tag, tagline, description, highlights, materials, dimensions, cover_url, gallery, price, price_note"
+            "id, collection_id, slug, name, name_en, emblem, tag, tagline, description, highlights, materials, dimensions, cover_url, gallery, price, price_note"
           )
           .eq("published", true)
           .order("sort_order"),
       ]);
       const loadedCollections = (cols as DBCollection[]) || [];
-      const loadedProducts = ((prods as any[]) || []).map(normaliseProduct);
+      // Only pieces whose collection is also published. The product query asks
+      // about the product's own flag and nothing else, so hiding a collection
+      // used to leave its furniture on the home page and in search — visible
+      // everywhere except the one place the owner had hidden it.
+      const publishedCollections = new Set(loadedCollections.map((c) => c.id));
+      const loadedProducts = ((prods as any[]) || [])
+        .map(normaliseProduct)
+        .filter((p) => publishedCollections.has(p.collection_id));
 
       // No placeholder catalogue any more. It existed so an empty database
       // did not render an empty page, and it earned its keep — but the shop is

@@ -52,6 +52,7 @@ import {
 import { CSS } from "@dnd-kit/utilities";
 import { uploadFile } from "@/lib/admin-storage";
 import { useCrop } from "@/components/admin/CropProvider";
+import { hasBothNames } from "@/lib/localized-name";
 import ProductFinishes, { DEFAULT_VARIANT } from "./ProductFinishes";
 import { planVariantSync, type DraftVariant } from "@/lib/variant-sync";
 import PhotoSpec from "@/components/admin/PhotoSpec";
@@ -385,6 +386,10 @@ const AdminCollections = () => {
   const saveCollection = async () => {
     if (!editCol) return;
     if (!editCol.name_he) return toast.error("חובה להזין שם");
+    // Only for a published collection: a draft can be saved half-finished.
+    if ((editCol.published ?? true) && !hasBothNames(editCol.name_he, editCol.name_en)) {
+      return toast.error("כדי לפרסם צריך שם בעברית וגם באנגלית");
+    }
     setSaving(true);
     const finalSlug = editCol.id ? editCol.slug! : slugify(editCol.name_he!);
     const nextSort = editCol.id
@@ -517,6 +522,26 @@ const AdminCollections = () => {
                     כתובת אוטומטית: <span dir="ltr">/collections#{slugify(editCol.name_he)}</span>
                   </p>
                 )}
+              </div>
+              {/*
+                The English name. The column has existed since the CMS was
+                built and there was never a field for it anywhere — the query
+                selected it, the save wrote it straight back unchanged, and no
+                screen ever offered it. So /en showed Hebrew collection names
+                and nobody could have fixed that if they had wanted to.
+              */}
+              <div>
+                <Label htmlFor="col-name-en">השם באנגלית *</Label>
+                <Input
+                  id="col-name-en"
+                  dir="ltr"
+                  value={editCol.name_en || ""}
+                  onChange={(e) => setEditCol({ ...editCol, name_en: e.target.value })}
+                  placeholder="e.g. Outdoor Salons"
+                />
+                <p className="mt-1 text-sm text-muted-foreground">
+                  נדרש כדי לפרסם. זה מה שיופיע למי שגולש באנגלית.
+                </p>
               </div>
               <div>
                 <Label htmlFor="col-intro">תיאור קצר</Label>

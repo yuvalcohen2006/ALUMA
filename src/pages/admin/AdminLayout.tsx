@@ -19,6 +19,7 @@ import {
   MessageSquare,
   Quote,
   type LucideIcon,
+  Star,
 } from "lucide-react";
 import { DirectionProvider } from "@radix-ui/react-direction";
 import { useAuth } from "@/hooks/useAuth";
@@ -51,6 +52,7 @@ const navGroups: { label: string | null; items: NavItem[] }[] = [
       { to: "/admin/collections", label: "קולקציות ומוצרים", icon: Package },
       { to: "/admin/projects", label: "פרויקטים", icon: FolderOpen },
       { to: "/admin/hero", label: "תמונה ראשית", icon: ImageIcon },
+      { to: "/admin/home", label: "מוצרים נבחרים", icon: Star },
       { to: "/admin/texts", label: "טקסטים באתר", icon: Type },
       { to: "/admin/faqs", label: "שאלות ותשובות", icon: MessageSquare },
       { to: "/admin/reviews", label: "המלצות לקוחות", icon: Quote },

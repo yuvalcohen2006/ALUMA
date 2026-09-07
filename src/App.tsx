@@ -27,6 +27,7 @@ const AdminCollections = lazy(() => import("./pages/admin/AdminCollections.tsx")
 const AdminProductEdit = lazy(() => import("./pages/admin/AdminProductEdit.tsx"));
 const AdminCollectionProducts = lazy(() => import("./pages/admin/AdminCollectionProducts.tsx"));
 const AdminHero = lazy(() => import("./pages/admin/AdminHero.tsx"));
+const AdminHome = lazy(() => import("./pages/admin/AdminHome.tsx"));
 const AdminBlog = lazy(() => import("./pages/admin/AdminBlog.tsx"));
 const AdminLeads = lazy(() => import("./pages/admin/AdminLeads.tsx"));
 const AdminSettings = lazy(() => import("./pages/admin/AdminSettings.tsx"));
@@ -70,6 +71,7 @@ const App = () => (
                 <Route path="/admin/collections/:id" element={<AdminGuard><AdminCollectionProducts /></AdminGuard>} />
                 <Route path="/admin/products/:id" element={<AdminGuard><AdminProductEdit /></AdminGuard>} />
                 <Route path="/admin/hero" element={<AdminGuard><AdminHero /></AdminGuard>} />
+                <Route path="/admin/home" element={<AdminGuard><AdminHome /></AdminGuard>} />
                 <Route path="/admin/blog" element={<AdminGuard><AdminBlog /></AdminGuard>} />
                 <Route path="/admin/leads" element={<AdminGuard><AdminLeads /></AdminGuard>} />
                 <Route path="/admin/team" element={<AdminGuard><AdminTeam /></AdminGuard>} />

@@ -61,6 +61,7 @@ export type Database = {
       }
       blog_posts: {
         Row: {
+          title_en: string | null
           author_id: string | null
           content: string
           cover_image_url: string | null
@@ -76,6 +77,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          title_en?: string | null
           author_id?: string | null
           content: string
           cover_image_url?: string | null
@@ -91,6 +93,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          title_en?: string | null
           author_id?: string | null
           content?: string
           cover_image_url?: string | null
@@ -422,10 +425,31 @@ export type Database = {
         }
         Relationships: []
       }
+      site_home_highlights: {
+        Row: {
+          product_id: string
+          slot: number
+          created_at: string
+        }
+        Insert: {
+          product_id: string
+          slot: number
+          created_at?: string
+        }
+        Update: {
+          product_id?: string
+          slot?: number
+          created_at?: string
+        }
+        Relationships: []
+      }
       site_collection_products: {
         Row: {
           price: number | null
           price_note: string | null
+          name_en: string | null
+          emblem: string | null
+          published_at: string | null
           collection_id: string
           cover_url: string | null
           created_at: string
@@ -446,6 +470,9 @@ export type Database = {
         Insert: {
           price?: number | null
           price_note?: string | null
+          name_en?: string | null
+          emblem?: string | null
+          published_at?: string | null
           collection_id: string
           cover_url?: string | null
           created_at?: string
@@ -466,6 +493,9 @@ export type Database = {
         Update: {
           price?: number | null
           price_note?: string | null
+          name_en?: string | null
+          emblem?: string | null
+          published_at?: string | null
           collection_id?: string
           cover_url?: string | null
           created_at?: string
@@ -534,6 +564,7 @@ export type Database = {
       }
       site_projects: {
         Row: {
+          title_en: string | null
           category: string | null
           cover_url: string | null
           created_at: string
@@ -550,6 +581,7 @@ export type Database = {
           views: number
         }
         Insert: {
+          title_en?: string | null
           category?: string | null
           cover_url?: string | null
           created_at?: string
@@ -566,6 +598,7 @@ export type Database = {
           views?: number
         }
         Update: {
+          title_en?: string | null
           category?: string | null
           cover_url?: string | null
           created_at?: string

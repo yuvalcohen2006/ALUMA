@@ -65,7 +65,7 @@ export const PHOTO_SPECS = {
     out: { w: 1600, h: 1600 },
     shownAt: [
       { label: "דף הקולקציה", ratio: 1 },
-      { label: "דף הבית", ratio: 4 / 5 },
+      { label: "דף הבית", ratio: 1 },
       { label: "מוצרים דומים", ratio: 4 / 3 },
     ],
   },
