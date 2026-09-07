@@ -54,16 +54,16 @@ const Testimonials = () => {
   return (
     <section className="bg-background">
       <div className="mx-auto max-w-[1440px] px-5 md:px-10 lg:px-16 py-20 md:py-28 lg:py-36">
-        <ul className="grid grid-cols-1 md:grid-cols-3 gap-x-10 gap-y-12">
+        <ul role="list" className="grid grid-cols-1 gap-x-10 gap-y-12 md:grid-cols-3">
           {reviews.map((r, i) => (
-            <Reveal key={r.id} delay={i * 70}>
-              <li className="text-start">
+            <li key={r.id} className="text-start">
+              <Reveal delay={i * 70}>
                 <blockquote className="text-body text-foreground">„{r.quote}”</blockquote>
                 <div aria-hidden="true" className="mt-6 h-px w-10 bg-foreground/20" />
                 <p className="mt-4 text-label text-foreground">{r.name}</p>
                 {r.meta && <p className="mt-1 text-label text-muted-foreground">{r.meta}</p>}
-              </li>
-            </Reveal>
+              </Reveal>
+            </li>
           ))}
         </ul>
       </div>

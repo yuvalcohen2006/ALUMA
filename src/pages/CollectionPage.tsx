@@ -5,6 +5,7 @@ import { Link, useParams } from "react-router-dom";
 import Layout from "@/components/Layout";
 import SEO from "@/components/SEO";
 import Reveal from "@/components/Reveal";
+import TileCard from "@/components/TileCard";
 import { useCollections, type DBProduct } from "@/hooks/useCollectionsData";
 import { useLocalizedPath } from "@/lib/useLocalizedPath";
 import NotFound from "./NotFound";
@@ -22,43 +23,37 @@ const SITE = "https://alumaoutdoor.com";
  */
 export const ProductCard = ({ product: p, eager }: { product: DBProduct; eager: boolean }) => {
   const { to } = useLocalizedPath();
+  const price = formatPrice(p.price);
   return (
-    <Link to={to(`/products/${p.slug}`)} className="group block text-center">
-      <div className="relative aspect-square overflow-hidden rounded-sm bg-muted">
-        {p.cover_url && (
-          <img
-            src={p.cover_url}
-            alt={[p.name, p.tag].filter(Boolean).join(", ")}
-            width={1024}
-            height={1024}
-            loading={eager ? "eager" : "lazy"}
-            decoding="async"
-            className="absolute inset-0 w-full h-full object-cover transition-transform duration-600 ease-hover group-hover:scale-[1.03] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
-          />
-        )}
-      </div>
-      <h3 className="mt-5 font-display font-medium text-body leading-snug text-foreground transition-colors duration-300 group-hover:text-accent">
-        {p.name}
-      </h3>
-      {p.tagline && (
-        <p className="mt-1 text-small leading-relaxed text-muted-foreground text-pretty">
-          {p.tagline}
-        </p>
-      )}
-      {formatPrice(p.price) && (
-        <p className="mt-1.5 text-small text-foreground">
-          {p.price_note && <span className="text-foreground-soft">{p.price_note} </span>}
-          <span dir="ltr">{formatPrice(p.price)}</span>
-        </p>
-      )}
-      {p.dimensions && (
-        <p className="mt-1.5 text-label text-foreground/45">
-          {/* Dimensions stay LTR inside the RTL line, or the × and the units
-              end up on the wrong side. */}
-          <Ltr>{p.dimensions}</Ltr>
-        </p>
-      )}
-    </Link>
+    <TileCard
+      to={to(`/products/${p.slug}`)}
+      image={p.cover_url}
+      alt=""
+      title={p.name}
+      meta={p.tagline}
+      aspect="square"
+      eager={eager}
+      align="center"
+      extra={
+        (price || p.dimensions) && (
+          <>
+            {price && (
+              <p className="mt-1.5 text-small text-foreground">
+                {p.price_note && <span className="text-foreground-soft">{p.price_note} </span>}
+                <span dir="ltr">{price}</span>
+              </p>
+            )}
+            {p.dimensions && (
+              <p className="mt-1.5 text-label text-foreground/45">
+                {/* Dimensions stay LTR inside the RTL line, or the × and the
+                    units end up on the wrong side. */}
+                <Ltr>{p.dimensions}</Ltr>
+              </p>
+            )}
+          </>
+        )
+      }
+    />
   );
 };
 
@@ -141,13 +136,16 @@ const CollectionPage = () => {
           {items.length === 0 ? (
             <p className="text-body text-muted-foreground text-start">בקרוב.</p>
           ) : (
-            <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-6 md:gap-x-8 gap-y-12 md:gap-y-14">
+            <ul
+              role="list"
+              className="tile-grid grid grid-cols-1 gap-x-6 gap-y-12 sm:grid-cols-2 md:gap-x-8 md:gap-y-14 lg:grid-cols-4"
+            >
               {items.map((p, i) => (
-                <Reveal key={p.id} delay={(i % 4) * 70}>
-                  <li>
+                <li key={p.id}>
+                  <Reveal delay={(i % 4) * 70}>
                     <ProductCard product={p} eager={i < 4} />
-                  </li>
-                </Reveal>
+                  </Reveal>
+                </li>
               ))}
             </ul>
           )}

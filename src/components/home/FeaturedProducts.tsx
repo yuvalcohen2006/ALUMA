@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import Reveal from "@/components/Reveal";
+import TileCard from "@/components/TileCard";
 import { useCollections } from "@/hooks/useCollectionsData";
 import { useLocalizedPath } from "@/lib/useLocalizedPath";
 import { useSiteText } from "@/hooks/useSiteText";
@@ -36,31 +37,24 @@ const FeaturedProducts = () => {
 
         {/* gap-y is double gap-x on purpose: uneven vertical breathing is what
             makes a grid read as curated rather than dumped. */}
-        <ul className="mt-10 md:mt-14 grid grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-12 md:gap-y-16">
+        <ul
+          role="list"
+          className="tile-grid mt-10 grid grid-cols-2 gap-x-6 gap-y-12 md:mt-14 md:gap-y-16 lg:grid-cols-3"
+        >
           {shown.map((p, i) => (
-            <Reveal key={p.id} delay={(i % 3) * 70}>
-              <li>
-                <Link to={to(`/products/${p.slug}`)} className="group block text-start">
-                  <div className="aspect-[4/5] overflow-hidden bg-muted">
-                    {p.cover_url && (
-                      <img
-                        src={p.cover_url}
-                        alt={p.name}
-                        loading={i < 3 ? "eager" : "lazy"}
-                        decoding="async"
-                        className="w-full h-full object-cover transition-opacity duration-500 group-hover:opacity-90"
-                      />
-                    )}
-                  </div>
-                  <h3 className="mt-4 text-small text-foreground">{p.name}</h3>
-                  {p.tagline && (
-                    <p className="mt-1 text-label text-muted-foreground line-clamp-1">
-                      {p.tagline}
-                    </p>
-                  )}
-                </Link>
-              </li>
-            </Reveal>
+            <li key={p.id}>
+              <Reveal delay={(i % 3) * 70}>
+                <TileCard
+                  to={to(`/products/${p.slug}`)}
+                  image={p.cover_url}
+                  alt=""
+                  title={p.name}
+                  meta={p.tagline}
+                  aspect="4/5"
+                  eager={i < 3}
+                />
+              </Reveal>
+            </li>
           ))}
         </ul>
 

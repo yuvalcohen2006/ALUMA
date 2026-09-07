@@ -4,6 +4,7 @@ import Layout from "@/components/Layout";
 import SEO from "@/components/SEO";
 import PageHero from "@/components/PageHero";
 import Reveal from "@/components/Reveal";
+import TileCard from "@/components/TileCard";
 import { useCollections, type DBCollection, type DBProduct } from "@/hooks/useCollectionsData";
 import { useLocalizedPath } from "@/lib/useLocalizedPath";
 import { useSiteText } from "@/hooks/useSiteText";
@@ -56,42 +57,29 @@ const CollectionCard = ({
 }) => {
   const { to } = useLocalizedPath();
   const { t } = useTranslation("catalogue");
-  const cover = col.image_url;
 
   return (
-    <li>
-      <Link
-        to={to(`/collections/${col.slug}`)}
-        className="group block text-start focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring"
-      >
-        <div className="aspect-[4/5] overflow-hidden bg-secondary">
-          {cover ? (
-            <img
-              src={cover}
-              alt=""
-              loading={eager ? "eager" : "lazy"}
-              decoding="async"
-              className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.02]"
-            />
-          ) : (
-            // A collection with no photograph yet still gets a tile of the
-            // right shape, so the grid never collapses into a ragged row.
-            <div className="grid h-full w-full place-items-center">
-              <span className="font-display text-heading text-foreground/20">
-                {col.name_he.charAt(0)}
-              </span>
-            </div>
-          )}
+    <TileCard
+      to={to(`/collections/${col.slug}`)}
+      image={col.image_url}
+      alt=""
+      title={col.name_he}
+      meta={t("itemCount", { count })}
+      aspect="4/5"
+      eager={eager}
+      // A collection is the primary thing this page lists, so its name is a
+      // real heading rather than the h3 a tile carries inside a section.
+      as="h2"
+      // A collection with no photograph yet still gets a tile of the right
+      // shape, so the grid never collapses into a ragged row.
+      fallback={
+        <div className="grid h-full w-full place-items-center">
+          <span className="font-display text-heading text-foreground/25">
+            {col.name_he.charAt(0)}
+          </span>
         </div>
-
-        <h2 className="mt-4 text-body text-foreground transition-colors group-hover:text-accent">
-          {col.name_he}
-        </h2>
-        <p className="mt-1 text-small text-muted-foreground">
-          {t("itemCount", { count })}
-        </p>
-      </Link>
-    </li>
+      }
+    />
   );
 };
 
@@ -189,15 +177,17 @@ const CollectionsPage = () => {
             </Link>
           </div>
         ) : (
-          <ul className="grid grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-12">
+          <ul role="list" className="tile-grid grid grid-cols-2 gap-x-6 gap-y-12 lg:grid-cols-3">
             {collections.map((c, i) => (
-              <Reveal key={c.id} delay={(i % 3) * 70}>
-                <CollectionCard
-                  collection={c}
-                  count={products.filter((p) => p.collection_id === c.id).length}
-                  eager={i < 3}
-                />
-              </Reveal>
+              <li key={c.id}>
+                <Reveal delay={(i % 3) * 70}>
+                  <CollectionCard
+                    collection={c}
+                    count={products.filter((p) => p.collection_id === c.id).length}
+                    eager={i < 3}
+                  />
+                </Reveal>
+              </li>
             ))}
           </ul>
         )}

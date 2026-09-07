@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 
@@ -43,10 +44,25 @@ type Props = {
   /** Empty string for a photograph that adds nothing the title has not said. */
   alt: string;
   title: string;
-  meta?: string | null;
+  meta?: ReactNode;
   aspect?: keyof typeof ASPECT;
   /** The first tile in the first grid on a page; everything else stays lazy. */
   eager?: boolean;
+  /**
+   * Product tiles carry a price and a size under the name. Anything passed
+   * here sits below `meta` and above the rule, and is not part of the link's
+   * accessible name — it is detail, not identity.
+   */
+  extra?: ReactNode;
+  /** What fills the frame when there is no photograph yet. */
+  fallback?: ReactNode;
+  /**
+   * Catalogue tiles centre their type over a square photograph; editorial
+   * tiles start-align it. The rule and arrow follow whichever is chosen.
+   */
+  align?: "start" | "center";
+  /** `h2` where the tile is the page's primary list of things. */
+  as?: "h2" | "h3";
 };
 
 const TileCard = ({
@@ -57,6 +73,10 @@ const TileCard = ({
   meta,
   aspect = "3/4",
   eager = false,
+  extra,
+  fallback,
+  align = "start",
+  as: Heading = "h3",
 }: Props) => (
   /*
    * The focus ring is never suppressed here. The base layer already rings a
@@ -65,13 +85,19 @@ const TileCard = ({
    * Only the offset is widened, so the ring clears the photograph instead of
    * sitting on its edge.
    */
-  <Link to={to} className="group block text-start focus-visible:outline-offset-4">
+  <Link
+    to={to}
+    className={`group block focus-visible:outline-offset-4 ${
+      align === "center" ? "text-center" : "text-start"
+    }`}
+  >
     {/*
       `isolate` and a radius on the <img> as well as on this box: WebKit does
       not clip a transform-scaled child to a rounded overflow-hidden ancestor,
       so without both the corners leak during the zoom on iOS only.
     */}
     <div className={`relative isolate overflow-hidden rounded-sm bg-muted ${ASPECT[aspect]}`}>
+      {!image && fallback}
       {image && (
         <img
           src={image}
@@ -103,8 +129,10 @@ const TileCard = ({
     </div>
 
     <div className="relative mt-5">
-      <div className="flex items-baseline gap-2">
-        <h3 className="text-tile text-foreground">{title}</h3>
+      <div
+        className={`flex items-baseline gap-2 ${align === "center" ? "justify-center" : ""}`}
+      >
+        <Heading className="text-tile text-foreground">{title}</Heading>
         <ArrowLeft
           aria-hidden="true"
           strokeWidth={1.5}
@@ -119,6 +147,7 @@ const TileCard = ({
       </div>
 
       {meta && <p className="mt-1 line-clamp-1 text-label text-muted-foreground">{meta}</p>}
+      {extra}
 
       {/*
         The rule draws itself from the reading start. --tile-line-origin is set

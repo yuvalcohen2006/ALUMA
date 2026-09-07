@@ -4,6 +4,7 @@ import Layout from "@/components/Layout";
 import SEO from "@/components/SEO";
 import PageHero from "@/components/PageHero";
 import Reveal from "@/components/Reveal";
+import TileCard from "@/components/TileCard";
 import { materials } from "@/data/materials";
 import { useLocalizedPath } from "@/lib/useLocalizedPath";
 import { supabase } from "@/integrations/supabase/client";
@@ -64,24 +65,19 @@ const JournalPage = () => {
           points at the good content rather than trying to be it. */}
       <section className="bg-background">
         <div className="mx-auto max-w-[1440px] px-5 md:px-10 lg:px-16 pb-20 md:pb-28">
-          <ul className="grid grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-10">
+          <ul role="list" className="tile-grid grid grid-cols-2 gap-x-6 gap-y-10 lg:grid-cols-4">
             {materials.map((m, i) => (
-              <Reveal key={m.slug} delay={(i % 4) * 70}>
-                <li>
-                  <Link to={to(`/materials/${m.slug}`)} className="group block text-start">
-                    <div className="aspect-[3/4] overflow-hidden bg-muted">
-                      <img
-                        src={m.image}
-                        alt={m.name}
-                        loading="lazy"
-                        decoding="async"
-                        className="w-full h-full object-cover transition-opacity duration-500 group-hover:opacity-90"
-                      />
-                    </div>
-                    <h3 className="mt-4 text-small text-foreground">{m.name}</h3>
-                  </Link>
-                </li>
-              </Reveal>
+              <li key={m.slug}>
+                <Reveal delay={(i % 4) * 70}>
+                  <TileCard
+                    to={to(`/materials/${m.slug}`)}
+                    image={m.image}
+                    alt=""
+                    title={m.name}
+                    aspect="3/4"
+                  />
+                </Reveal>
+              </li>
             ))}
           </ul>
 
@@ -108,10 +104,10 @@ const JournalPage = () => {
               </h2>
             </Reveal>
 
-            <ul className="mt-10 md:mt-14 max-w-[820px]">
+            <ul role="list" className="mt-10 max-w-[820px] md:mt-14">
               {articles.map((a, i) => (
-                <Reveal key={a.id} delay={(i % 4) * 70}>
-                  <li className="border-t border-foreground/10 first:border-t-0">
+                <li key={a.id} className="border-t border-foreground/10 first:border-t-0">
+                  <Reveal delay={(i % 4) * 70}>
                     <Link
                       to={to(`/journal/${a.slug}`)}
                       className="group block py-7 text-start"
@@ -132,8 +128,8 @@ const JournalPage = () => {
                         </p>
                       )}
                     </Link>
-                  </li>
-                </Reveal>
+                  </Reveal>
+                </li>
               ))}
             </ul>
           </div>

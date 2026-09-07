@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import Reveal from "@/components/Reveal";
+import TileCard from "@/components/TileCard";
 import { useProjects } from "@/hooks/useProjectsData";
 import { useLocalizedPath } from "@/lib/useLocalizedPath";
 import { useSiteText } from "@/hooks/useSiteText";
@@ -22,7 +23,9 @@ const ProjectsPreview = () => {
   if (shown.length === 0) return null;
 
   return (
-    <section className="bg-secondary">
+    // Hairlined, like every tinted band now: #F8F8F8 on white separates at
+    // 1.06:1, where sand on cream managed 1.22:1.
+    <section className="border-y border-border bg-secondary">
       <div className="mx-auto max-w-[1440px] px-5 md:px-10 lg:px-16 py-20 md:py-28 lg:py-36">
         <Reveal>
           <h2 className="text-start text-heading font-normal tracking-normal text-foreground">
@@ -30,27 +33,23 @@ const ProjectsPreview = () => {
           </h2>
         </Reveal>
 
-        <ul className="mt-10 md:mt-14 grid grid-cols-1 sm:grid-cols-3 gap-x-6 gap-y-16">
+        <ul
+          role="list"
+          className="tile-grid mt-10 grid grid-cols-1 gap-x-6 gap-y-16 sm:grid-cols-3 md:mt-14"
+        >
           {shown.map((p, i) => (
-            <Reveal key={p.slug} delay={i * 70}>
-              <li>
-                <Link to={to(`/projects/${p.slug}`)} className="group block text-start">
-                  <div className="aspect-[3/2] overflow-hidden bg-muted">
-                    <img
-                      src={p.cover}
-                      alt={p.name}
-                      loading="lazy"
-                      decoding="async"
-                      className="w-full h-full object-cover transition-opacity duration-500 group-hover:opacity-90"
-                    />
-                  </div>
-                  <h3 className="mt-4 text-small text-foreground">{p.name}</h3>
-                  {p.location && (
-                    <p className="mt-1 text-label text-muted-foreground">{p.location}</p>
-                  )}
-                </Link>
-              </li>
-            </Reveal>
+            <li key={p.slug}>
+              <Reveal delay={i * 70}>
+                <TileCard
+                  to={to(`/projects/${p.slug}`)}
+                  image={p.cover}
+                  alt=""
+                  title={p.name}
+                  meta={p.location}
+                  aspect="3/2"
+                />
+              </Reveal>
+            </li>
           ))}
         </ul>
 
