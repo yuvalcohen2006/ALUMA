@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import Reveal from "@/components/Reveal";
+import TileCard from "@/components/TileCard";
 import { useCollections } from "@/hooks/useCollectionsData";
 import { useLocalizedPath } from "@/lib/useLocalizedPath";
 import { useSiteText } from "@/hooks/useSiteText";
@@ -20,42 +21,42 @@ const FeaturedCollections = () => {
   if (loading || shown.length === 0) return null;
 
   return (
-    <section className="bg-secondary">
-      <div className="mx-auto max-w-[1440px] px-5 md:px-10 lg:px-16 py-20 md:py-28 lg:py-36">
+    // A hairline at each edge, because the band no longer separates itself.
+    // Sand on cream was 1.22:1; #F8F8F8 on white is 1.06:1, and this site has
+    // never had any separator other than fill.
+    <section className="border-y border-border bg-secondary">
+      <div className="mx-auto max-w-[1440px] px-5 py-20 md:px-10 md:py-28 lg:px-16 lg:py-36">
         <Reveal>
           <h2 className="text-start text-heading font-normal tracking-normal text-foreground">
             {t("home.collections.title", "קולקציות נבחרות")}
           </h2>
         </Reveal>
 
-        <ul className="mt-10 md:mt-14 grid grid-cols-1 sm:grid-cols-3 gap-x-6 gap-y-12">
+        {/*
+          Reveal sits INSIDE the li, not around it. Wrapped the other way it
+          produced `ul > div > li`, which is invalid and drops the list
+          semantics the role attribute is there to guarantee — and it put a
+          div between .tile-grid and the li that the sibling-dimming rule
+          needs to reach.
+        */}
+        <ul
+          role="list"
+          className="tile-grid mt-10 grid grid-cols-1 gap-x-6 gap-y-12 sm:grid-cols-3 md:mt-14"
+        >
           {shown.map((c, i) => (
-            <Reveal key={c.id} delay={i * 70}>
-              <li>
-                {/* No border, no shadow, no radius: the photograph sits on the
-                    page and the type sits under it. Hover is a slow crossfade
-                    of the image only. */}
-                <Link to={to(`/collections/${c.slug}`)} className="group block text-start">
-                  <div className="aspect-[3/4] overflow-hidden bg-muted">
-                    {c.image_url && (
-                      <img
-                        src={c.image_url}
-                        alt={c.name_he}
-                        loading={i === 0 ? "eager" : "lazy"}
-                        decoding="async"
-                        className="w-full h-full object-cover transition-opacity duration-500 group-hover:opacity-90"
-                      />
-                    )}
-                  </div>
-                  <h3 className="mt-4 text-small text-foreground">{c.name_he}</h3>
-                  {c.intro && (
-                    <p className="mt-1 text-label text-muted-foreground line-clamp-1">
-                      {c.intro}
-                    </p>
-                  )}
-                </Link>
-              </li>
-            </Reveal>
+            <li key={c.id}>
+              <Reveal delay={i * 70}>
+                <TileCard
+                  to={to(`/collections/${c.slug}`)}
+                  image={c.image_url}
+                  alt=""
+                  title={c.name_he}
+                  meta={c.intro}
+                  aspect="3/4"
+                  eager={i === 0}
+                />
+              </Reveal>
+            </li>
           ))}
         </ul>
 
@@ -65,7 +66,7 @@ const FeaturedCollections = () => {
                 belongs on the quote request. */}
             <Link
               to={to("/collections")}
-              className="text-small text-foreground underline underline-offset-[6px] decoration-1 hover:text-accent transition-colors"
+              className="text-small text-foreground underline decoration-1 underline-offset-[6px] transition-colors hover:text-accent"
             >
               לכל הקטלוג
             </Link>

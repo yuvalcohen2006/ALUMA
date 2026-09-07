@@ -56,11 +56,14 @@ const Newsletter = () => {
   };
 
   return (
-    // px-3 matches the mosaic above: this is the ninth tile, so it takes the
-    // same frame. Flush against the viewport while every tile above it is
-    // inset would read as a bug, not a choice.
-    <section className="bg-background p-3">
-      <div className="relative h-[500px] md:h-[490px] lg:h-[580px] overflow-hidden">
+    // Full bleed, and no frame. The p-3 that used to be here dated from a
+    // mosaic of inset tiles that no longer exists, and it was doing two
+    // visible jobs by accident: holding the band 12px short of the viewport
+    // edges, and painting a 12px strip of page colour between the band and
+    // the footer. Nothing separates them now, which is the point — the
+    // photograph runs edge to edge and hands straight over to the charcoal.
+    <section>
+      <div className="relative h-[500px] overflow-hidden md:h-[490px] lg:h-[580px]">
         <img
           src={clubBg}
           alt=""

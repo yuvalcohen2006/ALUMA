@@ -182,6 +182,48 @@
 
 /* Scroll-reveal utility (paired with useReveal hook) */
 @layer utilities {
+  /*
+     transform-origin has no logical keyword, so the rule under a tile title
+     cannot be told to grow "from the reading start" in CSS alone. Tailwind's
+     rtl:/ltr: variants are not usable either: Layout hardcodes <main dir="rtl">
+     while /en sets <html dir="ltr">, so an element inside main on an English
+     route matches BOTH `[dir=ltr] *` and `[dir=rtl] *` and the winner is
+     decided by stylesheet order rather than by the axis actually in effect.
+     A custom property inherits from the NEAREST declaring ancestor, so
+     main[dir=rtl] beats html[dir=ltr] and the origin always matches the axis
+     the element is really laid out on.
+  */
+  [dir="rtl"] {
+    --tile-line-origin: 100% 50%;
+    --tile-arrow-travel: -4px; /* forward is LEFT */
+    --tile-arrow-flip: 0deg;   /* ArrowLeft already points forward */
+  }
+  [dir="ltr"] {
+    --tile-line-origin: 0% 50%;
+    --tile-arrow-travel: 4px;
+    --tile-arrow-flip: 180deg;
+  }
+
+  /*
+     Sibling dimming: pointing at one tile settles the others back. Gated on a
+     real pointer, because on a touch screen there is no "the others" — the
+     first tap would dim two tiles and leave them dimmed.
+
+     Scoped to `> li` and not `> *` so it never lands on a .reveal wrapper,
+     whose own opacity transition is the scroll-in entrance.
+  */
+  @media (hover: hover) and (pointer: fine) {
+    .tile-grid > li {
+      transition: opacity 400ms cubic-bezier(0.215, 0.61, 0.355, 1);
+    }
+    .tile-grid:has(a:hover) > li:not(:has(a:hover)) {
+      opacity: 0.58;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .tile-grid > li { transition: none; }
+  }
+
   .reveal {
     opacity: 0;
     transform: translateY(28px);

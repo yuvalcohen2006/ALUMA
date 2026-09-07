@@ -66,7 +66,7 @@ export default {
         display: ['var(--font-display)'],
         sans: ['var(--font-body)'],
       },
-      // FIVE type roles. The site had grown 26 distinct arbitrary sizes, which
+      // SIX type roles. The site had grown 26 distinct arbitrary sizes, which
       // is the single largest contributor to the "everything is shouting"
       // problem — with that many steps nothing reads as more important than
       // anything else. Every new or rebuilt surface uses these and nothing
@@ -79,6 +79,12 @@ export default {
         display: ["clamp(2.25rem, 5vw, 3.75rem)", { lineHeight: "1.1", letterSpacing: "0" }],
         heading: ["clamp(1.5rem, 3vw, 1.875rem)", { lineHeight: "1.25", letterSpacing: "0" }],
         body: ["1.125rem", { lineHeight: "1.75" }],
+        // The title under a photograph in a grid of tiles. It exists as a role
+        // because the tile is now one shared component used on every index on
+        // the site, so its title is a repeated thing and not a one-off. 24px:
+        // `heading` would have been 30px at desktop, which is a section title,
+        // and `body` at 18px read as a caption rather than a name.
+        tile: ["1.5rem", { lineHeight: "1.3", letterSpacing: "0" }],
         small: ["1rem", { lineHeight: "1.65" }],
         label: ["0.875rem", { lineHeight: "1.5" }],
       },
