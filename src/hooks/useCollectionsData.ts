@@ -43,6 +43,11 @@ export type DBProduct = {
  */
 export const normaliseProduct = (p: any): DBProduct => ({
   ...p,
+  // Absent until their migration is applied, and `select("*")` simply omits
+  // them rather than failing — so they arrive as undefined, not null, and every
+  // consumer would have to know that. Normalised here instead.
+  name_en: p?.name_en ?? null,
+  emblem: p?.emblem ?? null,
   description: Array.isArray(p?.description) ? p.description : [],
   highlights: Array.isArray(p?.highlights) ? p.highlights : [],
   materials: Array.isArray(p?.materials) ? p.materials : [],
@@ -64,9 +69,21 @@ export function useCollections() {
           .order("sort_order"),
         supabase
           .from("site_collection_products")
-          .select(
-            "id, collection_id, slug, name, name_en, emblem, tag, tagline, description, highlights, materials, dimensions, cover_url, gallery, price, price_note"
-          )
+          // `*`, not a column list, and this is load-bearing.
+          //
+          // PostgREST rejects a select naming a column that does not exist —
+          // the WHOLE query, with a 400 — so the moment this file asked for
+          // name_en and emblem, every product on the site disappeared until
+          // the migration adding them was run. Not degraded: gone. Empty
+          // collection pages, an empty catalogue, an empty home page.
+          //
+          // A column list is a hard dependency on a migration having already
+          // been applied, and the code deploys before the SQL does. `*` returns
+          // whatever the table currently has, so a new column is simply
+          // undefined until it exists, and the site keeps working either way.
+          // The extra bytes are four scalars next to four JSON columns that
+          // were already being fetched.
+          .select("*")
           .eq("published", true)
           .order("sort_order"),
       ]);
