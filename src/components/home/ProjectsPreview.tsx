@@ -9,22 +9,15 @@ import { useSiteText } from "@/hooks/useSiteText";
 const MAX = 3;
 
 /**
- * Three projects, the last one dissolving, and then the offer.
+ * Three projects, then the offer.
  *
- * The fade is doing a specific job: a row of exactly three finished tiles says
- * "here are three projects", and a row whose last tile runs out of the frame
- * says "here are three of them". That is the difference between a list and a
- * window, and it is why the closing line can be an invitation rather than a
- * navigation label.
+ * The three tiles are plain and identical. A dissolve on the third belongs on
+ * the projects page, where it closes a list that has genuinely ended — here it
+ * only made one of three tiles look broken, since the sentence underneath is
+ * already doing the work of saying there is more.
  *
- * The mask lands on the photograph only. A mask clips its element's own focus
- * ring, so putting it on the link or the list item would leave a keyboard user
- * tabbing to a tile with no visible ring — see .tile-fade in index.css.
- *
- * The third project stays a real, clickable, focusable link. Faded is not
- * hidden: it is still in the document and still read aloud, so making it
- * unreachable by mouse while leaving it in the tab order would be worse than
- * either extreme.
+ * The words carry it instead: "and many others", then the invitation, then the
+ * two ways out — the conversation first, the full portfolio second.
  */
 const ProjectsPreview = () => {
   const { projects } = useProjects();
@@ -59,7 +52,6 @@ const ProjectsPreview = () => {
                   title={p.name}
                   meta={p.location}
                   aspect="3/2"
-                  fade={i === MAX - 1 && shown.length === MAX}
                 />
               </Reveal>
             </li>

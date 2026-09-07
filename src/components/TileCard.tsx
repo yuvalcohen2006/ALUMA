@@ -73,12 +73,6 @@ type Props = {
    * lib/emblems.ts for why, and cap it with capEmblems() before you get here.
    */
   emblem?: Emblem | null;
-  /**
-   * Dissolves the photograph toward the end of the row, for the last tile in a
-   * preview strip. Lands on the image frame only: a mask clips its element's
-   * focus ring, so it must never reach the <a>.
-   */
-  fade?: boolean;
 };
 
 const TileCard = ({
@@ -94,7 +88,6 @@ const TileCard = ({
   align = "start",
   as: Heading = "h3",
   emblem = null,
-  fade = false,
 }: Props) => {
   const { lang } = useLocalizedPath();
   return (
@@ -116,11 +109,7 @@ const TileCard = ({
       not clip a transform-scaled child to a rounded overflow-hidden ancestor,
       so without both the corners leak during the zoom on iOS only.
     */}
-    <div
-      className={`relative isolate overflow-hidden rounded-sm bg-muted ${ASPECT[aspect]} ${
-        fade ? "tile-fade" : ""
-      }`}
-    >
+    <div className={`relative isolate overflow-hidden rounded-sm bg-muted ${ASPECT[aspect]}`}>
       {!image && fallback}
       {image && (
         <img
@@ -133,6 +122,25 @@ const TileCard = ({
                      motion-reduce:transition-none motion-reduce:group-hover:scale-100
                      motion-reduce:group-focus-visible:scale-100"
         />
+      )}
+
+      {/*
+        The label, on the photograph.
+        A SOLID fill, not a translucent one. Over a photograph the only way to
+        guarantee contrast is to stop the photograph showing through — a tinted
+        pill reads differently on a pale stone terrace than on a dusk sky, and
+        somewhere in the catalogue there is always a picture that beats it.
+        Charcoal with white type is 13.6:1 on every photograph there will ever
+        be. Never terracotta: 3.3:1, which fails in both directions.
+
+        `start-4` and not `left-4`, so it sits at the reading start — top-right
+        in Hebrew, top-left on /en — and pointer-events-none so it can never
+        swallow a click meant for the tile.
+      */}
+      {emblem && (
+        <span className="pointer-events-none absolute start-4 top-4 z-10 rounded-full bg-foreground px-3 py-1 text-label leading-none text-background">
+          {emblemLabel(emblem, lang)}
+        </span>
       )}
 
       {/*
@@ -171,18 +179,6 @@ const TileCard = ({
 
       {meta && <p className="mt-1 line-clamp-1 text-label text-muted-foreground">{meta}</p>}
       {extra}
-
-      {/*
-        Last inside the link, which is where Net-a-Porter puts it and why it
-        needs no scrim: nothing sits over the photograph, so nothing has to win
-        a contrast fight with it. Charcoal at normal weight against the muted
-        metadata above — differentiated by colour and position, not by a box.
-        Never terracotta: it measures 3.3:1 on white and fails AA in every
-        direction.
-      */}
-      {emblem && (
-        <p className="mt-1.5 text-label text-foreground">{emblemLabel(emblem, lang)}</p>
-      )}
     </div>
   </Link>
   );

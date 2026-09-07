@@ -195,12 +195,10 @@
      the element is really laid out on.
   */
   [dir="rtl"] {
-    --tile-fade-to: left;      /* the end of the row */
     --tile-arrow-travel: -4px; /* forward is LEFT */
     --tile-arrow-flip: 0deg;   /* ArrowLeft already points forward */
   }
   [dir="ltr"] {
-    --tile-fade-to: right;
     --tile-arrow-travel: 4px;
     --tile-arrow-flip: 180deg;
   }
@@ -330,32 +328,22 @@
     }
   }
 
-  /*
-     The last tile in a preview row dissolves toward the end of the row, so the
-     strip reads as a window onto more rather than as everything there is.
-
-     TWO constraints shape this. A mask is one of the graphical effects that
-     clips its element's own focus ring, so it goes on the image FRAME and
-     never on the <a> or the list item — a keyboard user must still get a ring
-     around the whole tile. And linear-gradient has no logical keyword, so the
-     direction comes from a custom property that inherits from the nearest
-     [dir] ancestor; on /en the fade turns round on its own.
-
-     rgb(0 0 0 / 0) rather than `transparent`: the transparent keyword is
-     transparent BLACK, and Safari has historically interpolated toward it
-     through grey, leaving a dirty edge mid-fade.
-  */
-  .tile-fade {
+  /* The last entry in a list dissolves downward into the page, so the list
+     ends by trailing off rather than by stopping on a hard edge. Downward and
+     not sideways: a row continues along the inline axis, a list continues down
+     — which is also why this needs no direction property. Down is down in both
+     reading directions. */
+  .tile-fade-b {
     -webkit-mask-image: linear-gradient(
-      to var(--tile-fade-to),
-      rgb(0 0 0 / 1) 38%,
-      rgb(0 0 0 / 0.55) 68%,
+      to bottom,
+      rgb(0 0 0 / 1) 30%,
+      rgb(0 0 0 / 0.5) 66%,
       rgb(0 0 0 / 0) 100%
     );
     mask-image: linear-gradient(
-      to var(--tile-fade-to),
-      rgb(0 0 0 / 1) 38%,
-      rgb(0 0 0 / 0.55) 68%,
+      to bottom,
+      rgb(0 0 0 / 1) 30%,
+      rgb(0 0 0 / 0.5) 66%,
       rgb(0 0 0 / 0) 100%
     );
   }

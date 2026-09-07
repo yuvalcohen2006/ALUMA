@@ -62,7 +62,15 @@ const MetaRule = ({ className }: { className?: string }) => (
  * the numeral and lifts the photo — the photo itself never changes, so the row
  * stays calm rather than flickering to a different image under the cursor.
  */
-const ProjectEntry = ({ project: p, index }: { project: Project; index: number }) => {
+const ProjectEntry = ({
+  project: p,
+  index,
+  isLast,
+}: {
+  project: Project;
+  index: number;
+  isLast: boolean;
+}) => {
   const { t } = useTranslation("projects");
   const photoRight = index % 2 === 0;
   // Two values, not four. Across fourteen architecture and furniture indexes
@@ -111,7 +119,22 @@ const ProjectEntry = ({ project: p, index }: { project: Project; index: number }
                 zoom reads as a slideshow effect rather than as a response, and
                 a 1.06 scale on a 900px band is a lot of pixels resampling. The
                 title underline and the cue below carry the hover instead. */}
-            <div className="relative aspect-[4/3] overflow-hidden rounded-sm">
+            {/*
+              The last photograph on the page dissolves downward into the white
+              rather than stopping on a hard edge, so the list ends by trailing
+              off instead of by running out. Downward, not sideways: a row
+              continues along the inline axis, a list continues down the page.
+
+              The mask lands on the frame and never on the link — a mask clips
+              its own element's focus ring, so a keyboard user would otherwise
+              tab to a project with no visible ring at all.
+            */}
+            <div
+              className={cn(
+                "relative aspect-[4/3] overflow-hidden rounded-sm",
+                isLast && "tile-fade-b",
+              )}
+            >
               <div className="absolute inset-0">
                 <img
                   src={p.cover}
@@ -228,7 +251,12 @@ const ProjectsPage = () => {
         <div className="container-luxury">
           <div className="divide-y divide-border">
             {projects.map((p, i) => (
-              <ProjectEntry key={p.slug} project={p} index={i} />
+              <ProjectEntry
+                key={p.slug}
+                project={p}
+                index={i}
+                isLast={i === projects.length - 1}
+              />
             ))}
           </div>
         </div>
