@@ -150,13 +150,11 @@ const CollectionsPage = () => {
         jsonLd={collectionSchema}
       />
 
-      <PageHero
-        title={text("collections.title", "קולקציות")}
-        subtitle={text(
-          "collections.subtitle",
-          "כל פריט מיוצר בהזמנה אישית. בלי מחירון — כי אין אצלנו שני פרויקטים זהים.",
-        )}
-      />
+      {/* No subtitle. The line that was here explained that everything is made
+          to order and there is no price list — true, said again on every product
+          page, and standing between the visitor and the six photographs they
+          came for. */}
+      <PageHero title={text("collections.title", "קולקציות")} />
 
       <div className="container-luxury pb-24 md:pb-32">
         {loading ? (

@@ -7,6 +7,7 @@ import SEO from "@/components/SEO";
 import Reveal from "@/components/Reveal";
 import TileCard from "@/components/TileCard";
 import { localizedName } from "@/lib/localized-name";
+import { capEmblems, resolveEmblems, type Emblem } from "@/lib/emblems";
 import { useCollections, type DBProduct } from "@/hooks/useCollectionsData";
 import { useLocalizedPath } from "@/lib/useLocalizedPath";
 import NotFound from "./NotFound";
@@ -22,7 +23,15 @@ const SITE = "https://alumaoutdoor.com";
  * piece itself. Same card as the index so the two pages are visibly the same
  * system — tinted panel carries the radius, the card itself has no chrome.
  */
-export const ProductCard = ({ product: p, eager }: { product: DBProduct; eager: boolean }) => {
+export const ProductCard = ({
+  product: p,
+  eager,
+  emblem,
+}: {
+  product: DBProduct;
+  eager: boolean;
+  emblem?: Emblem | null;
+}) => {
   const { to } = useLocalizedPath();
   const price = formatPrice(p.price);
   return (
@@ -35,6 +44,7 @@ export const ProductCard = ({ product: p, eager }: { product: DBProduct; eager: 
       aspect="square"
       eager={eager}
       align="center"
+      emblem={emblem}
       extra={
         (price || p.dimensions) && (
           <>
@@ -92,6 +102,11 @@ const CollectionPage = () => {
 
 
   const name = localizedName(lang, collection.name_he, collection.name_en);
+  // Two, not one: this grid runs to a dozen tiles, where a single mark is lost
+  // rather than rare. Resolved across the whole catalogue so "new" is not
+  // relative to whichever collection you happen to be looking at.
+  const resolved = resolveEmblems(products);
+  const emblems = capEmblems(items, (p) => resolved.get(p.id), 2);
 
   return (
     <Layout>
@@ -146,7 +161,7 @@ const CollectionPage = () => {
               {items.map((p, i) => (
                 <li key={p.id}>
                   <Reveal delay={(i % 4) * 70}>
-                    <ProductCard product={p} eager={i < 4} />
+                    <ProductCard product={p} eager={i < 4} emblem={emblems[i]} />
                   </Reveal>
                 </li>
               ))}

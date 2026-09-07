@@ -45,6 +45,63 @@ export const EMBLEM_OPTIONS: { value: Emblem; label: string }[] = EMBLEMS.map((v
   label: LABELS[value].he,
 }));
 
+/** How recently a piece must have arrived to count as new. */
+export const NEW_WINDOW_DAYS = 45;
+
+/**
+ * How many pieces may be automatically new at once, however many qualify.
+ *
+ * This cap is the whole reason the automatic rule works here. Aluma's 47
+ * products were loaded in two batches a few days apart, so a plain "newer than
+ * 45 days" test marks the ENTIRE catalogue new — every tile badged, which is
+ * the same as no tile badged. Taking the most recent handful instead means the
+ * emblem stays rare no matter how the catalogue was filled, and it degrades
+ * correctly in the other direction too: a shop that adds nothing for a year
+ * shows no "new" rather than freezing one on forever.
+ */
+export const MAX_AUTO_NEW = 5;
+
+type Dated = { id: string; created_at?: string | null; published_at?: string | null; emblem?: string | null };
+
+/**
+ * Work out which pieces are new, and let a hand-set emblem win.
+ *
+ * A person choosing "popular" is making a claim about the piece; "new" is a
+ * fact about the calendar. When they collide the person wins — otherwise the
+ * owner marks something popular, sees "new" instead, and reasonably concludes
+ * the field is broken.
+ *
+ * published_at is preferred over created_at where it exists: created_at is when
+ * the ROW was inserted, which for a bulk import says nothing about when the
+ * piece went live. It is read defensively because the column arrives with a
+ * migration and the code ships first.
+ */
+export function resolveEmblems<T extends Dated>(
+  products: T[],
+  now: Date = new Date(),
+): Map<string, Emblem> {
+  const out = new Map<string, Emblem>();
+
+  const cutoff = now.getTime() - NEW_WINDOW_DAYS * 24 * 60 * 60 * 1000;
+  const dateOf = (p: Dated) => {
+    const raw = p.published_at ?? p.created_at;
+    const t = raw ? Date.parse(raw) : NaN;
+    return Number.isNaN(t) ? null : t;
+  };
+
+  const fresh = products
+    .map((p) => ({ p, t: dateOf(p) }))
+    .filter((x): x is { p: T; t: number } => x.t !== null && x.t >= cutoff)
+    .sort((a, b) => b.t - a.t)
+    .slice(0, MAX_AUTO_NEW);
+
+  for (const { p } of fresh) out.set(p.id, "new");
+  // Second, so a hand-set value overwrites the computed one.
+  for (const p of products) if (isEmblem(p.emblem)) out.set(p.id, p.emblem);
+
+  return out;
+}
+
 /**
  * How many tiles in one grid may carry an emblem.
  *

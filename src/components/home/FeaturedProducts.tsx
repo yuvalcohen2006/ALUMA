@@ -6,7 +6,7 @@ import { useHomeHighlights } from "@/hooks/useHomeHighlights";
 import { useLocalizedPath } from "@/lib/useLocalizedPath";
 import { useSiteText } from "@/hooks/useSiteText";
 import { localizedName } from "@/lib/localized-name";
-import { capEmblems } from "@/lib/emblems";
+import { capEmblems, resolveEmblems } from "@/lib/emblems";
 
 /**
  * Three pieces, chosen in the admin, shown large.
@@ -29,9 +29,13 @@ const FeaturedProducts = () => {
 
   if (loading || picking || highlights.length === 0) return null;
 
-  // At most one emblem across the three. On a strip this short a second one
-  // makes two thirds of the row "special", which is no signal at all.
-  const emblems = capEmblems(highlights, (p) => p.emblem);
+  // Resolved against the WHOLE catalogue, not just these three: "new" means
+  // new among everything Aluma sells, and computing it from a slice of three
+  // would make one of any three the newest.
+  const resolved = resolveEmblems(products);
+  // At most one across the three. On a strip this short a second makes two
+  // thirds of the row "special", which is no signal at all.
+  const emblems = capEmblems(highlights, (p) => resolved.get(p.id), 1);
 
   return (
     <section className="bg-background">
