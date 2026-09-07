@@ -305,7 +305,11 @@ const FieldError = ({ id, message }: { id: string; message: string }) => (
 const COOLDOWN_MS = 30_000;
 const MIN_FILL_MS = 2_500;
 
+const FORM_OPEN = "השארת פרטים";
+const FORM_CLOSE = "סגירת הטופס";
+
 const Contact = () => {
+  const [formOpen, setFormOpen] = useState(false);
   const navigate = useNavigate();
   // Phone, address and social links as set in /admin/settings, over the ones
   // the site ships with.
@@ -436,7 +440,71 @@ const Contact = () => {
               ))}
             </ul>
 
-            <form onSubmit={handleSubmit} className="mt-9" noValidate>
+            {/*
+              A disclosure, not a dialog — so a real <button> with
+              aria-expanded and aria-controls, per the APG pattern, and
+              deliberately NO focus move when it opens. Moving focus into the
+              first field would mean someone who pressed this by accident
+              cannot simply press it again to close it.
+
+              Same grid-template-rows 0fr -> 1fr mechanism the FAQ answers on
+              this page already use, so there is one way of opening things here
+              rather than two.
+
+              Honest note: collapsing a form is conversion-NEUTRAL in the only
+              real usability data on it (Baymard, on accordion checkouts). What
+              it reliably does is split one funnel into two — fewer people see
+              the fields, more of those who do finish. Worth watching in the
+              leads table rather than assuming.
+            */}
+            <button
+              type="button"
+              onClick={() => setFormOpen((v) => !v)}
+              aria-expanded={formOpen}
+              aria-controls="contact-form-region"
+              className="mt-9 inline-flex h-12 items-center gap-2 rounded-full bg-foreground px-7 text-small font-medium text-background transition-colors duration-200 hover:bg-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+            >
+              {formOpen ? FORM_CLOSE : FORM_OPEN}
+              <ChevronDown
+                className={cn(
+                  "h-4 w-4 transition-transform duration-300",
+                  formOpen && "rotate-180",
+                )}
+                aria-hidden="true"
+              />
+            </button>
+
+            <div
+              id="contact-form-region"
+              className={cn(
+                "grid transition-[grid-template-rows] duration-300 ease-in-out",
+                formOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]",
+              )}
+            >
+              {/*
+                min-h-0 is what lets the 0fr row actually collapse; without it
+                the child's min-content height holds the row open.
+
+                `inert` while closed is not optional. A 0fr grid row with
+                overflow hidden makes the form invisible and leaves every field
+                focusable and submittable — so a keyboard user tabs off the
+                button straight into a form they cannot see, and a screen reader
+                reads out fields that are not there. inert removes the whole
+                subtree from the tab order and the accessibility tree at once.
+
+                Spread rather than written as a prop: React 18 does not know
+                `inert` and warns when given a boolean, so it is passed as the
+                empty-string attribute the HTML spec actually defines.
+              */}
+              <div
+                className="min-h-0 overflow-hidden"
+                {...(formOpen ? {} : { inert: "" })}
+              >
+                {/* The card. A form on a page needs an edge to read as a form
+                    rather than as more page — a bordered panel on the white
+                    ground, with room inside it. */}
+                <div className="mt-6 rounded-sm border border-border bg-background p-6 md:p-8">
+            <form onSubmit={handleSubmit} noValidate>
               {/* Honeypot, hidden from real users. Deliberately NOT parked at
                   left:-9999px like the classic recipe: this document is
                   dir="rtl", where the left side is the scrollable overflow
@@ -619,6 +687,9 @@ const Contact = () => {
                 {submitting ? "שולחים את ההודעה, רגע אחד" : ""}
               </p>
             </form>
+                </div>
+              </div>
+            </div>
           </Reveal>
 
         </div>
