@@ -33,7 +33,7 @@ export const ProductCard = ({ product: p, eager }: { product: DBProduct; eager: 
             height={1024}
             loading={eager ? "eager" : "lazy"}
             decoding="async"
-            className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.25,0.1,0.25,1)] group-hover:scale-[1.03] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+            className="absolute inset-0 w-full h-full object-cover transition-transform duration-600 ease-hover group-hover:scale-[1.03] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
           />
         )}
       </div>

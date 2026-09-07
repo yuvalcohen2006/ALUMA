@@ -50,7 +50,7 @@ const FaqRow = ({ q, a, id, open, onToggle }: { q: string; a: string; id: string
     >
       <Plus
         aria-hidden="true"
-        className={`mt-1 w-[18px] h-[18px] shrink-0 text-foreground/40 group-hover:text-foreground transition-[transform,color] duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] ${
+        className={`mt-1 w-[18px] h-[18px] shrink-0 text-foreground/40 group-hover:text-foreground transition-[transform,color] duration-300 ease-in-out ${
           open ? "rotate-45" : ""
         }`}
         strokeWidth={2}
@@ -65,7 +65,7 @@ const FaqRow = ({ q, a, id, open, onToggle }: { q: string; a: string; id: string
     <div
       id={`faq-a-${id}`}
       role="region"
-      className={`grid transition-[grid-template-rows] duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] ${
+      className={`grid transition-[grid-template-rows] duration-300 ease-in-out ${
         open ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
       }`}
     >

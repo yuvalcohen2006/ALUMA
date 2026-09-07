@@ -3,6 +3,12 @@ import type { Config } from "tailwindcss";
 export default {
   content: ["./pages/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}", "./app/**/*.{ts,tsx}", "./src/**/*.{ts,tsx}"],
   prefix: "",
+  // Rewrites every hover:/group-hover: to @media (hover: hover). Without it the
+  // first tap on a phone applies the hover state and it STICKS until the user
+  // taps elsewhere — so a customer tapping a collection tile watches it zoom
+  // and dim before the page changes. Audited first: the only two hover-only
+  // reveals on the public site (DIY glow, 404 arrow) are decorative.
+  future: { hoverOnlyWhenSupported: true },
   theme: {
     container: {
       center: true,
@@ -85,8 +91,20 @@ export default {
       // standard image-zoom reached for `duration-[600ms]`, which Tailwind drops
       // entirely as ambiguous (transition- or animation-duration?) — so those
       // hovers silently ran at the 150ms default.
+      //
+      // The same trap swallowed every `ease-[cubic-bezier(...)]` on the site.
+      // Verified against the built stylesheet: neither curve reached it, so the
+      // collection zoom and both FAQ accordion transitions were running on the
+      // default easing. Any curve the site wants must be a NAMED value here.
       transitionDuration: {
+        250: "250ms",
+        400: "400ms",
         600: "600ms",
+      },
+      transitionTimingFunction: {
+        // easeOutCubic — one house curve for every hover on the site, so the
+        // next person reaching for a curve does not reintroduce the bug above.
+        hover: "cubic-bezier(0.215, 0.61, 0.355, 1)",
       },
       keyframes: {
         "accordion-down": {
