@@ -114,8 +114,6 @@ insert into public.site_texts (key, value, label, hint, multiline, sort_order) v
   ('home.products.title', 'מוצרים נבחרים', 'דף הבית - כותרת מוצרים', null, false, 40),
   ('home.projects.title', 'פרויקטים', 'דף הבית - כותרת פרויקטים', null, false, 50),
   ('collections.title', 'קולקציות', 'עמוד קולקציות - כותרת', null, false, 60),
-  ('collections.subtitle', 'כל פריט מיוצר בהזמנה אישית. בלי מחירון, כי אין אצלנו שני פרויקטים זהים.',
-   'עמוד קולקציות - תיאור', null, true, 70),
   ('materials.title', 'החומרים', 'עמוד חומרים - כותרת', null, false, 80),
   ('materials.subtitle', 'ההחלטה הראשונה בכל פריט היא לא הצורה, אלא החומר. אלה הארבעה שאנחנו בונים איתם, ומה כל אחד מהם עושה אחרי כמה שנים בחוץ.',
    'עמוד חומרים - תיאור', null, true, 90),

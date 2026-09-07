@@ -111,3 +111,16 @@ create policy "Admins write home highlights" on public.site_home_highlights
 
 grant select on public.site_home_highlights to anon, authenticated;
 grant insert, update, delete on public.site_home_highlights to authenticated;
+
+-- ──────────────────────────────────────────────────── 4. One orphaned text key
+--
+-- The collections index no longer renders a subtitle — the line explained that
+-- everything is made to order with no price list, which is true, repeated on
+-- every product page, and stood between the visitor and the six photographs
+-- they came for.
+--
+-- The seeded row has to go with it. A key the admin still lists is an
+-- invitation: the owner edits it, sees "נשמר", and the site does not change.
+-- That is the worst kind of failure, because it looks like success.
+
+delete from public.site_texts where key = 'collections.subtitle';
