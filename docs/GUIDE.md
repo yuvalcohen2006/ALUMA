@@ -306,9 +306,47 @@ Only once the domain says **Verified**:
 3. **Copy the `re_...` code immediately.** Resend shows it once and never
    again.
 
-**✅ Send me the `re_...` key and I will put it in.**
+## F — Put the key into Supabase (2 minutes)
 
-## F — Later, once mail is flowing
+This is the last step, and it is one you have to do yourself — the key lives in
+Supabase, which I have no access to.
+
+1. Go straight to this address, with your project open:
+
+   ```
+   https://supabase.com/dashboard/project/_/functions/secrets
+   ```
+
+   The `_` fills itself in. (In the sidebar it is under **Edge Functions** →
+   **Secrets**. I could not verify that menu wording myself, so use the link.)
+
+2. Add one secret:
+
+   | | |
+   |---|---|
+   | **Key** | `RESEND_API_KEY` |
+   | **Value** | your `re_...` key |
+
+3. Press **Save**.
+
+**No redeploy needed.** Supabase's own docs: *"You don't need to re-deploy after
+setting your secrets. They're available immediately in your functions."*
+
+⚠️ **It only starts working once the domain says Verified.** The site sends from
+`noreply@notify.alumaoutdoor.com`, so until that subdomain verifies, every send
+fails no matter how right the key is.
+
+**Then send a message through the site's own contact form and tell me whether it
+arrives.**
+
+### One note on the key
+
+You sent it to me in a chat message. It is a sending-only key, so the worst it
+can do is send email as you — but once everything works, it costs you thirty
+seconds to delete it in Resend and create a fresh one. Reasonable hygiene for
+any secret that has been pasted anywhere.
+
+## G — Later, once mail is flowing
 
 Add one more TXT record at Namecheap. Not urgent, and not needed for anything
 to work:
@@ -358,7 +396,7 @@ JOB 3  Three home products picked?     yes / not yet
 JOB 3  English names started?          yes / not yet
 JOB 4  Real projects, reviews, colours? yes / not yet
 JOB 5  Resend domain verified?         yes / not yet
-JOB 5  New API key:                    re_...
+JOB 5  Key pasted into Supabase?        yes / not yet
 ```
 
 **Never send me** the Supabase `service_role` key or any database password.
