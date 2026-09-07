@@ -200,8 +200,9 @@ const ProjectDetailPage = () => {
         </div>
       </section>
 
-      {/* CTA — sand band, so the title runs charcoal (terracotta only carries on warm white). */}
-      <section className="py-20 md:py-24 gradient-cream">
+      {/* CTA — tinted band, and the title runs charcoal: terracotta is 3.1:1
+          here, under AA for text at any size. */}
+      <section className="py-20 md:py-24 band-tint">
         <div className="container-luxury">
           <div className="flex flex-col items-center text-center">
             <p className="text-body text-muted-foreground mb-4">מגשימים חלום</p>

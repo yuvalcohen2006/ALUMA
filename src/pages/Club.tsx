@@ -31,7 +31,7 @@ import { useTranslation } from "react-i18next";
  *
  * Structure runs on one strong contrast beat, the way the home screen does:
  * warm-white explanation → a single charcoal band carrying the four benefits as
- * a hairline-separated ledger row → sand-beige joining spine → warm-white close.
+ * a hairline-separated ledger row → tinted joining spine → white close.
  *
  * Vertical rhythm is one scale, `py-14 md:py-20`, on every band — the colour
  * change at each seam is what separates the sections, so the padding only has
@@ -206,7 +206,7 @@ const Club = () => {
           <div className="grid lg:grid-cols-12 gap-10 lg:gap-14 items-start max-w-7xl mx-auto">
             <Reveal className="lg:col-span-5">
               <div className="text-start">
-                {/* Charcoal, not terracotta: this heading sits on sand beige. */}
+                {/* Charcoal, not terracotta: 3.1:1 on this band is under AA. */}
                 <SectionHeading tone="charcoal" align="start">
                   {t("joinTitle")}
                 </SectionHeading>
@@ -246,7 +246,7 @@ const Club = () => {
               {/* Block-level with a max-width: in RTL it settles against the
                   right (start) edge of its column on its own. 2xl rather than
                   anything narrower — each step is one line at any of these
-                  widths, so a tighter cap would only be trimming bare sand off
+                  widths, so a tighter cap would only be trimming bare ground off
                   the left of the column.
                   role="list" is not redundant — Tailwind's preflight sets
                   list-style:none, which makes VoiceOver drop list semantics

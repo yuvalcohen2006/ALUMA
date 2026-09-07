@@ -9,8 +9,9 @@ interface SectionHeadingProps {
   /** White title/text for dark sections (e.g. the materials rail). */
   light?: boolean;
   /**
-   * Title colour on light backgrounds. Terracotta only carries enough contrast on
-   * warm-white — any title sitting on sand beige must use "charcoal".
+   * Title colour on light backgrounds. Terracotta is 3.3:1 on white and 3.1:1
+   * on the tinted band — under AA for text either way, so "primary" is only
+   * ever correct on display-size type. Reading size must use "charcoal".
    */
   tone?: "primary" | "charcoal";
   /** Escape hatch: drop the rule entirely for a heading that shouldn't carry one. */
@@ -33,7 +34,7 @@ interface SectionHeadingProps {
  *   centred heading      → short 48×1px accent mark
  *   start-aligned heading → full-width hairline
  * and the surface is inferred from the colour props (`light` = charcoal
- * section, `tone="charcoal"` = sand section, otherwise warm white).
+ * section, `tone="charcoal"` = tinted band, otherwise the white page).
  */
 const SectionHeading = ({
   children,

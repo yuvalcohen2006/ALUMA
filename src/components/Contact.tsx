@@ -104,7 +104,7 @@ const scrollToShowroom = () => {
 };
 
 const tileClass =
-"group flex h-full w-full flex-col items-start gap-4 rounded-sm border border-foreground/10 bg-background p-6 md:p-7 text-start transition-colors duration-200 hover:bg-white";
+"group flex h-full w-full flex-col items-start gap-4 rounded-sm border border-border bg-secondary p-6 md:p-7 text-start transition-colors duration-200 hover:border-foreground/20 hover:bg-background";
 
 const ChannelTile = ({ channel }: { channel: Channel }) => {
   const { Icon } = channel;
@@ -305,10 +305,10 @@ const Contact = () => {
   const errorList = Object.entries(errors);
 
   return (
-    // The top margin is what keeps the sand edge off the hero: PageHero closes
-    // on 24px of its own padding, so without it the colour change lands almost
-    // on the subtitle's last line.
-    <section dir="rtl" className="py-14 md:py-20 bg-secondary">
+    // A tinted band, and now a ruled one. Fill alone carried every seam on this
+    // site while the page was cream and the band sand (1.22:1). White against
+    // #F8F8F8 is 1.06:1 — too little to mark a section change by itself.
+    <section dir="rtl" className="py-14 md:py-20 bg-secondary border-y border-border">
       <div className="container-luxury">
         {/* Channels before the form, everywhere. Apple's own contact page has
             no form at all — a person deciding on made-to-order furniture wants
@@ -334,9 +334,10 @@ const Contact = () => {
             <ul className="mt-6 flex flex-col gap-3 text-body text-foreground-soft">
               {assurances.map((a) => (
                 <li key={a} className="flex items-center gap-3">
-                  {/* Deeper terracotta, not primary: this band is sand, where
-                      primary measures ~2.5:1 — under the 3:1 floor even for a
-                      decorative glyph. text-accent clears it at ~3.3:1. */}
+                  {/* Deeper terracotta, not primary. Re-measured on the white
+                      palette: primary reaches 3.1:1 on this band and accent
+                      4.0:1. Primary now scrapes the 3:1 glyph floor it used to
+                      fail; accent is the one with room to spare. */}
                   <Check
                     className="w-[18px] h-[18px] shrink-0 text-accent"
                     strokeWidth={2.5}
@@ -389,8 +390,8 @@ const Contact = () => {
                   last — a note that explains a convention has to precede it. */}
               <div className="space-y-6">
                 {/* Charcoal asterisk, not terracotta. This whole section sits
-                    on sand, where text-accent measures ~3.3:1 — under AA for
-                    18px. On sand the ink is charcoal and the terracotta stays
+                    on the tinted band, where text-accent measures 4.0:1 — still under
+                    AA for 18px. The ink stays charcoal and the terracotta stays
                     in the rules, exactly as the projects index does it. */}
                 <p className="text-body leading-snug text-muted-foreground">
                   השדות המסומנים ב־<span className="font-medium text-foreground">*</span> הם שדות

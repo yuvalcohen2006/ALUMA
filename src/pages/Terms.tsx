@@ -47,7 +47,7 @@ const TermsPage = () => {
       <section className="py-14 md:py-20 bg-background">
         <div className="container-luxury max-w-4xl">
           <Tabs defaultValue="terms" dir="rtl" className="w-full">
-            <TabsList className="w-full flex flex-wrap justify-center h-auto gap-1 bg-secondary/60 p-1">
+            <TabsList className="w-full flex flex-wrap justify-center h-auto gap-1 bg-secondary p-1">
               <TabsTrigger value="terms" className="flex-1 min-w-[140px]">תקנון האתר</TabsTrigger>
               <TabsTrigger value="shipping" className="flex-1 min-w-[140px]">משלוחים ואספקה</TabsTrigger>
               <TabsTrigger value="returns" className="flex-1 min-w-[140px]">ביטול והחזרות</TabsTrigger>

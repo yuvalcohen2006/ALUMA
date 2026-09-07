@@ -24,7 +24,7 @@ export const ProductCard = ({ product: p, eager }: { product: DBProduct; eager: 
   const { to } = useLocalizedPath();
   return (
     <Link to={to(`/products/${p.slug}`)} className="group block text-center">
-      <div className="relative aspect-square overflow-hidden rounded-sm bg-secondary/50">
+      <div className="relative aspect-square overflow-hidden rounded-sm bg-muted">
         {p.cover_url && (
           <img
             src={p.cover_url}

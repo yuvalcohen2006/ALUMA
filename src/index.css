@@ -2,13 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Aluma design tokens — all colors HSL. Terracotta primary + deep-green accent on cream. */
+/* Aluma design tokens — all colors HSL. Terracotta primary on crystal white. */
 
 @layer base {
   :root {
     /* ===== Aluma palette ===== */
-    /* Warm white #F8F6F2 — main background */
-    --background: 40 30% 96%;
+    /* Crystal white. 14 of 17 luxury furniture houses checked ship pure #fff —
+       Tribu, Dedon, Kettal, Gloster, Minotti, Manutti, Ethimo, Fritz Hansen,
+       Carl Hansen among them. A neutral ground has equal RGB, so it casts no
+       colour back into a photograph: teak, rope, aluminium and off-white fabric
+       all read true against it, which a cream ground quietly prevents. */
+    --background: 0 0% 100%;
     /* Charcoal #2F2F2F — all running text & headings (great contrast on every bg) */
     --foreground: 0 0% 18%;
     /* Softer charcoal — hero slogan, nav links at rest, outlined buttons.
@@ -25,36 +29,49 @@
     --primary: 14 47% 58%;
     --primary-foreground: 0 0% 18%; /* charcoal text on terracotta buttons */
 
-    /* Sand beige #E9DFD2 — secondary backgrounds / panels / subtle fills */
-    --secondary: 34 34% 87%;
+    /* #F8F8F8 — the section band, and the whole reason the site read yellow.
+       The old cream ground was within a point of what RH ships; the SAND was
+       the problem. Its red-minus-blue warmth was 23, against 3-4 on every band
+       grey measured across the tier. This is dead neutral: warmth 0. */
+    --secondary: 0 0% 97%;
     --secondary-foreground: 0 0% 18%;
 
-    --muted: 34 34% 87%;
+    /* #F0F0F0 — one step below the band. This is a FILL, not a surface: image
+       letterboxes, skeletons, the ground behind a photo that has not loaded.
+       It has to stay visible on white or an empty tile becomes a hole. */
+    --muted: 0 0% 94%;
     --muted-foreground: 0 0% 34%; /* softened charcoal for secondary text, still readable */
 
     /* Accent = deeper terracotta for hover/press states (olive-grey / teal dropped entirely) */
     --accent: 14 47% 50%;
-    --accent-foreground: 40 30% 96%;
+    --accent-foreground: 0 0% 100%;
 
     --destructive: 0 60% 45%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 32 18% 82%;
-    --input: 32 18% 82%;
+    /* Two greys doing two different jobs, which one warm value used to blur.
+       --border is decoration: dividers and card edges, where a hairline only
+       has to be seen, not identified. --input is the boundary of a form
+       control, and on a white page with a white field it is the ONLY thing
+       marking where the field is — so WCAG 1.4.11 wants 3:1 against the page.
+       #949494 measures 3.03:1. The old warm 82% grey was about 1.4:1, and had
+       been failing that quietly since the day it was written. */
+    --border: 0 0% 90%;
+    --input: 0 0% 58%;
     --ring: 14 47% 58%;
 
-    /* Charcoal footer / mobile bar — warm-white text reads ~12:1 */
-    --footer: 0 0% 18%;
-
-    /* Cream — warm beige used for title/text dividers (visible on warm-white AND sand) */
+    /* Deliberately DARKER than --foreground (18%), which it used to match
+       exactly. A charcoal section closing a page met the charcoal footer at an
+       invisible seam; five points of separation is what makes the join read. */
+    --footer: 0 0% 13%;
 
     /* ===== Admin palette =====
-       The CMS is a tool, not the brand. The site's warm sand background is
-       right for furniture photography and wrong for a person reading forms all
-       morning: it tints every white photograph they upload and makes it hard
-       to judge a cut-out. So the panel is pure white and charcoal and nothing
-       else — no terracotta, no wood, no third hue. Emphasis is carried by the
-       ink itself, which is the only way a two-colour interface can carry it.
+       The CMS is a tool, not the brand. It went white first, for the reason
+       that has since been applied to the whole site: a warm ground tints every
+       photograph placed on it and makes a cut-out impossible to judge.
+       What still separates the two is ink, not ground — the panel is charcoal
+       and nothing else, no terracotta, no second hue, because emphasis in a
+       two-colour interface has to be carried by the type itself.
 
        Scoped to a class rather than a media query or a route check, so the
        public site is untouched and the two can never drift into each other. */
@@ -102,14 +119,19 @@
        photographs are square-cornered now regardless. */
     --radius: 0.5rem;
 
-    /* Solid sand — NEVER a gradient between the neutral backgrounds (clean lines only) */
-    --gradient-cream: hsl(34 34% 87%);
+    /* Renamed from --gradient-cream, which was a hardcoded sand literal rather
+       than a reference to --secondary — so it would have gone on painting four
+       public bands beige after every other surface turned grey. Never actually
+       a gradient, and no longer cream. */
+    --band-tint: hsl(0 0% 97%);
 
     /* Section dividers, one value per surface — see SectionRule.tsx. Tuned by
        eye against each background: a hairline under ~0.08 disappears on cheap
        panels, and over ~0.14 on a light surface reads as a table border. */
-    --rule-on-light: rgb(0 0 0 / 0.10);   /* warm white #F8F6F2 */
-    --rule-on-tinted: rgb(0 0 0 / 0.09);  /* sand #E9DFD2 */
+    --rule-on-light: rgb(0 0 0 / 0.09);   /* crystal white #FFFFFF */
+    --rule-on-tinted: rgb(0 0 0 / 0.10);  /* band #F8F8F8 — closer to the page
+                                             than sand was, so the rule has to
+                                             work slightly harder to be seen */
     --rule-on-dark: rgb(255 255 255 / 0.14); /* charcoal #2F2F2F */
     /* The brand-coloured mark, for rules that belong to a title rather than
        separating a section: the short mark under a centred heading, and the
@@ -215,8 +237,8 @@
     line-height: 1.75;
   }
 
-  .gradient-cream {
-    background: var(--gradient-cream);
+  .band-tint {
+    background: var(--band-tint);
   }
 
   .shadow-luxury {
@@ -330,7 +352,7 @@
 }
 
 /* ===== Custom scrollbars ===== */
-/* Page scrollbar: a thin terracotta thumb floating on a barely-there sand track.
+/* Page scrollbar: a thin terracotta thumb floating on a barely-there grey track.
    The transparent border + content-box clip is what makes the visible thumb thin
    while keeping a comfortable grab area. It deepens and thickens on hover. */
 ::-webkit-scrollbar {
@@ -344,7 +366,10 @@
   height: 0;
 }
 ::-webkit-scrollbar-track {
-  background: hsl(var(--secondary) / 0.4);
+  /* Was a 40% wash of --secondary. Against cream that was a faint sand line;
+     against white a 40% near-white grey is nothing at all, and the thumb would
+     float on an invisible track. Solid --muted instead. */
+  background: hsl(var(--muted));
 }
 ::-webkit-scrollbar-thumb {
   background-color: hsl(var(--primary) / 0.55);
@@ -410,7 +435,9 @@
    charcoal reads about 5.9:1. That is exactly why --primary-foreground was
    defined as charcoal, and this honours it. */
 .btn-shine {
-  --btn-surface: hsl(40 30% 93%);
+  /* Was a hardcoded cream literal, which would have left every primary button
+     on the site as a yellow tablet floating on a white page. */
+  --btn-surface: hsl(0 0% 97%);
   --btn-ink: hsl(var(--foreground));
   --btn-fill: hsl(var(--primary));
   --btn-ink-hover: hsl(var(--primary-foreground));
@@ -514,9 +541,11 @@ html.a11y-high-contrast {
   --foreground: 0 0% 0%;
   --card: 0 0% 100%;
   --card-foreground: 0 0% 0%;
-  --secondary: 0 0% 95%;
+  /* Pushed further now that the DEFAULT palette is white — at 95/93 this mode
+     had become almost indistinguishable from the normal site. */
+  --secondary: 0 0% 90%;
   --secondary-foreground: 0 0% 0%;
-  --muted: 0 0% 93%;
+  --muted: 0 0% 86%;
   --muted-foreground: 0 0% 15%;
   --primary: 14 55% 36%;
   --primary-foreground: 0 0% 100%;

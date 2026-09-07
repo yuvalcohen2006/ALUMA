@@ -351,7 +351,7 @@ const CollectionDetailPage = () => {
                 {/* object-contain, not cover: the photographs are square by
                     spec and this box is tall, so cover ate the top and bottom
                     of every piece. The mat behind it does the framing. */}
-                <div className="relative overflow-hidden rounded-sm h-full min-h-[500px] max-h-[720px] bg-secondary/30">
+                <div className="relative overflow-hidden rounded-sm h-full min-h-[500px] max-h-[720px] bg-muted">
                   {galleryImages[activeImage] && (
                     <img
                       src={galleryImages[activeImage]}
@@ -399,9 +399,9 @@ const CollectionDetailPage = () => {
 
 
       {/* CTA */}
-      <section className="py-20 md:py-24 gradient-cream">
+      <section className="py-20 md:py-24 band-tint">
         <div className="container-luxury flex flex-col items-center text-center">
-          {/* Charcoal, not terracotta: this block sits on sand beige. */}
+          {/* Charcoal, not terracotta: 3.1:1 on this band is under AA. */}
           <p className="text-body text-foreground-soft mb-4">מגשימים חלום</p>
           <h2 className="font-display font-normal text-3xl md:text-5xl text-foreground leading-tight">
             {t("leaveDetails")}

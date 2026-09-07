@@ -103,7 +103,7 @@ interface StationProps {
  * button lights the same plank a mouse would.
  *
  * Nothing painted above the stamp is opaque (the specimen plates are
- * bg-secondary/50, the button is a 5% wash), so the numeral reads through
+ * bg-foreground/5, the button is a 5% wash), so the numeral reads through
  * whatever lands on top of it.
  */
 const Station = ({ n, to, className, children }: StationProps) => (
@@ -182,7 +182,7 @@ const Specimen = ({
 }) => (
   <div
     className={cn(
-"rounded-sm border border-border bg-secondary/50 p-4 transition-colors duration-300 group-hover:border-foreground/15 group-focus-within:border-foreground/15",
+"rounded-sm border border-border bg-foreground/[0.05] p-4 transition-colors duration-300 group-hover:border-foreground/15 group-focus-within:border-foreground/15",
       className,
     )}
   >

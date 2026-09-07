@@ -117,8 +117,8 @@ const ARPreview = () => {
           </div>
 
           {/* Model viewer */}
-          <div className="bg-secondary/30 border border-border rounded-sm overflow-hidden ">
-            <div className="aspect-[4/3] md:aspect-[16/10] w-full bg-secondary">
+          <div className="bg-secondary border border-border rounded-sm overflow-hidden">
+            <div className="aspect-[4/3] md:aspect-[16/10] w-full bg-muted">
               {ready ? (
                 <model-viewer
                   key={active.id}
@@ -201,7 +201,7 @@ const ARPreview = () => {
             ))}
           </div>
 
-          <div className="mt-10 flex items-start gap-3 bg-secondary/40 border border-border rounded-sm p-5">
+          <div className="mt-10 flex items-start gap-3 bg-secondary border border-border rounded-sm p-5">
             <Info className="h-5 w-5 text-accent shrink-0 mt-0.5" />
             <p className="text-sm text-muted-foreground leading-relaxed">
               <strong className="text-foreground">שימו לב:</strong> הדגמים

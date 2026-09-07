@@ -137,7 +137,7 @@ const FabricConfigurator = () => {
                 ].map((s) => (
                   <div
                     key={s}
-                    className="bg-secondary/40 border border-border rounded-sm p-3 text-center text-label text-muted-foreground"
+                    className="bg-secondary border border-border rounded-sm p-3 text-center text-label text-muted-foreground"
                   >
                     <Sparkles className="h-3.5 w-3.5 inline text-accent me-1" />
                     {s}

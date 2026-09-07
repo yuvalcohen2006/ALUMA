@@ -37,7 +37,7 @@ const NotFound = () => {
       </Helmet>
 
       {/* Centred full-screen state rather than a content page, so it keeps its
-          own composition — but the sand band is gone and the title carries the
+          own composition — but the tinted band is gone and the title carries the
           site-wide token like everywhere else. */}
       <section className="pt-32 pb-20 md:pt-40 md:pb-28 bg-background min-h-[70vh] flex items-center">
         <div className="container-luxury text-center max-w-2xl mx-auto">

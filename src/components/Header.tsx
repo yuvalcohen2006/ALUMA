@@ -23,7 +23,7 @@ const Header = () => {
   const { pathname } = useLocation();
   const { t } = useTranslation();
   const { to: localized } = useLocalizedPath();
-  // Interior pages open straight onto the background with no sand band, so the
+  // Interior pages open straight onto the background with no tinted band, so the
   // header needs its border immediately. Only the home page, whose hero image
   // separates it on its own, waits for scroll. Both language roots count as
   // home.

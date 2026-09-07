@@ -100,7 +100,7 @@ const Account = () => {
     <Layout>
       <SEO title="האזור האישי שלי | מועדון אלומה" description="מעקב הזמנה ופרטי חשבון." path="/club/dashboard" />
 
-      <section className="pt-32 pb-6 md:pt-40 gradient-cream">
+      <section className="pt-32 pb-6 md:pt-40 band-tint">
         <div className="container-luxury">
           <div className="flex items-start justify-between flex-wrap gap-4">
             <div>

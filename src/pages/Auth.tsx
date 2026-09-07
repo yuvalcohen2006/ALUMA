@@ -117,7 +117,7 @@ const AuthPage = () => {
         path="/club/auth"
       />
       {/* Deliberately plain. A signup is a moment of intent, and every
-          decoration around it — the cream gradient, the bordered card, the
+          decoration around it — the tinted gradient, the bordered card, the
           illustrated brand panel beside the fields — was competing with the
           three inputs that actually matter. */}
       <section className="bg-background pt-40 pb-24 md:pt-52 md:pb-32">
@@ -129,7 +129,7 @@ const AuthPage = () => {
               </div>
 
                 {/* Mode toggle pills */}
-                <div className="inline-flex w-full rounded-sm bg-secondary/60 p-1 mb-8 border border-border">
+                <div className="inline-flex w-full rounded-sm bg-secondary p-1 mb-8 border border-border">
                   <button
                     type="button"
                     onClick={() => setMode("signup")}

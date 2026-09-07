@@ -118,12 +118,12 @@ const MaterialDetailPage = () => {
       </section>
 
       {material.faq && material.faq.length > 0 && (
-        <section className="py-16 md:py-24 gradient-cream">
+        <section className="py-16 md:py-24 band-tint">
           <div className="container-luxury max-w-3xl">
             {/* Right-anchored like every other header on the site now, with the
                 standard divider. The old centred micro-eyebrow is kept as a
-                plain 18px label — charcoal, not terracotta, because this band
-                is sand. */}
+                plain 18px label — charcoal, not terracotta. Terracotta measures
+                3.3:1 on white: fine for a rule, not for a word. */}
             <div className="text-start mb-10">
               <p className="text-body text-foreground-soft mb-2">
                 שאלות ותשובות

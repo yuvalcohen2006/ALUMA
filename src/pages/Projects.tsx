@@ -283,7 +283,7 @@ const ProjectsPage = () => {
         }
       />
 
-      {/* CONTENTS STRIP — the table of contents of the portfolio. A sand band
+      {/* CONTENTS STRIP — the table of contents of the portfolio. A tinted band
           that scrolls sideways on phones and wraps on desktop. */}
       {visible.length > 0 && (
         <section className="mt-10 md:mt-12 bg-secondary border-y border-border/70">
@@ -299,11 +299,11 @@ const ProjectsPage = () => {
               </span>
               <MetaRule />
 
-              {/* Charcoal ink, not terracotta. This band is sand, and both the
-                  palette note in SectionHeading and the measured contrast say
-                  terracotta only carries on warm white — text-accent on
-                  bg-secondary lands around 3.3:1, under AA for 18px. The
-                  terracotta stays where it belongs here: in the rules. */}
+              {/* Charcoal ink, not terracotta. Re-measured against the white
+                  palette: primary lands 3.1:1 on this band and accent 4.0:1,
+                  both under the 4.5:1 AA floor for 18px text. The verdict is
+                  unchanged, only the arithmetic — terracotta stays where it
+                  belongs here, in the rules. */}
               {visible.map((p, i) => (
                 <a
                   key={p.slug}
