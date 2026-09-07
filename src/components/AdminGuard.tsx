@@ -2,6 +2,7 @@ import { ReactNode } from "react";
 import { Navigate } from "react-router-dom";
 import { useIsAdmin } from "@/hooks/useIsAdmin";
 import { useAuth } from "@/hooks/useAuth";
+import CropProvider from "@/components/admin/CropProvider";
 
 const AdminGuard = ({ children }: { children: ReactNode }) => {
   const { user, loading: authLoading } = useAuth();
@@ -33,7 +34,17 @@ const AdminGuard = ({ children }: { children: ReactNode }) => {
       </div>
     );
   }
-  return <>{children}</>;
+  /*
+   * CropProvider belongs HERE and not in AdminLayout, and the difference is
+   * not stylistic — it was a white screen on every admin page with an upload.
+   *
+   * Each page calls useCrop() and then RENDERS <AdminLayout>. A provider
+   * inside AdminLayout is therefore a descendant of the component consuming
+   * it, so useContext found nothing and the hook threw before anything
+   * painted. The guard is the first thing above every admin page, so it is
+   * the one place that cannot be got wrong by adding a new route.
+   */
+  return <CropProvider>{children}</CropProvider>;
 };
 
 export default AdminGuard;
