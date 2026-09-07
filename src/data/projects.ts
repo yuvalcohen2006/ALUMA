@@ -1,3 +1,9 @@
+import kfar from "@/assets/projects/kfar.jpg";
+import telaviv from "@/assets/projects/telaviv.jpg";
+import herzliya from "@/assets/projects/herzliya.jpg";
+import raanana from "@/assets/projects/raanana.jpg";
+import caesarea from "@/assets/projects/caesarea.jpg";
+import modiin from "@/assets/projects/modiin.jpg";
 import salonEucalyptus from "@/assets/collections/salon-eucalyptus.jpg";
 import salonMarina from "@/assets/collections/salon-marina.jpg";
 import salonSahara from "@/assets/collections/salon-sahara.jpg";
@@ -30,7 +36,7 @@ export const projects: Project[] = [
     tag: "מרפסת פנורמית",
     year: "2024",
     area: "120 מ״ר",
-    cover: salonMonolith,
+    cover: kfar,
     gallery: [salonMonolith, tableGranite, salonEucalyptus],
     intro:
       "מרפסת פנורמית של 120 מ״ר שנפתחת אל קו ההרים, וביקשה שפה אחת שקטה לכל אורכה. תכננו מתחם ישיבה רחב לצד אזור ארוחות נפרד, כך שאירוח גדול לא הופך את המרחב לעמוס. סלון מונוליט בשחור מאט ושולחן גרניט פורצלן ארוך מחזיקים את הקו האדריכלי, תאורה חמה נסתרת מקיפה את הפינות, וצמחייה במיקום מדויק מפרידה בין האזורים בלי לחסום ולו סנטימטר מהנוף.",
@@ -52,7 +58,7 @@ export const projects: Project[] = [
     tag: "גג עירוני",
     year: "2024",
     area: "85 מ״ר",
-    cover: salonMarina,
+    cover: telaviv,
     gallery: [salonMarina, tableTerrazzo, salonSahara],
     intro:
       "גג עירוני של 85 מ״ר מול הים, שהאתגר בו היה לייצר תחושת חופש דווקא במרחב מצומצם. בחרנו פלטה בהירה של חול, שמנת ולבן, ובדים שלא אוגרים חום גם בשיא הקיץ. כל פריט תוכנן בגובה מדויק כדי לא לחסום את קו הים, וכל המסגרות עברו ציפוי כפול נגד מליחות. התוצאה היא פינת מקלט ים תיכוני שקטה לגמרי, קומה אחת מעל קצב העיר.",
@@ -74,7 +80,7 @@ export const projects: Project[] = [
     tag: "חצר משפחתית",
     year: "2023",
     area: "200 מ״ר",
-    cover: salonEucalyptus,
+    cover: herzliya,
     gallery: [salonEucalyptus, tableTerrazzo, salonSahara],
     intro:
       "חצר משפחתית של 200 מ״ר עם דשא, בריכה ופינת אוכל, שהתבקשה להכיל גם אירוח גדול וגם יום־יום רגוע. חילקנו אותה לשלושה אזורים מובחנים שנשארים בשפה ויזואלית אחת: סלון אקליפטוס שמביא את החום הביתי, פינת טרצו שמארחת ארוחות שישי של שנים־עשר סועדים, ופינת בריכה עם מיטות שיזוף. כל חומר נבחר כך שיעמוד בשימוש יומיומי אינטנסיבי של ילדים, ויתנקה בקלות.",
@@ -96,7 +102,7 @@ export const projects: Project[] = [
     tag: "אזור רחצה",
     year: "2024",
     area: "140 מ״ר",
-    cover: salonSahara,
+    cover: raanana,
     gallery: [salonSahara, salonMarina, tableGranite],
     intro:
       "מתחם בריכה פרטי של 140 מ״ר, שהלקוחות ביקשו שירגיש כמו חופשה קבועה בבית. בנינו פלטת חול וטרקוטה עם מרקמים ארוגים ביד, שילבנו סלון סהרה לאווירת ריאד, והוספנו גומחות שיזוף יחידניות לצד שולחן גרניט לשמונה סועדים. אורות חמים נסתרים מתחת לרהיטים מאריכים את הערב, וכל הבדים והחבלים עמידים לכלור ולשמן שיזוף ומתנקים בקלות גם אחרי סוף שבוע עמוס.",
@@ -118,7 +124,7 @@ export const projects: Project[] = [
     tag: "פינת אירוח",
     year: "2023",
     area: "95 מ״ר",
-    cover: tableGranite,
+    cover: caesarea,
     gallery: [tableGranite, salonMonolith, salonEucalyptus],
     intro:
       "פינת אירוח אינטימית של 95 מ״ר מול הים, בווילה אדריכלית שביקשה ריהוט שיתמזג ולא יבלוט. בחרנו גרפיט מאט עמוק וויתרנו על כל פרט מיותר, כך שהקו של הבית נשאר הגיבור. שולחן הגרניט נחתך לפי מידה במיוחד עבור המרחב, עם פאזות עדינות שמרככות את הקווים החדים של המבנה, וסלון מונוליט עוטף סוגר את הפינה. תאורה משולבת ברגלי הרהיטים מאירה את הרצפה בלבד.",
@@ -140,7 +146,7 @@ export const projects: Project[] = [
     tag: "מרפסת מקורה",
     year: "2024",
     area: "60 מ״ר",
-    cover: tableTerrazzo,
+    cover: modiin,
     gallery: [tableTerrazzo, salonEucalyptus, salonMarina],
     intro:
       "מרפסת מקורה של 60 מ״ר לזוג צעיר, מרחב צנוע שדרש שכל סנטימטר יישב במקום הנכון. בחרנו שולחן טרצו עגול שמרכך את הקווים ומאפשר תנועה חופשית סביבו, סלון אקליפטוס קומפקטי שמספיק בדיוק לארבעה, ושני כיסאות בר שנשענים אל המעקה ומנצלים את קו הנוף. הפלטה חמה וקלילה, בלי שום עומס. התוצאה היא מרפסת שהפכה לחדר המועדף בבית, כל ערב מחדש.",
