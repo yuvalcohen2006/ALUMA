@@ -11,7 +11,9 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { Plus, Pencil, Trash2, Upload } from "lucide-react";
 import { toast } from "sonner";
 import { uploadFile } from "@/lib/admin-storage";
+import { useCrop } from "@/components/admin/CropProvider";
 import PhotoSpec from "@/components/admin/PhotoSpec";
+import { ACCEPT_ATTRIBUTE } from "@/lib/photo-specs";
 
 type Post = {
   id: string;
@@ -47,6 +49,7 @@ const empty: Partial<Post> = {
 };
 
 const AdminBlog = () => {
+  const requestCrop = useCrop();
   const [items, setItems] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState<Partial<Post> | null>(null);
@@ -103,8 +106,10 @@ const AdminBlog = () => {
   };
 
   const uploadCover = async (file: File) => {
+    const cropped = await requestCrop(file, "article");
+    if (!cropped) return;
     try {
-      const { url } = await uploadFile("blog-images", file);
+      const { url } = await uploadFile("blog-images", cropped);
       setEditing((e) => ({ ...e!, cover_image_url: url }));
       toast.success("התמונה הועלתה");
     } catch (e: any) {
@@ -192,7 +197,7 @@ const AdminBlog = () => {
                   <label className="inline-flex items-center gap-2 px-3 py-2 border border-border rounded cursor-pointer hover:bg-muted text-sm">
                     <Upload className="w-4 h-4" />
                     העלאה
-                    <input type="file" accept="image/*" className="hidden" onChange={(e) => e.target.files?.[0] && uploadCover(e.target.files[0])} />
+                    <input type="file" accept={ACCEPT_ATTRIBUTE} className="hidden" onChange={(e) => e.target.files?.[0] && uploadCover(e.target.files[0])} />
                   </label>
                 </div>
               </div>

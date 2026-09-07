@@ -17,8 +17,10 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Plus, Pencil, Trash2, Upload, X, GripVertical } from "lucide-react";
 import { toast } from "sonner";
 import { uploadFile } from "@/lib/admin-storage";
+import { useCrop } from "@/components/admin/CropProvider";
 import PhotoSpec from "@/components/admin/PhotoSpec";
 import { contentDirection } from "@/lib/field-direction";
+import { ACCEPT_ATTRIBUTE } from "@/lib/photo-specs";
 
 type Project = {
   id: string;
@@ -57,6 +59,7 @@ const slugify = (s: string) =>
     .replace(/-+/g, "-");
 
 const AdminProjects = () => {
+  const requestCrop = useCrop();
   const [items, setItems] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState<Partial<Project> | null>(null);
@@ -121,9 +124,11 @@ const AdminProjects = () => {
   };
 
   const handleCoverUpload = async (file: File) => {
+    const cropped = await requestCrop(file, "project");
+    if (!cropped) return;
     setUploading(true);
     try {
-      const { url } = await uploadFile("site-projects", file);
+      const { url } = await uploadFile("site-projects", cropped);
       setEditing((e) => ({ ...e!, cover_url: url }));
       toast.success("התמונה הועלתה");
     } catch (e: any) {
@@ -138,7 +143,9 @@ const AdminProjects = () => {
     try {
       const urls: string[] = [];
       for (const f of Array.from(files)) {
-        const { url } = await uploadFile("site-projects", f);
+        const cropped = await requestCrop(f, "project");
+        if (!cropped) break;
+        const { url } = await uploadFile("site-projects", cropped);
         urls.push(url);
       }
       setEditing((e) => ({ ...e!, gallery: [...(e?.gallery || []), ...urls] }));
@@ -263,7 +270,7 @@ const AdminProjects = () => {
                     {editing.cover_url ? "החלפה" : "העלאה"}
                     <input
                       type="file"
-                      accept="image/*"
+                      accept={ACCEPT_ATTRIBUTE}
                       className="hidden"
                       onChange={(e) => e.target.files?.[0] && handleCoverUpload(e.target.files[0])}
                     />
@@ -293,7 +300,7 @@ const AdminProjects = () => {
                     <Upload className="w-5 h-5 text-muted-foreground" />
                     <input
                       type="file"
-                      accept="image/*"
+                      accept={ACCEPT_ATTRIBUTE}
                       multiple
                       className="hidden"
                       onChange={(e) => e.target.files && handleGalleryUpload(e.target.files)}

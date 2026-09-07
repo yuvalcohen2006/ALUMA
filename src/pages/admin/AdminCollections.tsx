@@ -51,9 +51,11 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { uploadFile } from "@/lib/admin-storage";
+import { useCrop } from "@/components/admin/CropProvider";
 import ProductFinishes, { DEFAULT_VARIANT } from "./ProductFinishes";
 import { planVariantSync, type DraftVariant } from "@/lib/variant-sync";
 import PhotoSpec from "@/components/admin/PhotoSpec";
+import { ACCEPT_ATTRIBUTE } from "@/lib/photo-specs";
 
 type Collection = {
   id: string;
@@ -302,6 +304,7 @@ function SortableCollectionCard({
 
 
 const AdminCollections = () => {
+  const requestCrop = useCrop();
   const nav = useNavigate();
   const [collections, setCollections] = useState<Collection[]>([]);
   const [products, setProducts] = useState<Record<string, Product[]>>({});
@@ -425,9 +428,11 @@ const AdminCollections = () => {
 
   /* ---- Uploads ---- */
   const uploadCover = async (file: File) => {
+    const cropped = await requestCrop(file, "collection");
+    if (!cropped) return;
     setUploading(true);
     try {
-      const { url } = await uploadFile("site-collections", file);
+      const { url } = await uploadFile("site-collections", cropped);
       setEditCol((e) => ({ ...e!, image_url: url }));
       toast.success("הועלה");
     } catch (e: any) {
@@ -541,7 +546,7 @@ const AdminCollections = () => {
                     {editCol.image_url ? "החלפה" : "העלאה"}
                     <input
                       type="file"
-                      accept="image/*"
+                      accept={ACCEPT_ATTRIBUTE}
                       className="hidden"
                       onChange={(e) =>
                         e.target.files?.[0] && uploadCover(e.target.files[0])

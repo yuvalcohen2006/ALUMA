@@ -13,6 +13,7 @@ import {
 } from "./catalogue-shared";
 import { supabase } from "@/integrations/supabase/client";
 import { uploadFile } from "@/lib/admin-storage";
+import { useCrop } from "@/components/admin/CropProvider";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -22,6 +23,7 @@ import { formatPrice, parsePriceInput } from "@/lib/price";
 import { contentDirection } from "@/lib/field-direction";
 import { planVariantSync, type DraftVariant } from "@/lib/variant-sync";
 import Ltr from "@/components/Ltr";
+import { ACCEPT_ATTRIBUTE } from "@/lib/photo-specs";
 
 type Collection = { id: string; name_he: string };
 
@@ -40,6 +42,7 @@ type Collection = { id: string; name_he: string };
  * column; nothing there changes the product's content.
  */
 const AdminProductEdit = () => {
+  const requestCrop = useCrop();
   const { id } = useParams();
   const [params] = useSearchParams();
   const nav = useNavigate();
@@ -103,9 +106,11 @@ const AdminProductEdit = () => {
     setProduct((p) => (p ? { ...p, ...changes } : p));
 
   const uploadCover = async (file: File) => {
+    const cropped = await requestCrop(file, "product");
+    if (!cropped) return;
     setUploading(true);
     try {
-      const { url } = await uploadFile("site-collections", file);
+      const { url } = await uploadFile("site-collections", cropped);
       patch({ cover_url: url });
     } catch {
       toast.error("העלאת התמונה נכשלה");
@@ -119,7 +124,12 @@ const AdminProductEdit = () => {
     try {
       const urls: string[] = [];
       for (const f of Array.from(files)) {
-        const { url } = await uploadFile("site-collections", f);
+        // One dialog per file, in order. Cancelling stops the rest rather than
+        // skipping one, and keeps whatever was already cropped — throwing away
+        // finished work to honour a cancel is the wrong reading of it.
+        const cropped = await requestCrop(f, "product");
+        if (!cropped) break;
+        const { url } = await uploadFile("site-collections", cropped);
         urls.push(url);
       }
       patch({ gallery: [...((product?.gallery as string[]) ?? []), ...urls] });
@@ -330,7 +340,7 @@ const AdminProductEdit = () => {
                     {product.cover_url ? "החלפה" : "תמונה ראשית"}
                     <input
                       type="file"
-                      accept="image/*"
+                      accept={ACCEPT_ATTRIBUTE}
                       className="hidden"
                       onChange={(e) => e.target.files?.[0] && uploadCover(e.target.files[0])}
                     />
@@ -363,7 +373,7 @@ const AdminProductEdit = () => {
                         <Upload className="h-4 w-4" />
                         <input
                           type="file"
-                          accept="image/*"
+                          accept={ACCEPT_ATTRIBUTE}
                           multiple
                           className="hidden"
                           onChange={(e) => e.target.files && uploadGallery(e.target.files)}

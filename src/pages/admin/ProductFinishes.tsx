@@ -2,12 +2,14 @@ import { useState } from "react";
 import { Plus, Upload, X } from "lucide-react";
 import { toast } from "sonner";
 import { uploadFile } from "@/lib/admin-storage";
+import { useCrop } from "@/components/admin/CropProvider";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import PhotoSpec from "@/components/admin/PhotoSpec";
 import { contentDirection } from "@/lib/field-direction";
 import type { DraftVariant } from "@/lib/variant-sync";
+import { ACCEPT_ATTRIBUTE } from "@/lib/photo-specs";
 
 /** What a new piece of furniture starts with, so the list is never empty. */
 export const DEFAULT_VARIANT: DraftVariant = {
@@ -35,6 +37,7 @@ const ProductFinishes = ({
   value: DraftVariant[];
   onChange: (next: DraftVariant[]) => void;
 }) => {
+  const requestCrop = useCrop();
   const [uploading, setUploading] = useState<number | null>(null);
 
   const patch = (i: number, changes: Partial<DraftVariant>) =>
@@ -45,9 +48,11 @@ const ProductFinishes = ({
   const remove = (i: number) => onChange(value.filter((_, n) => n !== i));
 
   const upload = async (i: number, file: File) => {
+    const cropped = await requestCrop(file, "finish");
+    if (!cropped) return;
     setUploading(i);
     try {
-      const { url } = await uploadFile("site-collections", file);
+      const { url } = await uploadFile("site-collections", cropped);
       patch(i, { image_url: url });
     } catch {
       toast.error("העלאת התמונה נכשלה");
@@ -114,7 +119,7 @@ const ProductFinishes = ({
                 {uploading === i ? "מעלה…" : v.image_url ? "החלפת תמונה" : "תמונה בצבע הזה"}
                 <input
                   type="file"
-                  accept="image/*"
+                  accept={ACCEPT_ATTRIBUTE}
                   className="hidden"
                   onChange={(e) => e.target.files?.[0] && upload(i, e.target.files[0])}
                 />

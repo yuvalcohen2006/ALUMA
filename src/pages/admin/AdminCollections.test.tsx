@@ -16,11 +16,20 @@ vi.mock("./AdminLayout", () => ({
 }));
 
 const AdminCollections = (await import("./AdminCollections")).default;
+const { CropProvider } = await import("@/components/admin/CropProvider");
 
+/**
+ * CropProvider is normally supplied by AdminLayout, which this file mocks away.
+ * It is provided here rather than made optional: a screen that cannot reach the
+ * crop step must fail loudly, because the alternative is silently uploading an
+ * uncropped photograph.
+ */
 const renderScreen = () =>
   render(
     <MemoryRouter>
-      <AdminCollections />
+      <CropProvider>
+        <AdminCollections />
+      </CropProvider>
     </MemoryRouter>,
   );
 

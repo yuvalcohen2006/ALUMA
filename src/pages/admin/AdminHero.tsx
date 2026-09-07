@@ -8,7 +8,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Upload } from "lucide-react";
 import { toast } from "sonner";
 import { uploadFile } from "@/lib/admin-storage";
+import { useCrop } from "@/components/admin/CropProvider";
 import PhotoSpec from "@/components/admin/PhotoSpec";
+import { ACCEPT_ATTRIBUTE } from "@/lib/photo-specs";
 
 type Hero = {
   title_he?: string;
@@ -20,6 +22,7 @@ type Hero = {
 };
 
 const AdminHero = () => {
+  const requestCrop = useCrop();
   const [hero, setHero] = useState<Hero>({});
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -47,8 +50,10 @@ const AdminHero = () => {
   };
 
   const handleUpload = async (which: "desktop_image" | "mobile_image", file: File) => {
+    const cropped = await requestCrop(file, "hero");
+    if (!cropped) return;
     try {
-      const { url } = await uploadFile("site-hero", file);
+      const { url } = await uploadFile("site-hero", cropped);
       setHero((h) => ({ ...h, [which]: url }));
       toast.success("הועלה, לחצו שמירה לעדכון בדף הבית");
     } catch (e: any) {
@@ -91,7 +96,7 @@ const AdminHero = () => {
               העלאת תמונה
               <input
                 type="file"
-                accept="image/*"
+                accept={ACCEPT_ATTRIBUTE}
                 className="hidden"
                 onChange={(e) => e.target.files?.[0] && handleUpload("desktop_image", e.target.files[0])}
               />
@@ -120,7 +125,7 @@ const AdminHero = () => {
               העלאת תמונה
               <input
                 type="file"
-                accept="image/*"
+                accept={ACCEPT_ATTRIBUTE}
                 className="hidden"
                 onChange={(e) => e.target.files?.[0] && handleUpload("mobile_image", e.target.files[0])}
               />

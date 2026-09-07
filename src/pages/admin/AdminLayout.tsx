@@ -23,6 +23,7 @@ import {
 import { DirectionProvider } from "@radix-ui/react-direction";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
+import CropProvider from "@/components/admin/CropProvider";
 
 const LEADS_SEEN_KEY = "aluma_admin_leads_seen_at";
 
@@ -174,6 +175,7 @@ const AdminLayout = ({ children }: { children: ReactNode }) => {
     // The CMS sits outside the language tree, so it carries its own
     // direction context. Radix will not pick it up from the dir attribute.
     <DirectionProvider dir="rtl">
+    <CropProvider>
     <div className="admin-theme min-h-dvh bg-background" dir="rtl">
       <div className="flex min-h-dvh">
         {/* Sidebar */}
@@ -260,6 +262,7 @@ const AdminLayout = ({ children }: { children: ReactNode }) => {
         </main>
       </div>
     </div>
+    </CropProvider>
     </DirectionProvider>
   );
 };
