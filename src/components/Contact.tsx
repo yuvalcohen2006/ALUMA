@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef, useState, type ReactNode } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   AlertCircle,
@@ -16,6 +16,7 @@ import { contactSchema } from "@/lib/contactSchema";
 import { supabase } from "@/integrations/supabase/client";
 import { useSiteContact } from "@/hooks/useSiteContact";
 import { mailtoLink } from "@/lib/mailto";
+import { copyText, gmailComposeLink } from "@/lib/webmail";
 import { submitErrorMessage } from "@/lib/submitError";
 import { latinFieldProps } from "@/lib/field-direction";
 import type { SiteContact } from "@/lib/site-contact";
@@ -82,7 +83,7 @@ const channelsFor = (SITE: SiteContact): Channel[] => [
     line: "נוח לשליחת מידות, תוכניות וקבצים",
     // Prefilled, like the WhatsApp tile beside it. A bare mailto: opens an
     // empty window, and the visitor has to invent an opening line.
-    href: mailtoLink(SITE.email, "פנייה מהאתר", "היי,\n\nאשמח לשמוע על ריהוט חוץ בהתאמה אישית.\n\nשם:\nטלפון:\n"),
+    href: mailtoLink(SITE.email, EMAIL_SUBJECT, EMAIL_BODY),
   },
   {
     key: "showroom",
@@ -95,6 +96,16 @@ const channelsFor = (SITE: SiteContact): Channel[] => [
     line: `${SITE.address.street}, ביקור בתיאום מראש`,
   },
 ];
+
+/** One prefill, shared by the mailto and the Gmail link so the two agree. */
+const EMAIL_SUBJECT = "פנייה מהאתר";
+const EMAIL_BODY = "היי,\n\nאשמח לשמוע על ריהוט חוץ בהתאמה אישית.\n\nשם:\nטלפון:\n";
+
+const OPEN_IN_MAIL_APP = "פתיחה בתוכנת הדואר";
+const OPEN_IN_GMAIL = "פתיחה ב-Gmail";
+const COPY_ADDRESS = "העתקת הכתובת";
+const COPIED = "הכתובת הועתקה";
+const COPY_FAILED = "ההעתקה נכשלה. סמנו את הכתובת והעתיקו ידנית.";
 
 const scrollToShowroom = () => {
   const el = document.getElementById("showroom");
@@ -113,6 +124,9 @@ const ChannelTile = ({ channel }: { channel: Channel }) => {
   // makes — same weight, same slot, so the four tiles still read as a set.
   const jumps = !channel.href;
   const Cue = jumps ? ChevronDown : ChevronLeft;
+  // The email tile offers three routes rather than making one; a cue pointing
+  // out of the page would promise a departure it does not make.
+  const showCue = channel.key !== "email";
 
   const inner = (
     <>
@@ -143,15 +157,18 @@ const ChannelTile = ({ channel }: { channel: Channel }) => {
       </span>
 
       {/* RTL: forward points left */}
-      <Cue
+      {showCue && <Cue
         className={cn(
 "w-5 h-5 shrink-0 text-primary/60 transition-all duration-300 group-hover:text-primary",
           jumps ? "group-hover:translate-y-0.5" : "group-hover:-translate-x-1",
         )}
         aria-hidden="true"
-      />
+      />}
     </>
   );
+
+  if (channel.key === "email")
+    return <EmailTile inner={inner} email={channel.title} mailto={channel.href!} />;
 
   if (!channel.href) {
     return (
@@ -169,6 +186,77 @@ const ChannelTile = ({ channel }: { channel: Channel }) => {
     >
       {inner}
     </a>
+  );
+};
+
+/**
+ * The email tile, which is the only one that cannot be a single link.
+ *
+ * A mailto: is correct and, for a large share of visitors, does nothing at all.
+ * The browser hands the URL to a registered protocol handler; with none
+ * registered, Chrome and Edge silently ignore the click — no error, no tab, not
+ * even a console message — and a page is not permitted to detect that, because
+ * the handler list is withheld on privacy grounds. The person signed into Gmail
+ * in a browser tab is exactly the person it fails for, which is the report that
+ * produced this component.
+ *
+ * So it offers three routes and detects nothing. The address is a mailto for
+ * anyone with a mail client, the Gmail link opens a composed message in a tab,
+ * and copy is the floor that always works. Offering the choice is also why this
+ * tile stops being one big link: an anchor cannot legally contain another
+ * anchor and a button.
+ */
+const EmailTile = ({
+  inner,
+  email,
+  mailto,
+}: {
+  inner: ReactNode;
+  email: string;
+  mailto: string;
+}) => {
+  const [copied, setCopied] = useState(false);
+
+  const copy = async () => {
+    const ok = await copyText(email);
+    if (!ok) return toast.error(COPY_FAILED);
+    setCopied(true);
+    window.setTimeout(() => setCopied(false), 2400);
+  };
+
+  return (
+    <div className={cn(tileClass, "cursor-default")}>
+      {inner}
+
+      <div className="mt-1 flex flex-wrap items-center gap-x-5 gap-y-2">
+        <a
+          href={mailto}
+          className="text-body text-accent underline decoration-1 underline-offset-4 transition-colors hover:text-foreground"
+        >
+          {OPEN_IN_MAIL_APP}
+        </a>
+        <a
+          href={gmailComposeLink(email, EMAIL_SUBJECT, EMAIL_BODY)}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-body text-accent underline decoration-1 underline-offset-4 transition-colors hover:text-foreground"
+        >
+          {OPEN_IN_GMAIL}
+        </a>
+        <button
+          type="button"
+          onClick={copy}
+          className="text-body text-accent underline decoration-1 underline-offset-4 transition-colors hover:text-foreground"
+        >
+          {COPY_ADDRESS}
+        </button>
+        {/* Polite, never assertive: a copy confirmation must not interrupt
+            whatever was already being read aloud. */}
+        <span role="status" aria-live="polite" className="text-body text-muted-foreground">
+          {copied ? COPIED : ""}
+        </span>
+      </div>
+    </div>
   );
 };
 
