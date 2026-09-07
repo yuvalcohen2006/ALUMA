@@ -6,6 +6,7 @@ import Layout from "@/components/Layout";
 import SEO from "@/components/SEO";
 import Reveal from "@/components/Reveal";
 import TileCard from "@/components/TileCard";
+import { localizedName } from "@/lib/localized-name";
 import { useCollections, type DBProduct } from "@/hooks/useCollectionsData";
 import { useLocalizedPath } from "@/lib/useLocalizedPath";
 import NotFound from "./NotFound";
@@ -60,7 +61,7 @@ export const ProductCard = ({ product: p, eager }: { product: DBProduct; eager: 
 const CollectionPage = () => {
   const { slug } = useParams();
   const { collections, products, loading } = useCollections();
-  const { to } = useLocalizedPath();
+  const { to, lang } = useLocalizedPath();
 
   const collection = collections.find((c) => c.slug === slug);
   const { t } = useTranslation("catalogue");
@@ -90,13 +91,13 @@ const CollectionPage = () => {
   if (!collection) return <NotFound />;
 
 
+  const name = localizedName(lang, collection.name_he, collection.name_en);
+
   return (
     <Layout>
       <SEO
-        title={`${collection.name_he} | ${t("seo.collectionSuffix")}`}
-        description={
-          collection.intro || t("seo.collectionFallback", { name: collection.name_he })
-        }
+        title={`${name} | ${t("seo.collectionSuffix")}`}
+        description={collection.intro || t("seo.collectionFallback", { name })}
         path={`/collections/${collection.slug}`}
         // The band photograph is gone; the first product is the
         // representative image for a share card now.
@@ -104,9 +105,11 @@ const CollectionPage = () => {
         jsonLd={{
 "@context": "https://schema.org",
 "@type": "CollectionPage",
-          name: collection.name_he,
+          name,
           url: `${SITE}/collections/${collection.slug}`,
-          inLanguage: "he-IL",
+          // Was hardcoded he-IL, which told a crawler the English page was
+          // Hebrew.
+          inLanguage: lang === "he" ? "he-IL" : "en",
         }}
       />
 
@@ -116,7 +119,7 @@ const CollectionPage = () => {
       <section className="pt-36 pb-10 md:pt-44 md:pb-14">
         <div className="container-luxury">
           <h1 className="text-start text-display font-normal tracking-normal text-foreground">
-            {collection.name_he}
+            {name}
           </h1>
 
           {collection.intro && (

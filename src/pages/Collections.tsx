@@ -5,6 +5,7 @@ import SEO from "@/components/SEO";
 import PageHero from "@/components/PageHero";
 import Reveal from "@/components/Reveal";
 import TileCard from "@/components/TileCard";
+import { localizedName } from "@/lib/localized-name";
 import { useCollections, type DBCollection, type DBProduct } from "@/hooks/useCollectionsData";
 import { useLocalizedPath } from "@/lib/useLocalizedPath";
 import { useSiteText } from "@/hooks/useSiteText";
@@ -55,15 +56,18 @@ const CollectionCard = ({
   count: number;
   eager: boolean;
 }) => {
-  const { to } = useLocalizedPath();
+  const { to, lang } = useLocalizedPath();
   const { t } = useTranslation("catalogue");
+  // name_en has been selected by the query since the CMS was built and read by
+  // nothing, so /en showed Hebrew collection names under English headings.
+  const name = localizedName(lang, col.name_he, col.name_en);
 
   return (
     <TileCard
       to={to(`/collections/${col.slug}`)}
       image={col.image_url}
       alt=""
-      title={col.name_he}
+      title={name}
       meta={t("itemCount", { count })}
       aspect="4/5"
       eager={eager}
@@ -75,7 +79,7 @@ const CollectionCard = ({
       fallback={
         <div className="grid h-full w-full place-items-center">
           <span className="font-display text-heading text-foreground/25">
-            {col.name_he.charAt(0)}
+            {name.charAt(0)}
           </span>
         </div>
       }

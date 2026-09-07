@@ -4,6 +4,7 @@ import TileCard from "@/components/TileCard";
 import { useCollections } from "@/hooks/useCollectionsData";
 import { useLocalizedPath } from "@/lib/useLocalizedPath";
 import { useSiteText } from "@/hooks/useSiteText";
+import { localizedName } from "@/lib/localized-name";
 
 /** Three, not eight. Audo shows four; Skargaarden uses text links; Hillerstorp
  *  shows none at all. Eight tiles was more than any reference brand puts on a
@@ -13,7 +14,7 @@ const MAX = 3;
 
 const FeaturedCollections = () => {
   const { collections, loading } = useCollections();
-  const { to } = useLocalizedPath();
+  const { to, lang } = useLocalizedPath();
   const t = useSiteText();
   const shown = collections.slice(0, MAX);
 
@@ -50,7 +51,7 @@ const FeaturedCollections = () => {
                   to={to(`/collections/${c.slug}`)}
                   image={c.image_url}
                   alt=""
-                  title={c.name_he}
+                  title={localizedName(lang, c.name_he, c.name_en)}
                   meta={c.intro}
                   aspect="3/4"
                   eager={i === 0}
