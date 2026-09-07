@@ -190,7 +190,11 @@ const ProjectEntry = ({ project: p, index }: { project: Project; index: number }
               ))}
             </div>
 
-            <p className="mt-6 text-body leading-relaxed text-foreground text-pretty">
+            {/* Clamped, not shortened. Six projects each carried a 57-61 word
+                intro in full, which is 355 words of unbroken paragraph down
+                one page — and the project's own page opens with the same text.
+                Nothing is lost; the index stops being a wall. */}
+            <p className="mt-6 line-clamp-3 text-body leading-relaxed text-foreground text-pretty">
               {p.intro}
             </p>
 
@@ -286,7 +290,7 @@ const ProjectsPage = () => {
       {/* CONTENTS STRIP — the table of contents of the portfolio. A tinted band
           that scrolls sideways on phones and wraps on desktop. */}
       {visible.length > 0 && (
-        <section className="mt-10 md:mt-12 bg-secondary border-y border-border/70">
+        <section className="mt-10 md:mt-12 bg-secondary border-y border-border">
           <div className="container-luxury py-6 md:py-7">
             <nav
               aria-label="מפתח הפרויקטים"

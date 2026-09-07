@@ -281,6 +281,10 @@
 
   .band-tint {
     background: var(--band-tint);
+    /* The hairline is part of the band, not a decision per call site. Fill
+       alone separated sections while the page was cream and the band sand
+       (1.22:1); white against #F8F8F8 is 1.06:1. */
+    border-block: 1px solid hsl(var(--border));
   }
 
   .shadow-luxury {

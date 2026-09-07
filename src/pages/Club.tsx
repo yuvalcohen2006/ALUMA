@@ -201,7 +201,7 @@ const Club = () => {
       </section>
 
       {/* ── 2. Joining — a numbered spine, and the only ask on the page ── */}
-      <section className="py-14 md:py-20 bg-secondary">
+      <section className="border-y border-border py-14 md:py-20 bg-secondary">
         <div className="container-luxury">
           <div className="grid lg:grid-cols-12 gap-10 lg:gap-14 items-start max-w-7xl mx-auto">
             <Reveal className="lg:col-span-5">

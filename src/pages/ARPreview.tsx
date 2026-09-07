@@ -50,13 +50,10 @@ const ARPreview = () => {
   const [active, setActive] = useState(products[0]);
 
   useEffect(() => {
-    document.title = "AR Preview, נסו את הרהיט במרחב שלכם | Aluma";
-    const meta =
-      document.querySelector('meta[name="description"]') ||
-      Object.assign(document.createElement("meta"), { name: "description" });
-    (meta as HTMLMetaElement).content =
-"תצוגת מציאות רבודה, מקמו רהיטי חוץ של Aluma במרפסת או בגינה שלכם דרך הסמארטפון.";
-    if (!meta.parentNode) document.head.appendChild(meta);
+    // This effect used to ALSO set document.title and a description meta tag
+    // by hand, while <SEO> below set a different title and description for the
+    // same page. Two writers, no ordering guarantee, so which pair a crawler
+    // saw was down to timing. <SEO> is the one the rest of the site uses.
 
     // Lazy-load Google's <model-viewer> web component
     const existing = document.querySelector(

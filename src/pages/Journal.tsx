@@ -96,7 +96,7 @@ const JournalPage = () => {
           grid of cards: the materials above are what this page is for, and a
           second block of photographs would compete with them. */}
       {articles.length > 0 && (
-        <section className="bg-secondary">
+        <section className="border-y border-border bg-secondary">
           <div className="mx-auto max-w-[1440px] px-5 md:px-10 lg:px-16 py-20 md:py-28">
             <Reveal>
               <h2 className="text-start text-heading font-normal tracking-normal text-foreground">

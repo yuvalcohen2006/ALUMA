@@ -43,10 +43,10 @@ const MaterialsPage = () => {
               {text("materials.title", t("materials.title"))}
             </h1>
             <p className="mt-6 max-w-[58ch] text-start text-body tracking-normal text-foreground-soft">
-              {text(
-                "materials.subtitle",
-                "ההחלטה הראשונה בכל פריט היא לא הצורה, אלא החומר. אלה הארבעה שאנחנו בונים איתם, ומה כל אחד מהם עושה אחרי כמה שנים בחוץ.",
-              )}
+              {/* t(), not a hardcoded Hebrew string. The title one line up was
+                  already doing this correctly; this one shipped the Hebrew
+                  subtitle to /en. */}
+              {text("materials.subtitle", t("materials.subtitle"))}
             </p>
           </Reveal>
         </div>
@@ -55,7 +55,7 @@ const MaterialsPage = () => {
       {materials.map((m, i) => (
         <section
           key={m.slug}
-          className={i % 2 === 1 ? "bg-secondary" : "bg-background"}
+          className={i % 2 === 1 ? "border-y border-border bg-secondary" : "bg-background"}
         >
           <div className="mx-auto max-w-[1440px] px-5 md:px-10 lg:px-16 py-20 md:py-28">
             <div className="grid md:grid-cols-2 gap-10 md:gap-16 items-center">

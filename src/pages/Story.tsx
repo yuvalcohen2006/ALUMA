@@ -157,7 +157,7 @@ const StoryPage = () => {
           there were numbers worth printing. Also the page's single permitted
           use of terracotta — a third colour used repeatedly is the fastest way
           to read as a template. */}
-      <section className="bg-secondary">
+      <section className="border-y border-border bg-secondary">
         <div className="mx-auto max-w-[860px] px-6 py-24 md:py-32">
           <Reveal>
             <h2 className="text-start text-heading font-normal tracking-normal text-foreground">

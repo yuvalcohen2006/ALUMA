@@ -248,7 +248,7 @@ const DIYPage = () => {
       </section>
 
       {/* ===== The bench: two long planks with two stations clamped between ===== */}
-      <section className="py-20 md:py-28 bg-secondary">
+      <section className="border-y border-border py-20 md:py-28 bg-secondary">
         <div className="container-luxury">
           <Reveal className="mb-12 md:mb-16 flex flex-col items-center">
             <SectionHeading
