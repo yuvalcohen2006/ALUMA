@@ -91,15 +91,32 @@ const ImageCropDialog = ({
   const maxZoom = Math.max(1.6, maxUsefulZoom(img, win, output));
   const soft = image ? isUpscaling(view, img, win, output) : false;
 
-  useLayoutEffect(() => {
-    const el = stageRef.current;
+  /*
+   * Measured by a CALLBACK REF, not by an effect keyed on `open`.
+   *
+   * Radix mounts a dialog through Presence and Portal, and BOTH render null for
+   * one extra commit. A layout effect keyed on `open` therefore runs while the
+   * stage div does not exist yet, hits its own null check, and — since `open`
+   * is its only dependency — never runs again for that session. The stage
+   * stayed {0,0}: a black rectangle where the photograph should be, a crop
+   * window collapsed to the 1px floor, and both position sliders disabled
+   * because there was no slack to move through. It only started working on the
+   * SECOND open, using a size measured when the dialog last closed.
+   *
+   * A callback ref is invoked on the commit where the element actually
+   * attaches, which is exactly the commit that was being missed.
+   */
+  const observer = useRef<ResizeObserver | null>(null);
+  const setStageEl = useCallback((el: HTMLDivElement | null) => {
+    stageRef.current = el;
+    observer.current?.disconnect();
+    observer.current = null;
     if (!el) return;
     const measure = () => setStage({ w: el.clientWidth, h: el.clientHeight });
     measure();
-    const ro = new ResizeObserver(measure);
-    ro.observe(el);
-    return () => ro.disconnect();
-  }, [open]);
+    observer.current = new ResizeObserver(measure);
+    observer.current.observe(el);
+  }, []);
 
   // Centre a newly loaded photograph, and re-centre if the stage resizes before
   // anything has been dragged.
@@ -152,6 +169,13 @@ const ImageCropDialog = ({
 
   const drag = useRef<{ id: number; x: number; y: number } | null>(null);
 
+  // Closing mid-drag — Escape, or the overlay — never fires pointerup, so the
+  // pointer id survived into the next dialog and the photograph followed the
+  // cursor with no button held down.
+  useEffect(() => {
+    if (!open) drag.current = null;
+  }, [open]);
+
   const confirm = async () => {
     if (!image) return;
     setSaving(true);
@@ -170,7 +194,12 @@ const ImageCropDialog = ({
 
   return (
     <Dialog open={open} onOpenChange={(o) => !o && !working && onCancel()}>
-      <DialogContent dir="rtl" className="admin-theme max-w-4xl">
+      {/* max-h/overflow like every other admin dialog. Without it this one — the
+          tallest of them — pushed its own save button off the bottom of a laptop
+          screen with no way to scroll to it. Wheel over the stage still zooms
+          rather than scrolling the dialog: that listener is non-passive and
+          calls preventDefault. */}
+      <DialogContent dir="rtl" className="admin-theme max-h-[90vh] max-w-4xl overflow-y-auto">
         <DialogHeader>
           <DialogTitle>מיקום התמונה</DialogTitle>
         </DialogHeader>
@@ -183,7 +212,7 @@ const ImageCropDialog = ({
         <div className="grid gap-5 lg:grid-cols-[1fr_200px]">
           {/* ── The stage ─────────────────────────────────────────────── */}
           <div
-            ref={stageRef}
+            ref={setStageEl}
             role="group"
             aria-label="מיקום התמונה במסגרת"
             className="relative h-[340px] w-full cursor-grab touch-none overflow-hidden rounded-sm bg-neutral-900 active:cursor-grabbing sm:h-[400px]"

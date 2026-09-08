@@ -130,7 +130,10 @@ const AdminProductEdit = () => {
         // skipping one, and keeps whatever was already cropped — throwing away
         // finished work to honour a cancel is the wrong reading of it.
         const cropped = await requestCrop(f, "product");
-        if (!cropped) break;
+        // undefined = this file could not be opened, so skip it and keep going.
+        // null = the owner pressed cancel, which should stop the whole batch.
+        if (cropped === undefined) continue;
+        if (cropped === null) break;
         const { url } = await uploadFile("site-collections", cropped);
         urls.push(url);
       }

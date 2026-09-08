@@ -144,7 +144,10 @@ const AdminProjects = () => {
       const urls: string[] = [];
       for (const f of Array.from(files)) {
         const cropped = await requestCrop(f, "project");
-        if (!cropped) break;
+        // undefined = this file could not be opened, so skip it and keep going.
+        // null = the owner pressed cancel, which should stop the whole batch.
+        if (cropped === undefined) continue;
+        if (cropped === null) break;
         const { url } = await uploadFile("site-projects", cropped);
         urls.push(url);
       }

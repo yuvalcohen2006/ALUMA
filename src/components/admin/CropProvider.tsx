@@ -28,7 +28,17 @@ import type { PhotoSpecKey } from "@/lib/photo-specs";
  * need a try/catch to express "then nothing happens".
  */
 
-type RequestCrop = (file: File, spec: PhotoSpecKey) => Promise<File | null>;
+/**
+ * `null` means the owner cancelled. `undefined` means the file was unusable —
+ * too large, or something the browser cannot decode.
+ *
+ * The distinction exists for the two multi-file gallery loops. They treated
+ * every falsy result as "cancelled, stop here", so one 9MB photo in the middle
+ * of a batch of five showed a single red toast and then silently skipped the
+ * rest — no dialog ever opened for them, and nothing said why. A cancel should
+ * still stop the batch; an unreadable file should only skip itself.
+ */
+type RequestCrop = (file: File, spec: PhotoSpecKey) => Promise<File | null | undefined>;
 
 const CropContext = createContext<RequestCrop | null>(null);
 
@@ -51,7 +61,11 @@ export const CropProvider = ({ children }: { children: ReactNode }) => {
   /** Resolve the outstanding promise and let go of the blob exactly once. */
   const settle = useCallback((file: File | null) => {
     setPending((p) => {
-      p?.image.release();
+      // Released on a delay, and deliberately. Revoking the blob URL in the
+      // same tick pulls the photograph out of a dialog that is still playing
+      // its close animation, so every confirm and every cancel ended on a
+      // quarter-second of empty box.
+      if (p) window.setTimeout(() => p.image.release(), 400);
       return null;
     });
     const resolve = resolver.current;
@@ -69,7 +83,9 @@ export const CropProvider = ({ children }: { children: ReactNode }) => {
         image = await loadImageForCrop(file);
       } catch (e) {
         toast.error(e instanceof ImageLoadError ? e.message : "לא הצלחנו לפתוח את התמונה");
-        return null;
+        // undefined, not null: this file is unusable, but the batch it may be
+        // part of should carry on to the next one.
+        return undefined;
       }
 
       if (image.downscaled) {
