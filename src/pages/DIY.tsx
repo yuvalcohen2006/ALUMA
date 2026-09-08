@@ -60,11 +60,13 @@ const toolList = {
 "@type": "ItemList",
   name: "כלים לתכנון עצמי של ריהוט חוץ",
   inLanguage: "he-IL",
+  // The two stations this page actually renders. It used to list four,
+  // including `${SITE}/designer` — a route that was deleted — so the page told
+  // Google about a tool that 404s, and promised a visitor four things before
+  // showing them two.
   itemListElement: [
-    { name: "עצבו סלון", url: `${SITE}/designer` },
     { name: "בחרו את הבד", url: `${SITE}/fabric` },
     { name: "AR, תצוגה במרחב", url: `${SITE}/ar` },
-    { name: "שאלון חכם", url: `${SITE}/questionnaire` },
   ].map((t, i) => ({
 "@type": "ListItem",
     position: i + 1,
@@ -213,7 +215,7 @@ const DIYPage = () => {
     <Layout>
       <SEO
         title="עשה זאת בעצמך | כלים לתכנון סלון החוץ שלכם | Aluma"
-        description="ארבעה כלים לתכנון ריהוט החוץ שלכם: מעצב סלון מודולרי, בחירת בד Sunbrella עם תצוגה מיידית, תצוגת AR בגודל אמיתי במרפסת ושאלון חכם להמלצה אישית. הכול מהדפדפן, בלי הרשמה."
+        description="שני כלים לתכנון ריהוט החוץ שלכם: בחירת בד Sunbrella עם תצוגה מיידית על הספה, ותצוגת AR בגודל אמיתי במרפסת. הכול מהדפדפן, בלי הרשמה ובלי עלות."
         path="/diy"
         jsonLd={[breadcrumbs, toolList]}
       />
@@ -229,7 +231,7 @@ const DIYPage = () => {
             <div className="mx-auto grid gap-10 lg:grid-cols-[minmax(0,1fr)_auto] lg:gap-16 items-start max-w-6xl">
               <SectionHeading
                 align="start"
-                subtitle="ריכזנו במקום אחד את הכלים שמאפשרים לכם להתחיל לתכנן עוד לפני שדיברנו איתנו. אפשר להרכיב מערכת ישיבה מודולרית לפי המידות שלכם, לבחור גוון בד ולראות אותו מיד על הספה, להציב רהיט בגודל אמיתי במרפסת דרך מצלמת הטלפון, או פשוט לענות על כמה שאלות ולקבל המלצה. כל כלי עומד בפני עצמו, ואפשר להתחיל מאיפה שנוח לכם."
+                subtitle="שני כלים שאפשר להתחיל איתם עוד לפני שדיברנו: לבחור גוון בד ולראות אותו מיד על הספה, ולהציב רהיט בגודל אמיתי במרפסת דרך הטלפון. בלי הרשמה ובלי עלות."
               >
                 מה אפשר לעשות כאן
               </SectionHeading>

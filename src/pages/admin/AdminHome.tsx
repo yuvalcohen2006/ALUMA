@@ -36,7 +36,8 @@ const AdminHome = () => {
 
   const load = useCallback(async () => {
     setLoading(true);
-    const [{ data: prods }, { data: highlights }] = await Promise.all([
+    const [{ data: cols }, { data: prods }, { data: highlights }] = await Promise.all([
+      supabase.from("site_collections").select("id").eq("published", true),
       supabase
         .from("site_collection_products")
         .select("id, name, cover_url, collection_id")
@@ -44,8 +45,29 @@ const AdminHome = () => {
         .order("name"),
       supabase.from("site_home_highlights").select("product_id, slot").order("slot"),
     ]);
-    const chosen = ((highlights as { product_id: string }[]) ?? []).map((h) => h.product_id);
-    setProducts((prods as Row[]) ?? []);
+
+    /*
+     * Offer only what the home page can actually render.
+     *
+     * The site drops any product whose COLLECTION is hidden, and this screen
+     * did not — so a piece inside a hidden collection could be picked, saved,
+     * and then silently filtered out, leaving a strip of two with nothing in
+     * the admin to explain it.
+     */
+    const visibleCollections = new Set(((cols as { id: string }[]) ?? []).map((c) => c.id));
+    const rows = ((prods as Row[]) ?? []).filter((p) => visibleCollections.has(p.collection_id));
+
+    /*
+     * And reconcile the saved picks against that same list. A product that has
+     * since been unpublished keeps its row in site_home_highlights, and its id
+     * had no tile to click — so the counter read "2 of 3" while three slots
+     * were taken, and there was no way to clear the third.
+     */
+    const live = new Set(rows.map((p) => p.id));
+    const chosen = ((highlights as { product_id: string }[]) ?? [])
+      .map((h) => h.product_id)
+      .filter((id) => live.has(id));
+    setProducts(rows);
     setPicked(chosen);
     setInitial(chosen);
     setLoading(false);

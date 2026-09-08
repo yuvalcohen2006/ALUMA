@@ -42,8 +42,13 @@
     --muted: 0 0% 94%;
     --muted-foreground: 0 0% 34%; /* softened charcoal for secondary text, still readable */
 
-    /* Accent = deeper terracotta for hover/press states (olive-grey / teal dropped entirely) */
-    --accent: 14 47% 50%;
+    /* Deeper terracotta, for hover and press states and for any text that has
+       to carry the brand colour. 46%, not 50%: at 50% it measured 4.32:1 on
+       white and 4.07:1 on the band, and 18px regular type is NOT WCAG "large
+       text" — that starts at 24px — so every accent-coloured link on the
+       contact block was under AA. 46% gives 4.97:1 and 4.68:1, and white on it
+       is 4.97:1 for the two button hovers. */
+    --accent: 14 47% 46%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 60% 45%;

@@ -111,7 +111,7 @@ const scrollToShowroom = () => {
   const el = document.getElementById("showroom");
   if (!el) return;
   const reduce = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
-  el.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+  el.scrollIntoView({ behavior: reduce ? "instant" : "smooth", block: "start" });
 };
 
 const tileClass =
@@ -288,7 +288,7 @@ const fieldClass = (invalid: boolean) =>
   cn(
 "w-full rounded-none border-0 border-b bg-transparent px-0 text-body text-foreground text-start",
 "placeholder:text-muted-foreground/60 transition-colors focus:ring-0",
-    invalid ? "border-destructive/70 focus:border-destructive" : "border-foreground/25 focus:border-accent",
+    invalid ? "border-destructive/70 focus:border-destructive" : "border-input focus:border-accent",
   );
 
 const labelClass = "block text-label tracking-[0.04em] text-foreground-soft mb-1.5";

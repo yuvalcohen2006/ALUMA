@@ -11,15 +11,42 @@ import { useLocation, useNavigationType } from "react-router-dom";
  * they tick a checkbox made filtering unusable. Only a new pathname scrolls.
  */
 const ScrollToTop = () => {
-  const { pathname, search } = useLocation();
+  const { pathname, search, hash } = useLocation();
   const navType = useNavigationType();
 
   const lastPathRef = useRef<string | null>(null);
   // Read during render, before the layout effect advances the ref, so both
   // effects in this commit agree on whether the page actually changed.
   const isNewPage = lastPathRef.current !== pathname;
+  // A hash arriving on the page you are already on is not a navigation, but it
+  // still has somewhere to go — the FAQ's own "write to us" link is exactly
+  // this case.
+  const hasTarget = Boolean(hash);
+
+  /*
+   * A link carrying a #fragment wants that element, not the top.
+   *
+   * React Router does not restore fragments itself, and this component ran
+   * unconditionally — so every cross-page "contact us" on the site
+   * (footer, home, story, product page, account, catalogue: six of them) went
+   * to /faq#contact and landed at the top of the FAQ, with the form a screen
+   * and a half further down. The anchor and its scroll-mt were there the whole
+   * time; nothing ever reached them.
+   *
+   * Returning true here means "handled" — the caller then leaves the page
+   * alone rather than yanking it back up.
+   */
+  const scrollToHash = () => {
+    if (!hash) return false;
+    const el = document.getElementById(decodeURIComponent(hash.slice(1)));
+    if (!el) return false;
+    const reduce = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+    el.scrollIntoView({ behavior: reduce ? "instant" : "smooth", block: "start" });
+    return true;
+  };
 
   const scrollTop = () => {
+    if (scrollToHash()) return;
     // Disable any CSS smooth-scroll for this jump
     const html = document.documentElement;
     const prev = html.style.scrollBehavior;
@@ -34,14 +61,14 @@ const ScrollToTop = () => {
   useLayoutEffect(() => {
     lastPathRef.current = pathname;
     if (navType === "POP") return; // preserve back/forward position
-    if (!isNewPage) return; // filter change, not a navigation
+    if (!isNewPage && !hasTarget) return; // filter change, not a navigation
     scrollTop();
-  }, [pathname, search, navType, isNewPage]);
+  }, [pathname, search, hash, navType, isNewPage]);
 
   // After lazy content mounts / images shift layout
   useEffect(() => {
     if (navType === "POP") return;
-    if (!isNewPage) return;
+    if (!isNewPage && !hasTarget) return;
     const r1 = requestAnimationFrame(scrollTop);
     const t1 = window.setTimeout(scrollTop, 60);
     const t2 = window.setTimeout(scrollTop, 250);
@@ -50,7 +77,7 @@ const ScrollToTop = () => {
       clearTimeout(t1);
       clearTimeout(t2);
     };
-  }, [pathname, search, navType, isNewPage]);
+  }, [pathname, search, hash, navType, isNewPage]);
 
   return null;
 };

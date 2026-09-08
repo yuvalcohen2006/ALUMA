@@ -10,6 +10,7 @@ import { type Project } from "@/data/projects";
 import { useProjects } from "@/hooks/useProjectsData";
 import { cn } from "@/lib/utils";
 import { useTranslation } from "react-i18next";
+import { useLocalizedPath } from "@/lib/useLocalizedPath";
 
 const SITE = "https://alumaoutdoor.com";
 
@@ -72,6 +73,7 @@ const ProjectEntry = ({
   isLast: boolean;
 }) => {
   const { t } = useTranslation("projects");
+  const { to } = useLocalizedPath();
   const photoRight = index % 2 === 0;
   // Two values, not four. Across fourteen architecture and furniture indexes
   // the median card carries five or six words of metadata and the near-
@@ -90,7 +92,7 @@ const ProjectEntry = ({
       className="scroll-mt-[120px] focus:outline-none"
     >
       <Link
-        to={`/projects/${p.slug}`}
+        to={to(`/projects/${p.slug}`)}
         // Deliberately NO aria-label. An aria-label on a container link
         // replaces the name computed from its contents, which would have
         // hidden the meta line and the whole intro from screen readers — the
@@ -164,7 +166,7 @@ const ProjectEntry = ({
             <span
               aria-hidden="true"
               dir="ltr"
-              className="block text-start text-label font-medium tracking-[0.14em] tabular-nums text-primary"
+              className="block text-start text-label font-medium tracking-[0.14em] tabular-nums text-accent"
             >
               {folio(index + 1)}
             </span>
