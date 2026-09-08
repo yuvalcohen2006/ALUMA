@@ -9,7 +9,7 @@ The technical setup is done. What remains is content, plus one thing to confirm.
 | ✅ | Database script | done |
 | ✅ | Sign-in address | done |
 | ✅ | Three home-page products | done — 3 picked |
-| ⚠️ | **Email — the site cannot see the key** | **one screenshot needed** |
+| ⚠️ | **Email — delete one secret** | **2 minutes, then done** |
 | ○ | English names | optional — 0 of 47 products, 0 of 6 collections |
 | ⬜ | Customer reviews | 0 — the section is hidden until there is one |
 | ⬜ | Colours on products | 0 |
@@ -18,72 +18,67 @@ The technical setup is done. What remains is content, plus one thing to confirm.
 
 ---
 
-# ⚠️ THE EMAIL PROBLEM — found it
+# ✅ THE EMAIL PROBLEM — solved. One thing to delete.
 
-Your Resend log answered it. Three messages, **all three Delivered** — and every
-one of them is a test I sent **straight to Resend**. The two I sent **through
-your website's contact form are not in that list at all.**
+## The fix
 
-Not failed. Not bounced. **Never sent.**
+**Delete the secret called `RESEND_FROM`.** That is the whole fix.
 
-So the chain looks like this:
+1. `https://supabase.com/dashboard/project/jzqayfllojeqivwbbuyf/functions/secrets`
+2. Find **RESEND_FROM** in *Custom secrets*.
+3. Click the **⋮** at the end of its row → **Delete**.
+
+Nothing to redeploy. Send a message through your own contact form a minute
+later and it will arrive.
+
+## What was wrong
+
+`RESEND_FROM` was set on **28 July** — back when the domain was not verified yet
+— to Resend's shared test address:
 
 ```
-website form  ──✗──  Resend  ──✓──  Gmail  ──✓──  your inbox
-              ↑
-        the break is here
+Aluma <onboarding@resend.dev>
 ```
 
-Everything downstream is fine and proven: the domain, the key, the DNS, Gmail
-delivery. The direct message landed in your inbox, which settles all of it.
+It has been overriding the correct sender ever since. Your code already defaults
+to `Aluma <noreply@notify.alumaoutdoor.com>`, which is your verified domain and
+works; that secret was silently replacing it on every send.
 
-**Stand down on the DKIM record.** I flagged it earlier as worth fixing. Mail is
-being delivered, so it is not causing this. Worth tidying one day, not today.
+And Resend does not allow the test address to email anyone but the account
+owner. This is the exact error your website has been getting, every time,
+reproduced word for word:
 
-## What is actually wrong
+> **403** — *You can only send testing emails to your own email address
+> (yuval.cohen006@gmail.com). To send emails to other recipients, please verify
+> a domain at resend.com/domains, and change the `from` address to an email
+> using this domain.*
 
-Your website saves the lead, then tries to email you, and if that email fails it
-writes the reason to a log nobody reads and reports success anyway. That is why
-the form looked fine.
+Because Resend rejects the message outright, **no email is ever created** — which
+is why nothing appeared in your Resend log. And because your website catches that
+error, writes it to a log nobody reads, and reports success anyway, nothing
+appeared anywhere else either.
 
-The email is failing because **the function cannot see the API key.** It is not
-the key itself — that same key sent all three delivered messages.
+Deleting the secret removes the override and the real sender takes over.
 
-## 📸 What I need from you
+## Your other secrets — verdict on each
 
-**A screenshot of your Edge Function secrets page.** Supabase hides the values
-and shows only the names, so this is safe to share — and the names are exactly
-what I need to see.
-
-1. Go to **supabase.com/dashboard** and open the **aluma** project.
-2. ⚠️ **Check the address bar contains `jzqayfllojeqivwbbuyf`.** If you were
-   looking at a different project when you added the secret, that alone explains
-   everything.
-3. Hover the left icon strip → **Edge Functions** → **Secrets**.
-
-   Direct link: `https://supabase.com/dashboard/project/jzqayfllojeqivwbbuyf/functions/secrets`
-
-Screenshot the list of names.
-
-### What I am looking for
-
-The name has to be **exactly** this, and these are the ways it usually is not:
-
-| Must be | Common mistakes |
+| Secret | Verdict |
 |---|---|
-| `RESEND_API_KEY` | `RESEND_API_KEY ` with a trailing space |
-| | `RESEND_KEY`, `RESEND_APIKEY` |
-| | lower case, or mixed case |
-| | pasted into the wrong project |
+| **RESEND_FROM** | ❌ **Delete it.** This is the bug. |
+| **RESEND_API_KEY** | ✅ Correct, and proven working. Leave it. |
+| **OWNER_EMAIL** | ✅ Holds `outdooraluma@gmail.com`, which is right. Leave it. |
+| **SEND_EMAIL_HOOK_SECRET** | ✅ **Do not touch.** Unrelated to this — it signs Supabase's sign-in emails, and changing it here alone breaks them. |
 
-**Also tell me if you see a secret called `OWNER_EMAIL`.** The site sends your
-enquiries to whatever that holds, falling back to outdooraluma@gmail.com.
+Only the key is worth rotating eventually, and only because it travelled through
+a chat message. Not urgent, and not related to this.
 
-## While you are there — one cross-check
+## Afterwards
 
-Open **פניות** in the admin. You should see **two test leads** from me. They
-prove the form is working and only the email step is broken, which is exactly
-what the Resend log says. Delete them once you have looked.
+Send one message through your own contact form. When it arrives, tell me — and
+I would still like to fix the deeper problem, which is that your site cannot tell
+you when an email fails. One small SQL script and the **פניות** screen shows
+"המייל לא נשלח" on any lead whose email did not go out. Without it, the next
+email outage is just as invisible as this one was.
 
 ---
 
@@ -192,9 +187,9 @@ uploading broken, so convert it first.
 # 📬 WHAT TO TELL ME
 
 ```
-Secret name on the secrets page?  exactly RESEND_API_KEY ? yes / no
-Is there an OWNER_EMAIL secret?   yes / no
-Two test leads showing in פניות?   yes / no
+RESEND_FROM deleted?              yes / no
+Form email arrived after that?    yes / no
+Want the "email failed" warning?  yes / no
 
 English names (optional)?         yes / not bothering
 Reviews added?                    yes / not yet
