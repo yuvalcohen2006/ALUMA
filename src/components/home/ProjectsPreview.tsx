@@ -4,6 +4,7 @@ import Reveal from "@/components/Reveal";
 import TileCard from "@/components/TileCard";
 import { useProjects } from "@/hooks/useProjectsData";
 import { useLocalizedPath } from "@/lib/useLocalizedPath";
+import { useTranslation } from "react-i18next";
 import { useSiteText } from "@/hooks/useSiteText";
 
 const MAX = 3;
@@ -23,6 +24,7 @@ const ProjectsPreview = () => {
   const { projects } = useProjects();
   const { to } = useLocalizedPath();
   const t = useSiteText();
+  const { t: tr } = useTranslation("home");
   const shown = projects.slice(0, MAX);
 
   if (shown.length === 0) return null;
@@ -34,7 +36,7 @@ const ProjectsPreview = () => {
       <div className="mx-auto max-w-[1440px] px-5 py-20 md:px-10 md:py-28 lg:px-16 lg:py-36">
         <Reveal>
           <h2 className="text-start text-heading font-normal tracking-normal text-foreground">
-            {t("home.projects.title", "פרויקטים")}
+            {t("home.projects.title", tr("projects.title"))}
           </h2>
         </Reveal>
 
@@ -66,10 +68,10 @@ const ProjectsPreview = () => {
         <Reveal>
           <div className="mt-14 max-w-[46ch] text-start md:mt-16">
             <p className="text-tile text-foreground">
-              {t("home.projects.more", "ועוד רבים אחרים.")}
+              {t("home.projects.more", tr("projects.more"))}
             </p>
             <p className="mt-2 text-body text-foreground-soft">
-              {t("home.projects.invite", "הפרויקט הבא יכול להיות שלכם.")}
+              {t("home.projects.invite", tr("projects.invite"))}
             </p>
 
             <div className="mt-8 flex flex-wrap items-center gap-x-8 gap-y-4">
@@ -79,7 +81,7 @@ const ProjectsPreview = () => {
                 to={to("/faq") + "#contact"}
                 className="inline-flex h-12 items-center rounded-full bg-foreground px-7 text-small font-medium text-background transition-colors duration-200 hover:bg-accent"
               >
-                {t("home.projects.cta", "דברו איתנו")}
+                {t("home.projects.cta", tr("projects.cta"))}
               </Link>
 
               {/* Bigger than it was. This used to be a 16px text link sharing a
@@ -89,7 +91,7 @@ const ProjectsPreview = () => {
                 to={to("/projects")}
                 className="group inline-flex items-center gap-2 text-tile text-foreground underline decoration-1 underline-offset-[6px] transition-colors hover:text-accent"
               >
-                {t("home.projects.all", "כל הפרויקטים")}
+                {t("home.projects.all", tr("projects.all"))}
                 <ArrowLeft
                   aria-hidden="true"
                   strokeWidth={1.5}

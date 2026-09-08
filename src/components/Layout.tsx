@@ -4,8 +4,11 @@ import WhatsAppButton from "@/components/WhatsAppButton";
 import AccessibilityWidget from "@/components/AccessibilityWidget";
 import CookieConsent from "@/components/CookieConsent";
 import { ReactNode } from "react";
+import { LANGUAGE_DIR } from "@/i18n";
+import { useLocalizedPath } from "@/lib/useLocalizedPath";
 
 const Layout = ({ children }: { children: ReactNode }) => {
+  const { lang } = useLocalizedPath();
   return (
     <div className="min-h-dvh bg-background flex flex-col">
       {/* Skip to main content, keyboard a11y */}
@@ -16,7 +19,23 @@ const Layout = ({ children }: { children: ReactNode }) => {
         דלגו לתוכן הראשי
       </a>
       <Header />
-      <main id="main-content" dir="rtl" tabIndex={-1} className="flex-1 focus:outline-none">
+      {/*
+        The direction of the CONTENT, not a constant. This was hardcoded rtl,
+        and the nearest dir attribute is what every logical property inside
+        resolves against — so the entire English site laid out right-to-left:
+        text-start right-aligned every English heading and paragraph, and every
+        ms-/me-/start-/end- on every page pointed the wrong way.
+
+        Only <main> changes. Header and Footer keep their explicit dir="rtl"
+        because their contents are still untranslated Hebrew literals, and that
+        attribute is what keeps them reading correctly on /en.
+      */}
+      <main
+        id="main-content"
+        dir={LANGUAGE_DIR[lang]}
+        tabIndex={-1}
+        className="flex-1 focus:outline-none"
+      >
         {children}
       </main>
       <Footer />

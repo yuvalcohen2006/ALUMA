@@ -3,6 +3,7 @@ import Reveal from "@/components/Reveal";
 import TileCard from "@/components/TileCard";
 import { useCollections } from "@/hooks/useCollectionsData";
 import { useLocalizedPath } from "@/lib/useLocalizedPath";
+import { useTranslation } from "react-i18next";
 import { useSiteText } from "@/hooks/useSiteText";
 import { localizedName } from "@/lib/localized-name";
 
@@ -16,6 +17,7 @@ const FeaturedCollections = () => {
   const { collections, loading } = useCollections();
   const { to, lang } = useLocalizedPath();
   const t = useSiteText();
+  const { t: tr } = useTranslation("home");
   const shown = collections.slice(0, MAX);
 
   // Nothing to show is a reason to render nothing, not to render a hole.
@@ -29,7 +31,7 @@ const FeaturedCollections = () => {
       <div className="mx-auto max-w-[1440px] px-5 py-20 md:px-10 md:py-28 lg:px-16 lg:py-36">
         <Reveal>
           <h2 className="text-start text-heading font-normal tracking-normal text-foreground">
-            {t("home.collections.title", "קולקציות נבחרות")}
+            {t("home.collections.title", tr("collections.title"))}
           </h2>
         </Reveal>
 
@@ -69,7 +71,7 @@ const FeaturedCollections = () => {
               to={to("/collections")}
               className="text-small text-foreground underline decoration-1 underline-offset-[6px] transition-colors hover:text-accent"
             >
-              לכל הקטלוג
+              {tr("collections.all")}
             </Link>
           </div>
         </Reveal>

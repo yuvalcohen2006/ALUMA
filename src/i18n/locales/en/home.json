@@ -44,5 +44,24 @@
     "thanks": "Thank you — see you in your inbox.",
     "unsubscribe": "You can unsubscribe at any time.",
     "error": "Something went wrong. Try again, or contact us directly."
+  },
+  "statement": {
+    "lead": "Aluma was born from a meeting of material and light.",
+    "body": "We design and build outdoor furniture to order — aluminium frames, Sunbrella fabrics and stone surfaces chosen to stand up to Israeli sun, salt and rain. Every piece is measured for the space it goes into, and stays outside all year."
+  },
+  "collections": {
+    "title": "Selected collections",
+    "all": "See the full catalogue"
+  },
+  "products": {
+    "title": "Selected pieces",
+    "all": "See all pieces"
+  },
+  "projects": {
+    "title": "Projects",
+    "more": "And many others.",
+    "invite": "The next one could be yours.",
+    "cta": "Talk to us",
+    "all": "All projects"
   }
 }

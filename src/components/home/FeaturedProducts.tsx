@@ -4,6 +4,7 @@ import TileCard from "@/components/TileCard";
 import { useCollections } from "@/hooks/useCollectionsData";
 import { useHomeHighlights } from "@/hooks/useHomeHighlights";
 import { useLocalizedPath } from "@/lib/useLocalizedPath";
+import { useTranslation } from "react-i18next";
 import { useSiteText } from "@/hooks/useSiteText";
 import { localizedName } from "@/lib/localized-name";
 import { capEmblems, resolveEmblems } from "@/lib/emblems";
@@ -26,6 +27,7 @@ const FeaturedProducts = () => {
   const { highlights, loading: picking } = useHomeHighlights(products);
   const { to, lang } = useLocalizedPath();
   const t = useSiteText();
+  const { t: tr } = useTranslation("home");
 
   if (loading || picking || highlights.length === 0) return null;
 
@@ -42,7 +44,7 @@ const FeaturedProducts = () => {
       <div className="mx-auto max-w-[1440px] px-5 py-20 md:px-10 md:py-28 lg:px-16 lg:py-36">
         <Reveal>
           <h2 className="text-start text-heading font-normal tracking-normal text-foreground">
-            {t("home.products.title", "מוצרים נבחרים")}
+            {t("home.products.title", tr("products.title"))}
           </h2>
         </Reveal>
 
@@ -74,7 +76,7 @@ const FeaturedProducts = () => {
               to={to("/collections")}
               className="text-small text-foreground underline decoration-1 underline-offset-[6px] transition-colors hover:text-accent"
             >
-              לכל המוצרים
+              {tr("products.all")}
             </Link>
           </div>
         </Reveal>

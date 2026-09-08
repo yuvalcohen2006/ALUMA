@@ -1,4 +1,5 @@
 import Reveal from "@/components/Reveal";
+import { useTranslation } from "react-i18next";
 import { useSiteText } from "@/hooks/useSiteText";
 
 /**
@@ -34,6 +35,11 @@ import { useSiteText } from "@/hooks/useSiteText";
  */
 const BrandStatement = () => {
   const t = useSiteText();
+  // The translated string is the FALLBACK, not the Hebrew literal. useSiteText
+  // returns its fallback verbatim on /en — the editable layer is Hebrew-only,
+  // by design — so a hardcoded Hebrew second argument put Hebrew copy on the
+  // English page.
+  const { t: tr } = useTranslation("home");
   return (
     <section className="band-light relative isolate overflow-hidden">
       <div aria-hidden="true" className="band-wash band-wash--warm" />
@@ -48,14 +54,11 @@ const BrandStatement = () => {
             goes from the hero straight to the collections.
           */}
           <h2 className="max-w-[24ch] text-heading font-normal tracking-normal text-foreground">
-            {t("home.statement.lead", "אלומה נולדה מתוך חיבור בין חומר לאור.")}
+            {t("home.statement.lead", tr("statement.lead"))}
           </h2>
 
           <p className="mt-5 max-w-[56ch] text-body tracking-normal text-foreground-soft">
-            {t(
-              "home.statement.body",
-              "אנחנו מתכננים ומייצרים ריהוט חוץ בהתאמה אישית — שלדת אלומיניום, בדי Sunbrella ומשטחי אבן שנבחרו כדי לעמוד בשמש, במלח ובגשם של ישראל. כל פריט נמדד למרחב שהוא נכנס אליו, ונשאר בחוץ כל השנה.",
-            )}
+            {t("home.statement.body", tr("statement.body"))}
           </p>
         </Reveal>
       </div>
