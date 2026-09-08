@@ -9,7 +9,7 @@ The technical setup is done. What remains is content, plus one thing to confirm.
 | ✅ | Database script | done |
 | ✅ | Sign-in address | done |
 | ✅ | Three home-page products | done — 3 picked |
-| ⚠️ | **Email — send me the Resend log** | **do this first** |
+| ⚠️ | **Email — the site cannot see the key** | **one screenshot needed** |
 | ○ | English names | optional — 0 of 47 products, 0 of 6 collections |
 | ⬜ | Customer reviews | 0 — the section is hidden until there is one |
 | ⬜ | Colours on products | 0 |
@@ -18,79 +18,72 @@ The technical setup is done. What remains is content, plus one thing to confirm.
 
 ---
 
-# ⚠️ THE EMAIL PROBLEM — where it actually stands
+# ⚠️ THE EMAIL PROBLEM — found it
 
-## What I have ruled out
+Your Resend log answered it. Three messages, **all three Delivered** — and every
+one of them is a test I sent **straight to Resend**. The two I sent **through
+your website's contact form are not in that list at all.**
 
-**Resend accepts our mail.** Every send comes back `200` with a message id —
-including one addressed straight to `outdooraluma@gmail.com`, bypassing the
-website entirely. So the key works, `notify.alumaoutdoor.com` is verified, and
-`noreply@` on it is a valid sender.
+Not failed. Not bounced. **Never sent.**
 
-**The DNS is essentially right.** I checked every record:
+So the chain looks like this:
 
-| Record | State |
+```
+website form  ──✗──  Resend  ──✓──  Gmail  ──✓──  your inbox
+              ↑
+        the break is here
+```
+
+Everything downstream is fine and proven: the domain, the key, the DNS, Gmail
+delivery. The direct message landed in your inbox, which settles all of it.
+
+**Stand down on the DKIM record.** I flagged it earlier as worth fixing. Mail is
+being delivered, so it is not causing this. Worth tidying one day, not today.
+
+## What is actually wrong
+
+Your website saves the lead, then tries to email you, and if that email fails it
+writes the reason to a log nobody reads and reports success anyway. That is why
+the form looked fine.
+
+The email is failing because **the function cannot see the API key.** It is not
+the key itself — that same key sent all three delivered messages.
+
+## 📸 What I need from you
+
+**A screenshot of your Edge Function secrets page.** Supabase hides the values
+and shows only the names, so this is safe to share — and the names are exactly
+what I need to see.
+
+1. Go to **supabase.com/dashboard** and open the **aluma** project.
+2. ⚠️ **Check the address bar contains `jzqayfllojeqivwbbuyf`.** If you were
+   looking at a different project when you added the secret, that alone explains
+   everything.
+3. Hover the left icon strip → **Edge Functions** → **Secrets**.
+
+   Direct link: `https://supabase.com/dashboard/project/jzqayfllojeqivwbbuyf/functions/secrets`
+
+Screenshot the list of names.
+
+### What I am looking for
+
+The name has to be **exactly** this, and these are the ways it usually is not:
+
+| Must be | Common mistakes |
 |---|---|
-| Return-path SPF and MX (`send.notify…`) | ✅ correct, pointing at Resend |
-| DKIM key (`resend._domainkey.notify…`) | ⚠️ present, but see below |
-| DMARC on `alumaoutdoor.com` | ✅ `v=DMARC1; p=none;` |
+| `RESEND_API_KEY` | `RESEND_API_KEY ` with a trailing space |
+| | `RESEND_KEY`, `RESEND_APIKEY` |
+| | lower case, or mixed case |
+| | pasted into the wrong project |
 
-So the message is leaving Resend. Whatever is going wrong happens **after**
-that, and Resend's own log is the only place that records it.
+**Also tell me if you see a secret called `OWNER_EMAIL`.** The site sends your
+enquiries to whatever that holds, falling back to outdooraluma@gmail.com.
 
-## ⚠️ One record worth fixing regardless
+## While you are there — one cross-check
 
-Your DKIM record currently reads:
-
-```
-p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCB…
-```
-
-Resend publishes it as:
-
-```
-v=DKIM1; k=rsa; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCB…
-```
-
-**The `v=DKIM1; k=rsa;` at the front is missing.** The key itself is complete, and
-strictly speaking a mail server is allowed to assume those defaults — which is
-probably why Resend still shows the domain as verified — but not every server
-does, and Gmail is fussy. It is worth correcting whether or not it turns out to
-be the cause.
-
-**To fix it:** Namecheap → **Domain List** → **MANAGE** on alumaoutdoor.com →
-**Advanced DNS** → find the TXT record whose Host is `resend._domainkey.notify`
-→ click the pencil on its **Value** → put `v=DKIM1; k=rsa; ` at the very front,
-before the existing `p=` → green tick → **SAVE ALL CHANGES**.
-
-Do not retype the long key. Click into the field, go to the very beginning, and
-type the missing prefix in front of what is already there.
-
-## 📸 What to send me
-
-**A screenshot of your Resend "Emails" page.** That is the one thing I cannot
-see and the one thing that answers this.
-
-resend.com → **Emails** in the left menu. It lists every message with a status
-beside it — *Delivered*, *Bounced*, *Complained*, *Queued*. I have sent three;
-they will all be there.
-
-That status tells us which of these it is, and they need completely different
-fixes:
-
-- **Delivered** → it reached Gmail and Gmail filed it. Check spam and
-  Promotions; the fix is reputation, not code.
-- **Bounced** → Gmail refused it. The bounce reason will say why, and that is
-  the answer.
-- **Queued / nothing** → it never left Resend.
-
-If you would rather not screenshot it, tell me the status word next to the most
-recent message and the reason if there is one.
-
-## Also worth checking while you are there
-
-Is `outdooraluma@gmail.com` definitely a live mailbox you can log into? A hard
-bounce on a non-existent address looks exactly like this from where I stand.
+Open **פניות** in the admin. You should see **two test leads** from me. They
+prove the form is working and only the email step is broken, which is exactly
+what the Resend log says. Delete them once you have looked.
 
 ---
 
@@ -199,9 +192,9 @@ uploading broken, so convert it first.
 # 📬 WHAT TO TELL ME
 
 ```
-Resend "Emails" page status?      Delivered / Bounced / Queued
-Anything in spam or Promotions?   yes / no
-DKIM prefix fixed?                yes / not yet
+Secret name on the secrets page?  exactly RESEND_API_KEY ? yes / no
+Is there an OWNER_EMAIL secret?   yes / no
+Two test leads showing in פניות?   yes / no
 
 English names (optional)?         yes / not bothering
 Reviews added?                    yes / not yet
