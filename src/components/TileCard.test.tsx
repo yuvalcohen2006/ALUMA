@@ -64,6 +64,22 @@ describe("the tile", () => {
     expect(screen.getByRole("heading", { level: 2, name: "סלונים" })).toBeTruthy();
   });
 
+  /**
+   * Half this catalogue is named in Latin — aero, milo, ciro — and those names
+   * sit inside a Hebrew page. Without dir="auto" they inherited the page
+   * direction and hung off the wrong edge of the line.
+   */
+  it("aligns each label to the side its own language starts from", () => {
+    renderTile({ title: "aero", meta: "עץ טיק" });
+    const title = screen.getByRole("heading", { name: "aero" });
+    expect(title.getAttribute("dir")).toBe("auto");
+    expect(title.className).toContain("text-start");
+
+    const meta = screen.getByText("עץ טיק");
+    expect(meta.getAttribute("dir")).toBe("auto");
+    expect(meta.className).toContain("text-start");
+  });
+
   /** An empty alt is correct for a photo the title already names — but the
    *  element must still be there, or a missing image has no box at all. */
   it("still renders a frame when there is no photograph yet", () => {

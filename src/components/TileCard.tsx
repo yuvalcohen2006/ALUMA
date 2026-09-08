@@ -163,7 +163,16 @@ const TileCard = ({
       <div
         className={`flex items-baseline gap-2 ${align === "center" ? "justify-center" : ""}`}
       >
-        <Heading className="text-tile text-foreground">{title}</Heading>
+        {/*
+          dir="auto" with text-start, so a label lands on the side its own
+          language starts from: a Latin product name ("aero", "milo") to the
+          left of the line, a Hebrew collection name to the right. Without it
+          every name inherited the page direction, and half the catalogue —
+          which is named in Latin — sat against the wrong edge.
+        */}
+        <Heading dir="auto" className="text-tile text-start text-foreground">
+          {title}
+        </Heading>
         <ArrowLeft
           aria-hidden="true"
           strokeWidth={1.5}
@@ -177,7 +186,11 @@ const TileCard = ({
         />
       </div>
 
-      {meta && <p className="mt-1 line-clamp-1 text-label text-muted-foreground">{meta}</p>}
+      {meta && (
+        <p dir="auto" className="mt-1 line-clamp-1 text-start text-label text-muted-foreground">
+          {meta}
+        </p>
+      )}
       {extra}
     </div>
   </Link>

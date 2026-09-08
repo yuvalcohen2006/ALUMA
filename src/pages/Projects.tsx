@@ -102,11 +102,11 @@ const ProjectEntry = ({
         // The global a:active press would shrink the entire band; on something
         // this large it reads as a layout jolt. The photo lift carries the
         // feedback instead.
-        className="group block py-14 lg:py-20 active:transform-none"
+        className="group block py-10 lg:py-14 active:transform-none"
       >
         <div
           className={cn(
-"grid gap-8 lg:gap-14 xl:gap-16 items-center",
+"grid items-center gap-7 lg:gap-12",
             photoRight
               ? "lg:grid-cols-[1.4fr_1fr]"
               : "lg:grid-cols-[1fr_1.4fr]"
@@ -133,7 +133,7 @@ const ProjectEntry = ({
             */}
             <div
               className={cn(
-                "relative aspect-[4/3] overflow-hidden rounded-sm",
+                "relative aspect-[3/2] overflow-hidden rounded-sm",
                 isLast && "tile-fade-b",
               )}
             >
@@ -171,7 +171,10 @@ const ProjectEntry = ({
               {folio(index + 1)}
             </span>
 
-            <h2 className="mt-3 font-display text-heading font-medium text-foreground decoration-1 underline-offset-[6px] group-hover:underline">
+            <h2
+              dir="auto"
+              className="mt-3 font-display text-heading font-medium text-start text-foreground decoration-1 underline-offset-[6px] group-hover:underline"
+            >
               {p.name}
             </h2>
 
@@ -185,7 +188,8 @@ const ProjectEntry = ({
               {meta.map((m, i) => (
                 <span
                   key={`${i}-${m}`}
-                  className="inline-flex items-center whitespace-nowrap"
+                  dir="auto"
+                  className="inline-flex items-center whitespace-nowrap text-start"
                 >
                   {m}
                   {i < meta.length - 1 && <MetaRule className="mx-3" />}
@@ -223,6 +227,11 @@ const ProjectEntry = ({
 const ProjectsPage = () => {
   const { t } = useTranslation("projects");
   const { projects } = useProjects();
+  // Three, not six. These are placeholder examples until real work is
+  // photographed, and six of them is a wall rather than a portfolio — the
+  // third one dissolving says "and there is more" better than three more
+  // invented ones would.
+  const shown = projects.slice(0, 3);
   // No filtering. Six projects is an order of magnitude below where any
   // comparable portfolio keeps a filter — the reference sites that have one
   // carry 37, 57 and 109 projects, and every site at Aluma's scale shows the
@@ -252,12 +261,12 @@ const ProjectsPage = () => {
       <section className="bg-background pb-6 md:pb-10">
         <div className="container-luxury">
           <div className="divide-y divide-border">
-            {projects.map((p, i) => (
+            {shown.map((p, i) => (
               <ProjectEntry
                 key={p.slug}
                 project={p}
                 index={i}
-                isLast={i === projects.length - 1}
+                isLast={i === shown.length - 1}
               />
             ))}
           </div>
