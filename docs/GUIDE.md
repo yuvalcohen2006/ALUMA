@@ -18,39 +18,47 @@ The technical setup is done. What remains is content, plus one thing to confirm.
 
 ---
 
-# ⚠️ FIRST — did the test email arrive?
+# ⚠️ FIRST — one look in your spam folder
 
-I sent one through your live contact form. **Check `outdooraluma@gmail.com`** for:
+Here is where the email problem actually stands.
 
-> **פנייה חדשה מהאתר — בדיקת מערכת - Claude**
+**Resend accepts our mail.** I sent one straight to their API with your key and
+your sending address, and it came back accepted, with a message id. So the key
+works, `notify.alumaoutdoor.com` is verified and able to send, and
+`noreply@notify.alumaoutdoor.com` is a valid sender. None of those is the
+problem.
 
-**If it arrived:** email works. Delete that one lead from **פניות** in the admin
-and you are done with email. Tell me and I will close it off.
+That leaves two possibilities, and **one look tells us which**.
 
-**If it did NOT arrive**, the key is probably fine — check this instead:
+I have just sent you a matched pair:
 
-1. Go to **resend.com** → **Domains**.
-2. Look at **notify.alumaoutdoor.com**. Does it say **Verified**?
+| | Subject | Sent to |
+|---|---|---|
+| **A** | `Aluma DIRECT test B` | artechb152@gmail.com |
+| **B** | `פנייה חדשה מהאתר — בדיקה ב` | outdooraluma@gmail.com |
 
-The site sends from `noreply@notify.alumaoutdoor.com`, so until that subdomain
-verifies, **every email fails no matter how correct the key is.** If it says
-*Pending*, press **Verify DNS Records** and give it fifteen minutes.
+**A went straight to Resend. B went through your website's contact form.**
+Check both inboxes, **including spam and "Promotions"**.
 
-Tell me either way — I cannot see this from here.
+### What each result means
 
-> I have to be straight with you about why I cannot just check. The contact
-> function saves the lead first and then tries to send, and if the send fails it
-> writes the error to a log nobody reads and still reports success. So the form
-> looks fine to you and to the visitor whether or not the mail went out. **I can
-> fix that** — one small SQL script and the פניות screen will show "המייל לא
-> נשלח" on any lead whose email failed. Say the word.
+**Both arrived (probably in spam):** nothing is broken. A brand-new sending
+domain has no reputation with Gmail, so the first messages get filtered. Mark
+one as "not spam" and it settles down within a few days. We are done.
+
+**A arrived, B did not:** the website is not reaching Resend, and the cause is
+almost certainly the secret. Go to
+`https://supabase.com/dashboard/project/_/functions/secrets` and check the name
+is **exactly** `RESEND_API_KEY` — no trailing space, correct spelling, and on the
+**aluma** project. Also check whether an `OWNER_EMAIL` secret exists there; if it
+does, your form emails have been going to whatever address it holds.
+
+**Neither arrived:** the mail is leaving Resend and being dropped before it
+reaches you. Tell me and I will look at authentication records next.
 
 ---
 
-# English names — 0 of 47
-
-This is the biggest remaining job, and it is boring. Do it over a coffee, not
-tonight.
+# English names — optional
 
 **Where:** קולקציות ומוצרים → click a collection → click a product →
 **השם באנגלית**, beside the Hebrew name.
@@ -155,8 +163,8 @@ uploading broken, so convert it first.
 # 📬 WHAT TO TELL ME
 
 ```
-Did the test email arrive?        yes / no
-If no — does Resend say Verified? yes / no / not sure
+Test A (direct) arrived?          yes / no / in spam
+Test B (through the form) arrived? yes / no / in spam
 
 English names (optional)?         yes / not bothering
 Reviews added?                    yes / not yet
