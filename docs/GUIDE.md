@@ -9,7 +9,7 @@ The technical setup is done. What remains is content, plus one thing to confirm.
 | ✅ | Database script | done |
 | ✅ | Sign-in address | done |
 | ✅ | Three home-page products | done — 3 picked |
-| ⚠️ | **Email — delete one secret** | **2 minutes, then done** |
+| ✅ | **Email** | fixed — one look to confirm |
 | ○ | English names | optional — 0 of 47 products, 0 of 6 collections |
 | ⬜ | Customer reviews | 0 — the section is hidden until there is one |
 | ⬜ | Colours on products | 0 |
@@ -18,67 +18,48 @@ The technical setup is done. What remains is content, plus one thing to confirm.
 
 ---
 
-# ✅ THE EMAIL PROBLEM — solved. One thing to delete.
+# ✅ EMAIL — fixed. One look to confirm.
 
-## The fix
+You deleted `RESEND_FROM`. That was the fault, and everything else was already
+proven working.
 
-**Delete the secret called `RESEND_FROM`.** That is the whole fix.
+## Check this when you next open your mail
 
-1. `https://supabase.com/dashboard/project/jzqayfllojeqivwbbuyf/functions/secrets`
-2. Find **RESEND_FROM** in *Custom secrets*.
-3. Click the **⋮** at the end of its row → **Delete**.
+**`outdooraluma@gmail.com` should now hold TWO new messages:**
 
-Nothing to redeploy. Send a message through your own contact form a minute
-later and it will arrive.
-
-## What was wrong
-
-`RESEND_FROM` was set on **28 July** — back when the domain was not verified yet
-— to Resend's shared test address:
-
-```
-Aluma <onboarding@resend.dev>
-```
-
-It has been overriding the correct sender ever since. Your code already defaults
-to `Aluma <noreply@notify.alumaoutdoor.com>`, which is your verified domain and
-works; that secret was silently replacing it on every send.
-
-And Resend does not allow the test address to email anyone but the account
-owner. This is the exact error your website has been getting, every time,
-reproduced word for word:
-
-> **403** — *You can only send testing emails to your own email address
-> (yuval.cohen006@gmail.com). To send emails to other recipients, please verify
-> a domain at resend.com/domains, and change the `from` address to an email
-> using this domain.*
-
-Because Resend rejects the message outright, **no email is ever created** — which
-is why nothing appeared in your Resend log. And because your website catches that
-error, writes it to a log nobody reads, and reports success anyway, nothing
-appeared anywhere else either.
-
-Deleting the secret removes the override and the real sender takes over.
-
-## Your other secrets — verdict on each
-
-| Secret | Verdict |
+| Subject | Came from |
 |---|---|
-| **RESEND_FROM** | ❌ **Delete it.** This is the bug. |
-| **RESEND_API_KEY** | ✅ Correct, and proven working. Leave it. |
-| **OWNER_EMAIL** | ✅ Holds `outdooraluma@gmail.com`, which is right. Leave it. |
-| **SEND_EMAIL_HOOK_SECRET** | ✅ **Do not touch.** Unrelated to this — it signs Supabase's sign-in emails, and changing it here alone breaks them. |
+| `פנייה חדשה מהאתר — בדיקה סופית` | **your website's contact form** |
+| `Aluma — after the fix` | me, straight to Resend |
 
-Only the key is worth rotating eventually, and only because it travelled through
-a chat message. Not urgent, and not related to this.
+**The first one is the one that matters.** It is the message that could not be
+sent for the last six weeks. If it is there, the site's email works and you are
+done — delete the test leads from **פניות** and forget about it.
 
-## Afterwards
+If only the second arrived, tell me and I will keep digging. Check spam before
+concluding either way; the domain is still new.
 
-Send one message through your own contact form. When it arrives, tell me — and
-I would still like to fix the deeper problem, which is that your site cannot tell
-you when an email fails. One small SQL script and the **פניות** screen shows
-"המייל לא נשלח" on any lead whose email did not go out. Without it, the next
-email outage is just as invisible as this one was.
+## What was wrong, in one line
+
+`RESEND_FROM` had been set on 28 July to Resend's shared test address,
+`onboarding@resend.dev`, back when your domain was not verified yet. Resend only
+lets that address email the account owner, so every message the site sent to
+`outdooraluma@gmail.com` was rejected with a 403 — and rejected messages never
+reach the log, which is why nothing appeared anywhere.
+
+## The part I would still like to fix
+
+Your site cannot tell you when an email fails. It caught that 403 on every
+single enquiry for six weeks, wrote it to a log nobody reads, and reported
+success every time. That is why this took so long to find, and it will hide the
+next failure exactly as well.
+
+The fix is a small SQL script plus one change to the site's code, after which
+**פניות** shows *"המייל לא נשלח"* on any lead whose email did not go out. It is
+not urgent now that mail is flowing — but it is the difference between finding
+out in a minute and finding out in six weeks.
+
+Say the word whenever you like and I will prepare it as one job.
 
 ---
 
@@ -187,8 +168,7 @@ uploading broken, so convert it first.
 # 📬 WHAT TO TELL ME
 
 ```
-RESEND_FROM deleted?              yes / no
-Form email arrived after that?    yes / no
+Did "בדיקה סופית" arrive?          yes / no / in spam
 Want the "email failed" warning?  yes / no
 
 English names (optional)?         yes / not bothering
