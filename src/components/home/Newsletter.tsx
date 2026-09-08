@@ -6,6 +6,11 @@ import { supabase } from "@/integrations/supabase/client";
 import { useSiteText } from "@/hooks/useSiteText";
 import clubBg from "@/assets/categories/club-morning.jpg";
 
+/** Same shape the contact form's schema accepts, kept deliberately loose:
+ *  this only has to stop a typo, not adjudicate RFC 5322. */
+const isEmail = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v);
+const INVALID_EMAIL = "כתובת המייל לא נראית תקינה";
+
 /**
  * Club signup, styled as the ninth tile.
  *
@@ -22,6 +27,7 @@ const Newsletter = () => {
   // Editable in the admin, but only in Hebrew — /en keeps its translation.
   const text = useSiteText();
   const [email, setEmail] = useState("");
+  const [invalid, setInvalid] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [subscribed, setSubscribed] = useState(
     typeof window !== "undefined" && localStorage.getItem("aluma_newsletter") === "1",
@@ -29,12 +35,30 @@ const Newsletter = () => {
 
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    if (!email || submitting) return;
+    if (submitting) return;
+
+    /*
+     * Validated here, because nothing else validates it.
+     *
+     * noValidate switches off the browser's own type="email" and required
+     * checks — deliberately, so the styling stays ours — and the table has no
+     * format constraint. So "asdf" was accepted, stored, and answered with
+     * "thank you". Worse, the success state latches in localStorage, so the
+     * form never came back and the person could not correct their own typo.
+     * The owner ended up with a list seeded with addresses nothing can be
+     * sent to.
+     */
+    const address = email.trim().toLowerCase();
+    if (!isEmail(address)) {
+      setInvalid(true);
+      return;
+    }
+    setInvalid(false);
     setSubmitting(true);
     try {
       const { error } = await supabase
         .from("newsletter_subscribers")
-        .insert({ email: email.trim().toLowerCase(), name: null });
+        .insert({ email: address, name: null });
 
       // 23505 = unique violation = already subscribed; treat that as success.
       if (error && error.code !== "23505") {
@@ -120,7 +144,12 @@ const Newsletter = () => {
                   type="email"
                   required
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    if (invalid) setInvalid(false);
+                  }}
+                  aria-invalid={invalid || undefined}
+                  aria-describedby={invalid ? "club-email-error" : undefined}
                   placeholder={t("club.emailPlaceholder")}
                   autoComplete="email"
                   // Not dir="auto": that reads the direction off the VALUE,
@@ -129,7 +158,7 @@ const Newsletter = () => {
                   // left edge of a right-to-left page. Decide it here instead
                   // — Hebrew prompt while empty, Latin address once typed.
                   dir={email ? "ltr" : "rtl"}
-                  className="h-14 flex-1 min-w-0 rounded-full border border-foreground/15 bg-white/80 px-6 text-small text-foreground text-start shadow-soft backdrop-blur-md transition-colors placeholder:text-foreground/45 focus:border-accent"
+                  className="h-14 flex-1 min-w-0 rounded-full border border-foreground/15 bg-white/80 px-6 text-small text-foreground text-start shadow-soft backdrop-blur-md transition-colors placeholder:text-foreground/70 focus:border-accent"
                 />
                 <button
                   type="submit"
@@ -140,7 +169,21 @@ const Newsletter = () => {
                 </button>
               </div>
 
-              <p className="mt-3 text-label text-foreground/55">
+              {invalid && (
+                <p
+                  id="club-email-error"
+                  role="alert"
+                  className="mt-3 text-label font-medium text-destructive"
+                >
+                  {INVALID_EMAIL}
+                </p>
+              )}
+
+              {/* foreground-soft at full opacity, not charcoal at 55%. This
+                  line sits about 87% down the white scrim, where the wash is
+                  roughly 7% — effectively on the raw photograph — and measured
+                  3.09:1 there. The token gives 5.4:1 on the same pixels. */}
+              <p className="mt-3 text-label text-foreground-soft">
                 {t("club.unsubscribe")}
               </p>
             </form>

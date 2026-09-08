@@ -9,6 +9,7 @@ import Newsletter from "@/components/home/Newsletter";
 import SEO from "@/components/SEO";
 import { useSiteContact } from "@/hooks/useSiteContact";
 import type { SiteContact } from "@/lib/site-contact";
+import { useTranslation } from "react-i18next";
 
 const localBusinessFor = (SITE: SiteContact) => ({
 "@context": "https://schema.org",
@@ -64,14 +65,18 @@ const websiteSchema = {
 };
 
 const Index = () => {
+  const { t: tr, i18n } = useTranslation("home");
   const localBusiness = localBusinessFor(useSiteContact());
   return (
     <Layout>
+      {/* Translated, like every other page that has been through this. These
+          were Hebrew literals, so /en shipped a Hebrew browser tab and a Hebrew
+          Google snippet on a document declaring itself English. */}
       <SEO
-        title="ריהוט גן וריהוט חוץ יוקרתי בעיצוב אישי | Aluma"
-        description="ריהוט גן וריהוט חוץ יוקרתי בעיצוב אישי, סלוני חוץ, שולחנות גן ופינות אוכל מאלומיניום, בדי Sunbrella ושיש גרניט פורצלן. עמיד לכל מזג אוויר."
+        title={tr("seo.title")}
+        description={tr("seo.description")}
         path="/"
-        jsonLd={[localBusiness, websiteSchema]}
+        jsonLd={[localBusiness, { ...websiteSchema, inLanguage: i18n.resolvedLanguage === "en" ? "en" : "he-IL" }]}
       />
       {/* The client's order, and it is the order every reference brand uses:
           say who you are before you sell anything. The eight category tiles

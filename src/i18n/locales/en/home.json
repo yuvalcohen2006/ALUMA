@@ -63,5 +63,13 @@
     "invite": "The next one could be yours.",
     "cta": "Talk to us",
     "all": "All projects"
+  },
+  "seo": {
+    "title": "Bespoke luxury garden and outdoor furniture | Aluma",
+    "description": "Bespoke luxury outdoor lounges, garden tables and dining sets in premium aluminium, Sunbrella fabrics and porcelain granite. Built to stay outside all year."
+  },
+  "hero": {
+    "srTitle": "Aluma — bespoke outdoor lounges and pergolas",
+    "alt": "A modern Aluma outdoor lounge set on a terrace"
   }
 }

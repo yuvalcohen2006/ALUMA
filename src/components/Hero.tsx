@@ -4,6 +4,7 @@ import alumaLogo from "@/assets/aluma-logo.png";
 import { supabase } from "@/integrations/supabase/client";
 import { Link } from "react-router-dom";
 import { ChevronDown } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 type HeroSettings = {
   title_he?: string;
@@ -72,10 +73,22 @@ const Hero = () => {
     };
   }, []);
 
+  const { t: tr, i18n } = useTranslation("home");
+  const isEnglish = i18n.resolvedLanguage === "en";
   const desktopBg = settings.desktop_image || heroImage;
   const mobileBg = settings.mobile_image || desktopBg;
   const bg = isMobile ? mobileBg : desktopBg;
-  const srTitle = settings.title_he || "Aluma, סלוני חוץ ופרגולות בעיצוב אישי";
+  /*
+   * The CMS field is title_he — Hebrew by name and by content, with no English
+   * counterpart in the admin. So on /en an owner-supplied value would still be
+   * Hebrew, and this is the page's ONLY h1: an English screen reader met the
+   * document's single heading and got Hebrew codepoints.
+   *
+   * The owner's value still wins on the Hebrew site, which is the whole point
+   * of the field. English falls back to the translation instead of to a Hebrew
+   * literal.
+   */
+  const srTitle = (isEnglish ? "" : settings.title_he) || tr("hero.srTitle");
 
   return (
     <section
@@ -92,7 +105,7 @@ const Hero = () => {
       <div className="absolute inset-0">
         <img
           src={bg}
-          alt="סלון חוץ יוקרתי בעיצוב מודרני של Aluma"
+          alt={tr("hero.alt")}
           className="w-full h-[125%] object-cover object-top will-change-transform"
           style={{ transform: `translate3d(0, ${-offset * 0.8}px, 0)` }}
           width={1920}
