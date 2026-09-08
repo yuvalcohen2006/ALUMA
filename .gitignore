@@ -38,5 +38,10 @@ supabase/.temp/
 .tmp/
 
 # Scratch probes written by audit agents
-src/**/__tmp_*
+# Scratch files background agents leave behind while reproducing a bug. The
+# pattern is deliberately loose: two of these have already been swept into a
+# commit because the name did not match a tighter one.
+src/**/__tmp*
+src/**/*probe*
+src/**/zz*
 src/**/__audit_*
