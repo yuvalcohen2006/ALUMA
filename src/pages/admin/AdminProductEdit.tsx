@@ -19,7 +19,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { EMBLEM_OPTIONS } from "@/lib/emblems";
-import { hasBothNames } from "@/lib/localized-name";
 import PhotoSpec from "@/components/admin/PhotoSpec";
 import { formatPrice, parsePriceInput } from "@/lib/price";
 import { contentDirection } from "@/lib/field-direction";
@@ -149,12 +148,6 @@ const AdminProductEdit = () => {
     if (!product) return;
     if (!product.name?.trim()) return toast.error("צריך שם למוצר");
     if (!product.collection_id) return toast.error("צריך לבחור קולקציה");
-    // Enforced only for a PUBLISHED row, so a draft can be saved half-finished
-    // and come back to. Blocking every save would mean the English name had to
-    // be decided before the photograph.
-    if ((product.published ?? true) && !hasBothNames(product.name, product.name_en)) {
-      return toast.error("כדי לפרסם צריך שם בעברית וגם באנגלית");
-    }
 
     setSaving(true);
     const payload = {
@@ -307,7 +300,7 @@ const AdminProductEdit = () => {
                       onChange={(e) => patch({ name_en: e.target.value })}
                     />
                     <p className="mt-1.5 text-sm text-muted-foreground">
-                      נדרש כדי לפרסם. זה מה שיופיע למי שגולש באנגלית.
+                      לא חובה. אם תמלאו, זה מה שיופיע למי שגולש באנגלית.
                     </p>
                   </div>
                 </div>

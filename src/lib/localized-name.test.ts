@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { hasBothNames, localizedName } from "./localized-name";
+import { localizedName } from "./localized-name";
 
 describe("localizedName", () => {
   it("shows the Hebrew name on the Hebrew site", () => {
@@ -28,36 +28,5 @@ describe("localizedName", () => {
 
   it("trims a translation that was pasted with whitespace", () => {
     expect(localizedName("en", "כיסאות", "  Chairs  ")).toBe("Chairs");
-  });
-});
-
-describe("hasBothNames", () => {
-  it("requires both to be present and non-blank", () => {
-    expect(hasBothNames("כיסאות", "Chairs")).toBe(true);
-    expect(hasBothNames("כיסאות", "")).toBe(false);
-    expect(hasBothNames("כיסאות", "  ")).toBe(false);
-    expect(hasBothNames("", "Chairs")).toBe(false);
-    expect(hasBothNames(null, "Chairs")).toBe(false);
-    expect(hasBothNames("כיסאות", null)).toBe(false);
-    expect(hasBothNames(undefined, undefined)).toBe(false);
-  });
-
-  /**
-   * The admin's rule and the site's fallback must agree. Anything the rule
-   * accepts, the site must be able to render in both languages.
-   */
-  it("agrees with what localizedName can actually render", () => {
-    const rows: [string | null, string | null][] = [
-      ["כיסאות", "Chairs"],
-      ["כיסאות", " "],
-      ["כיסאות", null],
-    ];
-    for (const [he, en] of rows) {
-      if (hasBothNames(he, en)) {
-        expect(localizedName("en", he!, en)).not.toBe(he);
-      } else {
-        expect(localizedName("en", he ?? "", en)).toBe(he ?? "");
-      }
-    }
   });
 });

@@ -52,7 +52,6 @@ import {
 import { CSS } from "@dnd-kit/utilities";
 import { uploadFile } from "@/lib/admin-storage";
 import { useCrop } from "@/components/admin/CropProvider";
-import { hasBothNames } from "@/lib/localized-name";
 import ProductFinishes, { DEFAULT_VARIANT } from "./ProductFinishes";
 import { planVariantSync, type DraftVariant } from "@/lib/variant-sync";
 import PhotoSpec from "@/components/admin/PhotoSpec";
@@ -386,10 +385,6 @@ const AdminCollections = () => {
   const saveCollection = async () => {
     if (!editCol) return;
     if (!editCol.name_he) return toast.error("חובה להזין שם");
-    // Only for a published collection: a draft can be saved half-finished.
-    if ((editCol.published ?? true) && !hasBothNames(editCol.name_he, editCol.name_en)) {
-      return toast.error("כדי לפרסם צריך שם בעברית וגם באנגלית");
-    }
     setSaving(true);
     const finalSlug = editCol.id ? editCol.slug! : slugify(editCol.name_he!);
     const nextSort = editCol.id
@@ -531,7 +526,7 @@ const AdminCollections = () => {
                 and nobody could have fixed that if they had wanted to.
               */}
               <div>
-                <Label htmlFor="col-name-en">השם באנגלית *</Label>
+                <Label htmlFor="col-name-en">השם באנגלית</Label>
                 <Input
                   id="col-name-en"
                   dir="ltr"
@@ -540,7 +535,7 @@ const AdminCollections = () => {
                   placeholder="e.g. Outdoor Salons"
                 />
                 <p className="mt-1 text-sm text-muted-foreground">
-                  נדרש כדי לפרסם. זה מה שיופיע למי שגולש באנגלית.
+                  לא חובה. אם תמלאו, זה מה שיופיע למי שגולש באנגלית.
                 </p>
               </div>
               <div>

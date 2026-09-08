@@ -10,7 +10,7 @@ The technical setup is done. What remains is content, plus one thing to confirm.
 | ✅ | Sign-in address | done |
 | ✅ | Three home-page products | done — 3 picked |
 | ⚠️ | **Did the test email arrive?** | **do this first, 1 minute** |
-| ⬜ | English names | 0 of 47 products, 0 of 6 collections |
+| ○ | English names | optional — 0 of 47 products, 0 of 6 collections |
 | ⬜ | Customer reviews | 0 — the section is hidden until there is one |
 | ⬜ | Colours on products | 0 |
 | ⬜ | Real projects | 6 placeholders on the site |
@@ -58,18 +58,12 @@ tonight.
 **Collections too:** קולקציות ומוצרים → the pencil icon on a collection →
 **השם באנגלית**.
 
-### Two things to expect
+**Entirely optional, and nothing blocks you.** The rule that refused to save
+without an English name is gone — one name is enough. Fill these in whenever you
+feel like it, or never.
 
-**Nothing is broken right now.** The English site falls back to the Hebrew name,
-so an English visitor sees Hebrew product names — untidy, not broken.
-
-**But the rule bites the moment you edit.** You cannot save a published product
-or collection without both names. So the first time you open a product to change
-its price, it will refuse to save until you add an English name. That is what you
-asked for; I just do not want it to surprise you mid-edit.
-
-If it turns out to be too annoying, tell me and I will make the rule apply only
-to newly published items.
+Where a name is missing the English site simply shows the Hebrew one. Untidy for
+an English visitor, not broken.
 
 ---
 
@@ -164,7 +158,7 @@ uploading broken, so convert it first.
 Did the test email arrive?        yes / no
 If no — does Resend say Verified? yes / no / not sure
 
-English names started?            yes / not yet
+English names (optional)?         yes / not bothering
 Reviews added?                    yes / not yet
 Colours on any product?           yes / not yet
 Real projects added?              yes / not yet

@@ -25,15 +25,3 @@ export function localizedName(
   if (lang !== "he" && en && en.trim()) return en.trim();
   return he;
 }
-
-/**
- * Whether a row carries everything the publish rule requires.
- *
- * Kept next to `localizedName` on purpose: the rule the admin enforces and the
- * fallback the site relies on have to agree about what "has a name" means, or
- * the admin will refuse to publish something the site would have rendered
- * perfectly well — or, worse, allow the reverse.
- */
-export function hasBothNames(he?: string | null, en?: string | null): boolean {
-  return Boolean(he && he.trim() && en && en.trim());
-}
