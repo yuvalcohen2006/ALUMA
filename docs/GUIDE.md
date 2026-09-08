@@ -9,7 +9,7 @@ The technical setup is done. What remains is content, plus one thing to confirm.
 | ✅ | Database script | done |
 | ✅ | Sign-in address | done |
 | ✅ | Three home-page products | done — 3 picked |
-| ⚠️ | **Did the test email arrive?** | **do this first, 1 minute** |
+| ⚠️ | **Email — send me the Resend log** | **do this first** |
 | ○ | English names | optional — 0 of 47 products, 0 of 6 collections |
 | ⬜ | Customer reviews | 0 — the section is hidden until there is one |
 | ⬜ | Colours on products | 0 |
@@ -18,43 +18,79 @@ The technical setup is done. What remains is content, plus one thing to confirm.
 
 ---
 
-# ⚠️ FIRST — one look in your spam folder
+# ⚠️ THE EMAIL PROBLEM — where it actually stands
 
-Here is where the email problem actually stands.
+## What I have ruled out
 
-**Resend accepts our mail.** I sent one straight to their API with your key and
-your sending address, and it came back accepted, with a message id. So the key
-works, `notify.alumaoutdoor.com` is verified and able to send, and
-`noreply@notify.alumaoutdoor.com` is a valid sender. None of those is the
-problem.
+**Resend accepts our mail.** Every send comes back `200` with a message id —
+including one addressed straight to `outdooraluma@gmail.com`, bypassing the
+website entirely. So the key works, `notify.alumaoutdoor.com` is verified, and
+`noreply@` on it is a valid sender.
 
-That leaves two possibilities, and **one look tells us which**.
+**The DNS is essentially right.** I checked every record:
 
-I have just sent you a matched pair:
+| Record | State |
+|---|---|
+| Return-path SPF and MX (`send.notify…`) | ✅ correct, pointing at Resend |
+| DKIM key (`resend._domainkey.notify…`) | ⚠️ present, but see below |
+| DMARC on `alumaoutdoor.com` | ✅ `v=DMARC1; p=none;` |
 
-| | Subject | Sent to |
-|---|---|---|
-| **A** | `Aluma DIRECT test B` | artechb152@gmail.com |
-| **B** | `פנייה חדשה מהאתר — בדיקה ב` | outdooraluma@gmail.com |
+So the message is leaving Resend. Whatever is going wrong happens **after**
+that, and Resend's own log is the only place that records it.
 
-**A went straight to Resend. B went through your website's contact form.**
-Check both inboxes, **including spam and "Promotions"**.
+## ⚠️ One record worth fixing regardless
 
-### What each result means
+Your DKIM record currently reads:
 
-**Both arrived (probably in spam):** nothing is broken. A brand-new sending
-domain has no reputation with Gmail, so the first messages get filtered. Mark
-one as "not spam" and it settles down within a few days. We are done.
+```
+p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCB…
+```
 
-**A arrived, B did not:** the website is not reaching Resend, and the cause is
-almost certainly the secret. Go to
-`https://supabase.com/dashboard/project/_/functions/secrets` and check the name
-is **exactly** `RESEND_API_KEY` — no trailing space, correct spelling, and on the
-**aluma** project. Also check whether an `OWNER_EMAIL` secret exists there; if it
-does, your form emails have been going to whatever address it holds.
+Resend publishes it as:
 
-**Neither arrived:** the mail is leaving Resend and being dropped before it
-reaches you. Tell me and I will look at authentication records next.
+```
+v=DKIM1; k=rsa; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCB…
+```
+
+**The `v=DKIM1; k=rsa;` at the front is missing.** The key itself is complete, and
+strictly speaking a mail server is allowed to assume those defaults — which is
+probably why Resend still shows the domain as verified — but not every server
+does, and Gmail is fussy. It is worth correcting whether or not it turns out to
+be the cause.
+
+**To fix it:** Namecheap → **Domain List** → **MANAGE** on alumaoutdoor.com →
+**Advanced DNS** → find the TXT record whose Host is `resend._domainkey.notify`
+→ click the pencil on its **Value** → put `v=DKIM1; k=rsa; ` at the very front,
+before the existing `p=` → green tick → **SAVE ALL CHANGES**.
+
+Do not retype the long key. Click into the field, go to the very beginning, and
+type the missing prefix in front of what is already there.
+
+## 📸 What to send me
+
+**A screenshot of your Resend "Emails" page.** That is the one thing I cannot
+see and the one thing that answers this.
+
+resend.com → **Emails** in the left menu. It lists every message with a status
+beside it — *Delivered*, *Bounced*, *Complained*, *Queued*. I have sent three;
+they will all be there.
+
+That status tells us which of these it is, and they need completely different
+fixes:
+
+- **Delivered** → it reached Gmail and Gmail filed it. Check spam and
+  Promotions; the fix is reputation, not code.
+- **Bounced** → Gmail refused it. The bounce reason will say why, and that is
+  the answer.
+- **Queued / nothing** → it never left Resend.
+
+If you would rather not screenshot it, tell me the status word next to the most
+recent message and the reason if there is one.
+
+## Also worth checking while you are there
+
+Is `outdooraluma@gmail.com` definitely a live mailbox you can log into? A hard
+bounce on a non-existent address looks exactly like this from where I stand.
 
 ---
 
@@ -163,8 +199,9 @@ uploading broken, so convert it first.
 # 📬 WHAT TO TELL ME
 
 ```
-Test A (direct) arrived?          yes / no / in spam
-Test B (through the form) arrived? yes / no / in spam
+Resend "Emails" page status?      Delivered / Bounced / Queued
+Anything in spam or Promotions?   yes / no
+DKIM prefix fixed?                yes / not yet
 
 English names (optional)?         yes / not bothering
 Reviews added?                    yes / not yet
