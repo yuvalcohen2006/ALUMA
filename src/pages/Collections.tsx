@@ -70,7 +70,7 @@ const CollectionCard = ({
       image={col.image_url}
       alt=""
       title={name}
-      meta={t("itemCount", { count })}
+      meta={count > 0 ? t("itemCount", { count }) : t("comingSoon")}
       aspect="4/5"
       eager={eager}
       // A collection is the primary thing this page lists, so its name is a

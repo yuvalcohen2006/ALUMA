@@ -57,11 +57,6 @@ const websiteSchema = {
   name: "Aluma",
   url: "https://alumaoutdoor.com/",
   inLanguage: "he-IL",
-  potentialAction: {
-"@type": "SearchAction",
-    target: "https://alumaoutdoor.com/collections?q={search_term_string}",
-"query-input": "required name=search_term_string",
-  },
 };
 
 const Index = () => {

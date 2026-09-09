@@ -181,7 +181,7 @@ const BlogPost = () => {
       <SEO
         title={`${post.title} | מגזין Aluma`}
         description={post.excerpt ?? post.title}
-        path={`/blog/${post.slug}`}
+        path={`/journal/${post.slug}`}
         image={post.cover_image_url ?? undefined}
       />
       <article className="pt-32 md:pt-40 pb-20">

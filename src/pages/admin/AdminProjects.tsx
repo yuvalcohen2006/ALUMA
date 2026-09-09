@@ -21,6 +21,7 @@ import { useCrop } from "@/components/admin/CropProvider";
 import PhotoSpec from "@/components/admin/PhotoSpec";
 import { contentDirection } from "@/lib/field-direction";
 import { ACCEPT_ATTRIBUTE } from "@/lib/photo-specs";
+import { slugify } from "./catalogue-shared";
 
 type Project = {
   id: string;
@@ -49,14 +50,6 @@ const empty: Partial<Project> = {
   sort_order: 0,
   published: true,
 };
-
-const slugify = (s: string) =>
-  s
-    .trim()
-    .toLowerCase()
-    .replace(/[^\u0590-\u05FF\w\s-]/g, "")
-    .replace(/[\s_]+/g, "-")
-    .replace(/-+/g, "-");
 
 const AdminProjects = () => {
   const requestCrop = useCrop();

@@ -88,7 +88,7 @@ const CollectionPage = () => {
           <div className="animate-pulse space-y-8">
             <div className="h-12 w-2/3 max-w-[420px] rounded-sm bg-secondary" />
             <div className="h-5 w-full max-w-[560px] rounded-sm bg-secondary" />
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
               {[0, 1, 2, 3].map((i) => (
                 <div key={i} className="aspect-square rounded-sm bg-secondary" />
               ))}

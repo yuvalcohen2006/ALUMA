@@ -287,7 +287,7 @@ const CollectionDetailPage = () => {
                           className={`h-9 w-9 rounded-full border transition-colors ${
                             isActive
                               ? "border-foreground ring-2 ring-foreground ring-offset-2 ring-offset-background"
-                              : "border-foreground/20 hover:border-foreground/50"
+                              : "border-foreground/55 hover:border-foreground"
                           }`}
                           style={v.swatch ? { backgroundColor: v.swatch } : undefined}
                         >
@@ -323,11 +323,14 @@ const CollectionDetailPage = () => {
                 </h2>
                 <div className="w-20 h-[2px] bg-foreground/15 mt-5 mb-6" aria-hidden="true" />
                 <ul className="space-y-4">
-                  {item.highlights.map((h) => (
-                    <li key={h.title} className="flex gap-3">
-                      <Check className="w-5 h-5 text-accent mt-1 shrink-0" />
+                  {item.highlights.map((h, i) => (
+                    <li key={i} className="flex gap-3">
+                      <Check className="w-5 h-5 text-accent mt-1 shrink-0" aria-hidden="true" />
                       <div dir="auto" className="text-foreground font-normal text-body leading-relaxed">
-                        {h.title}{h.desc && <span className="text-muted-foreground">, {h.desc}</span>}
+                        {typeof h === "string" ? h : h.title}
+                        {typeof h !== "string" && h.desc && (
+                          <span className="text-muted-foreground">, {h.desc}</span>
+                        )}
                       </div>
                     </li>
                   ))}
@@ -339,7 +342,7 @@ const CollectionDetailPage = () => {
               <div className="border border-border bg-card rounded-sm  p-6 md:p-8">
                 {item.materials.length > 0 && (
                   <div className="flex items-start gap-3 mb-6">
-                    <Layers className="w-5 h-5 text-accent mt-1.5 shrink-0" />
+                    <Layers className="w-5 h-5 text-accent mt-1.5 shrink-0" aria-hidden="true" />
                     <div className="min-w-0">
                       <div className="font-display font-normal text-body text-foreground mb-3">
                         {t("sections.materials")}
@@ -357,7 +360,7 @@ const CollectionDetailPage = () => {
                 )}
                 {item.dimensions && (
                   <div className={`flex items-start gap-3 ${item.materials.length > 0 ? 'pt-6 border-t border-border' : ''}`}>
-                    <Ruler className="w-5 h-5 text-accent mt-1.5 shrink-0" />
+                    <Ruler className="w-5 h-5 text-accent mt-1.5 shrink-0" aria-hidden="true" />
                     <div className="min-w-0">
                       <div className="font-display font-normal text-body text-foreground mb-3">
                         {t("sections.dimensions")}

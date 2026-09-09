@@ -97,3 +97,20 @@ describe("admin screens", () => {
     expect(leaked).toEqual([]);
   });
 });
+
+/**
+ * Three slug rules produced three kinds of URL. Products transliterated Hebrew
+ * to Latin; projects and blog posts kept the Hebrew letters, so a project
+ * called "מרפסת בהרצליה" became
+ * /projects/%D7%9E%D7%A8%D7%A4%D7%A1%D7%AA-%D7%91%D7%94%D7%A8%D7%A6%D7%9C%D7%99%D7%94
+ * — which is what gets pasted into WhatsApp and an email signature.
+ */
+describe("URLs the admin generates", () => {
+  it("has one slug rule, not one per screen", () => {
+    for (const f of ["src/pages/admin/AdminProjects.tsx", "src/pages/admin/AdminBlog.tsx"]) {
+      const src = readFileSync(join(process.cwd(), f), "utf8");
+      expect(src).not.toMatch(/^const slugify\b/m);
+      expect(src).toContain('from "./catalogue-shared"');
+    }
+  });
+});

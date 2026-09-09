@@ -14,6 +14,7 @@ import { uploadFile } from "@/lib/admin-storage";
 import { useCrop } from "@/components/admin/CropProvider";
 import PhotoSpec from "@/components/admin/PhotoSpec";
 import { ACCEPT_ATTRIBUTE } from "@/lib/photo-specs";
+import { slugify } from "./catalogue-shared";
 
 type Post = {
   id: string;
@@ -27,15 +28,6 @@ type Post = {
   published: boolean;
   published_at: string | null;
 };
-
-const slugify = (s: string) =>
-  s
-    .toLowerCase()
-    .trim()
-    .replace(/['"]/g, "")
-    .replace(/[^a-z0-9\u0590-\u05FF]+/g, "-")
-    .replace(/^-+|-+$/g, "")
-    .slice(0, 80);
 
 const empty: Partial<Post> = {
   slug: "",
