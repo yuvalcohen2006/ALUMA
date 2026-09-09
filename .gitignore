@@ -36,6 +36,14 @@ supabase/.temp/
 
 # Scratch space for local diagnostics
 .tmp/
+# Anything an agent scratches into the repo. This has slipped into a commit
+# three times now, from three different directory names, so the pattern is
+# deliberately wide rather than a list of the ones already seen.
+.agent-tmp/
+*-tmp/
+tmp-*/
+**/__tmp*
+**/zzprobe*
 
 # Scratch probes written by audit agents
 # Scratch files background agents leave behind while reproducing a bug. The
