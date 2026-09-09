@@ -7,6 +7,8 @@ import DOMPurify from "dompurify";
 import logo from "@/assets/aluma-logo.png";
 import { useLocalizedPath } from "@/lib/useLocalizedPath";
 import DirectionalArrow from "@/components/DirectionalArrow";
+import { articleHtml } from "@/lib/article-body";
+import { useTranslation } from "react-i18next";
 
 type Post = {
   id: string;
@@ -37,9 +39,12 @@ const formatDate = (iso: string | null) => {
   return Number.isNaN(d.getTime()) ? null : hebrewDate.format(d);
 };
 
-const formatRead = (minutes: number | null) => {
+const formatRead = (
+  minutes: number | null,
+  t: (key: string, opts?: Record<string, unknown>) => string,
+) => {
   if (!minutes || minutes < 1) return null;
-  return minutes === 1 ? "דקת קריאה" : `${minutes} דקות קריאה`;
+  return minutes === 1 ? t("readOne") : t("readMany", { count: minutes });
 };
 
 /* ─────────────────────────── article body ───────────────────────────
@@ -103,10 +108,10 @@ const ARTICLE_BODY = [
 ].join(" ");
 
 /** Layout stand-in while the row loads — same shapes as the article, no copy to read. */
-const ArticleSkeleton = () => (
+const ArticleSkeleton = ({ loading }: { loading: string }) => (
   <div className="container-luxury max-w-3xl">
     <span className="sr-only" role="status">
-      טוען מאמר…
+      {loading}
     </span>
     <div className="animate-pulse motion-reduce:animate-none" aria-hidden="true">
       <div className="h-5 w-32 rounded-sm bg-secondary" />
@@ -121,6 +126,7 @@ const ArticleSkeleton = () => (
 );
 
 const BlogPost = () => {
+  const { t } = useTranslation("journal");
   const { to } = useLocalizedPath();
   const { slug } = useParams();
   const [post, setPost] = useState<Post | null>(null);
@@ -145,7 +151,7 @@ const BlogPost = () => {
     return (
       <Layout>
         <article className="pt-32 md:pt-40 pb-20 min-h-[60vh]" aria-busy="true">
-          <ArticleSkeleton />
+          <ArticleSkeleton loading={t("loadingArticle")} />
         </article>
       </Layout>
     );
@@ -156,13 +162,13 @@ const BlogPost = () => {
       <Layout>
         <section className="pt-40 pb-20 bg-background">
           <div className="container-luxury max-w-3xl text-center">
-            <p className="text-body leading-relaxed text-foreground mb-6">המאמר לא נמצא.</p>
+            <p className="text-body leading-relaxed text-foreground mb-6">{t("notFound")}</p>
             <button
               type="button"
-              onClick={() => nav("/blog")}
+              onClick={() => nav(to("/blog"))}
               className="text-body text-accent link-underline transition-smooth"
             >
-              חזרה למגזין
+              {t("backToJournal")}
             </button>
           </div>
         </section>
@@ -172,14 +178,14 @@ const BlogPost = () => {
 
   // Whatever survived the null checks, separated by hairlines. Renders nothing
   // at all when a post carries no tag, no read time and no date.
-  const meta = [post.tag, formatRead(post.read_minutes), formatDate(post.published_at)].filter(
+  const meta = [post.tag, formatRead(post.read_minutes, t), formatDate(post.published_at)].filter(
     (part): part is string => Boolean(part)
   );
 
   return (
     <Layout>
       <SEO
-        title={`${post.title} | מגזין Aluma`}
+        title={`${post.title} | ${t("articleSuffix")}`}
         description={post.excerpt ?? post.title}
         path={`/journal/${post.slug}`}
         image={post.cover_image_url ?? undefined}
@@ -192,12 +198,15 @@ const BlogPost = () => {
             className="group inline-flex items-center gap-2 text-body text-foreground-soft hover:text-primary transition-smooth mb-10"
           >
             <DirectionalArrow direction="back" className="h-5 w-5" />
-            חזרה למגזין
+            {t("backToJournal")}
           </Link>
           <div className="flex justify-center mb-2">
             <img src={logo} alt="Aluma" className="h-7 md:h-8 w-auto object-contain opacity-70" />
           </div>
-          <h1 className="font-display text-3xl sm:text-4xl md:text-5xl text-foreground mt-3 mb-5 leading-tight text-center">
+          <h1
+            dir="auto"
+            className="font-display text-3xl sm:text-4xl md:text-5xl text-foreground mt-3 mb-5 leading-tight text-center"
+          >
             {post.title}
           </h1>
           <div className="w-20 h-[2px] bg-foreground/15 mx-auto mt-2" aria-hidden="true" />
@@ -219,16 +228,10 @@ const BlogPost = () => {
             </div>
           )}
           <div
+            dir="auto"
             className={`${ARTICLE_BODY} mt-10`}
             dangerouslySetInnerHTML={{
-              __html: DOMPurify.sanitize(
-                /<\/?[a-z][\s\S]*>/i.test(post.content)
-                  ? post.content
-                  : post.content
-                      .split(/\n{2,}/)
-                      .map((p) => `<p>${p.replace(/\n/g, "<br/>")}</p>`)
-                      .join("")
-              ),
+              __html: DOMPurify.sanitize(articleHtml(post.content)),
             }}
           />
         </div>

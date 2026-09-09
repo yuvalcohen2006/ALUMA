@@ -13,5 +13,11 @@
   "materials": {
     "title": "The materials",
     "subtitle": "The first decision in any piece isn't the shape, it's the material. These are the four we build with, and what each one does after a few years outdoors."
-  }
+  },
+  "backToJournal": "Back to the magazine",
+  "notFound": "We couldn't find that article.",
+  "loadingArticle": "Loading the article…",
+  "articleSuffix": "Aluma magazine",
+  "readOne": "1 min read",
+  "readMany": "{{count}} min read"
 }

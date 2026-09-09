@@ -74,11 +74,17 @@ const MaterialsPage = () => {
 
               <Reveal delay={80} className={i % 2 === 1 ? "md:order-1" : ""}>
                 <div className="text-start">
-                  <p className="text-label text-muted-foreground">{m.origin}</p>
-                  <h2 className="mt-3 text-heading font-normal tracking-normal text-foreground">
+                  <p dir="auto" className="text-label text-muted-foreground">{m.origin}</p>
+                  <h2
+                    dir="auto"
+                    className="mt-3 text-heading font-normal tracking-normal text-foreground"
+                  >
                     {m.name}
                   </h2>
-                  <p className="mt-4 max-w-[52ch] text-body tracking-normal text-foreground-soft">
+                  <p
+                    dir="auto"
+                    className="mt-4 max-w-[52ch] text-body tracking-normal text-foreground-soft"
+                  >
                     {m.longDesc[0]}
                   </p>
 

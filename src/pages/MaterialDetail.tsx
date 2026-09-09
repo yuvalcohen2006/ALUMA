@@ -165,7 +165,7 @@ const MaterialDetailPage = () => {
       <div className="py-16 md:py-20 bg-background flex justify-center">
         <Link
           to={to("/materials")}
-          className="inline-flex items-center gap-2.5 text-body font-normal text-primary border border-foreground/15 hover:bg-primary hover:text-primary-foreground hover:border-primary transition-smooth rounded-sm px-8 py-3.5"
+          className="inline-flex items-center gap-2.5 text-body font-normal text-foreground border border-foreground/40 hover:bg-primary hover:text-primary-foreground hover:border-primary transition-smooth rounded-sm px-8 py-3.5"
         >
           <DirectionalArrow direction="back" className="w-5 h-5" animate={false} />
           חזרה לחומרים
