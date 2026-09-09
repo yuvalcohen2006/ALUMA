@@ -36,6 +36,21 @@ export const SITE = {
    */
   enableEnglish: true,
 
+  /**
+   * "View it in your space".
+   *
+   * OFF, because every 3D model it showed is gone. The four products loaded
+   * sample models from modelviewer.dev, and all five of those URLs now return
+   * a GitHub Pages 404 page — model-viewer gets HTML where it expects a GLB,
+   * throws in its parser, and renders nothing at all. No poster, no message:
+   * an empty grey box on every product, on a live commercial site.
+   *
+   * The page and its code are untouched and still tested. Real models of
+   * Aluma's own furniture are roughly $250-500 each; when they exist, put the
+   * URLs in ARPreview.tsx and set this back to true.
+   */
+  enableAR: false,
+
   address: {
     street: "התמר 78",
     city: "יציץ",

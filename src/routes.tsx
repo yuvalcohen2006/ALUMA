@@ -1,6 +1,7 @@
 import { lazy } from "react";
 import { Navigate, Route, useParams } from "react-router-dom";
 import Index from "./pages/Index.tsx";
+import { SITE } from "@/config/site";
 
 /**
  * /blog/:slug → /journal/:slug, carrying the slug across.
@@ -77,7 +78,10 @@ export const publicRoutes = (
         admin panel) but is no longer presented as a build-your-own station. */}
     <Route path="diy" element={<DIY />} />
     <Route path="fabric" element={<FabricConfigurator />} />
-    <Route path="ar" element={<ARPreview />} />
+    {/* Sent to /diy while SITE.enableAR is off, rather than 404ing: the URL
+        has been live and shared, and the build-your-own page is the nearest
+        real thing. Flip the flag in config/site.ts to bring the page back. */}
+    <Route path="ar" element={SITE.enableAR ? <ARPreview /> : <Navigate to="../diy" replace />} />
     <Route path="questionnaire" element={<Questionnaire />} />
     <Route path="designer" element={<Navigate to="../diy" replace />} />
     <Route path="diy/scene" element={<Navigate to="../diy" replace />} />

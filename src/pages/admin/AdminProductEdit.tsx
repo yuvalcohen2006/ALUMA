@@ -427,7 +427,11 @@ const AdminProductEdit = () => {
             </section>
 
             <section className="rounded-sm border border-border bg-card p-6">
-              <ProductFinishes value={variants} onChange={setVariants} />
+              <ProductFinishes
+                value={variants}
+                onChange={setVariants}
+                onBusyChange={setUploading}
+              />
             </section>
 
             <section className="rounded-sm border border-border bg-card p-6">

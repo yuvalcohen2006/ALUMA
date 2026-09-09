@@ -3,6 +3,8 @@ import SEO from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { Smartphone, Box, ScanLine, Info } from "lucide-react";
 import Layout from "@/components/Layout";
+import { useLocalizedPath } from "@/lib/useLocalizedPath";
+import { Link } from "react-router-dom";
 
 // Demo products, placeholder GLB/USDZ models hosted on modelviewer.dev.
 // Replace `glb` / `usdz` URLs later with Aluma's own scanned models.
@@ -46,7 +48,9 @@ const products = [
 ];
 
 const ARPreview = () => {
+  const { to } = useLocalizedPath();
   const [ready, setReady] = useState(false);
+  const [failed, setFailed] = useState(false);
   const [active, setActive] = useState(products[0]);
 
   useEffect(() => {
@@ -69,7 +73,15 @@ const ARPreview = () => {
 "https://cdn.jsdelivr.net/npm/@google/model-viewer@3.5.0/dist/model-viewer.min.js";
     s.dataset.mv = "true";
     s.onload = () => setReady(true);
+    // `onload` used to be the only thing that ever set `ready`. With the CDN
+    // blocked — a corporate proxy, an ad-blocker list, a dropped connection —
+    // the page sat on "טוען תצוגת 3D…" for ever while the product buttons
+    // still highlighted, so it looked alive and was not. A failure is now said
+    // out loud, and a timeout covers the case where nothing fires at all.
+    s.onerror = () => setFailed(true);
+    const timer = window.setTimeout(() => setFailed(true), 12_000);
     document.head.appendChild(s);
+    return () => window.clearTimeout(timer);
   }, []);
 
   return (
@@ -147,6 +159,11 @@ const ARPreview = () => {
                     הציגו במרחב שלי
                   </button>
                 </model-viewer>
+              ) : failed ? (
+                <div className="flex h-full w-full items-center justify-center px-6 text-center text-sm text-muted-foreground">
+                  לא הצלחנו לטעון את התצוגה התלת־ממדית. נסו לרענן, או פנו אלינו
+                  ונשמח להראות את הפריט.
+                </div>
               ) : (
                 <div className="w-full h-full flex items-center justify-center text-muted-foreground text-sm">
                   טוען תצוגת 3D…
@@ -159,7 +176,7 @@ const ARPreview = () => {
                 <p className="text-muted-foreground text-sm mt-1">{active.desc}</p>
               </div>
               <Button asChild variant="default">
-                <a href="/faq#contact">לפרטים על הפריט</a>
+                <Link to={to("/faq") + "#contact"}>לפרטים על הפריט</Link>
               </Button>
             </div>
           </div>

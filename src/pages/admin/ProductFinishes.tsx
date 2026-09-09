@@ -33,9 +33,18 @@ export const DEFAULT_VARIANT: DraftVariant = {
 const ProductFinishes = ({
   value,
   onChange,
+  onBusyChange,
 }: {
   value: DraftVariant[];
   onChange: (next: DraftVariant[]) => void;
+  /**
+   * Raised while a colour photo is uploading, so the form above can hold its
+   * Save button. Without it the save ran with image_url still null, succeeded,
+   * navigated away, and the finished upload wrote into an unmounted tree —
+   * React discards that silently, so the photo was gone and the file was left
+   * sitting in the bucket with nothing pointing at it.
+   */
+  onBusyChange?: (busy: boolean) => void;
 }) => {
   const requestCrop = useCrop();
   const [uploading, setUploading] = useState<number | null>(null);
@@ -51,6 +60,7 @@ const ProductFinishes = ({
     const cropped = await requestCrop(file, "finish");
     if (!cropped) return;
     setUploading(i);
+    onBusyChange?.(true);
     try {
       const { url } = await uploadFile("site-collections", cropped);
       patch(i, { image_url: url });
@@ -58,6 +68,7 @@ const ProductFinishes = ({
       toast.error("העלאת התמונה נכשלה");
     } finally {
       setUploading(null);
+      onBusyChange?.(false);
     }
   };
 

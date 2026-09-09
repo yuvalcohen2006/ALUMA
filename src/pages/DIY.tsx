@@ -11,6 +11,7 @@ import ShineButton from "@/components/ui/shine-button";
 import { cn } from "@/lib/utils";
 import { sunbrellaFabrics } from "@/data/sunbrella";
 import { useLocalizedPath } from "@/lib/useLocalizedPath";
+import { SITE as SITE_CONFIG } from "@/config/site";
 
 /**
  * DIY hub — "the workbench".
@@ -58,13 +59,13 @@ const toolList = {
 "@type": "ItemList",
   name: "כלים לתכנון עצמי של ריהוט חוץ",
   inLanguage: "he-IL",
-  // The two stations this page actually renders. It used to list four,
-  // including `${SITE}/designer` — a route that was deleted — so the page told
-  // Google about a tool that 404s, and promised a visitor four things before
-  // showing them two.
+  // The stations this page actually renders. It used to list four, including
+  // `${SITE}/designer` — a route that was deleted — so the page told Google
+  // about a tool that 404s, and promised a visitor four things before showing
+  // them two. AR is on the same footing while its models are gone.
   itemListElement: [
     { name: "בחרו את הבד", url: `${SITE}/fabric` },
-    { name: "AR, תצוגה במרחב", url: `${SITE}/ar` },
+    ...(SITE_CONFIG.enableAR ? [{ name: "AR, תצוגה במרחב", url: `${SITE}/ar` }] : []),
   ].map((t, i) => ({
 "@type": "ListItem",
     position: i + 1,
@@ -306,48 +307,55 @@ const DIYPage = () => {
                 </StationCta>
               </Station>
 
-              {/* ---- 03 · short station, left column in RTL ---- */}
-              <Station n="02" to={to("/ar")}>
-                <StationHead icon={ScanLine} title="AR, תצוגה במרחב" />
-
-                <p className="mt-5 text-body leading-relaxed text-foreground text-pretty">
-                  בחרו פריט, כוונו את מצלמת הטלפון לרצפה, והרהיט יופיע לפניכם בגודל
-                  אמיתי, כדי לבדוק שהמידות עובדות עוד לפני שמזמינים.
-                </p>
-
-                {/* Drawn, not photographed: the floor plane the phone finds, with
-                    the placement reticle settling onto it as the plank wakes. */}
-                <Specimen
-                  caption="רץ מהדפדפן בטלפון, בלי אפליקציה. עובד על iPhone מגרסת iOS 12 ומעלה ועל מכשירי אנדרואיד עם תמיכת ARCore."
-                  className="mt-6"
-                >
-                  <div className="relative h-[76px] overflow-hidden rounded-sm bg-background/70 [perspective:420px]">
-                    <span
-                      aria-hidden="true"
-                      className="absolute inset-x-[-30%] bottom-0 h-32 origin-bottom opacity-70 transition-opacity duration-500 group-hover:opacity-100 group-focus-within:opacity-100 [transform:rotateX(64deg)]"
-                      style={{
-                        backgroundImage:
-"linear-gradient(hsl(var(--primary) / 0.35) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--primary) / 0.35) 1px, transparent 1px)",
-                        backgroundSize: "28px 28px",
-                        maskImage: "linear-gradient(to top, #000 30%, transparent 88%)",
-                        WebkitMaskImage: "linear-gradient(to top, #000 30%, transparent 88%)",
-                      }}
-                    />
-                    <span
-                      aria-hidden="true"
-                      className="absolute left-1/2 top-[58%] h-12 w-12 rounded-full border-2 border-foreground/15 transition-transform duration-500 ease-out [transform:translate(-50%,-50%)_rotateX(64deg)_scale(1.3)] group-hover:[transform:translate(-50%,-50%)_rotateX(64deg)_scale(1)] group-focus-within:[transform:translate(-50%,-50%)_rotateX(64deg)_scale(1)]"
-                    />
-                    <span
-                      aria-hidden="true"
-                      className="absolute left-1/2 top-[58%] h-1.5 w-1.5 rounded-full bg-primary/70 [transform:translate(-50%,-50%)]"
-                    />
-                  </div>
-                </Specimen>
-
-                <StationCta to={to("/ar")} className="mt-8 lg:mt-auto lg:pt-8">
-                  פתחו את התצוגה
-                </StationCta>
-              </Station>
+              {/* ---- 03 · the AR station, while there is an AR page ----
+                  Hidden with SITE.enableAR: every 3D model the viewer loaded
+                  is gone from its host, so the page it links to renders an
+                  empty grey box. A station that promises something the next
+                  page cannot deliver is worse than one station fewer. */}
+              {SITE_CONFIG.enableAR && (
+                <Station n="02" to={to("/ar")}>
+                  <StationHead icon={ScanLine} title="AR, תצוגה במרחב" />
+  
+                  <p className="mt-5 text-body leading-relaxed text-foreground text-pretty">
+                    בחרו פריט, כוונו את מצלמת הטלפון לרצפה, והרהיט יופיע לפניכם בגודל
+                    אמיתי, כדי לבדוק שהמידות עובדות עוד לפני שמזמינים.
+                  </p>
+  
+                  {/* Drawn, not photographed: the floor plane the phone finds, with
+                      the placement reticle settling onto it as the plank wakes. */}
+                  <Specimen
+                    caption="רץ מהדפדפן בטלפון, בלי אפליקציה. עובד על iPhone מגרסת iOS 12 ומעלה ועל מכשירי אנדרואיד עם תמיכת ARCore."
+                    className="mt-6"
+                  >
+                    <div className="relative h-[76px] overflow-hidden rounded-sm bg-background/70 [perspective:420px]">
+                      <span
+                        aria-hidden="true"
+                        className="absolute inset-x-[-30%] bottom-0 h-32 origin-bottom opacity-70 transition-opacity duration-500 group-hover:opacity-100 group-focus-within:opacity-100 [transform:rotateX(64deg)]"
+                        style={{
+                          backgroundImage:
+  "linear-gradient(hsl(var(--primary) / 0.35) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--primary) / 0.35) 1px, transparent 1px)",
+                          backgroundSize: "28px 28px",
+                          maskImage: "linear-gradient(to top, #000 30%, transparent 88%)",
+                          WebkitMaskImage: "linear-gradient(to top, #000 30%, transparent 88%)",
+                        }}
+                      />
+                      <span
+                        aria-hidden="true"
+                        className="absolute left-1/2 top-[58%] h-12 w-12 rounded-full border-2 border-foreground/15 transition-transform duration-500 ease-out [transform:translate(-50%,-50%)_rotateX(64deg)_scale(1.3)] group-hover:[transform:translate(-50%,-50%)_rotateX(64deg)_scale(1)] group-focus-within:[transform:translate(-50%,-50%)_rotateX(64deg)_scale(1)]"
+                      />
+                      <span
+                        aria-hidden="true"
+                        className="absolute left-1/2 top-[58%] h-1.5 w-1.5 rounded-full bg-primary/70 [transform:translate(-50%,-50%)]"
+                      />
+                    </div>
+                  </Specimen>
+  
+                  <StationCta to={to("/ar")} className="mt-8 lg:mt-auto lg:pt-8">
+                    פתחו את התצוגה
+                  </StationCta>
+                </Station>
+  
+              )}
 
             </ul>
           </Reveal>
