@@ -307,7 +307,11 @@ const AdminCollections = () => {
   const requestCrop = useCrop();
   const nav = useNavigate();
   const [collections, setCollections] = useState<Collection[]>([]);
-  const [products, setProducts] = useState<Record<string, Product[]>>({});
+  /* Counts, not rows. This screen shows one integer per collection, and it
+     used to fetch every product in full to get them — descriptions,
+     highlights, materials and gallery JSON included — before the list could
+     paint. The only other reader was a drag handler wired to nothing. */
+  const [productCounts, setProductCounts] = useState<Record<string, number>>({});
   const [loading, setLoading] = useState(true);
 
   const [editCol, setEditCol] = useState<Partial<Collection> | null>(null);
@@ -324,15 +328,14 @@ const AdminCollections = () => {
     setLoading(true);
     const [{ data: cols }, { data: prods }] = await Promise.all([
       supabase.from("site_collections").select("*").order("sort_order"),
-      supabase.from("site_collection_products").select("*").order("sort_order"),
+      supabase.from("site_collection_products").select("collection_id"),
     ]);
     setCollections((cols as Collection[]) || []);
-    const grouped: Record<string, Product[]> = {};
-    (prods as Product[] | null)?.forEach((p) => {
-      grouped[p.collection_id] = grouped[p.collection_id] || [];
-      grouped[p.collection_id].push(p);
+    const counts: Record<string, number> = {};
+    (prods as { collection_id: string }[] | null)?.forEach((p) => {
+      counts[p.collection_id] = (counts[p.collection_id] ?? 0) + 1;
     });
-    setProducts(grouped);
+    setProductCounts(counts);
     setLoading(false);
   };
 
@@ -350,18 +353,6 @@ const AdminCollections = () => {
     );
   };
 
-  const persistProductOrder = async (collectionId: string, ordered: Product[]) => {
-    setProducts({
-      ...products,
-      [collectionId]: ordered.map((p, i) => ({ ...p, sort_order: i })),
-    });
-    await Promise.all(
-      ordered.map((p, i) =>
-        supabase.from("site_collection_products").update({ sort_order: i }).eq("id", p.id)
-      )
-    );
-  };
-
   const onCollectionDragEnd = (e: DragEndEvent) => {
     const { active, over } = e;
     if (!over || active.id === over.id) return;
@@ -369,16 +360,6 @@ const AdminCollections = () => {
     const to = collections.findIndex((c) => c.id === over.id);
     if (from < 0 || to < 0) return;
     persistCollectionOrder(arrayMove(collections, from, to));
-  };
-
-  const onProductDragEnd = (collectionId: string) => (e: DragEndEvent) => {
-    const { active, over } = e;
-    if (!over || active.id === over.id) return;
-    const list = products[collectionId] || [];
-    const from = list.findIndex((p) => p.id === active.id);
-    const to = list.findIndex((p) => p.id === over.id);
-    if (from < 0 || to < 0) return;
-    persistProductOrder(collectionId, arrayMove(list, from, to));
   };
 
   /* ---- Collection CRUD ---- */
@@ -478,7 +459,7 @@ const AdminCollections = () => {
                 <SortableCollectionCard
                   key={c.id}
                   collection={c}
-                  productsCount={(products[c.id] || []).length}
+                  productsCount={productCounts[c.id] ?? 0}
                   href={`/admin/collections/${c.id}`}
                   onEdit={() => setEditCol(c)}
                   onDelete={() => deleteCollection(c.id)}
