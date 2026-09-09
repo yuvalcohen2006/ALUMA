@@ -7,7 +7,7 @@ const AccessibilityPage = () => {
   // Live contact facts, falling back to src/config/site.ts.
   const SITE = useSiteContact();
   return (
-    <Layout>
+    <Layout hebrewOnly>
       <SEO
         title="הצהרת נגישות | Aluma"
         description="הצהרת הנגישות של אתר Aluma, התאמות, אמצעי סיוע, יצירת קשר עם רכז הנגישות וטיפול בתקלות."

@@ -422,13 +422,11 @@
     padding-block: clamp(56px, 9vw, 120px);
   }
 
-  /* Running text. One size for every paragraph a visitor actually reads —
-     page intros, article and legal prose, FAQ answers. Card titles, captions,
-     prices and labels are not running text and keep their own scale. */
-  .text-body {
-    font-size: 18px;
-    line-height: 1.75;
-  }
+  /* Running text — page intros, article and legal prose, FAQ answers — is the
+     `body` role in tailwind.config.ts, at 1.125rem. It used to be repeated
+     here in px as well, later in the file and therefore winning, which pinned
+     every paragraph at 18px: px ignores the root font size, and the root font
+     size is exactly how the accessibility panel's text-size control works. */
 
   .band-tint {
     background: var(--band-tint);
@@ -731,7 +729,10 @@
   --a11y-font-scale: 1;
 }
 html {
-  font-size: calc(16px * var(--a11y-font-scale));
+  /* 100%, not 16px: hard-coding the base threw away the size a visitor had
+     already chosen in their browser — the setting people who need larger text
+     reach for first. The scale multiplies whatever that is. */
+  font-size: calc(100% * var(--a11y-font-scale));
 }
 /* Real high-contrast mode: push tokens to maximum contrast (not a blunt filter) */
 html.a11y-high-contrast {

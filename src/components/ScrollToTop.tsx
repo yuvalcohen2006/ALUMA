@@ -23,6 +23,20 @@ const ScrollToTop = () => {
   // still has somewhere to go — the FAQ's own "write to us" link is exactly
   // this case.
   const hasTarget = Boolean(hash);
+  /*
+   * The very first render of a page load reports navigationType "POP", which
+   * the guards below read as back/forward and leave alone — correct for a real
+   * back/forward, and exactly wrong for a link somebody shared or reloaded.
+   * So /faq#contact typed in the address bar, pasted from WhatsApp, or hit
+   * with F5 landed at the top of the FAQ with the form a screen and a half
+   * away: the same failure this whole component was written to fix, surviving
+   * in the one route into the page that nobody clicks their way to.
+   *
+   * There is no scroll position to preserve on a first render, so a fragment
+   * on one is always worth honouring.
+   */
+  const isFirstRender = lastPathRef.current === null;
+  const honourPop = isFirstRender && hasTarget;
 
   /*
    * A link carrying a #fragment wants that element, not the top.
@@ -61,14 +75,14 @@ const ScrollToTop = () => {
   // Before paint
   useLayoutEffect(() => {
     lastPathRef.current = pathname;
-    if (navType === "POP") return; // preserve back/forward position
+    if (navType === "POP" && !honourPop) return; // preserve back/forward position
     if (!isNewPage && !hasTarget) return; // filter change, not a navigation
     scrollTop();
   }, [pathname, search, hash, navType, isNewPage]);
 
   // After lazy content mounts / images shift layout
   useEffect(() => {
-    if (navType === "POP") return;
+    if (navType === "POP" && !honourPop) return;
     if (!isNewPage && !hasTarget) return;
     const r1 = requestAnimationFrame(scrollTop);
     const t1 = window.setTimeout(scrollTop, 60);

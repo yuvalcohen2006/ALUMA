@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Accessibility,
   X,
@@ -44,6 +44,53 @@ const AccessibilityWidget = () => {
   const { to } = useLocalizedPath();
   const [open, setOpen] = useState(false);
   const [settings, setSettings] = useState<Settings>(defaultSettings);
+  const trigger = useRef<HTMLButtonElement>(null);
+  const panel = useRef<HTMLDivElement>(null);
+
+  /*
+   * A dialog that says aria-modal="true" has to behave like one.
+   *
+   * This had no Escape, no focus trap and no focus return: a keyboard user
+   * opened the accessibility panel and Tab walked straight out of it into the
+   * page behind, with the overlay still up and nothing to indicate they had
+   * left. Of every dialog on the site, this is the one that has to work.
+   */
+  useEffect(() => {
+    if (!open) return;
+    const opener = document.activeElement as HTMLElement | null;
+    // Focus the panel itself rather than its first control, so a screen reader
+    // reads the dialog's name before its options.
+    panel.current?.focus();
+
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        e.stopPropagation();
+        setOpen(false);
+        return;
+      }
+      if (e.key !== "Tab" || !panel.current) return;
+      const focusable = panel.current.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), input, select, textarea, [tabindex]:not([tabindex="-1"])',
+      );
+      if (focusable.length === 0) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      const active = document.activeElement;
+      if (e.shiftKey && (active === first || active === panel.current)) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && active === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    };
+
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      (trigger.current ?? opener)?.focus();
+    };
+  }, [open]);
 
   useEffect(() => {
     try {
@@ -118,6 +165,7 @@ const AccessibilityWidget = () => {
           both FABs under the cookie banner (z-50). */}
       <button
         type="button"
+        ref={trigger}
         onClick={() => setOpen(true)}
         aria-label="פתיחת תפריט נגישות"
         aria-haspopup="dialog"
@@ -143,7 +191,11 @@ const AccessibilityWidget = () => {
             onClick={() => setOpen(false)}
             className="absolute inset-0 bg-black/40 backdrop-blur-sm"
           />
-          <div className="relative bg-background w-full md:w-[360px] md:m-6 md:rounded-sm shadow-luxury max-h-[90vh] overflow-y-auto border border-border">
+          <div
+            ref={panel}
+            tabIndex={-1}
+            className="relative bg-background w-full md:w-[360px] md:m-6 md:rounded-sm shadow-luxury max-h-[90vh] overflow-y-auto border border-border focus:outline-none"
+          >
             <div className="flex items-center justify-between px-5 py-4 border-b border-border bg-primary text-primary-foreground">
               <div className="flex items-center gap-2">
                 <Accessibility className="w-5 h-5" />
@@ -153,7 +205,7 @@ const AccessibilityWidget = () => {
                 type="button"
                 onClick={() => setOpen(false)}
                 aria-label="סגירה"
-                className="w-9 h-9 rounded-sm flex items-center justify-center hover:bg-primary-foreground/10 transition-smooth"
+                className="w-9 h-9 rounded-sm flex items-center justify-center hover:bg-primary-foreground/10 transition-smooth focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[hsl(var(--primary-foreground))]"
               >
                 <X className="w-5 h-5" />
               </button>

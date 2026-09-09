@@ -23,5 +23,14 @@
     "whatsapp": "Message us on WhatsApp",
     "call": "Call us",
     "projects": "See our projects"
+  },
+  "cookies": {
+    "title": "Privacy preferences",
+    "body": "This site uses cookies to improve your experience and understand traffic. For details see our",
+    "policy": "privacy policy",
+    "accept": "Accept",
+    "decline": "Essential only",
+    "close": "Close",
+    "label": "Cookie consent"
   }
 }

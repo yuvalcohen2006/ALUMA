@@ -80,13 +80,19 @@ describe("page direction", () => {
     const optedOut = [...files("src/pages"), ...files("src/components")].filter((f) =>
       read(f).includes("<Layout hebrewOnly"),
     );
-    // The four tool pages, and nothing else. Anything added here has to be a
-    // page with no translated copy at all, not a page someone gave up on.
+    // The four tool pages and the three legal ones, and nothing else.
+    // Anything added here has to be a page with no translated copy at all, not
+    // a page someone gave up on. The legal pages are a deliberate permanent
+    // entry: they are legally meaningful documents for an Israeli business,
+    // and a translation of them is not the same document.
     expect(optedOut.sort()).toEqual([
       "src/pages/ARPreview.tsx",
+      "src/pages/Accessibility.tsx",
       "src/pages/DIY.tsx",
       "src/pages/FabricConfigurator.tsx",
+      "src/pages/Privacy.tsx",
       "src/pages/Questionnaire.tsx",
+      "src/pages/Terms.tsx",
     ]);
   });
 });

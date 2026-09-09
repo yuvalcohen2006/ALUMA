@@ -41,7 +41,7 @@ const NotFound = () => {
           site-wide token like everywhere else. */}
       <section className="pt-32 pb-20 md:pt-40 md:pb-28 bg-background min-h-[70vh] flex items-center">
         <div className="container-luxury text-center max-w-2xl mx-auto">
-          <div className="font-display text-7xl md:text-9xl text-primary/20 leading-none mb-4">
+          <div className="font-display text-7xl md:text-9xl text-primary/55 leading-none mb-4" aria-hidden="true">
             404
           </div>
           <h1 className="font-display text-3xl sm:text-4xl md:text-5xl text-foreground leading-tight mb-5">
@@ -56,7 +56,7 @@ const NotFound = () => {
               <Link
                 key={path}
                 to={to(path)}
-                className="group flex items-center justify-between gap-3 bg-card border border-border hover:border-foreground/15  rounded-sm px-5 py-3.5 text-start transition-smooth"
+                className="group flex items-center justify-start gap-3 bg-card border border-border hover:border-foreground/15  rounded-sm px-5 py-3.5 text-start transition-smooth"
               >
                 {/* Focus as well as hover — with hoverOnlyWhenSupported on,
                     a touch screen never fires hover at all, so this arrow was

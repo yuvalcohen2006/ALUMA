@@ -7,7 +7,7 @@ const PrivacyPage = () => {
   // Live contact facts, falling back to src/config/site.ts.
   const SITE = useSiteContact();
   return (
-    <Layout>
+    <Layout hebrewOnly>
       <SEO
         title="מדיניות פרטיות | Aluma"
         description="מדיניות הפרטיות של אתר Aluma, איזה מידע נאסף, איך הוא מאוחסן, מי נחשף אליו וזכויות המשתמשים."

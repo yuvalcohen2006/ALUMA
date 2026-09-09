@@ -55,7 +55,10 @@ const ThankYou = () => {
               href={SITE.whatsapp.href}
               target="_blank"
               rel="noreferrer"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#1ebd5a] text-white px-6 py-3 rounded-sm text-body transition-smooth"
+              // Dark ink, not white: white on #25D366 measures 1.98:1, and
+              // #0B3D22 on it reads 8.4:1 while leaving the brand green the
+              // thing you recognise.
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#1ebd5a] text-[#0B3D22] px-6 py-3 rounded-sm text-body font-medium transition-smooth"
             >
               <MessageCircle className="w-4 h-4" />
               {t("thankYou.whatsapp")}

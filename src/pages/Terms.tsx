@@ -35,7 +35,7 @@ const UL = ({ children }: { children: React.ReactNode }) => (
 
 const TermsPage = () => {
   return (
-    <Layout>
+    <Layout hebrewOnly>
       <SEO
         title="תקנון ומדיניות | Aluma, אלומה ריהוט גן"
         description="תקנון האתר, מדיניות משלוחים, ביטול עסקאות ותנאי אחריות ותחזוקה של אלומה ריהוט גן. כל המידע במקום אחד, מסודר וברור."
