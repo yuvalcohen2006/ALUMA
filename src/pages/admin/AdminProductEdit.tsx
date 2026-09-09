@@ -188,9 +188,21 @@ const AdminProductEdit = () => {
         .single();
       if (error || !data) {
         setSaving(false);
+        // Two products whose Hebrew names transliterate to the same slug hit a
+        // unique constraint, and its message is raw English Postgres.
+        if (error?.code === "23505") {
+          return toast.error("כבר קיים מוצר עם שם דומה. שנו מעט את השם ונסו שוב.");
+        }
         return toast.error(error?.message ?? "השמירה נכשלה");
       }
       productId = data.id;
+      /* Written into state, not just a local, BEFORE the colours run.
+         The colour step can fail on its own and the toast asks the owner to
+         press save again — and with the id living only in a local variable
+         that retry took the insert branch a second time and created a DUPLICATE
+         product. The slug goes with it, since it is only generated for a new
+         row. */
+      setProduct((p) => (p ? { ...p, id: productId, slug: payload.slug } : p));
     }
 
     const plan = planVariantSync(savedVariants, variants, productId);
@@ -213,6 +225,25 @@ const AdminProductEdit = () => {
         ? supabase.from("product_variants").delete().in("id", plan.deletes)
         : Promise.resolve({ error: null }),
     ]);
+    /* What actually landed, whether or not every part of it did.
+       `savedVariants` is the baseline the next save diffs against, and leaving
+       it stale after a partial failure meant the retry re-inserted colours that
+       were already in the table — one extra copy of every colour, per attempt.
+       Reading them back costs one query on a path that has already failed. */
+    const { data: after } = await supabase
+      .from("product_variants")
+      .select("id, name, swatch, image_url")
+      .eq("product_id", productId)
+      .order("sort_order", { ascending: true });
+    setSavedVariants(
+      (after ?? []).map((v) => ({
+        id: v.id,
+        name: v.name,
+        swatch: v.swatch ?? "#cbbba4",
+        image_url: v.image_url,
+      })),
+    );
+
     setSaving(false);
 
     if (results.find((r) => r.error)) {
@@ -321,8 +352,8 @@ const AdminProductEdit = () => {
                     ))}
                   </select>
                   <p className="mt-1.5 text-sm text-muted-foreground">
-                    מילה אחת מתחת לשם המוצר בדף הבית. האתר מציג תווית אחת בלבד בכל
-                    שורה — ככל שיש פחות, כך היא נראית יותר.
+                    מילה אחת על תמונת המוצר, בעמוד הקולקציה. האתר מציג לכל היותר
+                    תווית או שתיים בכל רשת — ככל שיש פחות, כך הן נראות יותר.
                   </p>
                 </div>
 
@@ -515,10 +546,11 @@ const AdminProductEdit = () => {
             </section>
 
             <section className="rounded-sm border border-border bg-card p-6">
+              <Label htmlFor="p-collection">הקולקציה של המוצר</Label>
               <select
+                id="p-collection"
                 value={product.collection_id ?? ""}
                 onChange={(e) => patch({ collection_id: e.target.value })}
-                aria-label="הקולקציה של המוצר"
                 className="mt-4 h-11 w-full rounded-sm border border-input bg-background px-3 text-base text-foreground"
               >
                 {collections.map((c) => (

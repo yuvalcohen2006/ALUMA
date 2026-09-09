@@ -13,8 +13,10 @@
 -- showed English headings wrapped around Hebrew catalogue names. Nothing else
 -- had an English name at all.
 --
--- Nullable, and staying nullable. The rule that a published item needs both
--- names is enforced in the admin, where it can explain itself; a NOT NULL here
+-- Nullable, and staying nullable. There is deliberately NO rule that a
+-- published item needs both names — the client's call, "one name is enough for
+-- now", and the admin check that used to enforce it has been removed. The site
+-- falls back to the Hebrew name wherever the English one is blank. A NOT NULL
 -- would fail 47 existing rows on the next save with a Postgres error the owner
 -- cannot act on.
 

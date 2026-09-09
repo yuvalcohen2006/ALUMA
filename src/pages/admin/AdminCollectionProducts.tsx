@@ -123,6 +123,7 @@ const AdminCollectionProducts = () => {
   const [name, setName] = useState("");
   const [rows, setRows] = useState<Row[]>([]);
   const [loading, setLoading] = useState(true);
+  const [missing, setMissing] = useState(false);
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 6 } }),
@@ -141,6 +142,10 @@ const AdminCollectionProducts = () => {
         .order("sort_order"),
     ]);
     setName(col?.name_he ?? "");
+    // A stale bookmark, a second tab, or the back button after deleting: the
+    // collection is gone, and the page used to render an empty heading over an
+    // empty list with an "add a product" button that could only ever fail.
+    setMissing(!col);
     setRows((prods as Row[]) ?? []);
     setLoading(false);
   }, [id]);
@@ -187,6 +192,10 @@ const AdminCollectionProducts = () => {
 
         {loading ? (
           <p className="mt-8 text-muted-foreground">טוען…</p>
+        ) : missing ? (
+          <p className="mt-8 text-muted-foreground">
+            הקולקציה הזו לא קיימת יותר. ייתכן שנמחקה בכרטיסייה אחרת.
+          </p>
         ) : (
           <>
             {rows.length > 0 && (
@@ -197,6 +206,10 @@ const AdminCollectionProducts = () => {
                 accessibility={{
                   announcements: dragAnnouncements(
                     (id) => rows.find((r) => r.id === id)?.name ?? "פריט",
+                    (id) => {
+                      const i = rows.findIndex((r) => r.id === id);
+                      return i < 0 ? null : { position: i + 1, total: rows.length };
+                    },
                   ),
                   screenReaderInstructions: dragInstructions,
                 }}

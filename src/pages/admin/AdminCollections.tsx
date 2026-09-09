@@ -244,7 +244,7 @@ function SortableCollectionCard({
         {...attributes}
         {...listeners}
         aria-label={`שינוי הסדר של ${c.name_he}`}
-        className="relative z-10 grid h-11 w-8 shrink-0 cursor-grab touch-none place-items-center rounded-sm text-muted-foreground/50 transition-colors hover:text-foreground active:cursor-grabbing"
+        className="relative z-10 grid h-11 w-8 shrink-0 cursor-grab touch-none place-items-center rounded-sm text-muted-foreground transition-colors hover:text-foreground active:cursor-grabbing"
       >
         <GripVertical className="h-4 w-4" />
       </button>
@@ -345,12 +345,22 @@ const AdminCollections = () => {
 
   /* ---- Reordering via drag-and-drop ---- */
   const persistCollectionOrder = async (ordered: Collection[]) => {
+    const before = collections;
     setCollections(ordered.map((c, i) => ({ ...c, sort_order: i })));
-    await Promise.all(
+    /* Every row's new position, and all of them or none.
+       These fire concurrently, so a lapsed session or a dropped connection can
+       land some and not others — and nothing here reported it or put the list
+       back. The owner saw the order they dragged, the site kept a different
+       one, and a partial failure left the catalogue in an order nobody chose. */
+    const results = await Promise.all(
       ordered.map((c, i) =>
         supabase.from("site_collections").update({ sort_order: i }).eq("id", c.id)
       )
     );
+    if (results.some((r) => r.error)) {
+      setCollections(before);
+      toast.error("שינוי הסדר לא נשמר. בדקו את החיבור ונסו שוב.");
+    }
   };
 
   const onCollectionDragEnd = (e: DragEndEvent) => {
@@ -446,6 +456,10 @@ const AdminCollections = () => {
           accessibility={{
             announcements: dragAnnouncements(
               (id) => collections.find((c) => c.id === id)?.name_he ?? "פריט",
+              (id) => {
+                const i = collections.findIndex((c) => c.id === id);
+                return i < 0 ? null : { position: i + 1, total: collections.length };
+              },
             ),
             screenReaderInstructions: dragInstructions,
           }}

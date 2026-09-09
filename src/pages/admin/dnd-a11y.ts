@@ -10,12 +10,24 @@ import type { Announcements, ScreenReaderInstructions } from "@dnd-kit/core";
  * Hebrew voice, into an assertive live region that interrupts whatever the
  * person was reading. It says nothing about where the item landed.
  *
- * Given a way to turn an id into a name, this says the name and the position.
+ * Given a way to turn an id into a name AND into a position, this says both.
+ *
+ * The position half used to be unreachable: `at()` took optional position and
+ * total arguments and both call sites passed neither, so every announcement
+ * fell to "next to <name>" — which is the one thing a person who cannot see
+ * the list already knows, since it is the item they are dragging past. Where
+ * it landed, out of how many, is the part that was missing.
  */
-export function dragAnnouncements(nameOf: (id: string) => string): Announcements {
-  const at = (over: { id: string | number } | null, position?: number, total?: number) => {
+export function dragAnnouncements(
+  nameOf: (id: string) => string,
+  placeOf: (id: string) => { position: number; total: number } | null,
+): Announcements {
+  const at = (over: { id: string | number } | null) => {
     if (!over) return "";
-    return position && total ? ` למקום ${position} מתוך ${total}` : ` ליד ${nameOf(String(over.id))}`;
+    const place = placeOf(String(over.id));
+    return place
+      ? ` למקום ${place.position} מתוך ${place.total}`
+      : ` ליד ${nameOf(String(over.id))}`;
   };
 
   return {
