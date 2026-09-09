@@ -196,7 +196,12 @@ const ProjectEntry = ({
                 <span
                   key={`${i}-${m}`}
                   dir="auto"
-                  className="inline-flex items-center whitespace-nowrap text-start"
+                  // No `whitespace-nowrap`: a CMS location is free text with
+                  // no length limit, and one long enough pushed the whole page
+                  // wider than the phone reading it. The value is a single
+                  // flex item, so it wraps within itself while the rule beside
+                  // it still cannot be separated from it.
+                  className="inline-flex min-w-0 items-center text-start [overflow-wrap:anywhere]"
                 >
                   {m}
                   {i < meta.length - 1 && <MetaRule className="mx-3" />}

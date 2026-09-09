@@ -199,7 +199,7 @@ const AdminLogin = () => {
             "הגדרות אתר", which is not a label that exists any more. */}
         <p className="mt-5 text-center text-sm leading-relaxed text-muted-foreground">
           אין לכם סיסמה עדיין? היכנסו עם Google, ואז קבעו סיסמה בתפריט תחת
-          <span className="mx-1 text-foreground">הגדרות → פרטי קשר וסיסמה</span>.
+          <span className="mx-1 text-foreground">הגדרות ← פרטי קשר וסיסמה</span>.
         </p>
       </div>
     </div>

@@ -164,7 +164,7 @@ const Club = () => {
               Runs to the container (7xl): four columns of short text is the one
               block on the page that gets straightforwardly better with width,
               since every extra pixel lands in the copy rather than in margins. */}
-          <ul className="grid gap-x-10 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 lg:gap-x-0 max-w-7xl mx-auto">
+          <ul role="list" className="grid gap-x-10 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 lg:gap-x-0 max-w-7xl mx-auto">
             {PERKS.map((perk, i) => {
               const Icon = perk.icon;
               return (
@@ -221,7 +221,7 @@ const Club = () => {
                     panel of their own — they are what makes the click easy,
                     so they belong within a glance of it. */}
                 {!user && (
-                  <ul className="mt-7 space-y-3">
+                  <ul role="list" className="mt-7 space-y-3">
                     {TERMS.map((term) => (
                       <li key={term} className="flex items-start gap-3">
                         <Check

@@ -63,8 +63,17 @@ const Hero = () => {
     const onScroll = () => {
       if (raf) return;
       raf = window.requestAnimationFrame(() => {
-        setOffset(window.scrollY * 0.25);
         raf = 0;
+        // Past the hero there is nothing to parallax, and re-rendering this
+        // component on every frame of a scroll through the rest of the page
+        // was pure cost. One last write pins it at the bottom of its travel
+        // rather than leaving it mid-slide.
+        const y = window.scrollY;
+        const past = y > window.innerHeight;
+        setOffset((prev) => {
+          const next = (past ? window.innerHeight : y) * 0.25;
+          return next === prev ? prev : next;
+        });
       });
     };
     window.addEventListener("scroll", onScroll, { passive: true });
