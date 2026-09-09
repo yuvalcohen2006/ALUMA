@@ -226,6 +226,12 @@ const ImageCropDialog = ({
             className="relative h-[340px] w-full cursor-grab touch-none overflow-hidden rounded-sm bg-neutral-900 active:cursor-grabbing sm:h-[400px]"
             onPointerDown={(e) => {
               if (!image) return;
+              // First finger down owns the drag. Resting a second finger on
+              // the stage — the natural reach for a pinch, which this control
+              // does not do — used to steal the drag, and then lifting either
+              // finger killed it: the pan stopped dead and the finger still on
+              // the glass moved nothing.
+              if (drag.current) return;
               (e.target as Element).setPointerCapture?.(e.pointerId);
               drag.current = { id: e.pointerId, x: e.clientX, y: e.clientY };
             }}
@@ -235,8 +241,13 @@ const ImageCropDialog = ({
               pan(e.clientX - d.x, e.clientY - d.y);
               drag.current = { id: e.pointerId, x: e.clientX, y: e.clientY };
             }}
-            onPointerUp={() => (drag.current = null)}
-            onPointerCancel={() => (drag.current = null)}
+            // Only the finger that started it can end it.
+            onPointerUp={(e) => {
+              if (drag.current?.id === e.pointerId) drag.current = null;
+            }}
+            onPointerCancel={(e) => {
+              if (drag.current?.id === e.pointerId) drag.current = null;
+            }}
           >
             {image && stage.w > 0 && (
               <>

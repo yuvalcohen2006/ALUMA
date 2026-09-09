@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Reveal from "@/components/Reveal";
 import { supabase } from "@/integrations/supabase/client";
+import { useTranslation } from "react-i18next";
 
 type Review = {
   id: string;
@@ -26,6 +27,7 @@ type Review = {
  * avatars.
  */
 const Testimonials = () => {
+  const { t } = useTranslation("home");
   const [reviews, setReviews] = useState<Review[]>([]);
 
   useEffect(() => {
@@ -54,7 +56,16 @@ const Testimonials = () => {
   return (
     <section className="bg-background">
       <div className="mx-auto max-w-[1440px] px-5 md:px-10 lg:px-16 py-20 md:py-28 lg:py-36">
-        <ul role="list" className="grid grid-cols-1 gap-x-10 gap-y-12 md:grid-cols-3">
+        {/* Every other band on this page announces itself, and this one jumped
+            straight into three unattributed quotes — with no heading, a screen
+            reader's landmark list gives no clue what the section is. */}
+        <Reveal>
+          <h2 className="text-start text-heading font-normal tracking-normal text-foreground">
+            {t("reviews.title")}
+          </h2>
+        </Reveal>
+
+        <ul role="list" className="mt-10 grid grid-cols-1 gap-x-10 gap-y-12 md:mt-14 md:grid-cols-3">
           {reviews.map((r, i) => (
             <li key={r.id} className="text-start">
               <Reveal delay={i * 70}>

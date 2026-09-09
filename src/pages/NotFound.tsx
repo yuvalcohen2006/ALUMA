@@ -2,9 +2,9 @@ import { Link, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import Layout from "@/components/Layout";
-import { ArrowLeft } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useLocalizedPath } from "@/lib/useLocalizedPath";
+import DirectionalArrow from "@/components/DirectionalArrow";
 
 /** Paths are localised at render; the labels come from the catalogue. */
 const POPULAR = [
@@ -58,7 +58,18 @@ const NotFound = () => {
                 to={to(path)}
                 className="group flex items-center justify-between gap-3 bg-card border border-border hover:border-foreground/15  rounded-sm px-5 py-3.5 text-start transition-smooth"
               >
-                <ArrowLeft className="w-4 h-4 text-primary opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0 transition-all" />
+                {/* Focus as well as hover — with hoverOnlyWhenSupported on,
+                    a touch screen never fires hover at all, so this arrow was
+                    invisible on a phone. The travel is a logical axis now, so
+                    it arrives from the right side on /en too. */}
+                <DirectionalArrow
+                  animate={false}
+                  className="w-4 h-4 text-primary opacity-0 transition-all
+                             translate-x-1 rtl:-translate-x-1
+                             group-hover:translate-x-0 group-hover:opacity-100
+                             group-focus-visible:translate-x-0 group-focus-visible:opacity-100
+                             rtl:group-hover:translate-x-0 rtl:group-focus-visible:translate-x-0"
+                />
                 <span className="font-display text-base text-foreground">
                   {t(`notFound.links.${key}`)}
                 </span>
@@ -71,7 +82,7 @@ const NotFound = () => {
             className="inline-flex items-center gap-2 bg-primary hover:bg-accent text-primary-foreground px-8 py-3 rounded-sm tracking-wide transition-smooth"
           >
             {t("notFound.home")}
-            <ArrowLeft className="w-4 h-4" />
+            <DirectionalArrow className="w-4 h-4" animate={false} />
           </Link>
         </div>
       </section>
