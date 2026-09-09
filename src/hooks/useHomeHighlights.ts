@@ -45,8 +45,12 @@ export function useHomeHighlights(products: DBProduct[]) {
 
   if (chosen.length > 0) return { highlights: chosen, loading: false };
 
+  // (sort_order, id), as the note above says — the sort_order half had been
+  // dropped, so the owner's arrangement counted for nothing and the three
+  // faces of the business were decided by an alphabetical race between UUIDs.
+  // The id is still there to break the ties, which are most of them.
   const fallback = [...products]
-    .sort((a, b) => a.id.localeCompare(b.id))
+    .sort((a, b) => a.sort_order - b.sort_order || a.id.localeCompare(b.id))
     .slice(0, 3);
   return { highlights: fallback, loading: false };
 }

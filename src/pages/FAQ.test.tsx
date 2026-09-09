@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
 
@@ -28,19 +29,35 @@ const renderFaq = () =>
   );
 
 /**
- * The form was hidden behind a plus-row, matching the questions above it.
- * That read nicely and worked badly: someone who arrives wanting to write to
- * you has to first work out that the row is a row and not a heading.
+ * The form sits behind a labelled disclosure button, so the page opens on the
+ * four ways to reach a person rather than on a form.
+ *
+ * These used to assert the opposite — that the fields were visible without
+ * anyone opening anything — and they kept passing after the change because
+ * jsdom implements neither `inert` nor a grid collapsing to 0fr, so the
+ * collapsed fields are still findable in the DOM. The button's own
+ * aria-expanded is the thing to test, because it is also what a screen reader
+ * is told.
  */
 describe("the questions page", () => {
-  it("shows the message form without anyone having to open it", () => {
+  const discloser = () => screen.getByRole("button", { name: /השארת פרטים|סגירת הטופס/ });
+
+  it("keeps the form closed until someone asks for it", () => {
     renderFaq();
+    expect(discloser().getAttribute("aria-expanded")).toBe("false");
+  });
+
+  it("opens it on the button, and says so", async () => {
+    renderFaq();
+    await userEvent.setup().click(discloser());
+    expect(discloser().getAttribute("aria-expanded")).toBe("true");
     expect(screen.getByLabelText(/שם מלא/)).toBeTruthy();
     expect(screen.getByLabelText(/טלפון/)).toBeTruthy();
   });
 
-  it("has a real send button, not a row that expands", () => {
+  it("has a real send button once it is open", async () => {
     renderFaq();
+    await userEvent.setup().click(discloser());
     expect(screen.getByRole("button", { name: /שליחת ההודעה/ })).toBeTruthy();
   });
 

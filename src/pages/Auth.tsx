@@ -11,8 +11,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
 import { trackPixel } from "@/lib/pixel";
 import alumaLogo from "@/assets/aluma-logo.png";
-import heroSalon from "@/assets/hero-salon.jpg";
-import { Sparkles, Heart, ShieldCheck, ClipboardCheck, ArrowLeft } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { useLocalizedPath } from "@/lib/useLocalizedPath";
 
 const GoogleIcon = () => (
@@ -23,13 +22,6 @@ const GoogleIcon = () => (
     <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z" />
   </svg>
 );
-
-const sidePerks = [
-  { icon: ClipboardCheck, text: "מעקב פרויקט חי, סטטוס ואבני דרך בזמן אמת" },
-  { icon: Heart, text: "מועדפים שנשמרים בין המכשירים" },
-  { icon: Sparkles, text: "גישה מוקדמת לקולקציות והזמנות פרטיות" },
-  { icon: ShieldCheck, text: "מעצב אישי ושירות VIP מלווה" },
-];
 
 const AuthPage = () => {
   const [params] = useSearchParams();

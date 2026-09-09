@@ -29,6 +29,8 @@ export type DBProduct = {
   /** Optional — most pieces are made to order and carry no price. */
   price: number | null;
   price_note: string | null;
+  /** The order the owner arranged in the admin, within its collection. */
+  sort_order: number;
   /** Drives the automatic "new" emblem. published_at arrives with a migration. */
   created_at: string | null;
   published_at: string | null;
@@ -51,6 +53,7 @@ export const normaliseProduct = (p: any): DBProduct => ({
   // consumer would have to know that. Normalised here instead.
   name_en: p?.name_en ?? null,
   emblem: p?.emblem ?? null,
+  sort_order: typeof p?.sort_order === "number" ? p.sort_order : 0,
   created_at: p?.created_at ?? null,
   published_at: p?.published_at ?? null,
   description: Array.isArray(p?.description) ? p.description : [],

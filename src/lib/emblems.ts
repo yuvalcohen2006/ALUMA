@@ -8,13 +8,18 @@ import type { Language } from "@/i18n";
  * capped, and the whole value of an emblem is that it is rare — which is only
  * enforceable if the set is closed.
  *
- * It is deliberately NOT a pill over the photograph. At the luxury end the
- * badge is either absent entirely (Minotti, Poliform, Cassina and B&B Italia
- * ship none at all; Audo's theme has a six-position badge grid and every slot
- * is empty) or it is bare text under the name, which is what Net-a-Porter does
- * on the ~33% of tiles it badges. A filled pill in a corner is what a discount
- * retailer does, and it also drags in a contrast fight with the photograph
- * underneath it.
+ * It IS a pill over the photograph, at the client's explicit request, and this
+ * note used to argue at length that it should not be — which is worse than no
+ * note at all, because it described the opposite of what ships.
+ *
+ * The argument is still worth keeping for the shape it forced. At the luxury
+ * end the badge is either absent (Minotti, Poliform, Cassina and B&B Italia
+ * ship none) or bare text under the name (Net-a-Porter, on the ~33% of tiles
+ * it badges), and a translucent pill over a photograph is a contrast fight it
+ * cannot win. So the pill is SOLID charcoal — 13.6:1 on any photograph there
+ * will ever be — rather than a tint, and at most one or two tiles in a grid
+ * carry one at all. That is the discount-retailer failure mode avoided by
+ * restraint rather than by absence.
  *
  * No uppercase and no letter-spacing. That convention is Latin micro-caps and
  * does not transfer — Hebrew is unicase, so uppercase does nothing and tracking

@@ -55,15 +55,17 @@ type Props = {
   eager?: boolean;
   /**
    * Product tiles carry a price and a size under the name. Anything passed
-   * here sits below `meta` and above the rule, and is not part of the link's
-   * accessible name — it is detail, not identity.
+   * here renders below `meta` and OUTSIDE the link, so it is not part of the
+   * link's accessible name — it is detail, not identity. It was inside for a
+   * while, which made every tile announce itself as "new, Aero armchair, teak,
+   * from ₪12,400, 2400 × 1350".
    */
   extra?: ReactNode;
   /** What fills the frame when there is no photograph yet. */
   fallback?: ReactNode;
   /**
    * Catalogue tiles centre their type over a square photograph; editorial
-   * tiles start-align it. The rule and arrow follow whichever is chosen.
+   * tiles start-align it. The arrow follows whichever is chosen.
    */
   align?: "start" | "center";
   /** `h2` where the tile is the page's primary list of things. */

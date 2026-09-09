@@ -96,7 +96,7 @@ const FaqRow = ({ q, a, id, open, onToggle }: { q: string; a: string; id: string
  * Q&A, on Apple's marketing-FAQ pattern: one flat accordion in a 720px
  * measure, quiet category labels as separators rather than tabs or a sidebar,
  * multiple rows allowed open at once, and no search — Apple runs 25 questions
- * in a flat list without one, and this page has nine. The previous version's
+ * in a flat list without one, and this page has six. The previous version's
  * scroll-spy topic index was a support-portal device the content never needed.
  */
 const FAQPage = () => {
@@ -174,7 +174,7 @@ const FAQPage = () => {
               {text("faq.subtitle", t("subtitle"))}
             </p>
             {/* Straight to the form. Somebody who came here to ask something
-                should not have to read nine answers first to find out where
+                should not have to read six answers first to find out where
                 the asking happens. A real anchor, so it works with the back
                 button and can be copied as a link. */}
             <p className="mt-5 text-start">
@@ -227,7 +227,7 @@ const FAQPage = () => {
       </section>
 
       {/* Contact sits directly under the questions rather than on a page of
-          its own: someone who read nine answers and still has a question
+          its own: someone who read six answers and still has a question
           shouldn't have to go looking for the way to ask it. /contact
           redirects here.
 

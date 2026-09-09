@@ -36,9 +36,6 @@ const SITE = "https://alumaoutdoor.com";
 const swatchSample = sunbrellaFabrics.filter((_, i) => i % 2 === 0).slice(0, 8);
 const swatchRest = sunbrellaFabrics.length - swatchSample.length;
 
-/** The four steps the questionnaire actually walks you through. */
-const questionnaireSteps = ["המרחב", "סגנון ולוח זמנים", "מה לכלול", "פרטי קשר"];
-
 const introFacts = [
 "בלי הרשמה, בלי עלות",
 "הכול רץ מהדפדפן",
