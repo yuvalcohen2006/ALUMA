@@ -170,23 +170,28 @@ const TileCard = ({
     </div>
 
     <div className="relative mt-5">
-      <div
-        className={`flex items-baseline gap-2 ${align === "center" ? "justify-center" : ""}`}
+      {/*
+        dir="auto" with text-start, so a label lands on the side its own
+        language starts from: a Latin product name ("aero", "milo") to the
+        left of the line, a Hebrew collection name to the right. Without it
+        every name inherited the page direction, and half the catalogue —
+        which is named in Latin — sat against the wrong edge.
+
+        The arrow lives INSIDE the heading rather than beside it. As a sibling
+        flex item it was pushed to the tile's far edge the moment the name
+        wrapped — which any two-word Hebrew name does in a four-column grid —
+        so the cue that belongs to the last word ended up on its own out at the
+        margin. Inline, it always follows the last word, wherever that lands.
+      */}
+      <Heading
+        dir="auto"
+        className={`text-tile text-foreground ${align === "center" ? "text-center" : "text-start"}`}
       >
-        {/*
-          dir="auto" with text-start, so a label lands on the side its own
-          language starts from: a Latin product name ("aero", "milo") to the
-          left of the line, a Hebrew collection name to the right. Without it
-          every name inherited the page direction, and half the catalogue —
-          which is named in Latin — sat against the wrong edge.
-        */}
-        <Heading dir="auto" className="text-tile text-start text-foreground">
-          {title}
-        </Heading>
+        {title}
         <ArrowLeft
           aria-hidden="true"
           strokeWidth={1.5}
-          className="h-4 w-4 shrink-0 self-center text-foreground opacity-0
+          className="ms-2 inline-block h-4 w-4 shrink-0 align-middle text-foreground opacity-0
                      rotate-[var(--tile-arrow-flip)]
                      transition-[opacity,transform] delay-75 duration-250 ease-hover
                      group-hover:translate-x-[var(--tile-arrow-travel)] group-hover:opacity-100
@@ -194,7 +199,7 @@ const TileCard = ({
                      group-focus-visible:opacity-100
                      motion-reduce:transition-none"
         />
-      </div>
+      </Heading>
 
       {meta && (
         <p dir="auto" className="mt-1 line-clamp-1 text-start text-label text-muted-foreground">

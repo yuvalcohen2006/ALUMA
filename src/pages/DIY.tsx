@@ -273,7 +273,7 @@ const DIYPage = () => {
               role="list"
               className="mx-auto grid max-w-6xl gap-6 lg:gap-8 lg:grid-cols-2"
             >
-              <Station n="01" to={to("/fabric")} className="lg:col-span-2">
+              <Station n="01" to={to("/fabric")}>
                 <StationHead icon={Palette} title="בחרו את הבד" />
 
                 <p className="mt-5 text-body leading-relaxed text-foreground text-pretty">
@@ -307,7 +307,7 @@ const DIYPage = () => {
               </Station>
 
               {/* ---- 03 · short station, left column in RTL ---- */}
-              <Station n="02" to={to("/ar")} className="lg:col-span-2">
+              <Station n="02" to={to("/ar")}>
                 <StationHead icon={ScanLine} title="AR, תצוגה במרחב" />
 
                 <p className="mt-5 text-body leading-relaxed text-foreground text-pretty">

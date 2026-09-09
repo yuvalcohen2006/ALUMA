@@ -49,12 +49,22 @@ export function useProductGallery(item: GalleryItem | null, variants: ProductVar
   // strip hidden too, so nothing on screen could put it right.
   const safeImage = activeImage < images.length ? activeImage : 0;
 
-  const selectVariant = useCallback((id: string | null) => {
-    setActiveVariant(id);
-    // Back to the lead photograph, which is the finish you just chose — and,
-    // when clearing, an index that is always inside the shorter list.
-    setActiveImage(0);
-  }, []);
+  const selectVariant = useCallback(
+    (id: string | null) => {
+      setActiveVariant(id);
+      // Back to the lead photograph, which is the finish you just chose — and,
+      // when clearing, an index that is always inside the shorter list.
+      //
+      // But only when the finish HAS a photograph. A colour saved in the admin
+      // without one leaves the gallery exactly as it was, so resetting the
+      // index made the click look like it had thrown the visitor back to the
+      // first photo for no reason. The clamp below keeps the index safe either
+      // way, so leaving it alone is free.
+      const chosen = id ? variants.find((v) => v.id === id) : null;
+      if (!id || chosen?.image_url) setActiveImage(0);
+    },
+    [variants],
+  );
 
   return { images, activeImage: safeImage, setActiveImage, selected, activeVariant, selectVariant };
 }

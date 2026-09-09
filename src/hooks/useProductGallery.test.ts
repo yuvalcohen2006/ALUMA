@@ -115,3 +115,30 @@ describe("useProductGallery", () => {
     expect(result.current.images[result.current.activeImage]).toBe("detail.jpg");
   });
 });
+
+/**
+ * A colour can be saved in the admin without its own photograph — the finish
+ * editor creates rows as {name, swatch, image_url: null}, and the default
+ * variant is one. Choosing one of those leaves the gallery exactly as it was,
+ * so resetting the index made the click look like it had thrown the visitor
+ * back to the first photo for nothing.
+ */
+describe("a finish with no photograph of its own", () => {
+  const plain = { id: "cream", name: "קרם", swatch: "#EFE9DE", image_url: null };
+
+  it("leaves the visitor on the photograph they were looking at", () => {
+    const { result } = renderHook(() => useProductGallery(item, [plain]));
+    act(() => result.current.setActiveImage(2));
+    act(() => result.current.selectVariant("cream"));
+
+    expect(result.current.images[result.current.activeImage]).toBe("detail.jpg");
+    expect(result.current.selected?.name).toBe("קרם");
+  });
+
+  it("still returns to the lead photograph when the finish brings one", () => {
+    const { result } = renderHook(() => useProductGallery(item, [teak]));
+    act(() => result.current.setActiveImage(2));
+    act(() => result.current.selectVariant("teak"));
+    expect(result.current.images[result.current.activeImage]).toBe("teak.jpg");
+  });
+});

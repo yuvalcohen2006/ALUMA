@@ -75,6 +75,7 @@ const JournalPage = () => {
                     alt=""
                     title={m.name}
                     aspect="3/4"
+                    eager={i < 4}
                   />
                 </Reveal>
               </li>
