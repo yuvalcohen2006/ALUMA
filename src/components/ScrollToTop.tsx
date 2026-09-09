@@ -1,5 +1,6 @@
 import { useEffect, useLayoutEffect, useRef } from "react";
 import { useLocation, useNavigationType } from "react-router-dom";
+import { decodeHash } from "@/lib/safe-hash";
 
 /**
  * Forces every route navigation to start at the top of the page.
@@ -38,7 +39,7 @@ const ScrollToTop = () => {
    */
   const scrollToHash = () => {
     if (!hash) return false;
-    const el = document.getElementById(decodeURIComponent(hash.slice(1)));
+    const el = document.getElementById(decodeHash(hash));
     if (!el) return false;
     const reduce = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
     el.scrollIntoView({ behavior: reduce ? "instant" : "smooth", block: "start" });

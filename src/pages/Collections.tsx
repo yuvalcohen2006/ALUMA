@@ -10,6 +10,7 @@ import { useCollections, type DBCollection, type DBProduct } from "@/hooks/useCo
 import { useLocalizedPath } from "@/lib/useLocalizedPath";
 import { useSiteText } from "@/hooks/useSiteText";
 import { useTranslation } from "react-i18next";
+import { decodeHash } from "@/lib/safe-hash";
 
 const SITE = "https://alumaoutdoor.com";
 
@@ -100,7 +101,7 @@ const CollectionsPage = () => {
   // fragment scroll fires too early and hits a skeleton.
   useEffect(() => {
     if (loading || !hash) return;
-    const slug = decodeURIComponent(hash.slice(1));
+    const slug = decodeHash(hash);
     if (slug === scrolledTo) return;
     const el = document.getElementById(slug);
     if (!el) return;

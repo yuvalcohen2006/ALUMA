@@ -58,7 +58,7 @@ const AuthPage = () => {
     setBusy(true);
     try {
       if (mode === "signup") {
-        const { error } = await supabase.auth.signUp({
+        const { data, error } = await supabase.auth.signUp({
           email,
           password,
           options: {
@@ -67,6 +67,18 @@ const AuthPage = () => {
           },
         });
         if (error) throw error;
+
+        // Supabase does not say "that address is taken" — telling a stranger
+        // which addresses have accounts is a privacy leak, so it returns a
+        // success with a fake user whose `identities` list is empty. Treated as
+        // a real sign-up, that sends someone to wait for a confirmation email
+        // that will never arrive, and counts a registration that never happened.
+        if (data.user && (data.user.identities?.length ?? 0) === 0) {
+          toast.error("כתובת האימייל הזו כבר רשומה במועדון. התחברו במקום זאת.");
+          setMode("signin");
+          return;
+        }
+
         trackPixel("CompleteRegistration", {
           content_name: "הצטרפות למועדון אלומה",
           status: true,
