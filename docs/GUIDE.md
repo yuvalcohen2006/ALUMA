@@ -1,6 +1,6 @@
 # Aluma — what's left
 
-Checked against your live site and database on **8 September 2026**.
+Checked against your live site and database on **9 September 2026**.
 
 The technical setup is done. What remains is content, plus one thing to confirm.
 
@@ -32,12 +32,8 @@ proven working.
 | `פנייה חדשה מהאתר — בדיקה סופית` | **your website's contact form** |
 | `Aluma — after the fix` | me, straight to Resend |
 
-**The first one is the one that matters.** It is the message that could not be
-sent for the last six weeks. If it is there, the site's email works and you are
-done — delete the test leads from **פניות** and forget about it.
-
-If only the second arrived, tell me and I will keep digging. Check spam before
-concluding either way; the domain is still new.
+You confirmed the first one arrived, so the site's email works. Delete the test
+leads from **פניות** and forget about it.
 
 ## What was wrong, in one line
 
@@ -142,6 +138,23 @@ will take it off the list.
 
 ---
 
+# Three things that now work that did not
+
+**The front-page tagline.** קדמת האתר → **תת-כותרת (Tagline)**. It has always been
+saved and never shown; it now appears as one line under the logo. Leave it empty
+and nothing appears. The field above it, **כותרת ראשית**, is the hidden title
+Google and screen readers read — it is not meant to appear on screen.
+
+**The collection links the admin gives you.** קולקציות ומוצרים shows a
+*כתובת אוטומטית* like `/collections#lounge` for each collection. Those used to
+land at the top of the page; they now scroll to the collection.
+
+**The front-page button.** קדמת האתר → **קישור הכפתור**. A full `https://…`
+address now works as well as a path like `/faq#contact`. The placeholder used to
+suggest `/contact`, which is not a page on the site.
+
+---
+
 # When you upload any photo
 
 A window opens first. **Drag the photo to choose what goes in the frame, scroll
@@ -195,8 +208,15 @@ they are demonstrations. **Say the word and I will hide it** until real ones
 exist.
 
 **The English site is partly translated.** The pages a customer walks through are
-done — home, collections, products, projects, journal, materials, club, About,
-404, thank-you. Still Hebrew under `/en`: the questionnaire, the build-your-own
-pages, the club account screens, and the legal pages. I would leave the legal ones
-in Hebrew regardless — they are legally meaningful documents for an Israeli
-business, and a translation of mine is not the same document.
+done — home, collections, products, projects, the contact form, journal,
+materials, club, About, 404, thank-you. Still Hebrew under `/en`: the
+questionnaire, the build-your-own pages, the club account screens, and the legal
+pages. I would leave the legal ones in Hebrew regardless — they are legally
+meaningful documents for an Israeli business, and a translation of mine is not
+the same document.
+
+**Your own words stay in the language you wrote them.** Product names, taglines,
+descriptions and the Q&A are whatever you typed in the admin, on both sites. An
+English visitor sees English buttons and labels around Hebrew content until you
+fill in the English fields. That is untidy, not broken, and it is the reason the
+optional English names above exist.
