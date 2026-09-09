@@ -1,12 +1,12 @@
 # Bug sweep — where I'm standing
 
 ```
-████████████░░░░░░░░  59%
+██████████████░░░░░░  72%
 ```
 
-**72 of 123 problems fixed. 51 left.**
+**89 of 123 problems fixed. 34 left.**
 
-Last updated: 9 September 2026, part-way through the third session.
+Last updated: 9 September 2026, third session.
 
 ---
 
@@ -34,6 +34,9 @@ tried to prove each finding wrong. 123 survived that. I'm working down the list.
 | ✅ | **Club & account** | No way back in if you forgot your password; progress bar filled backwards; error messages in English |
 | ✅ | **"View in your space"** | Every 3D model was dead — page now hidden, one switch brings it back |
 | ✅ | **Admin colours** | Saving while a colour photo uploaded threw the photo away |
+| ✅ | **Questionnaire** | Accepted a blank name and a fake phone; Enter did nothing |
+| ✅ | **Every button on the site** | Text on the terracotta buttons was below the readable minimum |
+| ✅ | **Magazine** | An article with an email address in it lost all its paragraphs |
 
 Plus 25 smaller ones: contrast, arrows pointing the wrong way, dead code.
 
@@ -43,11 +46,9 @@ Plus 25 smaller ones: contrast, arrows pointing the wrong way, dead code.
 
 | | Area | How many | What's in there |
 |---|---|---|---|
-| ⬜ | **Tools** (fabric, questionnaire) | 11 | The questionnaire accepts a blank name and a fake email; the fabric page promises a preview it does not have |
 | ⬜ | **Small pages** (404, cookies, legal) | 12 | Accessibility panel traps nothing; cookie banner covers the buttons on a phone |
 | ⬜ | **Admin — products** | 10 | A half-failed save can duplicate colours; a failed reorder is neither reported nor undone |
 | ⬜ | **Admin — everything else** | 10 | A failed save wipes the live home strip; "new question" discards unsaved edits |
-| ⬜ | **Magazine & materials** | 6 | The article page is Hebrew-only; an article containing `<` loses its paragraphs |
 | ⬜ | **Two leftovers** | 2 | Product headings sit at the wrong level; phone number aligns to the wrong edge |
 
 ---
