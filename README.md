@@ -32,9 +32,10 @@ API). Without it the Supabase client can't be created and the app won't mount.
 
 ## Everything else
 
-- **[docs/NEXT-STEPS.md](docs/NEXT-STEPS.md)** — start here. Click-by-click
-  walkthrough of the outstanding setup (Resend, Supabase keys, Cloudflare
-  Pages) and what to do about the domain after 11 August.
+- **[docs/ACTION.md](docs/ACTION.md)** — for the site's owner. What is missing
+  and exactly what to click. Nothing else.
+- **[docs/PROGRESS.md](docs/PROGRESS.md)** — where the bug sweep stands: one
+  progress bar and a checklist, updated as work continues.
 - **[docs/SETUP.md](docs/SETUP.md)** — the reference: architecture, running
   costs, secrets, migrations, edge functions, deployment.
 

@@ -1,9 +1,10 @@
 # Aluma — setup & architecture
 
 The single source of truth for how this project is put together and how to get
-it running. Replaces the older scattered notes (`GUIDE.md`, `ASSESSMENT.md`,
-`nightfixes.md`, `.lovable/plan.md`), which were historical status reports and
-have been removed — they live in git history if ever needed.
+it running. The owner-facing list of what to click lives in `ACTION.md`; where the current
+bug sweep stands lives in `PROGRESS.md`. The older status reports (`GUIDE.md`,
+`ROADMAP.md`, `NEXT-STEPS.md`, `ASSESSMENT.md`, `nightfixes.md`) have all been
+removed — they live in git history if ever needed.
 
 ---
 
