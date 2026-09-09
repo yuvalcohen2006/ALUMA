@@ -33,14 +33,14 @@ export const ProductCard = ({
   eager: boolean;
   emblem?: Emblem | null;
 }) => {
-  const { to } = useLocalizedPath();
+  const { to, lang } = useLocalizedPath();
   const price = formatPrice(p.price);
   return (
     <TileCard
       to={to(`/products/${p.slug}`)}
       image={p.cover_url}
       alt=""
-      title={p.name}
+      title={localizedName(lang, p.name, p.name_en)}
       meta={p.tagline}
       aspect="square"
       eager={eager}

@@ -15,13 +15,14 @@ import { useTranslation } from "react-i18next";
 import { useLocalizedPath } from "@/lib/useLocalizedPath";
 import DirectionalArrow from "@/components/DirectionalArrow";
 import TileFallback from "@/components/TileFallback";
+import { localizedName } from "@/lib/localized-name";
 
 const SITE = "https://alumaoutdoor.com";
 
 const CollectionDetailPage = () => {
   const { slug } = useParams();
   const { t } = useTranslation("catalogue");
-  const { to } = useLocalizedPath();
+  const { to, lang } = useLocalizedPath();
   const [item, setItem] = useState<DBProduct | null>(null);
   const [variants, setVariants] = useState<ProductVariant[]>([]);
   const [related, setRelated] = useState<DBProduct[]>([]);
@@ -46,9 +47,12 @@ const CollectionDetailPage = () => {
 
     const { data, error } = await supabase
       .from("site_collection_products")
-      .select(
-"id, collection_id, slug, name, tag, tagline, description, highlights, materials, dimensions, cover_url, gallery, price, price_note"
-      )
+      // `*`, for the same reason useCollectionsData gives at length: a column
+      // list is a hard dependency on a migration already being applied, and
+      // PostgREST rejects the WHOLE query with a 400 for one unknown name. It
+      // also meant name_en was never fetched, so the English name the admin
+      // has been collecting could never appear on the page that shows it.
+      .select("*")
       .eq("slug", slug)
       .eq("published", true)
       .maybeSingle();
@@ -93,7 +97,7 @@ const CollectionDetailPage = () => {
       setItem(p);
       const { data: rel } = await supabase
         .from("site_collection_products")
-        .select("id, collection_id, slug, name, tag, tagline, description, highlights, materials, dimensions, cover_url, gallery, price, price_note")
+        .select("*")
         .eq("collection_id", p.collection_id)
         .eq("published", true)
         .neq("id", p.id)
@@ -168,10 +172,12 @@ const CollectionDetailPage = () => {
 
   if (!item) return <NotFound />;
 
+  const displayName = localizedName(lang, item.name, item.name_en);
+
   const productJsonLd = {
 "@context": "https://schema.org",
 "@type": "Product",
-    name: item.name,
+    name: displayName,
     description: item.tagline ?? "",
     image: item.cover_url ?? undefined,
     brand: { "@type": "Brand", name: "Aluma" },
@@ -179,23 +185,28 @@ const CollectionDetailPage = () => {
     material: item.materials.join(", "),
     offers: {
 "@type": "Offer",
-      // Made-to-order / quote-based: no fixed price. A fake "0" + InStock is
-      // invalid structured data, so we signal pre-order and omit the price.
+      // Made to order, so pre-order rather than in stock. The price is stated
+      // when there is one: the page shows it, and telling Google there is no
+      // price while showing one is a mismatch Search Console flags — and it
+      // loses the piece its price in the result. /faq#contact, not /contact,
+      // which is not a page.
       availability: "https://schema.org/PreOrder",
-      url: `${SITE}/contact`,
-      description: t("quoteOnly"),
+      url: `${SITE}/faq#contact`,
+      ...(item.price
+        ? { price: item.price, priceCurrency: "ILS" }
+        : { description: t("quoteOnly") }),
     },
   };
 
   return (
     <Layout>
       <SEO
-        title={`${item.name} | ${t("collectionsWord")} | Aluma`}
+        title={`${displayName} | ${t("collectionsWord")} | Aluma`}
         /* Assembled from the parts that exist. Written as a template with the
            comma and full stop as literals, a product with no tagline and no
            description — which is every product on the site today — produced
            the meta description "aero, . " for Google to show. */
-        description={[item.name, item.tagline, item.description[0]].filter(Boolean).join(". ")}
+        description={[displayName, item.tagline, item.description[0]].filter(Boolean).join(". ")}
         path={`/products/${item.slug}`}
         jsonLd={productJsonLd}
       />
@@ -226,7 +237,7 @@ const CollectionDetailPage = () => {
               dir="auto"
               className="font-display text-3xl sm:text-4xl md:text-5xl leading-tight text-foreground"
             >
-              {item.name}
+              {displayName}
             </h1>
           </div>
           {item.tagline && (
@@ -385,7 +396,7 @@ const CollectionDetailPage = () => {
                   <div className="relative overflow-hidden rounded-sm aspect-square bg-secondary">
                     <img
                       src={img}
-                      alt={t("imageAlt", { name: item.name, index: i + 1 })}
+                      alt={t("imageAlt", { name: displayName, index: i + 1 })}
                       loading={i === 0 ? "eager" : "lazy"}
                       decoding="async"
                       className="absolute inset-0 h-full w-full object-contain p-4"
@@ -403,11 +414,11 @@ const CollectionDetailPage = () => {
                     spec and this box is tall, so cover ate the top and bottom
                     of every piece. The mat behind it does the framing. */}
                 <div className="relative overflow-hidden rounded-sm h-full min-h-[500px] max-h-[720px] bg-muted">
-                  {!galleryImages.length && <TileFallback name={item.name} />}
+                  {!galleryImages.length && <TileFallback name={displayName} />}
                   {galleryImages[activeImage] && (
                     <img
                       src={galleryImages[activeImage]}
-                      alt={t("imageAlt", { name: item.name, index: activeImage + 1 })}
+                      alt={t("imageAlt", { name: displayName, index: activeImage + 1 })}
                       loading="eager"
                       decoding="async"
                       className="absolute inset-0 h-full w-full object-contain p-6 transition-opacity duration-500"
@@ -514,8 +525,11 @@ const CollectionDetailPage = () => {
                     )}
                   </div>
                   <div className="p-6">
-                    <h3 className="font-display font-normal text-body text-foreground group-hover:text-accent transition-smooth flex items-center gap-2">
-                      {c.name}
+                    <h3
+                      dir="auto"
+                      className="font-display font-normal text-body text-foreground group-hover:text-accent transition-smooth flex items-center gap-2"
+                    >
+                      {localizedName(lang, c.name, c.name_en)}
                       <DirectionalArrow className="w-4 h-4" />
                     </h3>
                   </div>
