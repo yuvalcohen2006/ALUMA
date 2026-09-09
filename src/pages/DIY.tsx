@@ -212,7 +212,7 @@ const StationCta = ({
 const DIYPage = () => {
   const { to } = useLocalizedPath();
   return (
-    <Layout>
+    <Layout hebrewOnly>
       <SEO
         title="עשה זאת בעצמך | כלים לתכנון סלון החוץ שלכם | Aluma"
         description="שני כלים לתכנון ריהוט החוץ שלכם: בחירת בד Sunbrella עם תצוגה מיידית על הספה, ותצוגת AR בגודל אמיתי במרפסת. הכול מהדפדפן, בלי הרשמה ובלי עלות."

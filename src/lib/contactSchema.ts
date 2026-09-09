@@ -55,3 +55,18 @@ export const contactSchema = z.object({
 });
 
 export type ContactInput = z.infer<typeof contactSchema>;
+
+/**
+ * The questionnaire's last step, which used to check nothing at all.
+ *
+ * `canNext()` returned `name && phone`, so a single space in each enabled the
+ * submit button and wrote the lead — and the email field, typed as `email`,
+ * was never validated because the step is not a form and the browser only
+ * checks on submit. The result was leads with no name and no reachable phone,
+ * which look identical in the admin to real ones.
+ */
+export const questionnaireContactSchema = contactSchema.pick({
+  name: true,
+  phone: true,
+  email: true,
+});

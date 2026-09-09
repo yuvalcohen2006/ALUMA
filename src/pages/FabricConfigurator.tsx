@@ -38,7 +38,7 @@ const FabricConfigurator = () => {
   const whatsappUrl = `${SITE.whatsapp.href}?text=${waText}`;
 
   return (
-    <Layout>
+    <Layout hebrewOnly>
       <SEO
         title="בחרו את הבד, קונפיגורטור בדי Sunbrella לסלוני חוץ | Aluma"
         description="בחרו צבע ומרקם של בד Sunbrella וראו תצוגה מקדימה מיידית על ספת חוץ של Aluma. עשרות גוונים, עמיד UV, חיוני לריהוט גן ומרפסת."
@@ -57,8 +57,8 @@ const FabricConfigurator = () => {
             </h1>
             <p className="text-foreground max-w-2xl mx-auto leading-relaxed">
               כל הבדים מתוך מניפת Sunbrella המקורית, עמידים ב-UV, דוחי מים,
-              אחריות 5 שנים. בחרו משפחה, לחצו על דגימה, וראו מיד איך הספה תיראה
-              עם הבד שבחרתם.
+              אחריות 5 שנים. בחרו משפחה, לחצו על דגימה, וראו את הגוון עצמו
+              בגדול — ואם הוא מוצא חן, הזמינו דוגמית אמיתית.
             </p>
           </div>
 
@@ -108,23 +108,23 @@ const FabricConfigurator = () => {
                     </div>
                   </div>
 
-                  <a
-                    href={whatsappUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={() =>
-                      trackPixel("InitiateCheckout", {
-                        content_name: `בד Sunbrella, ${selected.nameHe}`,
-                        content_category: "Fabric Configurator",
-                        content_ids: [selected.code],
-                      })
-                    }
-                  >
-                    <Button variant="default" className="gap-2">
-                      <MessageCircle className="h-4 w-4" />
+                  <Button asChild variant="default" className="gap-2">
+                    <a
+                      href={whatsappUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={() =>
+                        trackPixel("InitiateCheckout", {
+                          content_name: `בד Sunbrella, ${selected.nameHe}`,
+                          content_category: "Fabric Configurator",
+                          content_ids: [selected.code],
+                        })
+                      }
+                    >
+                      <MessageCircle className="h-4 w-4" aria-hidden="true" />
                       הצעת מחיר ב-WhatsApp
-                    </Button>
-                  </a>
+                    </a>
+                  </Button>
                 </div>
               </div>
 

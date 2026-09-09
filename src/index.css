@@ -27,7 +27,10 @@
 
     /* Terracotta #C77962 — buttons, large display titles (on light), accents, dividers, icons */
     --primary: 14 47% 58%;
-    --primary-foreground: 0 0% 18%; /* charcoal text on terracotta buttons */
+    /* 12%, not 18%. Charcoal on this terracotta was measured at 4.09:1, not
+       the 5.9:1 the note beside .btn-shine claimed — under AA, on every
+       primary button and every active tab on the site. 12% reads 4.98:1. */
+    --primary-foreground: 0 0% 12%;
 
     /* #F8F8F8 — the section band, and the whole reason the site read yellow.
        The old cream ground was within a point of what RH ships; the SAND was
@@ -625,9 +628,10 @@
    heavy against a page that is otherwise uniformly flat.
 
    The hover ink is charcoal rather than white on purpose. White on this
-   terracotta measures roughly 2.9:1 — well under the 4.5:1 AA floor — while
-   charcoal reads about 5.9:1. That is exactly why --primary-foreground was
-   defined as charcoal, and this honours it. */
+   terracotta measures 3.3:1 — under the 4.5:1 AA floor — while charcoal at
+   --primary-foreground reads 4.98:1. (This note used to claim 5.9:1 for the
+   charcoal, which was wrong and was hiding a real failure: at the token's old
+   18% the true figure was 4.09:1.) */
 .btn-shine {
   /* Was a hardcoded cream literal, which would have left every primary button
      on the site as a yellow tablet floating on a white page. */

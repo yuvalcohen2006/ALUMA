@@ -85,7 +85,7 @@ const ARPreview = () => {
   }, []);
 
   return (
-    <Layout>
+    <Layout hebrewOnly>
       <SEO
         title="תצוגת AR, ראו ריהוט חוץ במציאות רבודה | Aluma"
         description="הציבו ספות, כורסאות ושולחנות חוץ של Aluma בגינה או במרפסת שלכם בעזרת תצוגת AR ישירות מהדפדפן בטלפון."

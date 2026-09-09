@@ -42,7 +42,7 @@ const ConversionCTA = ({
         <div className="max-w-4xl mx-auto text-center">
           <div className="inline-flex items-center gap-2 border border-primary-foreground/25 rounded-sm px-4 py-1.5 mb-6">
             <Sparkles className="h-3.5 w-3.5 text-accent" />
-            <span className="text-label tracking-[0.35em] uppercase opacity-90">
+            <span className="text-label tracking-[0.35em] uppercase">
               {eyebrow}
             </span>
           </div>
@@ -50,7 +50,7 @@ const ConversionCTA = ({
           <h2 className="font-display text-3xl md:text-5xl leading-tight mb-4 text-balance">
             {title}
           </h2>
-          <p className="text-base md:text-lg font-normal opacity-85 leading-relaxed max-w-2xl mx-auto mb-10">
+          <p className="text-base md:text-lg font-normal leading-relaxed max-w-2xl mx-auto mb-10">
             {subtitle}
           </p>
 
@@ -90,7 +90,7 @@ const ConversionCTA = ({
             </Button>
           </div>
 
-          <p className="mt-8 text-label opacity-70">
+          <p className="mt-8 text-label">
             ייעוץ ראשוני חינם · תשובה תוך יום עסקים · ללא התחייבות
           </p>
         </div>

@@ -7,7 +7,23 @@ import { ReactNode } from "react";
 import { LANGUAGE_DIR } from "@/i18n";
 import { useLocalizedPath } from "@/lib/useLocalizedPath";
 
-const Layout = ({ children }: { children: ReactNode }) => {
+const Layout = ({
+  children,
+  hebrewOnly = false,
+}: {
+  children: ReactNode;
+  /**
+   * For a page whose copy has not been translated yet.
+   *
+   * <main> normally takes the language's direction, which is right for a page
+   * whose words follow. On a page that is still entirely Hebrew literals, /en
+   * gave it dir="ltr" — so Hebrew sentences were laid out left-to-right and
+   * every sentence-final full stop jumped to the front of the line, on top of
+   * every logical property pointing the wrong way. The Header and Footer
+   * already pin themselves to rtl for exactly this reason.
+   */
+  hebrewOnly?: boolean;
+}) => {
   const { lang } = useLocalizedPath();
   return (
     <div className="min-h-dvh bg-background flex flex-col">
@@ -32,7 +48,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
       */}
       <main
         id="main-content"
-        dir={LANGUAGE_DIR[lang]}
+        dir={hebrewOnly ? "rtl" : LANGUAGE_DIR[lang]}
         tabIndex={-1}
         className="flex-1 focus:outline-none"
       >

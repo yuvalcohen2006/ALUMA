@@ -68,8 +68,26 @@ describe("page direction", () => {
    */
   it("follows the language rather than being hardcoded", () => {
     const layout = read("src/components/Layout.tsx");
-    expect(layout).toContain("dir={LANGUAGE_DIR[lang]}");
-    expect(layout).not.toMatch(/<main[^>]*dir="rtl"/);
+    // The language's direction is still the default; `hebrewOnly` is the one
+    // documented exception, for a page whose copy is not translated yet — on
+    // those, LTR laid Hebrew sentences out backwards and threw every
+    // sentence-final full stop to the front of the line.
+    expect(layout).toContain("LANGUAGE_DIR[lang]");
+    expect(layout).toMatch(/dir=\{hebrewOnly \? "rtl" : LANGUAGE_DIR\[lang\]\}/);
+  });
+
+  it("only lets pages that really are untranslated opt out", () => {
+    const optedOut = [...files("src/pages"), ...files("src/components")].filter((f) =>
+      read(f).includes("<Layout hebrewOnly"),
+    );
+    // The four tool pages, and nothing else. Anything added here has to be a
+    // page with no translated copy at all, not a page someone gave up on.
+    expect(optedOut.sort()).toEqual([
+      "src/pages/ARPreview.tsx",
+      "src/pages/DIY.tsx",
+      "src/pages/FabricConfigurator.tsx",
+      "src/pages/Questionnaire.tsx",
+    ]);
   });
 });
 

@@ -11,6 +11,9 @@ import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
 import { Check } from "lucide-react";
 import { trackPixel } from "@/lib/pixel";
+import { questionnaireContactSchema } from "@/lib/contactSchema";
+import { useLocalizedPath } from "@/lib/useLocalizedPath";
+import { Link } from "react-router-dom";
 
 type Answers = {
   space_type: string;
@@ -60,6 +63,7 @@ const recommendFor = (a: Answers) => {
 const steps = ["מרחב", "סגנון ולוח זמנים", "פיצ׳רים", "פרטי קשר"];
 
 const Questionnaire = () => {
+  const { to } = useLocalizedPath();
   const [step, setStep] = useState(0);
   const [a, setA] = useState<Answers>(initial);
   const [busy, setBusy] = useState(false);
@@ -74,10 +78,26 @@ const Questionnaire = () => {
     if (step === 0) return a.space_type && a.space_size;
     if (step === 1) return a.style && a.timeline;
     if (step === 2) return true;
-    return a.contact_name && a.contact_phone;
+    return contactStepOk;
   };
 
+  /* A real check, not a truthiness test. See questionnaireContactSchema. */
+  const contactCheck = questionnaireContactSchema.safeParse({
+    name: a.contact_name,
+    phone: a.contact_phone,
+    email: a.contact_email,
+  });
+  const contactStepOk = contactCheck.success;
+  const contactErrors: Record<string, string> = {};
+  if (!contactCheck.success) {
+    for (const issue of contactCheck.error.issues) {
+      const key = issue.path[0] as string;
+      if (!contactErrors[key]) contactErrors[key] = issue.message;
+    }
+  }
+
   const submit = async () => {
+    if (!contactCheck.success) return;
     setBusy(true);
     try {
       const recommendation = recommendFor(a);
@@ -108,7 +128,7 @@ const Questionnaire = () => {
   };
 
   return (
-    <Layout>
+    <Layout hebrewOnly>
       <SEO
         title="שאלון אפיון חכם | Aluma"
         description="ענו על 4 שאלות קצרות וקבלו המלצה אישית על קולקציית סלוני החוץ המתאימה למרחב שלכם."
@@ -128,9 +148,9 @@ const Questionnaire = () => {
               <p className="text-sm text-muted-foreground mb-6">
                 נחזור אליך תוך 24 שעות לתאם פגישת אפיון ללא עלות.
               </p>
-              <a href="/collections">
-                <Button>צפייה בקולקציות</Button>
-              </a>
+              <Button asChild>
+                <Link to={to("/collections")}>צפייה בקולקציות</Link>
+              </Button>
             </div>
           ) : (
             <div className="bg-background border border-border rounded-sm p-8 md:p-10 ">
@@ -157,7 +177,7 @@ const Questionnaire = () => {
               )}
 
               {step === 2 && (
-                <div>
+                <div role="group" aria-label="מה חשוב לכלול">
                   <Label className="block mb-4 text-foreground">מה חשוב לכלול? (אופציונלי)</Label>
                   <div className="flex flex-wrap gap-2">
                     {featureOptions.map((f) => {
@@ -166,6 +186,7 @@ const Questionnaire = () => {
                         <button
                           key={f}
                           type="button"
+                          aria-pressed={active}
                           onClick={() => toggleFeature(f)}
                           className={`px-4 py-2 rounded-sm border text-sm transition-smooth ${
                             active
@@ -182,20 +203,70 @@ const Questionnaire = () => {
               )}
 
               {step === 3 && (
-                <div className="space-y-5">
+                /* A real <form>, so Enter submits and the browser will
+                   autofill. These were three bare divs: pressing Enter or the
+                   phone keyboard's "Go" did nothing at all, and nothing
+                   offered a saved name or number. */
+                <form
+                  className="space-y-5"
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    if (!busy) submit();
+                  }}
+                >
                   <div className="space-y-2">
                     <Label htmlFor="cname">שם מלא *</Label>
-                    <Input id="cname" value={a.contact_name} onChange={(e) => update("contact_name", e.target.value)} />
+                    <Input
+                      id="cname"
+                      value={a.contact_name}
+                      onChange={(e) => update("contact_name", e.target.value)}
+                      autoComplete="name"
+                      required
+                      aria-invalid={!!contactErrors.name || undefined}
+                    />
+                    {contactErrors.name && (
+                      <p className="text-body text-destructive">{contactErrors.name}</p>
+                    )}
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="cphone">טלפון *</Label>
-                    <Input id="cphone" type="tel" value={a.contact_phone} onChange={(e) => update("contact_phone", e.target.value)} />
+                    <Input
+                      id="cphone"
+                      type="tel"
+                      inputMode="tel"
+                      autoComplete="tel"
+                      required
+                      dir="ltr"
+                      value={a.contact_phone}
+                      onChange={(e) => update("contact_phone", e.target.value)}
+                      aria-invalid={!!contactErrors.phone || undefined}
+                    />
+                    {contactErrors.phone && (
+                      <p className="text-body text-destructive">{contactErrors.phone}</p>
+                    )}
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="cemail">אימייל</Label>
-                    <Input id="cemail" type="email" dir="ltr" value={a.contact_email} onChange={(e) => update("contact_email", e.target.value)} />
+                    <Input
+                      id="cemail"
+                      type="email"
+                      inputMode="email"
+                      autoComplete="email"
+                      dir="ltr"
+                      value={a.contact_email}
+                      onChange={(e) => update("contact_email", e.target.value)}
+                      aria-invalid={!!contactErrors.email || undefined}
+                    />
+                    {contactErrors.email && (
+                      <p className="text-body text-destructive">{contactErrors.email}</p>
+                    )}
                   </div>
-                </div>
+                  {/* The visible button is in the footer below; this keeps
+                      Enter working without showing a second one. */}
+                  <button type="submit" className="sr-only" tabIndex={-1} aria-hidden="true">
+                    שליחה
+                  </button>
+                </form>
               )}
 
               <div className="flex items-center justify-between gap-3 mt-10 pt-6 border-t border-border">
@@ -235,7 +306,7 @@ const FieldChoice = ({
   options: string[];
   onChange: (v: string) => void;
 }) => (
-  <div>
+  <div role="group" aria-label={label}>
     <Label className="block mb-3 text-foreground">{label}</Label>
     <div className="grid grid-cols-2 gap-2">
       {options.map((opt) => {
@@ -244,6 +315,7 @@ const FieldChoice = ({
           <button
             key={opt}
             type="button"
+            aria-pressed={active}
             onClick={() => onChange(opt)}
             className={`px-4 py-3 rounded-sm border text-sm text-start transition-smooth ${
               active
