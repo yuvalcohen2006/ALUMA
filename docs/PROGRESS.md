@@ -1,10 +1,10 @@
 # Bug sweep — where I'm standing
 
 ```
-██████████████░░░░░░  72%
+████████████████░░░░  82%
 ```
 
-**89 of 123 problems fixed. 34 left.**
+**101 of 123 problems fixed. 22 left.**
 
 Last updated: 9 September 2026, third session.
 
@@ -37,6 +37,8 @@ tried to prove each finding wrong. 123 survived that. I'm working down the list.
 | ✅ | **Questionnaire** | Accepted a blank name and a fake phone; Enter did nothing |
 | ✅ | **Every button on the site** | Text on the terracotta buttons was below the readable minimum |
 | ✅ | **Magazine** | An article with an email address in it lost all its paragraphs |
+| ✅ | **Accessibility panel** | Keyboard users fell straight out of it; its text-size button did nothing |
+| ✅ | **Shared links** | A link with a `#` in it (from WhatsApp) landed at the top of the page, not the section |
 
 Plus 25 smaller ones: contrast, arrows pointing the wrong way, dead code.
 
@@ -46,7 +48,6 @@ Plus 25 smaller ones: contrast, arrows pointing the wrong way, dead code.
 
 | | Area | How many | What's in there |
 |---|---|---|---|
-| ⬜ | **Small pages** (404, cookies, legal) | 12 | Accessibility panel traps nothing; cookie banner covers the buttons on a phone |
 | ⬜ | **Admin — products** | 10 | A half-failed save can duplicate colours; a failed reorder is neither reported nor undone |
 | ⬜ | **Admin — everything else** | 10 | A failed save wipes the live home strip; "new question" discards unsaved edits |
 | ⬜ | **Two leftovers** | 2 | Product headings sit at the wrong level; phone number aligns to the wrong edge |
