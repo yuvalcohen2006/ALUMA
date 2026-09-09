@@ -1,12 +1,12 @@
 # Bug sweep — where I'm standing
 
 ```
-█████████░░░░░░░░░░░  46%
+████████████░░░░░░░░  59%
 ```
 
-**56 of 123 problems fixed. 67 left.**
+**72 of 123 problems fixed. 51 left.**
 
-Last updated: 9 September 2026, after the second session limit.
+Last updated: 9 September 2026, part-way through the third session.
 
 ---
 
@@ -31,6 +31,9 @@ tried to prove each finding wrong. 123 survived that. I'm working down the list.
 | ✅ | **Club sign-up** | An address that already existed reported success and did nothing |
 | ✅ | **English names** | The field you fill in never appeared anywhere on the site |
 | ✅ | **Speed** | The home page downloaded the whole catalogue twice on every visit |
+| ✅ | **Club & account** | No way back in if you forgot your password; progress bar filled backwards; error messages in English |
+| ✅ | **"View in your space"** | Every 3D model was dead — page now hidden, one switch brings it back |
+| ✅ | **Admin colours** | Saving while a colour photo uploaded threw the photo away |
 
 Plus 25 smaller ones: contrast, arrows pointing the wrong way, dead code.
 
@@ -40,10 +43,9 @@ Plus 25 smaller ones: contrast, arrows pointing the wrong way, dead code.
 
 | | Area | How many | What's in there |
 |---|---|---|---|
-| ⬜ | **Club & account** | 13 | No "forgot password" anywhere; progress bar fills backwards; menu items lie about where they go |
-| ⬜ | **Tools** (AR, fabric, questionnaire) | 13 | Every 3D model is dead; questionnaire accepts a blank name and a fake email |
+| ⬜ | **Tools** (fabric, questionnaire) | 11 | The questionnaire accepts a blank name and a fake email; the fabric page promises a preview it does not have |
 | ⬜ | **Small pages** (404, cookies, legal) | 12 | Accessibility panel traps nothing; cookie banner covers the buttons on a phone |
-| ⬜ | **Admin — products** | 11 | A half-failed save can duplicate colours; saving mid-upload throws the photo away |
+| ⬜ | **Admin — products** | 10 | A half-failed save can duplicate colours; a failed reorder is neither reported nor undone |
 | ⬜ | **Admin — everything else** | 10 | A failed save wipes the live home strip; "new question" discards unsaved edits |
 | ⬜ | **Magazine & materials** | 6 | The article page is Hebrew-only; an article containing `<` loses its paragraphs |
 | ⬜ | **Two leftovers** | 2 | Product headings sit at the wrong level; phone number aligns to the wrong edge |
