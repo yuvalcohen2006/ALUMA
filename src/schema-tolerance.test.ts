@@ -45,3 +45,24 @@ describe("the catalogue read path", () => {
     expect(read("src/hooks/useHomeHighlights.ts")).toMatch(/\?\?\s*\[\]/);
   });
 });
+
+/**
+ * The catalogue is fetched once and shared.
+ *
+ * The home page mounts two components that both want it — the collection strip
+ * and the featured pieces — and with a bare useEffect each ran its own copy, so
+ * all 47 products and their JSON columns came down the wire twice on the page
+ * that matters most, and again on every navigation back to it.
+ */
+describe("how the catalogue is fetched", () => {
+  const src = readFileSync(join(process.cwd(), "src/hooks/useCollectionsData.ts"), "utf8");
+
+  it("goes through the shared query cache, not a per-component effect", () => {
+    expect(src).toContain("useQuery(");
+    expect(src).not.toContain("useEffect(");
+  });
+
+  it("still asks for every column, so a missing migration cannot 400 the query", () => {
+    expect(src).toContain('.select("*")');
+  });
+});
