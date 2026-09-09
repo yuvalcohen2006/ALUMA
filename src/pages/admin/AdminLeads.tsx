@@ -12,7 +12,12 @@ const toCsv = (rows: any[]) => {
   const headers = Object.keys(rows[0]);
   const escape = (v: any) => {
     if (v == null) return "";
-    const s = typeof v === "object" ? JSON.stringify(v) : String(v);
+    let s = typeof v === "object" ? JSON.stringify(v) : String(v);
+    // A leading =, +, -, @, tab or carriage return makes Excel and Sheets treat
+    // the cell as a FORMULA — and every value in this file was typed by a
+    // stranger into the public contact form. A leading apostrophe is the
+    // standard defusal: the cell still reads as the text that was sent.
+    if (/^[=+\-@\t\r]/.test(s)) s = `'${s}`;
     return `"${s.replace(/"/g, '""')}"`;
   };
   return [headers.join(","), ...rows.map((r) => headers.map((h) => escape(r[h])).join(","))].join("\n");
@@ -42,7 +47,10 @@ const AdminLeads = () => {
       if (b.error) toast.error(b.error.message);
       setLeads(a.data || []);
       setQuiz(b.data || []);
-      markLeadsSeen();
+      // Only when they were actually shown. This ran regardless, so a failed
+      // query cleared the sidebar badge for leads nobody had seen — and the
+      // badge is the only thing that says a new enquiry has arrived.
+      if (!a.error && !b.error) markLeadsSeen();
     })();
   }, []);
 

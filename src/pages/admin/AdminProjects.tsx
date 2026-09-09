@@ -14,7 +14,7 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Card, CardContent } from "@/components/ui/card";
-import { Plus, Pencil, Trash2, Upload, X, GripVertical } from "lucide-react";
+import { Plus, Pencil, Trash2, Upload, X } from "lucide-react";
 import { toast } from "sonner";
 import { uploadFile } from "@/lib/admin-storage";
 import { useCrop } from "@/components/admin/CropProvider";
@@ -186,7 +186,7 @@ const AdminProjects = () => {
           {items.map((p) => (
             <Card key={p.id}>
               <CardContent className="flex items-center gap-4 p-4">
-                <GripVertical className="w-4 h-4 text-muted-foreground" />
+
                 {p.cover_url ? (
                   <img src={p.cover_url} alt={p.title} className="w-20 h-20 object-cover rounded" />
                 ) : (
@@ -215,7 +215,16 @@ const AdminProjects = () => {
         </div>
       )}
 
-      <Dialog open={!!editing} onOpenChange={(o) => !o && setEditing(null)}>
+      <Dialog open={!!editing} onOpenChange={(o) => {
+          if (o) return;
+          // Photos are uploaded to storage the moment they are chosen, and
+          // live only in this dialog's state until save. Closing used to
+          // discard them silently — the files stay in the bucket with nothing
+          // pointing at them, and the owner has no idea the work is gone.
+          const hasUploads = Boolean(editing?.cover_url) || (editing?.gallery?.length ?? 0) > 0;
+          if (hasUploads && !confirm("לסגור בלי לשמור? התמונות שהעליתם יאבדו.")) return;
+          setEditing(null);
+        }}>
         <DialogContent className="max-w-2xl max-h-[90vh] overflow-auto" dir="rtl">
           <DialogHeader>
             <DialogTitle>{editing?.id ? "עריכת פרויקט" : "פרויקט חדש"}</DialogTitle>

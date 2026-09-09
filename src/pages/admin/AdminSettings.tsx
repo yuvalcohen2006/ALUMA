@@ -211,9 +211,15 @@ const AdminSettings = () => {
         <CardContent className="grid md:grid-cols-2 gap-4">
           {fields.map((f) => (
             <div key={f.key}>
-              <Label>{f.label}</Label>
-              {f.hint && <p className="text-xs text-muted-foreground mt-1">{f.hint}</p>}
+              <Label htmlFor={`contact-${f.key}`}>{f.label}</Label>
+              {f.hint && (
+                <p id={`contact-${f.key}-hint`} className="text-xs text-muted-foreground mt-1">
+                  {f.hint}
+                </p>
+              )}
               <Input
+                id={`contact-${f.key}`}
+                aria-describedby={f.hint ? `contact-${f.key}-hint` : undefined}
                 dir={f.dir}
                 placeholder={f.placeholder}
                 value={contact[f.key] || ""}

@@ -142,9 +142,12 @@ const ChannelTile = ({ channel }: { channel: Channel }) => {
         <span
           className={cn(
 "block font-display font-normal text-body leading-snug text-foreground",
-            // A latin string inside an RTL block: flip the element to LTR so the
-            // digits read correctly, then pin it back to the right edge.
-            channel.ltr && "text-start",
+            // A Latin string inside an RTL block: flip the element to LTR so
+            // the digits read in order, then pin it back to the block's own
+            // reading edge. `text-start` cannot do that — it resolves against
+            // this element's direction, which is now ltr, which is the LEFT
+            // edge and the opposite of every other line on the tile.
+            channel.ltr && "text-end rtl:text-start",
           )}
           dir={channel.ltr ? "ltr" : undefined}
         >

@@ -57,6 +57,11 @@ const AdminTexts = () => {
       toast.error("השמירה נכשלה");
       return;
     }
+    // The saved value becomes the new baseline. Without this the Save button
+    // compares the draft against the value loaded at mount, so it stayed
+    // enabled for ever after a successful save and the screen went on claiming
+    // an unsaved change that was not there.
+    setRows((list) => list.map((r) => (r.key === key ? { ...r, value: draft[key] ?? "" } : r)));
     toast.success("נשמר. רעננו את האתר כדי לראות את השינוי.");
   };
 

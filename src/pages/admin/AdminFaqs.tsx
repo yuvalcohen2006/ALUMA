@@ -29,6 +29,11 @@ const AdminFaqs = () => {
   const [faqs, setFaqs] = useState<Faq[]>([]);
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState(false);
+  /* What was on screen when the list was last loaded or saved. Adding a row
+     reloads from the database and replaces every row's state, so this is how
+     the screen knows whether that would cost the owner anything. */
+  const [clean, setClean] = useState<Faq[]>([]);
+  const dirty = JSON.stringify(faqs) !== JSON.stringify(clean);
 
   const load = async () => {
     const { data, error } = await supabase
@@ -37,6 +42,7 @@ const AdminFaqs = () => {
       .order("sort_order", { ascending: true });
     if (error) toast.error("לא הצלחנו לטעון את השאלות");
     setFaqs((data as Faq[]) ?? []);
+    setClean((data as Faq[]) ?? []);
     setLoading(false);
   };
 
@@ -62,10 +68,16 @@ const AdminFaqs = () => {
       .eq("id", f.id);
     setBusy(false);
     if (error) return toast.error("השמירה נכשלה");
+    // This row is no longer an unsaved change.
+    setClean((list) => list.map((r) => (r.id === f.id ? { ...f } : r)));
     toast.success("נשמר");
   };
 
   const add = async () => {
+    // The list is reloaded after an insert, which replaces every row's state —
+    // so any edit not yet saved on any other row is gone, with no warning and
+    // nothing on screen to say it happened.
+    if (dirty && !confirm("יש שינויים שלא נשמרו. להוסיף שאלה חדשה ולאבד אותם?")) return;
     setBusy(true);
     const { error } = await supabase.from("site_faqs").insert({
       question: "שאלה חדשה",

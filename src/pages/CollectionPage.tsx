@@ -28,10 +28,15 @@ export const ProductCard = ({
   product: p,
   eager,
   emblem,
+  as = "h3",
 }: {
   product: DBProduct;
   eager: boolean;
   emblem?: Emblem | null;
+  /* The products are what this page lists, so on the collection page they are
+     h2 under the collection's h1. The tile's own default is h3, which is right
+     where a grid sits inside a section that has its own heading. */
+  as?: "h2" | "h3";
 }) => {
   const { to, lang } = useLocalizedPath();
   const price = formatPrice(p.price);
@@ -45,6 +50,7 @@ export const ProductCard = ({
       aspect="square"
       eager={eager}
       align="center"
+      as={as}
       emblem={emblem}
       extra={
         (price || p.dimensions) && (
@@ -173,7 +179,7 @@ const CollectionPage = () => {
               {items.map((p, i) => (
                 <li key={p.id}>
                   <Reveal delay={(i % 4) * 70}>
-                    <ProductCard product={p} eager={i < 4} emblem={emblems[i]} />
+                    <ProductCard product={p} eager={i < 4} emblem={emblems[i]} as="h2" />
                   </Reveal>
                 </li>
               ))}

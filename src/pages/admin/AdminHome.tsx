@@ -91,9 +91,18 @@ const AdminHome = () => {
   const save = async () => {
     setSaving(true);
     try {
-      // Replace rather than diff: three rows, and a partial failure that leaves
-      // two slots pointing at the old choice and one at the new is worse than
-      // an error the owner can retry.
+      /* The old picks are read first so they can be put back.
+         slot is `check (slot between 1 and 3)` and unique, so the new rows
+         cannot be written alongside the old ones and the delete has to come
+         first. What was missing is the undo: any failure on the insert — RLS,
+         a dropped connection — left the table EMPTY, and the live home page
+         lost its featured strip entirely until someone noticed and saved
+         again. */
+      const { data: previous, error: readErr } = await supabase
+        .from("site_home_highlights")
+        .select("product_id, slot");
+      if (readErr) throw readErr;
+
       const { error: cleared } = await supabase
         .from("site_home_highlights")
         .delete()
@@ -104,8 +113,14 @@ const AdminHome = () => {
         const { error } = await supabase
           .from("site_home_highlights")
           .insert(picked.map((product_id, i) => ({ product_id, slot: i + 1 })));
-        if (error) throw error;
+        if (error) {
+          if (previous && previous.length > 0) {
+            await supabase.from("site_home_highlights").insert(previous);
+          }
+          throw error;
+        }
       }
+
       setInitial(picked);
       toast.success("נשמר");
     } catch (e) {

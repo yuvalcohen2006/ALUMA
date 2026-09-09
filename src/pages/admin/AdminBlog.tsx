@@ -77,7 +77,11 @@ const AdminBlog = () => {
       tag: editing.tag || null,
       read_minutes: editing.read_minutes || 5,
       published: editing.published ?? false,
-      published_at: editing.published ? (editing.published_at || new Date().toISOString()) : null,
+      // Kept when unpublishing. Writing NULL destroyed the original date, so a
+      // post taken down for an afternoon came back stamped today and jumped to
+      // the top of the magazine as new. The `published` flag is what hides it;
+      // the date is a fact about when it first went out.
+      published_at: editing.published_at || (editing.published ? new Date().toISOString() : null),
     };
     const { error } = editing.id
       ? await supabase.from("blog_posts").update(payload).eq("id", editing.id)
@@ -175,6 +179,26 @@ const AdminBlog = () => {
               <div>
                 <Label>תקציר</Label>
                 <Textarea rows={2} value={editing.excerpt || ""} onChange={(e) => setEditing({ ...editing, excerpt: e.target.value })} />
+              </div>
+              <div>
+                {/* Every article shows "5 דקות קריאה" whatever its length,
+                    because the value was seeded to 5 in code and there was
+                    nowhere to change it. */}
+                <Label htmlFor="post-read">דקות קריאה</Label>
+                <Input
+                  id="post-read"
+                  type="number"
+                  min={1}
+                  max={60}
+                  dir="ltr"
+                  value={editing.read_minutes ?? 5}
+                  onChange={(e) =>
+                    setEditing({ ...editing, read_minutes: Number(e.target.value) || 1 })
+                  }
+                />
+                <p className="mt-1 text-xs text-muted-foreground">
+                  מופיע ליד הכותרת. בערך ‎200 מילים לדקה.
+                </p>
               </div>
               <div>
                 <Label>תוכן (Markdown / HTML)</Label>

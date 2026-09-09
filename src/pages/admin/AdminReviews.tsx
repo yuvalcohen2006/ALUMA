@@ -29,6 +29,11 @@ const AdminReviews = () => {
   const [reviews, setReviews] = useState<Review[]>([]);
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState(false);
+  /* Adding a row reloads the list from the database, which replaces every
+     row's state — so an unsaved edit on any other row disappears with no
+     warning. This is how the screen knows whether that costs anything. */
+  const [clean, setClean] = useState<Review[]>([]);
+  const dirty = JSON.stringify(reviews) !== JSON.stringify(clean);
 
   const load = async () => {
     const { data, error } = await supabase
@@ -37,6 +42,7 @@ const AdminReviews = () => {
       .order("sort_order", { ascending: true });
     if (error) toast.error("לא הצלחנו לטעון את ההמלצות");
     setReviews((data as Review[]) ?? []);
+    setClean((data as Review[]) ?? []);
     setLoading(false);
   };
 
@@ -61,10 +67,12 @@ const AdminReviews = () => {
       .eq("id", r.id);
     setBusy(false);
     if (error) return toast.error("השמירה נכשלה");
+    setClean((list) => list.map((x) => (x.id === r.id ? { ...r } : x)));
     toast.success("נשמר");
   };
 
   const add = async () => {
+    if (dirty && !confirm("יש שינויים שלא נשמרו. להוסיף המלצה חדשה ולאבד אותם?")) return;
     setBusy(true);
     const { error } = await supabase.from("site_reviews").insert({
       quote: "",
