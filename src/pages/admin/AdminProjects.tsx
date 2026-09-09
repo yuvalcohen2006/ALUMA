@@ -152,7 +152,12 @@ const AdminProjects = () => {
         urls.push(url);
       }
       setEditing((e) => ({ ...e!, gallery: [...(e?.gallery || []), ...urls] }));
-      toast.success(`${urls.length} תמונות נוספו`);
+      // Nothing added is not a success. Cancelling the first crop of three
+      // used to raise a green "0 תמונות נוספו", and one file produced the
+      // plural "1 תמונות נוספו".
+      if (urls.length === 0) toast.info("לא נוספו תמונות");
+      else if (urls.length === 1) toast.success("תמונה אחת נוספה");
+      else toast.success(`${urls.length} תמונות נוספו`);
     } catch (e: any) {
       toast.error(e.message);
     } finally {

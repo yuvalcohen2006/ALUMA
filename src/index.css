@@ -709,7 +709,7 @@
 .btn-shine-invert {
   --btn-surface: hsl(0 0% 24%);
   --btn-ink: hsl(40 30% 92%);
-  border-color: hsl(40 30% 92% / 0.28);
+  border-color: hsl(40 30% 92% / 0.42);
 }
 
 @media (prefers-reduced-motion: reduce) {

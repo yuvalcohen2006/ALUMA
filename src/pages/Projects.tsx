@@ -145,7 +145,7 @@ const ProjectEntry = ({
                 {p.cover ? (
                   <img
                     src={p.cover}
-                    alt={`${p.name} | Aluma`}
+                    alt=""
                     width={1024}
                     height={768}
                     loading={index < 2 ? "eager" : "lazy"}

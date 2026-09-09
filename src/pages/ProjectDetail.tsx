@@ -253,7 +253,7 @@ const ProjectDetailPage = () => {
                   {p.cover ? (
                     <img
                       src={p.cover}
-                      alt={p.name}
+                      alt=""
                       loading="lazy"
                       decoding="async"
                       className="absolute inset-0 w-full h-full object-cover transition-transform duration-600 ease-out group-hover:scale-[1.06]"

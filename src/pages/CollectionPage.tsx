@@ -184,7 +184,7 @@ const CollectionPage = () => {
             <div className="mt-16 md:mt-20 text-center">
               <Link
                 to={to("/collections")}
-                className="inline-flex items-center justify-center h-12 px-7 rounded-full border border-foreground/25 text-small text-foreground transition-colors duration-200 hover:border-accent hover:text-accent"
+                className="inline-flex items-center justify-center h-12 px-7 rounded-full border border-foreground/55 text-small text-foreground transition-colors duration-200 hover:border-accent hover:text-accent"
               >
                 {t("allCollections")}
               </Link>

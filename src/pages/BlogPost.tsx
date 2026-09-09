@@ -3,10 +3,10 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import Layout from "@/components/Layout";
 import SEO from "@/components/SEO";
 import { supabase } from "@/integrations/supabase/client";
-import { ArrowRight } from "lucide-react";
 import DOMPurify from "dompurify";
 import logo from "@/assets/aluma-logo.png";
 import { useLocalizedPath } from "@/lib/useLocalizedPath";
+import DirectionalArrow from "@/components/DirectionalArrow";
 
 type Post = {
   id: string;
@@ -191,10 +191,7 @@ const BlogPost = () => {
             to={to("/blog")}
             className="group inline-flex items-center gap-2 text-body text-foreground-soft hover:text-primary transition-smooth mb-10"
           >
-            <ArrowRight
-              className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1"
-              aria-hidden="true"
-            />
+            <DirectionalArrow direction="back" className="h-5 w-5" />
             חזרה למגזין
           </Link>
           <div className="flex justify-center mb-2">

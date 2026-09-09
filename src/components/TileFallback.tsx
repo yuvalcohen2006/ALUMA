@@ -11,7 +11,7 @@
  */
 const TileFallback = ({ name }: { name: string }) => (
   <div className="grid h-full w-full place-items-center bg-muted" aria-hidden="true">
-    <span className="font-display text-heading text-foreground/25">{name.charAt(0)}</span>
+    <span className="font-display text-heading text-foreground/40">{name.charAt(0)}</span>
   </div>
 );
 

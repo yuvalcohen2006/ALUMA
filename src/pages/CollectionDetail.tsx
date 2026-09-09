@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import Layout from "@/components/Layout";
 import SEO from "@/components/SEO";
@@ -14,6 +14,7 @@ import { useProductGallery, type ProductVariant } from "@/hooks/useProductGaller
 import { useTranslation } from "react-i18next";
 import { useLocalizedPath } from "@/lib/useLocalizedPath";
 import DirectionalArrow from "@/components/DirectionalArrow";
+import TileFallback from "@/components/TileFallback";
 
 const SITE = "https://alumaoutdoor.com";
 
@@ -29,8 +30,17 @@ const CollectionDetailPage = () => {
   const { images: galleryImages, activeImage, setActiveImage, selected, activeVariant, selectVariant } =
     useProductGallery(item, variants);
 
+  /* Bumped on every load, so a stale response knows it is stale. Without it,
+     clicking a related piece and going straight back left whichever request
+     happened to finish LAST on screen — the visitor reads and shares the wrong
+     product under the right URL, and nothing looks broken. The variants effect
+     immediately below already guarded itself this way. */
+  const request = useRef(0);
+
   const load = useCallback(async () => {
     if (!slug) return;
+    const ticket = ++request.current;
+    const stale = () => ticket !== request.current;
     setLoading(true);
     setLoadError(false);
 
@@ -43,6 +53,7 @@ const CollectionDetailPage = () => {
       .eq("published", true)
       .maybeSingle();
     // A query error is NOT a missing product, don't render a false 404.
+    if (stale()) return;
     if (error) {
       setLoadError(true);
       setItem(null);
@@ -66,6 +77,7 @@ const CollectionDetailPage = () => {
         .eq("id", p.collection_id)
         .eq("published", true)
         .maybeSingle();
+      if (stale()) return;
       if (parentError) {
         setLoadError(true);
         setItem(null);
@@ -87,6 +99,7 @@ const CollectionDetailPage = () => {
         .neq("id", p.id)
         .order("sort_order")
         .limit(3);
+      if (stale()) return;
       setRelated(((rel as any[]) || []).map(normaliseProduct));
     } else {
       setItem(null);
@@ -390,6 +403,7 @@ const CollectionDetailPage = () => {
                     spec and this box is tall, so cover ate the top and bottom
                     of every piece. The mat behind it does the framing. */}
                 <div className="relative overflow-hidden rounded-sm h-full min-h-[500px] max-h-[720px] bg-muted">
+                  {!galleryImages.length && <TileFallback name={item.name} />}
                   {galleryImages[activeImage] && (
                     <img
                       src={galleryImages[activeImage]}

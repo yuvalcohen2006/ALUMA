@@ -4,9 +4,10 @@ import SEO from "@/components/SEO";
 
 
 import { getMaterial } from "@/data/materials";
-import { ArrowRight, Check } from "lucide-react";
+import { Check } from "lucide-react";
 import NotFound from "./NotFound";
 import { useLocalizedPath } from "@/lib/useLocalizedPath";
+import DirectionalArrow from "@/components/DirectionalArrow";
 
 const MaterialDetailPage = () => {
   const { to } = useLocalizedPath();
@@ -166,7 +167,7 @@ const MaterialDetailPage = () => {
           to={to("/materials")}
           className="inline-flex items-center gap-2.5 text-body font-normal text-primary border border-foreground/15 hover:bg-primary hover:text-primary-foreground hover:border-primary transition-smooth rounded-sm px-8 py-3.5"
         >
-          <ArrowRight className="w-5 h-5" aria-hidden="true" />
+          <DirectionalArrow direction="back" className="w-5 h-5" animate={false} />
           חזרה לחומרים
         </Link>
       </div>

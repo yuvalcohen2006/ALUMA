@@ -17,6 +17,7 @@ import {
 } from "@/lib/crop-geometry";
 import { exportCrop, type LoadedImage } from "@/lib/image-io";
 import { PHOTO_SPECS, type PhotoSpecKey } from "@/lib/photo-specs";
+import { toast } from "sonner";
 
 /**
  * Put the photograph where it should be, before it goes to the site.
@@ -182,6 +183,13 @@ const ImageCropDialog = ({
     try {
       const rect = sourceRect(view, img, win);
       onConfirm(await exportCrop(image.url, rect, output, fileName));
+    } catch (err) {
+      // Without this the rejection went nowhere: the spinner stopped, the
+      // dialog stayed exactly as it was, and pressing save appeared to do
+      // nothing at all — repeatably, since the cause (a browser refusing a new
+      // 2D context, or toBlob returning null) does not clear by itself.
+      console.error(err);
+      toast.error("שמירת החיתוך נכשלה. נסו שוב, או בחרו תמונה אחרת.");
     } finally {
       setSaving(false);
     }

@@ -158,7 +158,7 @@ const ChannelTile = ({ channel }: { channel: Channel }) => {
       {/* RTL: forward points left */}
       {showCue && <Cue
         className={cn(
-"w-5 h-5 shrink-0 text-primary/60 transition-all duration-300 group-hover:text-primary",
+"w-5 h-5 shrink-0 text-accent transition-all duration-300 group-hover:text-primary",
           jumps ? "group-hover:translate-y-0.5" : "group-hover:-translate-x-1",
         )}
         aria-hidden="true"
