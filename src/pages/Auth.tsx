@@ -13,6 +13,7 @@ import { trackPixel } from "@/lib/pixel";
 import alumaLogo from "@/assets/aluma-logo.png";
 import heroSalon from "@/assets/hero-salon.jpg";
 import { Sparkles, Heart, ShieldCheck, ClipboardCheck, ArrowLeft } from "lucide-react";
+import { useLocalizedPath } from "@/lib/useLocalizedPath";
 
 const GoogleIcon = () => (
   <svg width="18" height="18" viewBox="0 0 48 48" aria-hidden="true">
@@ -43,11 +44,12 @@ const AuthPage = () => {
   const [googleBusy, setGoogleBusy] = useState(false);
   const { user, loading } = useAuth();
   const nav = useNavigate();
+  const { to } = useLocalizedPath();
   const rawRedirect = params.get("redirect") || "";
   const redirectTo =
     rawRedirect.startsWith("/") && !rawRedirect.startsWith("//")
       ? rawRedirect
-      : "/club/dashboard";
+      : to("/club/dashboard");
 
   useEffect(() => {
     if (!loading && user) nav(redirectTo, { replace: true });
@@ -265,18 +267,18 @@ const AuthPage = () => {
 
                 <p className="text-label text-muted-foreground text-center mt-6 leading-relaxed">
                   בהצטרפות אתם מאשרים את{" "}
-                  <Link to="/terms" className="text-foreground hover:text-accent underline underline-offset-2">
+                  <Link to={to("/terms")} className="text-foreground hover:text-accent underline underline-offset-2">
                     תנאי השימוש
                   </Link>{" "}
                   ואת{" "}
-                  <Link to="/privacy" className="text-foreground hover:text-accent underline underline-offset-2">
+                  <Link to={to("/privacy")} className="text-foreground hover:text-accent underline underline-offset-2">
                     מדיניות הפרטיות
                   </Link>
                   .
                 </p>
 
                 <Link
-                  to="/club"
+                  to={to("/club")}
                   className="mt-6 block text-center text-label text-muted-foreground hover:text-accent tracking-[0.15em] uppercase"
                 >
                   ← על המועדון

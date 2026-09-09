@@ -10,6 +10,7 @@ import SectionHeading from "@/components/SectionHeading";
 import ShineButton from "@/components/ui/shine-button";
 import { cn } from "@/lib/utils";
 import { sunbrellaFabrics } from "@/data/sunbrella";
+import { useLocalizedPath } from "@/lib/useLocalizedPath";
 
 /**
  * DIY hub — "the workbench".
@@ -211,6 +212,7 @@ const StationCta = ({
 );
 
 const DIYPage = () => {
+  const { to } = useLocalizedPath();
   return (
     <Layout>
       <SEO
@@ -274,7 +276,7 @@ const DIYPage = () => {
               role="list"
               className="mx-auto grid max-w-6xl gap-6 lg:gap-8 lg:grid-cols-2"
             >
-              <Station n="01" to="/fabric" className="lg:col-span-2">
+              <Station n="01" to={to("/fabric")} className="lg:col-span-2">
                 <StationHead icon={Palette} title="בחרו את הבד" />
 
                 <p className="mt-5 text-body leading-relaxed text-foreground text-pretty">
@@ -302,13 +304,13 @@ const DIYPage = () => {
                   </div>
                 </Specimen>
 
-                <StationCta to="/fabric" className="mt-8 lg:mt-auto lg:pt-8">
+                <StationCta to={to("/fabric")} className="mt-8 lg:mt-auto lg:pt-8">
                   לבחירת הבד
                 </StationCta>
               </Station>
 
               {/* ---- 03 · short station, left column in RTL ---- */}
-              <Station n="02" to="/ar" className="lg:col-span-2">
+              <Station n="02" to={to("/ar")} className="lg:col-span-2">
                 <StationHead icon={ScanLine} title="AR, תצוגה במרחב" />
 
                 <p className="mt-5 text-body leading-relaxed text-foreground text-pretty">
@@ -345,7 +347,7 @@ const DIYPage = () => {
                   </div>
                 </Specimen>
 
-                <StationCta to="/ar" className="mt-8 lg:mt-auto lg:pt-8">
+                <StationCta to={to("/ar")} className="mt-8 lg:mt-auto lg:pt-8">
                   פתחו את התצוגה
                 </StationCta>
               </Station>
@@ -385,7 +387,7 @@ const DIYPage = () => {
                   ))}
                 </ul>
 
-                <ShineButton to="/contact" invert>
+                <ShineButton to={to("/faq") + "#contact"} invert>
                   דברו איתנו
                   <ArrowLeft className="h-4 w-4" aria-hidden="true" />
                 </ShineButton>

@@ -2,7 +2,6 @@ import type { ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { motion, useReducedMotion, type Variants } from "framer-motion";
 import {
-  ArrowLeft,
   Check,
   ClipboardCheck,
   Heart,
@@ -19,6 +18,8 @@ import ShineButton from "@/components/ui/shine-button";
 import { useAuth } from "@/hooks/useAuth";
 import { cn } from "@/lib/utils";
 import { useTranslation } from "react-i18next";
+import { useLocalizedPath } from "@/lib/useLocalizedPath";
+import DirectionalArrow from "@/components/DirectionalArrow";
 
 /**
  * Club — the membership page.
@@ -93,6 +94,7 @@ const AuthGate = ({
 
 const Club = () => {
   const { t } = useTranslation("club");
+  const { to } = useLocalizedPath();
   const { user, loading } = useAuth();
   const reduceMotion = useReducedMotion();
 
@@ -107,21 +109,21 @@ const Club = () => {
       )}
     >
       {user ? (
-        <ShineButton to="/club/dashboard">
-          לאזור האישי
-          <ArrowLeft className="w-4 h-4" aria-hidden="true" />
+        <ShineButton to={to("/club/dashboard")}>
+          {t("dashboard")}
+          <DirectionalArrow className="w-4 h-4" animate={false} />
         </ShineButton>
       ) : (
         <>
-          <ShineButton to="/club/auth?mode=signup">
-            הצטרפו למועדון
-            <ArrowLeft className="w-4 h-4" aria-hidden="true" />
+          <ShineButton to={to("/club/auth?mode=signup")}>
+            {t("join")}
+            <DirectionalArrow className="w-4 h-4" animate={false} />
           </ShineButton>
           <Link
-            to="/club/auth"
+            to={to("/club/auth")}
             className="link-underline text-small text-foreground-soft hover:text-accent transition-smooth"
           >
-            כבר חברים? התחברות
+            {t("alreadyMember")}
           </Link>
         </>
       )}

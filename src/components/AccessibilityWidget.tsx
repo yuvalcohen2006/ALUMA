@@ -11,6 +11,7 @@ import {
   Type,
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useLocalizedPath } from "@/lib/useLocalizedPath";
 
 const STORAGE_KEY = "aluma-a11y-settings";
 
@@ -40,6 +41,7 @@ const applyToDom = (s: Settings) => {
 };
 
 const AccessibilityWidget = () => {
+  const { to } = useLocalizedPath();
   const [open, setOpen] = useState(false);
   const [settings, setSettings] = useState<Settings>(defaultSettings);
 
@@ -229,7 +231,7 @@ const AccessibilityWidget = () => {
 
               <div className="pt-4 border-t border-border text-center">
                 <Link
-                  to="/accessibility"
+                  to={to("/accessibility")}
                   onClick={() => setOpen(false)}
                   className="text-sm text-primary hover:text-accent transition-smooth"
                 >

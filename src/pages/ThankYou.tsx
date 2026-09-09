@@ -6,9 +6,11 @@ import { Check, ArrowLeft, Phone, MessageCircle } from "lucide-react";
 import alumaLogo from "@/assets/aluma-logo.png";
 import Layout from "@/components/Layout";
 import { useTranslation } from "react-i18next";
+import { useLocalizedPath } from "@/lib/useLocalizedPath";
 
 const ThankYou = () => {
   const { t } = useTranslation("misc");
+  const { to } = useLocalizedPath();
   // Live contact facts, falling back to src/config/site.ts.
   const SITE = useSiteContact();
   useEffect(() => {
@@ -69,7 +71,7 @@ const ThankYou = () => {
 
           <div className="border-t border-border/60 pt-6 flex flex-col sm:flex-row items-center justify-center gap-4 text-body">
             <Link
-              to="/projects"
+              to={to("/projects")}
               className="text-foreground hover:text-accent transition-smooth inline-flex items-center gap-1.5"
             >
               {t("thankYou.projects")}
@@ -77,7 +79,7 @@ const ThankYou = () => {
             </Link>
             <span className="hidden sm:inline text-border">|</span>
             <Link
-              to="/"
+              to={to("/")}
               className="text-muted-foreground hover:text-primary transition-smooth"
             >
               חזרה לדף הבית

@@ -3,7 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import Layout from "@/components/Layout";
 import SEO from "@/components/SEO";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, ArrowRight, Check, Ruler, Layers } from "lucide-react";
+import { Check, Ruler, Layers } from "lucide-react";
 import NotFound from "./NotFound";
 import { supabase } from "@/integrations/supabase/client";
 import { normaliseProduct, type DBProduct } from "@/hooks/useCollectionsData";
@@ -12,12 +12,15 @@ import { formatPrice } from "@/lib/price";
 import Ltr from "@/components/Ltr";
 import { useProductGallery, type ProductVariant } from "@/hooks/useProductGallery";
 import { useTranslation } from "react-i18next";
+import { useLocalizedPath } from "@/lib/useLocalizedPath";
+import DirectionalArrow from "@/components/DirectionalArrow";
 
 const SITE = "https://alumaoutdoor.com";
 
 const CollectionDetailPage = () => {
   const { slug } = useParams();
   const { t } = useTranslation("catalogue");
+  const { to } = useLocalizedPath();
   const [item, setItem] = useState<DBProduct | null>(null);
   const [variants, setVariants] = useState<ProductVariant[]>([]);
   const [related, setRelated] = useState<DBProduct[]>([]);
@@ -118,7 +121,7 @@ const CollectionDetailPage = () => {
     if (!item) return;
     trackPixel("ViewContent", {
       content_name: item.name,
-      content_category: item.tag ?? "קולקציות",
+      content_category: item.tag ?? "collections",
       content_ids: [item.slug],
       content_type: "product",
     });
@@ -173,8 +176,12 @@ const CollectionDetailPage = () => {
   return (
     <Layout>
       <SEO
-        title={`${item.name} | קולקציות | Aluma`}
-        description={`${item.name}, ${item.tagline ?? ""}. ${item.description[0] ?? ""}`}
+        title={`${item.name} | ${t("collectionsWord")} | Aluma`}
+        /* Assembled from the parts that exist. Written as a template with the
+           comma and full stop as literals, a product with no tagline and no
+           description — which is every product on the site today — produced
+           the meta description "aero, . " for Google to show. */
+        description={[item.name, item.tagline, item.description[0]].filter(Boolean).join(". ")}
         path={`/products/${item.slug}`}
         jsonLd={productJsonLd}
       />
@@ -183,11 +190,11 @@ const CollectionDetailPage = () => {
       <section className="bg-background pt-24 md:pt-28 pb-6 md:pb-10">
         <div className="container-luxury">
           <Link
-            to="/collections"
-            className="inline-flex items-center gap-2 text-body text-muted-foreground hover:text-accent transition-smooth"
+            to={to("/collections")}
+            className="group inline-flex items-center gap-2 text-body text-muted-foreground transition-smooth hover:text-foreground"
           >
-            <ArrowRight className="w-4 h-4" />
-            <span>חזרה לקולקציות</span>
+            <DirectionalArrow direction="back" className="w-4 h-4" />
+            <span>{t("backToCollections")}</span>
           </Link>
         </div>
       </section>
@@ -196,17 +203,20 @@ const CollectionDetailPage = () => {
       <section className="pb-8 md:pb-12 bg-background">
         <div className="container-luxury text-center">
           {item.tag && (
-            <div className="inline-block px-4 py-1.5 mb-5 bg-secondary text-foreground text-body rounded-sm">
+            <div dir="auto" className="inline-block px-4 py-1.5 mb-5 bg-secondary text-foreground text-body rounded-sm">
               {item.tag}
             </div>
           )}
           <div className="flex items-center justify-center gap-3 mb-3">
-            <h1 className="font-display text-3xl sm:text-4xl md:text-5xl leading-tight text-foreground">
+            <h1
+              dir="auto"
+              className="font-display text-3xl sm:text-4xl md:text-5xl leading-tight text-foreground"
+            >
               {item.name}
             </h1>
           </div>
           {item.tagline && (
-            <p className="text-body leading-relaxed italic text-foreground-soft max-w-2xl mx-auto">
+            <p dir="auto" className="text-body leading-relaxed italic text-foreground-soft max-w-2xl mx-auto">
               {item.tagline}
             </p>
           )}
@@ -215,7 +225,7 @@ const CollectionDetailPage = () => {
           {formatPrice(item.price) && (
             <p className="text-body text-foreground">
               {item.price_note && (
-                <span className="text-foreground-soft">{item.price_note} </span>
+                <span dir="auto" className="text-foreground-soft">{item.price_note} </span>
               )}
               <span dir="ltr">{formatPrice(item.price)}</span>
             </p>
@@ -273,7 +283,7 @@ const CollectionDetailPage = () => {
                 <div className="w-20 h-[2px] bg-foreground/15 mt-5 mb-6" aria-hidden="true" />
                 <div className="space-y-5">
                   {item.description.map((p, i) => (
-                    <p key={i} className="text-foreground text-body">
+                    <p key={i} dir="auto" className="text-foreground text-body">
                       {p}
                     </p>
                   ))}
@@ -291,7 +301,7 @@ const CollectionDetailPage = () => {
                   {item.highlights.map((h) => (
                     <li key={h.title} className="flex gap-3">
                       <Check className="w-5 h-5 text-accent mt-1 shrink-0" />
-                      <div className="text-foreground font-normal text-body leading-relaxed">
+                      <div dir="auto" className="text-foreground font-normal text-body leading-relaxed">
                         {h.title}{h.desc && <span className="text-muted-foreground">, {h.desc}</span>}
                       </div>
                     </li>
@@ -309,7 +319,7 @@ const CollectionDetailPage = () => {
                       <div className="font-display font-normal text-body text-foreground mb-3">
                         {t("sections.materials")}
                       </div>
-                      <div className="text-foreground font-normal text-body leading-relaxed space-y-1.5">
+                      <div dir="auto" className="text-foreground font-normal text-body leading-relaxed space-y-1.5">
                         {item.materials.map((m, i) => (
                           <div key={i} className="flex items-center gap-2.5">
                             <span className="w-1.5 h-1.5 rounded-full bg-accent shrink-0" />
@@ -361,7 +371,7 @@ const CollectionDetailPage = () => {
                   <div className="relative overflow-hidden rounded-sm aspect-square bg-secondary">
                     <img
                       src={img}
-                      alt={`${item.name}, תמונה ${i + 1}`}
+                      alt={t("imageAlt", { name: item.name, index: i + 1 })}
                       loading={i === 0 ? "eager" : "lazy"}
                       decoding="async"
                       className="absolute inset-0 h-full w-full object-contain p-4"
@@ -382,7 +392,7 @@ const CollectionDetailPage = () => {
                   {galleryImages[activeImage] && (
                     <img
                       src={galleryImages[activeImage]}
-                      alt={`${item.name}, תמונה ${activeImage + 1}`}
+                      alt={t("imageAlt", { name: item.name, index: activeImage + 1 })}
                       loading="eager"
                       decoding="async"
                       className="absolute inset-0 h-full w-full object-contain p-6 transition-opacity duration-500"
@@ -401,7 +411,7 @@ const CollectionDetailPage = () => {
                       key={i}
                       type="button"
                       onClick={() => setActiveImage(i)}
-                      aria-label={`תמונה ${i + 1}`}
+                      aria-label={t("imageLabel", { index: i + 1 })}
                       className={`relative aspect-square shrink-0 overflow-hidden rounded-sm transition-smooth ${
                         activeImage === i
                           ? "ring-2 ring-accent opacity-100"
@@ -429,7 +439,7 @@ const CollectionDetailPage = () => {
       <section className="py-20 md:py-24 band-tint">
         <div className="container-luxury flex flex-col items-center text-center">
           {/* Charcoal, not terracotta: 3.1:1 on this band is under AA. */}
-          <p className="text-body text-foreground-soft mb-4">מגשימים חלום</p>
+          <p className="text-body text-foreground-soft mb-4">{t("ctaEyebrow")}</p>
           <h2 className="font-display font-normal text-3xl md:text-5xl text-foreground leading-tight">
             {t("leaveDetails")}
           </h2>
@@ -438,9 +448,9 @@ const CollectionDetailPage = () => {
             {t("bespokeNote")}
           </p>
           <Button asChild size="lg" className="rounded-sm text-body px-8">
-            <Link to="/faq#contact" className="inline-flex items-center gap-2">
+            <Link to={to("/faq") + "#contact"} className="inline-flex items-center gap-2">
               {t("leaveDetailsCta")}
-              <ArrowLeft className="w-4 h-4" />
+              <DirectionalArrow className="w-4 h-4" animate={false} />
             </Link>
           </Button>
         </div>
@@ -460,7 +470,7 @@ const CollectionDetailPage = () => {
               {related.map((c) => (
                 <Link
                   key={c.slug}
-                  to={`/products/${c.slug}`}
+                  to={to(`/products/${c.slug}`)}
                   className="group block bg-card rounded-sm overflow-hidden border border-border  hover:border-foreground/15  transition-smooth"
                 >
                   <div className="relative aspect-[4/3] overflow-hidden bg-secondary">
@@ -484,7 +494,7 @@ const CollectionDetailPage = () => {
                   <div className="p-6">
                     <h3 className="font-display font-normal text-body text-foreground group-hover:text-accent transition-smooth flex items-center gap-2">
                       {c.name}
-                      <ArrowLeft className="w-4 h-4 shrink-0" />
+                      <DirectionalArrow className="w-4 h-4" />
                     </h3>
                   </div>
                 </Link>

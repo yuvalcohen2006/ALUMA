@@ -56,7 +56,7 @@ const FaqRow = ({ q, a, id, open, onToggle }: { q: string; a: string; id: string
         }`}
         strokeWidth={2}
       />
-      <span className="text-body font-medium leading-[1.35] text-foreground">
+      <span dir="auto" className="text-body font-medium leading-[1.35] text-foreground">
         {q}
       </span>
     </button>
@@ -80,6 +80,7 @@ const FaqRow = ({ q, a, id, open, onToggle }: { q: string; a: string; id: string
     >
       <div className="overflow-hidden">
         <p
+          dir="auto"
           className={`ps-10 pb-8 pt-1 max-w-[62ch] text-small text-foreground-soft transition-opacity duration-300 ${
             open ? "opacity-100 delay-75" : "opacity-0"
           }`}
@@ -187,12 +188,12 @@ const FAQPage = () => {
           </Reveal>
 
           <div className="mt-12 md:mt-16">
-            {grouped.map((group) => (
-              <Reveal key={group.category}>
+            {grouped.map((group, gi) => (
+              <Reveal key={group.category} className={gi > 0 ? "mt-14" : undefined}>
                 <section aria-label={group.category}>
                   {/* A label, not a tab. Hebrew has no uppercase, so size and
                       colour do that job instead. */}
-                  <h2 className="mt-14 first:mt-0 mb-4 text-label text-muted-foreground text-start">
+                  <h2 dir="auto" className="mb-4 text-label text-muted-foreground text-start">
                     {group.category}
                   </h2>
                   {group.items.map((f) => (

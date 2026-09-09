@@ -1,0 +1,63 @@
+{
+  "channels": {
+    "whatsapp": {
+      "title": "Send a WhatsApp message",
+      "line": "A real person, quickly — photos of your garden welcome"
+    },
+    "whatsappMessage": "Hi, I'd like to hear about a made-to-measure outdoor lounge",
+    "phoneLine": "Talk to us directly, during opening hours",
+    "emailLine": "Best for measurements, plans and files",
+    "showroomTitle": "The {{city}} showroom",
+    "showroomLine": "{{street}}, visits by appointment"
+  },
+  "email": {
+    "subject": "Enquiry from the website",
+    "body": "Hi,\n\nI'd like to hear about made-to-measure outdoor furniture.\n\nName:\nPhone:\n",
+    "openInMailApp": "Open in your mail app",
+    "openInGmail": "Open in Gmail",
+    "copyAddress": "Copy the address",
+    "copied": "Address copied",
+    "copyFailed": "Copying failed. Select the address and copy it by hand."
+  },
+  "assurances": [
+    "An answer within 24 hours on business days",
+    "Free consultation, no obligation",
+    "Your details stay with us alone"
+  ],
+  "intro": "Tell us what you have in mind and we'll help you build it.",
+  "openForm": "Leave your details",
+  "closeForm": "Close the form",
+  "required": "Fields marked * are required",
+  "errorSummary": "We couldn't send it — please correct the marked fields",
+  "fields": {
+    "name": "Name",
+    "phone": "Phone",
+    "email": "Email",
+    "message": "Message",
+    "nameLabel": "Full name *",
+    "namePlaceholder": "Your name",
+    "phoneLabel": "Phone *",
+    "phonePlaceholder": "A mobile we can call back",
+    "emailLabel": "Email",
+    "emailOptional": "(optional)",
+    "emailPlaceholder": "Email address",
+    "messageLabel": "Tell us about your project",
+    "messagePlaceholder": "The size of the terrace or garden, how many people sit down, a style you liked, your timing — every detail helps."
+  },
+  "submit": "Send the message",
+  "submitting": "Sending…",
+  "submittingLive": "Sending your message, one moment",
+  "consent": {
+    "before": "By sending this form you accept our",
+    "policy": "privacy policy",
+    "after": ". Your details are kept only so we can come back to you, and are never passed to a third party."
+  },
+  "toast": {
+    "tooFast": "Please try again in a moment",
+    "cooldown": "A message was sent just now — try again in {{secs}} seconds",
+    "thanks": "Thank you! We'll be in touch shortly",
+    "fixFields": "Please correct the marked fields",
+    "unexpected": "Something unexpected went wrong. Please try again.",
+    "network": "Network error. Check your connection and try again."
+  }
+}

@@ -12,6 +12,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
 import { LogOut, Calendar, MapPin, ClipboardList, UserRound } from "lucide-react";
+import { useLocalizedPath } from "@/lib/useLocalizedPath";
 
 type Project = {
   id: string;
@@ -39,13 +40,14 @@ const statusLabels: Record<string, string> = {
 const Account = () => {
   const { user, loading, signOut } = useAuth();
   const nav = useNavigate();
+  const { to } = useLocalizedPath();
   const [projects, setProjects] = useState<Project[]>([]);
   const [profile, setProfile] = useState<Profile>({ full_name: "", phone: "" });
   const [busy, setBusy] = useState(true);
   const [savingProfile, setSavingProfile] = useState(false);
 
   useEffect(() => {
-    if (!loading && !user) nav("/club/auth", { replace: true });
+    if (!loading && !user) nav(to("/club/auth"), { replace: true });
   }, [user, loading, nav]);
 
   useEffect(() => {
@@ -72,7 +74,7 @@ const Account = () => {
   const handleSignOut = async () => {
     await signOut();
     toast.success("התנתקת בהצלחה");
-    nav("/");
+    nav(to("/"));
   };
 
   const saveProfile = async (e: React.FormEvent) => {
@@ -140,7 +142,7 @@ const Account = () => {
                 <div className="bg-card border border-border rounded-sm p-10 text-center">
                   <p className="text-muted-foreground mb-4">אין לך עדיין הזמנה פעילה.</p>
                   <Button asChild>
-                    <Link to="/faq#contact">צור קשר להתחלת פרויקט</Link>
+                    <Link to={to("/faq") + "#contact"}>צור קשר להתחלת פרויקט</Link>
                   </Button>
                 </div>
               ) : (

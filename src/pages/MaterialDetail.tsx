@@ -6,8 +6,10 @@ import SEO from "@/components/SEO";
 import { getMaterial } from "@/data/materials";
 import { ArrowRight, Check } from "lucide-react";
 import NotFound from "./NotFound";
+import { useLocalizedPath } from "@/lib/useLocalizedPath";
 
 const MaterialDetailPage = () => {
+  const { to } = useLocalizedPath();
   const { slug } = useParams();
   const material = slug ? getMaterial(slug) : undefined;
   if (!material) return <NotFound />;
@@ -161,7 +163,7 @@ const MaterialDetailPage = () => {
 
       <div className="py-16 md:py-20 bg-background flex justify-center">
         <Link
-          to="/materials"
+          to={to("/materials")}
           className="inline-flex items-center gap-2.5 text-body font-normal text-primary border border-foreground/15 hover:bg-primary hover:text-primary-foreground hover:border-primary transition-smooth rounded-sm px-8 py-3.5"
         >
           <ArrowRight className="w-5 h-5" aria-hidden="true" />

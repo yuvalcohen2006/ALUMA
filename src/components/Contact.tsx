@@ -2,7 +2,6 @@ import { useRef, useState, type ReactNode } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   AlertCircle,
-  ArrowLeft,
   Check,
   ChevronDown,
   ChevronLeft,
@@ -24,6 +23,9 @@ import { WhatsAppIcon } from "@/components/WhatsAppButton";
 import SectionHeading from "@/components/SectionHeading";
 import Reveal from "@/components/Reveal";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "react-i18next";
+import { useLocalizedPath } from "@/lib/useLocalizedPath";
+import DirectionalArrow from "@/components/DirectionalArrow";
 
 /* ---------------------------------------------------------------------------
    Direct channels — the left column of the split (RTL: the second DOM child).
@@ -51,15 +53,17 @@ type Channel = {
   external?: boolean;
 };
 
-const channelsFor = (SITE: SiteContact): Channel[] => [
+type TFunc = (key: string, opts?: Record<string, unknown>) => string;
+
+const channelsFor = (SITE: SiteContact, t: TFunc): Channel[] => [
   {
     key: "whatsapp",
     Icon: WhatsAppIcon,
     iconClass: "bg-[#25D366]/10 text-[#25D366]",
     glyphClass: "w-[22px] h-[22px]",
-    title: "שליחת הודעת וואטסאפ",
-    line: "מענה אנושי מהיר, גם לתמונות מהחצר",
-    href: SITE.whatsapp.link("היי, אשמח לשמוע על סלון חוץ בהתאמה אישית"),
+    title: t("channels.whatsapp.title"),
+    line: t("channels.whatsapp.line"),
+    href: SITE.whatsapp.link(t("channels.whatsappMessage")),
     external: true,
   },
   {
@@ -68,7 +72,7 @@ const channelsFor = (SITE: SiteContact): Channel[] => [
     iconClass: "bg-foreground/15 text-accent",
     title: SITE.phone.display,
     ltr: true,
-    line: "מדברים איתנו ישירות, בשעות הפעילות",
+    line: t("channels.phoneLine"),
     href: `tel:${SITE.phone.tel}`,
   },
   {
@@ -80,32 +84,27 @@ const channelsFor = (SITE: SiteContact): Channel[] => [
     // Deliberately not the 24-hour promise: that line already sits, word for
     // word, in the assurances beside the form — two identical sentences a few
     // centimetres apart read as a copy-paste slip.
-    line: "נוח לשליחת מידות, תוכניות וקבצים",
+    line: t("channels.emailLine"),
     // Prefilled, like the WhatsApp tile beside it. A bare mailto: opens an
     // empty window, and the visitor has to invent an opening line.
-    href: mailtoLink(SITE.email, EMAIL_SUBJECT, EMAIL_BODY),
+    href: mailtoLink(SITE.email, t("email.subject"), t("email.body")),
   },
   {
     key: "showroom",
     Icon: MapPin,
     iconClass: "bg-foreground/15 text-accent",
-    title: `אולם התצוגה ב${SITE.address.city}`,
+    title: t("channels.showroomTitle", { city: SITE.address.city }),
     // The street stays on the tile. This is the one channel whose whole subject
     // is "where", and a visitor scanning the four tiles should get the answer
     // without a click — the band a screen below is the detail, not the source.
-    line: `${SITE.address.street}, ביקור בתיאום מראש`,
+    line: t("channels.showroomLine", { street: SITE.address.street }),
   },
 ];
 
-/** One prefill, shared by the mailto and the Gmail link so the two agree. */
-const EMAIL_SUBJECT = "פנייה מהאתר";
-const EMAIL_BODY = "היי,\n\nאשמח לשמוע על ריהוט חוץ בהתאמה אישית.\n\nשם:\nטלפון:\n";
-
-const OPEN_IN_MAIL_APP = "פתיחה בתוכנת הדואר";
-const OPEN_IN_GMAIL = "פתיחה ב-Gmail";
-const COPY_ADDRESS = "העתקת הכתובת";
-const COPIED = "הכתובת הועתקה";
-const COPY_FAILED = "ההעתקה נכשלה. סמנו את הכתובת והעתיקו ידנית.";
+/* The email prefill, the tile actions and the form copy all live in the
+   `contact` namespace now. They were module constants in Hebrew, which meant
+   /en/faq rendered an English heading over an entirely Hebrew contact block —
+   the one place on the English site where a visitor is asked to act. */
 
 const scrollToShowroom = () => {
   const el = document.getElementById("showroom");
@@ -216,10 +215,11 @@ const EmailTile = ({
   mailto: string;
 }) => {
   const [copied, setCopied] = useState(false);
+  const { t } = useTranslation("contact");
 
   const copy = async () => {
     const ok = await copyText(email);
-    if (!ok) return toast.error(COPY_FAILED);
+    if (!ok) return toast.error(t("email.copyFailed"));
     setCopied(true);
     window.setTimeout(() => setCopied(false), 2400);
   };
@@ -233,27 +233,27 @@ const EmailTile = ({
           href={mailto}
           className="text-body text-accent underline decoration-1 underline-offset-4 transition-colors hover:text-foreground"
         >
-          {OPEN_IN_MAIL_APP}
+          {t("email.openInMailApp")}
         </a>
         <a
-          href={gmailComposeLink(email, EMAIL_SUBJECT, EMAIL_BODY)}
+          href={gmailComposeLink(email, t("email.subject"), t("email.body"))}
           target="_blank"
           rel="noopener noreferrer"
           className="text-body text-accent underline decoration-1 underline-offset-4 transition-colors hover:text-foreground"
         >
-          {OPEN_IN_GMAIL}
+          {t("email.openInGmail")}
         </a>
         <button
           type="button"
           onClick={copy}
           className="text-body text-accent underline decoration-1 underline-offset-4 transition-colors hover:text-foreground"
         >
-          {COPY_ADDRESS}
+          {t("email.copyAddress")}
         </button>
         {/* Polite, never assertive: a copy confirmation must not interrupt
             whatever was already being read aloud. */}
         <span role="status" aria-live="polite" className="text-body text-muted-foreground">
-          {copied ? COPIED : ""}
+          {copied ? t("email.copied") : ""}
         </span>
       </div>
     </div>
@@ -264,18 +264,6 @@ const EmailTile = ({
    The form
 --------------------------------------------------------------------------- */
 
-const FIELD_LABELS: Record<string, string> = {
-  name: "שם",
-  phone: "טלפון",
-  email: "מייל",
-  message: "הודעה",
-};
-
-const assurances = [
-"מענה תוך 24 שעות בימי עסקים",
-"ייעוץ ללא עלות וללא התחייבות",
-"פרטיכם נשמרים אצלנו בלבד",
-];
 
 // Tall, generously padded fields. Radius is the site's control radius (10px,
 // the same tablet the buttons and pills use) rather than the 14px reserved for
@@ -287,7 +275,7 @@ const assurances = [
 const fieldClass = (invalid: boolean) =>
   cn(
 "w-full rounded-none border-0 border-b bg-transparent px-0 text-body text-foreground text-start",
-"placeholder:text-muted-foreground/60 transition-colors focus:ring-0",
+"placeholder:text-muted-foreground/85 transition-colors focus:ring-0",
     invalid ? "border-destructive/70 focus:border-destructive" : "border-input focus:border-accent",
   );
 
@@ -305,15 +293,16 @@ const FieldError = ({ id, message }: { id: string; message: string }) => (
 const COOLDOWN_MS = 30_000;
 const MIN_FILL_MS = 2_500;
 
-const FORM_OPEN = "השארת פרטים";
-const FORM_CLOSE = "סגירת הטופס";
 
 const Contact = () => {
   const [formOpen, setFormOpen] = useState(false);
   const navigate = useNavigate();
+  const { t } = useTranslation("contact");
+  const { to } = useLocalizedPath();
+  const assurances = t("assurances", { returnObjects: true }) as string[];
   // Phone, address and social links as set in /admin/settings, over the ones
   // the site ships with.
-  const channels = channelsFor(useSiteContact());
+  const channels = channelsFor(useSiteContact(), t);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
   const formMountedAt = useRef<number>(Date.now());
@@ -324,12 +313,12 @@ const Contact = () => {
     const now = Date.now();
 
     if (now - formMountedAt.current < MIN_FILL_MS) {
-      toast.error("נא לנסות שוב בעוד רגע");
+      toast.error(t("toast.tooFast"));
       return;
     }
     if (now - lastSubmitAt.current < COOLDOWN_MS) {
       const secs = Math.ceil((COOLDOWN_MS - (now - lastSubmitAt.current)) / 1000);
-      toast.error(`נשלחה הודעה לאחרונה, נסו שוב בעוד ${secs} שניות`);
+      toast.error(t("toast.cooldown", { secs }));
       return;
     }
 
@@ -344,7 +333,7 @@ const Contact = () => {
     };
 
     if (payload.website) {
-      toast.success("תודה! נחזור אליכם בהקדם");
+      toast.success(t("toast.thanks"));
       form.reset();
       return;
     }
@@ -357,7 +346,7 @@ const Contact = () => {
         if (!fieldErrors[key]) fieldErrors[key] = issue.message;
       }
       setErrors(fieldErrors);
-      toast.error("יש לתקן את השדות המסומנים");
+      toast.error(t("toast.fixFields"));
       // Send focus to the first field that failed, so a keyboard/screen-reader
       // user lands on the problem instead of hunting for it.
       const firstKey = parsed.error.issues[0]?.path[0] as string | undefined;
@@ -388,15 +377,15 @@ const Contact = () => {
       } else if (result?.ok) {
         form.reset();
         formMountedAt.current = Date.now();
-        navigate("/thank-you");
+        navigate(to("/thank-you"));
       } else {
         lastSubmitAt.current = 0;
-        toast.error("שגיאה לא צפויה. נסו שוב.");
+        toast.error(t("toast.unexpected"));
       }
     } catch (err) {
       console.error(err);
       lastSubmitAt.current = 0;
-      toast.error("שגיאת רשת. בדקו חיבור ונסו שוב.");
+      toast.error(t("toast.network"));
     } finally {
       setSubmitting(false);
     }
@@ -408,7 +397,7 @@ const Contact = () => {
     // A tinted band, and now a ruled one. Fill alone carried every seam on this
     // site while the page was cream and the band sand (1.22:1). White against
     // #F8F8F8 is 1.06:1 — too little to mark a section change by itself.
-    <section dir="rtl" className="py-14 md:py-20 bg-secondary border-y border-border">
+    <section className="py-14 md:py-20 bg-secondary border-y border-border">
       <div className="container-luxury">
         {/* Channels before the form, everywhere. Apple's own contact page has
             no form at all — a person deciding on made-to-order furniture wants
@@ -425,7 +414,7 @@ const Contact = () => {
           {/* ===== FORM ===== */}
           <Reveal className="min-w-0 max-w-[640px]">
             <p className="text-body leading-relaxed text-foreground-soft">
-              ספרו לנו מה החלום שלכם ואנחנו נדאג להגשים לכם אותו.
+              {t("intro")}
             </p>
 
             {/* Close to the heading (24px) because it belongs to it, and a full
@@ -472,7 +461,7 @@ const Contact = () => {
               aria-controls="contact-form-region"
               className="mt-9 inline-flex h-12 items-center gap-2 rounded-full bg-foreground px-7 text-small font-medium text-background transition-colors duration-200 hover:bg-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
             >
-              {formOpen ? FORM_CLOSE : FORM_OPEN}
+              {formOpen ? t("closeForm") : t("openForm")}
               <ChevronDown
                 className={cn(
                   "h-4 w-4 transition-transform duration-300",
@@ -537,12 +526,12 @@ const Contact = () => {
                 >
                   <p className="flex items-center gap-2.5 text-body font-medium text-destructive">
                     <AlertCircle className="w-5 h-5 shrink-0" aria-hidden="true" />
-                    לא הצלחנו לשלוח, יש לתקן את השדות המסומנים
+                    {t("errorSummary")}
                   </p>
                   <ul className="mt-3 space-y-1.5 text-body leading-snug text-destructive">
                     {errorList.map(([key, message]) => (
                       <li key={key}>
-                        {FIELD_LABELS[key] ?? key}: {message}
+                        {t(`fields.${key}`, { defaultValue: key })}: {message}
                       </li>
                     ))}
                   </ul>
@@ -557,15 +546,12 @@ const Contact = () => {
                     on the tinted band, where text-accent measures 4.0:1 — still under
                     AA for 18px. The ink stays charcoal and the terracotta stays
                     in the rules, exactly as the projects index does it. */}
-                <p className="text-body leading-snug text-muted-foreground">
-                  השדות המסומנים ב־<span className="font-medium text-foreground">*</span> הם שדות
-                  חובה
-                </p>
+                <p className="text-body leading-snug text-muted-foreground">{t("required")}</p>
 
                 <div className="grid gap-6 sm:grid-cols-2">
                   <div>
                     <label htmlFor="contact-name" className={labelClass}>
-                      שם מלא *
+                      {t("fields.nameLabel")}
                     </label>
                     <input
                       id="contact-name"
@@ -573,7 +559,7 @@ const Contact = () => {
                       required
                       maxLength={100}
                       autoComplete="name"
-                      placeholder="השם שלכם"
+                      placeholder={t("fields.namePlaceholder")}
                       dir="rtl"
                       aria-invalid={!!errors.name}
                       aria-describedby={errors.name ? "contact-name-error" : undefined}
@@ -584,7 +570,7 @@ const Contact = () => {
 
                   <div>
                     <label htmlFor="contact-phone" className={labelClass}>
-                      טלפון *
+                      {t("fields.phoneLabel")}
                     </label>
                     <input
                       id="contact-phone"
@@ -594,7 +580,7 @@ const Contact = () => {
                       maxLength={20}
                       autoComplete="tel"
                       inputMode="tel"
-                      placeholder="טלפון נייד לחזרה"
+                      placeholder={t("fields.phonePlaceholder")}
                       // Hebrew prompt while empty, digits left-to-right once
                       // typed. See lib/field-direction.
                       {...latinFieldProps}
@@ -608,7 +594,8 @@ const Contact = () => {
 
                 <div>
                   <label htmlFor="contact-email" className={labelClass}>
-                    מייל <span className="font-normal text-muted-foreground">(לא חובה)</span>
+                    {t("fields.emailLabel")}{" "}
+                    <span className="font-normal text-muted-foreground">{t("fields.emailOptional")}</span>
                   </label>
                   <input
                     id="contact-email"
@@ -616,7 +603,7 @@ const Contact = () => {
                     type="email"
                     maxLength={255}
                     autoComplete="email"
-                    placeholder="כתובת מייל"
+                    placeholder={t("fields.emailPlaceholder")}
                     {...latinFieldProps}
                     aria-invalid={!!errors.email}
                     aria-describedby={errors.email ? "contact-email-error" : undefined}
@@ -627,16 +614,16 @@ const Contact = () => {
 
                 <div>
                   <label htmlFor="contact-message" className={labelClass}>
-                    ספרו לנו על הפרויקט שלכם{" "}
-                    <span className="font-normal text-muted-foreground">(לא חובה)</span>
+                    {t("fields.messageLabel")}{" "}
+                    <span className="font-normal text-muted-foreground">{t("fields.emailOptional")}</span>
                   </label>
                   <textarea
                     id="contact-message"
                     name="message"
                     maxLength={1000}
                     rows={7}
-                    dir="rtl"
-                    placeholder="גודל המרפסת או החצר, כמה אנשים יושבים, סגנון שאהבתם, לוח זמנים — כל פרט עוזר לנו להתאים."
+                    dir="auto"
+                    placeholder={t("fields.messagePlaceholder")}
                     aria-invalid={!!errors.message}
                     aria-describedby={errors.message ? "contact-message-error" : undefined}
                     className={cn(fieldClass(!!errors.message), "py-4 leading-relaxed resize-none")}
@@ -661,38 +648,35 @@ const Contact = () => {
                   {submitting ? (
                     <>
                       <Loader2 className="w-5 h-5 animate-spin" aria-hidden="true" />
-                      שולחים…
+                      {t("submitting")}
                     </>
                   ) : (
                     <>
-                      שליחת ההודעה
-                      <ArrowLeft
-                        className="w-5 h-5 transition-transform duration-300 group-hover:-translate-x-1"
-                        aria-hidden="true"
-                      />
+                      {t("submit")}
+                      <DirectionalArrow className="w-5 h-5" />
                     </>
                   )}
                 </button>
 
                 <p className="text-body leading-relaxed text-muted-foreground sm:max-w-[22rem]">
-                  בשליחת הטופס הינכם מאשרים את{" "}
+                  {t("consent.before")}{" "}
                   {/* Sand again: charcoal ink, and a standing underline rather
                       than the hover-grown one, because this is a link buried
                       inside a sentence — colour alone can't carry it. */}
                   <Link
-                    to="/privacy"
+                    to={to("/privacy")}
                     className="font-medium text-foreground underline underline-offset-4 decoration-foreground/40 transition-colors hover:decoration-foreground"
                   >
-                    מדיניות הפרטיות
+                    {t("consent.policy")}
                   </Link>{" "}
-                  שלנו. הפרטים נשמרים לצורך חזרה אליכם בלבד ולא מועברים לצד שלישי.
+                  {t("consent.after")}
                 </p>
               </div>
 
               {/* Announced on submit; the button label alone is not enough for
                   screen readers that keep focus inside the form. */}
               <p className="sr-only" role="status" aria-live="polite">
-                {submitting ? "שולחים את ההודעה, רגע אחד" : ""}
+                {submitting ? t("submittingLive") : ""}
               </p>
             </form>
                 </div>

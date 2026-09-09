@@ -6,6 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { ArrowRight } from "lucide-react";
 import DOMPurify from "dompurify";
 import logo from "@/assets/aluma-logo.png";
+import { useLocalizedPath } from "@/lib/useLocalizedPath";
 
 type Post = {
   id: string;
@@ -120,6 +121,7 @@ const ArticleSkeleton = () => (
 );
 
 const BlogPost = () => {
+  const { to } = useLocalizedPath();
   const { slug } = useParams();
   const [post, setPost] = useState<Post | null>(null);
   const [loading, setLoading] = useState(true);
@@ -186,7 +188,7 @@ const BlogPost = () => {
         <div className="container-luxury max-w-3xl">
           {/* Back, not forward: in RTL the return arrow points right. */}
           <Link
-            to="/blog"
+            to={to("/blog")}
             className="group inline-flex items-center gap-2 text-body text-foreground-soft hover:text-primary transition-smooth mb-10"
           >
             <ArrowRight

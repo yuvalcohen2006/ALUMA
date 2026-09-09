@@ -72,3 +72,35 @@ describe("page direction", () => {
     expect(layout).not.toMatch(/<main[^>]*dir="rtl"/);
   });
 });
+
+/**
+ * A public page that writes `to="/collections"` sends an English reader to the
+ * HEBREW collections page: react-router resolves a leading slash against the
+ * router root, so the `/en` the visitor is reading under is simply dropped.
+ * The project pages, the product page, the club page and the contact form all
+ * shipped this, and each one was a one-way exit out of the English site.
+ *
+ * The fix is `to(...)` from useLocalizedPath. This is the guard that stops the
+ * next one, because nothing about the Hebrew site ever looks wrong.
+ */
+describe("links out of a public page", () => {
+  // The admin lives at /admin in Hebrew only; the language switcher and the
+  // SEO helper build cross-language URLs on purpose; AdminGuard redirects into
+  // that Hebrew-only tree.
+  const EXEMPT = /^src\/(pages|components)\/admin\/|LanguageSwitcher|SEO\.tsx$|AdminGuard\.tsx$/;
+
+  it("never hardcode an absolute app path", () => {
+    const offenders: string[] = [];
+    for (const f of [...files("src/pages"), ...files("src/components")]) {
+      if (EXEMPT.test(f)) continue;
+      const src = read(f);
+      for (const m of src.matchAll(/(?:to|navigate\()\s*=?\s*"(\/[^"]*)"/g)) {
+        const path = m[1];
+        // Anchors and external schemes are not app paths.
+        if (path.startsWith("//")) continue;
+        offenders.push(`${f}: ${path}`);
+      }
+    }
+    expect(offenders).toEqual([]);
+  });
+});

@@ -38,5 +38,10 @@
   "backToProjects": "Back to projects",
   "aboutProject": "About this project",
   "projectIncludes": "This project includes",
-  "loadErrorPage": "We couldn't load the catalogue. Check your connection and try again."
+  "loadErrorPage": "We couldn't load the catalogue. Check your connection and try again.",
+  "backToCollections": "Back to collections",
+  "collectionsWord": "Collections",
+  "imageAlt": "{{name}}, image {{index}}",
+  "imageLabel": "Image {{index}}",
+  "ctaEyebrow": "Making it real"
 }

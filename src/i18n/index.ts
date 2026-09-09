@@ -15,10 +15,12 @@ import heProjects from "./locales/he/projects.json";
 import heMisc from "./locales/he/misc.json";
 import heClub from "./locales/he/club.json";
 import heAbout from "./locales/he/about.json";
+import heContact from "./locales/he/contact.json";
 import enProjects from "./locales/en/projects.json";
 import enMisc from "./locales/en/misc.json";
 import enClub from "./locales/en/club.json";
 import enAbout from "./locales/en/about.json";
+import enContact from "./locales/en/contact.json";
 
 /**
  * Two languages, so both catalogues are imported eagerly rather than fetched.
@@ -63,6 +65,7 @@ i18n.use(initReactI18next).init({
       misc: heMisc,
       club: heClub,
       about: heAbout,
+      contact: heContact,
     },
     en: {
       common: enCommon,
@@ -74,6 +77,7 @@ i18n.use(initReactI18next).init({
       misc: enMisc,
       club: enClub,
       about: enAbout,
+      contact: enContact,
     },
   },
   lng: DEFAULT_LANGUAGE,

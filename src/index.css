@@ -159,6 +159,18 @@
 
   html {
     scroll-behavior: smooth;
+  }
+
+  /* Every in-page jump on the site goes through this, so the preference has to
+     be honoured here rather than at each call site — the two FAQ jumps slid
+     past the whole question list for someone who asked for no motion. */
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+
+  html {
     /* Firefox: thin terracotta thumb on an invisible track */
     scrollbar-width: thin;
     scrollbar-color: hsl(var(--primary) / 0.55) transparent;

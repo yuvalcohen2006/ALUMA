@@ -40,5 +40,10 @@
   "itemCount_two": "שני פריטים",
   "itemCount_many": "{{count}} פריטים",
   "itemCount_other": "{{count}} פריטים",
-  "loadErrorPage": "אירעה שגיאה בטעינת הקטלוג. בדקו את החיבור ונסו שוב."
+  "loadErrorPage": "אירעה שגיאה בטעינת הקטלוג. בדקו את החיבור ונסו שוב.",
+  "backToCollections": "חזרה לקולקציות",
+  "collectionsWord": "קולקציות",
+  "imageAlt": "{{name}}, תמונה {{index}}",
+  "imageLabel": "תמונה {{index}}",
+  "ctaEyebrow": "מגשימים חלום"
 }

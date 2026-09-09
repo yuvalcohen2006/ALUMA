@@ -4,8 +4,10 @@ import { Link } from "react-router-dom";
 import { X } from "lucide-react";
 import { getConsent, setConsent, type ConsentValue } from "@/lib/consent";
 import { loadPixel } from "@/lib/pixel";
+import { useLocalizedPath } from "@/lib/useLocalizedPath";
 
 const CookieConsent = () => {
+  const { to } = useLocalizedPath();
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -48,7 +50,7 @@ const CookieConsent = () => {
         <p className="text-label md:text-sm text-muted-foreground leading-relaxed mb-3">
           האתר משתמש בעוגיות לשיפור החוויה ולניתוח תעבורה.
           לפרטים נוספים ראו{" "}
-          <Link to="/privacy" className="text-foreground underline underline-offset-2">
+          <Link to={to("/privacy")} className="text-foreground underline underline-offset-2">
             מדיניות הפרטיות
           </Link>
           .
