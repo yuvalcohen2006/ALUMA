@@ -11,6 +11,7 @@ import { useLocalizedPath } from "@/lib/useLocalizedPath";
 import { useSiteText } from "@/hooks/useSiteText";
 import { useTranslation } from "react-i18next";
 import { decodeHash } from "@/lib/safe-hash";
+import TileFallback from "@/components/TileFallback";
 
 const SITE = "https://alumaoutdoor.com";
 
@@ -77,20 +78,14 @@ const CollectionCard = ({
       as="h2"
       // A collection with no photograph yet still gets a tile of the right
       // shape, so the grid never collapses into a ragged row.
-      fallback={
-        <div className="grid h-full w-full place-items-center">
-          <span className="font-display text-heading text-foreground/25">
-            {name.charAt(0)}
-          </span>
-        </div>
-      }
+      fallback={<TileFallback name={name} />}
     />
   );
 };
 
 const CollectionsPage = () => {
   const { t } = useTranslation("catalogue");
-  const { collections, products, loading } = useCollections();
+  const { collections, products, loading, error, reload } = useCollections();
   const { hash } = useLocation();
   const { to } = useLocalizedPath();
   const text = useSiteText();
@@ -158,7 +153,20 @@ const CollectionsPage = () => {
       <PageHero title={text("collections.title", "קולקציות")} />
 
       <div className="container-luxury pb-24 md:pb-32">
-        {loading ? (
+        {error ? (
+          <div className="flex min-h-[40vh] flex-col items-center justify-center gap-5 text-center">
+            <p className="max-w-md text-body leading-relaxed text-muted-foreground">
+              {t("loadErrorPage")}
+            </p>
+            <button
+              type="button"
+              onClick={reload}
+              className="rounded-sm border border-border px-6 py-2 text-body transition-colors hover:bg-secondary"
+            >
+              {t("retry")}
+            </button>
+          </div>
+        ) : loading ? (
           <ul className="grid grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-12">
             {[0, 1, 2, 3, 4, 5].map((i) => (
               <li key={i} className="animate-pulse space-y-4">

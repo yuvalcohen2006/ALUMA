@@ -377,6 +377,12 @@ const Contact = () => {
       });
 
       if (error) {
+        // Nothing was sent, so nothing should be held against the next
+        // attempt. The cooldown exists to stop a flood of real submissions;
+        // charging it for a failed one meant the toast said "try again in a
+        // moment" and the next press answered "a message was sent recently,
+        // try again in 27 seconds" — about a message that never left.
+        lastSubmitAt.current = 0;
         const ctx = (error as { context?: Response }).context;
         toast.error(await submitErrorMessage(ctx));
       } else if (result?.ok) {
@@ -384,10 +390,12 @@ const Contact = () => {
         formMountedAt.current = Date.now();
         navigate("/thank-you");
       } else {
+        lastSubmitAt.current = 0;
         toast.error("שגיאה לא צפויה. נסו שוב.");
       }
     } catch (err) {
       console.error(err);
+      lastSubmitAt.current = 0;
       toast.error("שגיאת רשת. בדקו חיבור ונסו שוב.");
     } finally {
       setSubmitting(false);

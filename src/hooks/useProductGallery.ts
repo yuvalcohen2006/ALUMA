@@ -39,6 +39,16 @@ export function useProductGallery(item: GalleryItem | null, variants: ProductVar
     return item?.cover_url ? [item.cover_url] : [];
   }, [selected?.image_url, item?.gallery, item?.cover_url]);
 
+  // Clamped, because the index outlives the product it was chosen on.
+  //
+  // React Router keeps one CollectionDetail mounted across /products/a ->
+  // /products/b, so clicking a related piece changes `item` while this state
+  // stays put. Land on a product with fewer photographs than the thumbnail you
+  // last clicked and the main image was simply absent — a blank grey box on
+  // the one page whose whole job is showing the furniture, with the thumbnail
+  // strip hidden too, so nothing on screen could put it right.
+  const safeImage = activeImage < images.length ? activeImage : 0;
+
   const selectVariant = useCallback((id: string | null) => {
     setActiveVariant(id);
     // Back to the lead photograph, which is the finish you just chose — and,
@@ -46,5 +56,5 @@ export function useProductGallery(item: GalleryItem | null, variants: ProductVar
     setActiveImage(0);
   }, []);
 
-  return { images, activeImage, setActiveImage, selected, activeVariant, selectVariant };
+  return { images, activeImage: safeImage, setActiveImage, selected, activeVariant, selectVariant };
 }

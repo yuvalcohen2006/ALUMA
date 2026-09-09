@@ -39,5 +39,6 @@
   "itemCount_one": "פריט אחד",
   "itemCount_two": "שני פריטים",
   "itemCount_many": "{{count}} פריטים",
-  "itemCount_other": "{{count}} פריטים"
+  "itemCount_other": "{{count}} פריטים",
+  "loadErrorPage": "אירעה שגיאה בטעינת הקטלוג. בדקו את החיבור ונסו שוב."
 }

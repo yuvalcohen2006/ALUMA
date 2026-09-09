@@ -12,6 +12,7 @@ import { useCollections, type DBProduct } from "@/hooks/useCollectionsData";
 import { useLocalizedPath } from "@/lib/useLocalizedPath";
 import NotFound from "./NotFound";
 import { useTranslation } from "react-i18next";
+import LoadError from "@/components/LoadError";
 
 const SITE = "https://alumaoutdoor.com";
 
@@ -70,7 +71,7 @@ export const ProductCard = ({
 
 const CollectionPage = () => {
   const { slug } = useParams();
-  const { collections, products, loading } = useCollections();
+  const { collections, products, loading, error, reload } = useCollections();
   const { to, lang } = useLocalizedPath();
 
   const collection = collections.find((c) => c.slug === slug);
@@ -97,6 +98,11 @@ const CollectionPage = () => {
       </Layout>
     );
   }
+
+  // Order matters: a query error reaches here with an empty `collections`, and
+  // `find` missing is exactly what a genuinely wrong slug looks like. Checked
+  // first, a database outage no longer serves 404 + noindex for six real URLs.
+  if (error) return <LoadError onRetry={reload} />;
 
   if (!collection) return <NotFound />;
 

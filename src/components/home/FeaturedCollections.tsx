@@ -6,6 +6,7 @@ import { useLocalizedPath } from "@/lib/useLocalizedPath";
 import { useTranslation } from "react-i18next";
 import { useSiteText } from "@/hooks/useSiteText";
 import { localizedName } from "@/lib/localized-name";
+import TileFallback from "@/components/TileFallback";
 
 /** Three, not eight. Audo shows four; Skargaarden uses text links; Hillerstorp
  *  shows none at all. Eight tiles was more than any reference brand puts on a
@@ -46,21 +47,25 @@ const FeaturedCollections = () => {
           role="list"
           className="tile-grid mt-10 grid grid-cols-1 gap-x-6 gap-y-12 sm:grid-cols-3 md:mt-14"
         >
-          {shown.map((c, i) => (
+          {shown.map((c, i) => {
+            const name = localizedName(lang, c.name_he, c.name_en);
+            return (
             <li key={c.id}>
               <Reveal delay={i * 70}>
                 <TileCard
                   to={to(`/collections/${c.slug}`)}
                   image={c.image_url}
+                  fallback={<TileFallback name={name} />}
                   alt=""
-                  title={localizedName(lang, c.name_he, c.name_en)}
+                  title={name}
                   meta={c.intro}
                   aspect="3/4"
                   eager={i === 0}
                 />
               </Reveal>
             </li>
-          ))}
+            );
+          })}
         </ul>
 
         <Reveal>

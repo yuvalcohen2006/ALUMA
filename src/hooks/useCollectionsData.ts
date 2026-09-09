@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 
 export type DBCollection = {
@@ -63,10 +63,15 @@ export function useCollections() {
   const [collections, setCollections] = useState<DBCollection[]>([]);
   const [products, setProducts] = useState<DBProduct[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+  const [attempt, setAttempt] = useState(0);
+  const reload = useCallback(() => setAttempt((n) => n + 1), []);
 
   useEffect(() => {
     (async () => {
-      const [{ data: cols }, { data: prods }] = await Promise.all([
+      setLoading(true);
+      setError(false);
+      const [{ data: cols, error: colsError }, { data: prods, error: prodsError }] = await Promise.all([
         supabase
           .from("site_collections")
           .select("id, slug, name_he, name_en, intro, image_url, sort_order")
@@ -92,6 +97,22 @@ export function useCollections() {
           .eq("published", true)
           .order("sort_order"),
       ]);
+      // A failed query is not an empty catalogue.
+      //
+      // supabase-js does not throw on an HTTP error or a dropped connection —
+      // it resolves with `{ data: null, error }`. Reading only `data` turned
+      // every one of those into an empty array, and an empty array is
+      // indistinguishable from "this shop sells nothing": /collections showed
+      // the "coming soon" copy and every real collection URL rendered the 404
+      // page, complete with noindex, while the database was merely briefly
+      // unreachable. The product page next door already knew this — see the
+      // "A query error is NOT a missing product" comment in CollectionDetail.
+      if (colsError || prodsError) {
+        setError(true);
+        setLoading(false);
+        return;
+      }
+
       const loadedCollections = (cols as DBCollection[]) || [];
       // Only pieces whose collection is also published. The product query asks
       // about the product's own flag and nothing else, so hiding a collection
@@ -110,7 +131,7 @@ export function useCollections() {
       setProducts(loadedProducts);
       setLoading(false);
     })();
-  }, []);
+  }, [attempt]);
 
-  return { collections, products, loading };
+  return { collections, products, loading, error, reload };
 }

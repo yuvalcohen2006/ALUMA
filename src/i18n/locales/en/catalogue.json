@@ -37,5 +37,6 @@
   "bespokeNote": "Every project is designed and made to suit the character of its space, down to the smallest detail.",
   "backToProjects": "Back to projects",
   "aboutProject": "About this project",
-  "projectIncludes": "This project includes"
+  "projectIncludes": "This project includes",
+  "loadErrorPage": "We couldn't load the catalogue. Check your connection and try again."
 }

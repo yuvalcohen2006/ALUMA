@@ -87,4 +87,31 @@ describe("useProductGallery", () => {
     act(() => result.current.selectVariant("grey"));
     expect(result.current.selected?.name).toBe("אפור");
   });
+  // Clicking a related product keeps this hook mounted: react-router reuses the
+  // CollectionDetail instance across /products/a -> /products/b, so an index
+  // chosen on the first product survives into the second. Land on one with
+  // fewer photographs and the page rendered no main image at all — a blank grey
+  // box with the thumbnail strip hidden, so nothing on screen could fix it.
+  it("falls back to the first photograph when the next product has fewer", () => {
+    const shorter = { cover_url: "siena-cover.jpg", gallery: [] };
+    const { result, rerender } = renderHook(({ p }) => useProductGallery(p, []), {
+      initialProps: { p: item as { cover_url: string | null; gallery: string[] } },
+    });
+
+    act(() => result.current.setActiveImage(2));
+    expect(result.current.images[result.current.activeImage]).toBe("detail.jpg");
+
+    rerender({ p: shorter });
+    expect(result.current.activeImage).toBe(0);
+    expect(result.current.images[result.current.activeImage]).toBe("siena-cover.jpg");
+  });
+
+  it("keeps the chosen photograph while the product stays put", () => {
+    const { result, rerender } = renderHook(({ p }) => useProductGallery(p, []), {
+      initialProps: { p: item },
+    });
+    act(() => result.current.setActiveImage(2));
+    rerender({ p: item });
+    expect(result.current.images[result.current.activeImage]).toBe("detail.jpg");
+  });
 });

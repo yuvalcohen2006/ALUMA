@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import { ArrowLeft } from "lucide-react";
 import Layout from "@/components/Layout";
 import SEO from "@/components/SEO";
 import PageHero from "@/components/PageHero";
@@ -11,6 +10,8 @@ import { useProjects } from "@/hooks/useProjectsData";
 import { cn } from "@/lib/utils";
 import { useTranslation } from "react-i18next";
 import { useLocalizedPath } from "@/lib/useLocalizedPath";
+import TileFallback from "@/components/TileFallback";
+import DirectionalArrow from "@/components/DirectionalArrow";
 
 const SITE = "https://alumaoutdoor.com";
 
@@ -138,15 +139,22 @@ const ProjectEntry = ({
               )}
             >
               <div className="absolute inset-0">
-                <img
-                  src={p.cover}
-                  alt={`${p.name} | Aluma`}
-                  width={1024}
-                  height={768}
-                  loading={index < 2 ? "eager" : "lazy"}
-                  decoding="async"
-                  className="absolute inset-0 w-full h-full object-cover"
-                />
+                {/* A project saved with a title and no photograph is a state
+                    the admin allows, and `<img src="">` renders as a broken
+                    image across two thirds of the row. */}
+                {p.cover ? (
+                  <img
+                    src={p.cover}
+                    alt={`${p.name} | Aluma`}
+                    width={1024}
+                    height={768}
+                    loading={index < 2 ? "eager" : "lazy"}
+                    decoding="async"
+                    className="absolute inset-0 w-full h-full object-cover"
+                  />
+                ) : (
+                  <TileFallback name={p.name} />
+                )}
               </div>
             </div>
           </Reveal>
@@ -207,10 +215,7 @@ const ProjectEntry = ({
             <span className="inline-block mt-8">
               <span className="inline-flex items-center gap-2 text-body text-accent">
                 {t("viewProject")}
-                <ArrowLeft
-                  className="w-[18px] h-[18px] transition-transform duration-300 ease-out group-hover:-translate-x-1"
-                  aria-hidden="true"
-                />
+                <DirectionalArrow className="w-[18px] h-[18px]" />
               </span>
               <span
                 aria-hidden="true"
@@ -226,6 +231,7 @@ const ProjectEntry = ({
 
 const ProjectsPage = () => {
   const { t } = useTranslation("projects");
+  const { to } = useLocalizedPath();
   const { projects } = useProjects();
   // Three, not six. These are placeholder examples until real work is
   // photographed, and six of them is a wall rather than a portfolio — the
@@ -241,15 +247,12 @@ const ProjectsPage = () => {
   return (
     <Layout>
       <SEO
-        title="פרויקטים | סלוני חוץ בוילות, פנטהאוזים ובתי יוקרה | Aluma"
-        description="מבחר פרויקטים נבחרים של Aluma, סלוני חוץ, מרפסות פנורמיות, מתחמי בריכה ופינות אירוח בעיצוב אישי. עבודות בוילות, פנטהאוזים ובתים פרטיים בישראל."
+        title={t("seoTitle")}
+        description={t("seoDescription")}
         path="/projects"
         jsonLd={buildCollectionSchema(projects)}
       />
-      <PageHero
-        title="פרויקטים"
-        subtitle="מבחר עבודות שתכננו, ייצרנו והרכבנו: מרפסות פנורמיות, גגות עירוניים, חצרות משפחתיות ומתחמי בריכה."
-      />
+      <PageHero title={t("hero.title")} subtitle={t("hero.subtitle")} />
 
       {/* The contents strip that used to sit here is gone — a jump-link index
           over six projects, on a page whose whole job is to show six
@@ -277,11 +280,8 @@ const ProjectsPage = () => {
       <section className="py-20 md:py-28 bg-foreground">
         <div className="container-luxury">
           <Reveal className="flex flex-col items-center text-center">
-            <SectionHeading
-              light
-              subtitle="כל פרויקט כאן התחיל בשיחה אחת על המרחב, על האור ועל הדרך שבה המשפחה חיה בחוץ. ספרו לנו על שלכם, ונחזור אליכם עם תכנון ראשוני."
-            >
-              המרחב הבא שנתכנן הוא שלכם
+            <SectionHeading light subtitle={t("cta.subtitle")}>
+              {t("cta.title")}
             </SectionHeading>
             {/* Label kept short on purpose. ShineButton is one fixed size with
                 3.2em of side padding at 17px — roughly 110px of chrome before a
@@ -289,9 +289,9 @@ const ProjectsPage = () => {
                 content width a 375px phone has. Every other CTA on the site
                 sits at 10–16 characters; this now matches. */}
             <div className="mt-9">
-              <ShineButton to="/contact" invert>
-                לתיאום שיחה
-                <ArrowLeft className="w-4 h-4" aria-hidden="true" />
+              <ShineButton to={to("/faq") + "#contact"} invert>
+                {t("cta.button")}
+                <DirectionalArrow className="w-4 h-4" animate={false} />
               </ShineButton>
             </div>
           </Reveal>

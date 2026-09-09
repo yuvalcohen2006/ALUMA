@@ -48,6 +48,33 @@ const CollectionDetailPage = () => {
     }
     if (data) {
       const p = normaliseProduct(data);
+
+      // The piece is only public if its range is. `published` on the product
+      // row says nothing about the collection above it, so turning a range off
+      // in the admin hid it from /collections and from the home page and left
+      // every /products/:slug inside it fully live — name, photographs, price,
+      // CTA — for anyone with a bookmark or a Google result. Its own "more
+      // from this collection" strip then linked the hidden siblings, so the
+      // whole range stayed browsable while the owner believed it was gone.
+      // useCollectionsData already applies this rule to every other surface.
+      const { data: parent, error: parentError } = await supabase
+        .from("site_collections")
+        .select("id")
+        .eq("id", p.collection_id)
+        .eq("published", true)
+        .maybeSingle();
+      if (parentError) {
+        setLoadError(true);
+        setItem(null);
+        setLoading(false);
+        return;
+      }
+      if (!parent) {
+        setItem(null);
+        setLoading(false);
+        return;
+      }
+
       setItem(p);
       const { data: rel } = await supabase
         .from("site_collection_products")

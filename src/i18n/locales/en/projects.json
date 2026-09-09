@@ -5,5 +5,18 @@
   },
   "viewProject": "View project",
   "allProjects": "All projects",
-  "empty": "Projects are on their way."
+  "empty": "Projects are on their way.",
+  "hero": {
+    "title": "Projects",
+    "subtitle": "Selected work we designed, built and installed: panoramic terraces, city roofs, family courtyards and pool complexes."
+  },
+  "seoTitle": "Projects | Outdoor lounges for villas, penthouses and private homes | Aluma",
+  "seoDescription": "Selected Aluma projects: outdoor lounges, panoramic terraces, pool complexes and dining areas, each designed for the space it sits in. Villas, penthouses and private homes across Israel.",
+  "cta": {
+    "title": "The next space we design could be yours",
+    "subtitle": "Every project here began with one conversation about the space, the light, and the way a family lives outdoors. Tell us about yours and we will come back with a first plan.",
+    "button": "Book a call"
+  },
+  "more": "More projects",
+  "imageAlt": "{{name}}, image {{index}}"
 }

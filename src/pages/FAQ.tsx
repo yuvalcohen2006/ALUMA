@@ -44,6 +44,7 @@ const FaqRow = ({ q, a, id, open, onToggle }: { q: string; a: string; id: string
     <button
       type="button"
       onClick={onToggle}
+      id={`faq-q-${id}`}
       aria-expanded={open}
       aria-controls={`faq-a-${id}`}
       className="group flex w-full items-start gap-5 py-6 text-start hover:opacity-70 transition-opacity duration-200 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring"
@@ -65,6 +66,14 @@ const FaqRow = ({ q, a, id, open, onToggle }: { q: string; a: string; id: string
     <div
       id={`faq-a-${id}`}
       role="region"
+      aria-labelledby={`faq-q-${id}`}
+      // Clipped to zero height is not hidden. Grid-collapsed content stays in
+      // the accessibility tree — that is exactly why `sr-only` works — so a
+      // screen reader read all six questions AND all six answers in one run
+      // while every button announced itself as collapsed. `hidden` would kill
+      // the open animation; aria-hidden removes it from the tree and leaves
+      // the animation alone, and the panel holds no focusable content.
+      aria-hidden={!open}
       className={`grid transition-[grid-template-rows] duration-300 ease-in-out ${
         open ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
       }`}
