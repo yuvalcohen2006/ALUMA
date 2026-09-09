@@ -13,6 +13,7 @@ import { trackPixel } from "@/lib/pixel";
 import alumaLogo from "@/assets/aluma-logo.png";
 import { ArrowLeft } from "lucide-react";
 import { useLocalizedPath } from "@/lib/useLocalizedPath";
+import { authErrorMessage } from "@/lib/auth-errors";
 
 const GoogleIcon = () => (
   <svg width="18" height="18" viewBox="0 0 48 48" aria-hidden="true">
@@ -47,6 +48,30 @@ const AuthPage = () => {
     if (!loading && user) nav(redirectTo, { replace: true });
   }, [user, loading, nav, redirectTo]);
 
+  const [resetBusy, setResetBusy] = useState(false);
+
+  const sendReset = async () => {
+    if (!email.trim()) {
+      toast.error("הקלידו קודם את כתובת האימייל שלכם.");
+      return;
+    }
+    setResetBusy(true);
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(email.trim(), {
+        redirectTo: `${window.location.origin}${to("/club/reset")}`,
+      });
+      if (error) throw error;
+      // Said the same way whether or not the address has an account: telling a
+      // stranger which addresses are registered is the leak Supabase's own
+      // sign-up flow goes out of its way to avoid.
+      toast.success("אם הכתובת רשומה אצלנו, שלחנו אליה קישור לאיפוס סיסמה.");
+    } catch (err) {
+      toast.error(authErrorMessage(err));
+    } finally {
+      setResetBusy(false);
+    }
+  };
+
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setBusy(true);
@@ -56,7 +81,7 @@ const AuthPage = () => {
           email,
           password,
           options: {
-            emailRedirectTo: `${window.location.origin}/club/dashboard`,
+            emailRedirectTo: `${window.location.origin}${redirectTo}`,
             data: { full_name: fullName, phone },
           },
         });
@@ -82,10 +107,10 @@ const AuthPage = () => {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
         toast.success("ברוכים השבים למועדון");
-        nav(redirectTo);
+        nav(redirectTo, { replace: true });
       }
-    } catch (err: any) {
-      toast.error(err?.message ?? "אירעה שגיאה");
+    } catch (err) {
+      toast.error(authErrorMessage(err));
     } finally {
       setBusy(false);
     }
@@ -256,6 +281,22 @@ const AuthPage = () => {
                     )}
                   </Button>
                 </form>
+
+                {/* There was no way back into an account. A member who signed
+                    up with an email and forgot the password was locked out of
+                    their own project tracking permanently — Google is a
+                    separate identity, so signing in that way makes a second
+                    account rather than recovering the first. */}
+                {!isSignup && (
+                  <button
+                    type="button"
+                    onClick={sendReset}
+                    disabled={resetBusy}
+                    className="mt-4 block w-full text-center text-label text-muted-foreground underline underline-offset-4 transition-colors hover:text-foreground disabled:opacity-60"
+                  >
+                    {resetBusy ? "שולחים…" : "שכחתי סיסמה"}
+                  </button>
+                )}
 
                 <p className="text-label text-muted-foreground text-center mt-6 leading-relaxed">
                   בהצטרפות אתם מאשרים את{" "}

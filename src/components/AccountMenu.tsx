@@ -22,10 +22,18 @@ const AccountMenu = () => {
   const nav = useNavigate();
   const [open, setOpen] = useState(false);
   const wrap = useRef<HTMLDivElement>(null);
+  const trigger = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     if (!open) return;
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== "Escape") return;
+      setOpen(false);
+      // Back to the chip that opened it. Closing while focus was inside the
+      // menu unmounted the focused element and dropped focus on <body>, so the
+      // next Tab restarted from the top of the page.
+      trigger.current?.focus();
+    };
     const onClick = (e: MouseEvent) => {
       if (!wrap.current?.contains(e.target as Node)) setOpen(false);
     };
@@ -53,6 +61,7 @@ const AccountMenu = () => {
   return (
     <div ref={wrap} className="relative shrink-0">
       <button
+        ref={trigger}
         type="button"
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
@@ -95,7 +104,7 @@ const AccountMenu = () => {
           </Link>
           <Link
             role="menuitem"
-            to={to("/club/dashboard")}
+            to={`${to("/club/dashboard")}?tab=profile`}
             onClick={close}
             className={item}
           >

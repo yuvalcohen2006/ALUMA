@@ -34,6 +34,7 @@ const Account = lazy(() => import("./pages/Account.tsx"));
 const BlogPost = lazy(() => import("./pages/BlogPost.tsx"));
 const Questionnaire = lazy(() => import("./pages/Questionnaire.tsx"));
 const ARPreview = lazy(() => import("./pages/ARPreview.tsx"));
+const ResetPassword = lazy(() => import("./pages/ResetPassword.tsx"));
 const FabricConfigurator = lazy(() => import("./pages/FabricConfigurator.tsx"));
 const DIY = lazy(() => import("./pages/DIY.tsx"));
 const Club = lazy(() => import("./pages/Club.tsx"));
@@ -91,6 +92,9 @@ export const publicRoutes = (
     <Route path="club" element={<Club />} />
     <Route path="club/auth" element={<Auth />} />
     <Route path="club/dashboard" element={<Account />} />
+    {/* Where the "forgot password" email lands. Without it a member who signed
+        up with an email and forgot the password was locked out for good. */}
+    <Route path="club/reset" element={<ResetPassword />} />
     {/* Legacy aliases — one page, one canonical URL. */}
     <Route path="auth" element={<Navigate to="../club/auth" replace />} />
     <Route path="account" element={<Navigate to="../club/dashboard" replace />} />

@@ -13,6 +13,8 @@ import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
 import { LogOut, Calendar, MapPin, ClipboardList, UserRound } from "lucide-react";
 import { useLocalizedPath } from "@/lib/useLocalizedPath";
+import { formatDateOnly } from "@/lib/dates";
+import { useSearchParams } from "react-router-dom";
 
 type Project = {
   id: string;
@@ -40,6 +42,7 @@ const statusLabels: Record<string, string> = {
 const Account = () => {
   const { user, loading, signOut } = useAuth();
   const nav = useNavigate();
+  const [params, setParams] = useSearchParams();
   const { to } = useLocalizedPath();
   const [projects, setProjects] = useState<Project[]>([]);
   const [profile, setProfile] = useState<Profile>({ full_name: "", phone: "" });
@@ -108,7 +111,10 @@ const Account = () => {
             <div>
               <SectionLabel he="מועדון אלומה" en="My Club" className="text-label mb-4" />
               <h1 className="font-display text-3xl md:text-5xl text-foreground">
-                שלום {profile.full_name || "חבר יקר"}
+                {/* No "חבר יקר" placeholder while the profile query is still
+                    in flight: it flashed on every load, so every member was
+                    greeted by a stand-in before their own name arrived. */}
+                שלום{profile.full_name ? ` ${profile.full_name}` : ""}
               </h1>
               <p className="text-muted-foreground mt-2">{user.email}</p>
             </div>
@@ -122,7 +128,11 @@ const Account = () => {
 
       <section className="py-10">
         <div className="container-luxury">
-          <Tabs defaultValue="orders" dir="rtl">
+          <Tabs
+            value={params.get("tab") === "profile" ? "profile" : "orders"}
+            onValueChange={(v) => setParams(v === "profile" ? { tab: "profile" } : {}, { replace: true })}
+            dir="rtl"
+          >
             <TabsList className="mb-8">
               <TabsTrigger value="orders" className="gap-2">
                 <ClipboardList className="w-4 h-4" />
@@ -159,7 +169,7 @@ const Account = () => {
                             </p>
                           )}
                         </div>
-                        <span className="text-label tracking-wider uppercase px-3 py-1 rounded-sm bg-accent/10 text-accent">
+                        <span className="text-label tracking-wider uppercase px-3 py-1 rounded-sm bg-secondary text-foreground">
                           {statusLabels[p.status] || p.status}
                         </span>
                       </div>
@@ -171,14 +181,16 @@ const Account = () => {
                         </div>
                         <Progress value={p.progress} />
                       </div>
-                      {p.next_milestone && (
+                      {(p.next_milestone || p.next_milestone_date) && (
                         <div className="mt-4 pt-4 border-t border-border flex items-center gap-2 text-sm">
-                          <Calendar className="w-4 h-4 text-accent" />
+                          <Calendar className="w-4 h-4 text-accent" aria-hidden="true" />
                           <span className="text-muted-foreground">אבן דרך הבאה:</span>
-                          <span className="text-foreground font-medium">{p.next_milestone}</span>
+                          {p.next_milestone && (
+                            <span className="text-foreground font-medium">{p.next_milestone}</span>
+                          )}
                           {p.next_milestone_date && (
                             <span className="text-label text-muted-foreground ms-auto">
-                              {new Date(p.next_milestone_date).toLocaleDateString("he-IL")}
+                              {formatDateOnly(p.next_milestone_date)}
                             </span>
                           )}
                         </div>

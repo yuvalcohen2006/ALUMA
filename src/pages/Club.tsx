@@ -263,7 +263,7 @@ const Club = () => {
                     <div className="flex flex-col items-center shrink-0">
                       <span
                         aria-hidden="true"
-                        className="grid place-items-center w-12 h-12 rounded-full border border-foreground/15 bg-background font-display text-small text-foreground/50"
+                        className="grid place-items-center w-12 h-12 rounded-full border border-foreground/25 bg-background font-display text-small text-muted-foreground"
                       >
                         {String(i + 1).padStart(2, "0")}
                       </span>
