@@ -98,11 +98,19 @@ const TileCard = ({
    * Only the offset is widened, so the ring clears the photograph instead of
    * sitting on its edge.
    */
+  /*
+   * The price and dimensions sit OUTSIDE the link, which is what the `extra`
+   * prop's own documentation says and what the markup used to contradict.
+   * Everything inside an <a> becomes part of its accessible name, so every
+   * tile in the grid was announced as "new, Aero armchair, teak, from ₪12,400,
+   * 2400 × 1350" — the identity buried in the middle of the detail. They are
+   * still read, as ordinary text right after the link; they are just no longer
+   * the link's name.
+   */
+  <div className={align === "center" ? "text-center" : "text-start"}>
   <Link
     to={to}
-    className={`group block focus-visible:outline-offset-4 ${
-      align === "center" ? "text-center" : "text-start"
-    }`}
+    className="group block focus-visible:outline-offset-4"
   >
     {/*
       `isolate` and a radius on the <img> as well as on this box: WebKit does
@@ -191,9 +199,10 @@ const TileCard = ({
           {meta}
         </p>
       )}
-      {extra}
     </div>
   </Link>
+  {extra}
+  </div>
   );
 };
 

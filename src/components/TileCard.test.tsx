@@ -88,3 +88,34 @@ describe("the tile", () => {
     expect(container.querySelector(".bg-muted")).toBeTruthy();
   });
 });
+
+/**
+ * A link's accessible name is everything inside it, so a tile that wrapped the
+ * price and the dimensions in its <a> was announced as
+ * "new, Aero armchair, teak, from ₪12,400, 2400 × 1350" — the piece's identity
+ * buried in the middle of its detail. The `extra` prop's own documentation
+ * said the opposite of what the markup did.
+ */
+describe("what the tile link is called", () => {
+  it("is the piece, not its price list", () => {
+    render(
+      <MemoryRouter>
+        <TileCard
+          to="/products/aero"
+          image="aero.jpg"
+          alt=""
+          title="כורסת אאירו"
+          meta="עץ טיק"
+          emblem="new"
+          extra={<p>החל מ־ ₪12,400</p>}
+        />
+      </MemoryRouter>,
+    );
+
+    const name = screen.getByRole("link").textContent ?? "";
+    expect(name).toContain("כורסת אאירו");
+    expect(name).not.toContain("12,400");
+    // Still on the page, just not part of what the link is called.
+    expect(screen.getByText("החל מ־ ₪12,400")).toBeTruthy();
+  });
+});

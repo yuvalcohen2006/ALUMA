@@ -173,7 +173,6 @@ const ProjectEntry = ({
                 tile's own type scale, so the two pages speak in one voice. */}
             <span
               aria-hidden="true"
-              dir="ltr"
               className="block text-start text-label font-medium tracking-[0.14em] tabular-nums text-accent"
             >
               {folio(index + 1)}
@@ -232,7 +231,7 @@ const ProjectEntry = ({
 const ProjectsPage = () => {
   const { t } = useTranslation("projects");
   const { to } = useLocalizedPath();
-  const { projects } = useProjects();
+  const { projects, loading } = useProjects();
   // Three, not six. These are placeholder examples until real work is
   // photographed, and six of them is a wall rather than a portfolio — the
   // third one dissolving says "and there is more" better than three more
@@ -264,14 +263,25 @@ const ProjectsPage = () => {
       <section className="bg-background pb-6 md:pb-10">
         <div className="container-luxury">
           <div className="divide-y divide-border">
-            {shown.map((p, i) => (
-              <ProjectEntry
-                key={p.slug}
-                project={p}
-                index={i}
-                isLast={i === shown.length - 1}
-              />
-            ))}
+            {loading &&
+              [0, 1, 2].map((i) => (
+                <div key={i} className="animate-pulse py-10 lg:py-14">
+                  <div className="aspect-[3/2] rounded-sm bg-secondary" />
+                  <div className="mt-6 h-6 w-1/3 rounded-sm bg-secondary" />
+                </div>
+              ))}
+            {!loading &&
+              shown.map((p, i) => (
+                <ProjectEntry
+                  key={p.slug}
+                  project={p}
+                  index={i}
+                  // The fade says "the list carries on past here", which needs
+                  // a list. On a site with one published project it was simply
+                  // a half-erased photograph, the only one on the page.
+                  isLast={shown.length > 1 && i === shown.length - 1}
+                />
+              ))}
           </div>
         </div>
       </section>

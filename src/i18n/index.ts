@@ -80,7 +80,13 @@ i18n.use(initReactI18next).init({
       contact: enContact,
     },
   },
-  lng: DEFAULT_LANGUAGE,
+  /* Read from the URL, not defaulted, so a hard load of /en never initialises
+     the Hebrew catalogue and re-renders out of it. The URL is already the
+     single source of truth for language everywhere else. */
+  lng:
+    typeof window !== "undefined"
+      ? languageFromPath(window.location.pathname)
+      : DEFAULT_LANGUAGE,
   fallbackLng: DEFAULT_LANGUAGE,
   defaultNS: "common",
   interpolation: { escapeValue: false }, // React already escapes

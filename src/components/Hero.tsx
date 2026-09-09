@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Link } from "react-router-dom";
 import { ChevronDown } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { useLocalizedPath } from "@/lib/useLocalizedPath";
 
 type HeroSettings = {
   title_he?: string;
@@ -74,6 +75,7 @@ const Hero = () => {
   }, []);
 
   const { t: tr, i18n } = useTranslation("home");
+  const { to } = useLocalizedPath();
   const isEnglish = i18n.resolvedLanguage === "en";
   const desktopBg = settings.desktop_image || heroImage;
   const mobileBg = settings.mobile_image || desktopBg;
@@ -89,6 +91,10 @@ const Hero = () => {
    * literal.
    */
   const srTitle = (isEnglish ? "" : settings.title_he) || tr("hero.srTitle");
+  /* A full URL typed into the admin's link field is not an app route. Handed
+     to <Link>, react-router treats it as relative and navigates the visitor to
+     /en/https:/example.com; as a plain href it does what the owner meant. */
+  const externalCta = /^[a-z][a-z0-9+.-]*:|^\/\//i.test(settings.cta_link ?? "");
 
   return (
     <section
@@ -128,9 +134,29 @@ const Hero = () => {
           fetchPriority="high"
           className="w-[58%] sm:w-[68%] max-w-[320px] sm:max-w-[560px] md:max-w-[760px] lg:max-w-[980px] h-auto mb-5 sm:mb-8 animate-logo-reveal drop-shadow-md"
         />
-        {settings.cta_text && settings.cta_link && (
+        {settings.subtitle && (
+          <p
+            dir="auto"
+            className="animate-fade-in-up mb-6 max-w-[34ch] text-body leading-relaxed text-foreground drop-shadow-sm sm:mb-8"
+            style={{ animationDelay: "0.2s" }}
+          >
+            {settings.subtitle}
+          </p>
+        )}
+        {settings.cta_text && settings.cta_link && externalCta && (
+          <a
+            href={settings.cta_link}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-sm tracking-wider hover:bg-accent transition-smooth animate-fade-in-up"
+            style={{ animationDelay: "0.3s" }}
+          >
+            {settings.cta_text}
+          </a>
+        )}
+        {settings.cta_text && settings.cta_link && !externalCta && (
           <Link
-            to={settings.cta_link}
+            to={to(settings.cta_link)}
             className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-sm tracking-wider hover:bg-accent transition-smooth animate-fade-in-up"
             style={{ animationDelay: "0.3s" }}
           >

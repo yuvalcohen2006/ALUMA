@@ -139,12 +139,20 @@ const AdminHero = () => {
           <CardTitle>טקסטים וכפתור</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
+          {/* Both fields used to look identical and behave nothing alike:
+              the headline is the page's hidden h1 and never appears on screen,
+              and the tagline was saved and then read by nothing at all. The
+              tagline now renders under the logo; the headline says plainly
+              that it is for Google and screen readers. */}
           <div>
-            <Label>כותרת ראשית</Label>
+            <Label>כותרת ראשית (לא מוצגת על המסך)</Label>
             <Input
               value={hero.title_he || ""}
               onChange={(e) => setHero({ ...hero, title_he: e.target.value })}
             />
+            <p className="mt-1.5 text-xs text-muted-foreground">
+              הכותרת שגוגל וקוראי מסך רואים. התמונה והלוגו הם מה שרואים בעין.
+            </p>
           </div>
           <div>
             <Label>תת-כותרת (Tagline)</Label>
@@ -152,6 +160,9 @@ const AdminHero = () => {
               value={hero.subtitle || ""}
               onChange={(e) => setHero({ ...hero, subtitle: e.target.value })}
             />
+            <p className="mt-1.5 text-xs text-muted-foreground">
+              משפט אחד קצר שמופיע מתחת ללוגו. השאירו ריק ולא יופיע כלום.
+            </p>
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div>
@@ -168,7 +179,7 @@ const AdminHero = () => {
                 value={hero.cta_link || ""}
                 onChange={(e) => setHero({ ...hero, cta_link: e.target.value })}
                 dir="ltr"
-                placeholder="/contact"
+                placeholder="/faq#contact"
               />
             </div>
           </div>

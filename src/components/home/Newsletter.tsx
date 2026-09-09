@@ -5,6 +5,8 @@ import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
 import { useSiteText } from "@/hooks/useSiteText";
 import clubBg from "@/assets/categories/club-morning.jpg";
+import { LANGUAGE_DIR } from "@/i18n";
+import { useLocalizedPath } from "@/lib/useLocalizedPath";
 
 /** Same shape the contact form's schema accepts, kept deliberately loose:
  *  this only has to stop a typo, not adjudicate RFC 5322. */
@@ -23,6 +25,7 @@ const INVALID_EMAIL = "כתובת המייל לא נראית תקינה";
  * The signup is a field and a labelled button side by side over the sky.
  */
 const Newsletter = () => {
+  const { lang } = useLocalizedPath();
   const { t } = useTranslation("home");
   // Editable in the admin, but only in Hebrew — /en keeps its translation.
   const text = useSiteText();
@@ -156,8 +159,12 @@ const Newsletter = () => {
                   // and an empty field has no strong character, so it falls
                   // back to LTR and parks the Hebrew placeholder against the
                   // left edge of a right-to-left page. Decide it here instead
-                  // — Hebrew prompt while empty, Latin address once typed.
-                  dir={email ? "ltr" : "rtl"}
+                  // — the page's own direction while the field shows a prompt
+                  // in the page's language, Latin once an address is typed.
+                  // Hardcoding "rtl" pushed the English placeholder to the far
+                  // side of a left-aligned page, and the text jumped across
+                  // the field the moment a character was typed.
+                  dir={email ? "ltr" : LANGUAGE_DIR[lang]}
                   className="h-14 flex-1 min-w-0 rounded-full border border-foreground/15 bg-white/80 px-6 text-small text-foreground text-start shadow-soft backdrop-blur-md transition-colors placeholder:text-foreground/70 focus:border-accent"
                 />
                 <button

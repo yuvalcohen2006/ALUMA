@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { render as rtlRender, screen } from "@testing-library/react";
+import { MemoryRouter } from "react-router-dom";
 import userEvent from "@testing-library/user-event";
 
 const insert = vi.fn(async () => ({ error: null }));
@@ -9,6 +10,10 @@ vi.mock("@/integrations/supabase/client", () => ({
 vi.mock("@/hooks/useSiteText", () => ({ useSiteText: () => (_k: string, f: string) => f }));
 
 const Newsletter = (await import("./components/home/Newsletter")).default;
+
+// The band reads the language off the URL — the empty field takes the page's
+// direction — so it is rendered here inside a router, as it is in the app.
+const render = (ui: React.ReactElement) => rtlRender(<MemoryRouter>{ui}</MemoryRouter>);
 
 /**
  * The club form took anything, said thank you, and then latched that success

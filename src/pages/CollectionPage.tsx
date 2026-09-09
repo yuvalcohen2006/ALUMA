@@ -56,7 +56,7 @@ export const ProductCard = ({
               </p>
             )}
             {p.dimensions && (
-              <p className="mt-1.5 text-label text-foreground/45">
+              <p className="mt-1.5 text-label text-muted-foreground">
                 {/* Dimensions stay LTR inside the RTL line, or the × and the
                     units end up on the wrong side. */}
                 <Ltr>{p.dimensions}</Ltr>
@@ -139,18 +139,24 @@ const CollectionPage = () => {
           first real thing on the page below the fold. */}
       <section className="pt-36 pb-10 md:pt-44 md:pb-14">
         <div className="container-luxury">
-          <h1 className="text-start text-display font-normal tracking-normal text-foreground">
+          <h1
+            dir="auto"
+            className="text-start text-display font-normal tracking-normal text-foreground"
+          >
             {name}
           </h1>
 
           {collection.intro && (
-            <p className="mt-6 max-w-[62ch] text-start text-body leading-relaxed text-foreground-soft">
+            <p
+              dir="auto"
+              className="mt-6 max-w-[62ch] text-start text-body leading-relaxed text-foreground-soft"
+            >
               {collection.intro}
             </p>
           )}
 
           <p className="mt-8 border-t border-foreground/12 pt-5 text-start text-small text-muted-foreground">
-            {items.length} פריטים
+            {t("itemCount", { count: items.length })}
           </p>
         </div>
       </section>
@@ -158,7 +164,7 @@ const CollectionPage = () => {
       <section className="py-14 md:py-20">
         <div className="container-luxury">
           {items.length === 0 ? (
-            <p className="text-body text-muted-foreground text-start">בקרוב.</p>
+            <p className="text-body text-muted-foreground text-start">{t("comingSoon")}</p>
           ) : (
             <ul
               role="list"
@@ -180,7 +186,7 @@ const CollectionPage = () => {
                 to={to("/collections")}
                 className="inline-flex items-center justify-center h-12 px-7 rounded-full border border-foreground/25 text-small text-foreground transition-colors duration-200 hover:border-accent hover:text-accent"
               >
-                לכל הקולקציות
+                {t("allCollections")}
               </Link>
             </div>
           </Reveal>

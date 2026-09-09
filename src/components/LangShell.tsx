@@ -22,6 +22,18 @@ import { LANGUAGE_DIR, type Language } from "@/i18n";
 const LangShell = ({ lang }: { lang: Language }) => {
   const { i18n } = useTranslation();
 
+  /*
+   * Switched during render, not in the effect below.
+   *
+   * An effect runs AFTER the commit, so every /en page used to paint once in
+   * Hebrew — Hebrew headings, Hebrew statement copy, Hebrew club form, in an
+   * LTR layout — and swap a frame later. Both catalogues are bundled and
+   * loaded, so changeLanguage resolves synchronously here and the children
+   * below read the right one in this same pass. Idempotent, so a double render
+   * costs nothing.
+   */
+  if (i18n.resolvedLanguage !== lang) i18n.changeLanguage(lang);
+
   useEffect(() => {
     if (i18n.resolvedLanguage !== lang) i18n.changeLanguage(lang);
     document.documentElement.lang = lang;

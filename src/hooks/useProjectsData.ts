@@ -44,13 +44,27 @@ export const toProject = (r: Row): Project => ({
   // Written in the admin's SEO field; the project's own opening line is a
   // better fallback than nothing at all.
   metaDescription: r.meta_description ?? r.description ?? "",
-  story: r.description ? [r.description] : [],
+  // Empty on purpose. `intro` above is already this column, rendered as the
+  // page's opening paragraph; repeating it inside the "about this project"
+  // panel printed the same sentences twice, sixty pixels apart, the second
+  // time framed as if it were more. The panel hides itself when empty.
+  story: [],
   scope: [],
   materials: [],
 });
 
 export function useProjects() {
-  const [projects, setProjects] = useState<Project[]>(staticProjects);
+  /*
+   * Empty until the database answers, not seeded with the placeholders.
+   *
+   * Seeding meant every visit to /projects painted six invented projects —
+   * "וילה בכפר שמריהו", "פנטהאוז בתל אביב" — on a live commercial site, then
+   * collapsed to the real list a few hundred milliseconds later, a jolt of
+   * several thousand pixels if the CMS holds one row. The placeholders are
+   * still the answer when there is genuinely nothing to show; they are just no
+   * longer shown to everyone on the way there.
+   */
+  const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -64,9 +78,10 @@ export function useProjects() {
           .order("sort_order", { ascending: true });
         if (cancelled) return;
         const rows = (data as Row[]) ?? [];
-        if (!error && rows.length > 0) setProjects(rows.map(toProject));
+        setProjects(!error && rows.length > 0 ? rows.map(toProject) : staticProjects);
       } catch {
-        // Offline or blocked: keep the fallback rather than emptying the page.
+        // Offline or blocked: the placeholders rather than an empty page.
+        if (!cancelled) setProjects(staticProjects);
       } finally {
         if (!cancelled) setLoading(false);
       }

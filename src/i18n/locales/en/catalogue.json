@@ -43,5 +43,6 @@
   "collectionsWord": "Collections",
   "imageAlt": "{{name}}, image {{index}}",
   "imageLabel": "Image {{index}}",
-  "ctaEyebrow": "Making it real"
+  "ctaEyebrow": "Making it real",
+  "pageTitle": "Collections"
 }

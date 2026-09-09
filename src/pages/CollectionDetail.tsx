@@ -85,6 +85,7 @@ const CollectionDetailPage = () => {
         .eq("collection_id", p.collection_id)
         .eq("published", true)
         .neq("id", p.id)
+        .order("sort_order")
         .limit(3);
       setRelated(((rel as any[]) || []).map(normaliseProduct));
     } else {
@@ -412,6 +413,13 @@ const CollectionDetailPage = () => {
                       type="button"
                       onClick={() => setActiveImage(i)}
                       aria-label={t("imageLabel", { index: i + 1 })}
+                      // Which one is on screen was carried by a ring and an
+                      // opacity step and nothing else, so a screen reader heard
+                      // "image 1, button, image 2, button" with no way to tell
+                      // where it was — and pressing one gave no feedback at
+                      // all. The finish swatches on this same page already do
+                      // this properly.
+                      aria-pressed={activeImage === i}
                       className={`relative aspect-square shrink-0 overflow-hidden rounded-sm transition-smooth ${
                         activeImage === i
                           ? "ring-2 ring-accent opacity-100"

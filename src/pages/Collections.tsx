@@ -150,7 +150,7 @@ const CollectionsPage = () => {
           to order and there is no price list — true, said again on every product
           page, and standing between the visitor and the six photographs they
           came for. */}
-      <PageHero title={text("collections.title", "קולקציות")} />
+      <PageHero title={text("collections.title", t("pageTitle"))} />
 
       <div className="container-luxury pb-24 md:pb-32">
         {error ? (
@@ -190,7 +190,7 @@ const CollectionsPage = () => {
         ) : (
           <ul role="list" className="tile-grid grid grid-cols-2 gap-x-6 gap-y-12 lg:grid-cols-3">
             {collections.map((c, i) => (
-              <li key={c.id}>
+              <li key={c.id} id={c.slug} className="scroll-mt-28 md:scroll-mt-32">
                 <Reveal delay={(i % 3) * 70}>
                   <CollectionCard
                     collection={c}
