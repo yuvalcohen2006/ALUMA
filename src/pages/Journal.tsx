@@ -122,7 +122,7 @@ const JournalPage = () => {
                         </p>
                       )}
                       {(a.tag || a.read_minutes) && (
-                        <p className="mt-3 text-label text-muted-foreground">
+                        <p dir="auto" className="mt-3 text-label text-muted-foreground">
                           {[a.tag, a.read_minutes ? t("readMinutes", { count: a.read_minutes }) : null]
                             .filter(Boolean)
                             .join(" · ")}

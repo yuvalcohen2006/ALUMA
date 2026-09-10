@@ -46,6 +46,24 @@ function internationalise(raw: string): string | null {
  * The static config stays the floor, so an empty table, an offline visitor or
  * a half-filled form all render the site exactly as it shipped.
  */
+/**
+ * A social address the owner typed, made safe to put in an href.
+ *
+ * "instagram.com/aluma" without a scheme is a RELATIVE URL, so the footer icon
+ * navigated to alumaoutdoor.com/instagram.com/aluma — an internal 404 on the
+ * one link meant to leave the site. Anything not already http(s) gets the
+ * scheme; anything carrying another scheme (javascript:, data:) is dropped
+ * rather than rendered, because this value goes straight into an href.
+ */
+function externalUrl(value: string | null | undefined): string | null {
+  if (!value) return null;
+  const raw = value.trim();
+  if (/^https?:\/\//i.test(raw)) return raw;
+  if (/^[a-z][a-z0-9+.-]*:/i.test(raw)) return null;
+  return "https://" + raw.replace(/^\/+/, "");
+}
+
+
 export function mergeContact(overrides: ContactOverrides | null | undefined): SiteContact {
   const o = overrides ?? {};
 
@@ -82,8 +100,8 @@ export function mergeContact(overrides: ContactOverrides | null | undefined): Si
     email: set(o.email) ?? SITE.email,
     address,
     social: {
-      instagram: set(o.instagram) ?? SITE.social.instagram,
-      facebook: set(o.facebook) ?? SITE.social.facebook,
+      instagram: externalUrl(set(o.instagram)) ?? SITE.social.instagram,
+      facebook: externalUrl(set(o.facebook)) ?? SITE.social.facebook,
     },
     hours: set(o.hours),
   };

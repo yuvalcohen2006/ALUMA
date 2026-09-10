@@ -153,11 +153,21 @@ const AdminBlog = () => {
                   </div>
                   <p className="text-xs text-muted-foreground truncate">/{p.slug} • {p.tag || "—"}</p>
                 </div>
-                <Button variant="ghost" size="icon" onClick={() => setEditing(p)}>
-                  <Pencil className="w-4 h-4" />
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  aria-label={`עריכת ${p.title}`}
+                  onClick={() => setEditing(p)}
+                >
+                  <Pencil className="w-4 h-4" aria-hidden="true" />
                 </Button>
-                <Button variant="ghost" size="icon" onClick={() => del(p.id)}>
-                  <Trash2 className="w-4 h-4 text-destructive" />
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  aria-label={`מחיקת ${p.title}`}
+                  onClick={() => del(p.id)}
+                >
+                  <Trash2 className="w-4 h-4 text-destructive" aria-hidden="true" />
                 </Button>
               </CardContent>
             </Card>

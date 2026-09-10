@@ -42,7 +42,11 @@ const AdminLogin = () => {
 
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    if (!email.trim() || !password || busy) return;
+    if (busy) return;
+    // Returning silently meant the button appeared to do nothing, repeatably,
+    // with nothing on screen to say what was missing.
+    if (!email.trim()) return setError("צריך להזין כתובת אימייל.");
+    if (!password) return setError("צריך להזין סיסמה.");
 
     setBusy("password");
     setError(null);

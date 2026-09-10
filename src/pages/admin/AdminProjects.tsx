@@ -178,7 +178,12 @@ const AdminProjects = () => {
       ) : items.length === 0 ? (
         <Card>
           <CardContent className="py-16 text-center text-muted-foreground">
-            עדיין אין פרויקטים. הוסיפו פרויקט ראשון.
+            <p>עדיין אין פרויקטים משלכם.</p>
+            <p className="mx-auto mt-3 max-w-md text-sm">
+              באתר מוצגים כרגע שישה פרויקטים לדוגמה, עם תמונות מיוצרות. ברגע
+              שתפרסמו פרויקט אמיתי אחד — כל השישה ייעלמו והאתר יציג רק אותו.
+              כדאי להוסיף שניים־שלושה באותה ישיבה.
+            </p>
           </CardContent>
         </Card>
       ) : (
@@ -203,11 +208,23 @@ const AdminProjects = () => {
                     /{p.slug} • {p.location || "—"} • {p.views} צפיות
                   </p>
                 </div>
-                <Button variant="ghost" size="icon" onClick={() => setEditing(p)}>
-                  <Pencil className="w-4 h-4" />
+                {/* Icon-only buttons need a name: a screen reader announced
+                    both of these as just "button". */}
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  aria-label={`עריכת ${p.title}`}
+                  onClick={() => setEditing(p)}
+                >
+                  <Pencil className="w-4 h-4" aria-hidden="true" />
                 </Button>
-                <Button variant="ghost" size="icon" onClick={() => handleDelete(p.id)}>
-                  <Trash2 className="w-4 h-4 text-destructive" />
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  aria-label={`מחיקת ${p.title}`}
+                  onClick={() => handleDelete(p.id)}
+                >
+                  <Trash2 className="w-4 h-4 text-destructive" aria-hidden="true" />
                 </Button>
               </CardContent>
             </Card>

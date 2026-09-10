@@ -104,6 +104,9 @@ const AdminSettings = () => {
   };
 
   const invite = async () => {
+    // The button is disabled while this runs; the Enter key was not, so a
+    // second press before the first call returned sent a second invitation.
+    if (inviting) return;
     const email = inviteEmail.trim().toLowerCase();
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       toast.error("כתובת אימייל לא תקינה");
@@ -184,8 +187,20 @@ const AdminSettings = () => {
     { key: "whatsapp", label: "WhatsApp", hint: "רק אם הוא שונה מהטלפון. אם ריק, נשתמש במספר הטלפון", dir: "ltr" },
     { key: "email", label: "אימייל", dir: "ltr" },
     { key: "address", label: "כתובת", hint: "רחוב, עיר", placeholder: "התמר 78, יציץ" },
-    { key: "instagram", label: "Instagram URL", dir: "ltr" },
-    { key: "facebook", label: "Facebook URL", dir: "ltr" },
+    {
+      key: "instagram",
+      label: "Instagram URL",
+      hint: "הכתובת המלאה, כולל https://",
+      placeholder: "https://instagram.com/…",
+      dir: "ltr",
+    },
+    {
+      key: "facebook",
+      label: "Facebook URL",
+      hint: "הכתובת המלאה, כולל https://",
+      placeholder: "https://facebook.com/…",
+      dir: "ltr",
+    },
     // The weekly table itself is in the code; this line is the exception to it.
     {
       key: "hours",

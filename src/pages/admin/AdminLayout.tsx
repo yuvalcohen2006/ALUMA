@@ -189,7 +189,7 @@ const AdminLayout = ({ children }: { children: ReactNode }) => {
             {navGroups.map((group, i) => (
               <div key={group.label ?? "top"} className={i > 0 ? "mt-6" : ""}>
                 {group.label && (
-                  <h3 className="px-3 pb-2 text-xs font-medium tracking-wide text-muted-foreground/70">
+                  <h3 className="px-3 pb-2 text-xs font-medium tracking-wide text-muted-foreground">
                     {group.label}
                   </h3>
                 )}

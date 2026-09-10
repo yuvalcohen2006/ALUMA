@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { readFileSync, readdirSync } from "node:fs";
 import { join, relative } from "node:path";
+import { mergeContact } from "@/lib/site-contact";
 
 /**
  * One phone number, in one place.
@@ -52,5 +53,27 @@ describe("contact facts", () => {
 
   it("never hardcodes a phone number outside the config", () => {
     expect(offenders).toEqual([]);
+  });
+});
+
+/**
+ * A social address typed without a scheme is a RELATIVE URL, so the footer's
+ * Instagram icon navigated to alumaoutdoor.com/instagram.com/aluma — an
+ * internal 404 on the one link on the page whose whole job is to leave.
+ */
+describe("social links from the settings screen", () => {
+  it("adds the scheme when the owner leaves it out", () => {
+    const c = mergeContact({ instagram: "instagram.com/aluma" });
+    expect(c.social.instagram).toBe("https://instagram.com/aluma");
+  });
+
+  it("leaves a full address exactly as typed", () => {
+    const c = mergeContact({ facebook: "https://www.facebook.com/aluma" });
+    expect(c.social.facebook).toBe("https://www.facebook.com/aluma");
+  });
+
+  it("refuses a scheme that is not the web, rather than putting it in an href", () => {
+    const c = mergeContact({ instagram: "javascript:alert(1)" });
+    expect(c.social.instagram).not.toContain("javascript");
   });
 });

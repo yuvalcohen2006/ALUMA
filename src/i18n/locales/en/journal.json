@@ -9,7 +9,6 @@
   "subtitle": "What to know before choosing furniture that stays outside all year.",
   "moreOnMaterials": "More about the materials",
   "fromMagazine": "From the magazine",
-  "readMinutes": "{{count}} min read",
   "materials": {
     "title": "The materials",
     "subtitle": "The first decision in any piece isn't the shape, it's the material. These are the four we build with, and what each one does after a few years outdoors."
@@ -18,6 +17,7 @@
   "notFound": "We couldn't find that article.",
   "loadingArticle": "Loading the article…",
   "articleSuffix": "Aluma magazine",
-  "readOne": "1 min read",
-  "readMany": "{{count}} min read"
+  "readMinutes_one": "1 min read",
+  "readMinutes_other": "{{count}} min read",
+  "moreAbout": "More about {{name}}"
 }

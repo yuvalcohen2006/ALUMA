@@ -44,7 +44,7 @@ const formatRead = (
   t: (key: string, opts?: Record<string, unknown>) => string,
 ) => {
   if (!minutes || minutes < 1) return null;
-  return minutes === 1 ? t("readOne") : t("readMany", { count: minutes });
+  return t("readMinutes", { count: minutes });
 };
 
 /* ─────────────────────────── article body ───────────────────────────

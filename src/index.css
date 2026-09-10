@@ -111,7 +111,10 @@
     --accent-foreground: 0 0% 100%;
 
     --border: 0 0% 90%;
-    --input: 0 0% 88%;
+    /* 58%, matching the public site. At 88% this was 1.32:1 on white — under
+       the 3:1 a control boundary owes, and the border is the only thing
+       drawing an input or an off-state switch. */
+    --input: 0 0% 58%;
     --ring: 0 0% 16%;
   }
 

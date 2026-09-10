@@ -104,7 +104,7 @@ const MaterialsPage = () => {
                     to={to(`/materials/${m.slug}`)}
                     className="mt-8 inline-block text-small text-foreground underline underline-offset-[6px] decoration-1 hover:text-accent transition-colors"
                   >
-                    עוד על {m.name}
+                    {t("moreAbout", { name: m.name })}
                   </Link>
                 </div>
               </Reveal>

@@ -9,7 +9,6 @@
   "subtitle": "מה שכדאי לדעת לפני שבוחרים ריהוט שנשאר בחוץ כל השנה.",
   "moreOnMaterials": "עוד על החומרים",
   "fromMagazine": "מהמגזין",
-  "readMinutes": "{{count}} דקות קריאה",
   "materials": {
     "title": "החומרים",
     "subtitle": "ההחלטה הראשונה בכל פריט היא לא הצורה, אלא החומר. אלה הארבעה שאנחנו בונים איתם, ומה כל אחד מהם עושה אחרי כמה שנים בחוץ."
@@ -18,6 +17,9 @@
   "notFound": "המאמר לא נמצא.",
   "loadingArticle": "טוען מאמר…",
   "articleSuffix": "מגזין Aluma",
-  "readOne": "דקת קריאה",
-  "readMany": "{{count}} דקות קריאה"
+  "readMinutes_one": "דקת קריאה",
+  "readMinutes_two": "שתי דקות קריאה",
+  "readMinutes_many": "{{count}} דקות קריאה",
+  "readMinutes_other": "{{count}} דקות קריאה",
+  "moreAbout": "עוד על {{name}}"
 }
