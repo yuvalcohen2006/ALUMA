@@ -44,8 +44,22 @@ Aluma was at 1.06:1 — below every one of them, which is why a white plate on i
 disappeared. The plate is fine; the band was too pale. It is 1.17:1 now, the
 light end of that range, and there is a test holding it there.
 
-**Waiting on you:** one more script — the stock numbers. Step 1 of
-[ACTION.md](ACTION.md).
+### Third pass — the light-and-matter section
+
+| | Change |
+|---|---|
+| ✅ | Photo capped at 400px and centred, words and picture now stand next to each other instead of at opposite edges of the screen |
+| ✅ | The paragraph breaks on the exact three lines you wrote — and those breaks now live in the text itself, so you can move them from **ניהול טקסטים** |
+| ✅ | Dust drifting in the air around it: sixteen specks, a pixel a second, 5–14% opacity. Invisible until you stop and look, and they stop entirely for anyone who has asked their computer for less motion |
+| ✅ | New flame — the one you linked, in your terracotta |
+
+**On the flame:** I checked the licence before using it. That icon is Loading.io's
+FREE tier, which their terms describe as "dedicated to the public domain … no
+attribution is required" — so nothing follows it onto your site. Some icons in
+the same library are not, and would have needed a credit line.
+
+**Waiting on you:** two short scripts — the stock numbers and the paragraph
+line breaks. Step 1 of [ACTION.md](ACTION.md).
 
 **Not touched:** every other page, as asked. The one exception is the shared
 button shape, which by its nature applies everywhere. The contact form's

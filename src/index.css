@@ -287,6 +287,34 @@
     .tile-soften > li img { transition: none; filter: none; }
   }
 
+  /* Dust in the shaft of light — see components/home/Motes.tsx for why every
+     number is what it is. Transform and opacity only, so it stays on the
+     compositor, and `alternate` rather than a loop because a looping translate
+     snaps home at the end of each cycle and a snap is the one thing that would
+     draw the eye. */
+  .mote {
+    position: absolute;
+    border-radius: 9999px;
+    opacity: var(--mote-from);
+    transform: translate3d(0, 0, 0);
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .mote {
+      animation: mote-drift var(--mote-duration) ease-in-out var(--mote-delay)
+        infinite alternate;
+    }
+  }
+  @keyframes mote-drift {
+    from {
+      transform: translate3d(0, 0, 0);
+      opacity: var(--mote-from);
+    }
+    to {
+      transform: translate3d(var(--mote-dx), var(--mote-dy), 0);
+      opacity: var(--mote-to);
+    }
+  }
+
   /* The sheen on the "new" chip.
      Transform only, so it never leaves the compositor, and added under
      `no-preference` rather than removed under `reduce` — a decorative loop
