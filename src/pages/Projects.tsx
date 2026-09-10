@@ -191,6 +191,7 @@ const ProjectEntry = ({
                 a line (the left margin in RTL, where it reads as a
                 continuation tick) and never orphan one at the right margin
                 where the eye starts the next line. */}
+            {meta.length > 0 && (
             <div className="mt-4 flex flex-wrap items-center gap-y-2 text-body text-muted-foreground">
               {meta.map((m, i) => (
                 <span
@@ -208,6 +209,7 @@ const ProjectEntry = ({
                 </span>
               ))}
             </div>
+            )}
 
             {/* No paragraph. It was clamped to three lines first, which was
                 the wrong fix — none of the fourteen reference indexes carries
@@ -223,7 +225,7 @@ const ProjectEntry = ({
               </span>
               <span
                 aria-hidden="true"
-                className="block h-px w-0 bg-accent/70 transition-[width] duration-500 ease-out group-hover:w-full"
+                className="block h-px w-0 bg-accent/70 transition-[width] duration-500 ease-out group-hover:w-full group-focus-visible:w-full"
               />
             </span>
           </Reveal>

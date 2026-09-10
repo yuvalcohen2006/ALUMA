@@ -7,12 +7,13 @@ import SEO from "@/components/SEO";
 import Reveal from "@/components/Reveal";
 import TileCard from "@/components/TileCard";
 import { localizedName } from "@/lib/localized-name";
-import { capEmblems, resolveEmblems, type Emblem } from "@/lib/emblems";
+import { capEmblems, resolveEmblems, type Emblem, isEmblem } from "@/lib/emblems";
 import { useCollections, type DBProduct } from "@/hooks/useCollectionsData";
 import { useLocalizedPath } from "@/lib/useLocalizedPath";
 import NotFound from "./NotFound";
 import { useTranslation } from "react-i18next";
 import LoadError from "@/components/LoadError";
+import TileFallback from "@/components/TileFallback";
 
 const SITE = "https://alumaoutdoor.com";
 
@@ -44,6 +45,7 @@ export const ProductCard = ({
     <TileCard
       to={to(`/products/${p.slug}`)}
       image={p.cover_url}
+      fallback={<TileFallback name={localizedName(lang, p.name, p.name_en)} />}
       alt=""
       title={localizedName(lang, p.name, p.name_en)}
       meta={p.tagline}
@@ -118,7 +120,7 @@ const CollectionPage = () => {
   // rather than rare. Resolved across the whole catalogue so "new" is not
   // relative to whichever collection you happen to be looking at.
   const resolved = resolveEmblems(products);
-  const emblems = capEmblems(items, (p) => resolved.get(p.id), 2);
+  const emblems = capEmblems(items, (p) => resolved.get(p.id), 2, (p) => isEmblem(p.emblem));
 
   return (
     <Layout>

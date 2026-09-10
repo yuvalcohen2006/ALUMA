@@ -3,6 +3,7 @@ import {
   capEmblems,
   emblemLabel,
   isEmblem,
+  type Emblem,
   MAX_EMBLEMS_PER_GRID,
   resolveEmblems,
 } from "./emblems";
@@ -115,5 +116,39 @@ describe("resolving the automatic new emblem", () => {
     expect(resolved.get("none")).toBeUndefined();
     expect(resolved.get("junk")).toBeUndefined();
     expect(resolved.get("ok")).toBe("new");
+  });
+});
+
+/**
+ * The budget used to be spent in document order, so two automatically-fresh
+ * pieces earlier in the grid could use both slots and silently drop the
+ * "popular" the owner had put on a piece further down — the one label on the
+ * page that was a decision rather than a date.
+ */
+describe("who gets the emblem budget", () => {
+  const grid = [
+    { id: "a", emblem: null },
+    { id: "b", emblem: null },
+    { id: "c", emblem: "popular" as const },
+  ];
+  const resolved = new Map<string, Emblem>([
+    ["a", "new"],
+    ["b", "new"],
+    ["c", "popular"],
+  ]);
+
+  it("spends it on the owner's label before the automatic ones", () => {
+    const out = capEmblems(grid, (p) => resolved.get(p.id), 2, (p) => isEmblem(p.emblem));
+    expect(out[2]).toBe("popular");
+    // One automatic "new" still fits; the second is dropped, not the owner's.
+    expect(out.filter(Boolean)).toHaveLength(2);
+  });
+
+  it("still fills the grid in order when nothing is hand-set", () => {
+    const auto = grid.map((p) => ({ ...p, emblem: null }));
+    const out = capEmblems(auto, (p) => resolved.get(p.id), 2, (p) => isEmblem(p.emblem));
+    expect(out[0]).toBe("new");
+    expect(out[1]).toBe("new");
+    expect(out[2]).toBeNull();
   });
 });

@@ -14,9 +14,12 @@
 /blog/*          /journal/:splat      301
 /en/blog/*       /en/journal/:splat   301
 
-# Contact now lives under the Q&A page.
-/contact      /faq        301
-/en/contact   /en/faq     301
+# Contact now lives under the Q&A page — as a section of it, so the anchor has
+# to be part of the redirect. Without it an old /contact link lands at the top
+# of the Q&A with the form a screen and a half below, which is the same defect
+# the in-app links were carrying.
+/contact      /faq#contact        301
+/en/contact   /en/faq#contact     301
 
 # Briefly-lived URLs from the restructure that was rolled back.
 /about        /story      301

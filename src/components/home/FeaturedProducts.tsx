@@ -7,7 +7,7 @@ import { useLocalizedPath } from "@/lib/useLocalizedPath";
 import { useTranslation } from "react-i18next";
 import { useSiteText } from "@/hooks/useSiteText";
 import { localizedName } from "@/lib/localized-name";
-import { capEmblems, resolveEmblems } from "@/lib/emblems";
+import { capEmblems, resolveEmblems, isEmblem } from "@/lib/emblems";
 
 /**
  * Three pieces, chosen in the admin, shown large.
@@ -37,7 +37,7 @@ const FeaturedProducts = () => {
   const resolved = resolveEmblems(products);
   // At most one across the three. On a strip this short a second makes two
   // thirds of the row "special", which is no signal at all.
-  const emblems = capEmblems(highlights, (p) => resolved.get(p.id), 1);
+  const emblems = capEmblems(highlights, (p) => resolved.get(p.id), 1, (p) => isEmblem(p.emblem));
 
   return (
     <section className="bg-background">

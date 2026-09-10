@@ -127,12 +127,34 @@ export function capEmblems<T>(
   items: T[],
   emblemOf: (item: T) => string | null | undefined,
   max = MAX_EMBLEMS_PER_GRID,
+  /**
+   * Which items carry a label the OWNER set, as opposed to the automatic
+   * "new".
+   *
+   * Two passes, because one was not enough. The budget used to be spent in
+   * document order, so two automatically-fresh pieces sitting earlier in the
+   * grid could use up both slots and silently drop the "popular" the owner had
+   * put on a piece further down — the one emblem on the page that was a
+   * decision rather than a date. Hand-set labels take the budget first; the
+   * automatic ones get what is left.
+   */
+  isManual?: (item: T) => boolean,
 ): (Emblem | null)[] {
+  const out: (Emblem | null)[] = items.map(() => null);
   let used = 0;
-  return items.map((item) => {
-    const value = emblemOf(item);
-    if (!isEmblem(value) || used >= max) return null;
-    used += 1;
-    return value;
-  });
+
+  const spend = (wanted: (index: number) => boolean) => {
+    items.forEach((item, i) => {
+      if (out[i] || used >= max || !wanted(i)) return;
+      const value = emblemOf(item);
+      if (!isEmblem(value)) return;
+      out[i] = value;
+      used += 1;
+    });
+  };
+
+  if (isManual) spend((i) => isManual(items[i]));
+  spend(() => true);
+
+  return out;
 }
