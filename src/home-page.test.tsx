@@ -100,32 +100,6 @@ describe("the home page", () => {
     expect(lead.className).toContain("whitespace-nowrap");
   });
 
-  it("gives the flame a box it actually fills", async () => {
-    const { container } = mount();
-    // Wait for the COLLECTIONS section, not for any svg — the hero's scroll
-    // chevron satisfies `querySelector("svg")` long before the catalogue has
-    // loaded, which is how this test first passed its wait and then found
-    // nothing.
-    await screen.findByText("סלוני חוץ");
-    // Queried by reading the attribute rather than by selector: a CSS
-    // attribute selector is lower-cased in an HTML document, so
-    // `[viewBox="..."]` silently matches nothing on an SVG element.
-    const flame = [...container.querySelectorAll("svg")].find(
-      (el) => el.getAttribute("viewBox") === "0 0 64 100",
-    );
-    expect(flame, "the flame").toBeTruthy();
-    // Two subpaths and evenodd, or the inner flame is not a hole and the mark
-    // reads as a solid blob at small sizes.
-    const path = flame!.querySelector("path")!;
-    expect(path.getAttribute("fill-rule")).toBe("evenodd");
-    expect((path.getAttribute("d") ?? "").match(/Z/g)).toHaveLength(2);
-    // Sized by height with the width free, or it renders squashed into a square.
-    expect(flame!.getAttribute("class")).toContain("w-auto");
-    // And it carries the gradient rather than the source's flat pink.
-    expect(container.innerHTML).toContain("#B85A31");
-    expect(container.innerHTML).not.toContain("#e15b64");
-  });
-
   it("floats the motes without putting them in the accessibility tree", async () => {
     const { container } = mount();
     await waitFor(() => expect(container.querySelectorAll(".mote").length).toBeGreaterThan(0));

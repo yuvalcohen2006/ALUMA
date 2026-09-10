@@ -1,93 +1,75 @@
 # Where the site stands
 
-## Home page polish — 10 September
+## Home page — 10 September
 
 ```
-██████████████████░░  90%
+████████████████████  done
 ```
 
-**Done, and on your screen once you run the script in [ACTION.md](ACTION.md).**
+Everything asked for is in. One short script left before it is all on screen —
+step 1 of [ACTION.md](ACTION.md), the stock numbers.
 
-| | Change |
+### The landing
+
+| | |
 |---|---|
 | ✅ | The English line under the ALUMA logo is gone |
-| ✅ | Scrolling off the landing page — the photo now lags behind the page instead of outrunning it, and the wordmark fades out before the next section arrives |
-| ✅ | New photograph for the paragraph: light through a prism onto aluminium, stone and outdoor fabric — the three materials you actually build with |
-| ✅ | That section is crystal white now, picture left, words right, headline on one line |
-| ✅ | Hovering one collection softly blurs the others instead of washing them out, and the one you are on grows for longer |
-| ✅ | Collection names ride a white plate across the foot of each photo, with the arrow on hover |
-| ✅ | "קולקציות חמות", "מוצרים מובילים", "הפרויקטים שלנו" |
-| ✅ | The "חדש" tag is terracotta with a slow sheen crossing it |
-| ✅ | Products can carry a stock count; at 5 or fewer an orange line appears under the photo |
-| ✅ | All 47 product names go to Hebrew, and the Latin moves to the English field where it belongs |
-| ✅ | Projects show a year after the place |
-| ✅ | The two project buttons swapped, and both are now the same pill as the account button in the header |
-| ✅ | Every button on the site is one height, one radius, one typeface |
-| ✅ | The club field keeps its round corners when you click into it |
-| ✅ | The "unsubscribe any time" line is gone |
+| ✅ | Scrolling off it is smooth now. The photo had been travelling *up* faster than the page, which is backwards and is what made it feel out of place; it lags behind now, and the wordmark fades out before the next section arrives |
 
-### Second pass, same day
+### Light and matter
 
-| | Change |
+| | |
 |---|---|
-| ✅ | Simpler photo: one prism, one beam, one spectrum — and its background is now exactly the page's white with the edges feathered out, so it sits on the page instead of being a picture of something |
-| ✅ | The paragraph is three lines |
-| ✅ | The "חדש" tag is squared rather than a pill — every button on the site is a pill now, so a pill badge looked like something you could press |
-| ✅ | A hand-drawn flame beside "קולקציות חמות", gradient between two neighbours of your terracotta |
-| ✅ | Stock numbers invented for all 47, six of them low |
-| ✅ | **The band behind the collections is a shade deeper** — see below |
-
-**Why the band changed.** You were right that white on it did not read. I
-measured the shipped CSS of eight comparable brands: Vitra, Paola Lenti,
-Neptune, Aesop, DWR and others all sit between 1.17:1 and 1.21:1 against white.
-Aluma was at 1.06:1 — below every one of them, which is why a white plate on it
-disappeared. The plate is fine; the band was too pale. It is 1.17:1 now, the
-light end of that range, and there is a test holding it there.
-
-### Third pass — the light-and-matter section
-
-| | Change |
-|---|---|
-| ✅ | Photo capped at 400px and centred, words and picture now stand next to each other instead of at opposite edges of the screen |
-| ✅ | The paragraph breaks on the exact three lines you wrote — and those breaks now live in the text itself, so you can move them from **ניהול טקסטים** |
-| ✅ | Dust drifting in the air around it: sixteen specks, a pixel a second, 5–14% opacity. Invisible until you stop and look, and they stop entirely for anyone who has asked their computer for less motion |
-| ✅ | New flame — the one you linked, in your terracotta |
-
-**On the flame:** I checked the licence before using it. That icon is Loading.io's
-FREE tier, which their terms describe as "dedicated to the public domain … no
-attribution is required" — so nothing follows it onto your site. Some icons in
-the same library are not, and would have needed a credit line.
-
-### Fourth pass — fixing what was still wrong
-
-| | Change |
-|---|---|
-| ✅ | **The paragraph is three lines.** It was showing four because I had made the line breaks depend on a database script nobody had run. That was my mistake — a layout requirement should never need a script. It is computed in the code now and cannot come out any other way |
+| ✅ | One prism, one beam, one spectrum — and its background is exactly the page's white with the edges feathered out, so it sits on the page rather than being a picture of something |
+| ✅ | Crystal white section, picture left at 400px, words right, headline on one line |
+| ✅ | The paragraph is on your three lines. Those breaks live in the copy, so you can move them yourself from **ניהול טקסטים** |
 | ✅ | The photo sits 50px lower against the words |
-| ✅ | The flame reads as a flame. At 27px it was a blob: the shape only used 58% of its own box, and its inner curl closes up below about 36px. Measured, cropped to fit, sized at 36px, and darkened so it holds against the grey band |
-| ✅ | **Then redrawn entirely** to match the reference you sent — two tongues with a smaller flame cut out of the middle. Drawn from scratch rather than copied: the picture you sent is a watermarked stock file, and the style itself is generic, so there is nothing attached to it |
-| ✅ | Sharper photo — regenerated at four times the resolution |
-| ✅ | Six new tests on the home page specifically, each one guarding something that has already gone wrong once |
+| ✅ | Dust drifting in the air: sixteen specks, about a pixel a second. Invisible until you stop and look, and they stop entirely for anyone who has asked their computer for less motion |
 
-**Waiting on you:** one short script — the stock numbers. Step 1 of
-[ACTION.md](ACTION.md).
+### Collections and products
+
+| | |
+|---|---|
+| ✅ | "קולקציות חמות" and "מוצרים מובילים" |
+| ✅ | Hovering one tile softly blurs the others instead of washing them out, and the one you are on grows for longer |
+| ✅ | Collection names ride a white plate across the foot of each photo, with the arrow on hover |
+| ✅ | **The band behind them is a shade deeper.** You were right that white on it did not read — see below |
+| ✅ | The "חדש" tag is terracotta with a slow sheen, squared rather than a pill |
+| ✅ | Products can carry a stock count; at 5 or fewer an orange line appears under the photo |
+| ✅ | All 47 product names are Hebrew, and the Latin moved to the English field where it belongs |
+| ⛔ | The flame icon is gone. Three versions in it still was not earning its place |
+
+### Projects, club, and everything
+
+| | |
+|---|---|
+| ✅ | Projects show a year after the place |
+| ✅ | The two project buttons swapped, and both are the same pill as the account button in the header |
+| ✅ | Every button on the site is one height, one radius, one typeface |
+| ✅ | The club field keeps its round corners when you click into it, and the "unsubscribe any time" line is gone |
+
+**Why the band changed.** White on it measured 1.06:1 — invisible. I measured
+the shipped CSS of eight comparable brands: Vitra, Paola Lenti, Neptune, Aesop
+and DWR all sit between 1.17:1 and 1.21:1 against white. Aluma was below every
+one of them, which is why a white plate on it disappeared. The plate was fine;
+the band was too pale. It is 1.17:1 now, and a test holds it there.
 
 **Not touched:** every other page, as asked. The one exception is the shared
 button shape, which by its nature applies everywhere. The contact form's
-underline fields are also still underlines rather than pills — say the word and
+underline fields are still underlines rather than pills — say the word and
 they change too.
 
----
-
-```
-████████████████████  100%
-```
-
-**Every problem found has been dealt with. Ready to go live.**
-
-Last updated: 10 September 2026.
+**Next:** the other screens.
 
 ---
+
+## The bug sweep — 9 September
+
+```
+████████████████████  done
+```
+
+**Every problem found has been dealt with.**
 
 ## What was done
 

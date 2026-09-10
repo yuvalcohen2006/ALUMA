@@ -7,7 +7,6 @@ import { useTranslation } from "react-i18next";
 import { useSiteText } from "@/hooks/useSiteText";
 import { localizedName } from "@/lib/localized-name";
 import TileFallback from "@/components/TileFallback";
-import FlameMark from "@/components/FlameMark";
 
 /** Three, not eight. Audo shows four; Skargaarden uses text links; Hillerstorp
  *  shows none at all. Eight tiles was more than any reference brand puts on a
@@ -32,16 +31,8 @@ const FeaturedCollections = () => {
     <section className="border-y border-border bg-secondary">
       <div className="mx-auto max-w-[1440px] px-5 py-20 md:px-10 md:py-28 lg:px-16 lg:py-36">
         <Reveal>
-          {/*
-            Flex, not a margin: the row runs right-to-left in Hebrew, so the
-            heading takes the reading start and the flame lands on its left —
-            and it mirrors to the right of the words on /en without a second
-            rule. The mark is sized against the cap height, not the line box,
-            which is why it is 0.8em rather than a pixel value.
-          */}
-          <h2 className="flex items-center gap-3 text-start text-heading font-normal tracking-normal text-foreground">
+          <h2 className="text-start text-heading font-normal tracking-normal text-foreground">
             {t("home.collections.title", tr("collections.title"))}
-            <FlameMark id="collections-flame" className="h-9 w-auto shrink-0" />
           </h2>
         </Reveal>
 
