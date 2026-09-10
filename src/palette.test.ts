@@ -84,3 +84,40 @@ describe("browser chrome", () => {
     expect(read("public/site.webmanifest")).toMatch(/"background_color":\s*"#FFFFFF"/i);
   });
 });
+
+/**
+ * The section band has to be a plane you can actually see.
+ *
+ * At 97% lightness it measured 1.06:1 against white — so a white element on
+ * it, which is what a collection tile's name plate is, was invisible, and the
+ * band itself needed a hairline to register at all.
+ *
+ * 1.17:1 is not a number from a standard; it is where the tier actually sits.
+ * Measured off the shipped CSS of eight comparable brands: Vitra #eaeaea (its
+ * workhorse, used 20 times), Paola Lenti #ededed, Neptune #edede9, Aesop
+ * #e9e9e9, DWR #efebe2 — a band from 1.17:1 to 1.21:1. Anything lighter is
+ * decoration that costs a repaint and buys nothing.
+ */
+describe("the section band", () => {
+  const relativeLuminance = (l: number) => {
+    const c = l / 100;
+    const f = c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
+    return f; // neutral grey: all three channels are equal, so this IS the luminance
+  };
+
+  it("is far enough below white for a white plate to read on it", () => {
+    const match = css().match(/--secondary:\s*0 0% ([\d.]+)%/);
+    expect(match, "--secondary should be a neutral grey").toBeTruthy();
+
+    const lightness = Number(match![1]);
+    const ratio = 1.05 / (relativeLuminance(lightness) + 0.05);
+
+    expect(ratio).toBeGreaterThanOrEqual(1.15);
+    // And not so dark that it stops being a light band and becomes a slab.
+    expect(ratio).toBeLessThanOrEqual(1.3);
+  });
+
+  it("stays dead neutral, which is what fixed the yellow", () => {
+    expect(css()).toMatch(/--secondary:\s*0 0% [\d.]+%/);
+  });
+});

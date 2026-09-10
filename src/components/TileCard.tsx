@@ -160,19 +160,26 @@ const TileCard = ({
       */}
       {emblem && (
         <span
-          className={`pointer-events-none absolute start-4 top-4 z-10 overflow-hidden rounded-full px-3 py-1 text-label leading-none ${
+          className={`pointer-events-none absolute start-4 top-4 z-10 overflow-hidden rounded-[2px] px-2.5 py-1 text-label leading-none tracking-[0.04em] ${
             emblem === "new"
-              ? "bg-accent font-medium text-background shadow-[0_1px_10px_hsl(var(--accent)/0.45)]"
+              ? "bg-accent font-medium text-background"
               : "bg-foreground text-background"
           }`}
         >
           {/*
+            Squared, not a pill. Every button on the site is now a full pill,
+            so a pill-shaped badge reads as something you can press — and this
+            one deliberately cannot be pressed. A 2px radius with a little
+            tracking is the editorial flash: Farfetch, Matches and Ssense all
+            square their labels for the same reason.
+
             "new" is the one that has to feel like something. Terracotta rather
             than charcoal — white on it measures 4.98:1, so it clears AA where
             the same fill fails under dark type — with a slow sheen crossing it
             every few seconds. The sheen is the whole trick: at 3.2 seconds and
             low contrast it is a sweep of light on a lacquered chip, and at
-            anything faster it is a discount sticker.
+            anything faster it is a discount sticker. The drop shadow that used
+            to sit under it is gone; a glow on a flat page is the tell.
           */}
           {emblem === "new" && (
             <span

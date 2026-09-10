@@ -1,7 +1,7 @@
 import Reveal from "@/components/Reveal";
 import { useTranslation } from "react-i18next";
 import { useSiteText } from "@/hooks/useSiteText";
-import lightAndMatter from "@/assets/light-and-matter.jpg";
+import lightAndMatter from "@/assets/light-and-matter.webp";
 
 /**
  * The warm-up: the sentence, and a picture of what the sentence is about.
@@ -15,14 +15,20 @@ import lightAndMatter from "@/assets/light-and-matter.jpg";
  * That argument was wrong twice over. The washes read as a brown gradient
  * rather than as light, and the sentence IS about a thing: material meeting
  * light. So the band is now crystal white with the photograph the sentence
- * describes — a beam refracting through a prism onto aluminium, porcelain
- * stone and woven outdoor fabric. Those are not decorative props: they are the
- * three materials Aluma actually builds with, which is why this picture can
- * carry a claim a gradient could not.
+ * describes, reduced to its smallest true form: one beam, one prism, one
+ * spectrum. An earlier version staged four materials around it and read as a
+ * product shot of a mood board — the sentence is about light meeting matter,
+ * and that is exactly two things.
  *
  * ORDER IS THE LAYOUT. The text comes first in the DOM and the photograph
  * second, so on the Hebrew site the words sit right and the picture left, and
  * the whole thing mirrors correctly on /en without a second rule.
+ *
+ * THE PICTURE HAS NO EDGES. Its ground was lifted to exactly #FFFFFF and its
+ * outer 130px feathered into that white, so there is no rectangle, no corner
+ * and no border — the prism and its light simply sit on the page. That is also
+ * why there is no `rounded-sm` here: a radius implies a frame, and the whole
+ * point is that there is not one.
  */
 const BrandStatement = () => {
   const t = useSiteText();
@@ -50,7 +56,7 @@ const BrandStatement = () => {
             {t("home.statement.lead", tr("statement.lead"))}
           </h2>
 
-          <p className="mt-5 max-w-[52ch] text-body tracking-normal text-foreground-soft">
+          <p className="mt-5 max-w-[46ch] text-body tracking-normal text-foreground-soft">
             {t("home.statement.body", tr("statement.body"))}
           </p>
         </Reveal>
@@ -59,11 +65,11 @@ const BrandStatement = () => {
           <img
             src={lightAndMatter}
             alt=""
-            width={1200}
-            height={1600}
+            width={880}
+            height={920}
             loading="lazy"
             decoding="async"
-            className="w-full rounded-sm object-cover"
+            className="w-full"
           />
         </Reveal>
       </div>

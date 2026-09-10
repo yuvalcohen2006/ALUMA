@@ -32,11 +32,19 @@
        primary button and every active tab on the site. 12% reads 4.98:1. */
     --primary-foreground: 0 0% 12%;
 
-    /* #F8F8F8 — the section band, and the whole reason the site read yellow.
-       The old cream ground was within a point of what RH ships; the SAND was
-       the problem. Its red-minus-blue warmth was 23, against 3-4 on every band
-       grey measured across the tier. This is dead neutral: warmth 0. */
-    --secondary: 0 0% 97%;
+    /* #EDEDED — the section band.
+       Dead neutral, which is what fixed the yellow: the old cream ground was
+       within a point of what RH ships, and the SAND was the problem (warmth
+       23, against 3-4 on every band grey across the tier).
+       
+       93%, not 97%. At 97% the band measured 1.06:1 against white — so a white
+       element sitting on it, like the name plate on a collection tile, was
+       invisible, and the band itself needed a hairline to be seen at all.
+       Pulled from what the tier actually ships: Vitra #eaeaea (used 20 times),
+       Paola Lenti #ededed, Neptune #edede9, Aesop #e9e9e9, DWR #efebe2 — all
+       between 1.17:1 and 1.21:1. This is 1.17:1, the light end of that range.
+       Body copy on it still measures 6.2:1. */
+    --secondary: 0 0% 93%;
     --secondary-foreground: 0 0% 18%;
 
     /* #F0F0F0 — one step below the band. This is a FILL, not a surface: image

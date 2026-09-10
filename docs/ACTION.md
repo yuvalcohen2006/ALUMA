@@ -4,36 +4,34 @@ Updated 10 September 2026. No explanations — what's missing, then exactly what
 
 ---
 
-## 1. Run one database script ⚠️ do this first
+## 1. Run one more database script
 
-Three of today's home-page changes are waiting on it: the Hebrew product names,
-the "only 3 left" line, and the three new section titles.
+The first one is done — your product names are Hebrew now. This second one just
+fills in stock numbers so the "only a few left" line has something to show.
 
 1. Go to **supabase.com/dashboard/project/jzqayfllojeqivwbbuyf/sql/new**
-2. Open the file `supabase/migrations/20260910120000_hebrew_names_stock_and_home_titles.sql`
-   from the project folder, select all of it, and copy
+2. Open `supabase/migrations/20260910130000_seed_stock_counts.sql` from the
+   project folder, select all of it, and copy
 3. Paste it into the big empty box
 4. Click **Run** (bottom right, or Ctrl+Enter)
 5. It should say **Success. No rows returned**
 
-Safe to run twice — the second time changes nothing.
-
-If Supabase shows a red "destructive operation" warning, that is about the word
-`update` and is expected. Click through it.
+These numbers are invented. Six pieces come out low so you can see the orange
+line — קוטה is one of them and it is on the home page. Change any of them from
+the product form whenever you like.
 
 ---
 
-## 2. Stock counts — optional, new today
+## 2. Stock counts — how to set them yourself
 
-A product can now say **"נותרו 3 במלאי"** in orange under its photo.
+A product says **"נותרו 3 במלאי"** in orange under its photo at 5 or fewer.
 
 1. **alumaoutdoor.com/admin** → **קולקציות ומוצרים**
 2. Click a collection → click a product
 3. Find **כמה נשארו במלאי**
 4. Type a number → **שמירה**
 
-At 5 or fewer the line appears. Leave it blank and nothing appears — that is
-how all 47 products start, so nothing changes until you fill one in.
+Leave it blank and nothing appears at all.
 
 ---
 

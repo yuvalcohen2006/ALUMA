@@ -26,8 +26,26 @@
 | ✅ | The club field keeps its round corners when you click into it |
 | ✅ | The "unsubscribe any time" line is gone |
 
-**Waiting on you:** the database script — the Hebrew names, the stock counts and
-the three titles are in it. Step 1 of [ACTION.md](ACTION.md).
+### Second pass, same day
+
+| | Change |
+|---|---|
+| ✅ | Simpler photo: one prism, one beam, one spectrum — and its background is now exactly the page's white with the edges feathered out, so it sits on the page instead of being a picture of something |
+| ✅ | The paragraph is three lines |
+| ✅ | The "חדש" tag is squared rather than a pill — every button on the site is a pill now, so a pill badge looked like something you could press |
+| ✅ | A hand-drawn flame beside "קולקציות חמות", gradient between two neighbours of your terracotta |
+| ✅ | Stock numbers invented for all 47, six of them low |
+| ✅ | **The band behind the collections is a shade deeper** — see below |
+
+**Why the band changed.** You were right that white on it did not read. I
+measured the shipped CSS of eight comparable brands: Vitra, Paola Lenti,
+Neptune, Aesop, DWR and others all sit between 1.17:1 and 1.21:1 against white.
+Aluma was at 1.06:1 — below every one of them, which is why a white plate on it
+disappeared. The plate is fine; the band was too pale. It is 1.17:1 now, the
+light end of that range, and there is a test holding it there.
+
+**Waiting on you:** one more script — the stock numbers. Step 1 of
+[ACTION.md](ACTION.md).
 
 **Not touched:** every other page, as asked. The one exception is the shared
 button shape, which by its nature applies everywhere. The contact form's
