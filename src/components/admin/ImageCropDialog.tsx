@@ -91,6 +91,10 @@ const ImageCropDialog = ({
   const display = displaySize(img, win, view.zoom);
   const maxZoom = Math.max(1.6, maxUsefulZoom(img, win, output));
   const soft = image ? isUpscaling(view, img, win, output) : false;
+  /* At zoom 1 the photograph is simply smaller than the output, and no amount
+     of zooming out will change that — so telling the owner to reduce the zoom
+     is advice they cannot take. The two cases need different sentences. */
+  const softAtMinimum = soft && view.zoom <= 1.001;
 
   /*
    * Measured by a CALLBACK REF, not by an effect keyed on `open`.
@@ -119,16 +123,33 @@ const ImageCropDialog = ({
     observer.current.observe(el);
   }, []);
 
-  // Centre a newly loaded photograph, and re-centre if the stage resizes before
-  // anything has been dragged.
+  /*
+   * Centre a newly loaded photograph, and re-centre if the stage resizes
+   * BEFORE anything has been dragged.
+   *
+   * The second half of that sentence was in the comment and not in the code:
+   * this ran on every change of winW/winH, and the stage is measured by a
+   * ResizeObserver. So resizing the window, pressing Ctrl+=, rotating a tablet
+   * or simply crossing the sm breakpoint (h-[340px] sm:h-[400px]) snapped zoom
+   * back to 1 and re-centred the image — throwing away the framing the owner
+   * had just set, with no warning and no undo.
+   */
+  const touched = useRef(false);
   useEffect(() => {
     if (!image || !winW || !winH) return;
+    if (touched.current) return;
     const d = displaySize({ w: image.width, h: image.height }, { w: winW, h: winH }, 1);
     setView({ zoom: 1, ...centeredOffset(d, { w: winW, h: winH }) });
   }, [image, winW, winH]);
 
+  // A new photograph is a fresh crop, so it starts centred again.
+  useEffect(() => {
+    touched.current = false;
+  }, [image]);
+
   const pan = useCallback(
     (dx: number, dy: number) => {
+      touched.current = true;
       setView((v) => {
         const d = displaySize(img, win, v.zoom);
         return { zoom: v.zoom, ...clampOffset(v.tx + dx, v.ty + dy, d, win) };
@@ -139,6 +160,7 @@ const ImageCropDialog = ({
 
   const setZoom = useCallback(
     (next: number, focus?: { x: number; y: number }) => {
+      touched.current = true;
       setView((v) => zoomAbout(v, img, win, Math.min(maxZoom, Math.max(1, next)), focus));
     },
     [img.w, img.h, winW, winH, maxZoom], // eslint-disable-line react-hooks/exhaustive-deps
@@ -156,6 +178,14 @@ const ImageCropDialog = ({
     const el = stageRef.current;
     if (!el || !image) return;
     const onWheel = (e: WheelEvent) => {
+      /* Zoom on pinch and Ctrl+wheel only.
+         A plain two-finger scroll is how someone reaches the save button —
+         this dialog is taller than the viewport — and the stage is the largest
+         target in it, so the reflex to scroll silently re-cropped the
+         photograph instead. Browsers report a trackpad pinch as a wheel event
+         with ctrlKey set, which is the same convention Figma and Maps use.
+         The +/- buttons and the slider cover the rest. */
+      if (!e.ctrlKey && !e.metaKey) return;
       e.preventDefault();
       const rect = el.getBoundingClientRect();
       const focus = {
@@ -300,8 +330,17 @@ const ImageCropDialog = ({
             {s.shownAt.map((place) => (
               <div key={place.label}>
                 <div
-                  className="overflow-hidden rounded-sm border border-border bg-secondary"
-                  style={{ aspectRatio: String(place.ratio) }}
+                  className="mx-auto overflow-hidden rounded-sm border border-border bg-secondary"
+                  style={{
+                    aspectRatio: String(place.ratio),
+                    // Capped, and the width follows from the cap for a tall
+                    // shape. The hero's phone preview is 0.37 wide-to-tall:
+                    // full-width in the one-column layout below `lg` that is a
+                    // 2,300px box, so the previews alone ran to nearly three
+                    // thousand pixels and pushed the stage off screen.
+                    maxHeight: "260px",
+                    width: place.ratio < 1 ? `${260 * place.ratio}px` : undefined,
+                  }}
                 >
                   {image && winW > 0 && (
                     <CropPreview
@@ -400,8 +439,9 @@ const ImageCropDialog = ({
         <p className="text-sm text-muted-foreground" role="status">
           {soft ? (
             <span className="text-foreground">
-              התמונה מוגדלת מעבר לרזולוציה שלה והתוצאה תהיה מעט מטושטשת. הקטינו את
-              התקריב, או העלו תמונה גדולה יותר.
+              {softAtMinimum
+                ? "התמונה קטנה מהגודל שהאתר צריך, והתוצאה תהיה מעט מטושטשת. אפשר לשמור ככה, אבל תמונה גדולה יותר תיראה טוב יותר."
+                : "התמונה מוגדלת מעבר לרזולוציה שלה והתוצאה תהיה מעט מטושטשת. הקטינו את התקריב, או העלו תמונה גדולה יותר."}
             </span>
           ) : (
             <>

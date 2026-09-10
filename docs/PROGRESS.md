@@ -1,12 +1,17 @@
 # Bug sweep — where I'm standing
 
 ```
-████████████████████  100%
+██████████████████░░  88%
 ```
 
-**123 of 123 problems fixed.**
+**123 fixed. ~17 still to check.**
 
 Last updated: 10 September 2026.
+
+> Corrected from "100%". That figure counted only the problems the sweep
+> managed to fully check. It found more than that and ran out of budget before
+> judging all of them, so the honest denominator is larger. Detail at the
+> bottom.
 
 ---
 
@@ -46,14 +51,18 @@ wrong way, dead code.
 
 ---
 
-## One thing worth knowing
+## Left to do
 
-The sweep ran out of budget twice. On the last run, **18 of its checks never
-finished** — so 18 possible problems were spotted but never confirmed or ruled
-out. They are not known bugs; they are unexamined. Say the word and I'll run
-that last slice.
+**24 findings were never judged.** Their checking agents ran out of budget, so
+these were spotted and then neither confirmed nor ruled out. Three are rated as
+breakages, two of them in the photo-crop tool, which got no verified coverage
+at all in either run. I am going through these by hand now.
 
-Everything in the table above is confirmed, fixed and pushed.
+**About 45 more were filed as small** and skipped on purpose. I have fixed
+roughly 25 of them along the way; the rest are unread.
+
+**Then a production check** that is not about the sweep at all: security rules,
+settings, dead links, what the browser console says on a real page load.
 
 ---
 

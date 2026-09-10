@@ -106,7 +106,7 @@ before saving.
 | Product | 1600 × 1600 | square |
 | Product in a colour | 1600 × 1600 | square, same angle |
 | Project | 2000 × 1333 | landscape |
-| Article | 1600 × 1067 | landscape |
+| Article | 1600 × 900 | landscape |
 
 Up to 8MB. **JPG or PNG only** — an iPhone HEIC is refused, convert it first.
 

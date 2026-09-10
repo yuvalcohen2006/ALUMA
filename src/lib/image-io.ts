@@ -115,6 +115,15 @@ export async function loadImageForCrop(file: File): Promise<LoadedImage> {
   const h = Math.round(natural.h * ratio);
 
   const { canvas, ctx } = canvasOf(w, h);
+  /* White first, and this is the pass that matters.
+     PNG and WebP are both accepted, both can carry an alpha channel, and this
+     is where the file is first written out as JPEG — which has no alpha, so
+     every transparent pixel becomes BLACK. exportCrop further down fills white
+     before it draws, but by then the image it is handed has already been
+     flattened here, so that fill had nothing left to fill. A cut-out product
+     shot on a transparent background arrived on the site on a black slab. */
+  ctx.fillStyle = "#FFFFFF";
+  ctx.fillRect(0, 0, w, h);
   ctx.imageSmoothingEnabled = true;
   ctx.imageSmoothingQuality = "high";
   ctx.drawImage(source, 0, 0, w, h);

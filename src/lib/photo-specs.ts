@@ -82,20 +82,29 @@ export const PHOTO_SPECS = {
     what: "תמונת פרויקט",
     shape: "לרוחב, 3:2",
     size: "2000 × 1333",
-    watchOut: "בדף הפרויקטים התמונה נחתכת מעט מהצדדים. אל תצמידו את הרהיט לקצה.",
+    // The 4:3 is the strip at the BOTTOM of a project page, not the projects
+    // index — the index and the home page both show this at 3:2, exactly as
+    // cropped. The labels named the wrong page, so the owner was warned about
+    // cropping on a page that does not crop.
+    watchOut: "בתחתית דף פרויקט התמונה נחתכת מעט מהצדדים. אל תצמידו את הרהיט לקצה.",
     out: { w: 2000, h: 1333 },
     shownAt: [
-      { label: "דף הבית", ratio: 3 / 2 },
-      { label: "דף הפרויקטים", ratio: 4 / 3 },
+      { label: "דף הפרויקטים ודף הבית", ratio: 3 / 2 },
+      { label: "בתחתית דף פרויקט", ratio: 4 / 3 },
     ],
   },
   article: {
     what: "תמונת כתבה",
-    shape: "לרוחב, 3:2",
-    size: "1600 × 1067",
+    // 16:9, because that is the only shape the site ever shows it in — the
+    // article page's own cover (BlogPost.tsx). The spec used to output 3:2 and
+    // preview it "ביומן", where the magazine index in fact lists articles as
+    // text with no image at all: so the preview showed a shape nothing uses,
+    // and the site then cut the top and bottom off every cover it was given.
+    shape: "לרוחב, 16:9",
+    size: "1600 × 900",
     watchOut: "טקסט בתוך התמונה לא ייקרא בטלפון. עדיף תמונה בלי כיתוב.",
-    out: { w: 1600, h: 1067 },
-    shownAt: [{ label: "ביומן", ratio: 3 / 2 }],
+    out: { w: 1600, h: 900 },
+    shownAt: [{ label: "בראש הכתבה", ratio: 16 / 9 }],
   },
 } as const satisfies Record<string, PhotoSpec>;
 
