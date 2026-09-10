@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import { ChevronDown } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useLocalizedPath } from "@/lib/useLocalizedPath";
+import { HIGH_FETCH_PRIORITY } from "@/lib/img-priority";
 
 type HeroSettings = {
   title_he?: string;
@@ -125,7 +126,7 @@ const Hero = () => {
           style={{ transform: `translate3d(0, ${-offset * 0.8}px, 0)` }}
           width={1920}
           height={1280}
-          fetchPriority="high"
+          {...HIGH_FETCH_PRIORITY}
         />
         <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-background/30 to-background/80" />
       </div>
@@ -140,7 +141,7 @@ const Hero = () => {
           alt="Aluma"
           width={2026}
           height={492}
-          fetchPriority="high"
+          {...HIGH_FETCH_PRIORITY}
           className="w-[58%] sm:w-[68%] max-w-[320px] sm:max-w-[560px] md:max-w-[760px] lg:max-w-[980px] h-auto mb-5 sm:mb-8 animate-logo-reveal drop-shadow-md"
         />
         {settings.subtitle && (

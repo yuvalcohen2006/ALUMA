@@ -9,6 +9,7 @@ import { useLocalizedPath } from "@/lib/useLocalizedPath";
 import DirectionalArrow from "@/components/DirectionalArrow";
 import { articleHtml } from "@/lib/article-body";
 import { useTranslation } from "react-i18next";
+import { HIGH_FETCH_PRIORITY } from "@/lib/img-priority";
 
 type Post = {
   id: string;
@@ -224,7 +225,7 @@ const BlogPost = () => {
           )}
           {post.cover_image_url && (
             <div className="aspect-[16/9] overflow-hidden rounded-sm border border-border  mt-10 mb-10 bg-secondary">
-              <img src={post.cover_image_url} alt={post.title} loading="eager" decoding="async" fetchPriority="high" width={1600} height={900} className="w-full h-full object-cover" />
+              <img src={post.cover_image_url} alt={post.title} loading="eager" decoding="async" {...HIGH_FETCH_PRIORITY} width={1600} height={900} className="w-full h-full object-cover" />
             </div>
           )}
           <div
