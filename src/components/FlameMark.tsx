@@ -1,33 +1,61 @@
 /**
  * The flame beside "קולקציות חמות".
  *
- * The silhouette is loading.io's `fire` icon (slug 5xrfpc). Its own metadata
- * declares `<d:license>free</d:license>`, which is Loading.io's LD-FREE tier:
- * "dedicated to the public domain by waiving all our right worldwide under
- * copyright law … No attribution is required." So it carries no obligation
- * onto a commercial site — worth recording, because the same library also
- * ships BY-licensed icons that would.
+ * Drawn here, not lifted. The client supplied a watermarked Adobe Stock
+ * reference; the two-tongue flame with an inner flame cut out of it is a
+ * generic icon archetype that ships in every icon set going, so this is an
+ * original path in that style rather than a trace of a licensed file. Nothing
+ * follows it onto a commercial site.
  *
- * THE VIEWBOX IS THE SHAPE, NOT THE SOURCE'S. As shipped, the path occupies
- * x 21.0-79.1 and y 7.5-92.5 of a 100x100 box — 58% of the width. Dropped into
- * a square at 0.8em that rendered a 14px flame beside a 30px heading, which is
- * why it read as weedy rather than small. Measured by rasterising the path at
- * 10x and trimming, then the box was cropped to it with a hair of margin. The
- * mark is now sized by HEIGHT with the width free, so it fills what it is
- * given.
+ * PROPORTIONS ARE MEASURED, NOT EYEBALLED. Normalising the reference into this
+ * 64x100 box puts the main tip at (30, 1), the notch between the tongues at
+ * (48, 49), the second tongue's tip at (57, 32) and the widest point of the
+ * bowl at y≈70. Earlier drafts had the second tongue too high and too far
+ * left, and — the real fault — joined it with control points meeting at too
+ * wide an angle to read as a point at all.
  *
- * What is ours is the colour. The original is flat #e15b64, a pink-leaning
- * red that fights the brand; this runs a gradient between two neighbours of
- * Aluma's terracotta (hsl(14 47% 46%)) — #B85A31, the same hue lighter, and
- * #7E3319, the same hue deeper. Both were pushed deeper than the first attempt
- * because the band behind them is #EDEDED, not white: the old light stop
- * measured 3.19:1 there and looked washed. These read 3.94:1 and 7.56:1, and
- * stay close enough that at this size it is one warm mark with depth rather
- * than two colours.
+ * THE INNER FLAME IS A MINIATURE OF THE OUTER. That is the thing that took
+ * five drafts to see. Treated as a teardrop with a curl at its foot it reads
+ * as a comma at any size; given the same structure as its parent — tall
+ * tongue, notch, shorter second tongue, mirrored so the small one falls left —
+ * it reads as a flame, and it still reads at 36px, which a spiral never did.
+ *
+ * `fill-rule="evenodd"` makes the inner flame a hole rather than a second
+ * shape, so the page shows through it and the mark works on any ground.
+ *
+ * The gradient runs between two neighbours of the brand terracotta
+ * (hsl(14 47% 46%)): #7E3319 deeper and #B85A31 lighter, climbing bottom-left
+ * to top-right so the bowl reads grounded and the tips read lit. Both are
+ * pitched for the #EDEDED band behind them — 7.56:1 and 3.94:1 — because an
+ * earlier pair chosen against white washed out on the grey.
  *
  * The gradient id comes from a prop: an SVG defs id is global to the document,
  * so two of these on one page would otherwise collide.
  */
+const OUTER_FLAME = [
+  "M30 1",
+  "C33 14 38 23 43 31", // right edge of the main tongue
+  "C46 37 49 43 48 49", // down into the notch
+  "C50 43 53 37 57 32", // back up to the second tongue, meeting at a corner
+  "C60 39 63 48 63 58", // right flank
+  "C63 80 49 97 32 97", // bowl, right half
+  "C15 97 1 80 1 58", // bowl, left half
+  "C1 45 8 33 16 24", // left flank
+  "C22 17 27 9 30 1",
+  "Z",
+].join(" ");
+
+const INNER_FLAME = [
+  "M31 33",
+  "C34 45 39 55 42 65", // right edge, widening as it falls
+  "C45 77 39 89 29 89", // foot, right half
+  "C20 89 14 82 14 74", // foot, left half
+  "C14 68 16 62 19 57", // left flank rising into the small tongue
+  "C19 62 20 66 22 69", // its notch
+  "C25 60 28 45 31 33", // back up to the tip
+  "Z",
+].join(" ");
+
 const FlameMark = ({
   className,
   id = "flame",
@@ -36,7 +64,7 @@ const FlameMark = ({
   id?: string;
 }) => (
   <svg
-    viewBox="20 6.5 60 87"
+    viewBox="0 0 64 100"
     className={className}
     aria-hidden="true"
     focusable="false"
@@ -45,10 +73,10 @@ const FlameMark = ({
     <defs>
       <linearGradient
         id={`${id}-body`}
-        x1="26"
-        y1="90"
-        x2="76"
-        y2="14"
+        x1="8"
+        y1="94"
+        x2="58"
+        y2="10"
         gradientUnits="userSpaceOnUse"
       >
         <stop offset="0" stopColor="#7E3319" />
@@ -59,7 +87,7 @@ const FlameMark = ({
       fillRule="evenodd"
       clipRule="evenodd"
       fill={`url(#${id}-body)`}
-      d="M24.6 79.4C21.4 74 20 67.2 21.8 61.1c1.7-5.6 5.5-10.4 9.3-14.7 4.2-4.9 8.9-9.6 11.5-15.6 3.2-7.4 2.7-16.3-1.3-23.3 2.2 2.1 5.2 3 7.9 4.3 5.7 2.7 10.5 7.5 12.8 13.4 2.3 5.9 2 12.8-1.2 18.3-3.6 6.3-11.1 10.2-12.3 17.8-.4 2.9.6 6.2 3.3 7.5.9.4 1.9.6 2.9.6 3.8-.1 7.3-2.6 9.5-5.8 3.8-5.3 3.8-10.9 2.9-17.1 1.7.4 3.6 2.8 4.7 4.1 5.2 5.9 8.9 15.4 6.5 23.2-1.6 5-5.1 9.3-9.3 12.4-8.5 6.3-20.1 8-30 4.4-6-2-11.2-5.9-14.4-11.2z"
+      d={`${OUTER_FLAME} ${INNER_FLAME}`}
     />
   </svg>
 );

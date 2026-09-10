@@ -111,9 +111,14 @@ describe("the home page", () => {
     // attribute selector is lower-cased in an HTML document, so
     // `[viewBox="..."]` silently matches nothing on an SVG element.
     const flame = [...container.querySelectorAll("svg")].find(
-      (el) => el.getAttribute("viewBox") === "20 6.5 60 87",
+      (el) => el.getAttribute("viewBox") === "0 0 64 100",
     );
-    expect(flame, "the flame, cropped to its own path").toBeTruthy();
+    expect(flame, "the flame").toBeTruthy();
+    // Two subpaths and evenodd, or the inner flame is not a hole and the mark
+    // reads as a solid blob at small sizes.
+    const path = flame!.querySelector("path")!;
+    expect(path.getAttribute("fill-rule")).toBe("evenodd");
+    expect((path.getAttribute("d") ?? "").match(/Z/g)).toHaveLength(2);
     // Sized by height with the width free, or it renders squashed into a square.
     expect(flame!.getAttribute("class")).toContain("w-auto");
     // And it carries the gradient rather than the source's flat pink.

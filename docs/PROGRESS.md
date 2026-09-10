@@ -65,6 +65,7 @@ the same library are not, and would have needed a credit line.
 | ✅ | **The paragraph is three lines.** It was showing four because I had made the line breaks depend on a database script nobody had run. That was my mistake — a layout requirement should never need a script. It is computed in the code now and cannot come out any other way |
 | ✅ | The photo sits 50px lower against the words |
 | ✅ | The flame reads as a flame. At 27px it was a blob: the shape only used 58% of its own box, and its inner curl closes up below about 36px. Measured, cropped to fit, sized at 36px, and darkened so it holds against the grey band |
+| ✅ | **Then redrawn entirely** to match the reference you sent — two tongues with a smaller flame cut out of the middle. Drawn from scratch rather than copied: the picture you sent is a watermarked stock file, and the style itself is generic, so there is nothing attached to it |
 | ✅ | Sharper photo — regenerated at four times the resolution |
 | ✅ | Six new tests on the home page specifically, each one guarding something that has already gone wrong once |
 
