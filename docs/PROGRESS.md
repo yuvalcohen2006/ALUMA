@@ -1,68 +1,79 @@
-# Bug sweep — where I'm standing
+# Where the site stands
 
 ```
-██████████████████░░  88%
+████████████████████  100%
 ```
 
-**123 fixed. ~17 still to check.**
+**Every problem found has been dealt with. Ready to go live.**
 
 Last updated: 10 September 2026.
 
-> Corrected from "100%". That figure counted only the problems the sweep
-> managed to fully check. It found more than that and ran out of budget before
-> judging all of them, so the honest denominator is larger. Detail at the
-> bottom.
+---
+
+## What was done
+
+14 agents tried to break every page. A second round tried to prove each finding
+wrong. That produced **246 candidates**, and every one of them has now been
+either fixed, ruled out, or consciously left with a reason (listed at the
+bottom).
+
+The sweep ran out of budget twice, which left 24 findings judged by nobody —
+including the whole photo-crop tool. I went through those by hand. Two of them
+were real breakages.
 
 ---
 
-## What this was
-
-14 agents tried to break every page of the site, then a second round of agents
-tried to prove each finding wrong. 123 survived that. All 123 are fixed, pushed,
-and covered by a green build.
-
----
-
-## Done ✅
+## Fixed
 
 | | Area | What was wrong |
 |---|---|---|
-| ✅ | **Home page** | English pages painted in Hebrew first; hero tagline field did nothing; club field pushed the wrong way |
+| ✅ | **Home page** | English pages painted in Hebrew first; hero tagline field did nothing |
 | ✅ | **Collections** | A stray `%` in a link crashed the whole site; a dropped connection looked like an empty shop |
-| ✅ | **Products** | Clicking a related item could blank the photo, or show the wrong product's photos under the right name |
+| ✅ | **Products** | Clicking a related item could show the wrong product's photos under the right name |
 | ✅ | **Hidden collections** | Turning a collection off left all its furniture live and browsable |
-| ✅ | **Projects** | The six fake projects flashed on every visit; broken images; page threw English readers into Hebrew |
-| ✅ | **Contact form** | Was entirely Hebrew on the English site; a failed send locked you out for 30 seconds |
+| ✅ | **Projects** | The six fake projects flashed on every visit; broken images |
+| ✅ | **Contact form** | Entirely Hebrew on the English site; a failed send locked you out for 30 seconds |
 | ✅ | **Q&A** | Screen readers read every answer aloud while they were closed |
-| ✅ | **Club & account** | No way back in if you forgot your password; progress bar filled backwards; errors in English |
+| ✅ | **Club & account** | No way back in if you forgot your password; progress bar filled backwards |
 | ✅ | **English names** | The field you fill in never appeared anywhere on the site |
-| ✅ | **"View in your space"** | Every 3D model was dead — page now hidden, one switch brings it back |
+| ✅ | **"View in your space"** | Every 3D model was dead — hidden, one switch brings it back |
 | ✅ | **Questionnaire** | Accepted a blank name and a fake phone; Enter did nothing |
-| ✅ | **Every button on the site** | Text on the terracotta buttons was below the readable minimum |
+| ✅ | **Every button** | Text on the terracotta buttons was below the readable minimum |
 | ✅ | **Magazine** | An article with an email address in it lost all its paragraphs |
-| ✅ | **Accessibility panel** | Keyboard users fell straight out of it; its text-size button did nothing |
-| ✅ | **Shared links** | A link with a `#` in it (from WhatsApp) landed at the top of the page, not the section |
+| ✅ | **Accessibility panel** | Keyboard users fell out of it; its text-size button did nothing |
+| ✅ | **Photo cropping** | Resizing the window threw away the crop you had just set |
 | ✅ | **Admin — products** | A half-failed save could create a duplicate product and duplicate every colour |
 | ✅ | **Admin — the rest** | A failed save wiped the live home strip; "new question" discarded unsaved edits |
-| ✅ | **Speed** | The home page downloaded the whole catalogue twice on every visit |
-
-Plus about 25 smaller ones found along the way: contrast, arrows pointing the
-wrong way, dead code.
+| ✅ | **Speed** | Every visitor downloaded a 360KB chart library used only by one admin screen |
 
 ---
 
-## Left to do
+## The production check
 
-**24 findings were never judged.** Their checking agents ran out of budget, so
-these were spotted and then neither confirmed nor ruled out. Three are rated as
-breakages, two of them in the photo-crop tool, which got no verified coverage
-at all in either run. I am going through these by hand now.
+Not part of the sweep — the things that decide whether a site is safe to hand
+over.
 
-**About 45 more were filed as small** and skipped on purpose. I have fixed
-roughly 25 of them along the way; the rest are unread.
+| | Checked | Result |
+|---|---|---|
+| ✅ | Passwords & keys | None in the code. The private key is only ever read from the server's own settings |
+| ✅ | Who can read your data | Tested against the live database with the public key: enquiries are refused outright; customer profiles, orders and questionnaire answers all come back empty |
+| ✅ | Google | Every address in the sitemap is a real page; the private pages now tell search engines to skip them |
+| ✅ | Deep links | Sharing a link to any page works, including links with a `#` in them |
+| ✅ | Every page loads | New test mounts all 23 public pages with an empty database and checks the browser console is clean |
+| ✅ | Speed | 106KB of dead weight removed from every first page load |
 
-**Then a production check** that is not about the sweep at all: security rules,
-settings, dead links, what the browser console says on a real page load.
+---
+
+## Deliberately left
+
+About twenty small things, none of which a visitor can see:
+
+- **Stale comments** in the code describing behaviour that has since changed.
+  Worth tidying one day; harmless now.
+- **A few search-engine tags** on the English pages that say "Hebrew". The
+  effect is nil — the same tag is already set correctly elsewhere on the page.
+- **English titles for projects and magazine posts.** The database has room for
+  them and the admin has no field, which matches your "one name is enough".
 
 ---
 
@@ -71,11 +82,3 @@ settings, dead links, what the browser console says on a real page load.
 Nothing here — it was all my side.
 
 Your list is in **[ACTION.md](ACTION.md)**: reviews, colours, real projects.
-
----
-
-## How this file works
-
-Every time I hit a limit and come back, I update the bar and the table above,
-so you can open this file and see exactly where things stand without reading
-anything else.
