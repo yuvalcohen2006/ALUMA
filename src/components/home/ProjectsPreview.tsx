@@ -42,7 +42,7 @@ const ProjectsPreview = () => {
 
         <ul
           role="list"
-          className="tile-grid mt-10 grid grid-cols-1 gap-x-6 gap-y-16 sm:grid-cols-3 md:mt-14"
+          className="tile-grid tile-soften mt-10 grid grid-cols-1 gap-x-6 gap-y-16 sm:grid-cols-3 md:mt-14"
         >
           {shown.map((p, i) => (
             <li key={p.slug}>
@@ -52,7 +52,7 @@ const ProjectsPreview = () => {
                   image={p.cover}
                   alt=""
                   title={p.name}
-                  meta={p.location}
+                  meta={[p.location, p.year].filter(Boolean).join(" - ")}
                   aspect="3/2"
                 />
               </Reveal>
@@ -74,29 +74,31 @@ const ProjectsPreview = () => {
               {t("home.projects.invite", tr("projects.invite"))}
             </p>
 
-            <div className="mt-8 flex flex-wrap items-center gap-x-8 gap-y-4">
-              {/* The primary move is the conversation, not the catalogue of
-                  work — someone reading this far has seen enough work. */}
-              <Link
-                to={to("/faq") + "#contact"}
-                className="inline-flex h-12 items-center rounded-full bg-foreground px-7 text-small font-medium text-background transition-colors duration-200 hover:bg-accent"
-              >
-                {t("home.projects.cta", tr("projects.cta"))}
-              </Link>
-
-              {/* Bigger than it was. This used to be a 16px text link sharing a
-                  line with nothing; at 24px it is the second thing on the
-                  block rather than a footnote to it. */}
+            {/*
+              Both are buttons now, on one geometry: 48px tall, fully rounded,
+              same type — the account pill in the header is the control the
+              whole site is measured against. The portfolio link used to be an
+              underlined text link, so the two sat on the same line at
+              different heights and different shapes.
+            */}
+            <div className="mt-8 flex flex-wrap items-center gap-3">
               <Link
                 to={to("/projects")}
-                className="group inline-flex items-center gap-2 text-tile text-foreground underline decoration-1 underline-offset-[6px] transition-colors hover:text-accent"
+                className="group inline-flex h-12 items-center gap-2 rounded-full border border-foreground/30 px-7 text-small font-medium text-foreground transition-colors duration-200 hover:border-foreground hover:bg-foreground hover:text-background"
               >
                 {t("home.projects.all", tr("projects.all"))}
                 <ArrowLeft
                   aria-hidden="true"
                   strokeWidth={1.5}
-                  className="h-5 w-5 rotate-[var(--tile-arrow-flip)] transition-transform duration-250 ease-hover group-hover:translate-x-[var(--tile-arrow-travel)] motion-reduce:transition-none"
+                  className="h-4 w-4 rotate-[var(--tile-arrow-flip)] transition-transform duration-250 ease-hover group-hover:translate-x-[var(--tile-arrow-travel)] motion-reduce:transition-none"
                 />
+              </Link>
+
+              <Link
+                to={to("/faq") + "#contact"}
+                className="inline-flex h-12 items-center rounded-full bg-foreground px-7 text-small font-medium text-background transition-colors duration-200 hover:bg-accent"
+              >
+                {t("home.projects.cta", tr("projects.cta"))}
               </Link>
             </div>
           </div>

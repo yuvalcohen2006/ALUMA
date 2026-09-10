@@ -463,6 +463,7 @@ export type Database = {
           published: boolean
           slug: string
           sort_order: number
+          stock: number | null
           tag: string | null
           tagline: string | null
           updated_at: string
@@ -486,6 +487,7 @@ export type Database = {
           published?: boolean
           slug: string
           sort_order?: number
+          stock?: number | null
           tag?: string | null
           tagline?: string | null
           updated_at?: string
@@ -509,6 +511,7 @@ export type Database = {
           published?: boolean
           slug?: string
           sort_order?: number
+          stock?: number | null
           tag?: string | null
           tagline?: string | null
           updated_at?: string

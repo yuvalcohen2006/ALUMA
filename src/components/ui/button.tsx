@@ -4,8 +4,20 @@ import { cva, type VariantProps } from "class-variance-authority";
 
 import { cn } from "@/lib/utils";
 
+/*
+ * One geometry for every control on the site.
+ *
+ * `rounded-full` and a single height, matching the account pill in the header
+ * — which was the one control the client pointed at and said "this one". The
+ * shadcn defaults shipped three radii (md on the base, md again on sm and lg)
+ * and four heights across the size scale, so two buttons side by side rarely
+ * lined up. Every size below is now the same pill; only the padding changes.
+ *
+ * 48px is also comfortably over the 44px minimum for a touch target, which the
+ * old `sm` at 36px was not.
+ */
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full text-small font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
   {
     variants: {
       variant: {
@@ -17,10 +29,13 @@ const buttonVariants = cva(
         link: "text-primary underline-offset-4 hover:underline",
       },
       size: {
-        default: "h-10 px-4 py-2",
-        sm: "h-9 rounded-md px-3",
-        lg: "h-11 rounded-md px-8",
-        icon: "h-10 w-10",
+        default: "h-12 px-6",
+        sm: "h-12 px-5",
+        lg: "h-12 px-8",
+        // The one exception, and it stays square-ish on purpose: an icon-only
+        // control in a dense admin table is not the same object as a call to
+        // action, and a 48px circle in a row of them eats the row.
+        icon: "h-10 w-10 rounded-md",
       },
     },
     defaultVariants: {

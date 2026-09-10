@@ -73,7 +73,13 @@ describe("every public page mounts", () => {
     try {
       mount(path);
       // Past the lazy chunk and the first data effect.
-      await waitFor(() => expect(document.querySelector("main")).toBeTruthy());
+      // Generous, because this asks "does it mount", not "how fast". The club
+      // and questionnaire pages take about a second to resolve their lazy
+      // chunks, and a 1s default made them fail only when the rest of the
+      // suite was running beside them.
+      await waitFor(() => expect(document.querySelector("main")).toBeTruthy(), {
+        timeout: 8000,
+      });
       expect(document.body.textContent?.length ?? 0).toBeGreaterThan(0);
       const real = errors.filter(
         (e) => !/not wrapped in act|useLayoutEffect|404 Error: User attempted/i.test(String(e)),

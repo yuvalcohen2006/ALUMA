@@ -48,6 +48,7 @@ export default {
           DEFAULT: "hsl(var(--muted))",
           foreground: "hsl(var(--muted-foreground))",
         },
+        warning: "hsl(var(--warning))",
         accent: {
           DEFAULT: "hsl(var(--accent))",
           foreground: "hsl(var(--accent-foreground))",
@@ -106,6 +107,10 @@ export default {
         250: "250ms",
         400: "400ms",
         600: "600ms",
+        // The tile zoom on the home page. Named, not arbitrary: Tailwind 3.4
+        // treats `duration-[900ms]` as ambiguous and drops it silently, which
+        // is how a "longer" animation ends up exactly as long as it was.
+        900: "900ms",
       },
       transitionTimingFunction: {
         // easeOutCubic — one house curve for every hover on the site, so the

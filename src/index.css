@@ -52,6 +52,12 @@
        contact block was under AA. 46% gives 4.97:1 and 4.68:1, and white on it
        is 4.97:1 for the two button hovers. */
     --accent: 14 47% 46%;
+
+    /* The "only a few left" line, and nothing else on the site.
+       A deeper orange than the terracotta accent on purpose: this is a
+       scarcity signal, and a signal that looks like the brand colour reads as
+       decoration. 5.03:1 on white, so it clears AA at 14px. */
+    --warning: 24 90% 38%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 60% 45%;
@@ -248,115 +254,65 @@
     .tile-grid:has(a:hover) > li:not(:has(a:hover)) img {
       opacity: 0.55;
     }
+
+    /*
+       The home page settles the others BACK rather than washing them out.
+       `.tile-soften` opts a grid out of the opacity dim above and into a
+       shallow blur instead: a dimmed photograph reads as disabled, where a
+       slightly out-of-focus one reads as "not the one you are looking at",
+       which is the actual intent. 2px is under the threshold at which anyone
+       can name what changed and well over the threshold at which they feel it.
+    */
+    .tile-soften:has(a:hover) > li:not(:has(a:hover)) img {
+      opacity: 1;
+      filter: blur(2px);
+    }
+    .tile-soften > li img {
+      transition:
+        opacity 400ms cubic-bezier(0.215, 0.61, 0.355, 1),
+        filter 400ms cubic-bezier(0.215, 0.61, 0.355, 1),
+        transform 900ms cubic-bezier(0.215, 0.61, 0.355, 1);
+    }
   }
   @media (prefers-reduced-motion: reduce) {
     .tile-grid > li img { transition: none; }
+    .tile-soften > li img { transition: none; filter: none; }
   }
 
-  /* ── The statement band ──────────────────────────────────────────────
-     Light, moving so slowly you cannot catch it, and built entirely from
-     gradients because a gradient is cheaper than a photograph and, done
-     properly, looks better than one.
-
-     "Done properly" is the eight stops. A two-stop radial fade has a
-     mathematically visible Mach band at its midpoint — that is the whole
-     tell of a cheap blurred blob. The curve below (100 / 94 / 78 / 58 / 35
-     / 16 / 3 / 0) holds near-full strength through the first fifth, drops
-     hard through the middle, then tails out. It is Linear's shipped
-     .edgeGlow falloff, and it is what makes light read as light.
-
-     Warm wash toward the inline start, which in Hebrew is the right: the
-     light enters where the eye does. Cool wash opposite and half as strong,
-     because a single warm blob is a sunset and two opposed temperatures are
-     a room. */
-  .band-light {
-    background-color: #FBFAF8;
-  }
-
-  .band-wash {
-    position: absolute;
-    inset: -20%;
-    pointer-events: none;
-  }
-
-  .band-wash--warm {
-    background: radial-gradient(
-      38% 46% at 74% 18%,
-      hsl(22 62% 66% / 0.17) 0%,
-      hsl(22 62% 66% / 0.16) 15%,
-      hsl(22 62% 66% / 0.133) 30%,
-      hsl(22 62% 66% / 0.099) 45%,
-      hsl(22 62% 66% / 0.059) 60%,
-      hsl(22 62% 66% / 0.027) 75%,
-      hsl(22 62% 66% / 0.005) 90%,
-      transparent 100%
+  /* The sheen on the "new" chip.
+     Transform only, so it never leaves the compositor, and added under
+     `no-preference` rather than removed under `reduce` — a decorative loop
+     should not exist at all for someone who asked for no motion. */
+  .emblem-sheen {
+    background: linear-gradient(
+      100deg,
+      transparent 20%,
+      hsl(0 0% 100% / 0.42) 46%,
+      hsl(0 0% 100% / 0.42) 54%,
+      transparent 80%
     );
+    transform: translateX(-140%);
   }
-
-  .band-wash--cool {
-    background: radial-gradient(
-      44% 52% at 18% 88%,
-      hsl(205 30% 58% / 0.1) 0%,
-      hsl(205 30% 58% / 0.094) 15%,
-      hsl(205 30% 58% / 0.078) 30%,
-      hsl(205 30% 58% / 0.058) 45%,
-      hsl(205 30% 58% / 0.035) 60%,
-      hsl(205 30% 58% / 0.016) 75%,
-      hsl(205 30% 58% / 0.003) 90%,
-      transparent 100%
-    );
-  }
-
-  /* multiply, NOT overlay.
-     On a white backdrop overlay is mathematically the identity function —
-     overlay(1, s) = 1 for every source value — so the grain that worked on
-     the charcoal version of this band would be exactly, measurably
-     invisible here. multiply and darken are the only separable modes that
-     do anything on white.
-     stitchTiles='stitch' is what stops a tiled feTurbulence seaming at every
-     tile edge; the previous version omitted it. */
-  .band-grain {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    opacity: 0.045;
-    mix-blend-mode: multiply;
-    background-size: 220px 220px;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)'/%3E%3C/svg%3E");
-  }
-
-  /* Transform only. Never a gradient stop, never background-position, never
-     a filter radius — animating an feTurbulence primitive across a
-     full-bleed band is the documented way to pin a CPU.
-
-     Two coprime durations so the pair never visibly loops. At 3% travel over
-     68 seconds this moves about 0.6px per second: below the speed at which
-     it reads as animation, which is the point. */
-  @keyframes band-drift-a {
-    from { transform: translate3d(0, 0, 0); }
-    to   { transform: translate3d(-3.5%, 2.5%, 0); }
-  }
-  @keyframes band-drift-b {
-    from { transform: translate3d(0, 0, 0); }
-    to   { transform: translate3d(3%, -2%, 0); }
-  }
-
-  /* Motion is ADDED under no-preference rather than removed under reduce, so
-     a browser that reports nothing gets the still version. The still version
-     parks each wash at the MIDPOINT of its travel — the composition someone
-     with reduced motion sees is the one in the middle of the drift, not the
-     accidental frame zero. */
-  .band-wash--warm { transform: translate3d(-1.75%, 1.25%, 0); }
-  .band-wash--cool { transform: translate3d(1.5%, -1%, 0); }
-
   @media (prefers-reduced-motion: no-preference) {
-    .band-wash--warm {
-      animation: band-drift-a 68s cubic-bezier(0.37, 0, 0.63, 1) infinite alternate;
-    }
-    .band-wash--cool {
-      animation: band-drift-b 92s cubic-bezier(0.37, 0, 0.63, 1) infinite alternate;
+    .emblem-sheen {
+      animation: emblem-sheen 3.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
     }
   }
+  @keyframes emblem-sheen {
+    0%,
+    62% {
+      transform: translateX(-140%);
+    }
+    100% {
+      transform: translateX(140%);
+    }
+  }
+
+  /* The statement band's two drifting washes and its grain lived here — an
+     eight-stop gradient standing in for a photograph. The band is a white
+     section with a real photograph in it now, so all of it is gone rather
+     than left to ship unused. It is in git history if the argument for a
+     gradient ever wins again. */
 
   /* The last entry in a list dissolves downward into the page, so the list
      ends by trailing off rather than by stopping on a hard edge. Downward and
@@ -529,7 +485,13 @@
   textarea:focus-visible {
     outline: 2px solid hsl(var(--accent));
     outline-offset: 2px;
-    border-radius: 2px;
+    /*
+      No border-radius here. An outline already follows the element's OWN
+      radius, and hard-setting 2px overrode it — so the moment a pill-shaped
+      control took focus its ring turned into a rectangle and the control
+      looked like it had changed shape. Most visible on the club field, which
+      is the one control on the site a visitor is asked to click into.
+    */
   }
   button:not(:disabled):active,
   a:active {

@@ -154,16 +154,7 @@ const AdminHero = () => {
               הכותרת שגוגל וקוראי מסך רואים. התמונה והלוגו הם מה שרואים בעין.
             </p>
           </div>
-          <div>
-            <Label>תת-כותרת (Tagline)</Label>
-            <Input
-              value={hero.subtitle || ""}
-              onChange={(e) => setHero({ ...hero, subtitle: e.target.value })}
-            />
-            <p className="mt-1.5 text-xs text-muted-foreground">
-              משפט אחד קצר שמופיע מתחת ללוגו. השאירו ריק ולא יופיע כלום.
-            </p>
-          </div>
+
           <div className="grid grid-cols-2 gap-3">
             <div>
               <Label>טקסט כפתור CTA</Label>

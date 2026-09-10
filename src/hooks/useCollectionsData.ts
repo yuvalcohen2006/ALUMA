@@ -31,6 +31,8 @@ export type DBProduct = {
   price_note: string | null;
   /** The order the owner arranged in the admin, within its collection. */
   sort_order: number;
+  /** Units left, or null when the owner is not counting this piece. */
+  stock: number | null;
   /** Drives the automatic "new" emblem. published_at arrives with a migration. */
   created_at: string | null;
   published_at: string | null;
@@ -54,6 +56,10 @@ export const normaliseProduct = (p: any): DBProduct => ({
   name_en: p?.name_en ?? null,
   emblem: p?.emblem ?? null,
   sort_order: typeof p?.sort_order === "number" ? p.sort_order : 0,
+  // Null, not 0. "Not counted" and "none left" are different answers, and
+  // defaulting to 0 would put a sold-out warning on all 47 pieces the moment
+  // the column exists.
+  stock: typeof p?.stock === "number" ? p.stock : null,
   created_at: p?.created_at ?? null,
   published_at: p?.published_at ?? null,
   description: Array.isArray(p?.description) ? p.description : [],

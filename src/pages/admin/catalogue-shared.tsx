@@ -27,6 +27,8 @@ export type Product = {
   gallery: any;
   price: number | null;
   price_note: string | null;
+  /** Units left, or null when the owner is not counting this piece. */
+  stock: number | null;
   sort_order: number;
   published: boolean;
 };

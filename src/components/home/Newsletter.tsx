@@ -165,12 +165,12 @@ const Newsletter = () => {
                   // side of a left-aligned page, and the text jumped across
                   // the field the moment a character was typed.
                   dir={email ? "ltr" : LANGUAGE_DIR[lang]}
-                  className="h-14 flex-1 min-w-0 rounded-full border border-foreground/15 bg-white/80 px-6 text-small text-foreground text-start shadow-soft backdrop-blur-md transition-colors placeholder:text-foreground/70 focus:border-accent"
+                  className="h-12 flex-1 min-w-0 rounded-full border border-foreground/15 bg-white/80 px-6 text-small text-foreground text-start shadow-soft backdrop-blur-md transition-colors placeholder:text-foreground/70 focus:border-accent"
                 />
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="h-14 shrink-0 rounded-full bg-foreground px-8 text-small font-medium text-background transition-colors duration-200 hover:bg-accent disabled:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+                  className="h-12 shrink-0 rounded-full bg-foreground px-8 text-small font-medium text-background transition-colors duration-200 hover:bg-accent disabled:opacity-60"
                 >
                   {t("club.submit")}
                 </button>
@@ -186,13 +186,6 @@ const Newsletter = () => {
                 </p>
               )}
 
-              {/* foreground-soft at full opacity, not charcoal at 55%. This
-                  line sits about 87% down the white scrim, where the wash is
-                  roughly 7% — effectively on the raw photograph — and measured
-                  3.09:1 there. The token gives 5.4:1 on the same pixels. */}
-              <p className="mt-3 text-label text-foreground-soft">
-                {t("club.unsubscribe")}
-              </p>
             </form>
           )}
         </div>

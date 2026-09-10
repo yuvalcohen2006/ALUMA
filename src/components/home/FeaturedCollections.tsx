@@ -45,7 +45,7 @@ const FeaturedCollections = () => {
         */}
         <ul
           role="list"
-          className="tile-grid mt-10 grid grid-cols-1 gap-x-6 gap-y-12 sm:grid-cols-3 md:mt-14"
+          className="tile-grid tile-soften mt-10 grid grid-cols-1 gap-x-6 gap-y-12 sm:grid-cols-3 md:mt-14"
         >
           {shown.map((c, i) => {
             const name = localizedName(lang, c.name_he, c.name_en);
@@ -58,9 +58,11 @@ const FeaturedCollections = () => {
                   fallback={<TileFallback name={name} />}
                   alt=""
                   title={name}
-                  meta={c.intro}
                   aspect="3/4"
                   eager={i === 0}
+                  // The name rides a white plate across the foot of the
+                  // photograph rather than sitting under it.
+                  nameplate
                 />
               </Reveal>
             </li>

@@ -50,15 +50,18 @@
     "body": "We design and build outdoor furniture to order — aluminium frames, Sunbrella fabrics and stone surfaces chosen to stand up to Israeli sun, salt and rain. Every piece is measured for the space it goes into, and stays outside all year."
   },
   "collections": {
-    "title": "Selected collections",
+    "title": "Hot collections",
     "all": "See the full catalogue"
   },
   "products": {
-    "title": "Selected pieces",
-    "all": "See all pieces"
+    "title": "Leading pieces",
+    "all": "See all pieces",
+    "lastFew": "Only {{count}} left",
+    "lastOne": "Only one left",
+    "soldOut": "Sold out"
   },
   "projects": {
-    "title": "Projects",
+    "title": "Our projects",
     "more": "And many others.",
     "invite": "The next one could be yours.",
     "cta": "Talk to us",

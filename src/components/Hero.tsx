@@ -21,6 +21,9 @@ const Hero = () => {
   const [offset, setOffset] = useState(0);
   const [showCue, setShowCue] = useState(true);
   const [settings, setSettings] = useState<HeroSettings>({});
+  const [viewport, setViewport] = useState(
+    typeof window !== "undefined" ? window.innerHeight : 800,
+  );
   const [isMobile, setIsMobile] = useState(
     typeof window !== "undefined" ? window.matchMedia("(max-width: 768px)").matches : false,
   );
@@ -40,7 +43,12 @@ const Hero = () => {
     const mq = window.matchMedia("(max-width: 768px)");
     const onChange = () => setIsMobile(mq.matches);
     mq.addEventListener("change", onChange);
-    return () => mq.removeEventListener("change", onChange);
+    const onResize = () => setViewport(window.innerHeight);
+    window.addEventListener("resize", onResize);
+    return () => {
+      mq.removeEventListener("change", onChange);
+      window.removeEventListener("resize", onResize);
+    };
   }, []);
 
   // Scroll cue visibility. Kept separate from the parallax listener below, which
@@ -90,6 +98,18 @@ const Hero = () => {
   const desktopBg = settings.desktop_image || heroImage;
   const mobileBg = settings.mobile_image || desktopBg;
   const bg = isMobile ? mobileBg : desktopBg;
+
+  /*
+   * The lockup is gone by the time the next section arrives.
+   *
+   * `offset` is scrollY * 0.25 and stops climbing at one viewport, so this
+   * reaches 0 at roughly 70% of a screen of scrolling — while the hero is
+   * still the thing being looked at, not after it has half left. Without it
+   * the wordmark was still sitting over the top edge of the white section
+   * below, which is what made the hand-off read as two pages colliding rather
+   * than one page moving.
+   */
+  const fade = Math.max(0, 1 - offset / (Math.max(1, viewport) * 0.18));
   /*
    * The CMS field is title_he — Hebrew by name and by content, with no English
    * counterpart in the admin. So on /en an owner-supplied value would still be
@@ -123,17 +143,20 @@ const Hero = () => {
           src={bg}
           alt={tr("hero.alt")}
           className="w-full h-[125%] object-cover object-top will-change-transform"
-          style={{ transform: `translate3d(0, ${-offset * 0.8}px, 0)` }}
+          style={{ transform: `translate3d(0, ${offset * 0.6}px, 0)` }}
           width={1920}
           height={1280}
           {...HIGH_FETCH_PRIORITY}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-background/30 to-background/80" />
+        <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-background/25 to-background" />
       </div>
 
       <div
         className="container-luxury relative z-10 text-center pt-24 pb-12 flex flex-col items-center will-change-transform"
-        style={{ transform: `translate3d(0, ${offset * 0.45}px, 0)` }}
+        style={{
+          transform: `translate3d(0, ${offset * 0.35}px, 0)`,
+          opacity: fade,
+        }}
       >
         <h1 className="sr-only">{srTitle}</h1>
         <img
@@ -144,15 +167,6 @@ const Hero = () => {
           {...HIGH_FETCH_PRIORITY}
           className="w-[58%] sm:w-[68%] max-w-[320px] sm:max-w-[560px] md:max-w-[760px] lg:max-w-[980px] h-auto mb-5 sm:mb-8 animate-logo-reveal drop-shadow-md"
         />
-        {settings.subtitle && (
-          <p
-            dir="auto"
-            className="animate-fade-in-up mb-6 max-w-[34ch] text-body leading-relaxed text-foreground drop-shadow-sm sm:mb-8"
-            style={{ animationDelay: "0.2s" }}
-          >
-            {settings.subtitle}
-          </p>
-        )}
         {settings.cta_text && settings.cta_link && externalCta && (
           <a
             href={settings.cta_link}

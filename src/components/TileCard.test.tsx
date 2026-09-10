@@ -35,22 +35,41 @@ describe("the tile", () => {
    */
   it("puts the label on the photograph, opaque, at the reading start", () => {
     renderTile({ emblem: "new" });
-    const badge = screen.getByText("חדש");
-    const cls = badge.getAttribute("class") ?? "";
+    // The word sits in its own span so the sheen can pass behind it; the chip
+    // is that span's parent.
+    const chip = screen.getByText("חדש").closest("span[class*='absolute']");
+    const cls = chip?.getAttribute("class") ?? "";
 
     expect(cls).toContain("absolute");
     expect(cls).toContain("start-4");
-    // Solid charcoal on white type — 13.6:1 over any photograph.
-    expect(cls).toContain("bg-foreground");
     expect(cls).toContain("text-background");
-    // A slash in a Tailwind colour is an alpha value; there must not be one.
-    expect(cls).not.toMatch(/bg-foreground\//);
+    // A slash in a Tailwind colour is an alpha value. Over a photograph the
+    // fill has to be solid, whichever fill it is — a tinted chip reads
+    // differently on a pale terrace than on a dusk sky.
+    expect(cls).not.toMatch(/bg-(foreground|accent)\//);
     // It must never eat a click meant for the tile.
     expect(cls).toContain("pointer-events-none");
 
     // Inside the image frame, not the text block.
-    const frame = badge.parentElement;
-    expect(frame?.className).toContain("overflow-hidden");
+    expect(chip?.parentElement?.className).toContain("overflow-hidden");
+  });
+
+  /*
+   * "new" is the one emblem that is supposed to feel like something, so it
+   * carries the terracotta accent — white on it measures 4.98:1, where the
+   * same fill under charcoal type fails. Every other emblem stays charcoal,
+   * because three shouting labels are no label at all.
+   */
+  it("gives new the accent and leaves the rest charcoal", () => {
+    const chipFor = (emblem: "new" | "popular") => {
+      const { unmount } = renderTile({ emblem });
+      const el = screen.getByText(emblem === "new" ? "חדש" : "מבוקש");
+      const cls = el.closest("span[class*='absolute']")?.getAttribute("class") ?? "";
+      unmount();
+      return cls;
+    };
+    expect(chipFor("new")).toContain("bg-accent");
+    expect(chipFor("popular")).toContain("bg-foreground");
   });
 
   it("keeps the label out of the text block", () => {

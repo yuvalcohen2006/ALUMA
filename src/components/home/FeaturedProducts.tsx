@@ -8,6 +8,7 @@ import { useTranslation } from "react-i18next";
 import { useSiteText } from "@/hooks/useSiteText";
 import { localizedName } from "@/lib/localized-name";
 import { capEmblems, resolveEmblems, isEmblem } from "@/lib/emblems";
+import StockNote from "@/components/home/StockNote";
 
 /**
  * Three pieces, chosen in the admin, shown large.
@@ -50,7 +51,7 @@ const FeaturedProducts = () => {
 
         <ul
           role="list"
-          className="tile-grid mt-10 grid grid-cols-1 gap-x-8 gap-y-14 sm:grid-cols-3 md:mt-14"
+          className="tile-grid tile-soften mt-10 grid grid-cols-1 gap-x-8 gap-y-14 sm:grid-cols-3 md:mt-14"
         >
           {highlights.map((p, i) => (
             <li key={p.id}>
@@ -64,6 +65,9 @@ const FeaturedProducts = () => {
                   aspect="square"
                   eager={i === 0}
                   emblem={emblems[i]}
+                  // Outside the link, so "only 3 left" is read after the
+                  // piece's name rather than becoming part of it.
+                  extra={<StockNote stock={p.stock} />}
                 />
               </Reveal>
             </li>

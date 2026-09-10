@@ -1,5 +1,41 @@
 # Where the site stands
 
+## Home page polish — 10 September
+
+```
+██████████████████░░  90%
+```
+
+**Done, and on your screen once you run the script in [ACTION.md](ACTION.md).**
+
+| | Change |
+|---|---|
+| ✅ | The English line under the ALUMA logo is gone |
+| ✅ | Scrolling off the landing page — the photo now lags behind the page instead of outrunning it, and the wordmark fades out before the next section arrives |
+| ✅ | New photograph for the paragraph: light through a prism onto aluminium, stone and outdoor fabric — the three materials you actually build with |
+| ✅ | That section is crystal white now, picture left, words right, headline on one line |
+| ✅ | Hovering one collection softly blurs the others instead of washing them out, and the one you are on grows for longer |
+| ✅ | Collection names ride a white plate across the foot of each photo, with the arrow on hover |
+| ✅ | "קולקציות חמות", "מוצרים מובילים", "הפרויקטים שלנו" |
+| ✅ | The "חדש" tag is terracotta with a slow sheen crossing it |
+| ✅ | Products can carry a stock count; at 5 or fewer an orange line appears under the photo |
+| ✅ | All 47 product names go to Hebrew, and the Latin moves to the English field where it belongs |
+| ✅ | Projects show a year after the place |
+| ✅ | The two project buttons swapped, and both are now the same pill as the account button in the header |
+| ✅ | Every button on the site is one height, one radius, one typeface |
+| ✅ | The club field keeps its round corners when you click into it |
+| ✅ | The "unsubscribe any time" line is gone |
+
+**Waiting on you:** the database script — the Hebrew names, the stock counts and
+the three titles are in it. Step 1 of [ACTION.md](ACTION.md).
+
+**Not touched:** every other page, as asked. The one exception is the shared
+button shape, which by its nature applies everywhere. The contact form's
+underline fields are also still underlines rather than pills — say the word and
+they change too.
+
+---
+
 ```
 ████████████████████  100%
 ```

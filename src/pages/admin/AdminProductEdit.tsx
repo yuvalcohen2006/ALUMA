@@ -167,6 +167,9 @@ const AdminProductEdit = () => {
       name_en: product.name_en?.trim() || null,
       emblem: product.emblem || null,
       sort_order: product.sort_order ?? 0,
+      // Null when the box is empty: "not counted" is a different answer from
+      // "none left", and the site only speaks up for the second.
+      stock: product.stock ?? null,
       published: product.published ?? true,
     };
 
@@ -524,6 +527,24 @@ const AdminProductEdit = () => {
                       onChange={(e) => patch({ price_note: e.target.value })}
                       placeholder="החל מ־"
                     />
+                  </div>
+                  <div>
+                    <Label htmlFor="p-stock">כמה נשארו במלאי</Label>
+                    <Input
+                      id="p-stock"
+                      type="number"
+                      min={0}
+                      dir="ltr"
+                      value={product.stock ?? ""}
+                      onChange={(e) =>
+                        patch({ stock: e.target.value === "" ? null : Number(e.target.value) })
+                      }
+                      placeholder="ריק = לא סופרים"
+                    />
+                    <p className="mt-1.5 text-xs text-muted-foreground">
+                      מ־5 ומטה מופיעה שורה כתומה מתחת לתמונה בדף הבית. השאירו ריק
+                      ולא יופיע כלום.
+                    </p>
                   </div>
                 </div>
               </div>

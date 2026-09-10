@@ -68,6 +68,16 @@ type Props = {
    * tiles start-align it. The arrow follows whichever is chosen.
    */
   align?: "start" | "center";
+  /**
+   * Put the name on a white plate across the foot of the photograph instead
+   * of under it.
+   *
+   * The plate is the page's own white (#FFFFFF) sitting on the section's
+   * #F7F7F7, so it reads as a label laid on the picture rather than a caption
+   * beneath it. Used by the home page's collections; everything else keeps the
+   * name under the frame, where a grid of twelve needs the alignment.
+   */
+  nameplate?: boolean;
   /** `h2` where the tile is the page's primary list of things. */
   as?: "h2" | "h3";
   /**
@@ -90,6 +100,7 @@ const TileCard = ({
   align = "start",
   as: Heading = "h3",
   emblem = null,
+  nameplate = false,
 }: Props) => {
   const { lang } = useLocalizedPath();
   return (
@@ -148,8 +159,28 @@ const TileCard = ({
         swallow a click meant for the tile.
       */}
       {emblem && (
-        <span className="pointer-events-none absolute start-4 top-4 z-10 rounded-full bg-foreground px-3 py-1 text-label leading-none text-background">
-          {emblemLabel(emblem, lang)}
+        <span
+          className={`pointer-events-none absolute start-4 top-4 z-10 overflow-hidden rounded-full px-3 py-1 text-label leading-none ${
+            emblem === "new"
+              ? "bg-accent font-medium text-background shadow-[0_1px_10px_hsl(var(--accent)/0.45)]"
+              : "bg-foreground text-background"
+          }`}
+        >
+          {/*
+            "new" is the one that has to feel like something. Terracotta rather
+            than charcoal — white on it measures 4.98:1, so it clears AA where
+            the same fill fails under dark type — with a slow sheen crossing it
+            every few seconds. The sheen is the whole trick: at 3.2 seconds and
+            low contrast it is a sweep of light on a lacquered chip, and at
+            anything faster it is a discount sticker.
+          */}
+          {emblem === "new" && (
+            <span
+              aria-hidden="true"
+              className="emblem-sheen pointer-events-none absolute inset-0"
+            />
+          )}
+          <span className="relative">{emblemLabel(emblem, lang)}</span>
         </span>
       )}
 
@@ -167,8 +198,36 @@ const TileCard = ({
             "linear-gradient(to top, rgb(0 0 0 / 0.20) 0%, rgb(0 0 0 / 0.06) 32%, transparent 62%)",
         }}
       />
+
+      {/*
+        The plate. `z-20` puts it over the grade above, and it is deliberately
+        outside the element that scales — a label that zooms with the picture
+        stops reading as a label.
+      */}
+      {nameplate && (
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 bg-background px-5 py-4">
+          <Heading
+            dir="auto"
+            className="flex items-center gap-2 text-tile leading-none text-foreground"
+          >
+            {title}
+            <ArrowLeft
+              aria-hidden="true"
+              strokeWidth={1.5}
+              className="h-4 w-4 shrink-0 text-foreground opacity-0
+                         rotate-[var(--tile-arrow-flip)]
+                         transition-[opacity,transform] delay-75 duration-250 ease-hover
+                         group-hover:translate-x-[var(--tile-arrow-travel)] group-hover:opacity-100
+                         group-focus-visible:translate-x-[var(--tile-arrow-travel)]
+                         group-focus-visible:opacity-100
+                         motion-reduce:transition-none"
+            />
+          </Heading>
+        </div>
+      )}
     </div>
 
+    {!nameplate && (
     <div className="relative mt-5">
       {/*
         dir="auto" with text-start, so a label lands on the side its own
@@ -207,6 +266,7 @@ const TileCard = ({
         </p>
       )}
     </div>
+    )}
   </Link>
   {extra}
   </div>
