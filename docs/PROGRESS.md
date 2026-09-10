@@ -58,8 +58,18 @@ FREE tier, which their terms describe as "dedicated to the public domain … no
 attribution is required" — so nothing follows it onto your site. Some icons in
 the same library are not, and would have needed a credit line.
 
-**Waiting on you:** two short scripts — the stock numbers and the paragraph
-line breaks. Step 1 of [ACTION.md](ACTION.md).
+### Fourth pass — fixing what was still wrong
+
+| | Change |
+|---|---|
+| ✅ | **The paragraph is three lines.** It was showing four because I had made the line breaks depend on a database script nobody had run. That was my mistake — a layout requirement should never need a script. It is computed in the code now and cannot come out any other way |
+| ✅ | The photo sits 50px lower against the words |
+| ✅ | The flame reads as a flame. At 27px it was a blob: the shape only used 58% of its own box, and its inner curl closes up below about 36px. Measured, cropped to fit, sized at 36px, and darkened so it holds against the grey band |
+| ✅ | Sharper photo — regenerated at four times the resolution |
+| ✅ | Six new tests on the home page specifically, each one guarding something that has already gone wrong once |
+
+**Waiting on you:** one short script — the stock numbers. Step 1 of
+[ACTION.md](ACTION.md).
 
 **Not touched:** every other page, as asked. The one exception is the shared
 button shape, which by its nature applies everywhere. The contact form's

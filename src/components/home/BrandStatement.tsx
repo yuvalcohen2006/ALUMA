@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { useSiteText } from "@/hooks/useSiteText";
 import Motes from "@/components/home/Motes";
 import lightAndMatter from "@/assets/light-and-matter.webp";
+import { statementLines } from "@/lib/statement-lines";
 
 /**
  * The warm-up: the sentence, and a picture of what the sentence is about.
@@ -34,11 +35,16 @@ import lightAndMatter from "@/assets/light-and-matter.webp";
  * nothing else. In Hebrew the row runs right-to-left, which puts the words on
  * the right and the picture on the left, and mirrors on /en for free.
  *
- * THE LINE BREAKS ARE THE COPY. The paragraph breaks mid-sentence, after
- * "שלדת אלומיניום,", so they cannot be derived from the text — they have to be
- * in it. The field is `multiline` in the admin, so the owner keeps control of
- * them by pressing Enter, and `whitespace-pre-line` honours them while still
- * wrapping normally when a phone is too narrow for a line.
+ * THE LINE BREAKS ARE COMPUTED, NOT STORED. Three lines, and the first break
+ * falls mid sentence, so no measure produces them — see lib/statement-lines.
+ * They were briefly shipped as a database migration, which made the layout
+ * depend on someone running a script and left the page showing four lines for
+ * a day. Each line is its own block, so three lines is what renders.
+ *
+ * THE ROW WRAPS. Side by side needs about 600px of text plus a 400px picture,
+ * which does not fit on a 1024px laptop — so the row is allowed to wrap rather
+ * than crushing the picture to a stamp. The browser puts them side by side
+ * when there is room and stacks them when there is not.
  */
 const BrandStatement = () => {
   const t = useSiteText();
@@ -52,32 +58,42 @@ const BrandStatement = () => {
     <section className="relative isolate overflow-hidden bg-background">
       <Motes />
 
-      <div className="relative mx-auto flex max-w-[1440px] flex-col items-center gap-8 px-5 py-20 md:flex-row md:justify-center md:gap-10 md:px-10 md:py-24 lg:gap-14 lg:px-16 lg:py-28">
-        <Reveal className="min-w-0">
+      <div className="relative mx-auto flex max-w-[1440px] flex-col items-center gap-8 px-5 py-20 md:px-10 md:py-24 lg:flex-row lg:flex-wrap lg:justify-center lg:gap-14 lg:px-16 lg:py-28">
+        <Reveal className="lg:shrink-0">
           {/*
             The lead IS the heading. Without one this band contributes nothing
             to the document outline and a screen reader navigating by heading
             goes from the hero straight to the collections.
 
-            `md:whitespace-nowrap` holds it to one line wherever the row is a
-            row, and lets it wrap on a phone, where forcing it would push the
+            `md:whitespace-nowrap` holds it to one line from 768px up — where
+            the section is full width whether or not the picture is beside it —
+            and lets it wrap on a phone, where forcing it would push the
             section wider than the screen.
           */}
           <h2 className="text-heading font-normal tracking-normal text-foreground md:whitespace-nowrap">
             {t("home.statement.lead", tr("statement.lead"))}
           </h2>
 
-          <p className="mt-5 whitespace-pre-line text-body tracking-normal text-foreground-soft">
-            {t("home.statement.body", tr("statement.body"))}
+          <p className="mt-5 text-body tracking-normal text-foreground-soft">
+            {/* Keyed by position, not by content: two identical lines is not a
+                thing this copy does, but it is not a thing React should warn
+                about either, and the list is static. */}
+            {statementLines(t("home.statement.body", tr("statement.body"))).map((line, i) => (
+              <span key={i} className="block">
+                {line}
+              </span>
+            ))}
           </p>
         </Reveal>
 
-        <Reveal delay={90} className="w-full max-w-[400px] shrink-0">
+        {/* Dropped 50px against the words, so the picture's mass sits with
+            the paragraph rather than riding above the heading. */}
+        <Reveal delay={90} className="w-full max-w-[400px] lg:mt-[50px]">
           <img
             src={lightAndMatter}
             alt=""
-            width={880}
-            height={920}
+            width={1200}
+            height={900}
             loading="lazy"
             decoding="async"
             className="mx-auto w-full"

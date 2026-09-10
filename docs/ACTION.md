@@ -4,29 +4,20 @@ Updated 10 September 2026. No explanations — what's missing, then exactly what
 
 ---
 
-## 1. Run two database scripts
+## 1. Run one database script
 
-The first one is done — your product names are Hebrew now. Two small ones left.
-Same steps for each:
+Just the stock numbers. Everything else is done in the code now — the paragraph
+line breaks no longer need a script.
 
 1. Go to **supabase.com/dashboard/project/jzqayfllojeqivwbbuyf/sql/new**
-2. Open the file from the project folder, select all of it, and copy
+2. Open `supabase/migrations/20260910130000_seed_stock_counts.sql` from the
+   project folder, select all of it, and copy
 3. Paste it into the big empty box
 4. Click **Run** (bottom right, or Ctrl+Enter)
 5. It should say **Success. No rows returned**
 
-**File A — `supabase/migrations/20260910130000_seed_stock_counts.sql`**
-Invented stock numbers for all 47 products. Six come out low so you can see the
-orange line — קוטה is one of them and it is on the home page. Change any of them
-from the product form whenever you like.
-
-**File B — `supabase/migrations/20260910140000_statement_line_breaks.sql`**
-Puts the opening paragraph on the three lines you asked for. Until you run it
-the words are right but the line breaks fall wherever they land.
-
-After that, those three lines are yours to move: **ניהול טקסטים** →
-**דף הבית - פסקת פתיחה**. Every time you press Enter in that box you get a new
-line on the site.
+These numbers are invented. Six pieces come out low so you can see the orange
+line — קוטה is one of them and it is on the home page.
 
 ---
 

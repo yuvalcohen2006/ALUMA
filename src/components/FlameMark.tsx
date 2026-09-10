@@ -8,12 +8,22 @@
  * onto a commercial site — worth recording, because the same library also
  * ships BY-licensed icons that would.
  *
+ * THE VIEWBOX IS THE SHAPE, NOT THE SOURCE'S. As shipped, the path occupies
+ * x 21.0-79.1 and y 7.5-92.5 of a 100x100 box — 58% of the width. Dropped into
+ * a square at 0.8em that rendered a 14px flame beside a 30px heading, which is
+ * why it read as weedy rather than small. Measured by rasterising the path at
+ * 10x and trimming, then the box was cropped to it with a hair of margin. The
+ * mark is now sized by HEIGHT with the width free, so it fills what it is
+ * given.
+ *
  * What is ours is the colour. The original is flat #e15b64, a pink-leaning
  * red that fights the brand; this runs a gradient between two neighbours of
- * Aluma's terracotta (hsl(14 47% 46%)) — #C96A3F, the same hue lighter, and
- * #8E3C20, the same hue deeper. It climbs from bottom-left to top-right so the
- * mass reads grounded and the curl reads lit, and the two stops stay close
- * enough that at 24px it is one warm mark with depth rather than two colours.
+ * Aluma's terracotta (hsl(14 47% 46%)) — #B85A31, the same hue lighter, and
+ * #7E3319, the same hue deeper. Both were pushed deeper than the first attempt
+ * because the band behind them is #EDEDED, not white: the old light stop
+ * measured 3.19:1 there and looked washed. These read 3.94:1 and 7.56:1, and
+ * stay close enough that at this size it is one warm mark with depth rather
+ * than two colours.
  *
  * The gradient id comes from a prop: an SVG defs id is global to the document,
  * so two of these on one page would otherwise collide.
@@ -26,7 +36,7 @@ const FlameMark = ({
   id?: string;
 }) => (
   <svg
-    viewBox="0 0 100 100"
+    viewBox="20 6.5 60 87"
     className={className}
     aria-hidden="true"
     focusable="false"
@@ -35,14 +45,14 @@ const FlameMark = ({
     <defs>
       <linearGradient
         id={`${id}-body`}
-        x1="28"
-        y1="92"
-        x2="78"
-        y2="12"
+        x1="26"
+        y1="90"
+        x2="76"
+        y2="14"
         gradientUnits="userSpaceOnUse"
       >
-        <stop offset="0" stopColor="#8E3C20" />
-        <stop offset="1" stopColor="#C96A3F" />
+        <stop offset="0" stopColor="#7E3319" />
+        <stop offset="1" stopColor="#B85A31" />
       </linearGradient>
     </defs>
     <path

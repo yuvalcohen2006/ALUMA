@@ -41,7 +41,7 @@ const FeaturedCollections = () => {
           */}
           <h2 className="flex items-center gap-3 text-start text-heading font-normal tracking-normal text-foreground">
             {t("home.collections.title", tr("collections.title"))}
-            <FlameMark id="collections-flame" className="h-[0.8em] w-[0.8em] shrink-0" />
+            <FlameMark id="collections-flame" className="h-9 w-auto shrink-0" />
           </h2>
         </Reveal>
 
