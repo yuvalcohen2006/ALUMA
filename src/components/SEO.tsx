@@ -15,9 +15,22 @@ interface SEOProps {
   image?: string;
   type?: "website" | "article" | "product";
   jsonLd?: object | object[];
+  /**
+   * Keep this page out of search results.
+   *
+   * robots.txt asks a crawler not to FETCH a path; it cannot stop one indexing
+   * a URL it found linked elsewhere, and a blocked page can still appear as a
+   * bare title. A member's dashboard, the password-reset page and the
+   * thank-you page all need the meta tag as well, which is a directive.
+   *
+   * A noindex page also drops its canonical and its hreflang alternates —
+   * advertising a translated twin of a page you are asking to be ignored is
+   * the kind of mixed signal Search Console flags.
+   */
+  noindex?: boolean;
 }
 
-const SEO = ({ title, description, path, image, type = "website", jsonLd }: SEOProps) => {
+const SEO = ({ title, description, path, image, type = "website", jsonLd, noindex }: SEOProps) => {
   const { pathname } = useLocation();
   const lang = languageFromPath(pathname);
 
@@ -38,15 +51,16 @@ const SEO = ({ title, description, path, image, type = "website", jsonLd }: SEOP
       <html lang={lang} dir={LANGUAGE_DIR[lang]} />
       <title>{title}</title>
       <meta name="description" content={description} />
-      <link rel="canonical" href={url} />
+      {noindex && <meta name="robots" content="noindex,follow" />}
+      {!noindex && <link rel="canonical" href={url} />}
 
       {/* Alternates are only advertised once English actually has copy —
           pointing crawlers at a half-translated tree is worse than not
           declaring it. x-default is the tag most sites forget; without it
           Google has no fallback for unmatched locales. */}
-      {SITE.enableEnglish && <link rel="alternate" hrefLang="he-IL" href={heUrl} />}
-      {SITE.enableEnglish && <link rel="alternate" hrefLang="en" href={enUrl} />}
-      {SITE.enableEnglish && <link rel="alternate" hrefLang="x-default" href={enUrl} />}
+      {SITE.enableEnglish && !noindex && <link rel="alternate" hrefLang="he-IL" href={heUrl} />}
+      {SITE.enableEnglish && !noindex && <link rel="alternate" hrefLang="en" href={enUrl} />}
+      {SITE.enableEnglish && !noindex && <link rel="alternate" hrefLang="x-default" href={enUrl} />}
 
       <meta property="og:site_name" content="Aluma" />
       <meta property="og:locale" content={lang === "en" ? "en_US" : "he_IL"} />

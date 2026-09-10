@@ -41,7 +41,8 @@ API). Without it the Supabase client can't be created and the app won't mount.
 
 ### Note on local development
 
-`npm run dev` renders a 20-product **placeholder catalogue** on the collections
-pages instead of the database, so layouts and filters can be judged against a
-realistic amount of stock. It is development-only and never reaches production.
+`npm run dev` reads the same live database the deployed site does — there is no
+placeholder catalogue any more, and `VITE_USE_DEMO_DATA` in `.env.example` is a
+leftover that nothing reads. Point `VITE_SUPABASE_*` at a separate project if
+you want to work without touching real content.
 Append `?live=1` to any collections URL to see the real database instead.

@@ -67,7 +67,7 @@ const ResetPassword = () => {
 
   return (
     <Layout>
-      <SEO title="איפוס סיסמה | מועדון אלומה" description="בחירת סיסמה חדשה למועדון אלומה." path="/club/reset" />
+      <SEO title="איפוס סיסמה | מועדון אלומה" description="בחירת סיסמה חדשה למועדון אלומה." path="/club/reset" noindex />
       <section className="min-h-[70vh] pt-32 pb-20 md:pt-40">
         <div className="container-luxury max-w-md">
           <h1 className="font-display text-3xl text-foreground md:text-4xl">בחירת סיסמה חדשה</h1>

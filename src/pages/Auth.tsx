@@ -146,6 +146,7 @@ const AuthPage = () => {
         title={isSignup ? "הצטרפות למועדון | Aluma" : "התחברות למועדון | Aluma"}
         description="מועדון אלומה, מעקב הזמנה, מועדפים והטבות בלעדיות."
         path="/club/auth"
+        noindex
       />
       {/* Deliberately plain. A signup is a moment of intent, and every
           decoration around it — the tinted gradient, the bordered card, the

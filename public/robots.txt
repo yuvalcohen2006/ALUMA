@@ -1,28 +1,31 @@
-User-agent: Googlebot
+# The private half of the site: the owner's control panel, and anything behind
+# a member's login. Blocked by path AND by a noindex on the pages themselves,
+# because robots.txt is a request and a noindex is not.
+#
+# Paths kept in step with src/routes.tsx. `/auth` and `/account` used to be
+# listed here and are not routes; `/club/auth`, `/club/dashboard` and
+# `/club/reset` are. `/en/...` needs blocking too — the whole site is mounted
+# under it a second time.
+
+User-agent: *
 Allow: /
 Disallow: /admin
-Disallow: /account
-Disallow: /auth
+Disallow: /club/auth
 Disallow: /club/dashboard
+Disallow: /club/reset
+Disallow: /thank-you
+Disallow: /en/admin
+Disallow: /en/club/auth
+Disallow: /en/club/dashboard
+Disallow: /en/club/reset
+Disallow: /en/thank-you
 
-User-agent: Bingbot
-Allow: /
-Disallow: /admin
-Disallow: /account
-Disallow: /auth
-Disallow: /club/dashboard
-
+# Social crawlers only ever fetch a page someone deliberately shared, and they
+# need the open graph tags on it, so they are not restricted.
 User-agent: Twitterbot
 Allow: /
 
 User-agent: facebookexternalhit
 Allow: /
-
-User-agent: *
-Allow: /
-Disallow: /admin
-Disallow: /account
-Disallow: /auth
-Disallow: /club/dashboard
 
 Sitemap: https://alumaoutdoor.com/sitemap.xml

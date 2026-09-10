@@ -24,7 +24,15 @@ export default defineConfig(() => ({
         // Split heavy vendor libs into cacheable chunks instead of one large bundle.
         manualChunks(id) {
           if (!id.includes("node_modules")) return;
-          if (id.includes("recharts") || id.includes("/d3-")) return "charts";
+          /* No manual chunk for recharts.
+             It is used by exactly one lazily-loaded route (the admin's stats
+             page), so naming a chunk for it made things worse rather than
+             better: Rollup co-locates shared dependencies into an existing
+             chunk, clsx landed in "charts" — and clsx is behind `cn()`, which
+             every component on the site calls. So every route ended up
+             importing the chart library, and index.html modulepreloaded
+             360KB of it on the home page. Left alone, recharts is split into
+             the admin route that actually uses it. */
           if (id.includes("@supabase")) return "supabase";
           if (id.includes("@tanstack")) return "query";
           if (id.includes("react-router")) return "router";

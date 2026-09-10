@@ -43,7 +43,7 @@ describe("collection links", () => {
           // Only routing: an asset living under assets/collections/ is a
           // file path, not a link.
           if (/^import /.test(trimmed) || /@\/assets/.test(line)) return;
-          if (!/(to|href)\s*[=(]/.test(line)) return;
+          if (!/\b(to|href)\s*[=(]/.test(line)) return;
           // A literal path segment after /collections/ — as opposed to an
           // interpolated ${...} from a database row.
           if (/\/collections\/[a-z]/.test(line)) offenders.push(`${file}:${i + 1} ${trimmed.slice(0, 60)}`);
@@ -61,7 +61,7 @@ describe("collection links", () => {
           const trimmed = line.trimStart();
           if (trimmed.startsWith("//") || trimmed.startsWith("*")) return;
           if (/^import /.test(trimmed) || /@\/assets/.test(line)) return;
-          if (!/(to|href)\s*[=(]/.test(line)) return;
+          if (!/\b(to|href)\s*[=(]/.test(line)) return;
           if (/\/products\/[a-z]/.test(line)) offenders.push(`${file}:${i + 1}`);
         });
     }
