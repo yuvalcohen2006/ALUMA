@@ -6,7 +6,7 @@ import { useHomeHighlights } from "@/hooks/useHomeHighlights";
 import { useLocalizedPath } from "@/lib/useLocalizedPath";
 import { useTranslation } from "react-i18next";
 import { useSiteText } from "@/hooks/useSiteText";
-import { localizedName } from "@/lib/localized-name";
+import { productName } from "@/lib/localized-name";
 import { capEmblems, resolveEmblems, isEmblem } from "@/lib/emblems";
 import StockNote from "@/components/home/StockNote";
 
@@ -60,7 +60,7 @@ const FeaturedProducts = () => {
                   to={to(`/products/${p.slug}`)}
                   image={p.cover_url}
                   alt=""
-                  title={localizedName(lang, p.name, p.name_en)}
+                  title={productName(lang, p.name, p.name_en)}
                   meta={p.tagline}
                   aspect="square"
                   eager={i === 0}

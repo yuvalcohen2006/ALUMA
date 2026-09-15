@@ -6,7 +6,7 @@ import Layout from "@/components/Layout";
 import SEO from "@/components/SEO";
 import Reveal from "@/components/Reveal";
 import TileCard from "@/components/TileCard";
-import { localizedName } from "@/lib/localized-name";
+import { localizedName, productName } from "@/lib/localized-name";
 import { capEmblems, resolveEmblems, type Emblem, isEmblem } from "@/lib/emblems";
 import { useCollections, type DBProduct } from "@/hooks/useCollectionsData";
 import { useLocalizedPath } from "@/lib/useLocalizedPath";
@@ -45,9 +45,9 @@ export const ProductCard = ({
     <TileCard
       to={to(`/products/${p.slug}`)}
       image={p.cover_url}
-      fallback={<TileFallback name={localizedName(lang, p.name, p.name_en)} />}
+      fallback={<TileFallback name={productName(lang, p.name, p.name_en)} />}
       alt=""
-      title={localizedName(lang, p.name, p.name_en)}
+      title={productName(lang, p.name, p.name_en)}
       meta={p.tagline}
       aspect="square"
       eager={eager}

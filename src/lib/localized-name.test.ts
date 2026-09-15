@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { localizedName } from "./localized-name";
+import { localizedName, productName } from "./localized-name";
 
 describe("localizedName", () => {
   it("shows the Hebrew name on the Hebrew site", () => {
@@ -40,12 +40,48 @@ describe("localizedName", () => {
  * query did not even fetch the column. Collections did it properly, which is
  * exactly why it looked finished.
  */
-describe("where the English name has to reach", () => {
+describe("productName", () => {
+  it("keeps the owner's Latin spelling on the Hebrew site, casing and all", () => {
+    expect(productName("he", "milo", null)).toBe("milo");
+    expect(productName("he", "Elba", "Elba")).toBe("Elba");
+    expect(productName("he", "tano trio", "tano trio")).toBe("tano trio");
+  });
+
+  /** The live state until the names script runs: Hebrew in `name`, the
+   *  original in `name_en`. */
+  it("undoes the transliteration by reading the original back", () => {
+    expect(productName("he", "מילו", "milo")).toBe("milo");
+    expect(productName("he", "ג'יימס", "James")).toBe("James");
+  });
+
+  it("prefers the name field once it is Latin, so an admin edit shows", () => {
+    expect(productName("he", "Dex", "dex")).toBe("Dex");
+  });
+
+  it("falls back to a Hebrew name rather than to nothing", () => {
+    expect(productName("he", "ספסל", null)).toBe("ספסל");
+    expect(productName("he", "ספסל", "   ")).toBe("ספסל");
+  });
+
+  it("leaves the English site reading its own field first", () => {
+    expect(productName("en", "dex", "Dex fire table")).toBe("Dex fire table");
+    expect(productName("en", "מילו", "milo")).toBe("milo");
+    expect(productName("en", "milo", null)).toBe("milo");
+  });
+});
+
+describe("where the product name has to reach", () => {
   const read = (p: string) => readFileSync(join(process.cwd(), p), "utf8");
 
   it("is used by every page that prints a product name", () => {
-    for (const f of ["src/pages/CollectionPage.tsx", "src/pages/CollectionDetail.tsx"]) {
-      expect(read(f)).toContain("localizedName(");
+    for (const f of [
+      "src/pages/CollectionPage.tsx",
+      "src/pages/CollectionDetail.tsx",
+      "src/components/home/FeaturedProducts.tsx",
+    ]) {
+      expect(read(f)).toContain("productName(");
+      // localizedName on a product would put the Hebrew transliteration back.
+      expect(read(f)).not.toMatch(/localizedName\(lang, (p|c|item)\.name,/);
     }
   });
 

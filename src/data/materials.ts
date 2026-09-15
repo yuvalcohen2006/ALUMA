@@ -2,6 +2,10 @@ import sunbrellaImg from "@/assets/materials/sunbrella.jpg";
 import aluminumImg from "@/assets/materials/aluminum.jpg";
 import graniteImg from "@/assets/materials/granite.jpg";
 import polystoneImg from "@/assets/materials/polystone.jpg";
+import sunbrellaThumb from "@/assets/materials/thumbs/sunbrella.webp";
+import aluminumThumb from "@/assets/materials/thumbs/aluminum.webp";
+import graniteThumb from "@/assets/materials/thumbs/granite.webp";
+import polystoneThumb from "@/assets/materials/thumbs/polystone.webp";
 
 export interface Material {
   slug: string;
@@ -9,6 +13,14 @@ export interface Material {
   tagline: string;
   shortDesc: string;
   image: string;
+  /**
+   * A 320px square cut from the photograph close enough to read as a swatch —
+   * the frame's corner, the stone's top — for the home page's materials strip,
+   * where the whole scene would be a postage stamp of a terrace.
+   */
+  thumb: string;
+  /** The home page strip is the one place on /en that names these. */
+  en: { name: string; tagline: string };
   /**
    * Colour sampled off the material itself in its photo — the sand of the
    * weave, the graphite of the frame, the grey of the stone. Drives the card
@@ -29,6 +41,8 @@ export const materials: Material[] = [
     shortDesc:
       "בדי Sunbrella איכותיים, עמידים ל-UV, לדהייה ולמים. נוחות ויוקרה שנשארות שנים בחוץ.",
     image: sunbrellaImg,
+    thumb: sunbrellaThumb,
+    en: { name: "Sunbrella fabric", tagline: "Comfort that doesn't give in to the sun" },
     accent: "hsl(38 44% 64%)",
     origin: "ארה״ב, תקן Sunbrella® מקורי",
     longDesc: [
@@ -67,6 +81,8 @@ export const materials: Material[] = [
     shortDesc:
       "מסגרות אלומיניום בציפוי אבקה איכותי, עמידות לחלודה וללחות. אסתטיקה אדריכלית טהורה ומשקל קל.",
     image: aluminumImg,
+    thumb: aluminumThumb,
+    en: { name: "Aluminium", tagline: "An architectural frame that never rusts" },
     accent: "hsl(210 11% 34%)",
     origin: "פרופילים אדריכליים בציפוי אבקה תרמי",
     longDesc: [
@@ -105,6 +121,8 @@ export const materials: Material[] = [
     shortDesc:
       "משטחים בעיבוד יד, כל לוח ייחודי בטקסטורה ובדגם. עמידים, יוקרתיים ויפים לנצח.",
     image: graniteImg,
+    thumb: graniteThumb,
+    en: { name: "Porcelain stoneware", tagline: "Every slab a piece of its own" },
     accent: "hsl(208 8% 47%)",
     origin: "לוחות פורצלן בעיבוד יד, חיתוך לפי מידה",
     longDesc: [
@@ -143,6 +161,8 @@ export const materials: Material[] = [
     shortDesc:
       "חומר מרוכב יוקרתי בגימור אבן, קל משמעותית מבטון, עמיד לכל מזג אוויר ומתאים לעיצוב פיסולי ייחודי.",
     image: polystoneImg,
+    thumb: polystoneThumb,
+    en: { name: "PolyStone", tagline: "Sculptural, light and made for weather" },
     accent: "hsl(36 20% 58%)",
     origin: "חומר מרוכב מבוסס שרף ואבן מינרלית, יציקה לפי תבנית",
     longDesc: [

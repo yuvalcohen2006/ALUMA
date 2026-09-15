@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { framedPhoto } from "@/lib/framed-photos";
 
 export type DBCollection = {
   id: string;
@@ -65,7 +66,14 @@ export const normaliseProduct = (p: any): DBProduct => ({
   description: Array.isArray(p?.description) ? p.description : [],
   highlights: Array.isArray(p?.highlights) ? p.highlights : [],
   materials: Array.isArray(p?.materials) ? p.materials : [],
-  gallery: Array.isArray(p?.gallery) ? p.gallery : [],
+  // The squared, centred copies of the photos uploaded before the crop window
+  // existed — see lib/framed-photos. Here, so every public surface gets the
+  // same square the visitor clicked on; the admin reads the table directly
+  // and keeps showing the owner the originals.
+  cover_url: framedPhoto(typeof p?.cover_url === "string" ? p.cover_url : null),
+  gallery: Array.isArray(p?.gallery)
+    ? p.gallery.map((g: unknown) => (typeof g === "string" ? framedPhoto(g) : g))
+    : [],
 });
 
 /**

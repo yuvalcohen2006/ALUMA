@@ -25,3 +25,34 @@ export function localizedName(
   if (lang !== "he" && en && en.trim()) return en.trim();
   return he;
 }
+
+const HEBREW = /[֐-׿]/;
+
+/**
+ * A product's name, which is a name and not a word, so it is not translated.
+ *
+ * The owner named every piece in Latin letters — "milo", "Elba", "tano trio" —
+ * and asked for those names on the Hebrew site too, spelled and capitalised
+ * exactly as typed. They had been transliterated into Hebrew for a few days
+ * (מילו, אלבה), with the originals kept in `name_en`.
+ *
+ * On the Hebrew site, in order:
+ *   1. `name` when it has no Hebrew in it: that is the owner's own spelling,
+ *      and an edit to it in the admin shows up straight away.
+ *   2. `name_en` when `name` is a Hebrew transliteration: the original, which
+ *      the transliteration moved there.
+ *   3. `name` as it stands, for a piece only ever named in Hebrew. A Hebrew
+ *      name is better than no name.
+ *
+ * The English site is unchanged: its own field first, then the name.
+ */
+export function productName(
+  lang: Language,
+  name: string,
+  en?: string | null,
+): string {
+  const english = en?.trim();
+  if (lang !== "he") return english || name;
+  if (!HEBREW.test(name)) return name;
+  return english || name;
+}

@@ -4,6 +4,7 @@ import BrandStatement from "@/components/home/BrandStatement";
 import FeaturedCollections from "@/components/home/FeaturedCollections";
 import FeaturedProducts from "@/components/home/FeaturedProducts";
 import ProjectsPreview from "@/components/home/ProjectsPreview";
+import MaterialsPreview from "@/components/home/MaterialsPreview";
 import Testimonials from "@/components/home/Testimonials";
 import Newsletter from "@/components/home/Newsletter";
 import SEO from "@/components/SEO";
@@ -87,6 +88,7 @@ const Index = () => {
       <FeaturedCollections />
       <FeaturedProducts />
       <ProjectsPreview />
+      <MaterialsPreview />
       <Testimonials />
       <Newsletter />
     </Layout>

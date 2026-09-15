@@ -1,5 +1,55 @@
 # Where the site stands
 
+## Client polish — 15 September
+
+```
+████████████████████  done
+```
+
+Everything asked for is in. Two optional scripts in step 1 of
+[ACTION.md](ACTION.md); the site does not need them to look right.
+
+| | |
+|---|---|
+| ⚠️ | **The client's materials do not exist.** Nothing is saved in the database, and the admin has no materials screen. See step 2 of ACTION.md |
+| ✅ | A small materials slider at the bottom of the home page, between projects and the club: a swatch and two lines each, arrows on a computer, swipe on a phone |
+| ✅ | The club photo sits in a white frame, with rounded corners like the tiles |
+| ✅ | Product names in English on the Hebrew site, exactly as typed — milo, Elba, tano trio |
+| ✅ | Product pages show a square with the piece centred, the same square as the tile you clicked |
+| ✅ | About page rebuilt — see below |
+| ✅ | Checked in Hebrew and English, desktop and phone. 447 tests pass |
+
+**The product photos.** All 47 were uploaded the day before the crop window
+existed, so none of them was a square: small tables at the bottom of tall
+photos, fire tables running edge to edge. Each one has been squared around its
+furniture, at a consistent size, with the backdrop continued where the square
+runs past the photo. The catalogue now reads as one set. Three lifestyle photos
+with no plain backdrop keep a simple centre square. Anything uploaded through
+the crop window from now on is shown exactly as framed.
+
+The squared photos are also far lighter — 2MB for all fifty, where several
+originals were nearly 2MB each.
+
+**The About page.**
+
+| | |
+|---|---|
+| ⛔ | Gone: "מה אנחנו לא עושים" and its four lines, "של ישראל", "שלושתנו" and its line, the three names |
+| ✅ | New opening line: **הבית לא נגמר בדלת.** |
+| ✅ | New closing line: **את הבד צריך לגעת. על הספה צריך לשבת.** — then the showroom address and a real button |
+| ✅ | The paragraph under the opening line is larger (up to 22px) and full black, beside the headline instead of in a narrow column |
+| ✅ | Uses the page's width: a wide dusk-terrace photo, the name story beside a close-up of an aluminium frame, then the portraits |
+| ✅ | The portraits stay, now as the three steps of making a piece: measure and plan, choose materials, see it through |
+
+**Also fixed on the way:** on a phone the club's email box was half the height
+of its button. And the product page's buttons were still the old square shape.
+
+**Worth knowing:** the portraits have the names drawn into them in handwriting
+(idan, roy, ben). They are part of the drawings, so they stay unless you want
+them erased.
+
+---
+
 ## Home page — 10 September
 
 ```
@@ -36,7 +86,7 @@ step 1 of [ACTION.md](ACTION.md), the stock numbers.
 | ✅ | **The band behind them is a shade deeper.** You were right that white on it did not read — see below |
 | ✅ | The "חדש" tag is terracotta with a slow sheen, squared rather than a pill |
 | ✅ | Products can carry a stock count; at 5 or fewer an orange line appears under the photo |
-| ✅ | All 47 product names are Hebrew, and the Latin moved to the English field where it belongs |
+| ↩️ | All 47 product names were made Hebrew — undone on 15 September at the owner's request |
 | ⛔ | The flame icon is gone. Three versions in it still was not earning its place |
 
 ### Projects, club, and everything

@@ -1,46 +1,38 @@
 {
   "seo": {
     "title": "About | Aluma, made-to-order outdoor furniture",
-    "description": "Aluma began where material meets light. Who we are, how we work, and what we don't do."
+    "description": "Aluma began where material meets light. Who we are, how each piece comes to be, and where to come and sit on one."
   },
   "crumbs": {
     "home": "Home",
     "about": "About"
   },
-  "statement": "We build furniture that stays outside — not furniture you have to bring in.",
-  "statementEmphasis": "not",
+  "statement": "Home doesn't end at the door.",
+  "lead": "Aluma isn't only outdoor furniture. It's the way a home carries on outdoors: settings that feel like a fine living room under open sky, somewhere to host, to rest, and to live the good hours properly.",
+  "terraceAlt": "A stone terrace above the sea at dusk, with a pale sofa between olive trees",
   "storyLead": "Aluma began where material meets light.",
   "story": {
-    "one": "The name comes from the root of aluminium — a material that is strong, clean and durable, made to live outdoors without fearing the sun, the rain or the passing of time. And beyond the material, it carries the sound of light: the same light that defines being outside.",
-    "two": "Aluma isn't only outdoor furniture. It's the way a home carries on outdoors.",
-    "three": "We make settings that feel like a fine living room under open sky — somewhere to host, to rest, and to live the good hours properly. Every piece is made to order, in clean and exact lines, on an advanced aluminium frame with fabrics that hold up to the Israeli outdoors."
+    "one": "The name comes from the root of aluminium, a material that is strong, clean and durable, made to live outdoors without fearing the sun, the rain or the passing of time. And beyond the material, it carries the sound of light: the same light that defines being outside.",
+    "two": "Every piece is made to order, in clean and exact lines, on an advanced aluminium frame with fabrics made for any weather."
   },
-  "peopleTitle": "The three of us",
-  "peopleBody": "The same people from the first measurement to the day you're sitting outside.",
-  "people": {
-    "idan": {
-      "name": "Idan",
-      "does": "plans and measures the space",
-      "alt": "Line portrait, Idan"
+  "craftAlt": "The corner of an aluminium frame, a wooden armrest and a pale fabric cushion",
+  "processTitle": "How a piece comes to be",
+  "process": {
+    "measure": {
+      "title": "We measure and plan",
+      "body": "Everything starts with the space itself: its size, where the sun falls, and how you actually sit outside."
     },
-    "roy": {
-      "name": "Roy",
-      "does": "chooses the materials",
-      "alt": "Line portrait, Roy"
+    "materials": {
+      "title": "We choose the materials",
+      "body": "Aluminium frames, Sunbrella fabrics and stone tops, in colours that suit the house and its light."
     },
-    "ben": {
-      "name": "Ben",
-      "does": "sees it through from sketch to installation",
-      "alt": "Line portrait, Ben"
+    "install": {
+      "title": "We see it through",
+      "body": "From the first sketch until the piece is standing in place, ready for its first evening outside."
     }
   },
-  "refusalsTitle": "What we don't do",
-  "refusals": {
-    "one": "We don't sell furniture we wouldn't put in our own garden.",
-    "two": "We don't work to standard sizes. Every piece is measured to its space.",
-    "three": "We don't promise a delivery date before we have one.",
-    "four": "We don't disappear after the installation."
-  },
-  "close": "Our showroom is at {{address}}. The easiest way to understand Aluma is to sit on it.",
+  "portraitAlt": "A line portrait of one of the Aluma team",
+  "closeTitle": "Fabric has to be touched. A sofa has to be sat on.",
+  "closeBody": "Our showroom is waiting for you at {{address}}.",
   "visitCta": "Arrange a visit"
 }

@@ -80,6 +80,10 @@ export default {
         display: ["clamp(2.25rem, 5vw, 3.75rem)", { lineHeight: "1.1", letterSpacing: "0" }],
         heading: ["clamp(1.5rem, 3vw, 1.875rem)", { lineHeight: "1.25", letterSpacing: "0" }],
         body: ["1.125rem", { lineHeight: "1.75" }],
+        // A paragraph meant to be read rather than scanned — the About page's
+        // opening. 19px on a phone to 22px on a wide screen, with the looser
+        // leading long Hebrew lines need.
+        lead: ["clamp(1.1875rem, 1.5vw, 1.375rem)", { lineHeight: "1.75", letterSpacing: "0" }],
         // The title under a photograph in a grid of tiles. It exists as a role
         // because the tile is now one shared component used on every index on
         // the site, so its title is a repeated thing and not a one-off. 24px:

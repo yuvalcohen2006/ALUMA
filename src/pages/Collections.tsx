@@ -5,7 +5,7 @@ import SEO from "@/components/SEO";
 import PageHero from "@/components/PageHero";
 import Reveal from "@/components/Reveal";
 import TileCard from "@/components/TileCard";
-import { localizedName } from "@/lib/localized-name";
+import { localizedName, productName } from "@/lib/localized-name";
 import { useCollections, type DBCollection, type DBProduct } from "@/hooks/useCollectionsData";
 import { useLocalizedPath } from "@/lib/useLocalizedPath";
 import { useSiteText } from "@/hooks/useSiteText";
@@ -87,7 +87,7 @@ const CollectionsPage = () => {
   const { t } = useTranslation("catalogue");
   const { collections, products, loading, error, reload } = useCollections();
   const { hash } = useLocation();
-  const { to } = useLocalizedPath();
+  const { to, lang } = useLocalizedPath();
   const text = useSiteText();
   const [scrolledTo, setScrolledTo] = useState<string | null>(null);
 
@@ -130,7 +130,7 @@ const CollectionsPage = () => {
         position: i + 1,
         item: {
 "@type": "Product",
-          name: p.name,
+          name: productName(lang, p.name, p.name_en),
           url: `${SITE}/products/${p.slug}`,
         },
       })),

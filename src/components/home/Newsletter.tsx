@@ -16,9 +16,9 @@ const INVALID_EMAIL = "כתובת המייל לא נראית תקינה";
 /**
  * Club signup, styled as the ninth tile.
  *
- * Same anatomy as the category tiles above it: full bleed, fixed height,
- * photograph with a clean upper-middle, type top-centred at the same scale,
- * separated from the mosaic by the same 12px seam. The photograph was
+ * Same anatomy as the category tiles above it: fixed height, photograph with
+ * a clean upper-middle, type top-centred at the same scale, inside a white
+ * frame (see the section below). The photograph was
  * generated with the whole upper two thirds empty, because unlike a category
  * tile this one needs room for a form as well as a headline.
  *
@@ -83,14 +83,18 @@ const Newsletter = () => {
   };
 
   return (
-    // Full bleed, and no frame. The p-3 that used to be here dated from a
-    // mosaic of inset tiles that no longer exists, and it was doing two
-    // visible jobs by accident: holding the band 12px short of the viewport
-    // edges, and painting a 12px strip of page colour between the band and
-    // the footer. Nothing separates them now, which is the point — the
-    // photograph runs edge to edge and hands straight over to the charcoal.
-    <section>
-      <div className="relative h-[500px] overflow-hidden md:h-[490px] lg:h-[580px]">
+    // Framed: the photograph sits inside a white margin on every side, with
+    // the tiles' own corner radius, so it reads as a picture placed on the
+    // page rather than a band the page ran out into.
+    //
+    // It ran edge to edge for a while, and the client found that it looked
+    // unfinished next to everything above it, all of which sits inside the
+    // page's gutters. The margin is small on purpose — a frame, not a card —
+    // and it is on all four sides rather than only the two asked about: with
+    // the sides framed and the foot left open, the photograph looked cropped
+    // at the footer instead of framed above it.
+    <section className="bg-background p-3 md:p-4 lg:p-5">
+      <div className="relative isolate h-[500px] overflow-hidden rounded-sm md:h-[490px] lg:h-[580px]">
         <img
           src={clubBg}
           alt=""
@@ -165,7 +169,10 @@ const Newsletter = () => {
                   // side of a left-aligned page, and the text jumped across
                   // the field the moment a character was typed.
                   dir={email ? "ltr" : LANGUAGE_DIR[lang]}
-                  className="h-12 flex-1 min-w-0 rounded-full border border-foreground/15 bg-white/80 px-6 text-small text-foreground text-start shadow-soft backdrop-blur-md transition-colors placeholder:text-foreground/70 focus:border-accent"
+                  // sm:flex-1, not flex-1. In the stacked phone layout the
+                  // column is the main axis, and flex-1's zero basis beat
+                  // h-12 — the field rendered at half the button's height.
+                  className="h-12 w-full min-w-0 rounded-full sm:w-auto sm:flex-1 border border-foreground/15 bg-white/80 px-6 text-small text-foreground text-start shadow-soft backdrop-blur-md transition-colors placeholder:text-foreground/70 focus:border-accent"
                 />
                 <button
                   type="submit"

@@ -70,15 +70,29 @@ describe("collection links", () => {
 });
 
 describe("product photographs", () => {
-  it("are never cropped on the product page", () => {
-    // The photographs are square by spec. The main image boxes are not always
-    // square, so object-cover silently cut the top and bottom off the
-    // furniture — on the one page whose entire job is showing the furniture.
+  it("fill a square frame on the product page, so the square is all that shows", () => {
+    // The photographs are squares: framed by the owner in the crop window, or
+    // squared around the furniture by lib/framed-photos for the older ones.
+    // So the frame is square as well, and `cover` on a square in a square
+    // crops nothing. What went wrong before was the other half of this: a
+    // tall box, where cover cut the top and bottom off the furniture — and
+    // then `contain`, which letterboxed every photo on a grey mat.
     const src = readFileSync(join(ROOT, "src/pages/CollectionDetail.tsx"), "utf8");
-    const mainImages = [...src.matchAll(/galleryImages\[[^\]]+\][\s\S]{0,400}?className="([^"]+)"/g)];
-    expect(mainImages.length).toBeGreaterThan(0);
-    for (const [, cls] of mainImages) {
-      expect(cls, "main product image must not crop").not.toMatch(/object-cover/);
+    // Every product photo <img>, paired with the nearest clipping box above it.
+    const photos = [...src.matchAll(/<img\s+src=\{(galleryImages\[[^\]]+\]|img)\}[^>]*?className="([^"]+)"/g)];
+    expect(photos.length).toBeGreaterThanOrEqual(3);
+    for (const m of photos) {
+      const before = src.slice(Math.max(0, m.index! - 1200), m.index);
+      const boxes = [...before.matchAll(/className={?[`"]([^`"]*overflow-hidden[^`"]*)[`"]/g)];
+      const frame = boxes.at(-1)?.[1] ?? "";
+      expect(m[2]).toMatch(/object-cover/);
+      expect(frame, "the box around a covered product photo must be square").toMatch(/aspect-square/);
     }
+  });
+
+  it("go through the squaring step before any page sees them", () => {
+    const src = readFileSync(join(ROOT, "src/hooks/useCollectionsData.ts"), "utf8");
+    expect(src).toMatch(/cover_url: framedPhoto\(/);
+    expect(src).toMatch(/framedPhoto\(g\)/);
   });
 });

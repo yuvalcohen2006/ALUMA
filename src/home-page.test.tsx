@@ -19,12 +19,12 @@ const COLLECTIONS = [
   { id: "c3", slug: "fire", name_he: "שולחנות אש", name_en: "Fire", intro: "", image_url: "c.jpg", sort_order: 2 },
 ];
 
-const product = (id: string, name: string, stock: number | null) => ({
+const product = (id: string, name: string, stock: number | null, en: string = name) => ({
   id,
   collection_id: "c1",
   slug: id,
   name,
-  name_en: name,
+  name_en: en,
   emblem: null,
   tag: null,
   tagline: "",
@@ -43,7 +43,9 @@ const product = (id: string, name: string, stock: number | null) => ({
   published_at: "2026-09-01T00:00:00Z",
 });
 
-const PRODUCTS = [product("p1", "מילו", 2), product("p2", "אריה", 40), product("p3", "קול", null)];
+// p1 is the live state of a transliterated name: Hebrew in `name`, the
+// owner's original in `name_en`.
+const PRODUCTS = [product("p1", "מילו", 2, "milo"), product("p2", "Aria", 40), product("p3", "קול", null)];
 
 vi.mock("@/integrations/supabase/client", () => {
   const table = (rows: unknown[]) => {
@@ -123,5 +125,48 @@ describe("the home page", () => {
     expect(plate!.className).toContain("bg-background");
     expect(plate!.className).toContain("absolute");
     expect(container.querySelectorAll(".tile-soften").length).toBeGreaterThan(0);
+  });
+
+  it("shows product names in English, as the owner typed them", async () => {
+    mount();
+    await waitFor(() => expect(screen.getByText("milo")).toBeTruthy());
+    expect(screen.getByText("Aria")).toBeTruthy();
+    expect(screen.queryByText("מילו")).toBeNull();
+  });
+
+  it("slides the materials in between the projects and the club", async () => {
+    const { container } = mount();
+    // By id: the footer has an "our materials" heading of its own.
+    await waitFor(() => expect(container.querySelector("#materials-preview-title")).toBeTruthy());
+    const strip = container.querySelector("#materials-preview-title")!.closest("section")!;
+    const links = [...strip.querySelectorAll("li a")].map((a) => a.getAttribute("href"));
+    expect(links).toEqual([
+      "/materials/sunbrella",
+      "/materials/aluminum",
+      "/materials/granite-porcelain",
+      "/materials/polystone",
+    ]);
+
+    const sections = [...container.querySelectorAll("section")];
+    const at = (text: string) => sections.findIndex((s) => s.textContent?.includes(text));
+    expect(at("הפרויקטים שלנו")).toBeLessThan(sections.indexOf(strip));
+    expect(sections.indexOf(strip)).toBeLessThan(at("הצטרפו למועדון"));
+  });
+
+  it("frames the club photograph inside a margin", async () => {
+    mount();
+    const club = (await screen.findByText("הצטרפו למועדון")).closest("section")!;
+    expect(club.className).toMatch(/\bp-3\b/);
+    expect(club.className).toContain("bg-background");
+    expect((club.firstElementChild as HTMLElement).className).toContain("rounded-sm");
+  });
+
+  it("keeps the club's email field as tall as its button on a phone", async () => {
+    mount();
+    const field = await screen.findByPlaceholderText("כתובת אימייל");
+    expect(field.className).toContain("h-12");
+    // flex-1 in the stacked column overrides the height; only from sm up.
+    expect(field.className.split(/\s+/)).not.toContain("flex-1");
+    expect(field.className).toContain("sm:flex-1");
   });
 });

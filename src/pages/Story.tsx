@@ -2,13 +2,17 @@ import Layout from "@/components/Layout";
 import SEO from "@/components/SEO";
 import Reveal from "@/components/Reveal";
 import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 import { useLocalizedPath } from "@/lib/useLocalizedPath";
 import { useSiteContact } from "@/hooks/useSiteContact";
 import alumaLogo from "@/assets/aluma-logo.png";
-import storyPortrait from "@/assets/story-portrait.png";
-import storyPortraitRoy from "@/assets/story-portrait-roy.png";
-import storyPortraitIdan from "@/assets/story-portrait-idan.png";
+import terraceDusk from "@/assets/about/terrace-dusk.webp";
+import craftDetail from "@/assets/about/craft-detail.webp";
+import portraitIdan from "@/assets/about/portrait-idan.webp";
+import portraitRoy from "@/assets/about/portrait-roy.webp";
+import portraitBen from "@/assets/about/portrait.webp";
 import { useTranslation } from "react-i18next";
+import { HIGH_FETCH_PRIORITY } from "@/lib/img-priority";
 
 const breadcrumbs = {
 "@context": "https://schema.org",
@@ -19,45 +23,42 @@ const breadcrumbs = {
   ],
 };
 
-/** The three of us, described by what we do rather than by a job title. */
-/** Drawings and order here; names and roles in the catalogue. */
-const PEOPLE = [
-  { src: storyPortraitIdan, key: "idan" },
-  { src: storyPortraitRoy, key: "roy" },
-  { src: storyPortrait, key: "ben" },
-] as const;
-
 /**
- * What we don't do — the single highest-value device for a brand with no
- * numbers to quote. Refusals cost nothing, are verifiable, and can't be faked;
- * Vitsœ built its whole identity on this. Every line restates a commitment the
- * brand already makes elsewhere on the site, phrased as what it rules out.
+ * How a piece is made, one step per portrait.
+ *
+ * The drawings stay; the names under them went, at the owner's request, and
+ * with them the "three of us" framing. What the three portraits still carry
+ * is the part a visitor is actually asking about — who does what — so each is
+ * now a step rather than a person, in the order the work happens.
  */
-const REFUSALS = ["one", "two", "three", "four"] as const;
+const STEPS = [
+  { src: portraitIdan, key: "measure" },
+  { src: portraitRoy, key: "materials" },
+  { src: portraitBen, key: "install" },
+] as const;
 
 /**
  * אודות.
  *
- * Built on what premium furniture houses actually do — Vitsœ, DEDON, Minotti,
- * Tribù — rather than on the template every other brand ships. Three decisions
- * carry it:
+ * The second version of this page, and the brief for it was "no dead zones".
+ * The first was one 860px column down the middle of a 1440px screen, with
+ * 200px of padding above every section — a third of each side of the screen
+ * empty, and paragraphs set at 16px in a grey that read as a caption. It also
+ * carried a list of refusals ("what we don't do") that the owner cut.
  *
- *   1. NO hero photograph. The most premium page of that set (Vitsœ) opens on
- *      type alone, and this site's home page is already a wall of full-bleed
- *      photography — repeating that here would make About read as a second
- *      home page. The opening statement has a refusal in it, which is what
- *      separates a position from a platitude.
- *   2. Three photographs total, not seven. The observed range across those
- *      houses is 3–7, and the restrained end is where the expensive ones sit.
- *   3. Where numbers would go, refusals go instead. There is no founding year
- *      worth boasting about and no client count, and a thin stat strip reads
- *      as padding. What we don't do is free to state and impossible to fake.
+ * Four sections now, each using the width:
  *
- * The preserved elements — the brand paragraphs, the wordmark, the three line
- * portraits — are all still here, placed where the research says they belong:
- * the wordmark bookends the page (small at the top, large and faint at the
- * close), the paragraphs are the story, and the portraits sit between the
- * story and the refusals.
+ *   1. The line and the lead side by side, over the terrace photograph —
+ *      the one image on the site that shows a home carrying on outdoors,
+ *      which is exactly what the line says.
+ *   2. The name: aluminium and light, beside a close-up of an aluminium
+ *      frame meeting a wooden arm.
+ *   3. How a piece comes to be, on a tinted band, one portrait per step.
+ *   4. The invitation to the showroom, with a real button.
+ *
+ * Paragraphs are `text-lead` and `text-body` in the foreground colour: this is
+ * the page people read to decide whether to trust the company, and it was set
+ * like small print.
  */
 const StoryPage = () => {
   const { t } = useTranslation("about");
@@ -74,129 +75,144 @@ const StoryPage = () => {
         jsonLd={breadcrumbs}
       />
 
-      {/* 1 — THE STATEMENT. Type only. */}
+      {/* 1 — THE LINE. */}
       <section className="bg-background">
-        <div className="mx-auto max-w-[860px] px-6 pt-40 pb-20 md:pt-52 md:pb-28">
-          <Reveal>
-            <img
-              src={alumaLogo}
-              alt="Aluma"
-              className="h-6 md:h-7 w-auto opacity-80 mb-14 md:mb-16"
-            />
-            {/* One sentence with a refusal in it — "ולא", not "and also". A
-                statement that refuses nothing is a platitude. tracking-normal
-                and a loose leading throughout: letter-spacing breaks Hebrew
-                rhythm and is the clearest tell of an un-adapted RTL design. */}
-            <h1 className="font-display font-normal tracking-normal text-foreground text-start text-display max-w-[22ch]">
-              {t("statement")}</h1>
-          </Reveal>
-        </div>
-      </section>
+        <div className="mx-auto max-w-[1440px] px-5 pt-32 md:px-10 md:pt-40 lg:px-16">
+          <div className="grid gap-8 lg:grid-cols-12 lg:items-end lg:gap-16">
+            <Reveal className="lg:col-span-7">
+              <img src={alumaLogo} alt="Aluma" className="mb-10 h-6 w-auto opacity-80 md:mb-12 md:h-7" />
+              {/* tracking-normal throughout: letter-spacing breaks Hebrew
+                  rhythm and is the clearest tell of an un-adapted RTL design. */}
+              {/* Balanced, so the English line does not leave "door." on
+                  a line of its own. The Hebrew fits on one either way. */}
+              <h1 className="text-balance text-start font-display text-display font-normal tracking-normal text-foreground">
+                {t("statement")}
+              </h1>
+            </Reveal>
+            <Reveal delay={80} className="lg:col-span-5">
+              <p className="max-w-[52ch] text-start text-lead text-foreground">{t("lead")}</p>
+            </Reveal>
+          </div>
 
-      {/* 3 — THE STORY. The brand's own paragraphs, with its strongest line
-          promoted out of the block and set as a lead. */}
-      <section className="bg-background">
-        <div className="mx-auto max-w-[860px] px-6 py-24 md:py-32">
-          <Reveal>
-            <h2 className="max-w-[46ch] text-start text-heading font-normal tracking-normal text-foreground">
-              {t("storyLead")}
-            </h2>
-
-            <div className="mt-10 max-w-[62ch] space-y-6 text-start text-foreground-soft tracking-normal text-small">
-              <p>
-                {t("story.one")}</p>
-
-              <p>{t("story.two")}</p>
-
-              <p>
-                {t("story.three")}</p>
+          {/* Wide on a wide screen, where the whole terrace fits; on a phone
+              a 4:3 cut held on the sofa, which is what the line is about. */}
+          <Reveal delay={120}>
+            <div className="mt-12 overflow-hidden rounded-sm bg-muted md:mt-16">
+              <img
+                src={terraceDusk}
+                alt={t("terraceAlt")}
+                width={2400}
+                height={1029}
+                {...HIGH_FETCH_PRIORITY}
+                decoding="async"
+                className="aspect-[4/3] w-full object-cover object-[80%_center] md:aspect-[21/9] md:object-center"
+              />
             </div>
           </Reveal>
         </div>
       </section>
 
-      {/* 4 — THE PEOPLE.
-          ⚠️ mix-blend-multiply composites against the nearest stacking
-          context, so this section needs its own explicit light background and
-          the portraits' direct parent must carry no transform, opacity, filter
-          or backdrop-blur. The Reveal wrapper is deliberately kept OFF that
-          parent: put a transform on it and the drawings render as white
-          boxes. */}
+      {/* 2 — THE NAME. */}
       <section className="bg-background">
-        <div className="mx-auto max-w-[860px] px-6 pb-24 md:pb-32">
-          <Reveal>
-            <h2 className="text-start text-heading font-normal tracking-normal text-foreground">
-              {t("peopleTitle")}
-            </h2>
-            <p className="mt-4 max-w-[46ch] text-start text-small tracking-normal text-foreground-soft">
-              {t("peopleBody")}</p>
-          </Reveal>
-
-          <div className="mt-12 grid grid-cols-1 sm:grid-cols-3 gap-10 sm:gap-6 md:gap-10 bg-background">
-            {PEOPLE.map((p) => (
-              <div key={p.key} className="mx-auto w-full max-w-[260px] sm:max-w-none bg-background">
-                <img
-                  src={p.src}
-                  alt={t(`people.${p.key}.alt`)}
-                  loading="lazy"
-                  className="w-full aspect-[3/4] object-contain object-bottom mix-blend-multiply"
-                />
-                <p className="mt-4 text-start text-small text-foreground">{t(`people.${p.key}.name`)}</p>
-                {/* A verb, not a job title — what someone does beats
-"Co-Founder". This is the substitute for credentials. */}
-                <p className="mt-1 text-start text-label text-foreground/55">
-                  {t(`people.${p.key}.does`)}
-                </p>
+        <div className="mx-auto max-w-[1440px] px-5 py-20 md:px-10 md:py-28 lg:px-16">
+          <div className="grid items-center gap-10 lg:grid-cols-12 lg:gap-16">
+            <Reveal className="lg:col-span-5">
+              <h2 className="text-start text-heading font-normal tracking-normal text-foreground">
+                {t("storyLead")}
+              </h2>
+              <div className="mt-6 max-w-[56ch] space-y-5 text-start text-body tracking-normal text-foreground">
+                <p>{t("story.one")}</p>
+                <p className="text-foreground-soft">{t("story.two")}</p>
               </div>
-            ))}
+            </Reveal>
+            <Reveal delay={80} className="lg:col-span-7">
+              <div className="overflow-hidden rounded-sm bg-muted">
+                <img
+                  src={craftDetail}
+                  alt={t("craftAlt")}
+                  width={1600}
+                  height={1200}
+                  loading="lazy"
+                  decoding="async"
+                  className="aspect-[4/3] w-full object-cover"
+                />
+              </div>
+            </Reveal>
           </div>
         </div>
       </section>
 
-      {/* 5 — WHAT WE DON'T DO. Carries the weight a stat strip would carry if
-          there were numbers worth printing. Also the page's single permitted
-          use of terracotta — a third colour used repeatedly is the fastest way
-          to read as a template. */}
+      {/* 3 — HOW A PIECE COMES TO BE. The portraits are transparent line art
+          now, so they sit on the band as drawn rather than needing a blend
+          mode, and the Reveal wrapper around them is safe. */}
       <section className="border-y border-border bg-secondary">
-        <div className="mx-auto max-w-[860px] px-6 py-24 md:py-32">
+        <div className="mx-auto max-w-[1440px] px-5 py-20 md:px-10 md:py-28 lg:px-16">
           <Reveal>
             <h2 className="text-start text-heading font-normal tracking-normal text-foreground">
-              {t("refusalsTitle")}
+              {t("processTitle")}
             </h2>
-            <ul className="mt-10 max-w-[62ch] divide-y divide-foreground/10 border-t border-foreground/10">
-              {REFUSALS.map((line) => (
-                <li
-                  key={line}
-                  className="py-5 text-start text-small text-foreground-soft"
-                >
-                  {t(`refusals.${line}`)}
-                </li>
-              ))}
-            </ul>
           </Reveal>
+
+          <ol className="mt-12 grid gap-14 sm:grid-cols-3 sm:gap-8 md:mt-14 lg:gap-14">
+            {STEPS.map((step, i) => (
+              <li key={step.key}>
+                <Reveal delay={i * 80}>
+                  <img
+                    src={step.src}
+                    alt={t("portraitAlt")}
+                    width={560}
+                    height={560}
+                    loading="lazy"
+                    decoding="async"
+                    className="mx-auto aspect-square w-full max-w-[220px] object-contain object-bottom sm:max-w-[320px]"
+                  />
+                  <div className="mt-6 border-t border-foreground/15 pt-6 text-start">
+                    <p className="text-label tabular-nums text-muted-foreground">
+                      {String(i + 1).padStart(2, "0")}
+                    </p>
+                    <h3 className="mt-2 text-tile text-foreground">{t(`process.${step.key}.title`)}</h3>
+                    <p className="mt-2 max-w-[40ch] text-body text-foreground-soft">
+                      {t(`process.${step.key}.body`)}
+                    </p>
+                  </div>
+                </Reveal>
+              </li>
+            ))}
+          </ol>
         </div>
       </section>
 
-      {/* 7 — CLOSE. The wordmark returns, larger and faint. Bookending the page
-          with the mark removes any need for a CTA button here. */}
+      {/* 4 — THE INVITATION. A button, not an underlined link: it is the one
+          thing this page asks a visitor to do. The wordmark still closes the
+          page, smaller and nearer than it was. */}
       <section className="bg-background">
-        <div className="mx-auto max-w-[860px] px-6 py-28 md:py-36 text-center">
+        <div className="mx-auto max-w-[1440px] px-5 py-24 text-center md:px-10 md:py-32 lg:px-16">
           <Reveal>
-            <p className="mx-auto max-w-[34ch] text-heading font-normal leading-snug tracking-normal text-foreground">
-              {t("close", { address: SITE.address.full })}
+            {/* A sentence to a line. Left to wrap, the break fell after the
+                first word of the second sentence, which read as a typo. */}
+            <h2 className="mx-auto font-display text-display font-normal tracking-normal text-foreground">
+              {t("closeTitle")
+                .split(/(?<=\.)\s+/)
+                .map((sentence, i) => (
+                  <span key={i} className="block">
+                    {sentence}
+                  </span>
+                ))}
+            </h2>
+            <p className="mx-auto mt-6 max-w-[48ch] text-lead text-foreground-soft">
+              {/* Isolated: the address is Hebrew, and dropped bare into the
+                  English sentence its number and comma were reordered. */}
+              {t("closeBody", { address: `\u2068${SITE.address.full}\u2069` })}
             </p>
-            <Link
-              to={to("/faq") + "#contact"}
-              className="mt-7 inline-block text-small text-primary underline underline-offset-[6px] decoration-1 hover:text-accent transition-colors"
-            >
-              {t("visitCta")}
-            </Link>
+            <Button asChild size="lg" className="mt-10">
+              <Link to={to("/faq") + "#contact"}>{t("visitCta")}</Link>
+            </Button>
             <img
               src={alumaLogo}
               alt=""
               aria-hidden="true"
               loading="lazy"
-              className="mx-auto mt-20 md:mt-24 h-10 md:h-14 w-auto opacity-25"
+              className="mx-auto mt-16 h-8 w-auto opacity-25 md:mt-20 md:h-10"
             />
           </Reveal>
         </div>

@@ -1,13 +1,14 @@
 # What Aluma needs from you
 
-Updated 10 September 2026. No explanations — what's missing, then exactly what to click.
+Updated 15 September 2026. No explanations — what's missing, then exactly what to click.
 
 ---
 
-## 1. Run one database script
+## 1. Run two database scripts
 
-Just the stock numbers. Everything else is done in the code now — the paragraph
-line breaks no longer need a script.
+The site already works without them. The first puts the stock numbers on
+screen; the second puts the English product names back in the admin's **שם**
+field (it shows מילו there now, the site shows milo).
 
 1. Go to **supabase.com/dashboard/project/jzqayfllojeqivwbbuyf/sql/new**
 2. Open `supabase/migrations/20260910130000_seed_stock_counts.sql` from the
@@ -15,13 +16,36 @@ line breaks no longer need a script.
 3. Paste it into the big empty box
 4. Click **Run** (bottom right, or Ctrl+Enter)
 5. It should say **Success. No rows returned**
+6. Click **New query** (top left), then repeat 2–5 with
+   `supabase/migrations/20260915120000_product_names_back_to_latin.sql`
 
-These numbers are invented. Six pieces come out low so you can see the orange
-line — קוטה is one of them and it is on the home page.
+The stock numbers are invented. Six pieces come out low so you can see the
+orange line — cotta is one of them and it is on the home page.
 
 ---
 
-## 2. Stock counts — how to set them yourself
+## 2. Materials the client "added" are not in the database
+
+Nothing was saved anywhere the site reads. The admin has no materials screen;
+the four materials on the site (Sunbrella, aluminium, porcelain, PolyStone) are
+built in, and they now also slide along the bottom of the home page.
+
+If they meant the materials of **one product**:
+
+1. **alumaoutdoor.com/admin** → **קולקציות ומוצרים**
+2. Click a collection → click a product
+3. Find the **חומרים** box
+4. One material per line (e.g. `אלומיניום` Enter `בד Sunbrella`)
+5. Click somewhere outside the box, then **שמירה**
+
+It appears on that product's page under **חומרים**.
+
+If they want to add brand-new materials of their own to the site, that screen
+does not exist yet — tell me.
+
+---
+
+## 3. Stock counts — how to set them yourself
 
 A product says **"נותרו 3 במלאי"** in orange under its photo at 5 or fewer.
 
@@ -34,7 +58,7 @@ Leave it blank and nothing appears at all.
 
 ---
 
-## 3. No customer reviews on the site
+## 4. No customer reviews on the site
 
 The reviews section is hidden completely until there is at least one.
 
@@ -49,7 +73,7 @@ Repeat 3–6 for each one. Real quotes only, from customers who agreed.
 
 ---
 
-## 4. No colours on any product
+## 5. No colours on any product
 
 1. **alumaoutdoor.com/admin** → **קולקציות ומוצרים**
 2. Click a collection → click a product
@@ -65,7 +89,7 @@ or the furniture jumps when someone switches colour.
 
 ---
 
-## 5. All six projects on the site are invented
+## 6. All six projects on the site are invented
 
 They are examples with generated photographs. None is work Aluma did.
 
@@ -82,7 +106,7 @@ So add two or three in one sitting, or the page shows a single project.
 
 ---
 
-## 6. "View it in your space" (AR) — now hidden
+## 7. "View it in your space" (AR) — now hidden
 
 Every 3D model on that page was dead (the host deleted them), so the page showed
 an empty grey box. I've hidden it so no customer runs into it.
@@ -94,26 +118,22 @@ roughly $250–500 each and 2–3 weeks.
 
 ---
 
-## 7. English names — optional
+## 8. Product names — English on both sites
 
-This now genuinely works: what you type shows up on the English site.
+Product names show exactly as typed, in English, on the Hebrew site too.
 
-The script in step 1 already filled these in for all 47 products — it moved the
-Latin names ("milo", "aria") into the English field where they belong, and put
-Hebrew ones on the Hebrew site. So this is only for anything you want to
-reword.
+To rename a product:
 
 1. **קולקציות ומוצרים** → collection → product
-2. The **השם באנגלית** field, beside the Hebrew name
+2. Change the **שם** field (e.g. `milo` → `Milo`)
 3. **שמירה**
 
-For a collection: **קולקציות ומוצרים** → the pencil icon → **השם באנגלית**.
-
-Leave it blank and the English site shows the Hebrew name. Untidy, not broken.
+Collections are different: they keep a Hebrew name, plus **השם באנגלית** for
+the English site (**קולקציות ומוצרים** → the pencil icon).
 
 ---
 
-## 8. Resend key — worth replacing
+## 9. Resend key — worth replacing
 
 Your key travelled through a chat message. It works; a fresh one is cleaner.
 
@@ -128,7 +148,7 @@ Not urgent.
 
 ---
 
-## 9. Uploading any photo
+## 10. Uploading any photo
 
 A crop window opens first. **Drag to choose the frame, scroll to zoom.**
 On the right you see every shape the site really uses it in — check all of them
@@ -138,12 +158,16 @@ before saving.
 |---|---|---|
 | Home page main image | 2400 × 1350 | landscape |
 | Collection | 1500 × 2000 | **portrait** |
-| Product | 1600 × 1600 | square |
+| Product | 1600 × 1600 | square — the page shows exactly this square |
 | Product in a colour | 1600 × 1600 | square, same angle |
 | Project | 2000 × 1333 | landscape |
 | Article | 1600 × 900 | landscape |
 
 Up to 8MB. **JPG or PNG only** — an iPhone HEIC is refused, convert it first.
+
+The product photos uploaded before the crop window existed were squared around
+the furniture automatically. To frame one differently yourself: product →
+**החלפה** under the main photo → choose the file → the crop window opens.
 
 ---
 

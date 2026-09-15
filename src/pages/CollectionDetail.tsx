@@ -15,7 +15,8 @@ import { useTranslation } from "react-i18next";
 import { useLocalizedPath } from "@/lib/useLocalizedPath";
 import DirectionalArrow from "@/components/DirectionalArrow";
 import TileFallback from "@/components/TileFallback";
-import { localizedName } from "@/lib/localized-name";
+import TileCard from "@/components/TileCard";
+import { productName } from "@/lib/localized-name";
 
 const SITE = "https://alumaoutdoor.com";
 
@@ -162,7 +163,7 @@ const CollectionDetailPage = () => {
           <p className="text-body leading-relaxed text-muted-foreground max-w-md">
             {t("loadError")}
           </p>
-          <Button onClick={load} variant="outline" className="rounded-sm text-body px-6">
+          <Button onClick={load} variant="outline">
             {t("retry")}
           </Button>
         </div>
@@ -172,14 +173,15 @@ const CollectionDetailPage = () => {
 
   if (!item) return <NotFound />;
 
-  const displayName = localizedName(lang, item.name, item.name_en);
+  const displayName = productName(lang, item.name, item.name_en);
 
   const productJsonLd = {
 "@context": "https://schema.org",
 "@type": "Product",
     name: displayName,
     description: item.tagline ?? "",
-    image: item.cover_url ?? undefined,
+    // Absolute: a framed photo is served from this site, as a relative path.
+    image: item.cover_url ? new URL(item.cover_url, SITE).href : undefined,
     brand: { "@type": "Brand", name: "Aluma" },
     category: item.tag ?? undefined,
     material: item.materials.join(", "),
@@ -390,19 +392,22 @@ const CollectionDetailPage = () => {
                 exactly, or the scroller overhangs the viewport at 375px. */}
             <div className="md:hidden flex overflow-x-auto gap-4 snap-x -mx-5 px-5 sm:-mx-6 sm:px-6 pb-2">
               {galleryImages.map((img, i) => (
-                <div key={i} className="shrink-0 snap-start w-[85%] sm:w-[60%]">
-                  {/* Square and contained. The box used to be 4:3 with
-                      object-cover, so a square photograph — which is the size
-                      the admin asks for — had its top and bottom cut off.
-                      Furniture is the subject here; cropping it is not a
-                      style choice. */}
+                // A lone photo takes the full width. At 85% — the peek that
+                // says "swipe" — a single square sat off to one side with
+                // nothing to swipe to.
+                <div
+                  key={i}
+                  className={`shrink-0 snap-start ${galleryImages.length > 1 ? "w-[85%] sm:w-[60%]" : "w-full"}`}
+                >
+                  {/* The same square as the tile that was tapped to get here.
+                      See the desktop frame below. */}
                   <div className="relative overflow-hidden rounded-sm aspect-square bg-secondary">
                     <img
                       src={img}
                       alt={t("imageAlt", { name: displayName, index: i + 1 })}
                       loading={i === 0 ? "eager" : "lazy"}
                       decoding="async"
-                      className="absolute inset-0 h-full w-full object-contain p-4"
+                      className="absolute inset-0 h-full w-full object-cover"
                     />
                   </div>
                 </div>
@@ -413,10 +418,17 @@ const CollectionDetailPage = () => {
             <div className="hidden md:flex gap-4 h-full">
               {/* Main image (appears on the right within left column, RTL) */}
               <div className="flex-1 order-1">
-                {/* object-contain, not cover: the photographs are square by
-                    spec and this box is tall, so cover ate the top and bottom
-                    of every piece. The mat behind it does the framing. */}
-                <div className="relative overflow-hidden rounded-sm h-full min-h-[500px] max-h-[720px] bg-muted">
+                {/* A square, showing exactly the square of the tile that was
+                    clicked to get here, with the piece centred in it.
+
+                    It was a tall box with the whole uploaded file contained in
+                    it — every photo a different shape, letterboxed on a grey
+                    mat that matched none of their backdrops. The photos from
+                    before the crop window arrive here already squared around
+                    the furniture (lib/framed-photos); the ones since are
+                    squares the owner framed. Either way `cover` on a square
+                    crops nothing. */}
+                <div className="relative aspect-square overflow-hidden rounded-sm bg-muted">
                   {!galleryImages.length && <TileFallback name={displayName} />}
                   {galleryImages[activeImage] && (
                     <img
@@ -424,7 +436,7 @@ const CollectionDetailPage = () => {
                       alt={t("imageAlt", { name: displayName, index: activeImage + 1 })}
                       loading="eager"
                       decoding="async"
-                      className="absolute inset-0 h-full w-full object-contain p-6 transition-opacity duration-500"
+                      className="absolute inset-0 h-full w-full object-cover"
                       key={activeImage}
                     />
                   )}
@@ -483,7 +495,7 @@ const CollectionDetailPage = () => {
           <p className="text-body font-normal leading-relaxed text-foreground max-w-xl mx-auto mb-10">
             {t("bespokeNote")}
           </p>
-          <Button asChild size="lg" className="rounded-sm text-body px-8">
+          <Button asChild size="lg">
             <Link to={to("/faq") + "#contact"} className="inline-flex items-center gap-2">
               {t("leaveDetailsCta")}
               <DirectionalArrow className="w-4 h-4" animate={false} />
@@ -502,43 +514,26 @@ const CollectionDetailPage = () => {
               </h2>
               <div className="w-20 h-[2px] bg-foreground/15 mt-5" aria-hidden="true" />
             </div>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+            {/* The collection page's own tile: the same square, the same name
+                under it. These were bordered 4:3 cards from an older pass,
+                which cropped a different rectangle out of each photo than the
+                square the visitor had just been looking at. */}
+            <ul role="list" className="tile-grid grid grid-cols-1 gap-x-6 gap-y-12 sm:grid-cols-3">
               {related.map((c) => (
-                <Link
-                  key={c.slug}
-                  to={to(`/products/${c.slug}`)}
-                  className="group block bg-card rounded-sm overflow-hidden border border-border  hover:border-foreground/15  transition-smooth"
-                >
-                  <div className="relative aspect-[4/3] overflow-hidden bg-secondary">
-                    {c.cover_url && (
-                      <img
-                        src={c.cover_url}
-                        alt={c.name}
-                        width={800}
-                        height={600}
-                        loading="lazy"
-                        decoding="async"
-                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-600 ease-out group-hover:scale-[1.06]"
-                      />
-                    )}
-                    {c.tag && (
-                      <div className="absolute top-4 right-4 px-3.5 py-1.5 bg-background/90 backdrop-blur-sm rounded-sm text-body text-foreground">
-                        {c.tag}
-                      </div>
-                    )}
-                  </div>
-                  <div className="p-6">
-                    <h3
-                      dir="auto"
-                      className="font-display font-normal text-body text-foreground group-hover:text-accent transition-smooth flex items-center gap-2"
-                    >
-                      {localizedName(lang, c.name, c.name_en)}
-                      <DirectionalArrow className="w-4 h-4" />
-                    </h3>
-                  </div>
-                </Link>
+                <li key={c.slug}>
+                  <TileCard
+                    to={to(`/products/${c.slug}`)}
+                    image={c.cover_url}
+                    fallback={<TileFallback name={productName(lang, c.name, c.name_en)} />}
+                    alt=""
+                    title={productName(lang, c.name, c.name_en)}
+                    meta={c.tagline}
+                    aspect="square"
+                    align="center"
+                  />
+                </li>
               ))}
-            </div>
+            </ul>
           </div>
         </section>
       )}

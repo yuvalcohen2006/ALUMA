@@ -60,6 +60,12 @@
     "lastOne": "Only one left",
     "soldOut": "Sold out"
   },
+  "materials": {
+    "title": "Our materials",
+    "all": "All materials",
+    "prev": "Previous material",
+    "next": "Next material"
+  },
   "projects": {
     "title": "Our projects",
     "more": "And many others.",
