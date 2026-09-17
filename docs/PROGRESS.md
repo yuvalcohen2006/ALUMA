@@ -1,5 +1,25 @@
 # Where the site stands
 
+## Language button, materials and sizes — 17 September
+
+```
+██░░░░░░░░░░░░░░░░░░  10%
+```
+
+| | |
+|---|---|
+| 🔎 | Design agreed. Spec in [docs/superpowers/specs](superpowers/specs) |
+| ⬜ | Language button: click it, pick 🇮🇱 עברית or 🇺🇸 English, the one you are in is ticked |
+| ⬜ | **חומרים** screen in the admin: photo, name, one line, explanation |
+| ⬜ | The four materials moved into the database so they can be edited too |
+| ⬜ | /materials shows them all in one composition, photo left, words right |
+| ⬜ | Products: tick the materials they are made of, type the sizes |
+| ⬜ | Product page: name above the photo, then על המוצר, מידות, חומרים in matching boxes |
+| ⬜ | Clicking a material on a product jumps to it and lights it up |
+| ⬜ | Tests, both languages, phone and desktop, pushed |
+
+---
+
 ## Client polish — 15 September
 
 ```
