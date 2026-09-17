@@ -17,7 +17,7 @@ was built with, exactly as before.
 | ✅ | A button showing the language you are in, with its flag. Click it and both languages drop down; the one you are in is tinted and ticked |
 | ✅ | In the header, in the phone menu (which had no language control at all) and in the footer |
 | ✅ | Each line is still a real link to the same page in the other language, so Google, middle-click and the back button all still work |
-| ℹ️ | The flags are drawn, not emoji: Windows has no flag glyphs and would have shown the letters "IL" and "US" |
+| ℹ️ | The flags are the real artwork, shipped as two files rather than emoji: Windows has no flag glyphs and would have shown the letters "IL" and "US" |
 
 ### Materials
 

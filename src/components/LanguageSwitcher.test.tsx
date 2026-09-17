@@ -76,13 +76,17 @@ describe("the language switcher", () => {
   });
 
   /** Windows has no flag glyphs: 🇮🇱 renders there as the letters "IL". */
-  it("draws its flags rather than spelling them with emoji", async () => {
+  it("shows real flag artwork rather than spelling it with emoji", async () => {
     const { container } = render(
       <MemoryRouter initialEntries={["/"]}>
         <LanguageSwitcher />
       </MemoryRouter>,
     );
-    expect(container.querySelector("svg")).toBeTruthy();
+    const flag = container.querySelector("img");
+    expect(flag, "the button carries a flag image").toBeTruthy();
+    // A file, inlined by the bundler in tests — either way it is an SVG and
+    // not a character the operating system may not have.
+    expect(flag!.getAttribute("src")).toMatch(/svg/);
     expect(container.textContent).not.toMatch(/[\u{1F1E6}-\u{1F1FF}]/u);
   });
 });
