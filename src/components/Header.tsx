@@ -225,6 +225,14 @@ const Header = () => {
               </div>
             )}
 
+            {/* The drawer had no language control at all: on a phone the only
+                way to reach /en was the footer. */}
+            {SITE.enableEnglish && (
+              <div className="mt-8 border-t border-border/40 pt-6">
+                <LanguageSwitcher />
+              </div>
+            )}
+
             <div
               className="mt-8 flex items-center gap-2"
               style={{

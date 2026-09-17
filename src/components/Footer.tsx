@@ -221,7 +221,7 @@ const Footer = () => {
             {/* Repeated here as well as in the navbar: visitors who don't find
                 a language control at the top look for it in the footer. */}
             {SITE_CONFIG.enableEnglish && (
-              <LanguageSwitcher className="min-h-0 px-0 text-label text-background/60 hover:text-accent" />
+              <LanguageSwitcher invert compact placement="top" />
             )}
           </div>
         </div>

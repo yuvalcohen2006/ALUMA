@@ -3,13 +3,13 @@
 ## Language button, materials and sizes — 17 September
 
 ```
-██░░░░░░░░░░░░░░░░░░  10%
+████░░░░░░░░░░░░░░░░  20%
 ```
 
 | | |
 |---|---|
 | 🔎 | Design agreed. Spec in [docs/superpowers/specs](superpowers/specs) |
-| ⬜ | Language button: click it, pick 🇮🇱 עברית or 🇺🇸 English, the one you are in is ticked |
+| ✅ | Language button: click it, pick 🇮🇱 עברית or 🇺🇸 English, the one you are in is ticked. In the header, the phone menu and the footer |
 | ⬜ | **חומרים** screen in the admin: photo, name, one line, explanation |
 | ⬜ | The four materials moved into the database so they can be edited too |
 | ⬜ | /materials shows them all in one composition, photo left, words right |
