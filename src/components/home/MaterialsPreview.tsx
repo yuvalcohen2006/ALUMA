@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { ArrowLeft, ChevronLeft, ChevronRight } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import Reveal from "@/components/Reveal";
-import { materials } from "@/data/materials";
+import { useMaterials, materialName, materialTagline } from "@/hooks/useMaterials";
 import { useLocalizedPath } from "@/lib/useLocalizedPath";
 
 /**
@@ -27,6 +27,7 @@ import { useLocalizedPath } from "@/lib/useLocalizedPath";
 const MaterialsPreview = () => {
   const { to, lang } = useLocalizedPath();
   const { t } = useTranslation("home");
+  const { materials } = useMaterials();
   const track = useRef<HTMLUListElement>(null);
   const [edges, setEdges] = useState({ start: true, end: true });
 
@@ -130,13 +131,13 @@ const MaterialsPreview = () => {
           className="-mx-5 mt-8 flex snap-x snap-mandatory scroll-px-5 gap-6 overflow-x-auto px-5 pb-1 [scrollbar-width:none] md:mx-0 md:mt-10 md:scroll-px-0 md:gap-8 md:px-0 [&::-webkit-scrollbar]:hidden"
         >
           {materials.map((m, i) => {
-            const name = lang === "he" ? m.name : m.en.name;
-            const tagline = lang === "he" ? m.tagline : m.en.tagline;
+            const name = materialName(m, lang);
+            const tagline = materialTagline(m, lang);
             return (
               <li key={m.slug} className="w-[78%] shrink-0 snap-start sm:w-[360px]">
                 <Reveal delay={i * 60}>
                   <Link
-                    to={to(`/materials/${m.slug}`)}
+                    to={to(`/materials#${m.slug}`)}
                     className="group flex items-center gap-5"
                   >
                     <div className="relative isolate h-24 w-24 shrink-0 overflow-hidden rounded-sm bg-muted sm:h-32 sm:w-32">

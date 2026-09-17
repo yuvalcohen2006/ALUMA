@@ -15,6 +15,19 @@ const LegacyBlogPostRedirect = () => {
   return <Navigate to={`../journal/${slug}`} replace />;
 };
 
+/**
+ * /materials/sunbrella, from before materials were rows in a table.
+ *
+ * Each material had a page of its own: a full-height photographic hero, the
+ * explanation, a features panel and a Q&A. They are one page now, one block
+ * per material, so the old addresses land on the block they named — the URLs
+ * have been live and indexed, and they still answer with the same content.
+ */
+const LegacyMaterialRedirect = () => {
+  const { slug } = useParams();
+  return <Navigate to={`../materials#${slug}`} replace />;
+};
+
 // Code-split secondary routes for faster initial load
 const Story = lazy(() => import("./pages/Story.tsx"));
 const Collections = lazy(() => import("./pages/Collections.tsx"));
@@ -22,7 +35,6 @@ const CollectionDetail = lazy(() => import("./pages/CollectionDetail.tsx"));
 const CollectionPage = lazy(() => import("./pages/CollectionPage.tsx"));
 const Journal = lazy(() => import("./pages/Journal.tsx"));
 const Materials = lazy(() => import("./pages/Materials.tsx"));
-const MaterialDetail = lazy(() => import("./pages/MaterialDetail.tsx"));
 const Projects = lazy(() => import("./pages/Projects.tsx"));
 const ProjectDetail = lazy(() => import("./pages/ProjectDetail.tsx"));
 const FAQ = lazy(() => import("./pages/FAQ.tsx"));
@@ -68,7 +80,7 @@ export const publicRoutes = (
     <Route path="journal" element={<Journal />} />
     <Route path="journal/:slug" element={<BlogPost />} />
     <Route path="materials" element={<Materials />} />
-    <Route path="materials/:slug" element={<MaterialDetail />} />
+    <Route path="materials/:slug" element={<LegacyMaterialRedirect />} />
     <Route path="blog" element={<Navigate to="../journal" replace />} />
     <Route path="blog/:slug" element={<LegacyBlogPostRedirect />} />
     <Route path="projects" element={<Projects />} />

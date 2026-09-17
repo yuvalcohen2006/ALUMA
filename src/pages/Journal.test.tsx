@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { render, waitFor } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { HelmetProvider } from "react-helmet-async";
 
 type Row = {
@@ -18,10 +19,13 @@ const posts = vi.hoisted(() => ({ rows: [] as Row[], threw: false }));
 
 vi.mock("@/integrations/supabase/client", () => ({
   supabase: {
-    from: () => ({
+    // By table: the page also reads the materials, and a mock that answers
+    // every query with blog posts rendered articles as materials.
+    from: (table: string) => ({
       select: () => ({
         eq: () => ({
           order: async () => {
+            if (table === "site_materials") return { data: [], error: null };
             if (posts.threw) throw new Error("offline");
             return { data: posts.rows, error: null };
           },
@@ -40,9 +44,11 @@ const Journal = (await import("./Journal")).default;
 const render_ = () =>
   render(
     <HelmetProvider>
-      <MemoryRouter>
-        <Journal />
-      </MemoryRouter>
+      <QueryClientProvider client={new QueryClient({ defaultOptions: { queries: { retry: false } } })}>
+        <MemoryRouter>
+          <Journal />
+        </MemoryRouter>
+      </QueryClientProvider>
     </HelmetProvider>,
   );
 

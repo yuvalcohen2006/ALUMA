@@ -5,7 +5,7 @@ import SEO from "@/components/SEO";
 import PageHero from "@/components/PageHero";
 import Reveal from "@/components/Reveal";
 import TileCard from "@/components/TileCard";
-import { materials } from "@/data/materials";
+import { useMaterials, materialName } from "@/hooks/useMaterials";
 import { useLocalizedPath } from "@/lib/useLocalizedPath";
 import { supabase } from "@/integrations/supabase/client";
 import { useTranslation } from "react-i18next";
@@ -20,7 +20,8 @@ type Article = {
 };
 
 const JournalPage = () => {
-  const { to } = useLocalizedPath();
+  const { to, lang } = useLocalizedPath();
+  const { materials } = useMaterials();
   const [articles, setArticles] = useState<Article[]>([]);
   const { t } = useTranslation("journal");
 
@@ -70,10 +71,10 @@ const JournalPage = () => {
               <li key={m.slug}>
                 <Reveal delay={(i % 4) * 70}>
                   <TileCard
-                    to={to(`/materials/${m.slug}`)}
+                    to={to(`/materials#${m.slug}`)}
                     image={m.image}
                     alt=""
-                    title={m.name}
+                    title={materialName(m, lang)}
                     aspect="3/4"
                     eager={i < 4}
                   />

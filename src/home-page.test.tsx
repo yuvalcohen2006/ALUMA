@@ -141,10 +141,10 @@ describe("the home page", () => {
     const strip = container.querySelector("#materials-preview-title")!.closest("section")!;
     const links = [...strip.querySelectorAll("li a")].map((a) => a.getAttribute("href"));
     expect(links).toEqual([
-      "/materials/sunbrella",
-      "/materials/aluminum",
-      "/materials/granite-porcelain",
-      "/materials/polystone",
+      "/materials#sunbrella",
+      "/materials#aluminum",
+      "/materials#granite-porcelain",
+      "/materials#polystone",
     ]);
 
     const sections = [...container.querySelectorAll("section")];

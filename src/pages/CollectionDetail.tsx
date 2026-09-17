@@ -1,9 +1,9 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { Link, useParams } from "react-router-dom";
 import Layout from "@/components/Layout";
 import SEO from "@/components/SEO";
 import { Button } from "@/components/ui/button";
-import { Check, Ruler, Layers } from "lucide-react";
+import { Check } from "lucide-react";
 import NotFound from "./NotFound";
 import { supabase } from "@/integrations/supabase/client";
 import { normaliseProduct, type DBProduct } from "@/hooks/useCollectionsData";
@@ -17,8 +17,26 @@ import DirectionalArrow from "@/components/DirectionalArrow";
 import TileFallback from "@/components/TileFallback";
 import TileCard from "@/components/TileCard";
 import { productName } from "@/lib/localized-name";
+import { useMaterials, materialName, materialTagline } from "@/hooks/useMaterials";
 
 const SITE = "https://alumaoutdoor.com";
+
+/**
+ * One card, used by every block of writing on this page.
+ *
+ * "על המוצר" was written out in full four times, and the sizes and materials
+ * blocks had drifted into a different thing entirely — an icon, a smaller
+ * heading, no rule. The client asked for all three to match, which is easier
+ * to guarantee with one component than with three copies that have to be kept
+ * in step by hand.
+ */
+const InfoCard = ({ title, children }: { title: string; children: ReactNode }) => (
+  <div className="rounded-sm border border-border bg-card p-6 md:p-8">
+    <h2 className="font-display font-medium text-heading leading-snug text-foreground">{title}</h2>
+    <div className="mb-6 mt-5 h-[2px] w-20 bg-foreground/15" aria-hidden="true" />
+    {children}
+  </div>
+);
 
 const CollectionDetailPage = () => {
   const { slug } = useParams();
@@ -31,6 +49,25 @@ const CollectionDetailPage = () => {
   const [loadError, setLoadError] = useState(false);
   const { images: galleryImages, activeImage, setActiveImage, selected, activeVariant, selectVariant } =
     useProductGallery(item, variants);
+  const { materials: allMaterials } = useMaterials();
+
+  // The materials this piece is ticked for, in the order they were ticked.
+  // An id with no material behind it — one deleted since — is dropped rather
+  // than rendered as a gap.
+  const productMaterials = useMemo(
+    () =>
+      (item?.material_ids ?? [])
+        .map((id) => allMaterials.find((m) => m.id === id))
+        .filter((m): m is (typeof allMaterials)[number] => Boolean(m)),
+    [item?.material_ids, allMaterials],
+  );
+
+  // The old single `dimensions` line still shows, as one unlabelled row, for
+  // any product that has one and no sizes — nothing typed is thrown away.
+  const sizeRows = useMemo(() => {
+    if (item?.sizes?.length) return item.sizes;
+    return item?.dimensions ? [{ label: "", value: item.dimensions }] : [];
+  }, [item?.sizes, item?.dimensions]);
 
   /* Bumped on every load, so a stale response knows it is stale. Without it,
      clicking a related piece and going straight back left whichever request
@@ -184,7 +221,9 @@ const CollectionDetailPage = () => {
     image: item.cover_url ? new URL(item.cover_url, SITE).href : undefined,
     brand: { "@type": "Brand", name: "Aluma" },
     category: item.tag ?? undefined,
-    material: item.materials.join(", "),
+    // The materials it is ticked for, named. Google reads this; the old
+    // free-text column it used to read is empty on every row.
+    material: productMaterials.map((m) => materialName(m, lang)).join(", "),
     offers: {
 "@type": "Offer",
       // Made to order, so pre-order rather than in stock. The price is stated
@@ -226,45 +265,13 @@ const CollectionDetailPage = () => {
         </div>
       </section>
 
-      {/* TITLE, centered */}
-      <section className="pb-8 md:pb-12 bg-background">
-        <div className="container-luxury text-center">
-          {item.tag && (
-            <div dir="auto" className="inline-block px-4 py-1.5 mb-5 bg-secondary text-foreground text-body rounded-sm">
-              {item.tag}
-            </div>
-          )}
-          <div className="flex items-center justify-center gap-3 mb-3">
-            <h1
-              dir="auto"
-              className="font-display text-3xl sm:text-4xl md:text-5xl leading-tight text-foreground"
-            >
-              {displayName}
-            </h1>
-          </div>
-          {item.tagline && (
-            <p dir="auto" className="text-body leading-relaxed italic text-foreground-soft max-w-2xl mx-auto">
-              {item.tagline}
-            </p>
-          )}
-          {/* Only when there is one. Most pieces are made to order and carry
-              no price at all, and an empty price line reads as an error. */}
-          {formatPrice(item.price) && (
-            <p className="text-body text-foreground">
-              {item.price_note && (
-                <span dir="auto" className="text-foreground-soft">{item.price_note} </span>
-              )}
-              <span dir="ltr">{formatPrice(item.price)}</span>
-            </p>
-          )}
-        </div>
-      </section>
-
       {/* MAIN 2-COLUMN */}
       <section className="pb-16 md:pb-24 bg-background">
-        <div className="container-luxury grid md:grid-cols-5 gap-8 md:gap-12 items-stretch">
-          {/* RIGHT COLUMN, text */}
-          <div className="md:col-span-2 order-2 md:order-1 flex flex-col gap-6 md:gap-8">
+        <div className="container-luxury grid md:grid-cols-12 gap-10 md:gap-14">
+          {/* The reading-start column: everything that is written about the
+              piece. Seven of twelve, where it used to be two of five — the
+              photograph was the wider half and the words were a margin. */}
+          <div className="md:col-span-7 order-2 md:order-1 flex flex-col gap-6 md:gap-8">
             {/* Finishes. Each swatch carries its own photograph, so choosing
                 one changes the picture rather than just tinting a square.
                 Shown only when a product actually has finishes loaded — most
@@ -303,11 +310,7 @@ const CollectionDetailPage = () => {
             )}
 
             {item.description.length > 0 && (
-              <div className="border border-border bg-card rounded-sm  p-6 md:p-8">
-                <h2 className="font-display font-medium text-heading leading-snug text-foreground">
-                  {t("sections.about")}
-                </h2>
-                <div className="w-20 h-[2px] bg-foreground/15 mt-5 mb-6" aria-hidden="true" />
+              <InfoCard title={t("sections.about")}>
                 <div className="space-y-5">
                   {item.description.map((p, i) => (
                     <p key={i} dir="auto" className="text-foreground text-body">
@@ -315,15 +318,11 @@ const CollectionDetailPage = () => {
                     </p>
                   ))}
                 </div>
-              </div>
+              </InfoCard>
             )}
 
             {item.highlights.length > 0 && (
-              <div className="border border-border bg-card rounded-sm  p-6 md:p-8">
-                <h2 className="font-display font-medium text-heading leading-snug text-foreground">
-                  {t("sections.highlights")}
-                </h2>
-                <div className="w-20 h-[2px] bg-foreground/15 mt-5 mb-6" aria-hidden="true" />
+              <InfoCard title={t("sections.highlights")}>
                 <ul className="space-y-4">
                   {item.highlights.map((h, i) => (
                     <li key={i} className="flex gap-3">
@@ -337,56 +336,131 @@ const CollectionDetailPage = () => {
                     </li>
                   ))}
                 </ul>
-              </div>
+              </InfoCard>
             )}
 
-            {(item.materials.length > 0 || item.dimensions) && (
-              <div className="border border-border bg-card rounded-sm  p-6 md:p-8">
-                {item.materials.length > 0 && (
-                  <div className="flex items-start gap-3 mb-6">
-                    <Layers className="w-5 h-5 text-accent mt-1.5 shrink-0" aria-hidden="true" />
-                    <div className="min-w-0">
-                      <div className="font-display font-normal text-body text-foreground mb-3">
-                        {t("sections.materials")}
-                      </div>
-                      <div dir="auto" className="text-foreground font-normal text-body leading-relaxed space-y-1.5">
-                        {item.materials.map((m, i) => (
-                          <div key={i} className="flex items-center gap-2.5">
-                            <span className="w-1.5 h-1.5 rounded-full bg-accent shrink-0" />
-                            <span>{m}</span>
-                          </div>
-                        ))}
-                      </div>
+            {/* The exact sizes the owner typed, one to a row. A single line of
+                text — "אורך 240 ס״מ · עומק 92" — is what this was, and it read
+                as a sentence rather than as a specification. Each value is
+                isolated, or "320 × 260" comes out as "260 × 320" in a Hebrew
+                line. */}
+            {sizeRows.length > 0 && (
+              <InfoCard title={t("sections.dimensions")}>
+                <dl className="divide-y divide-border">
+                  {sizeRows.map((size, i) => (
+                    <div
+                      key={i}
+                      className="flex items-baseline justify-between gap-6 py-3 first:pt-0 last:pb-0"
+                    >
+                      <dt dir="auto" className="text-body text-foreground-soft">
+                        {size.label}
+                      </dt>
+                      <dd className="text-body text-foreground">
+                        <Ltr>{size.value}</Ltr>
+                      </dd>
                     </div>
-                  </div>
-                )}
-                {item.dimensions && (
-                  <div className={`flex items-start gap-3 ${item.materials.length > 0 ? 'pt-6 border-t border-border' : ''}`}>
-                    <Ruler className="w-5 h-5 text-accent mt-1.5 shrink-0" aria-hidden="true" />
-                    <div className="min-w-0">
-                      <div className="font-display font-normal text-body text-foreground mb-3">
-                        {t("sections.dimensions")}
-                      </div>
-                      <div className="text-foreground font-normal text-body leading-relaxed">
-                        {/* Isolated: "320 × 260" in a Hebrew line
-                            displays as "260 × 320" without it. */}
-                        <Ltr>{item.dimensions}</Ltr>
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
+                  ))}
+                </dl>
+              </InfoCard>
             )}
 
-            {item.description.length === 0 && item.highlights.length === 0 && item.materials.length === 0 && !item.dimensions && (
-              <div className="border border-border bg-card rounded-sm  p-6 md:p-8 min-h-[400px] flex items-center justify-center text-muted-foreground text-body">
-                {t("sections.more")}
-              </div>
+            {/* What it is made of, and a way through to what that means. Each
+                row goes to that material on /materials, which scrolls to it
+                and lights it up — the list used to be words with no way to
+                find out anything about them. */}
+            {productMaterials.length > 0 && (
+              <InfoCard title={t("sections.materials")}>
+                <ul role="list" className="divide-y divide-border">
+                  {productMaterials.map((m) => (
+                    <li key={m.id}>
+                      <Link
+                        to={`${to("/materials")}#${m.slug}`}
+                        className="group flex items-center gap-4 py-3 first:pt-0 last:pb-0 transition-colors"
+                      >
+                        {m.thumb && (
+                          <img
+                            src={m.thumb}
+                            alt=""
+                            width={96}
+                            height={96}
+                            loading="lazy"
+                            decoding="async"
+                            className="h-12 w-12 shrink-0 rounded-[2px] object-cover"
+                          />
+                        )}
+                        <span className="min-w-0 flex-1">
+                          {/* Isolated rather than dir="auto": a material named
+                              in Latin — PolyStone — would otherwise turn its
+                              own row left-aligned in a right-to-left list. */}
+                          <span className="block text-body text-foreground transition-colors group-hover:text-accent">
+                            <bdi>{materialName(m, lang)}</bdi>
+                          </span>
+                          {materialTagline(m, lang) && (
+                            <span className="block line-clamp-1 text-label text-muted-foreground">
+                              <bdi>{materialTagline(m, lang)}</bdi>
+                            </span>
+                          )}
+                        </span>
+                        <DirectionalArrow className="w-4 h-4 shrink-0 text-foreground" />
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </InfoCard>
             )}
+
+            {item.description.length === 0 &&
+              item.highlights.length === 0 &&
+              productMaterials.length === 0 &&
+              sizeRows.length === 0 && (
+                <div className="flex min-h-[320px] items-center justify-center rounded-sm border border-border bg-card p-6 text-body text-muted-foreground md:p-8">
+                  {t("sections.more")}
+                </div>
+              )}
           </div>
 
-          {/* LEFT COLUMN, gallery (main + thumbs) */}
-          <div className="md:col-span-3 order-1 md:order-2">
+          {/* The reading-end column: the name, then the photographs.
+              The name used to be centred across the whole page above both
+              columns, which left it belonging to neither. Above the photograph
+              it reads as the label of the thing you are looking at.
+
+              dir="ltr" on the block, not on the page: every product is named
+              in Latin letters, so the lockup starts at the left in Hebrew as
+              well as in English. The tagline keeps dir="auto" inside it, so a
+              Hebrew line still runs right to left within a left-set block. */}
+          {/* Sticky: the words are now the taller column, and a photograph
+              that scrolls away leaves you reading about a piece you can no
+              longer see. */}
+          <div className="md:col-span-5 order-1 md:order-2 md:sticky md:top-28 md:self-start">
+            <div dir="ltr" className="mb-6 text-start md:mb-8">
+              {item.tag && (
+                <p dir="auto" className="mb-3 text-label text-muted-foreground">
+                  {item.tag}
+                </p>
+              )}
+              <h1 className="font-display text-3xl leading-tight text-foreground sm:text-4xl md:text-5xl">
+                {displayName}
+              </h1>
+              {item.tagline && (
+                <p dir="auto" className="mt-3 text-body italic leading-relaxed text-foreground-soft">
+                  {item.tagline}
+                </p>
+              )}
+              {/* Only when there is one. Most pieces are made to order and
+                  carry no price at all, and an empty price line reads as an
+                  error. */}
+              {formatPrice(item.price) && (
+                <p className="mt-3 text-body text-foreground">
+                  {item.price_note && (
+                    <span dir="auto" className="text-foreground-soft">
+                      {item.price_note}{" "}
+                    </span>
+                  )}
+                  <span dir="ltr">{formatPrice(item.price)}</span>
+                </p>
+              )}
+            </div>
+
             {/* Mobile: horizontal carousel */}
             {/* Bleed must match container-luxury's own padding (px-5 → sm:px-6)
                 exactly, or the scroller overhangs the viewport at 375px. */}

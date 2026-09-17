@@ -23,6 +23,7 @@ const AdminTexts = lazy(() => import("./pages/admin/AdminTexts.tsx"));
 const AdminFaqs = lazy(() => import("./pages/admin/AdminFaqs.tsx"));
 const AdminReviews = lazy(() => import("./pages/admin/AdminReviews.tsx"));
 const AdminProjects = lazy(() => import("./pages/admin/AdminProjects.tsx"));
+const AdminMaterials = lazy(() => import("./pages/admin/AdminMaterials.tsx"));
 const AdminCollections = lazy(() => import("./pages/admin/AdminCollections.tsx"));
 const AdminProductEdit = lazy(() => import("./pages/admin/AdminProductEdit.tsx"));
 const AdminCollectionProducts = lazy(() => import("./pages/admin/AdminCollectionProducts.tsx"));
@@ -65,6 +66,7 @@ const App = () => (
                 <Route path="/admin/customers" element={<AdminGuard><Navigate to="/admin/club" replace /></AdminGuard>} />
                 <Route path="/admin/orders" element={<AdminGuard><AdminOrders /></AdminGuard>} />
                 <Route path="/admin/projects" element={<AdminGuard><AdminProjects /></AdminGuard>} />
+                <Route path="/admin/materials" element={<AdminGuard><AdminMaterials /></AdminGuard>} />
                 <Route path="/admin/collections" element={<AdminGuard><AdminCollections /></AdminGuard>} />
                 {/* A product is edited on its own page, not in a dialog over
                     the list you were reading to decide what to change. */}

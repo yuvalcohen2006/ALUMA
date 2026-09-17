@@ -7,194 +7,84 @@ import aluminumThumb from "@/assets/materials/thumbs/aluminum.webp";
 import graniteThumb from "@/assets/materials/thumbs/granite.webp";
 import polystoneThumb from "@/assets/materials/thumbs/polystone.webp";
 
-export interface Material {
+/**
+ * The four materials the site shipped with, kept as the fallback.
+ *
+ * They used to BE the materials: a hardcoded list with a page each, which left
+ * the admin no way to add a fifth or fix a word in the four. They live in
+ * `site_materials` now (migration 20260917120000), and this list is what the
+ * site shows when that table is missing, unreachable or empty — which is the
+ * state of every deployment between the code going out and the SQL being run.
+ *
+ * The photographs stay in the bundle either way: the seeded rows carry no
+ * image_url, so these are what those four rows are drawn with until someone
+ * uploads a replacement. See PHOTOS below.
+ */
+export type BuiltInMaterial = {
   slug: string;
   name: string;
+  name_en: string;
   tagline: string;
-  shortDesc: string;
-  image: string;
-  /**
-   * A 320px square cut from the photograph close enough to read as a swatch —
-   * the frame's corner, the stone's top — for the home page's materials strip,
-   * where the whole scene would be a postage stamp of a terrace.
-   */
-  thumb: string;
-  /** The home page strip is the one place on /en that names these. */
-  en: { name: string; tagline: string };
-  /**
-   * Colour sampled off the material itself in its photo — the sand of the
-   * weave, the graphite of the frame, the grey of the stone. Drives the card
-   * border and check marks so each card is tinted by its own material.
-   */
-  accent: string;
-  origin: string;
-  longDesc: string[];
-  features: { title: string; desc: string }[];
-  faq?: { q: string; a: string }[];
-}
+  tagline_en: string;
+  /** Paragraphs of the explanation. */
+  body: string[];
+};
 
-export const materials: Material[] = [
+/** The bundled photograph and swatch for a material the site was born with. */
+export const PHOTOS: Record<string, { image: string; thumb: string }> = {
+  sunbrella: { image: sunbrellaImg, thumb: sunbrellaThumb },
+  aluminum: { image: aluminumImg, thumb: aluminumThumb },
+  "granite-porcelain": { image: graniteImg, thumb: graniteThumb },
+  polystone: { image: polystoneImg, thumb: polystoneThumb },
+};
+
+export const BUILT_IN_MATERIALS: BuiltInMaterial[] = [
   {
     slug: "sunbrella",
     name: "בד Sunbrella",
+    name_en: "Sunbrella fabric",
     tagline: "נוחות שלא נכנעת לשמש",
-    shortDesc:
-      "בדי Sunbrella איכותיים, עמידים ל-UV, לדהייה ולמים. נוחות ויוקרה שנשארות שנים בחוץ.",
-    image: sunbrellaImg,
-    thumb: sunbrellaThumb,
-    en: { name: "Sunbrella fabric", tagline: "Comfort that doesn't give in to the sun" },
-    accent: "hsl(38 44% 64%)",
-    origin: "ארה״ב, תקן Sunbrella® מקורי",
-    longDesc: [
+    tagline_en: "Comfort that doesn't give in to the sun",
+    body: [
       "בדי Sunbrella הם תקן הזהב העולמי לבדי חוץ. נארגים מסיבים אקריליים שנצבעים בצבע מלא, כך שהצבע חלק מהסיב עצמו ולא נשטף, לא דוהה ולא מתעייף עם השנים.",
       "המגע רך כמו בד פנים, אך מתחת לחזות העדינה מסתתרת עמידות בלתי מתפשרת לשמש הישראלית, לרסס מלח, לכלור ולמים. כתמים נשטפים בקלות, והבד שומר על מראהו המקורי גם אחרי עונות ארוכות בחוץ.",
-    ],
-    features: [
-      { title: "עמידות UV", desc: "צבע מלא בסיב, לא דוהה גם בשמש הישראלית." },
-      { title: "דוחה מים וכתמים", desc: "ציפוי הידרופובי, כתמים מנוקים במים וסבון עדין." },
-      { title: "מגע פרימיום", desc: "רכות של בד פנים, יציבות של בד חוץ." },
-      { title: "אחריות יצרן", desc: "עד 10 שנות אחריות בינלאומית מ-Sunbrella®." },
-    ],
-    faq: [
-      {
-        q: "האם באמת אפשר להשאיר את הבד בחוץ כל השנה?",
-        a: "כן. Sunbrella תוכנן במקור למפרשי יאכטות ומיועד לחשיפה יומיומית לשמש, לרוח ולרסס מלח. מומלץ לכסות רק בגשמים כבדים ממושכים או בסופת חול, כדי להקל על התחזוקה.",
-      },
-      {
-        q: "איך מנקים כתם יין, קפה או שמן?",
-        a: "רוב הכתמים יורדים בשטיפה עדינה עם מים פושרים וסבון כלים. לכתמים ישנים אפשר להשתמש בתמיסת מים עם 1/4 כוס אקונומיקה, הבד לא ישנה גוון.",
-      },
-      {
-        q: "מה משך האחריות?",
-        a: "Sunbrella מעניקים עד 10 שנות אחריות יצרן בינלאומית מפני דהייה. בפועל, במרבית הפרויקטים הבד נראה כמו חדש הרבה מעבר לתקופה הזו.",
-      },
-      {
-        q: "האם הבד חם לשבת עליו בקיץ?",
-        a: "לא באופן חריג. הסיב האקרילי אינו סופג חום כמו סינתטיקה זולה, והמגע נשאר יבש ונעים גם בטמפרטורות גבוהות.",
-      },
+      "עמידות UV: צבע מלא בסיב, לא דוהה גם בשמש הישראלית. דוחה מים וכתמים בזכות ציפוי הידרופובי, עם עד 10 שנות אחריות יצרן בינלאומית.",
     ],
   },
   {
     slug: "aluminum",
     name: "אלומיניום",
+    name_en: "Aluminium",
     tagline: "שלד אדריכלי שלא חולה ולא חולד",
-    shortDesc:
-      "מסגרות אלומיניום בציפוי אבקה איכותי, עמידות לחלודה וללחות. אסתטיקה אדריכלית טהורה ומשקל קל.",
-    image: aluminumImg,
-    thumb: aluminumThumb,
-    en: { name: "Aluminium", tagline: "An architectural frame that never rusts" },
-    accent: "hsl(210 11% 34%)",
-    origin: "פרופילים אדריכליים בציפוי אבקה תרמי",
-    longDesc: [
+    tagline_en: "An architectural frame that never rusts",
+    body: [
       "האלומיניום שלנו עובר ציפוי אבקה תרמי בתנור בטמפרטורה גבוהה, תהליך שיוצר שכבה אחידה, עמוקה ועמידה הרבה יותר מצבע רגיל. התוצאה: מסגרת שנשארת חלקה ומדויקת שנים, גם מול הים, הגשם והשמש.",
       "המבנה קל משמעותית מברזל, אבל לא מתפשר על יציבות. הוא לא חולד, לא מתעקם ולא דורש תחזוקה, רק ניגוב מדי פעם. הקווים הנקיים מאפשרים לרהיט לדבר בשפה אדריכלית מינימליסטית ושקטה.",
-    ],
-    features: [
-      { title: "אפס חלודה", desc: "מתאים לחצרות, גגות ובתים מול הים." },
-      { title: "ציפוי תרמי", desc: "שכבת אבקה אפויה, עמידה לשריטות ולקרינה." },
-      { title: "קל ויציב", desc: "קל להזיז, יציב לשבת. מסגרת לכל החיים." },
-      { title: "מגוון גוונים", desc: "שחור מאט, לבן, ברונזה וגוונים בהזמנה." },
-    ],
-    faq: [
-      {
-        q: "האם האלומיניום שלכם מתאים לבית מול הים?",
-        a: "כן, זה בדיוק היתרון המרכזי. אלומיניום לא חולד גם בחשיפה יומיומית לרסס מלח, ולכן זו הבחירה המועדפת לחצרות, גגות ובתים בהרצליה, קיסריה, נתניה ותל אביב.",
-      },
-      {
-        q: "מה ההבדל בין ציפוי אבקה תרמי לצבע רגיל?",
-        a: "ציפוי אבקה עובר אפייה בתנור בטמפרטורה גבוהה ויוצר שכבה עמידה, אחידה ועמוקה משמעותית מצבע רגיל. הוא לא מתקלף, לא מתבקע ועמיד לקרינת UV שנים.",
-      },
-      {
-        q: "מה משקל השלד ואיך זה משפיע על השימוש?",
-        a: "אלומיניום קל משמעותית מברזל, אפשר להזיז ספה או שולחן ביחיד, בלי לפגוע ברצפה. יחד עם זאת השלד יציב ויכול לשאת עומסי ישיבה גבוהים.",
-      },
-      {
-        q: "האם אפשר לקבל גוון מותאם אישית?",
-        a: "כן. בנוסף לשחור מאט, לבן וברונזה, אנחנו מייצרים בהזמנה בכל גוון RAL, כדי שהמסגרת תשתלב בדיוק בשפה האדריכלית של הבית.",
-      },
+      "מתאים לחצרות, לגגות ולבתים מול הים, ומיוצר בשחור מאט, לבן, ברונזה וכל גוון RAL בהזמנה.",
     ],
   },
   {
     slug: "granite-porcelain",
     name: "שיש גרניט פורצלן",
+    name_en: "Porcelain stoneware",
     tagline: "כל לוח, יצירה בפני עצמה",
-    shortDesc:
-      "משטחים בעיבוד יד, כל לוח ייחודי בטקסטורה ובדגם. עמידים, יוקרתיים ויפים לנצח.",
-    image: graniteImg,
-    thumb: graniteThumb,
-    en: { name: "Porcelain stoneware", tagline: "Every slab a piece of its own" },
-    accent: "hsl(208 8% 47%)",
-    origin: "לוחות פורצלן בעיבוד יד, חיתוך לפי מידה",
-    longDesc: [
+    tagline_en: "Every slab a piece of its own",
+    body: [
       "גרניט פורצלן הוא החומר היוקרתי ביותר למשטחי חוץ, קשה כאבן, עמיד בפני שריטות, חום, כתמים וקרינת UV. בניגוד לשיש טבעי, הוא לא סופג נוזלים ולא דורש איטום מחדש.",
       "כל לוח נבחר בידנו ומעובד באמצעות חיתוך מדויק, ליטוש קצוות והתאמה אישית לכל שולחן. הטקסטורה והוורידים נשארים ייחודיים, אין שני לוחות זהים, וזה בדיוק היופי שבו.",
-    ],
-    features: [
-      { title: "עמיד לחום וכתמים", desc: "כוסות חמות, יין ושמן זית, לא משאירים סימן." },
-      { title: "אפס תחזוקה", desc: "לא דורש איטום, לא סופג, לא משנה גוון." },
-      { title: "מראה טבעי", desc: "ורידים אמיתיים בכל לוח, כמו שיש מחצבה." },
-      { title: "חיתוך לפי מידה", desc: "כל שולחן מתוכנן ומיוצר במידה המדויקת שלך." },
-    ],
-    faq: [
-      {
-        q: "מה ההבדל בין גרניט פורצלן לשיש טבעי?",
-        a: "שיש טבעי סופג נוזלים, מוכתם מיין ושמן, ודורש איטום חוזר. גרניט פורצלן צפוף לחלוטין, לא סופג כלום, לא נכתם, ולא משנה גוון בשמש.",
-      },
-      {
-        q: "האם הלוח שביר?",
-        a: "לא ברמת השימוש היומיומי. כל לוח מותקן על מסגרת אלומיניום נושאת שמפזרת עומסים, כך שהוא עמיד לשימוש, לחפצים כבדים ולסטיות טמפרטורה חדות.",
-      },
-      {
-        q: "האם אני יכול לבחור את הדגם של הלוח?",
-        a: "בהחלט. אנחנו מזמינים אתכם לסטודיו לראות את הלוחות הפיזיים, כך אתם בוחרים את הוורידים והדגם המדויקים שילכו הביתה איתכם.",
-      },
-      {
-        q: "מה קורה במקרה של שריטה או פגיעה?",
-        a: "פני השטח של הפורצלן קשה מאוד וכמעט חסין לשריטות. במקרה נדיר של סדק, לוח בודד ניתן להחלפה בלי לפרק את השולחן כולו.",
-      },
+      "כוסות חמות, יין ושמן זית לא משאירים סימן, והלוח לא משנה גוון בשמש.",
     ],
   },
   {
     slug: "polystone",
     name: "PolyStone",
+    name_en: "PolyStone",
     tagline: "פיסול בחומר מודרני, קל, עמיד ויוקרתי",
-    shortDesc:
-      "חומר מרוכב יוקרתי בגימור אבן, קל משמעותית מבטון, עמיד לכל מזג אוויר ומתאים לעיצוב פיסולי ייחודי.",
-    image: polystoneImg,
-    thumb: polystoneThumb,
-    en: { name: "PolyStone", tagline: "Sculptural, light and made for weather" },
-    accent: "hsl(36 20% 58%)",
-    origin: "חומר מרוכב מבוסס שרף ואבן מינרלית, יציקה לפי תבנית",
-    longDesc: [
+    tagline_en: "Sculptural, light and made for weather",
+    body: [
       "PolyStone הוא חומר מרוכב מתקדם המשלב שרף פולימרי עם אבקת אבן טבעית, מקבל מראה ומגע של אבן יוקרתית, אך במשקל נמוך משמעותית ובעמידות גבוהה לכל תנאי החוץ.",
       "החומר מאפשר חופש עיצובי מלא: צורות פיסוליות, עיגולים מושלמים וקצוות חדים שלא ניתן להשיג באבן טבעית. גימור מאט אחיד, ללא תפרים, וגוונים אדריכליים שנשארים יציבים בשמש, בגשם וברסס מלח.",
-    ],
-    features: [
-      { title: "קל ועמיד", desc: "עד 70% קל יותר מבטון, בלי להתפשר על חוזק." },
-      { title: "אפס תחזוקה", desc: "לא סופג מים, לא מתפורר ולא משנה גוון." },
-      { title: "חופש עיצובי", desc: "צורות פיסוליות וגיאומטריות בכל גודל." },
-      { title: "גימור פרימיום", desc: "מראה אבן אדריכלי במגוון גוונים מאט." },
-    ],
-    faq: [
-      {
-        q: "מה ההבדל בין PolyStone לבטון אמיתי?",
-        a: "PolyStone מגיע למראה ולמגע של בטון או אבן, אבל שוקל עד 70% פחות. זה אומר שאפשר להעביר, לעצב ולעקם צורות שבבטון היו בלתי אפשריות, בלי לוותר על החוזק.",
-      },
-      {
-        q: "האם החומר עמיד לגשם ולרסס מלח?",
-        a: "כן. השרף אוטם את המשטח לחלוטין ומונע ספיגת מים. החומר יציב באור UV, מתאים לפרויקטים מול הים ולא דורש איטום חוזר.",
-      },
-      {
-        q: "אילו גוונים אפשר לקבל?",
-        a: "אנחנו עובדים בפלטת גוונים אדריכליים מאט, לבן שמנת, אפור אבן, חול, גרפיט ושחור. אפשר גם התאמה אישית לצבע ספציפי בפרויקט.",
-      },
-      {
-        q: "כמה זמן לוקח לייצר פריט מותאם?",
-        a: "פריט PolyStone נוצק בתבנית ייעודית. זמן ייצור טיפוסי הוא 4–6 שבועות מרגע אישור התכנון והגוון.",
-      },
+      "עד 70% קל יותר מבטון, לא סופג מים ולא דורש איטום חוזר.",
     ],
   },
 ];
-
-export const getMaterial = (slug: string) =>
-  materials.find((m) => m.slug === slug);

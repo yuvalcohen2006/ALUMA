@@ -23,7 +23,12 @@ export type DBProduct = {
   tagline: string | null;
   description: string[];
   highlights: { title: string; desc: string }[];
+  /** The old free-text list. Empty on every row; kept so nothing reads undefined. */
   materials: string[];
+  /** Materials ticked in the product form, resolved against site_materials. */
+  material_ids: string[];
+  /** [{ label: "אורך", value: "240 ס״מ" }], in the owner's own order. */
+  sizes: { label: string; value: string }[];
   dimensions: string | null;
   cover_url: string | null;
   gallery: string[];
@@ -66,6 +71,22 @@ export const normaliseProduct = (p: any): DBProduct => ({
   description: Array.isArray(p?.description) ? p.description : [],
   highlights: Array.isArray(p?.highlights) ? p.highlights : [],
   materials: Array.isArray(p?.materials) ? p.materials : [],
+  // Both arrive as undefined until their migration is applied — `select("*")`
+  // omits a column that does not exist yet — so they are normalised here
+  // rather than in every consumer.
+  material_ids: Array.isArray(p?.material_ids)
+    ? p.material_ids.filter((id: unknown) => typeof id === "string")
+    : [],
+  sizes: Array.isArray(p?.sizes)
+    ? p.sizes
+        .filter((s: unknown) => !!s && typeof s === "object")
+        .map((s: { label?: unknown; value?: unknown }) => ({
+          label: typeof s.label === "string" ? s.label.trim() : "",
+          value: typeof s.value === "string" ? s.value.trim() : "",
+        }))
+        // A row with nothing in it is a row the owner started and abandoned.
+        .filter((s: { label: string; value: string }) => s.label || s.value)
+    : [],
   // The squared, centred copies of the photos uploaded before the crop window
   // existed — see lib/framed-photos. Here, so every public surface gets the
   // same square the visitor clicked on; the admin reads the table directly

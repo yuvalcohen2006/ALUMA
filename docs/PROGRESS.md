@@ -3,11 +3,50 @@
 ## Language button, materials and sizes — 17 September
 
 ```
-████░░░░░░░░░░░░░░░░  20%
+████████████████████  done
 ```
+
+**One script to run before the new screens work** — step 1 of
+[ACTION.md](ACTION.md). Until it is run the site shows the four materials it
+was built with, exactly as before.
+
+### The language button
 
 | | |
 |---|---|
+| ✅ | A button showing the language you are in, with its flag. Click it and both languages drop down; the one you are in is tinted and ticked |
+| ✅ | In the header, in the phone menu (which had no language control at all) and in the footer |
+| ✅ | Each line is still a real link to the same page in the other language, so Google, middle-click and the back button all still work |
+| ℹ️ | The flags are drawn, not emoji: Windows has no flag glyphs and would have shown the letters "IL" and "US" |
+
+### Materials
+
+| | |
+|---|---|
+| ✅ | **חומרים** in the admin: photo, name, English name, one line, explanation, published, order |
+| ✅ | The four materials the site was built with move into it, with their photographs, so they can be edited too |
+| ✅ | /materials shows every material in one identical composition: photo on one side at 380px, name and explanation on the other |
+| ✅ | The old per-material addresses now land on that material, so nothing indexed breaks |
+| ✅ | The home-page strip and the "שווה לדעת" page read the same list, so a new material shows up in all three places at once |
+
+### Products
+
+| | |
+|---|---|
+| ✅ | **חומרים** on a product is a list to tick, not a box to type in |
+| ✅ | **מידות** is a row per measurement: the name of it, then the measurement |
+| ✅ | The name moved above the photo, set from the left, with the tagline and price under it |
+| ✅ | The photo column is narrower, and stays put while you read down the page |
+| ✅ | **על המוצר**, **מידות** and **חומרים** are one and the same box now — a test holds them identical |
+| ✅ | Each material in the box is a row with its photo, and clicking it jumps to that material and lights it up for a moment |
+
+**One gap worth knowing:** the material's one-line tagline has no English
+field, so the English site shows the Hebrew line under an English name. The
+same is already true of product descriptions. Say the word and I will add it.
+
+478 tests pass, and the site behaves the same before and after the script.
+
+---|---|
 | 🔎 | Design agreed. Spec in [docs/superpowers/specs](superpowers/specs) |
 | ✅ | Language button: click it, pick 🇮🇱 עברית or 🇺🇸 English, the one you are in is ticked. In the header, the phone menu and the footer |
 | ⬜ | **חומרים** screen in the admin: photo, name, one line, explanation |

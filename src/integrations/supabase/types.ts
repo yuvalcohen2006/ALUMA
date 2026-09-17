@@ -459,6 +459,8 @@ export type Database = {
           highlights: Json
           id: string
           materials: Json
+          material_ids: Json
+          sizes: Json
           name: string
           published: boolean
           slug: string
@@ -483,6 +485,8 @@ export type Database = {
           highlights?: Json
           id?: string
           materials?: Json
+          material_ids?: Json
+          sizes?: Json
           name: string
           published?: boolean
           slug: string
@@ -507,6 +511,8 @@ export type Database = {
           highlights?: Json
           id?: string
           materials?: Json
+          material_ids?: Json
+          sizes?: Json
           name?: string
           published?: boolean
           slug?: string
@@ -678,6 +684,48 @@ export type Database = {
           published?: boolean
           question?: string
           sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      site_materials: {
+        Row: {
+          body: string | null
+          created_at: string
+          id: string
+          image_url: string | null
+          name: string
+          name_en: string | null
+          published: boolean
+          slug: string
+          sort_order: number
+          tagline: string | null
+          updated_at: string
+        }
+        Insert: {
+          body?: string | null
+          created_at?: string
+          id?: string
+          image_url?: string | null
+          name: string
+          name_en?: string | null
+          published?: boolean
+          slug: string
+          sort_order?: number
+          tagline?: string | null
+          updated_at?: string
+        }
+        Update: {
+          body?: string | null
+          created_at?: string
+          id?: string
+          image_url?: string | null
+          name?: string
+          name_en?: string | null
+          published?: boolean
+          slug?: string
+          sort_order?: number
+          tagline?: string | null
           updated_at?: string
         }
         Relationships: []

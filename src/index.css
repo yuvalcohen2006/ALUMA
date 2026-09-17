@@ -315,6 +315,41 @@
     }
   }
 
+  /* A material arrived at from a product page.
+
+     The link from a product's materials box is /materials#slug, and the page
+     scrolls to the block itself (:target is no use — the blocks render after
+     the data arrives, by which time the browser has stopped looking) — but on a page of identical blocks, arriving at
+     one and arriving at the page look the same. This tints it for a couple of
+     seconds and fades out, which answers "which one did I just click" without
+     leaving a permanent mark on the page.
+
+     The box-shadow is the tint bleeding past the block's own box, so the band
+     reaches the page gutters rather than stopping at the text column. */
+  .material-block.is-found .material-block-inner {
+    animation: material-found 2.6s ease-out 1;
+  }
+  @keyframes material-found {
+    0%,
+    14% {
+      background-color: hsl(var(--secondary));
+      box-shadow: 0 0 0 16px hsl(var(--secondary));
+    }
+    100% {
+      background-color: transparent;
+      box-shadow: 0 0 0 16px transparent;
+    }
+  }
+  /* No fade for anyone who asked for less motion: the tint simply stays, which
+     is the same answer held still. */
+  @media (prefers-reduced-motion: reduce) {
+    .material-block.is-found .material-block-inner {
+      animation: none;
+      background-color: hsl(var(--secondary));
+      box-shadow: 0 0 0 16px hsl(var(--secondary));
+    }
+  }
+
   /* The sheen on the "new" chip.
      Transform only, so it never leaves the compositor, and added under
      `no-preference` rather than removed under `reduce` — a decorative loop

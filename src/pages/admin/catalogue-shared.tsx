@@ -22,6 +22,10 @@ export type Product = {
   description: any;
   highlights: any;
   materials: any;
+  /** Ids from site_materials, ticked in the product form. */
+  material_ids: string[];
+  /** [{ label, value }] — one row per measurement. */
+  sizes: { label: string; value: string }[];
   dimensions: string | null;
   cover_url: string | null;
   gallery: any;
@@ -132,6 +136,8 @@ export const emptyProduct: Partial<Product> = {
   description: [],
   highlights: [],
   materials: [],
+  material_ids: [],
+  sizes: [],
   dimensions: "",
   cover_url: "",
   gallery: [],

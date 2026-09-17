@@ -5,7 +5,6 @@ import { toast } from "sonner";
 import AdminLayout from "./AdminLayout";
 import ProductFinishes, { DEFAULT_VARIANT } from "./ProductFinishes";
 import {
-  BufferedInput,
   BufferedTextarea,
   emptyProduct,
   slugify,
@@ -27,6 +26,9 @@ import Ltr from "@/components/Ltr";
 import { ACCEPT_ATTRIBUTE } from "@/lib/photo-specs";
 
 type Collection = { id: string; name_he: string };
+/** Just enough of a material to tick it. Unpublished ones are listed and
+ *  labelled, so ticking one and wondering where it went cannot happen. */
+type AdminMaterial = { id: string; name: string; published: boolean };
 
 /**
  * One piece of furniture, on a page of its own.
@@ -51,6 +53,7 @@ const AdminProductEdit = () => {
 
   const [product, setProduct] = useState<Partial<Product> | null>(null);
   const [collections, setCollections] = useState<Collection[]>([]);
+  const [allMaterials, setAllMaterials] = useState<AdminMaterial[]>([]);
   const [variants, setVariants] = useState<DraftVariant[]>([]);
   const [savedVariants, setSavedVariants] = useState<(DraftVariant & { id: string })[]>([]);
   const [loading, setLoading] = useState(true);
@@ -64,6 +67,12 @@ const AdminProductEdit = () => {
       .select("id, name_he")
       .order("sort_order");
     setCollections((cols as Collection[]) ?? []);
+
+    const { data: mats } = await supabase
+      .from("site_materials")
+      .select("id, name, published")
+      .order("sort_order", { ascending: true });
+    setAllMaterials((mats as AdminMaterial[]) ?? []);
 
     if (isNew) {
       setProduct({
@@ -81,7 +90,19 @@ const AdminProductEdit = () => {
       .select("*")
       .eq("id", id!)
       .maybeSingle();
-    setProduct((data as Partial<Product>) ?? null);
+    // The two JSON columns arrive as `Json` — and as undefined at all until
+    // their migration is applied — so they are shaped here, once, rather than
+    // guarded at every checkbox and every row below.
+    const row = data as Record<string, unknown> | null;
+    setProduct(
+      row
+        ? ({
+            ...row,
+            material_ids: Array.isArray(row.material_ids) ? row.material_ids : [],
+            sizes: Array.isArray(row.sizes) ? row.sizes : [],
+          } as Partial<Product>)
+        : null,
+    );
 
     const { data: vs } = await supabase
       .from("product_variants")
@@ -159,6 +180,12 @@ const AdminProductEdit = () => {
       description: product.description || [],
       highlights: product.highlights || [],
       materials: product.materials || [],
+      material_ids: product.material_ids ?? [],
+      // Blank rows are dropped rather than saved: an owner who adds a row and
+      // changes their mind should not leave an empty line on the product page.
+      sizes: (product.sizes ?? [])
+        .map((s) => ({ label: s.label.trim(), value: s.value.trim() }))
+        .filter((s) => s.label || s.value),
       dimensions: product.dimensions || null,
       cover_url: product.cover_url || null,
       gallery: product.gallery || [],
@@ -470,32 +497,112 @@ const AdminProductEdit = () => {
 
             <section className="rounded-sm border border-border bg-card p-6">
               <div className="space-y-5">
+                {/* Ticked, not typed. Every material here is a row in the
+                    חומרים screen, so the product page can send a visitor to
+                    its explanation — a word typed by hand could only ever be
+                    a dead end. */}
                 <div>
-                  <Label htmlFor="p-materials">חומרים</Label>
-                  <BufferedTextarea
-                    id="p-materials"
-                    rows={3}
-                    initial={((product.materials as string[]) ?? []).join("\n")}
-                    placeholder={"אלומיניום\nבד Sunbrella"}
-                    onCommit={(raw) =>
-                      patch({
-                        materials: raw
-                          .split("\n")
-                          .map((x) => x.trim())
-                          .filter(Boolean),
-                      })
-                    }
-                  />
+                  <Label>חומרים</Label>
+                  {allMaterials.length === 0 ? (
+                    <p className="mt-2 text-sm text-muted-foreground">
+                      אין עדיין חומרים.{" "}
+                      <Link to="/admin/materials" className="underline">
+                        להוספת חומרים
+                      </Link>
+                    </p>
+                  ) : (
+                    <ul className="mt-2 grid gap-2 sm:grid-cols-2">
+                      {allMaterials.map((m) => {
+                        const on = (product.material_ids ?? []).includes(m.id);
+                        return (
+                          <li key={m.id}>
+                            <label className="flex cursor-pointer items-center gap-2.5 rounded-sm border border-border px-3 py-2.5 text-sm hover:bg-secondary">
+                              <input
+                                type="checkbox"
+                                checked={on}
+                                onChange={() =>
+                                  patch({
+                                    material_ids: on
+                                      ? (product.material_ids ?? []).filter((x) => x !== m.id)
+                                      : [...(product.material_ids ?? []), m.id],
+                                  })
+                                }
+                              />
+                              <span className="flex-1">{m.name}</span>
+                              {!m.published && (
+                                <span className="text-xs text-muted-foreground">לא מפורסם</span>
+                              )}
+                            </label>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  )}
                 </div>
 
+                {/* One row per measurement rather than one line of text: the
+                    product page sets these as a list, and "אורך 240 ס״מ ·
+                    עומק 92" typed into a single box cannot be listed. */}
                 <div>
-                  <Label htmlFor="p-dims">מידות</Label>
-                  <BufferedInput
-                    id="p-dims"
-                    initial={product.dimensions ?? ""}
-                    placeholder="אורך 240 ס״מ · עומק 92 ס״מ"
-                    onCommit={(v) => patch({ dimensions: v })}
-                  />
+                  <Label>מידות</Label>
+                  <ul className="mt-2 space-y-2">
+                    {(product.sizes ?? []).map((size, i) => (
+                      <li key={i} className="flex items-center gap-2">
+                        <Input
+                          value={size.label}
+                          placeholder="אורך"
+                          aria-label={`שם המידה ${i + 1}`}
+                          className="w-36"
+                          onChange={(e) =>
+                            patch({
+                              sizes: (product.sizes ?? []).map((s, j) =>
+                                j === i ? { ...s, label: e.target.value } : s,
+                              ),
+                            })
+                          }
+                        />
+                        <Input
+                          value={size.value}
+                          placeholder="240 ס״מ"
+                          aria-label={`המידה עצמה ${i + 1}`}
+                          className="flex-1"
+                          onChange={(e) =>
+                            patch({
+                              sizes: (product.sizes ?? []).map((s, j) =>
+                                j === i ? { ...s, value: e.target.value } : s,
+                              ),
+                            })
+                          }
+                        />
+                        <Button
+                          type="button"
+                          size="icon"
+                          variant="ghost"
+                          aria-label={`מחיקת המידה ${i + 1}`}
+                          className="text-destructive"
+                          onClick={() =>
+                            patch({ sizes: (product.sizes ?? []).filter((_, j) => j !== i) })
+                          }
+                        >
+                          <X className="h-4 w-4" />
+                        </Button>
+                      </li>
+                    ))}
+                  </ul>
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="outline"
+                    className="mt-2"
+                    onClick={() =>
+                      patch({ sizes: [...(product.sizes ?? []), { label: "", value: "" }] })
+                    }
+                  >
+                    הוספת מידה
+                  </Button>
+                  <p className="mt-2 text-xs text-muted-foreground">
+                    שם המידה קודם, ואחריו המידה עצמה. למשל: אורך · 240 ס״מ
+                  </p>
                 </div>
 
                 <div className="grid gap-4 sm:grid-cols-2">
