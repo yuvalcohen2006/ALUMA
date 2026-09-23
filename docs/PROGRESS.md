@@ -1,5 +1,37 @@
 # Where the site stands
 
+## Photos in the admin, and the last of the fuss — 23 September
+
+```
+████████████████████  done
+```
+
+**Nothing to do.** The materials script is run: four materials are live and
+every product has its size columns. I checked the database directly.
+
+### Photographs, everywhere in the panel
+
+| | |
+|---|---|
+| ✅ | **Click a photo and it opens large**, where it was left, with a grid through the middle to centre the furniture by. Drag it, and save |
+| ✅ | **A small − on the corner of each photo** deletes it, after asking |
+| ✅ | **A dashed square beside them adds another** — click it, or drop a file straight onto it |
+| ✅ | The cover and the gallery are one strip now, the first one marked ראשית. Deleting the first promotes the next |
+| ✅ | The same control on every screen that takes a picture: products, materials, projects, collections, the magazine, the main photo, and each colour |
+| ⛔ | The החלפה button is gone, and so is the paragraph above every upload box |
+
+### Less fuss
+
+| | |
+|---|---|
+| ✅ | "1600 × 1600 פיקסלים, מרובעת. עד 8MB, JPG או PNG." is now just **1600 × 1600**, written inside the add square |
+| ✅ | Labels shortened: תיאור SEO (meta description) → **תיאור לגוגל**, כותרת ראשית (לא מוצגת על המסך) → **כותרת לגוגל**, תוכן (Markdown / HTML) → **תוכן**, כמה נשארו במלאי → **מלאי** |
+
+493 tests pass, and two of them are about this: one holds every photo screen to
+the shared control, one holds the panel to 16px and to no explaining.
+
+---
+
 ## Phone number, two bugs, and the admin panel — 23 September
 
 ```

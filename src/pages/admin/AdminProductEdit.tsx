@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
-import { Loader2, Trash2, Upload, X } from "lucide-react";
+import { Loader2, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import AdminLayout from "./AdminLayout";
 import ProductFinishes, { DEFAULT_VARIANT } from "./ProductFinishes";
@@ -11,18 +11,15 @@ import {
   type Product,
 } from "./catalogue-shared";
 import { supabase } from "@/integrations/supabase/client";
-import { uploadFile } from "@/lib/admin-storage";
-import { useCrop } from "@/components/admin/CropProvider";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { EMBLEM_OPTIONS } from "@/lib/emblems";
-import PhotoSpec from "@/components/admin/PhotoSpec";
+import PhotoTiles from "@/components/admin/PhotoTiles";
 import { parsePriceInput } from "@/lib/price";
 import { contentDirection } from "@/lib/field-direction";
 import { planVariantSync, type DraftVariant } from "@/lib/variant-sync";
-import { ACCEPT_ATTRIBUTE } from "@/lib/photo-specs";
 import MigrationNotice from "@/components/admin/MigrationNotice";
 import { isMissingSchema } from "@/lib/missing-migration";
 
@@ -62,7 +59,6 @@ const SIZE_FIELDS = [
  * column; nothing there changes the product's content.
  */
 const AdminProductEdit = () => {
-  const requestCrop = useCrop();
   const { id } = useParams();
   const [params] = useSearchParams();
   const nav = useNavigate();
@@ -144,44 +140,6 @@ const AdminProductEdit = () => {
 
   const patch = (changes: Partial<Product>) =>
     setProduct((p) => (p ? { ...p, ...changes } : p));
-
-  const uploadCover = async (file: File) => {
-    const cropped = await requestCrop(file, "product");
-    if (!cropped) return;
-    setUploading(true);
-    try {
-      const { url } = await uploadFile("site-collections", cropped);
-      patch({ cover_url: url });
-    } catch {
-      toast.error("העלאת התמונה נכשלה");
-    } finally {
-      setUploading(false);
-    }
-  };
-
-  const uploadGallery = async (files: FileList) => {
-    setUploading(true);
-    try {
-      const urls: string[] = [];
-      for (const f of Array.from(files)) {
-        // One dialog per file, in order. Cancelling stops the rest rather than
-        // skipping one, and keeps whatever was already cropped — throwing away
-        // finished work to honour a cancel is the wrong reading of it.
-        const cropped = await requestCrop(f, "product");
-        // undefined = this file could not be opened, so skip it and keep going.
-        // null = the owner pressed cancel, which should stop the whole batch.
-        if (cropped === undefined) continue;
-        if (cropped === null) break;
-        const { url } = await uploadFile("site-collections", cropped);
-        urls.push(url);
-      }
-      patch({ gallery: [...((product?.gallery as string[]) ?? []), ...urls] });
-    } catch {
-      toast.error("העלאת התמונות נכשלה");
-    } finally {
-      setUploading(false);
-    }
-  };
 
   const save = async () => {
     if (!product) return;
@@ -450,73 +408,25 @@ const AdminProductEdit = () => {
               </div>
             </section>
 
+            {/* One strip: the main photograph first, then the rest, then the
+                square that adds another. The cover used to be a box with a
+                החלפה button and the gallery a separate row of thumbnails, so
+                the same job was done two different ways on one screen. */}
             <section className="rounded-sm border border-border bg-card p-6">
-              <div>
-                <PhotoSpec spec="product" />
-              </div>
-
-              <div className="flex flex-wrap items-start gap-4">
-                <div className="w-32">
-                  <div className="aspect-square overflow-hidden rounded-sm border border-border bg-secondary">
-                    {product.cover_url ? (
-                      <img
-                        src={product.cover_url}
-                        alt=""
-                        className="h-full w-full object-cover"
-                      />
-                    ) : (
-                      <div className="grid h-full place-items-center text-base text-muted-foreground">
-                        אין תמונה
-                      </div>
-                    )}
-                  </div>
-                  <label className="mt-2 inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-sm border border-border px-3 py-2 text-base hover:bg-secondary">
-                    <Upload className="h-4 w-4" />
-                    {product.cover_url ? "החלפה" : "תמונה ראשית"}
-                    <input
-                      type="file"
-                      accept={ACCEPT_ATTRIBUTE}
-                      className="hidden"
-                      onChange={(e) => e.target.files?.[0] && uploadCover(e.target.files[0])}
-                    />
-                  </label>
-                </div>
-
-                <div className="min-w-[12rem] flex-1">
-                  <ul className="mt-3 flex flex-wrap gap-2">
-                    {gallery.map((g, i) => (
-                      <li key={g} className="relative">
-                        <img
-                          src={g}
-                          alt=""
-                          className="h-16 w-16 rounded-sm border border-border object-cover"
-                        />
-                        <button
-                          type="button"
-                          onClick={() =>
-                            patch({ gallery: gallery.filter((_, n) => n !== i) })
-                          }
-                          aria-label="הסרת התמונה"
-                          className="absolute -top-2 -end-2 grid h-6 w-6 place-items-center rounded-full bg-foreground text-background"
-                        >
-                          <X className="h-3 w-3" />
-                        </button>
-                      </li>
-                    ))}
-                    <li>
-                      <label className="grid h-16 w-16 cursor-pointer place-items-center rounded-sm border border-dashed border-border text-muted-foreground hover:bg-secondary">
-                        <Upload className="h-4 w-4" />
-                        <input
-                          type="file"
-                          accept={ACCEPT_ATTRIBUTE}
-                          multiple
-                          className="hidden"
-                          onChange={(e) => e.target.files && uploadGallery(e.target.files)}
-                        />
-                      </label>
-                    </li>
-                  </ul>
-                </div>
+              <Label>תמונות</Label>
+              <div className="mt-3">
+                <PhotoTiles
+                  spec="product"
+                  photos={[product.cover_url, ...gallery].filter(Boolean) as string[]}
+                  firstLabel="ראשית"
+                  onBusyChange={setUploading}
+                  onChange={(next) =>
+                    // The first is the cover, the rest are the gallery — so
+                    // deleting the cover promotes the next photograph rather
+                    // than leaving the product without one.
+                    patch({ cover_url: next[0] ?? null, gallery: next.slice(1) })
+                  }
+                />
               </div>
             </section>
 
@@ -626,7 +536,7 @@ const AdminProductEdit = () => {
                     />
                   </div>
                   <div>
-                    <Label htmlFor="p-stock">כמה נשארו במלאי</Label>
+                    <Label htmlFor="p-stock">מלאי</Label>
                     <Input
                       id="p-stock"
                       type="number"

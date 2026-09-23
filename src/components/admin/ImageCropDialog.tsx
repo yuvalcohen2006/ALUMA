@@ -311,11 +311,22 @@ const ImageCropDialog = ({
                   />
                 </div>
 
+                {/* The frame, and a grid inside it: thirds, plus a brighter
+                    cross through the middle. Centring a chair by eye in an
+                    empty rectangle is guesswork; the middle lines are what
+                    "put it in the centre" actually needs. */}
                 <div
                   aria-hidden="true"
                   className="pointer-events-none absolute ring-1 ring-white/70"
                   style={{ left: winX, top: winY, width: winW, height: winH }}
-                />
+                >
+                  <div className="absolute inset-y-0 start-1/3 w-px bg-white/25" />
+                  <div className="absolute inset-y-0 start-2/3 w-px bg-white/25" />
+                  <div className="absolute inset-x-0 top-1/3 h-px bg-white/25" />
+                  <div className="absolute inset-x-0 top-2/3 h-px bg-white/25" />
+                  <div className="absolute inset-y-0 start-1/2 w-px bg-white/55" />
+                  <div className="absolute inset-x-0 top-1/2 h-px bg-white/55" />
+                </div>
               </>
             )}
           </div>

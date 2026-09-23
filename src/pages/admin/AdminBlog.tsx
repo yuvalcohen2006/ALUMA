@@ -8,12 +8,9 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Card, CardContent } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
-import { Plus, Pencil, Trash2, Upload } from "lucide-react";
+import { Plus, Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
-import { uploadFile } from "@/lib/admin-storage";
-import { useCrop } from "@/components/admin/CropProvider";
-import PhotoSpec from "@/components/admin/PhotoSpec";
-import { ACCEPT_ATTRIBUTE } from "@/lib/photo-specs";
+import PhotoTiles from "@/components/admin/PhotoTiles";
 import { slugify } from "./catalogue-shared";
 
 type Post = {
@@ -41,7 +38,6 @@ const empty: Partial<Post> = {
 };
 
 const AdminBlog = () => {
-  const requestCrop = useCrop();
   const [items, setItems] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState<Partial<Post> | null>(null);
@@ -101,17 +97,6 @@ const AdminBlog = () => {
     load();
   };
 
-  const uploadCover = async (file: File) => {
-    const cropped = await requestCrop(file, "article");
-    if (!cropped) return;
-    try {
-      const { url } = await uploadFile("blog-images", cropped);
-      setEditing((e) => ({ ...e!, cover_image_url: url }));
-      toast.success("התמונה הועלתה");
-    } catch (e: any) {
-      toast.error(e.message);
-    }
-  };
 
   return (
     <AdminLayout>
@@ -124,8 +109,6 @@ const AdminBlog = () => {
           פוסט חדש
         </Button>
       </header>
-
-      <PhotoSpec spec="article" />
 
       {loading ? (
         <p>טוען…</p>
@@ -207,20 +190,21 @@ const AdminBlog = () => {
                 />
               </div>
               <div>
-                <Label>תוכן (Markdown / HTML)</Label>
+                <Label>תוכן</Label>
                 <Textarea rows={12} value={editing.content || ""} onChange={(e) => setEditing({ ...editing, content: e.target.value })} />
               </div>
               <div>
                 <Label>תמונת כיסוי</Label>
-                <div className="flex items-center gap-3 mt-2">
-                  {editing.cover_image_url && (
-                    <img src={editing.cover_image_url} alt="" className="w-24 h-24 object-cover rounded" />
-                  )}
-                  <label className="inline-flex items-center gap-2 px-3 py-2 border border-border rounded cursor-pointer hover:bg-muted text-base">
-                    <Upload className="w-4 h-4" />
-                    העלאה
-                    <input type="file" accept={ACCEPT_ATTRIBUTE} className="hidden" onChange={(e) => e.target.files?.[0] && uploadCover(e.target.files[0])} />
-                  </label>
+                <div className="mt-2">
+                  <PhotoTiles
+                    spec="article"
+                    bucket="blog-images"
+                    single
+                    photos={editing.cover_image_url ? [editing.cover_image_url] : []}
+                    onChange={(next) =>
+                      setEditing((e) => (e ? { ...e, cover_image_url: next[0] ?? null } : e))
+                    }
+                  />
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-3">

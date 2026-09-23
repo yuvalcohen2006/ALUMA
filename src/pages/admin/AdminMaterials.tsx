@@ -1,15 +1,12 @@
 import { useEffect, useState } from "react";
-import { ImagePlus, Loader2, Plus, Trash2 } from "lucide-react";
+import { Plus, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { uploadFile } from "@/lib/admin-storage";
-import { useCrop } from "@/components/admin/CropProvider";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import PhotoSpec from "@/components/admin/PhotoSpec";
-import { ACCEPT_ATTRIBUTE } from "@/lib/photo-specs";
+import PhotoTiles from "@/components/admin/PhotoTiles";
 import { slugify } from "./catalogue-shared";
 import { PHOTOS } from "@/data/materials";
 import MigrationNotice from "@/components/admin/MigrationNotice";
@@ -42,11 +39,9 @@ type Material = {
  * first save — the same rule the product screen follows.
  */
 const AdminMaterials = () => {
-  const requestCrop = useCrop();
   const [materials, setMaterials] = useState<Material[]>([]);
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState(false);
-  const [uploading, setUploading] = useState<string | null>(null);
   /** The table is not there yet: the screen says so instead of failing. */
   const [needsScript, setNeedsScript] = useState(false);
 
@@ -114,20 +109,6 @@ const AdminMaterials = () => {
     toast.success("נמחק");
   };
 
-  const upload = async (m: Material, file: File) => {
-    const cropped = await requestCrop(file, "material");
-    if (!cropped) return;
-    setUploading(m.id);
-    try {
-      const { url } = await uploadFile("site-collections", cropped);
-      patch(m.id, { image_url: url });
-    } catch {
-      toast.error("העלאת התמונה נכשלה");
-    } finally {
-      setUploading(null);
-    }
-  };
-
   if (loading)
     return (
       <AdminLayout>
@@ -147,10 +128,6 @@ const AdminMaterials = () => {
           </Button>
         </div>
 
-        <div className="mt-8">
-          <PhotoSpec spec="material" />
-        </div>
-
         {needsScript && (
           <div className="mb-8">
             <MigrationNotice what="מסך החומרים" />
@@ -167,35 +144,19 @@ const AdminMaterials = () => {
           {materials.map((m) => (
             <section key={m.id} className="border-b border-border pb-8">
               <div className="flex flex-wrap gap-5">
-                <div className="w-full sm:w-52">
-                  <div className="relative aspect-[4/3] overflow-hidden rounded-sm border border-border bg-secondary">
-                    {/* The four the site was built with have no image_url —
-                        the site draws them from the bundle — so the screen
-                        shows the same photograph rather than an empty frame
-                        with a paragraph explaining the empty frame. */}
-                    {(m.image_url || PHOTOS[m.slug]?.image) && (
-                      <img
-                        src={m.image_url || PHOTOS[m.slug]?.image}
-                        alt=""
-                        className="h-full w-full object-cover"
-                      />
-                    )}
-                    {uploading === m.id && (
-                      <div className="absolute inset-0 grid place-items-center bg-background/70">
-                        <Loader2 className="h-5 w-5 animate-spin text-foreground" />
-                      </div>
-                    )}
-                  </div>
-                  <label className="mt-2 flex h-10 cursor-pointer items-center justify-center gap-2 rounded-sm border border-border text-base text-foreground hover:bg-secondary">
-                    <ImagePlus className="h-4 w-4" aria-hidden="true" />
-                    {m.image_url ? "החלפה" : "תמונה"}
-                    <input
-                      type="file"
-                      accept={ACCEPT_ATTRIBUTE}
-                      className="hidden"
-                      onChange={(e) => e.target.files?.[0] && upload(m, e.target.files[0])}
-                    />
-                  </label>
+                <div className="w-full sm:w-auto">
+                  {/* The four the site was built with carry no image_url — it
+                      draws them from the bundle — so the bundled photograph is
+                      what the screen shows until one is uploaded over it. */}
+                  <PhotoTiles
+                    spec="material"
+                    single
+                    photos={
+                      m.image_url ? [m.image_url] : PHOTOS[m.slug] ? [PHOTOS[m.slug].image] : []
+                    }
+                    removable={Boolean(m.image_url)}
+                    onChange={(next) => patch(m.id, { image_url: next[0] ?? null })}
+                  />
                 </div>
 
                 <div className="min-w-[260px] flex-1 space-y-3">
@@ -220,7 +181,7 @@ const AdminMaterials = () => {
                   </div>
 
                   <div>
-                    <Label htmlFor={`m-tagline-${m.id}`}>שורה אחת מתחת לשם</Label>
+                    <Label htmlFor={`m-tagline-${m.id}`}>משפט פתיחה</Label>
                     <Input
                       id={`m-tagline-${m.id}`}
                       value={m.tagline ?? ""}
@@ -261,7 +222,7 @@ const AdminMaterials = () => {
                       />
                       מפורסם
                     </label>
-                    <Button size="sm" onClick={() => save(m)} disabled={busy || uploading === m.id}>
+                    <Button size="sm" onClick={() => save(m)} disabled={busy}>
                       שמירה
                     </Button>
                     <Button

@@ -5,12 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Upload } from "lucide-react";
 import { toast } from "sonner";
-import { uploadFile } from "@/lib/admin-storage";
-import { useCrop } from "@/components/admin/CropProvider";
-import PhotoSpec from "@/components/admin/PhotoSpec";
-import { ACCEPT_ATTRIBUTE } from "@/lib/photo-specs";
+import PhotoTiles from "@/components/admin/PhotoTiles";
 
 type Hero = {
   title_he?: string;
@@ -22,7 +18,6 @@ type Hero = {
 };
 
 const AdminHero = () => {
-  const requestCrop = useCrop();
   const [hero, setHero] = useState<Hero>({});
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -49,18 +44,6 @@ const AdminHero = () => {
     toast.success("הירו נשמר");
   };
 
-  const handleUpload = async (which: "desktop_image" | "mobile_image", file: File) => {
-    const cropped = await requestCrop(file, "hero");
-    if (!cropped) return;
-    try {
-      const { url } = await uploadFile("site-hero", cropped);
-      setHero((h) => ({ ...h, [which]: url }));
-      toast.success("הועלה, לחצו שמירה לעדכון בדף הבית");
-    } catch (e: any) {
-      toast.error(e.message);
-    }
-  };
-
   if (loading) return <AdminLayout>טוען…</AdminLayout>;
 
   return (
@@ -69,71 +52,41 @@ const AdminHero = () => {
         <h1 className="font-display text-3xl text-foreground">התמונה הראשית</h1>
       </header>
 
-      <PhotoSpec spec="hero" />
-
-      <div className="grid lg:grid-cols-2 gap-6">
+      <div className="grid gap-6 lg:grid-cols-2">
         <Card>
           <CardHeader>
-            <CardTitle>תמונת רקע, דסקטופ</CardTitle>
+            <CardTitle>מחשב</CardTitle>
           </CardHeader>
           <CardContent>
-            {hero.desktop_image ? (
-              <img
-                src={hero.desktop_image}
-                alt="desktop hero"
-                className="w-full aspect-video object-cover rounded mb-3"
-              />
-            ) : (
-              <div className="w-full aspect-video bg-muted rounded mb-3 flex items-center justify-center text-muted-foreground text-base">
-                לא הוגדרה תמונה (יוצג ה-default של האתר)
-              </div>
-            )}
-            <label className="inline-flex items-center gap-2 px-3 py-2 border border-border rounded cursor-pointer hover:bg-muted text-base">
-              <Upload className="w-4 h-4" />
-              העלאת תמונה
-              <input
-                type="file"
-                accept={ACCEPT_ATTRIBUTE}
-                className="hidden"
-                onChange={(e) => e.target.files?.[0] && handleUpload("desktop_image", e.target.files[0])}
-              />
-            </label>
+            <PhotoTiles
+              spec="hero"
+              bucket="site-hero"
+              single
+              photos={hero.desktop_image ? [hero.desktop_image] : []}
+              onChange={(next) => setHero((h) => ({ ...h, desktop_image: next[0] ?? "" }))}
+            />
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader>
-            <CardTitle>תמונת רקע, מובייל</CardTitle>
+            <CardTitle>טלפון</CardTitle>
           </CardHeader>
           <CardContent>
-            {hero.mobile_image ? (
-              <img
-                src={hero.mobile_image}
-                alt="mobile hero"
-                className="w-48 aspect-[9/16] object-cover rounded mb-3 mx-auto"
-              />
-            ) : (
-              <div className="w-48 aspect-[9/16] bg-muted rounded mb-3 mx-auto flex items-center justify-center text-muted-foreground text-base text-center px-4">
-                לא הוגדרה תמונה למובייל (יוצג זה של הדסקטופ)
-              </div>
-            )}
-            <label className="inline-flex items-center gap-2 px-3 py-2 border border-border rounded cursor-pointer hover:bg-muted text-base">
-              <Upload className="w-4 h-4" />
-              העלאת תמונה
-              <input
-                type="file"
-                accept={ACCEPT_ATTRIBUTE}
-                className="hidden"
-                onChange={(e) => e.target.files?.[0] && handleUpload("mobile_image", e.target.files[0])}
-              />
-            </label>
+            <PhotoTiles
+              spec="hero"
+              bucket="site-hero"
+              single
+              photos={hero.mobile_image ? [hero.mobile_image] : []}
+              onChange={(next) => setHero((h) => ({ ...h, mobile_image: next[0] ?? "" }))}
+            />
           </CardContent>
         </Card>
       </div>
 
       <Card className="mt-6">
         <CardHeader>
-          <CardTitle>טקסטים וכפתור</CardTitle>
+          <CardTitle>טקסטים</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           {/* Both fields used to look identical and behave nothing alike:
@@ -142,7 +95,7 @@ const AdminHero = () => {
               tagline now renders under the logo; the headline says plainly
               that it is for Google and screen readers. */}
           <div>
-            <Label>כותרת ראשית (לא מוצגת על המסך)</Label>
+            <Label>כותרת לגוגל</Label>
             <Input
               value={hero.title_he || ""}
               onChange={(e) => setHero({ ...hero, title_he: e.target.value })}

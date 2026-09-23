@@ -54,7 +54,7 @@ import { uploadFile } from "@/lib/admin-storage";
 import { useCrop } from "@/components/admin/CropProvider";
 import ProductFinishes, { DEFAULT_VARIANT } from "./ProductFinishes";
 import { planVariantSync, type DraftVariant } from "@/lib/variant-sync";
-import PhotoSpec from "@/components/admin/PhotoSpec";
+import PhotoTiles from "@/components/admin/PhotoTiles";
 import { ACCEPT_ATTRIBUTE } from "@/lib/photo-specs";
 
 type Collection = {
@@ -538,28 +538,12 @@ const AdminCollections = () => {
               <div>
                 <Label htmlFor="col-cover">תמונת קולקציה</Label>
                 <div className="mt-2">
-                  <PhotoSpec spec="collection" />
-                </div>
-                <div className="flex items-center gap-3 mt-2">
-                  {editCol.image_url && (
-                    <img
-                      src={editCol.image_url}
-                      alt=""
-                      className="w-24 h-24 object-cover rounded"
-                    />
-                  )}
-                  <label className="inline-flex items-center gap-2 px-3 py-2 border border-border rounded cursor-pointer hover:bg-muted text-base">
-                    <Upload className="w-4 h-4" />
-                    {editCol.image_url ? "החלפה" : "העלאה"}
-                    <input
-                      type="file"
-                      accept={ACCEPT_ATTRIBUTE}
-                      className="hidden"
-                      onChange={(e) =>
-                        e.target.files?.[0] && uploadCover(e.target.files[0])
-                      }
-                    />
-                  </label>
+                  <PhotoTiles
+                    spec="collection"
+                    single
+                    photos={editCol.image_url ? [editCol.image_url] : []}
+                    onChange={(next) => setEditCol({ ...editCol, image_url: next[0] ?? "" })}
+                  />
                 </div>
               </div>
 

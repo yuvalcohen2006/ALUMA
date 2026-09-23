@@ -1,24 +1,17 @@
 # What Aluma needs from you
 
-Updated 23 September 2026. No explanations — what's missing, then exactly what to click.
+Updated 23 September 2026 (evening). No explanations — what's missing, then exactly what to click.
 
 ---
 
-## 1. Run the materials script
+## 1. Working with photographs
 
-**This is why "חומר חדש" says it cannot be created, and why a product's sizes
-do not save.** The table and the columns they need are not in the database
-yet. Nothing else is wrong.
+Everywhere in the panel, a photograph behaves the same way:
 
-1. Go to **supabase.com/dashboard/project/jzqayfllojeqivwbbuyf/sql/new**
-2. Open `supabase/migrations/20260917120000_materials_and_sizes.sql` from the
-   project folder, select all of it, and copy
-3. Paste it into the big empty box
-4. Click **Run** (bottom right, or Ctrl+Enter)
-5. It should say **Success. No rows returned**
-
-The four materials already on the site are put into the table by this script,
-with their photographs and their text, so nothing has to be typed again.
+- **Click it** to open it large and move it. A grid shows the middle. **שמירה**
+  in the window, then **שמירה** on the screen
+- **The − on its corner** deletes it, after asking
+- **The dashed square** adds another: click it, or drag a file onto it
 
 ---
 

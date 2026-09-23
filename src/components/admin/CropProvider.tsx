@@ -40,13 +40,29 @@ import type { PhotoSpecKey } from "@/lib/photo-specs";
  */
 type RequestCrop = (file: File, spec: PhotoSpecKey) => Promise<File | null | undefined>;
 
-const CropContext = createContext<RequestCrop | null>(null);
+/**
+ * Re-open a photograph that is already on the site and move it.
+ *
+ * The owner asked to be able to click a photo and adjust it, rather than
+ * having to find the original file again to change how it sits. It is fetched
+ * back out of storage and goes through exactly the same dialog; what comes
+ * back is a new file, so the old one stays where it is until the screen
+ * replaces the address it points at.
+ */
+type AdjustPhoto = (url: string, spec: PhotoSpecKey) => Promise<File | null | undefined>;
 
-export const useCrop = (): RequestCrop => {
+const CropContext = createContext<{ requestCrop: RequestCrop; adjustPhoto: AdjustPhoto } | null>(
+  null,
+);
+
+const useCropContext = () => {
   const ctx = useContext(CropContext);
   if (!ctx) throw new Error("useCrop must be used inside CropProvider");
   return ctx;
 };
+
+export const useCrop = (): RequestCrop => useCropContext().requestCrop;
+export const useAdjustPhoto = (): AdjustPhoto => useCropContext().adjustPhoto;
 
 type Pending = {
   image: LoadedImage;
@@ -100,8 +116,29 @@ export const CropProvider = ({ children }: { children: ReactNode }) => {
     [],
   );
 
+  const adjustPhoto = useCallback<AdjustPhoto>(
+    async (url, spec) => {
+      let file: File;
+      try {
+        // Public bucket, so this is a plain cross-origin GET; the blob is then
+        // handled exactly like a file the owner had just picked.
+        const response = await fetch(url, { mode: "cors" });
+        if (!response.ok) throw new Error(String(response.status));
+        const blob = await response.blob();
+        file = new File([blob], url.split("/").pop() || "photo.jpg", {
+          type: blob.type || "image/jpeg",
+        });
+      } catch {
+        toast.error("לא הצלחנו לפתוח את התמונה לעריכה");
+        return undefined;
+      }
+      return requestCrop(file, spec);
+    },
+    [requestCrop],
+  );
+
   return (
-    <CropContext.Provider value={requestCrop}>
+    <CropContext.Provider value={{ requestCrop, adjustPhoto }}>
       {children}
       <ImageCropDialog
         open={pending !== null}

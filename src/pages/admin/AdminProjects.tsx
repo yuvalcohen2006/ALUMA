@@ -17,10 +17,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Plus, Pencil, Trash2, Upload, X } from "lucide-react";
 import { toast } from "sonner";
 import { uploadFile } from "@/lib/admin-storage";
-import { useCrop } from "@/components/admin/CropProvider";
-import PhotoSpec from "@/components/admin/PhotoSpec";
+import PhotoTiles from "@/components/admin/PhotoTiles";
 import { contentDirection } from "@/lib/field-direction";
-import { ACCEPT_ATTRIBUTE } from "@/lib/photo-specs";
 import { slugify } from "./catalogue-shared";
 
 type Project = {
@@ -52,7 +50,6 @@ const empty: Partial<Project> = {
 };
 
 const AdminProjects = () => {
-  const requestCrop = useCrop();
   const [items, setItems] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState<Partial<Project> | null>(null);
@@ -116,48 +113,6 @@ const AdminProjects = () => {
     load();
   };
 
-  const handleCoverUpload = async (file: File) => {
-    const cropped = await requestCrop(file, "project");
-    if (!cropped) return;
-    setUploading(true);
-    try {
-      const { url } = await uploadFile("site-projects", cropped);
-      setEditing((e) => ({ ...e!, cover_url: url }));
-      toast.success("התמונה הועלתה");
-    } catch (e: any) {
-      toast.error(e.message);
-    } finally {
-      setUploading(false);
-    }
-  };
-
-  const handleGalleryUpload = async (files: FileList) => {
-    setUploading(true);
-    try {
-      const urls: string[] = [];
-      for (const f of Array.from(files)) {
-        const cropped = await requestCrop(f, "project");
-        // undefined = this file could not be opened, so skip it and keep going.
-        // null = the owner pressed cancel, which should stop the whole batch.
-        if (cropped === undefined) continue;
-        if (cropped === null) break;
-        const { url } = await uploadFile("site-projects", cropped);
-        urls.push(url);
-      }
-      setEditing((e) => ({ ...e!, gallery: [...(e?.gallery || []), ...urls] }));
-      // Nothing added is not a success. Cancelling the first crop of three
-      // used to raise a green "0 תמונות נוספו", and one file produced the
-      // plural "1 תמונות נוספו".
-      if (urls.length === 0) toast.info("לא נוספו תמונות");
-      else if (urls.length === 1) toast.success("תמונה אחת נוספה");
-      else toast.success(`${urls.length} תמונות נוספו`);
-    } catch (e: any) {
-      toast.error(e.message);
-    } finally {
-      setUploading(false);
-    }
-  };
-
   return (
     <AdminLayout>
       <header className="flex items-center justify-between mb-8">
@@ -170,7 +125,6 @@ const AdminProjects = () => {
         </Button>
       </header>
 
-      <PhotoSpec spec="project" />
 
       {loading ? (
         <p className="text-muted-foreground">טוען…</p>
@@ -285,57 +239,27 @@ const AdminProjects = () => {
                   onChange={(e) => setEditing({ ...editing, description: e.target.value })}
                 />
               </div>
+              {/* One strip, cover first, exactly as the product screen. */}
               <div>
-                <Label>תמונת כיסוי</Label>
-                <div className="flex items-center gap-3 mt-2">
-                  {editing.cover_url && (
-                    <img src={editing.cover_url} alt="cover" className="w-24 h-24 object-cover rounded" />
-                  )}
-                  <label className="inline-flex items-center gap-2 px-3 py-2 border border-border rounded cursor-pointer hover:bg-muted text-base">
-                    <Upload className="w-4 h-4" />
-                    {editing.cover_url ? "החלפה" : "העלאה"}
-                    <input
-                      type="file"
-                      accept={ACCEPT_ATTRIBUTE}
-                      className="hidden"
-                      onChange={(e) => e.target.files?.[0] && handleCoverUpload(e.target.files[0])}
-                    />
-                  </label>
+                <Label>תמונות</Label>
+                <div className="mt-2">
+                  <PhotoTiles
+                    spec="project"
+                    bucket="site-projects"
+                    firstLabel="כיסוי"
+                    photos={[editing.cover_url, ...((editing.gallery as string[]) || [])].filter(
+                      Boolean,
+                    ) as string[]}
+                    onChange={(next) =>
+                      setEditing((e) =>
+                        e ? { ...e, cover_url: next[0] ?? "", gallery: next.slice(1) } : e,
+                      )
+                    }
+                  />
                 </div>
               </div>
               <div>
-                <Label>גלריית תמונות</Label>
-                <div className="grid grid-cols-4 gap-2 mt-2">
-                  {(editing.gallery as string[] || []).map((url, i) => (
-                    <div key={i} className="relative aspect-square">
-                      <img src={url} alt="" className="w-full h-full object-cover rounded" />
-                      <button
-                        onClick={() =>
-                          setEditing({
-                            ...editing,
-                            gallery: (editing.gallery as string[]).filter((_, idx) => idx !== i),
-                          })
-                        }
-                        className="absolute top-1 left-1 bg-destructive text-destructive-foreground rounded-sm p-1"
-                      >
-                        <X className="w-3 h-3" />
-                      </button>
-                    </div>
-                  ))}
-                  <label className="aspect-square border-2 border-dashed border-border rounded flex items-center justify-center cursor-pointer hover:bg-muted">
-                    <Upload className="w-5 h-5 text-muted-foreground" />
-                    <input
-                      type="file"
-                      accept={ACCEPT_ATTRIBUTE}
-                      multiple
-                      className="hidden"
-                      onChange={(e) => e.target.files && handleGalleryUpload(e.target.files)}
-                    />
-                  </label>
-                </div>
-              </div>
-              <div>
-                <Label>תיאור SEO (meta description)</Label>
+                <Label>תיאור לגוגל</Label>
                 <Textarea
                   rows={2}
                   maxLength={160}

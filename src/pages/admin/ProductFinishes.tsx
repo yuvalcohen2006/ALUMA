@@ -6,7 +6,7 @@ import { useCrop } from "@/components/admin/CropProvider";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import PhotoSpec from "@/components/admin/PhotoSpec";
+import PhotoTiles from "@/components/admin/PhotoTiles";
 import { contentDirection } from "@/lib/field-direction";
 import type { DraftVariant } from "@/lib/variant-sync";
 import { ACCEPT_ATTRIBUTE } from "@/lib/photo-specs";
@@ -82,10 +82,6 @@ const ProductFinishes = ({
       </div>
 
 
-      <div className="mt-3">
-        <PhotoSpec spec="finish" />
-      </div>
-
       {value.length > 0 && (
         <ul className="space-y-3">
           {value.map((v, i) => (
@@ -110,24 +106,14 @@ const ProductFinishes = ({
                 className="h-10 min-w-[9rem] flex-1"
               />
 
-              {v.image_url && (
-                <img
-                  src={v.image_url}
-                  alt=""
-                  className="h-10 w-10 shrink-0 rounded-sm object-cover"
-                />
-              )}
-
-              <label className="inline-flex h-10 shrink-0 cursor-pointer items-center gap-2 rounded-sm border border-border px-3 text-base hover:bg-secondary">
-                <Upload className="h-4 w-4" />
-                {uploading === i ? "מעלה…" : v.image_url ? "החלפת תמונה" : "תמונה בצבע הזה"}
-                <input
-                  type="file"
-                  accept={ACCEPT_ATTRIBUTE}
-                  className="hidden"
-                  onChange={(e) => e.target.files?.[0] && upload(i, e.target.files[0])}
-                />
-              </label>
+              <PhotoTiles
+                spec="finish"
+                single
+                size="small"
+                photos={v.image_url ? [v.image_url] : []}
+                onChange={(next) => patch(i, { image_url: next[0] ?? null })}
+                onBusyChange={onBusyChange}
+              />
 
               <Button
                 type="button"

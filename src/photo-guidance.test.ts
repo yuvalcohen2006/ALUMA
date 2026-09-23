@@ -4,11 +4,12 @@ import { join } from "node:path";
 import { PHOTO_SPECS } from "@/lib/photo-specs";
 
 /**
- * Every screen that accepts a photo has to say what the photo should be.
+ * Every photograph in the admin goes through the same control.
  *
- * Otherwise the owner uploads a 600px phone screenshot, the site stretches it,
- * and the only feedback anyone gets is that the site "looks cheap" — which
- * nobody traces back to an upload box that asked for nothing.
+ * PhotoTiles is where a photo is added, adjusted and removed, and it is what
+ * states the size — a paragraph above the box was the old way and the owner
+ * asked for it to go. What matters now is that no screen rolls its own file
+ * input again, and that the spec each one names is real.
  */
 
 const ROOT = process.cwd();
@@ -20,24 +21,28 @@ const adminFiles = readdirSync(join(ROOT, ADMIN))
 
 const read = (f: string) => readFileSync(join(ROOT, f), "utf8");
 
-/** Screens with a file input are screens that need a spec. */
-const uploaders = adminFiles.filter((f) => read(f).includes("uploadFile("));
+/** Screens that put a photograph anywhere. */
+const uploaders = adminFiles.filter((f) => read(f).includes("PhotoTiles"));
 
 describe("photo guidance", () => {
-  it("finds the screens that accept uploads", () => {
+  it("finds the screens that accept photographs", () => {
     expect(uploaders.length).toBeGreaterThan(2);
   });
 
-  it("tells the owner what the photo should be, on every one of them", () => {
-    const silent = uploaders.filter((f) => !read(f).includes("<PhotoSpec"));
-    expect(silent).toEqual([]);
+  it("puts every one of them through the same control", () => {
+    // A hand-rolled <input type="file"> is how the panel ended up with three
+    // different ways to change a picture and no way to adjust one.
+    const rolledTheirOwn = adminFiles.filter(
+      (f) => /type="file"/.test(read(f)) && !read(f).includes("PhotoTiles"),
+    );
+    expect(rolledTheirOwn).toEqual([]);
   });
 
   it("names a spec that actually exists", () => {
     const keys = Object.keys(PHOTO_SPECS);
     const bad: string[] = [];
     for (const file of uploaders) {
-      for (const [, key] of read(file).matchAll(/<PhotoSpec\s+spec="(\w+)"/g)) {
+      for (const [, key] of read(file).matchAll(/spec="(\w+)"/g)) {
         if (!keys.includes(key)) bad.push(`${file}: ${key}`);
       }
     }

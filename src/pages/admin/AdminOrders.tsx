@@ -235,7 +235,7 @@ const AdminOrders = () => {
                 </div>
               </div>
               <div className="space-y-2">
-                <Label>התקדמות (%)</Label>
+                <Label>התקדמות</Label>
                 <Input type="number" min={0} max={100} value={editing.progress ?? 0} onChange={(e) => setEditing((s) => ({ ...s!, progress: Number(e.target.value) }))} />
               </div>
               <div className="grid grid-cols-2 gap-3">
