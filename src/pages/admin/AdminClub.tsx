@@ -99,10 +99,10 @@ const AdminClub = () => {
   };
 
   return (
-    <AdminLayout>
+    <AdminLayout width="wide">
       <header className="flex items-center justify-between flex-wrap gap-4 mb-8">
         <div>
-          <p className="text-xs tracking-[0.3em] text-foreground uppercase mb-1">Aluma Club</p>
+          <p className="text-base tracking-[0.3em] text-foreground uppercase mb-1">Aluma Club</p>
           <h1 className="font-display text-3xl flex items-center gap-3">
             <Crown className="w-7 h-7 text-primary" />
             ניהול מועדון
@@ -120,7 +120,7 @@ const AdminClub = () => {
         <p className="text-muted-foreground">אין חברי מועדון להצגה.</p>
       ) : (
         <div className="bg-card border border-border rounded-sm overflow-hidden">
-          <table className="w-full text-sm">
+          <table className="w-full text-base">
             <thead className="bg-muted/50 text-muted-foreground">
               <tr>
                 <th className="text-right px-4 py-3">שם</th>
@@ -166,7 +166,7 @@ const AdminClub = () => {
         <DialogContent dir="rtl" className="max-w-2xl max-h-[80vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="font-display text-2xl">{selected?.full_name || "חבר מועדון"}</DialogTitle>
-            <p className="text-sm text-muted-foreground">{selected?.phone}</p>
+            <p className="text-base text-muted-foreground">{selected?.phone}</p>
           </DialogHeader>
           {!selDetails ? (
             <p className="text-muted-foreground">טוען…</p>
@@ -177,17 +177,17 @@ const AdminClub = () => {
                   <ClipboardList className="w-4 h-4" /> הזמנות ({selDetails.projects.length})
                 </h3>
                 {selDetails.projects.length === 0 ? (
-                  <p className="text-sm text-muted-foreground">אין הזמנות</p>
+                  <p className="text-base text-muted-foreground">אין הזמנות</p>
                 ) : (
                   <ul className="space-y-2">
                     {selDetails.projects.map((p: any) => (
-                      <li key={p.id} className="border border-border rounded-sm p-3 text-sm">
+                      <li key={p.id} className="border border-border rounded-sm p-3 text-base">
                         <div className="flex justify-between">
                           <strong>{p.title}</strong>
-                          <span className="text-xs text-muted-foreground">{p.status} · {p.progress}%</span>
+                          <span className="text-base text-muted-foreground">{p.status} · {p.progress}%</span>
                         </div>
                         {p.next_milestone && (
-                          <p className="text-xs text-muted-foreground mt-1">אבן דרך: {p.next_milestone}</p>
+                          <p className="text-base text-muted-foreground mt-1">אבן דרך: {p.next_milestone}</p>
                         )}
                       </li>
                     ))}
@@ -199,7 +199,7 @@ const AdminClub = () => {
                   <Heart className="w-4 h-4" /> מועדפים ({selDetails.favorites.length})
                 </h3>
                 {selDetails.favorites.length === 0 ? (
-                  <p className="text-sm text-muted-foreground">אין מועדפים</p>
+                  <p className="text-base text-muted-foreground">אין מועדפים</p>
                 ) : (
                   <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                     {selDetails.favorites.map((f: any) => (
@@ -207,7 +207,7 @@ const AdminClub = () => {
                         {f.site_collection_products?.cover_url && (
                           <img src={f.site_collection_products.cover_url} alt={f.site_collection_products?.name} className="w-full aspect-square object-cover" />
                         )}
-                        <p className="p-2 text-xs">{f.site_collection_products?.name || "—"}</p>
+                        <p className="p-2 text-base">{f.site_collection_products?.name || "—"}</p>
                       </div>
                     ))}
                   </div>

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
-import { ArrowRight, Loader2, Trash2, Upload, X } from "lucide-react";
+import { Loader2, Trash2, Upload, X } from "lucide-react";
 import { toast } from "sonner";
 import AdminLayout from "./AdminLayout";
 import ProductFinishes, { DEFAULT_VARIANT } from "./ProductFinishes";
@@ -19,16 +19,33 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { EMBLEM_OPTIONS } from "@/lib/emblems";
 import PhotoSpec from "@/components/admin/PhotoSpec";
-import { formatPrice, parsePriceInput } from "@/lib/price";
+import { parsePriceInput } from "@/lib/price";
 import { contentDirection } from "@/lib/field-direction";
 import { planVariantSync, type DraftVariant } from "@/lib/variant-sync";
-import Ltr from "@/components/Ltr";
 import { ACCEPT_ATTRIBUTE } from "@/lib/photo-specs";
+import MigrationNotice from "@/components/admin/MigrationNotice";
+import { isMissingSchema } from "@/lib/missing-migration";
 
 type Collection = { id: string; name_he: string };
 /** Just enough of a material to tick it. Unpublished ones are listed and
  *  labelled, so ticking one and wondering where it went cannot happen. */
 type AdminMaterial = { id: string; name: string; published: boolean };
+
+/** Columns that arrive with the materials script, and only with it. */
+const NEW_COLUMNS = ["material_ids", "length_cm", "width_cm", "height_cm"] as const;
+
+const withoutNewColumns = <T extends Record<string, unknown>>(payload: T) => {
+  const rest = { ...payload };
+  for (const key of NEW_COLUMNS) delete rest[key];
+  return rest;
+};
+
+/** The three measurements, in the order a person says them. */
+const SIZE_FIELDS = [
+  { key: "length_cm", label: "אורך" },
+  { key: "width_cm", label: "רוחב" },
+  { key: "height_cm", label: "גובה" },
+] as const;
 
 /**
  * One piece of furniture, on a page of its own.
@@ -54,6 +71,7 @@ const AdminProductEdit = () => {
   const [product, setProduct] = useState<Partial<Product> | null>(null);
   const [collections, setCollections] = useState<Collection[]>([]);
   const [allMaterials, setAllMaterials] = useState<AdminMaterial[]>([]);
+  const [needsScript, setNeedsScript] = useState(false);
   const [variants, setVariants] = useState<DraftVariant[]>([]);
   const [savedVariants, setSavedVariants] = useState<(DraftVariant & { id: string })[]>([]);
   const [loading, setLoading] = useState(true);
@@ -68,10 +86,11 @@ const AdminProductEdit = () => {
       .order("sort_order");
     setCollections((cols as Collection[]) ?? []);
 
-    const { data: mats } = await supabase
+    const { data: mats, error: matsError } = await supabase
       .from("site_materials")
       .select("id, name, published")
       .order("sort_order", { ascending: true });
+    if (isMissingSchema(matsError)) setNeedsScript(true);
     setAllMaterials((mats as AdminMaterial[]) ?? []);
 
     if (isNew) {
@@ -99,7 +118,6 @@ const AdminProductEdit = () => {
         ? ({
             ...row,
             material_ids: Array.isArray(row.material_ids) ? row.material_ids : [],
-            sizes: Array.isArray(row.sizes) ? row.sizes : [],
           } as Partial<Product>)
         : null,
     );
@@ -181,16 +199,13 @@ const AdminProductEdit = () => {
       highlights: product.highlights || [],
       materials: product.materials || [],
       material_ids: product.material_ids ?? [],
-      // Blank rows are dropped rather than saved: an owner who adds a row and
-      // changes their mind should not leave an empty line on the product page.
-      sizes: (product.sizes ?? [])
-        .map((s) => ({ label: s.label.trim(), value: s.value.trim() }))
-        .filter((s) => s.label || s.value),
+      length_cm: product.length_cm ?? null,
+      width_cm: product.width_cm ?? null,
+      height_cm: product.height_cm ?? null,
       dimensions: product.dimensions || null,
       cover_url: product.cover_url || null,
       gallery: product.gallery || [],
       price: product.price ?? null,
-      price_note: product.price_note || null,
       name_en: product.name_en?.trim() || null,
       emblem: product.emblem || null,
       sort_order: product.sort_order ?? 0,
@@ -202,20 +217,47 @@ const AdminProductEdit = () => {
 
     let productId = product.id;
     if (productId) {
-      const { error } = await supabase
+      let { error } = await supabase
         .from("site_collection_products")
         .update(payload)
         .eq("id", productId);
+      /* The materials and the sizes live in columns added by a script that
+         may not have been run yet, and PostgREST rejects the WHOLE update for
+         one unknown column. So the edit — the name, the photographs, the text
+         — was thrown away along with them, with a red line that said only
+         "the save failed". Now the rest is saved, and the screen says which
+         script is missing and what to do about it. */
+      if (isMissingSchema(error)) {
+        setNeedsScript(true);
+        ({ error } = await supabase
+          .from("site_collection_products")
+          .update(withoutNewColumns(payload))
+          .eq("id", productId));
+        if (!error) {
+          setSaving(false);
+          toast.error("נשמר — חוץ מהמידות והחומרים. ראו את ההסבר בראש העמוד.");
+          return;
+        }
+      }
       if (error) {
         setSaving(false);
         return toast.error(error.message);
       }
     } else {
-      const { data, error } = await supabase
+      let { data, error } = await supabase
         .from("site_collection_products")
         .insert(payload)
         .select("id")
         .single();
+      if (isMissingSchema(error)) {
+        setNeedsScript(true);
+        ({ data, error } = await supabase
+          .from("site_collection_products")
+          .insert(withoutNewColumns(payload))
+          .select("id")
+          .single());
+        if (!error) toast.error("נשמר — חוץ מהמידות והחומרים. ראו את ההסבר בראש העמוד.");
+      }
       if (error || !data) {
         setSaving(false);
         // Two products whose Hebrew names transliterate to the same slug hit a
@@ -317,16 +359,8 @@ const AdminProductEdit = () => {
   const gallery = (product.gallery as string[]) ?? [];
 
   return (
-    <AdminLayout>
-      <div className="max-w-5xl">
-        <Link
-          to="/admin/collections"
-          className="mb-6 inline-flex h-10 items-center gap-2 rounded-sm -ms-3 px-3 text-sm text-muted-foreground transition-colors hover:bg-foreground/[0.04] hover:text-foreground"
-        >
-          <ArrowRight className="h-4 w-4" aria-hidden="true" />
-          חזרה לקולקציות
-        </Link>
-
+    <AdminLayout crumbs={[{ label: isNew ? "מוצר חדש" : product.name || "מוצר" }]}>
+      <div>
         <div className="flex flex-wrap items-center justify-between gap-4">
           <h1 className="font-display text-3xl text-foreground">
             {isNew ? "מוצר חדש" : product.name}
@@ -336,6 +370,12 @@ const AdminProductEdit = () => {
             שמירה
           </Button>
         </div>
+
+        {needsScript && (
+          <div className="mt-6">
+            <MigrationNotice what="המידות והחומרים" />
+          </div>
+        )}
 
         <div className="mt-8 grid gap-8 lg:grid-cols-3">
           {/* ── What the product is ─────────────────────────────────── */}
@@ -360,9 +400,6 @@ const AdminProductEdit = () => {
                       value={product.name_en ?? ""}
                       onChange={(e) => patch({ name_en: e.target.value })}
                     />
-                    <p className="mt-1.5 text-sm text-muted-foreground">
-                      לא חובה. אם תמלאו, זה מה שיופיע למי שגולש באנגלית.
-                    </p>
                   </div>
                 </div>
 
@@ -372,7 +409,7 @@ const AdminProductEdit = () => {
                     id="p-emblem"
                     value={product.emblem ?? ""}
                     onChange={(e) => patch({ emblem: e.target.value || null })}
-                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base"
                   >
                     <option value="">ללא</option>
                     {EMBLEM_OPTIONS.map((o) => (
@@ -381,10 +418,6 @@ const AdminProductEdit = () => {
                       </option>
                     ))}
                   </select>
-                  <p className="mt-1.5 text-sm text-muted-foreground">
-                    מילה אחת על תמונת המוצר, בעמוד הקולקציה. האתר מציג לכל היותר
-                    תווית או שתיים בכל רשת — ככל שיש פחות, כך הן נראות יותר.
-                  </p>
                 </div>
 
                 <div>
@@ -432,12 +465,12 @@ const AdminProductEdit = () => {
                         className="h-full w-full object-cover"
                       />
                     ) : (
-                      <div className="grid h-full place-items-center text-sm text-muted-foreground">
+                      <div className="grid h-full place-items-center text-base text-muted-foreground">
                         אין תמונה
                       </div>
                     )}
                   </div>
-                  <label className="mt-2 inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-sm border border-border px-3 py-2 text-sm hover:bg-secondary">
+                  <label className="mt-2 inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-sm border border-border px-3 py-2 text-base hover:bg-secondary">
                     <Upload className="h-4 w-4" />
                     {product.cover_url ? "החלפה" : "תמונה ראשית"}
                     <input
@@ -504,7 +537,7 @@ const AdminProductEdit = () => {
                 <div>
                   <Label>חומרים</Label>
                   {allMaterials.length === 0 ? (
-                    <p className="mt-2 text-sm text-muted-foreground">
+                    <p className="mt-2 text-base text-muted-foreground">
                       אין עדיין חומרים.{" "}
                       <Link to="/admin/materials" className="underline">
                         להוספת חומרים
@@ -516,7 +549,7 @@ const AdminProductEdit = () => {
                         const on = (product.material_ids ?? []).includes(m.id);
                         return (
                           <li key={m.id}>
-                            <label className="flex cursor-pointer items-center gap-2.5 rounded-sm border border-border px-3 py-2.5 text-sm hover:bg-secondary">
+                            <label className="flex cursor-pointer items-center gap-2.5 rounded-sm border border-border px-3 py-2.5 text-base hover:bg-secondary">
                               <input
                                 type="checkbox"
                                 checked={on}
@@ -530,7 +563,7 @@ const AdminProductEdit = () => {
                               />
                               <span className="flex-1">{m.name}</span>
                               {!m.published && (
-                                <span className="text-xs text-muted-foreground">לא מפורסם</span>
+                                <span className="text-base text-muted-foreground">לא מפורסם</span>
                               )}
                             </label>
                           </li>
@@ -540,69 +573,44 @@ const AdminProductEdit = () => {
                   )}
                 </div>
 
-                {/* One row per measurement rather than one line of text: the
-                    product page sets these as a list, and "אורך 240 ס״מ ·
-                    עומק 92" typed into a single box cannot be listed. */}
+                {/* Three boxes, in centimetres. The owner asked for boxes to
+                    fill in rather than rows to build: a row whose name is
+                    typed comes out as "אורך" on one product and "אורך כולל" on
+                    the next. A box left empty is simply not shown on the site. */}
                 <div>
                   <Label>מידות</Label>
-                  <ul className="mt-2 space-y-2">
-                    {(product.sizes ?? []).map((size, i) => (
-                      <li key={i} className="flex items-center gap-2">
-                        <Input
-                          value={size.label}
-                          placeholder="אורך"
-                          aria-label={`שם המידה ${i + 1}`}
-                          className="w-36"
-                          onChange={(e) =>
-                            patch({
-                              sizes: (product.sizes ?? []).map((s, j) =>
-                                j === i ? { ...s, label: e.target.value } : s,
-                              ),
-                            })
-                          }
-                        />
-                        <Input
-                          value={size.value}
-                          placeholder="240 ס״מ"
-                          aria-label={`המידה עצמה ${i + 1}`}
-                          className="flex-1"
-                          onChange={(e) =>
-                            patch({
-                              sizes: (product.sizes ?? []).map((s, j) =>
-                                j === i ? { ...s, value: e.target.value } : s,
-                              ),
-                            })
-                          }
-                        />
-                        <Button
-                          type="button"
-                          size="icon"
-                          variant="ghost"
-                          aria-label={`מחיקת המידה ${i + 1}`}
-                          className="text-destructive"
-                          onClick={() =>
-                            patch({ sizes: (product.sizes ?? []).filter((_, j) => j !== i) })
-                          }
-                        >
-                          <X className="h-4 w-4" />
-                        </Button>
-                      </li>
+                  <div className="mt-2 grid gap-4 sm:grid-cols-3">
+                    {SIZE_FIELDS.map((field) => (
+                      <div key={field.key}>
+                        <Label htmlFor={`p-${field.key}`} className="font-normal">
+                          {field.label}
+                        </Label>
+                        {/* The wrapper is LTR along with the field, or the
+                            unit is pinned to the same side the number starts
+                            from and sits on top of it. */}
+                        <div className="relative" dir="ltr">
+                          <Input
+                            id={`p-${field.key}`}
+                            type="number"
+                            min={0}
+                            step="0.5"
+                            dir="ltr"
+                            className="pe-12"
+                            value={product[field.key] ?? ""}
+                            onChange={(e) =>
+                              patch({
+                                [field.key]:
+                                  e.target.value === "" ? null : Number(e.target.value),
+                              })
+                            }
+                          />
+                          <span className="pointer-events-none absolute inset-y-0 end-3 flex items-center text-muted-foreground">
+                            ס״מ
+                          </span>
+                        </div>
+                      </div>
                     ))}
-                  </ul>
-                  <Button
-                    type="button"
-                    size="sm"
-                    variant="outline"
-                    className="mt-2"
-                    onClick={() =>
-                      patch({ sizes: [...(product.sizes ?? []), { label: "", value: "" }] })
-                    }
-                  >
-                    הוספת מידה
-                  </Button>
-                  <p className="mt-2 text-xs text-muted-foreground">
-                    שם המידה קודם, ואחריו המידה עצמה. למשל: אורך · 240 ס״מ
-                  </p>
+                  </div>
                 </div>
 
                 <div className="grid gap-4 sm:grid-cols-2">
@@ -616,24 +624,6 @@ const AdminProductEdit = () => {
                       onChange={(e) => patch({ price: parsePriceInput(e.target.value) })}
                       placeholder="12400"
                     />
-                    <p className="mt-1 text-sm text-muted-foreground">
-                      {formatPrice(product.price ?? null) ? (
-                        <>
-                          יופיע באתר: <Ltr>{formatPrice(product.price ?? null)}</Ltr>
-                        </>
-                      ) : (
-                        "ריק = לא יופיע מחיר."
-                      )}
-                    </p>
-                  </div>
-                  <div>
-                    <Label htmlFor="p-price-note">הערה ליד המחיר</Label>
-                    <Input
-                      id="p-price-note"
-                      value={product.price_note ?? ""}
-                      onChange={(e) => patch({ price_note: e.target.value })}
-                      placeholder="החל מ־"
-                    />
                   </div>
                   <div>
                     <Label htmlFor="p-stock">כמה נשארו במלאי</Label>
@@ -646,12 +636,7 @@ const AdminProductEdit = () => {
                       onChange={(e) =>
                         patch({ stock: e.target.value === "" ? null : Number(e.target.value) })
                       }
-                      placeholder="ריק = לא סופרים"
                     />
-                    <p className="mt-1.5 text-xs text-muted-foreground">
-                      מ־5 ומטה מופיעה שורה כתומה מתחת לתמונה בדף הבית. השאירו ריק
-                      ולא יופיע כלום.
-                    </p>
                   </div>
                 </div>
               </div>

@@ -118,7 +118,6 @@ const AdminBlog = () => {
       <header className="flex items-center justify-between mb-8">
         <div>
           <h1 className="font-display text-3xl text-foreground">מגזין</h1>
-          <p className="text-muted-foreground mt-1">כתבות שמופיעות בעמוד "שווה לדעת".</p>
         </div>
         <Button onClick={() => setEditing({ ...empty })}>
           <Plus className="w-4 h-4 ml-2" />
@@ -149,9 +148,9 @@ const AdminBlog = () => {
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-1">
                     <h3 className="font-medium truncate">{p.title}</h3>
-                    {!p.published && <span className="text-xs bg-muted px-2 py-0.5 rounded">טיוטה</span>}
+                    {!p.published && <span className="text-base bg-muted px-2 py-0.5 rounded">טיוטה</span>}
                   </div>
-                  <p className="text-xs text-muted-foreground truncate">/{p.slug} • {p.tag || "—"}</p>
+                  <p className="text-base text-muted-foreground truncate">/{p.slug} • {p.tag || "—"}</p>
                 </div>
                 <Button
                   variant="ghost"
@@ -206,9 +205,6 @@ const AdminBlog = () => {
                     setEditing({ ...editing, read_minutes: Number(e.target.value) || 1 })
                   }
                 />
-                <p className="mt-1 text-xs text-muted-foreground">
-                  מופיע ליד הכותרת. בערך ‎200 מילים לדקה.
-                </p>
               </div>
               <div>
                 <Label>תוכן (Markdown / HTML)</Label>
@@ -220,7 +216,7 @@ const AdminBlog = () => {
                   {editing.cover_image_url && (
                     <img src={editing.cover_image_url} alt="" className="w-24 h-24 object-cover rounded" />
                   )}
-                  <label className="inline-flex items-center gap-2 px-3 py-2 border border-border rounded cursor-pointer hover:bg-muted text-sm">
+                  <label className="inline-flex items-center gap-2 px-3 py-2 border border-border rounded cursor-pointer hover:bg-muted text-base">
                     <Upload className="w-4 h-4" />
                     העלאה
                     <input type="file" accept={ACCEPT_ATTRIBUTE} className="hidden" onChange={(e) => e.target.files?.[0] && uploadCover(e.target.files[0])} />

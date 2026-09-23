@@ -2,7 +2,7 @@
 // Update values HERE, not inline in components, this prevents the kind of
 // drift where the showroom address or phone number disagreed across pages.
 
-const WHATSAPP_NUMBER = "972504519062"; // international, digits only (for wa.me links)
+const WHATSAPP_NUMBER = "972544448797"; // international, digits only (for wa.me links)
 
 export const SITE = {
   name: "Aluma",
@@ -15,8 +15,8 @@ export const SITE = {
   email: "outdooraluma@gmail.com",
 
   phone: {
-    display: "050-451-9062", // human-readable, RTL-safe
-    tel: "+972504519062", // for tel: links
+    display: "054-444-8797", // human-readable, RTL-safe
+    tel: "+972544448797", // for tel: links
   },
 
   whatsapp: {

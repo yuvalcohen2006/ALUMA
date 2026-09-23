@@ -242,10 +242,6 @@ const ImageCropDialog = ({
           <DialogTitle>מיקום התמונה</DialogTitle>
         </DialogHeader>
 
-        <p className="-mt-1 text-sm text-muted-foreground">
-          גררו את התמונה כדי לבחור מה ייכנס למסגרת. מתחת רואים איך היא תיראה בכל
-          מקום באתר שבו היא מופיעה.
-        </p>
 
         <div className="grid gap-5 lg:grid-cols-[1fr_200px]">
           {/* ── The stage ─────────────────────────────────────────────── */}
@@ -326,7 +322,7 @@ const ImageCropDialog = ({
 
           {/* ── What the site will actually show ──────────────────────── */}
           <div className="space-y-3">
-            <p className="text-sm font-medium text-foreground">איך זה ייראה באתר</p>
+            <p className="text-base font-medium text-foreground">איך זה ייראה באתר</p>
             {s.shownAt.map((place) => (
               <div key={place.label}>
                 <div
@@ -352,7 +348,7 @@ const ImageCropDialog = ({
                     />
                   )}
                 </div>
-                <p className="mt-1 text-sm text-muted-foreground">{place.label}</p>
+                <p className="mt-1 text-base text-muted-foreground">{place.label}</p>
               </div>
             ))}
           </div>
@@ -393,7 +389,7 @@ const ImageCropDialog = ({
           </div>
 
           <div className="grid gap-3 sm:grid-cols-2">
-            <label className="flex items-center gap-3 text-sm text-muted-foreground">
+            <label className="flex items-center gap-3 text-base text-muted-foreground">
               <span className="w-12 shrink-0">אופקי</span>
               <input
                 type="range"
@@ -413,7 +409,7 @@ const ImageCropDialog = ({
                 className="h-2 flex-1 cursor-pointer accent-foreground disabled:opacity-40"
               />
             </label>
-            <label className="flex items-center gap-3 text-sm text-muted-foreground">
+            <label className="flex items-center gap-3 text-base text-muted-foreground">
               <span className="w-12 shrink-0">אנכי</span>
               <input
                 type="range"
@@ -436,7 +432,7 @@ const ImageCropDialog = ({
           </div>
         </div>
 
-        <p className="text-sm text-muted-foreground" role="status">
+        <p className="text-base text-muted-foreground" role="status">
           {soft ? (
             <span className="text-foreground">
               {softAtMinimum

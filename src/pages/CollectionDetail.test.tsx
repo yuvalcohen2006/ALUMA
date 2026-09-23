@@ -71,10 +71,9 @@ const product = (over: Record<string, unknown> = {}) => ({
   highlights: [],
   materials: [],
   material_ids: ["m2", "m1"],
-  sizes: [
-    { label: "אורך", value: "240 ס״מ" },
-    { label: "עומק", value: "92 ס״מ" },
-  ],
+  length_cm: 240,
+  width_cm: 92,
+  height_cm: null,
   dimensions: null,
   cover_url: "dex.jpg",
   gallery: [],
@@ -106,16 +105,18 @@ describe("the product page", () => {
     expect(container.querySelectorAll("h1").length).toBe(1);
   });
 
-  it("lists the sizes one to a row, label and value", async () => {
+  it("lists each measurement given, with its unit, and leaves out the blanks", async () => {
     mount();
     const box = (await screen.findByText("מידות")).closest("div")!.parentElement!;
-    const rows = box.querySelectorAll("dt");
-    expect([...rows].map((r) => r.textContent)).toEqual(["אורך", "עומק"]);
-    expect([...box.querySelectorAll("dd")].map((r) => r.textContent)).toEqual(["240 ס״מ", "92 ס״מ"]);
+    expect([...box.querySelectorAll("dt")].map((r) => r.textContent)).toEqual(["אורך", "רוחב"]);
+    expect([...box.querySelectorAll("dd")].map((r) => r.textContent)).toEqual([
+      "240 ס״מ",
+      "92 ס״מ",
+    ]);
   });
 
   it("falls back to the old single dimensions line when that is all there is", async () => {
-    db.product = product({ sizes: [], dimensions: "אורך 240 ס״מ" });
+    db.product = product({ length_cm: null, width_cm: null, dimensions: "אורך 240 ס״מ" });
     mount();
     const box = (await screen.findByText("מידות")).closest("div")!.parentElement!;
     expect(box.querySelectorAll("dd")[0].textContent).toBe("אורך 240 ס״מ");
@@ -140,7 +141,7 @@ describe("the product page", () => {
   });
 
   it("shows no box at all for a piece with no sizes and no materials", async () => {
-    db.product = product({ sizes: [], material_ids: [], dimensions: null });
+    db.product = product({ length_cm: null, width_cm: null, material_ids: [], dimensions: null });
     mount();
     await screen.findByRole("heading", { level: 1 });
     expect(screen.queryByText("מידות")).toBeNull();

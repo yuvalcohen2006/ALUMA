@@ -140,9 +140,6 @@ const AdminTeam = () => {
     <AdminLayout>
       <header className="mb-8">
         <h1 className="font-display text-3xl text-primary">חברי צוות</h1>
-        <p className="text-muted-foreground mt-1">
-          הוסיפו אנשים לצוות הניהול. הם יקבלו מייל הזמנה, יאשרו אותו, ויקבלו גישה מלאה לניהול האתר.
-        </p>
       </header>
 
       <Card>
@@ -180,7 +177,7 @@ const AdminTeam = () => {
                   className="flex items-center justify-between bg-muted/40 border border-border rounded-md px-4 py-3"
                 >
                   <div className="flex items-center gap-3 flex-1">
-                    <div className="w-9 h-9 rounded-sm bg-primary/10 text-primary flex items-center justify-center text-sm font-medium">
+                    <div className="w-9 h-9 rounded-sm bg-primary/10 text-primary flex items-center justify-center text-base font-medium">
                       {(a.full_name || "?").slice(0, 1)}
                     </div>
                     {editingId === a.user_id ? (
@@ -204,7 +201,7 @@ const AdminTeam = () => {
                         </Button>
                       </div>
                     ) : (
-                      <div className="text-sm font-medium flex items-center">
+                      <div className="text-base font-medium flex items-center">
                         {a.full_name || "ללא שם"}
                         {a.user_id === me && (
                           <Badge variant="secondary" className="mr-2">אתה</Badge>
@@ -232,7 +229,7 @@ const AdminTeam = () => {
                 </div>
               ))}
               {admins.length === 0 && (
-                <p className="text-sm text-muted-foreground">אין מנהלים רשומים</p>
+                <p className="text-base text-muted-foreground">אין מנהלים רשומים</p>
               )}
             </div>
           </div>
@@ -253,8 +250,8 @@ const AdminTeam = () => {
                         <Clock className="w-4 h-4 text-muted-foreground" />
                       )}
                       <div>
-                        <div className="text-sm font-medium" dir="ltr">{inv.email}</div>
-                        <div className="text-xs text-muted-foreground">
+                        <div className="text-base font-medium" dir="ltr">{inv.email}</div>
+                        <div className="text-base text-muted-foreground">
                           {inv.status === "accepted" ? "התקבל" : "ממתין לאישור"} ·{" "}
                           {new Date(inv.created_at).toLocaleDateString("he-IL")}
                         </div>

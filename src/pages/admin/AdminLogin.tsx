@@ -108,7 +108,7 @@ const AdminLogin = () => {
         <div className="flex flex-col items-center text-center">
           <img src={alumaLogo} alt="Aluma" className="h-9 w-auto opacity-90" />
           <h1 className="mt-6 font-display text-2xl text-foreground">ניהול האתר</h1>
-          <p className="mt-2 text-sm text-muted-foreground">
+          <p className="mt-2 text-base text-muted-foreground">
             הכניסה מיועדת לצוות אלומה בלבד.
           </p>
         </div>
@@ -117,7 +117,7 @@ const AdminLogin = () => {
           onSubmit={onSubmit}
           className="mt-8 rounded-sm border border-border bg-background p-6 sm:p-7"
         >
-          <label htmlFor="admin-email" className="block text-sm font-medium text-foreground">
+          <label htmlFor="admin-email" className="block text-base font-medium text-foreground">
             אימייל
           </label>
           <input
@@ -132,7 +132,7 @@ const AdminLogin = () => {
 
           <label
             htmlFor="admin-password"
-            className="mt-5 block text-sm font-medium text-foreground"
+            className="mt-5 block text-base font-medium text-foreground"
           >
             סיסמה
           </label>
@@ -165,7 +165,7 @@ const AdminLogin = () => {
               failed instead of the focus silently landing back on the form. */}
           <div role="alert" aria-live="polite">
             {error && (
-              <p className="mt-4 rounded-sm bg-destructive/10 px-3 py-2.5 text-sm leading-relaxed text-destructive">
+              <p className="mt-4 rounded-sm bg-destructive/10 px-3 py-2.5 text-base leading-relaxed text-destructive">
                 {error}
               </p>
             )}
@@ -180,7 +180,7 @@ const AdminLogin = () => {
             כניסה
           </button>
 
-          <div className="my-6 flex items-center gap-3 text-xs text-muted-foreground">
+          <div className="my-6 flex items-center gap-3 text-base text-muted-foreground">
             <span className="h-px flex-1 bg-border" />
             או
             <span className="h-px flex-1 bg-border" />
@@ -201,7 +201,7 @@ const AdminLogin = () => {
 
         {/* Names the screen exactly as the menu names it. It used to say
             "הגדרות אתר", which is not a label that exists any more. */}
-        <p className="mt-5 text-center text-sm leading-relaxed text-muted-foreground">
+        <p className="mt-5 text-center text-base leading-relaxed text-muted-foreground">
           אין לכם סיסמה עדיין? היכנסו עם Google, ואז קבעו סיסמה בתפריט תחת
           <span className="mx-1 text-foreground">הגדרות ← פרטי קשר וסיסמה</span>.
         </p>

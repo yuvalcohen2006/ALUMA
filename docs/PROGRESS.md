@@ -1,5 +1,52 @@
 # Where the site stands
 
+## Phone number, two bugs, and the admin panel — 23 September
+
+```
+████████████████████  done
+```
+
+**One thing to do, and it is the same one as last time:** run
+`supabase/migrations/20260917120000_materials_and_sizes.sql`. Step 1 of
+[ACTION.md](ACTION.md), about thirty seconds.
+
+### The two bugs, and why
+
+| | |
+|---|---|
+| 🔎 | **Both had one cause: that script was never run.** The materials table and the two product columns do not exist in the live database, so "חומר חדש" could not create anything, and saving a product with sizes failed — PostgREST refuses the whole save for one unknown column, so the rest of the edit went with it |
+| ✅ | The admin now says so on screen, with the five clicks that fix it, instead of a red toast that vanishes |
+| ✅ | A product save no longer loses everything else: the name, photos and text save, and the screen says the sizes and materials did not |
+| ✅ | The four materials the site already has are in the script, so they arrive as real materials you can edit and tick on products |
+
+### The phone number
+
+| | |
+|---|---|
+| ✅ | **054-444-8797** everywhere: the footer, the contact page, WhatsApp, the click-to-call links, the Google listing in the page head, and the file search engines read |
+
+### Sizes
+
+| | |
+|---|---|
+| ✅ | Three boxes — אורך, רוחב, גובה — each a number in centimetres. The ס״מ is written by the site, not typed |
+| ✅ | A box left empty is simply not shown on the product page |
+| ⛔ | The "הערה ליד המחיר" box is gone |
+
+### The admin panel
+
+| | |
+|---|---|
+| ✅ | Nothing under 16px anywhere in the panel. A test keeps it that way |
+| ✅ | A trail at the top of every screen: ניהול ‹ קולקציות ומוצרים ‹ dex, each step clickable |
+| ✅ | On a phone the twenty links were one sideways-scrolling row at 12px. They are a proper menu now, the same grouped sidebar in a drawer |
+| ✅ | Content sits in a centred column instead of hugging the left of a wide screen |
+| ⛔ | Every paragraph that explained the panel to itself is gone — 24 of them, including all three you named |
+
+486 tests pass.
+
+---
+
 ## Language button, materials and sizes — 17 September
 
 ```
@@ -45,17 +92,6 @@ field, so the English site shows the Hebrew line under an English name. The
 same is already true of product descriptions. Say the word and I will add it.
 
 478 tests pass, and the site behaves the same before and after the script.
-
----|---|
-| 🔎 | Design agreed. Spec in [docs/superpowers/specs](superpowers/specs) |
-| ✅ | Language button: click it, pick 🇮🇱 עברית or 🇺🇸 English, the one you are in is ticked. In the header, the phone menu and the footer |
-| ⬜ | **חומרים** screen in the admin: photo, name, one line, explanation |
-| ⬜ | The four materials moved into the database so they can be edited too |
-| ⬜ | /materials shows them all in one composition, photo left, words right |
-| ⬜ | Products: tick the materials they are made of, type the sizes |
-| ⬜ | Product page: name above the photo, then על המוצר, מידות, חומרים in matching boxes |
-| ⬜ | Clicking a material on a product jumps to it and lights it up |
-| ⬜ | Tests, both languages, phone and desktop, pushed |
 
 ---
 

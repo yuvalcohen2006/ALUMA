@@ -11,6 +11,9 @@ import { Textarea } from "@/components/ui/textarea";
 import PhotoSpec from "@/components/admin/PhotoSpec";
 import { ACCEPT_ATTRIBUTE } from "@/lib/photo-specs";
 import { slugify } from "./catalogue-shared";
+import { PHOTOS } from "@/data/materials";
+import MigrationNotice from "@/components/admin/MigrationNotice";
+import { isMissingSchema } from "@/lib/missing-migration";
 import AdminLayout from "./AdminLayout";
 
 type Material = {
@@ -44,13 +47,16 @@ const AdminMaterials = () => {
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState(false);
   const [uploading, setUploading] = useState<string | null>(null);
+  /** The table is not there yet: the screen says so instead of failing. */
+  const [needsScript, setNeedsScript] = useState(false);
 
   const load = async () => {
     const { data, error } = await supabase
       .from("site_materials")
       .select("*")
       .order("sort_order", { ascending: true });
-    if (error) toast.error("לא הצלחנו לטעון את החומרים");
+    if (isMissingSchema(error)) setNeedsScript(true);
+    else if (error) toast.error("לא הצלחנו לטעון את החומרים");
     setMaterials((data as Material[]) ?? []);
     setLoading(false);
   };
@@ -95,6 +101,7 @@ const AdminMaterials = () => {
       sort_order: (materials.at(-1)?.sort_order ?? 0) + 10,
     });
     setBusy(false);
+    if (isMissingSchema(error)) return setNeedsScript(true);
     if (error) return toast.error("לא הצלחנו להוסיף חומר");
     load();
   };
@@ -130,14 +137,10 @@ const AdminMaterials = () => {
 
   return (
     <AdminLayout>
-      <div className="max-w-3xl">
+      <div>
         <div className="flex items-center justify-between gap-4">
           <div>
             <h1 className="font-display text-3xl text-foreground">חומרים</h1>
-            <p className="mt-2 text-sm text-muted-foreground">
-              כל חומר כאן מופיע בעמוד החומרים, ברצועה בדף הבית, וברשימת החומרים של
-              כל מוצר שמסומן בו. חומר שאינו מסומן "מפורסם" לא מופיע בשום מקום.
-            </p>
           </div>
           <Button onClick={add} disabled={busy} className="shrink-0">
             <Plus className="w-4 h-4 ms-1" /> חומר חדש
@@ -148,8 +151,14 @@ const AdminMaterials = () => {
           <PhotoSpec spec="material" />
         </div>
 
-        {materials.length === 0 && (
-          <p className="rounded-sm border border-dashed border-border p-8 text-center text-sm text-muted-foreground">
+        {needsScript && (
+          <div className="mb-8">
+            <MigrationNotice what="מסך החומרים" />
+          </div>
+        )}
+
+        {!needsScript && materials.length === 0 && (
+          <p className="rounded-sm border border-dashed border-border p-8 text-center text-base text-muted-foreground">
             אין עדיין חומרים. עד שיהיו, האתר מציג את ארבעת החומרים שאיתם הוא נבנה.
           </p>
         )}
@@ -160,13 +169,16 @@ const AdminMaterials = () => {
               <div className="flex flex-wrap gap-5">
                 <div className="w-full sm:w-52">
                   <div className="relative aspect-[4/3] overflow-hidden rounded-sm border border-border bg-secondary">
-                    {m.image_url ? (
-                      <img src={m.image_url} alt="" className="h-full w-full object-cover" />
-                    ) : (
-                      <div className="grid h-full place-items-center px-3 text-center text-xs text-muted-foreground">
-                        בלי תמונה. אם זה אחד מארבעת החומרים המקוריים, האתר מציג את
-                        התמונה שלו מתוך הקוד
-                      </div>
+                    {/* The four the site was built with have no image_url —
+                        the site draws them from the bundle — so the screen
+                        shows the same photograph rather than an empty frame
+                        with a paragraph explaining the empty frame. */}
+                    {(m.image_url || PHOTOS[m.slug]?.image) && (
+                      <img
+                        src={m.image_url || PHOTOS[m.slug]?.image}
+                        alt=""
+                        className="h-full w-full object-cover"
+                      />
                     )}
                     {uploading === m.id && (
                       <div className="absolute inset-0 grid place-items-center bg-background/70">
@@ -174,7 +186,7 @@ const AdminMaterials = () => {
                       </div>
                     )}
                   </div>
-                  <label className="mt-2 flex h-10 cursor-pointer items-center justify-center gap-2 rounded-sm border border-border text-sm text-foreground hover:bg-secondary">
+                  <label className="mt-2 flex h-10 cursor-pointer items-center justify-center gap-2 rounded-sm border border-border text-base text-foreground hover:bg-secondary">
                     <ImagePlus className="h-4 w-4" aria-hidden="true" />
                     {m.image_url ? "החלפה" : "תמונה"}
                     <input
@@ -226,20 +238,22 @@ const AdminMaterials = () => {
                       placeholder={"פסקה ראשונה.\n\nשורה ריקה מתחילה פסקה חדשה."}
                       onChange={(e) => patch(m.id, { body: e.target.value })}
                     />
-                    <p className="mt-1 text-xs text-muted-foreground">
-                      שורה ריקה בין פסקאות מפרידה ביניהן באתר.
-                    </p>
                   </div>
 
                   <div className="flex flex-wrap items-center gap-3 pt-1">
-                    <Input
-                      type="number"
-                      value={m.sort_order}
-                      onChange={(e) => patch(m.id, { sort_order: Number(e.target.value) })}
-                      className="w-24"
-                      aria-label="סדר"
-                    />
-                    <label className="flex items-center gap-2 text-sm text-foreground">
+                    <div className="flex items-center gap-2">
+                      <Label htmlFor={`m-order-${m.id}`} className="font-normal">
+                        סדר
+                      </Label>
+                      <Input
+                        id={`m-order-${m.id}`}
+                        type="number"
+                        value={m.sort_order}
+                        onChange={(e) => patch(m.id, { sort_order: Number(e.target.value) })}
+                        className="w-20"
+                      />
+                    </div>
+                    <label className="flex items-center gap-2 text-base text-foreground">
                       <input
                         type="checkbox"
                         checked={m.published}

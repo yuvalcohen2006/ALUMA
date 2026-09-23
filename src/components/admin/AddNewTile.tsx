@@ -21,7 +21,7 @@ const AddNewTile = ({
 }) => {
   const inner = (
     <>
-      <span className="text-sm font-medium text-foreground/70 transition-colors group-hover:text-foreground">
+      <span className="text-base font-medium text-foreground/70 transition-colors group-hover:text-foreground">
         {label}
       </span>
       <span

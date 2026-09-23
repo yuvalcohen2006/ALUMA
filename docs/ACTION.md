@@ -1,14 +1,14 @@
 # What Aluma needs from you
 
-Updated 17 September 2026. No explanations — what's missing, then exactly what to click.
+Updated 23 September 2026. No explanations — what's missing, then exactly what to click.
 
 ---
 
 ## 1. Run the materials script
 
-**The חומרים screen and the sizes on a product do not work until this is run.**
-Until then the site shows the four materials it was built with, and the product
-form has nothing to tick.
+**This is why "חומר חדש" says it cannot be created, and why a product's sizes
+do not save.** The table and the columns they need are not in the database
+yet. Nothing else is wrong.
 
 1. Go to **supabase.com/dashboard/project/jzqayfllojeqivwbbuyf/sql/new**
 2. Open `supabase/migrations/20260917120000_materials_and_sizes.sql` from the
@@ -58,8 +58,8 @@ home page, and in the list a product can be ticked against.
 
 1. **קולקציות ומוצרים** → a collection → a product
 2. **חומרים**: tick every material the piece is made of
-3. **מידות**: **הוספת מידה**, then type the name of the measurement and the
-   measurement itself — `אורך` and `240 ס״מ`. One row per measurement
+3. **מידות**: three boxes — **אורך**, **רוחב**, **גובה**. Numbers only; the
+   site writes the ס״מ. Leave a box empty and it is not shown
 4. **שמירה**
 
 On the product page they become two boxes under **על המוצר**. Each material is
@@ -191,6 +191,15 @@ Up to 8MB. **JPG or PNG only** — an iPhone HEIC is refused, convert it first.
 The product photos uploaded before the crop window existed were squared around
 the furniture automatically. To frame one differently yourself: product →
 **החלפה** under the main photo → choose the file → the crop window opens.
+
+---
+
+## The phone number on the site
+
+**054-444-8797**, everywhere — footer, contact page, WhatsApp, click-to-call.
+
+To change it yourself: **admin** → **פרטי קשר וסיסמה** → **טלפון** → **שמירה**.
+Leave it blank and the site falls back to the number above.
 
 ---
 

@@ -2,12 +2,13 @@ import { describe, expect, it, vi } from "vitest";
 import { render, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 
-const rows = vi.hoisted(() => ({ list: [] as unknown[] }));
+const rows = vi.hoisted(() => ({ list: [] as unknown[], error: null as unknown }));
 
 vi.mock("@/integrations/supabase/client", () => ({
   supabase: {
     from: () => ({
-      select: () => ({ order: async () => ({ data: rows.list, error: null }) }),
+      select: () => ({ order: async () => ({ data: rows.list, error: rows.error }) }),
+      insert: async () => ({ error: rows.error }),
     }),
   },
 }));
@@ -39,6 +40,7 @@ const renderScreen = () =>
 describe("the materials screen", () => {
   it("renders inside the guard without the crop context throwing", async () => {
     rows.list = [];
+    rows.error = null;
     renderScreen();
     await waitFor(() => expect(screen.getByRole("heading", { name: "חומרים" })).toBeTruthy());
     expect(screen.getByRole("button", { name: /חומר חדש/ })).toBeTruthy();
@@ -46,11 +48,13 @@ describe("the materials screen", () => {
 
   it("says what the site is showing while there are no materials yet", async () => {
     rows.list = [];
+    rows.error = null;
     renderScreen();
     await waitFor(() => expect(screen.getByText(/אין עדיין חומרים/)).toBeTruthy());
   });
 
   it("gives every material its fields, and shows an unpublished one too", async () => {
+    rows.error = null;
     rows.list = [
       {
         id: "1",
@@ -69,5 +73,20 @@ describe("the materials screen", () => {
     expect((screen.getByLabelText("שם") as HTMLInputElement).value).toBe("עץ טיק");
     expect((screen.getByLabelText("הסבר") as HTMLTextAreaElement).value).toBe("אחת.");
     expect((screen.getByLabelText("מפורסם") as HTMLInputElement).checked).toBe(false);
+  });
+
+  /**
+   * The bug the owner hit: "new material" answered "could not be created" and
+   * nothing said why. The table was not there — one script away — and a toast
+   * that vanishes is no way to learn that.
+   */
+  it("says which script is missing instead of failing quietly", async () => {
+    rows.list = [];
+    rows.error = { code: "PGRST205", message: "Could not find the table 'public.site_materials' in the schema cache" };
+    renderScreen();
+    await waitFor(() => expect(screen.getByText(/עדיין לא מופעל במסד הנתונים/)).toBeTruthy());
+    expect(screen.getByText(/20260917120000_materials_and_sizes\.sql/)).toBeTruthy();
+    // And it does not also claim the list is simply empty.
+    expect(screen.queryByText(/אין עדיין חומרים/)).toBeNull();
   });
 });

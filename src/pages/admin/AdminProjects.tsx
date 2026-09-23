@@ -163,7 +163,6 @@ const AdminProjects = () => {
       <header className="flex items-center justify-between mb-8">
         <div>
           <h1 className="font-display text-3xl text-foreground">פרויקטים</h1>
-          <p className="text-muted-foreground mt-1">עבודות שכבר עשיתם. שלוש מהן מופיעות גם בדף הבית.</p>
         </div>
         <Button onClick={() => setEditing({ ...empty })}>
           <Plus className="w-4 h-4 ml-2" />
@@ -179,7 +178,7 @@ const AdminProjects = () => {
         <Card>
           <CardContent className="py-16 text-center text-muted-foreground">
             <p>עדיין אין פרויקטים משלכם.</p>
-            <p className="mx-auto mt-3 max-w-md text-sm">
+            <p className="mx-auto mt-3 max-w-md text-base">
               באתר מוצגים כרגע שישה פרויקטים לדוגמה, עם תמונות מיוצרות. ברגע
               שתפרסמו פרויקט אמיתי אחד — כל השישה ייעלמו והאתר יציג רק אותו.
               כדאי להוסיף שניים־שלושה באותה ישיבה.
@@ -201,10 +200,10 @@ const AdminProjects = () => {
                   <div className="flex items-center gap-2 mb-1">
                     <h3 className="font-medium truncate">{p.title}</h3>
                     {!p.published && (
-                      <span className="text-xs bg-muted px-2 py-0.5 rounded">טיוטה</span>
+                      <span className="text-base bg-muted px-2 py-0.5 rounded">טיוטה</span>
                     )}
                   </div>
-                  <p className="text-xs text-muted-foreground truncate">
+                  <p className="text-base text-muted-foreground truncate">
                     /{p.slug} • {p.location || "—"} • {p.views} צפיות
                   </p>
                 </div>
@@ -256,7 +255,7 @@ const AdminProjects = () => {
                   onChange={(e) => setEditing({ ...editing, title: e.target.value })}
                 />
                 {editing.id && (
-                  <p className="text-xs text-muted-foreground mt-1" dir="ltr">
+                  <p className="text-base text-muted-foreground mt-1" dir="ltr">
                     slug: {editing.slug}
                   </p>
                 )}
@@ -292,7 +291,7 @@ const AdminProjects = () => {
                   {editing.cover_url && (
                     <img src={editing.cover_url} alt="cover" className="w-24 h-24 object-cover rounded" />
                   )}
-                  <label className="inline-flex items-center gap-2 px-3 py-2 border border-border rounded cursor-pointer hover:bg-muted text-sm">
+                  <label className="inline-flex items-center gap-2 px-3 py-2 border border-border rounded cursor-pointer hover:bg-muted text-base">
                     <Upload className="w-4 h-4" />
                     {editing.cover_url ? "החלפה" : "העלאה"}
                     <input

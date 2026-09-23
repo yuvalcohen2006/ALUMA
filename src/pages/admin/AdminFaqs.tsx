@@ -111,14 +111,10 @@ const AdminFaqs = () => {
 
   return (
     <AdminLayout>
-      <div className="max-w-3xl">
+      <div>
       <div className="flex items-center justify-between gap-4">
         <div>
           <h1 className="font-display text-3xl text-foreground">שאלות ותשובות</h1>
-          <p className="mt-2 text-sm text-muted-foreground">
-            אלה השאלות שמופיעות בעמוד "שאלות ותשובות". שאלה שאינה מסומנת
-            "מפורסם" לא תופיע באתר.
-          </p>
         </div>
         <Button onClick={add} disabled={busy} className="shrink-0">
           <Plus className="w-4 h-4 ms-1" /> שאלה חדשה
@@ -157,7 +153,7 @@ const AdminFaqs = () => {
                 className="w-24"
                 aria-label="סדר"
               />
-              <label className="flex items-center gap-2 text-sm text-foreground">
+              <label className="flex items-center gap-2 text-base text-foreground">
                 <input
                   type="checkbox"
                   checked={f.published}

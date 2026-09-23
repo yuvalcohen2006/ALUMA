@@ -81,19 +81,12 @@ const ProductFinishes = ({
         </Button>
       </div>
 
-      <p className="mt-1 text-sm text-muted-foreground">
-        כל צבע הוא עיגול בעמוד המוצר. לוחצים עליו — התמונה מתחלפת לצבע הזה.
-      </p>
 
       <div className="mt-3">
         <PhotoSpec spec="finish" />
       </div>
 
-      {value.length === 0 ? (
-        <p className="rounded-sm border border-dashed border-border px-4 py-6 text-center text-sm text-muted-foreground">
-          אין צבעים למוצר הזה. אפשר להשאיר ככה — אז פשוט לא יופיעו עיגולי צבע.
-        </p>
-      ) : (
+      {value.length > 0 && (
         <ul className="space-y-3">
           {value.map((v, i) => (
             <li
@@ -125,7 +118,7 @@ const ProductFinishes = ({
                 />
               )}
 
-              <label className="inline-flex h-10 shrink-0 cursor-pointer items-center gap-2 rounded-sm border border-border px-3 text-sm hover:bg-secondary">
+              <label className="inline-flex h-10 shrink-0 cursor-pointer items-center gap-2 rounded-sm border border-border px-3 text-base hover:bg-secondary">
                 <Upload className="h-4 w-4" />
                 {uploading === i ? "מעלה…" : v.image_url ? "החלפת תמונה" : "תמונה בצבע הזה"}
                 <input

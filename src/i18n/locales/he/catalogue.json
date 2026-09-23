@@ -46,5 +46,11 @@
   "imageAlt": "{{name}}, תמונה {{index}}",
   "imageLabel": "תמונה {{index}}",
   "ctaEyebrow": "מגשימים חלום",
-  "pageTitle": "קולקציות"
+  "pageTitle": "קולקציות",
+  "sizes": {
+    "length": "אורך",
+    "width": "רוחב",
+    "height": "גובה",
+    "cm": "ס״מ"
+  }
 }

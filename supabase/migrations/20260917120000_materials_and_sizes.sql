@@ -116,10 +116,20 @@ on conflict (slug) do nothing;
 -- were ticked. The old free-text `materials` column stays where it is, unread
 -- and empty on every row, rather than being dropped from under a running site.
 --
--- sizes: [{"label": "אורך", "value": "240 ס״מ"}]. The single `dimensions`
--- line is still shown when a product has one and no sizes.
+-- The sizes are three plain numbers in centimetres rather than a list of
+-- label-and-value rows. The owner asked for boxes to fill in, not a table to
+-- build: a row that needs a name typed into it is a row that comes out as
+-- "אורך" on one product and "אורך כולל" on the next. A blank is simply not
+-- shown. The single free-text `dimensions` line from before still shows for
+-- any product that has one and no numbers.
 alter table public.site_collection_products
   add column if not exists material_ids jsonb not null default '[]'::jsonb;
 
 alter table public.site_collection_products
-  add column if not exists sizes jsonb not null default '[]'::jsonb;
+  add column if not exists length_cm numeric;
+
+alter table public.site_collection_products
+  add column if not exists width_cm numeric;
+
+alter table public.site_collection_products
+  add column if not exists height_cm numeric;

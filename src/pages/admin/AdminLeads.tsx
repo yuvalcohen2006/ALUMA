@@ -55,10 +55,9 @@ const AdminLeads = () => {
   }, []);
 
   return (
-    <AdminLayout>
+    <AdminLayout width="wide">
       <header className="mb-8">
         <h1 className="font-display text-3xl text-foreground">פניות מהאתר</h1>
-        <p className="text-muted-foreground mt-1">פניות מטופס יצירת קשר ומשאלון התאמה</p>
       </header>
 
       <Tabs defaultValue="contact" dir="rtl">
@@ -75,7 +74,7 @@ const AdminLeads = () => {
                 </Button>
               </div>
               <div className="overflow-auto">
-                <table className="w-full text-sm">
+                <table className="w-full text-base">
                   <thead className="bg-muted">
                     <tr>
                       <th className="text-right p-3">תאריך</th>
@@ -119,7 +118,7 @@ const AdminLeads = () => {
                 </Button>
               </div>
               <div className="overflow-auto">
-                <table className="w-full text-sm">
+                <table className="w-full text-base">
                   <thead className="bg-muted">
                     <tr>
                       <th className="text-right p-3">תאריך</th>

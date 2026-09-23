@@ -246,19 +246,19 @@ const AdminDashboard = () => {
   const maxSource = Math.max(1, ...topSources.map((s) => s.count));
 
   return (
-    <AdminLayout>
+    <AdminLayout width="wide">
       {/* Live banner */}
       <section className="rounded-2xl border border-primary/20 bg-gradient-to-l from-primary/5 via-primary/10 to-primary/5 px-8 py-6 mb-8">
         <div className="flex items-center justify-between gap-6 flex-wrap">
           <div className="text-right">
-            <div className="flex items-center justify-end gap-2 text-foreground text-sm mb-1">
+            <div className="flex items-center justify-end gap-2 text-foreground text-base mb-1">
               באתר עכשיו
             </div>
             <div className="font-display text-5xl text-foreground tabular-nums">{stats.live.toLocaleString("en-US")}</div>
-            <p className="text-xs text-muted-foreground mt-1">מבקר פעיל ב-3 הדקות האחרונות</p>
+            <p className="text-base text-muted-foreground mt-1">מבקר פעיל ב-3 הדקות האחרונות</p>
           </div>
           <div className="text-center flex-1 min-w-[180px]">
-            <p className="text-sm text-muted-foreground mb-1">עמודים פעילים כעת</p>
+            <p className="text-base text-muted-foreground mb-1">עמודים פעילים כעת</p>
             <p className="text-lg text-foreground">{livePath ? pathLabel(livePath) : "—"}</p>
           </div>
           <div className="flex items-center justify-center w-14 h-14 rounded-sm bg-primary/15 text-primary">
@@ -271,7 +271,7 @@ const AdminDashboard = () => {
       <div className="rounded-2xl border border-border bg-card px-4 py-3 mb-8 flex items-center justify-between gap-4 flex-wrap">
         <button
           onClick={() => setRefreshKey((k) => k + 1)}
-          className="inline-flex items-center gap-2 text-sm border border-border rounded-sm px-4 py-2 hover:bg-muted"
+          className="inline-flex items-center gap-2 text-base border border-border rounded-sm px-4 py-2 hover:bg-muted"
         >
           <RefreshCw className="w-3.5 h-3.5" />
           רענן
@@ -283,7 +283,7 @@ const AdminDashboard = () => {
               <button
                 key={r.key}
                 onClick={() => setRange(r.key)}
-                className={`text-sm px-4 py-1.5 rounded-sm transition-colors ${
+                className={`text-base px-4 py-1.5 rounded-sm transition-colors ${
                   active
                     ? "bg-foreground text-background"
                     : "text-muted-foreground hover:text-foreground hover:bg-muted"
@@ -319,7 +319,7 @@ const AdminDashboard = () => {
       {/* Trend chart */}
       <section className="rounded-2xl border border-border bg-card p-6 mb-8">
         <div className="flex items-start justify-between mb-6">
-          <div className="flex items-center gap-4 text-xs text-muted-foreground">
+          <div className="flex items-center gap-4 text-base text-muted-foreground">
             <span className="flex items-center gap-1.5">
               <span className="w-2 h-2 rounded-sm bg-primary" />
               צפיות
@@ -331,7 +331,7 @@ const AdminDashboard = () => {
           </div>
           <div className="text-right">
             <h2 className="font-display text-2xl text-foreground">מגמת תנועה</h2>
-            <p className="text-sm text-muted-foreground">צפיות לפי יום</p>
+            <p className="text-base text-muted-foreground">צפיות לפי יום</p>
           </div>
         </div>
         <div className="h-64">
@@ -367,18 +367,18 @@ const AdminDashboard = () => {
         <section className="rounded-2xl border border-border bg-card p-6">
           <div className="mb-5 text-right">
             <h2 className="font-display text-2xl text-foreground">העמודים הנצפים ביותר</h2>
-            <p className="text-xs text-muted-foreground mt-1">{dateLabel}</p>
+            <p className="text-base text-muted-foreground mt-1">{dateLabel}</p>
           </div>
           {topPaths.length === 0 ? (
-            <p className="text-muted-foreground text-sm">אין נתונים עדיין.</p>
+            <p className="text-muted-foreground text-base">אין נתונים עדיין.</p>
           ) : (
             <ul className="space-y-3">
               {topPaths.map((p) => {
                 const w = (p.views / maxPath) * 100;
                 return (
                   <li key={p.path}>
-                    <div className="flex items-baseline justify-between text-sm mb-1.5">
-                      <span className="text-muted-foreground text-xs">
+                    <div className="flex items-baseline justify-between text-base mb-1.5">
+                      <span className="text-muted-foreground text-base">
                         <span className="text-foreground font-medium">{p.views}</span> · {p.visitors} מבקרים
                       </span>
                       <span className="text-foreground truncate max-w-[60%]">{pathLabel(p.path)}</span>
@@ -396,17 +396,17 @@ const AdminDashboard = () => {
         <section className="rounded-2xl border border-border bg-card p-6">
           <div className="mb-5 text-right">
             <h2 className="font-display text-2xl text-foreground">מקורות תנועה</h2>
-            <p className="text-xs text-muted-foreground mt-1">מאיפה הגיעו המבקרים</p>
+            <p className="text-base text-muted-foreground mt-1">מאיפה הגיעו המבקרים</p>
           </div>
           {topSources.length === 0 ? (
-            <p className="text-muted-foreground text-sm">אין נתונים עדיין.</p>
+            <p className="text-muted-foreground text-base">אין נתונים עדיין.</p>
           ) : (
             <ul className="space-y-3">
               {topSources.map((s) => {
                 const w = (s.count / maxSource) * 100;
                 return (
                   <li key={s.source}>
-                    <div className="flex items-baseline justify-between text-sm mb-1.5">
+                    <div className="flex items-baseline justify-between text-base mb-1.5">
                       <span className="text-foreground font-medium">{s.count}</span>
                       <span className="text-foreground truncate max-w-[70%]">{s.source}</span>
                     </div>
@@ -425,10 +425,10 @@ const AdminDashboard = () => {
       <section className="rounded-2xl border border-border bg-card p-6">
         <div className="mb-6 text-right">
           <h2 className="font-display text-2xl text-foreground">הפרויקטים הנצפים ביותר</h2>
-          <p className="text-xs text-muted-foreground mt-1">{dateLabel}</p>
+          <p className="text-base text-muted-foreground mt-1">{dateLabel}</p>
         </div>
         {topProjects.length === 0 ? (
-          <p className="text-muted-foreground text-sm">אין נתונים עדיין.</p>
+          <p className="text-muted-foreground text-base">אין נתונים עדיין.</p>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {topProjects.map((p) => (
@@ -446,11 +446,11 @@ const AdminDashboard = () => {
                       loading="lazy"
                     />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center text-muted-foreground text-sm">
+                    <div className="w-full h-full flex items-center justify-center text-muted-foreground text-base">
                       ללא תמונה
                     </div>
                   )}
-                  <span className="absolute bottom-3 left-3 bg-background/95 text-foreground text-xs font-medium px-3 py-1 rounded-sm">
+                  <span className="absolute bottom-3 left-3 bg-background/95 text-foreground text-base font-medium px-3 py-1 rounded-sm">
                     #{p.rank}
                   </span>
                 </div>
@@ -491,13 +491,13 @@ function StatCard({
     <div className="rounded-2xl border border-border bg-card p-5">
       <div className="flex items-start justify-between mb-6">
         <Icon className="w-4 h-4 text-muted-foreground" />
-        <span className="text-sm text-muted-foreground text-right">{label}</span>
+        <span className="text-base text-muted-foreground text-right">{label}</span>
       </div>
       <div className="text-right">
         <div className="font-display text-4xl text-foreground tracking-tight">{display}</div>
         {typeof delta === "number" && !loading && (
           <div
-            className={`inline-flex items-center gap-1 mt-2 text-xs px-2 py-0.5 rounded-sm ${
+            className={`inline-flex items-center gap-1 mt-2 text-base px-2 py-0.5 rounded-sm ${
               delta >= 0 ? "bg-primary/10 text-foreground" : "bg-red-100 text-red-700"
             }`}
           >

@@ -103,28 +103,24 @@ const AdminReviews = () => {
 
   return (
     <AdminLayout>
-      <div className="max-w-3xl">
+      <div>
       <div className="flex items-center justify-between gap-4">
         <div>
           <h1 className="font-display text-3xl text-foreground">המלצות לקוחות</h1>
-          <p className="mt-2 text-sm text-muted-foreground">
-            ההמלצות מופיעות בתחתית דף הבית. כל עוד אין כאן המלצות מפורסמות,
-            הקטע פשוט לא מופיע באתר — אין צורך למלא כלום בינתיים.
-          </p>
         </div>
         <Button onClick={add} disabled={busy} className="shrink-0">
           <Plus className="w-4 h-4 ms-1" /> המלצה חדשה
         </Button>
       </div>
 
-      <p className="mt-5 rounded-md border border-destructive/30 bg-destructive/5 p-4 text-sm leading-relaxed text-foreground">
+      <p className="mt-5 rounded-md border border-destructive/30 bg-destructive/5 p-4 text-base leading-relaxed text-foreground">
         <strong>חשוב:</strong> להוסיף כאן רק ציטוטים אמיתיים של לקוחות אמיתיים,
         שנתנו אישור לפרסם. פרסום המלצות מומצאות בשם של אנשים הוא פרסום מטעה.
       </p>
 
       <div className="mt-8 space-y-8">
         {reviews.length === 0 && (
-          <p className="text-sm text-muted-foreground">אין עדיין המלצות.</p>
+          <p className="text-base text-muted-foreground">אין עדיין המלצות.</p>
         )}
 
         {reviews.map((r) => (
@@ -158,7 +154,7 @@ const AdminReviews = () => {
                 className="w-20"
                 aria-label="סדר"
               />
-              <label className="flex items-center gap-2 text-sm text-foreground">
+              <label className="flex items-center gap-2 text-base text-foreground">
                 <input
                   type="checkbox"
                   checked={r.published}

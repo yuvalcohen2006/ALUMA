@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { ArrowRight, GripVertical, Package, Pencil, Trash2 } from "lucide-react";
+import { GripVertical, Package, Pencil, Trash2 } from "lucide-react";
 import {
   closestCenter,
   DndContext,
@@ -88,7 +88,7 @@ function ProductRow({
           {p.name}
         </Link>
         {(price || !p.published) && (
-          <p className="mt-0.5 truncate text-sm text-muted-foreground">
+          <p className="mt-0.5 truncate text-base text-muted-foreground">
             {price && <Ltr>{price}</Ltr>}
             {price && !p.published && " · "}
             {!p.published && "מוסתר"}
@@ -178,16 +178,8 @@ const AdminCollectionProducts = () => {
   };
 
   return (
-    <AdminLayout>
-      <div className="max-w-3xl">
-        <Link
-          to="/admin/collections"
-          className="mb-6 inline-flex h-10 items-center gap-2 -ms-3 rounded-sm px-3 text-sm text-muted-foreground transition-colors hover:bg-foreground/[0.04] hover:text-foreground"
-        >
-          <ArrowRight className="h-4 w-4" aria-hidden="true" />
-          קולקציות
-        </Link>
-
+    <AdminLayout crumbs={[{ label: name || "קולקציה" }]}>
+      <div>
         <h1 className="font-display text-3xl text-foreground">{name}</h1>
 
         {loading ? (

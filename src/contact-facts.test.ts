@@ -35,7 +35,7 @@ const LITERALS = [
   /wa\.me\/\d{6,}/, // a wa.me link with the number baked in
   /tel:\+?\d[\d\s-]{7,}/, // a tel: link with the number baked in
   /\+972[\s-]?\d/, // an international number in prose or JSON-LD
-  /\b0\d{1,2}-\d{3}-\d{4}\b/, // the local display form, 050-451-9062
+  /\b0\d{1,2}-\d{3}-\d{4}\b/, // the local display form, 054-444-8797
 ];
 
 describe("contact facts", () => {

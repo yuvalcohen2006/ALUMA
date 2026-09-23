@@ -62,12 +62,19 @@ const CollectionDetailPage = () => {
     [item?.material_ids, allMaterials],
   );
 
-  // The old single `dimensions` line still shows, as one unlabelled row, for
-  // any product that has one and no sizes — nothing typed is thrown away.
+  // Three numbers in centimetres, and only the ones filled in. The old
+  // single `dimensions` line still shows, as one unlabelled row, for any
+  // product that has one and no numbers — nothing typed is thrown away.
   const sizeRows = useMemo(() => {
-    if (item?.sizes?.length) return item.sizes;
+    const cm = (n: number) => `${n} ${t("sizes.cm")}`;
+    const rows = [
+      item?.length_cm ? { label: t("sizes.length"), value: cm(item.length_cm) } : null,
+      item?.width_cm ? { label: t("sizes.width"), value: cm(item.width_cm) } : null,
+      item?.height_cm ? { label: t("sizes.height"), value: cm(item.height_cm) } : null,
+    ].filter((row): row is { label: string; value: string } => row !== null);
+    if (rows.length) return rows;
     return item?.dimensions ? [{ label: "", value: item.dimensions }] : [];
-  }, [item?.sizes, item?.dimensions]);
+  }, [item?.length_cm, item?.width_cm, item?.height_cm, item?.dimensions, t]);
 
   /* Bumped on every load, so a stale response knows it is stale. Without it,
      clicking a related piece and going straight back left whichever request
@@ -450,13 +457,8 @@ const CollectionDetailPage = () => {
                   carry no price at all, and an empty price line reads as an
                   error. */}
               {formatPrice(item.price) && (
-                <p className="mt-3 text-body text-foreground">
-                  {item.price_note && (
-                    <span dir="auto" className="text-foreground-soft">
-                      {item.price_note}{" "}
-                    </span>
-                  )}
-                  <span dir="ltr">{formatPrice(item.price)}</span>
+                <p className="mt-3 text-body text-foreground" dir="ltr">
+                  {formatPrice(item.price)}
                 </p>
               )}
             </div>

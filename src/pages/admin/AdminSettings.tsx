@@ -213,10 +213,6 @@ const AdminSettings = () => {
     <AdminLayout>
       <header className="mb-8">
         <h1 className="font-display text-3xl text-primary">הגדרות אתר</h1>
-        <p className="text-muted-foreground mt-1">
-          פרטי יצירת קשר ורשתות חברתיות. מה שתשנו כאן מתעדכן בכל מקום באתר —
-          בתחתית העמוד, בעמוד יצירת הקשר ובכפתור הוואטסאפ.
-        </p>
       </header>
 
       <Card>
@@ -228,7 +224,7 @@ const AdminSettings = () => {
             <div key={f.key}>
               <Label htmlFor={`contact-${f.key}`}>{f.label}</Label>
               {f.hint && (
-                <p id={`contact-${f.key}-hint`} className="text-xs text-muted-foreground mt-1">
+                <p id={`contact-${f.key}-hint`} className="text-base text-muted-foreground mt-1">
                   {f.hint}
                 </p>
               )}
@@ -259,7 +255,7 @@ const AdminSettings = () => {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-sm leading-relaxed text-muted-foreground">
+          <p className="text-base leading-relaxed text-muted-foreground">
             אם נכנסתם עם Google ואתם רוצים להפסיק להיות תלויים בו, קבעו כאן סיסמה.
             מהרגע הזה אפשר להיכנס לפאנל עם האימייל והסיסמה מהמסך של
             <Ltr className="mx-1">/admin/login</Ltr>.
@@ -276,7 +272,7 @@ const AdminSettings = () => {
                 value={pw}
                 onChange={(e) => setPw(e.target.value)}
               />
-              <p className="mt-1 text-xs text-muted-foreground">8 תווים לפחות.</p>
+              <p className="mt-1 text-base text-muted-foreground">8 תווים לפחות.</p>
             </div>
             <div>
               <Label htmlFor="new-password-again">שוב, כדי לוודא</Label>
@@ -306,9 +302,6 @@ const AdminSettings = () => {
             <Shield className="w-5 h-5" />
             ניהול צוות – מנהלי האתר
           </CardTitle>
-          <p className="text-sm text-muted-foreground mt-1">
-            הוסיפו אנשים לצוות הניהול. הם יקבלו מייל הזמנה, יאשרו אותו, ויקבלו גישה מלאה לניהול האתר בדיוק כמו שלכם.
-          </p>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="flex flex-col md:flex-row gap-3 md:items-end">
@@ -339,17 +332,17 @@ const AdminSettings = () => {
                   className="flex items-center justify-between bg-muted/40 border border-border rounded-md px-4 py-3"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-sm bg-primary/10 text-primary flex items-center justify-center text-sm font-medium">
+                    <div className="w-9 h-9 rounded-sm bg-primary/10 text-primary flex items-center justify-center text-base font-medium">
                       {(a.full_name || "?").slice(0, 1)}
                     </div>
                     <div>
-                      <div className="text-sm font-medium">
+                      <div className="text-base font-medium">
                         {a.full_name || "ללא שם"}
                         {a.user_id === me && (
                           <Badge variant="secondary" className="mr-2">אתה</Badge>
                         )}
                       </div>
-                      <div className="text-xs text-muted-foreground font-mono">
+                      <div className="text-base text-muted-foreground font-mono">
                         {a.user_id.slice(0, 8)}…
                       </div>
                     </div>
@@ -367,7 +360,7 @@ const AdminSettings = () => {
                 </div>
               ))}
               {admins.length === 0 && (
-                <p className="text-sm text-muted-foreground">אין מנהלים רשומים</p>
+                <p className="text-base text-muted-foreground">אין מנהלים רשומים</p>
               )}
             </div>
           </div>
@@ -389,8 +382,8 @@ const AdminSettings = () => {
                         <Clock className="w-4 h-4 text-muted-foreground" />
                       )}
                       <div>
-                        <div className="text-sm font-medium" dir="ltr">{inv.email}</div>
-                        <div className="text-xs text-muted-foreground">
+                        <div className="text-base font-medium" dir="ltr">{inv.email}</div>
+                        <div className="text-base text-muted-foreground">
                           {inv.status === "accepted" ? "התקבל" : "ממתין לאישור"} ·{" "}
                           {new Date(inv.created_at).toLocaleDateString("he-IL")}
                         </div>

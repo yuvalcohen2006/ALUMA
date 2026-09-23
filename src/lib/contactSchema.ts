@@ -7,7 +7,7 @@ import { z } from "zod";
  * The previous pattern ended in `\d{3}[\s-]?\d{4}` — eight digits after the
  * prefix digit, i.e. exactly nine in total. Every Israeli MOBILE number has
  * ten (05X + seven), so the form rejected 050, 052, 054, 058… — including
- * Aluma's own 050-451-9062. Landlines passed, mobiles did not, which in
+ * Aluma's own 054-444-8797. Landlines passed, mobiles did not, which in
  * practice meant almost nobody could submit the contact form.
  *
  * Normalising first and matching second is what keeps it readable: strip the

@@ -67,9 +67,6 @@ const AdminHero = () => {
     <AdminLayout>
       <header className="mb-8">
         <h1 className="font-display text-3xl text-foreground">התמונה הראשית</h1>
-        <p className="text-muted-foreground mt-1">
-          תמונה ותוכן הבאנר הראשי בדף הבית. אפשר להגדיר תמונה נפרדת לדסקטופ ולמובייל.
-        </p>
       </header>
 
       <PhotoSpec spec="hero" />
@@ -87,11 +84,11 @@ const AdminHero = () => {
                 className="w-full aspect-video object-cover rounded mb-3"
               />
             ) : (
-              <div className="w-full aspect-video bg-muted rounded mb-3 flex items-center justify-center text-muted-foreground text-sm">
+              <div className="w-full aspect-video bg-muted rounded mb-3 flex items-center justify-center text-muted-foreground text-base">
                 לא הוגדרה תמונה (יוצג ה-default של האתר)
               </div>
             )}
-            <label className="inline-flex items-center gap-2 px-3 py-2 border border-border rounded cursor-pointer hover:bg-muted text-sm">
+            <label className="inline-flex items-center gap-2 px-3 py-2 border border-border rounded cursor-pointer hover:bg-muted text-base">
               <Upload className="w-4 h-4" />
               העלאת תמונה
               <input
@@ -116,11 +113,11 @@ const AdminHero = () => {
                 className="w-48 aspect-[9/16] object-cover rounded mb-3 mx-auto"
               />
             ) : (
-              <div className="w-48 aspect-[9/16] bg-muted rounded mb-3 mx-auto flex items-center justify-center text-muted-foreground text-xs text-center px-4">
+              <div className="w-48 aspect-[9/16] bg-muted rounded mb-3 mx-auto flex items-center justify-center text-muted-foreground text-base text-center px-4">
                 לא הוגדרה תמונה למובייל (יוצג זה של הדסקטופ)
               </div>
             )}
-            <label className="inline-flex items-center gap-2 px-3 py-2 border border-border rounded cursor-pointer hover:bg-muted text-sm">
+            <label className="inline-flex items-center gap-2 px-3 py-2 border border-border rounded cursor-pointer hover:bg-muted text-base">
               <Upload className="w-4 h-4" />
               העלאת תמונה
               <input
@@ -150,9 +147,6 @@ const AdminHero = () => {
               value={hero.title_he || ""}
               onChange={(e) => setHero({ ...hero, title_he: e.target.value })}
             />
-            <p className="mt-1.5 text-xs text-muted-foreground">
-              הכותרת שגוגל וקוראי מסך רואים. התמונה והלוגו הם מה שרואים בעין.
-            </p>
           </div>
 
           <div className="grid grid-cols-2 gap-3">

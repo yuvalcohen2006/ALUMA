@@ -135,7 +135,7 @@ const AdminHome = () => {
 
   return (
     <AdminLayout>
-      <div className="max-w-4xl">
+      <div>
         <div className="flex flex-wrap items-center justify-between gap-4">
           <h1 className="font-display text-3xl text-foreground">מוצרים נבחרים בדף הבית</h1>
           <Button onClick={save} disabled={saving || !dirty} size="lg">
@@ -143,10 +143,6 @@ const AdminHome = () => {
           </Button>
         </div>
 
-        <p className="mt-3 text-sm text-muted-foreground">
-          בחרו עד שלושה מוצרים. הם יופיעו בדף הבית בסדר שבחרתם, בגודל גדול. אם לא
-          תבחרו כלום, האתר יציג שלושה מוצרים בעצמו.
-        </p>
 
         {loading ? (
           <p className="mt-10 text-muted-foreground">טוען…</p>
@@ -187,12 +183,12 @@ const AdminHome = () => {
                       )}
 
                       {chosen && (
-                        <span className="absolute end-2 top-2 grid h-7 w-7 place-items-center rounded-full bg-foreground text-sm font-medium text-background">
+                        <span className="absolute end-2 top-2 grid h-7 w-7 place-items-center rounded-full bg-foreground text-base font-medium text-background">
                           {slot + 1}
                         </span>
                       )}
                     </div>
-                    <p className="mt-2 line-clamp-2 text-sm text-foreground">{p.name}</p>
+                    <p className="mt-2 line-clamp-2 text-base text-foreground">{p.name}</p>
                   </button>
                 </li>
               );
@@ -201,7 +197,7 @@ const AdminHome = () => {
         )}
 
         {!loading && picked.length > 0 && (
-          <p className="mt-8 flex items-center gap-2 text-sm text-muted-foreground" role="status">
+          <p className="mt-8 flex items-center gap-2 text-base text-muted-foreground" role="status">
             <Check className="h-4 w-4" aria-hidden="true" />
             נבחרו {picked.length} מתוך {MAX}
           </p>

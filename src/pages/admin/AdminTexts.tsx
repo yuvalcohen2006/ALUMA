@@ -75,20 +75,16 @@ const AdminTexts = () => {
 
   return (
     <AdminLayout>
-      <div className="max-w-3xl">
+      <div>
       <h1 className="font-display text-3xl text-foreground">טקסטים באתר</h1>
-      <p className="mt-2 text-sm text-muted-foreground">
-        כל שדה כאן הוא טקסט שמופיע באתר. אפשר לערוך ולשמור כל אחד בנפרד.
-        השארתם שדה ריק? האתר יחזור לנוסח המקורי — אי אפשר לשבור שום דבר מכאן.
-      </p>
 
       <div className="mt-8 space-y-8">
         {rows.map((r) => (
           <div key={r.key} className="border-b border-border pb-6">
-            <label className="block text-sm font-medium text-foreground" htmlFor={r.key}>
+            <label className="block text-base font-medium text-foreground" htmlFor={r.key}>
               {r.label}
             </label>
-            {r.hint && <p className="mt-1 text-xs text-muted-foreground">{r.hint}</p>}
+            {r.hint && <p className="mt-1 text-base text-muted-foreground">{r.hint}</p>}
 
             {r.multiline ? (
               <Textarea

@@ -272,7 +272,7 @@ function SortableCollectionCard({
         {/* The number needs its noun. Bare, it read as "0 ·" — a digit and a
             dangling separator, announced between a link and two buttons with
             nothing to say what it counts. */}
-        <p className="mt-0.5 truncate text-sm text-muted-foreground">
+        <p className="mt-0.5 truncate text-base text-muted-foreground">
           {productsCount} מוצרים
           {!c.published && " · מוסתר"}
         </p>
@@ -468,7 +468,7 @@ const AdminCollections = () => {
             items={collections.map((c) => c.id)}
             strategy={verticalListSortingStrategy}
           >
-            <ul role="list" className="max-w-3xl overflow-hidden rounded-sm border border-border">
+            <ul role="list" className="overflow-hidden rounded-sm border border-border">
               {collections.map((c) => (
                 <SortableCollectionCard
                   key={c.id}
@@ -507,11 +507,6 @@ const AdminCollections = () => {
                   onChange={(e) => setEditCol({ ...editCol, name_he: e.target.value })}
                   placeholder="למשל: סלוני חוץ"
                 />
-                {!editCol.id && editCol.name_he && (
-                  <p className="text-xs text-muted-foreground mt-1">
-                    כתובת אוטומטית: <span dir="ltr">/collections#{slugify(editCol.name_he)}</span>
-                  </p>
-                )}
               </div>
               {/*
                 The English name. The column has existed since the CMS was
@@ -529,9 +524,6 @@ const AdminCollections = () => {
                   onChange={(e) => setEditCol({ ...editCol, name_en: e.target.value })}
                   placeholder="e.g. Outdoor Salons"
                 />
-                <p className="mt-1 text-sm text-muted-foreground">
-                  לא חובה. אם תמלאו, זה מה שיופיע למי שגולש באנגלית.
-                </p>
               </div>
               <div>
                 <Label htmlFor="col-intro">תיאור קצר</Label>
@@ -556,7 +548,7 @@ const AdminCollections = () => {
                       className="w-24 h-24 object-cover rounded"
                     />
                   )}
-                  <label className="inline-flex items-center gap-2 px-3 py-2 border border-border rounded cursor-pointer hover:bg-muted text-sm">
+                  <label className="inline-flex items-center gap-2 px-3 py-2 border border-border rounded cursor-pointer hover:bg-muted text-base">
                     <Upload className="w-4 h-4" />
                     {editCol.image_url ? "החלפה" : "העלאה"}
                     <input

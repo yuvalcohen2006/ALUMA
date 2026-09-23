@@ -21,6 +21,9 @@ import {
   type LucideIcon,
   Star,
   Layers,
+  Menu,
+  X,
+  ChevronLeft,
 } from "lucide-react";
 import { DirectionProvider } from "@radix-ui/react-direction";
 import { useAuth } from "@/hooks/useAuth";
@@ -80,11 +83,43 @@ const navGroups: { label: string | null; items: NavItem[] }[] = [
 
 const navItems: NavItem[] = navGroups.flatMap((g) => g.items);
 
-const AdminLayout = ({ children }: { children: ReactNode }) => {
+export type Crumb = { label: string; to?: string };
+
+/**
+ * Where a screen sits, for the trail at the top.
+ *
+ * The product editor and the product list are not in the sidebar under their
+ * own names — they are reached THROUGH קולקציות ומוצרים — so the trail has to
+ * be told, rather than matched on the address alone.
+ */
+const SECTION_FOR = (pathname: string): NavItem | undefined => {
+  if (pathname.startsWith("/admin/products") || pathname.startsWith("/admin/collections")) {
+    return navItems.find((i) => i.to === "/admin/collections");
+  }
+  return navItems
+    .filter((i) => i.to !== "/admin")
+    .find((i) => pathname === i.to || pathname.startsWith(i.to + "/"));
+};
+
+const AdminLayout = ({
+  children,
+  crumbs = [],
+  /** Tables and charts want the full width; a form does not. */
+  width = "normal",
+}: {
+  children: ReactNode;
+  crumbs?: Crumb[];
+  width?: "normal" | "wide";
+}) => {
   const { signOut, user } = useAuth();
   const navigate = useNavigate();
   // The landing screen IS the menu; a link back to it from itself is noise.
-  const onGuide = useLocation().pathname.replace(/\/$/, "") === "/admin";
+  const pathname = useLocation().pathname.replace(/\/$/, "");
+  const onGuide = pathname === "/admin";
+  const section = SECTION_FOR(pathname);
+  const [menuOpen, setMenuOpen] = useState(false);
+  // A menu left open over the screen you just moved to is a menu in the way.
+  useEffect(() => setMenuOpen(false), [pathname]);
   const [newLeads, setNewLeads] = useState(0);
 
   useEffect(() => {
@@ -134,7 +169,7 @@ const AdminLayout = ({ children }: { children: ReactNode }) => {
     navigate("/");
   };
 
-  const renderItem = (item: NavItem, mobile = false) => {
+  const renderItem = (item: NavItem) => {
     const Icon = item.icon;
     const showBadge = item.badge === "leads" && newLeads > 0;
     return (
@@ -143,28 +178,23 @@ const AdminLayout = ({ children }: { children: ReactNode }) => {
         to={item.to}
         end={item.end}
         className={({ isActive }) =>
-          mobile
-            ? `flex items-center gap-1.5 px-3 h-9 rounded-sm text-xs whitespace-nowrap transition-colors ${
-                isActive
-                  ? "bg-foreground text-background"
-                  : "bg-muted text-muted-foreground"
-              }`
-            // Ink on a tint, plus a bar on the reading edge — the terracotta
-            // fill made whichever screen you were on the loudest thing in the
-            // room, every time.
-            : `relative flex items-center gap-3 px-3 h-10 rounded-sm text-sm transition-colors ${
-                isActive
-                  ? "bg-foreground/[0.06] text-foreground font-medium before:absolute before:start-0 before:inset-y-2 before:w-[3px] before:rounded-full before:bg-foreground before:content-['']"
-                  : "text-muted-foreground hover:bg-foreground/[0.04] hover:text-foreground"
-              }`
+          // Ink on a tint, plus a bar on the reading edge — the terracotta
+          // fill made whichever screen you were on the loudest thing in the
+          // room, every time. One row style now: the phone drawer holds the
+          // same list rather than a squashed copy of it.
+          `relative flex items-center gap-3 px-3 h-11 rounded-sm text-base transition-colors ${
+            isActive
+              ? "bg-foreground/[0.06] text-foreground font-medium before:absolute before:start-0 before:inset-y-2 before:w-[3px] before:rounded-full before:bg-foreground before:content-['']"
+              : "text-muted-foreground hover:bg-foreground/[0.04] hover:text-foreground"
+          }`
         }
       >
-        <Icon className={mobile ? "w-3.5 h-3.5" : "w-4 h-4 shrink-0"} />
+        <Icon className="w-4 h-4 shrink-0" />
         <span>{item.label}</span>
         <span
-          className={`mr-auto inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-sm text-xs font-semibold bg-accent text-accent-foreground transition-opacity ${
+          className={`mr-auto inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-sm text-base font-semibold bg-accent text-accent-foreground transition-opacity ${
             showBadge ? "opacity-100" : "opacity-0"
-          } ${mobile ? "ml-1" : ""}`}
+          }`}
           aria-label={`${newLeads} פניות חדשות`}
           aria-hidden={!showBadge}
         >
@@ -183,7 +213,7 @@ const AdminLayout = ({ children }: { children: ReactNode }) => {
         {/* Sidebar */}
         <aside className="hidden md:flex w-64 shrink-0 flex-col border-l border-border bg-secondary">
           <div className="px-6 py-6 border-b border-border">
-            <p className="text-xs tracking-[0.3em] text-muted-foreground uppercase">Aluma</p>
+            <p className="text-base tracking-[0.3em] text-muted-foreground uppercase">Aluma</p>
             <h2 className="mt-1 font-display text-xl text-foreground">ניהול האתר</h2>
           </div>
 
@@ -191,7 +221,7 @@ const AdminLayout = ({ children }: { children: ReactNode }) => {
             {navGroups.map((group, i) => (
               <div key={group.label ?? "top"} className={i > 0 ? "mt-6" : ""}>
                 {group.label && (
-                  <h3 className="px-3 pb-2 text-xs font-medium tracking-wide text-muted-foreground">
+                  <h3 className="px-3 pb-2 text-base font-medium tracking-wide text-muted-foreground">
                     {group.label}
                   </h3>
                 )}
@@ -203,8 +233,8 @@ const AdminLayout = ({ children }: { children: ReactNode }) => {
           <div className="border-t border-border px-3 py-4">
             {user?.email && (
               <div className="px-3 pb-3">
-                <p className="text-xs text-muted-foreground">מחוברים בתור</p>
-                <p className="truncate text-[13px] text-foreground" dir="ltr" title={user.email}>
+                <p className="text-base text-muted-foreground">מחוברים בתור</p>
+                <p className="truncate text-base text-foreground" dir="ltr" title={user.email}>
                   {user.email}
                 </p>
               </div>
@@ -213,14 +243,14 @@ const AdminLayout = ({ children }: { children: ReactNode }) => {
               href="/"
               target="_blank"
               rel="noreferrer"
-              className="flex h-10 items-center gap-3 rounded-sm px-3 text-sm text-muted-foreground transition-colors hover:bg-foreground/[0.04] hover:text-foreground"
+              className="flex h-10 items-center gap-3 rounded-sm px-3 text-base text-muted-foreground transition-colors hover:bg-foreground/[0.04] hover:text-foreground"
             >
               <ExternalLink className="w-4 h-4" />
               <span>לראות את האתר</span>
             </a>
             <button
               onClick={handleLogout}
-              className="flex h-10 w-full items-center gap-3 rounded-sm px-3 text-sm text-muted-foreground transition-colors hover:bg-foreground/[0.04] hover:text-foreground"
+              className="flex h-10 w-full items-center gap-3 rounded-sm px-3 text-base text-muted-foreground transition-colors hover:bg-foreground/[0.04] hover:text-foreground"
             >
               <LogOut className="w-4 h-4" />
               <span>יציאה</span>
@@ -228,36 +258,122 @@ const AdminLayout = ({ children }: { children: ReactNode }) => {
           </div>
         </aside>
 
-        {/* Mobile top nav */}
-        <div className="md:hidden fixed top-0 inset-x-0 z-40 bg-card border-b border-border">
-          <div className="flex items-center justify-between px-4 h-14">
+        {/* Phone: a bar with a real menu behind it.
+
+            It used to be a single row of all twenty links, scrolled sideways
+            at 12px — every screen in the panel hidden behind a swipe, with no
+            grouping and nothing to say where you were. This is the same
+            sidebar, in a drawer. */}
+        <div className="md:hidden fixed top-0 inset-x-0 z-40 border-b border-border bg-card">
+          <div className="flex h-16 items-center justify-between px-4">
             <button
-              onClick={handleLogout}
-              className="text-muted-foreground hover:text-foreground"
-              aria-label="התנתק"
+              onClick={() => setMenuOpen(true)}
+              className="flex h-11 items-center gap-2 rounded-sm px-3 text-base text-foreground hover:bg-foreground/[0.04]"
+              aria-label="פתיחת התפריט"
+              aria-expanded={menuOpen}
             >
-              <LogOut className="w-5 h-5" />
+              <Menu className="h-5 w-5" aria-hidden="true" />
+              <span>תפריט</span>
             </button>
-            <h2 className="font-display text-lg">ניהול האתר</h2>
-          </div>
-          <div className="flex overflow-x-auto gap-1 px-2 pb-2">
-            {navItems.map((item) => renderItem(item, true))}
+            <h2 className="font-display text-lg">{section?.label ?? "ניהול האתר"}</h2>
           </div>
         </div>
 
+        {menuOpen && (
+          <div className="md:hidden fixed inset-0 z-50">
+            <button
+              type="button"
+              aria-label="סגירת התפריט"
+              onClick={() => setMenuOpen(false)}
+              className="absolute inset-0 bg-foreground/40"
+            />
+            <nav className="absolute inset-y-0 start-0 flex w-[84%] max-w-xs flex-col bg-secondary shadow-luxury">
+              <div className="flex items-center justify-between border-b border-border px-5 py-4">
+                <h2 className="font-display text-xl text-foreground">ניהול האתר</h2>
+                <button
+                  onClick={() => setMenuOpen(false)}
+                  aria-label="סגירת התפריט"
+                  className="grid h-11 w-11 place-items-center rounded-sm text-foreground hover:bg-foreground/[0.06]"
+                >
+                  <X className="h-5 w-5" aria-hidden="true" />
+                </button>
+              </div>
+              <div className="flex-1 overflow-y-auto px-3 py-5">
+                {navGroups.map((group, i) => (
+                  <div key={group.label ?? "top"} className={i > 0 ? "mt-6" : ""}>
+                    {group.label && (
+                      <h3 className="px-3 pb-2 text-base font-medium text-muted-foreground">
+                        {group.label}
+                      </h3>
+                    )}
+                    <div className="space-y-0.5">{group.items.map((item) => renderItem(item))}</div>
+                  </div>
+                ))}
+              </div>
+              <div className="border-t border-border px-3 py-4">
+                <button
+                  onClick={handleLogout}
+                  className="flex h-11 w-full items-center gap-3 rounded-sm px-3 text-base text-muted-foreground hover:bg-foreground/[0.04] hover:text-foreground"
+                >
+                  <LogOut className="h-4 w-4" />
+                  <span>יציאה</span>
+                </button>
+              </div>
+            </nav>
+          </div>
+        )}
+
         {/* Main */}
-        <main className="flex-1 min-w-0 pt-28 md:pt-0">
-          <div className="mx-auto max-w-7xl px-5 py-8 md:px-10 md:py-10">
+        <main className="flex-1 min-w-0 pt-16 md:pt-0">
+          <div
+            className={`mx-auto w-full px-5 py-8 md:px-10 md:py-10 ${
+              width === "wide" ? "max-w-[1400px]" : "max-w-5xl"
+            }`}
+          >
+            {/* Where you are, and one click to anywhere above it. The panel
+                had a single "back to the menu" link, which told you nothing
+                about where "here" was. */}
             {!onGuide && (
-              <NavLink
-                to="/admin"
-                end
-                className="mb-6 inline-flex h-10 items-center gap-2 rounded-sm px-3 -ms-3 text-sm text-muted-foreground transition-colors hover:bg-foreground/[0.04] hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
-              >
-                {/* RTL: back points right. */}
-                <ArrowRight className="h-4 w-4" aria-hidden="true" />
-                חזרה לתפריט
-              </NavLink>
+              <nav aria-label="מיקום" className="mb-6 flex flex-wrap items-center gap-2 text-base">
+                <NavLink
+                  to="/admin"
+                  end
+                  className="rounded-sm px-2 py-1 -ms-2 text-muted-foreground transition-colors hover:bg-foreground/[0.04] hover:text-foreground"
+                >
+                  ניהול
+                </NavLink>
+                {section && (
+                  <>
+                    <ChevronLeft className="h-4 w-4 shrink-0 text-muted-foreground" aria-hidden="true" />
+                    {crumbs.length > 0 ? (
+                      <NavLink
+                        to={section.to}
+                        end
+                        className="rounded-sm px-2 py-1 text-muted-foreground transition-colors hover:bg-foreground/[0.04] hover:text-foreground"
+                      >
+                        {section.label}
+                      </NavLink>
+                    ) : (
+                      <span className="px-2 py-1 text-foreground">{section.label}</span>
+                    )}
+                  </>
+                )}
+                {crumbs.map((crumb, i) => (
+                  <span key={i} className="flex items-center gap-2">
+                    <ChevronLeft className="h-4 w-4 shrink-0 text-muted-foreground" aria-hidden="true" />
+                    {crumb.to ? (
+                      <NavLink
+                        to={crumb.to}
+                        className="rounded-sm px-2 py-1 text-muted-foreground transition-colors hover:bg-foreground/[0.04] hover:text-foreground"
+                      >
+                        {crumb.label}
+                      </NavLink>
+                    ) : (
+                      <span className="px-2 py-1 text-foreground">{crumb.label}</span>
+                    )}
+                  </span>
+                ))}
+              </nav>
             )}
             {children}
           </div>

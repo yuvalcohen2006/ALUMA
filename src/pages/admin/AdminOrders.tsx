@@ -120,12 +120,11 @@ const AdminOrders = () => {
   };
 
   return (
-    <AdminLayout>
+    <AdminLayout width="wide">
       <header className="flex items-center justify-between flex-wrap gap-4 mb-8">
         <div>
-          <p className="text-xs tracking-[0.3em] text-foreground uppercase mb-1">Orders</p>
+          <p className="text-base tracking-[0.3em] text-foreground uppercase mb-1">Orders</p>
           <h1 className="font-display text-3xl">הזמנות לקוחות</h1>
-          <p className="text-sm text-muted-foreground mt-1">כאן הלקוח רואה את סטטוס ההזמנה שלו באזור האישי</p>
         </div>
         <Button onClick={() => setEditing(empty)} className="gap-2">
           <Plus className="w-4 h-4" />
@@ -146,13 +145,13 @@ const AdminOrders = () => {
               <div className="flex items-start justify-between flex-wrap gap-3 mb-3">
                 <div>
                   <h3 className="font-display text-xl">{o.title}</h3>
-                  <p className="text-xs text-muted-foreground mt-1">
+                  <p className="text-base text-muted-foreground mt-1">
                     לקוח: <strong>{nameFor(o.user_id)}</strong>
                     {o.location && ` · ${o.location}`}
                   </p>
                 </div>
                 <div className="flex gap-2">
-                  <span className="text-xs px-2 py-1 rounded-sm bg-accent/10 text-accent">
+                  <span className="text-base px-2 py-1 rounded-sm bg-accent/10 text-accent">
                     {statusOptions.find((s) => s.value === o.status)?.label}
                   </span>
                   <Button size="sm" variant="ghost" onClick={() => setEditing(o)}>
@@ -164,18 +163,18 @@ const AdminOrders = () => {
                 </div>
               </div>
               <div className="space-y-1">
-                <div className="flex justify-between text-xs text-muted-foreground">
+                <div className="flex justify-between text-base text-muted-foreground">
                   <span>התקדמות</span>
                   <span>{o.progress}%</span>
                 </div>
                 <Progress value={o.progress} />
               </div>
               {o.next_milestone && (
-                <p className="mt-3 text-sm flex items-center gap-2 text-muted-foreground">
+                <p className="mt-3 text-base flex items-center gap-2 text-muted-foreground">
                   <Calendar className="w-4 h-4 text-accent" />
                   אבן דרך: <strong className="text-foreground">{o.next_milestone}</strong>
                   {o.next_milestone_date && (
-                    <span className="text-xs">({new Date(o.next_milestone_date).toLocaleDateString("he-IL")})</span>
+                    <span className="text-base">({new Date(o.next_milestone_date).toLocaleDateString("he-IL")})</span>
                   )}
                 </p>
               )}

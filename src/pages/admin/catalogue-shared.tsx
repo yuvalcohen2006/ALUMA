@@ -24,8 +24,10 @@ export type Product = {
   materials: any;
   /** Ids from site_materials, ticked in the product form. */
   material_ids: string[];
-  /** [{ label, value }] — one row per measurement. */
-  sizes: { label: string; value: string }[];
+  /** Centimetres. Empty means "does not apply to this piece". */
+  length_cm: number | null;
+  width_cm: number | null;
+  height_cm: number | null;
   dimensions: string | null;
   cover_url: string | null;
   gallery: any;
@@ -137,7 +139,9 @@ export const emptyProduct: Partial<Product> = {
   highlights: [],
   materials: [],
   material_ids: [],
-  sizes: [],
+  length_cm: null,
+  width_cm: null,
+  height_cm: null,
   dimensions: "",
   cover_url: "",
   gallery: [],

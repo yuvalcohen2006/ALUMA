@@ -460,7 +460,9 @@ export type Database = {
           id: string
           materials: Json
           material_ids: Json
-          sizes: Json
+          length_cm?: number | null
+          width_cm?: number | null
+          height_cm?: number | null
           name: string
           published: boolean
           slug: string
@@ -486,7 +488,9 @@ export type Database = {
           id?: string
           materials?: Json
           material_ids?: Json
-          sizes?: Json
+          length_cm?: number | null
+          width_cm?: number | null
+          height_cm?: number | null
           name: string
           published?: boolean
           slug: string
@@ -512,7 +516,9 @@ export type Database = {
           id?: string
           materials?: Json
           material_ids?: Json
-          sizes?: Json
+          length_cm?: number | null
+          width_cm?: number | null
+          height_cm?: number | null
           name?: string
           published?: boolean
           slug?: string

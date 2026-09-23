@@ -27,8 +27,10 @@ export type DBProduct = {
   materials: string[];
   /** Materials ticked in the product form, resolved against site_materials. */
   material_ids: string[];
-  /** [{ label: "אורך", value: "240 ס״מ" }], in the owner's own order. */
-  sizes: { label: string; value: string }[];
+  /** Centimetres, each one optional: the owner fills in what applies. */
+  length_cm: number | null;
+  width_cm: number | null;
+  height_cm: number | null;
   dimensions: string | null;
   cover_url: string | null;
   gallery: string[];
@@ -54,6 +56,12 @@ export type DBProduct = {
  * one; a bare string is NOT a one-item list, or every `.map` over it would
  * spread it into characters.
  */
+/** A measurement, or nothing. Postgres numerics arrive as strings over REST. */
+const size = (v: unknown): number | null => {
+  const n = typeof v === "string" ? Number(v) : typeof v === "number" ? v : NaN;
+  return Number.isFinite(n) && n > 0 ? n : null;
+};
+
 export const normaliseProduct = (p: any): DBProduct => ({
   ...p,
   // Absent until their migration is applied, and `select("*")` simply omits
@@ -77,16 +85,9 @@ export const normaliseProduct = (p: any): DBProduct => ({
   material_ids: Array.isArray(p?.material_ids)
     ? p.material_ids.filter((id: unknown) => typeof id === "string")
     : [],
-  sizes: Array.isArray(p?.sizes)
-    ? p.sizes
-        .filter((s: unknown) => !!s && typeof s === "object")
-        .map((s: { label?: unknown; value?: unknown }) => ({
-          label: typeof s.label === "string" ? s.label.trim() : "",
-          value: typeof s.value === "string" ? s.value.trim() : "",
-        }))
-        // A row with nothing in it is a row the owner started and abandoned.
-        .filter((s: { label: string; value: string }) => s.label || s.value)
-    : [],
+  length_cm: size(p?.length_cm),
+  width_cm: size(p?.width_cm),
+  height_cm: size(p?.height_cm),
   // The squared, centred copies of the photos uploaded before the crop window
   // existed — see lib/framed-photos. Here, so every public surface gets the
   // same square the visitor clicked on; the admin reads the table directly

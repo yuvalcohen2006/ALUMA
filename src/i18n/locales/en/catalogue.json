@@ -44,5 +44,11 @@
   "imageAlt": "{{name}}, image {{index}}",
   "imageLabel": "Image {{index}}",
   "ctaEyebrow": "Making it real",
-  "pageTitle": "Collections"
+  "pageTitle": "Collections",
+  "sizes": {
+    "length": "Length",
+    "width": "Width",
+    "height": "Height",
+    "cm": "cm"
+  }
 }

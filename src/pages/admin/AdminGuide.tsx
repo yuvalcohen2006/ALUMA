@@ -38,7 +38,7 @@ const BLOCKS: Block[] = [
 
 const AdminGuide = () => (
   <AdminLayout>
-    <div className="max-w-4xl">
+    <div>
       <h1 className="font-display text-3xl text-foreground">מה בא לכם לעשות?</h1>
 
       <nav aria-label="אזורי הניהול" className="mt-8">

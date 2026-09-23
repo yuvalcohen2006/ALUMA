@@ -22,7 +22,6 @@ export type PhotoSpec = {
   /** The one size to aim for. Not a range — a range is a decision. */
   size: string;
   /** The one mistake this particular photo invites. */
-  watchOut: string;
   /** Output pixels. The crop is baked to exactly this. */
   out: { w: number; h: number };
   /** Every shape the site really shows this photo in, for the live preview. */
@@ -34,8 +33,6 @@ export const PHOTO_SPECS = {
     what: "התמונה הגדולה בדף הבית",
     shape: "לרוחב, 16:9",
     size: "2400 × 1350",
-    watchOut:
-      "בטלפון האתר חותך רצועה צרה וגבוהה מהחלק העליון. בדקו את התצוגה של הטלפון לפני שמירה — מה שחשוב חייב להיות למעלה ובמרכז.",
     out: { w: 2400, h: 1350 },
     // Hero.tsx renders `w-full h-[125%] object-cover object-top` inside a
     // min-h-dvh section, so the box is viewport-width by 1.25 viewport-height.
@@ -49,7 +46,6 @@ export const PHOTO_SPECS = {
     what: "תמונת קולקציה",
     shape: "לגובה, 3:4",
     size: "1500 × 2000",
-    watchOut: "השאירו אוויר מעל ומתחת לרהיט — בדף הקטלוג התמונה נחתכת קצת יותר נמוכה.",
     out: { w: 1500, h: 2000 },
     shownAt: [
       { label: "דף הבית", ratio: 3 / 4 },
@@ -60,8 +56,6 @@ export const PHOTO_SPECS = {
     what: "תמונת מוצר",
     shape: "מרובעת",
     size: "1600 × 1600",
-    watchOut:
-      "אותה תמונה נחתכת בשלוש צורות שונות. השאירו מרווח מסביב לרהיט, אחרת הוא ייחתך באחת מהן.",
     out: { w: 1600, h: 1600 },
     shownAt: [
       { label: "דף הקולקציה", ratio: 1 },
@@ -73,8 +67,6 @@ export const PHOTO_SPECS = {
     what: "תמונת חומר",
     shape: "לרוחב, 4:3",
     size: "1600 × 1200",
-    watchOut:
-      "צילום מקרוב של החומר עצמו עובד הכי טוב כאן — האריגה, פני האבן, פינת השלד. אותה תמונה מוקטנת לריבוע קטן ברצועת החומרים בדף הבית.",
     out: { w: 1600, h: 1200 },
     shownAt: [
       { label: "עמוד החומרים", ratio: 4 / 3 },
@@ -85,8 +77,6 @@ export const PHOTO_SPECS = {
     what: "תמונה של מוצר בצבע מסוים",
     shape: "מרובעת, בדיוק כמו תמונת המוצר",
     size: "1600 × 1600",
-    watchOut:
-      "צלמו מאותה זווית ומאותו מרחק כמו התמונה הרגילה, וחתכו אותה באותו אופן — אחרת הרהיט 'קופץ' כשמחליפים צבע.",
     out: { w: 1600, h: 1600 },
     shownAt: [{ label: "בדף המוצר", ratio: 1 }],
   },
@@ -98,7 +88,6 @@ export const PHOTO_SPECS = {
     // index — the index and the home page both show this at 3:2, exactly as
     // cropped. The labels named the wrong page, so the owner was warned about
     // cropping on a page that does not crop.
-    watchOut: "בתחתית דף פרויקט התמונה נחתכת מעט מהצדדים. אל תצמידו את הרהיט לקצה.",
     out: { w: 2000, h: 1333 },
     shownAt: [
       { label: "דף הפרויקטים ודף הבית", ratio: 3 / 2 },
@@ -114,7 +103,6 @@ export const PHOTO_SPECS = {
     // and the site then cut the top and bottom off every cover it was given.
     shape: "לרוחב, 16:9",
     size: "1600 × 900",
-    watchOut: "טקסט בתוך התמונה לא ייקרא בטלפון. עדיף תמונה בלי כיתוב.",
     out: { w: 1600, h: 900 },
     shownAt: [{ label: "בראש הכתבה", ratio: 16 / 9 }],
   },
