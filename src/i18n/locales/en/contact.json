@@ -1,23 +1,14 @@
 {
   "channels": {
-    "whatsapp": {
-      "title": "Send a WhatsApp message",
-      "line": "A real person, quickly — photos of your garden welcome"
-    },
+    "whatsapp": "Message us on WhatsApp",
     "whatsappMessage": "Hi, I'd like to hear about a made-to-measure outdoor lounge",
-    "phoneLine": "Talk to us directly, during opening hours",
-    "emailLine": "Best for measurements, plans and files",
+    "phone": "Call us",
+    "email": "Email us",
     "showroomTitle": "The {{city}} showroom",
     "showroomLine": "{{street}}, visits by appointment"
   },
   "email": {
-    "subject": "Enquiry from the website",
-    "body": "Hi,\n\nI'd like to hear about made-to-measure outdoor furniture.\n\nName:\nPhone:\n",
-    "openInMailApp": "Open in your mail app",
-    "openInGmail": "Open in Gmail",
-    "copyAddress": "Copy the address",
-    "copied": "Address copied",
-    "copyFailed": "Copying failed. Select the address and copy it by hand."
+    "subject": "Enquiry from the website"
   },
   "assurances": [
     "An answer within 24 hours on business days",
@@ -42,7 +33,7 @@
     "emailOptional": "(optional)",
     "emailPlaceholder": "Email address",
     "messageLabel": "Tell us about your project",
-    "messagePlaceholder": "The size of the terrace or garden, how many people sit down, a style you liked, your timing — every detail helps."
+    "messagePlaceholder": ""
   },
   "submit": "Send the message",
   "submitting": "Sending…",
@@ -59,5 +50,6 @@
     "fixFields": "Please correct the marked fields",
     "unexpected": "Something unexpected went wrong. Please try again.",
     "network": "Network error. Check your connection and try again."
-  }
+  },
+  "writeToUs": "Write to us"
 }

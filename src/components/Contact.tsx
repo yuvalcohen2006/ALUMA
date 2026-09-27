@@ -1,25 +1,22 @@
 import { useRef, useState, type ReactNode } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { AlertCircle, Check, ChevronDown, Loader2 } from "lucide-react";
 import {
-  AlertCircle,
-  Check,
-  ChevronDown,
-  ChevronLeft,
-  Loader2,
-  Mail,
-  MapPin,
-  Phone,
-} from "lucide-react";
+  IconBrandGmail,
+  IconBrandWaze,
+  IconBrandWhatsapp,
+  IconPhone,
+  type Icon as TablerIcon,
+} from "@tabler/icons-react";
 import { toast } from "sonner";
 import { contactSchema } from "@/lib/contactSchema";
 import { supabase } from "@/integrations/supabase/client";
 import { useSiteContact } from "@/hooks/useSiteContact";
-import { mailtoLink } from "@/lib/mailto";
-import { copyText, gmailComposeLink } from "@/lib/webmail";
+import { gmailComposeLink } from "@/lib/webmail";
+import { mapLinkTarget, mapLinks } from "@/lib/maps";
 import { submitErrorMessage } from "@/lib/submitError";
 import { latinFieldProps } from "@/lib/field-direction";
 import type { SiteContact } from "@/lib/site-contact";
-import { WhatsAppIcon } from "@/components/WhatsAppButton";
 import SectionHeading from "@/components/SectionHeading";
 import Reveal from "@/components/Reveal";
 import { cn } from "@/lib/utils";
@@ -28,238 +25,111 @@ import { useLocalizedPath } from "@/lib/useLocalizedPath";
 import DirectionalArrow from "@/components/DirectionalArrow";
 
 /* ---------------------------------------------------------------------------
-   Direct channels — the left column of the split (RTL: the second DOM child).
-   Every tile is a real target: three of them leave the page (WhatsApp, phone,
-   mail) and the fourth walks you down to the charcoal showroom band, so the
-   page holds together instead of ending in a dead card.
+   Direct channels — four short cards, each one link, each leaving the page:
+   WhatsApp, a phone call, Gmail, and Waze to the showroom.
 --------------------------------------------------------------------------- */
 
 type Channel = {
   key: string;
-  Icon: React.ComponentType<{ className?: string }>;
-  /** Warm terracotta wash by default; WhatsApp keeps its own brand green. */
-  iconClass: string;
-  /**
-   * Optical size correction for the glyph inside the 48px chip. Lucide icons
-   * are 2px strokes and sit right at 24px; the WhatsApp mark is a solid fill,
-   * which reads noticeably heavier at the same measure — so it is set smaller.
-   */
-  glyphClass?: string;
-  title: string;
-  /** Latin-only titles (phone, mail) must render LTR inside the RTL block. */
-  ltr?: boolean;
-  line: string;
-  href?: string;
-  external?: boolean;
+  Icon: TablerIcon;
+  /** What the card does, in words. */
+  label: ReactNode;
+  /** The number, the address, the place — isolated, since two are Latin. */
+  detail?: string;
+  href: string;
+  /** Anything but the phone call opens in a new tab on a computer. */
+  newTab?: boolean;
 };
 
 type TFunc = (key: string, opts?: Record<string, unknown>) => string;
 
-const channelsFor = (SITE: SiteContact, t: TFunc): Channel[] => [
-  {
-    key: "whatsapp",
-    Icon: WhatsAppIcon,
-    iconClass: "bg-[#25D366]/10 text-[#25D366]",
-    glyphClass: "w-[22px] h-[22px]",
-    title: t("channels.whatsapp.title"),
-    line: t("channels.whatsapp.line"),
-    href: SITE.whatsapp.link(t("channels.whatsappMessage")),
-    external: true,
-  },
-  {
-    key: "phone",
-    Icon: Phone,
-    iconClass: "bg-foreground/15 text-accent",
-    title: SITE.phone.display,
-    ltr: true,
-    line: t("channels.phoneLine"),
-    href: `tel:${SITE.phone.tel}`,
-  },
-  {
-    key: "email",
-    Icon: Mail,
-    iconClass: "bg-foreground/15 text-accent",
-    title: SITE.email,
-    ltr: true,
-    // Deliberately not the 24-hour promise: that line already sits, word for
-    // word, in the assurances beside the form — two identical sentences a few
-    // centimetres apart read as a copy-paste slip.
-    line: t("channels.emailLine"),
-    // Prefilled, like the WhatsApp tile beside it. A bare mailto: opens an
-    // empty window, and the visitor has to invent an opening line.
-    href: mailtoLink(SITE.email, t("email.subject"), t("email.body")),
-  },
-  {
-    key: "showroom",
-    Icon: MapPin,
-    iconClass: "bg-foreground/15 text-accent",
-    title: t("channels.showroomTitle", { city: SITE.address.city }),
-    // The street stays on the tile. This is the one channel whose whole subject
-    // is "where", and a visitor scanning the four tiles should get the answer
-    // without a click — the band a screen below is the detail, not the source.
-    line: t("channels.showroomLine", { street: SITE.address.street }),
-  },
-];
+const channelsFor = (SITE: SiteContact, t: TFunc): Channel[] => {
+  const { waze } = mapLinks(SITE.address.street, SITE.address.city);
+  return [
+    {
+      key: "whatsapp",
+      Icon: IconBrandWhatsapp,
+      label: t("channels.whatsapp"),
+      href: SITE.whatsapp.link(t("channels.whatsappMessage")),
+      newTab: true,
+    },
+    {
+      key: "phone",
+      Icon: IconPhone,
+      label: t("channels.phone"),
+      detail: SITE.phone.display,
+      href: `tel:${SITE.phone.tel}`,
+    },
+    {
+      key: "email",
+      Icon: IconBrandGmail,
+      label: t("channels.email"),
+      detail: SITE.email,
+      /* Straight to Gmail, composing to the studio.
+         It was a mailto: with a choice of three routes under it. A mailto:
+         is handed to whatever mail program the computer has registered, and
+         for most people who live in Gmail in a browser that is nothing at all
+         — Chrome and Edge ignore the click without a word. The owner asked
+         for one link that lands in Gmail, and this is that link. */
+      href: gmailComposeLink(SITE.email, t("email.subject")),
+      newTab: true,
+    },
+    {
+      key: "waze",
+      Icon: IconBrandWaze,
+      label: t("channels.showroomTitle", { city: SITE.address.city }),
+      detail: t("channels.showroomLine", { street: SITE.address.street }),
+      href: waze,
+    },
+  ];
+};
 
 /* The email prefill, the tile actions and the form copy all live in the
-   `contact` namespace now. They were module constants in Hebrew, which meant
+   `contact` namespace. They were module constants in Hebrew, which meant
    /en/faq rendered an English heading over an entirely Hebrew contact block —
    the one place on the English site where a visitor is asked to act. */
 
-const scrollToShowroom = () => {
-  const el = document.getElementById("showroom");
-  if (!el) return;
-  const reduce = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
-  el.scrollIntoView({ behavior: reduce ? "instant" : "smooth", block: "start" });
-};
-
-const tileClass =
-"group flex h-full w-full flex-col items-start gap-4 rounded-sm border border-border bg-secondary p-6 md:p-7 text-start transition-colors duration-200 hover:border-foreground/20 hover:bg-background";
-
+/**
+ * One card: a line icon in terracotta, what it does, and the detail under it.
+ *
+ * The cards were tall panels with a tinted chip behind the icon, a sentence of
+ * description, a chevron, and — on the email one — three links of their own.
+ * Each is now one short row, and the whole row is the link.
+ *
+ * The fill is a step lighter than the grey band they sit on, so each reads as
+ * a card rather than as a bordered patch of the same grey.
+ */
 const ChannelTile = ({ channel }: { channel: Channel }) => {
   const { Icon } = channel;
-  // The showroom tile is the only one that stays on the page. Its cue points
-  // down, where it actually goes, instead of promising a departure it never
-  // makes — same weight, same slot, so the four tiles still read as a set.
-  const jumps = !channel.href;
-  const Cue = jumps ? ChevronDown : ChevronLeft;
-  // The email tile offers three routes rather than making one; a cue pointing
-  // out of the page would promise a departure it does not make.
-  const showCue = channel.key !== "email";
-
-  const inner = (
-    <>
-      <span
-        className={cn(
-"shrink-0 w-12 h-12 rounded-sm flex items-center justify-center transition-transform duration-300 group-hover:scale-[1.06]",
-          channel.iconClass,
-        )}
-      >
-        <Icon className={channel.glyphClass ?? "w-6 h-6"} />
-      </span>
-
-      <span className="min-w-0 flex-1">
-        <span
-          className={cn(
-"block font-display font-normal text-body leading-snug text-foreground",
-            // A Latin string inside an RTL block: flip the element to LTR so
-            // the digits read in order, then pin it back to the block's own
-            // reading edge. `text-start` cannot do that — it resolves against
-            // this element's direction, which is now ltr, which is the LEFT
-            // edge and the opposite of every other line on the tile.
-            channel.ltr && "text-end rtl:text-start",
-          )}
-          dir={channel.ltr ? "ltr" : undefined}
-        >
-          {channel.title}
-        </span>
-        <span className="block text-body leading-snug text-muted-foreground mt-1.5">
-          {channel.line}
-        </span>
-      </span>
-
-      {/* RTL: forward points left */}
-      {showCue && <Cue
-        className={cn(
-"w-5 h-5 shrink-0 text-accent transition-all duration-300 group-hover:text-primary",
-          jumps ? "group-hover:translate-y-0.5" : "group-hover:-translate-x-1",
-        )}
-        aria-hidden="true"
-      />}
-    </>
-  );
-
-  if (channel.key === "email")
-    return <EmailTile inner={inner} email={channel.title} mailto={channel.href!} />;
-
-  if (!channel.href) {
-    return (
-      <button type="button" onClick={scrollToShowroom} className={tileClass}>
-        {inner}
-      </button>
-    );
-  }
+  // Waze decides per device: a phone follows it in the same tab, which is
+  // what hands it to the app. Everything else that leaves opens in a new tab.
+  const target =
+    channel.key === "waze"
+      ? mapLinkTarget()
+      : channel.newTab
+        ? { target: "_blank", rel: "noopener noreferrer" }
+        : {};
 
   return (
     <a
       href={channel.href}
-      className={tileClass}
-      {...(channel.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+      {...target}
+      className="group flex h-full min-h-[5.25rem] items-center gap-4 rounded-sm border border-border bg-[hsl(0_0%_97%)] px-5 py-4 text-start transition-colors duration-200 hover:border-foreground/25 hover:bg-background"
     >
-      {inner}
+      <Icon
+        aria-hidden="true"
+        stroke={1.5}
+        className="h-7 w-7 shrink-0 text-accent transition-transform duration-300 group-hover:scale-110 motion-reduce:transition-none"
+      />
+      <span className="min-w-0">
+        <span className="block text-body leading-snug text-foreground">{channel.label}</span>
+        {channel.detail && (
+          <span className="mt-0.5 block text-small leading-snug text-muted-foreground">
+            <bdi>{channel.detail}</bdi>
+          </span>
+        )}
+      </span>
     </a>
-  );
-};
-
-/**
- * The email tile, which is the only one that cannot be a single link.
- *
- * A mailto: is correct and, for a large share of visitors, does nothing at all.
- * The browser hands the URL to a registered protocol handler; with none
- * registered, Chrome and Edge silently ignore the click — no error, no tab, not
- * even a console message — and a page is not permitted to detect that, because
- * the handler list is withheld on privacy grounds. The person signed into Gmail
- * in a browser tab is exactly the person it fails for, which is the report that
- * produced this component.
- *
- * So it offers three routes and detects nothing. The address is a mailto for
- * anyone with a mail client, the Gmail link opens a composed message in a tab,
- * and copy is the floor that always works. Offering the choice is also why this
- * tile stops being one big link: an anchor cannot legally contain another
- * anchor and a button.
- */
-const EmailTile = ({
-  inner,
-  email,
-  mailto,
-}: {
-  inner: ReactNode;
-  email: string;
-  mailto: string;
-}) => {
-  const [copied, setCopied] = useState(false);
-  const { t } = useTranslation("contact");
-
-  const copy = async () => {
-    const ok = await copyText(email);
-    if (!ok) return toast.error(t("email.copyFailed"));
-    setCopied(true);
-    window.setTimeout(() => setCopied(false), 2400);
-  };
-
-  return (
-    <div className={cn(tileClass, "cursor-default")}>
-      {inner}
-
-      <div className="mt-1 flex flex-wrap items-center gap-x-5 gap-y-2">
-        <a
-          href={mailto}
-          className="text-body text-accent underline decoration-1 underline-offset-4 transition-colors hover:text-foreground"
-        >
-          {t("email.openInMailApp")}
-        </a>
-        <a
-          href={gmailComposeLink(email, t("email.subject"), t("email.body"))}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-body text-accent underline decoration-1 underline-offset-4 transition-colors hover:text-foreground"
-        >
-          {t("email.openInGmail")}
-        </a>
-        <button
-          type="button"
-          onClick={copy}
-          className="text-body text-accent underline decoration-1 underline-offset-4 transition-colors hover:text-foreground"
-        >
-          {t("email.copyAddress")}
-        </button>
-        {/* Polite, never assertive: a copy confirmation must not interrupt
-            whatever was already being read aloud. */}
-        <span role="status" aria-live="polite" className="text-body text-muted-foreground">
-          {copied ? t("email.copied") : ""}
-        </span>
-      </div>
-    </div>
   );
 };
 
@@ -400,14 +270,22 @@ const Contact = () => {
     // A tinted band, and now a ruled one. Fill alone carried every seam on this
     // site while the page was cream and the band sand (1.22:1). White against
     // #F8F8F8 is 1.06:1 — too little to mark a section change by itself.
-    <section className="py-14 md:py-20 bg-secondary border-y border-border">
+    // The #contact anchor lives here now, on the grey band itself: product
+    // pages, the header and the footer all link to /faq#contact, and "כתבו
+    // לנו" belongs with the ways of writing rather than floating above them.
+    <section id="contact" className="scroll-mt-28 py-14 md:py-20 bg-secondary border-y border-border">
       <div className="container-luxury">
         {/* Channels before the form, everywhere. Apple's own contact page has
             no form at all — a person deciding on made-to-order furniture wants
-            a phone number and a showroom before a message box. */}
-        <div className="max-w-6xl mx-auto">
+            a phone number and a showroom before a message box.
+            Full container width, so "כתבו לנו" starts on the same edge as the
+            page title and the questions above it. */}
+        <div>
           <Reveal className="min-w-0">
-            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4 mb-16 md:mb-20">
+            <h2 className="mb-8 text-start text-heading font-normal tracking-normal text-foreground md:mb-10">
+              {t("writeToUs")}
+            </h2>
+            <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4 mb-16 md:mb-20">
               {channels.map((c) => (
                 <ChannelTile key={c.key} channel={c} />
               ))}

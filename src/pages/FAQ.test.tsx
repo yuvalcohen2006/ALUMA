@@ -61,13 +61,45 @@ describe("the questions page", () => {
     expect(screen.getByRole("button", { name: /שליחת ההודעה/ })).toBeTruthy();
   });
 
-  it("offers a jump straight to the form from the top of the page", () => {
-    renderFaq();
-    const jump = screen.getByRole("link", { name: /כתבו לנו/ });
-    expect(jump.getAttribute("href")).toBe("#contact");
+  it("no longer carries the lines the owner cut", () => {
+    const { container } = renderFaq();
+    for (const line of [
+      "כל מה שאנחנו נשאלים לפני שמזמינים",
+      "כתבו לנו ↓",
+      "לא מצאתם את התשובה?",
+      "גודל המרפסת או החצר",
+    ]) {
+      expect(container.textContent).not.toContain(line);
+    }
   });
 
-  it("gives that jump somewhere to land", () => {
+  it("titles the page plainly", () => {
+    renderFaq();
+    expect(screen.getByRole("heading", { level: 1 }).textContent).toBe("שאלות ותשובות");
+  });
+
+  it("puts \"כתבו לנו\" over the ways to reach us", () => {
+    const { container } = renderFaq();
+    const heading = screen.getByRole("heading", { name: "כתבו לנו" });
+    expect(container.querySelector("#contact")?.contains(heading)).toBe(true);
+  });
+
+  it("sends the email card straight to Gmail, as one link", () => {
+    renderFaq();
+    const card = screen.getByRole("link", { name: /כתבו לנו במייל/ });
+    expect(card.getAttribute("href")).toMatch(/^https:\/\/mail\.google\.com\/mail\/\?view=cm&fs=1&to=/);
+    expect(card.querySelectorAll("a")).toHaveLength(0);
+  });
+
+  it("points the showroom card at Waze's own link, which a phone opens in the app", () => {
+    renderFaq();
+    const waze = [...document.querySelectorAll("a")].filter((a) =>
+      (a.getAttribute("href") ?? "").startsWith("https://waze.com/ul?"),
+    );
+    expect(waze.length).toBeGreaterThan(0);
+  });
+
+  it("keeps the #contact anchor the rest of the site links to", () => {
     const { container } = renderFaq();
     expect(container.querySelector("#contact")).toBeTruthy();
   });

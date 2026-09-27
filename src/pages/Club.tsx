@@ -31,8 +31,8 @@ import DirectionalArrow from "@/components/DirectionalArrow";
  * with that state is held behind <AuthGate> until the session resolves.
  *
  * Structure runs on one strong contrast beat, the way the home screen does:
- * warm-white explanation → a single charcoal band carrying the four benefits as
- * a hairline-separated ledger row → tinted joining spine → white close.
+ * the title → a single charcoal band carrying the four benefits as a
+ * hairline-separated ledger row → a tinted band with the one call to join.
  *
  * Vertical rhythm is one scale, `py-14 md:py-20`, on every band — the colour
  * change at each seam is what separates the sections, so the padding only has
@@ -49,7 +49,6 @@ const PERKS = [
   { icon: ShieldCheck, key: "vip" },
 ] as const;
 
-const STEPS = ["signup", "verify", "open"] as const;
 const TERMS = ["free", "leave", "noSpam"] as const;
 
 const perkVariants: Variants = {
@@ -115,7 +114,10 @@ const Club = () => {
         </ShineButton>
       ) : (
         <>
-          <ShineButton to={to("/club/auth?mode=signup")}>
+          {/* Joining happens in the club section of the home page, the same
+              one-field sign-up visitors already use there. This went to the
+              account sign-up screen, which answered with an error. */}
+          <ShineButton to={`${to("/")}#club`}>
             {t("join")}
             <DirectionalArrow className="w-4 h-4" animate={false} />
           </ShineButton>
@@ -138,22 +140,19 @@ const Club = () => {
         path="/club"
       />
 
-      <PageHero
-        title={t("title")}
-        subtitle={t("subtitle")}
-      />
+      <PageHero title={t("title")} />
 
       {/* ── 1. The one dark band: benefits as a hairline-separated ledger row ──
-          The hero closes tight (pb-4), which was fine when a white section
-          followed it. A colour change needs air before it or the hero reads as
-          clipped, and the margin shows the page's own background. */}
-      <section className="mt-10 md:mt-16 py-14 md:py-20 bg-foreground text-background">
+          It starts right where the hero ends, so the white under the title is
+          the hero's own bottom padding, the same as the gap above it. */}
+      <section className="py-14 md:py-20 bg-foreground text-background">
         <div className="container-luxury">
           <Reveal className="flex flex-col items-center mb-10 md:mb-14">
             <SectionHeading
               light
               align="center"
               subtitle={t("perksSubtitle")}
+              subtitleClassName="lg:max-w-none lg:whitespace-nowrap"
             >
               {t("perksTitle")}
             </SectionHeading>
@@ -202,17 +201,16 @@ const Club = () => {
         </div>
       </section>
 
-      {/* ── 2. Joining — a numbered spine, and the only ask on the page ── */}
+      {/* ── 2. Joining — the only ask on the page ── */}
       <section className="border-y border-border py-14 md:py-20 bg-secondary">
         <div className="container-luxury">
-          <div className="grid lg:grid-cols-12 gap-10 lg:gap-14 items-start max-w-7xl mx-auto">
-            <Reveal className="lg:col-span-5">
+          <div className="max-w-7xl mx-auto">
+            <Reveal>
               <div className="text-start">
                 {/* Charcoal, not terracotta: 3.1:1 on this band is under AA. */}
-                <SectionHeading tone="charcoal" align="start">
+                <SectionHeading tone="charcoal" align="start" className="lg:whitespace-nowrap">
                   {t("joinTitle")}
                 </SectionHeading>
-                <div className="w-20 h-[2px] bg-foreground/15 mt-5" aria-hidden="true" />
 
                 <p className="text-small leading-relaxed text-foreground-soft mt-6 text-pretty">
                   {t("joinBody")}</p>
@@ -244,49 +242,6 @@ const Club = () => {
               </div>
             </Reveal>
 
-            <Reveal className="lg:col-span-7" delay={120}>
-              {/* Block-level with a max-width: in RTL it settles against the
-                  right (start) edge of its column on its own. 2xl rather than
-                  anything narrower — each step is one line at any of these
-                  widths, so a tighter cap would only be trimming bare ground off
-                  the left of the column.
-                  role="list" is not redundant — Tailwind's preflight sets
-                  list-style:none, which makes VoiceOver drop list semantics
-                  entirely, and the visible 01/02/03 is aria-hidden, so this is
-                  what carries the ordering to a screen reader. */}
-              <ol role="list" className="max-w-2xl">
-                {STEPS.map((step, i) => (
-                  <li key={step} className="flex gap-6 md:gap-8">
-                    {/* Badge column, right in RTL, with the spine dropping to the next step.
-                        The numeral is decorative — the <ol> already announces the order,
-                        so reading "01" out loud on top of it would just double up. */}
-                    <div className="flex flex-col items-center shrink-0">
-                      <span
-                        aria-hidden="true"
-                        className="grid place-items-center w-12 h-12 rounded-full border border-foreground/25 bg-background font-display text-small text-muted-foreground"
-                      >
-                        {String(i + 1).padStart(2, "0")}
-                      </span>
-                      {i < STEPS.length - 1 && (
-                        <span
-                          className="w-px flex-1 min-h-[36px] bg-foreground/15 mt-3"
-                          aria-hidden="true"
-                        />
-                      )}
-                    </div>
-
-                    <div className={`text-start pt-2.5 ${i < STEPS.length - 1 ? "pb-8" : ""}`}>
-                      <h3 className="font-display font-normal text-body text-foreground leading-snug">
-                        {t(`steps.${step}.title`)}
-                      </h3>
-                      <p className="text-small leading-relaxed text-foreground-soft mt-2 text-pretty">
-                        {t(`steps.${step}.desc`)}
-                      </p>
-                    </div>
-                  </li>
-                ))}
-              </ol>
-            </Reveal>
           </div>
         </div>
       </section>

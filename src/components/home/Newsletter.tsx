@@ -93,7 +93,7 @@ const Newsletter = () => {
     // and it is on all four sides rather than only the two asked about: with
     // the sides framed and the foot left open, the photograph looked cropped
     // at the footer instead of framed above it.
-    <section className="bg-background p-3 md:p-4 lg:p-5">
+    <section id="club" className="scroll-mt-24 bg-background p-3 md:p-4 lg:p-5">
       <div className="relative isolate h-[500px] overflow-hidden rounded-sm md:h-[490px] lg:h-[580px]">
         <img
           src={clubBg}

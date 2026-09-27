@@ -1,13 +1,8 @@
 {
-  "title": "Questions? Answers.",
-  "subtitle": "Everything we get asked before an order — and what's worth knowing after.",
-  "notFound": "Didn't find your answer?",
-  "talkToUs": "Talk to us",
-  "replyTime": "— we reply within one business day.",
+  "title": "Questions and answers",
   "cats": {
     "buy": "Ordering & Delivery",
     "materials": "Materials & Durability",
     "service": "Warranty & Service"
-  },
-  "writeToUs": "Write to us"
+  }
 }

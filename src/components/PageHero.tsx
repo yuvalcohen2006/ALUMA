@@ -26,12 +26,14 @@ interface PageHeroProps {
  * hand-set to `text-5xl` drifts from the display role the moment either
  * changes, and drifted headers are most of what "inconsistent" means.
  *
- * `pt` clears the fixed header (~96px) and then adds the page's own opening
- * space; Header.tsx drops its border on pages that open like this.
+ * `pt` clears the fixed header (96px) and then adds the page's own opening
+ * space: 48px, 80px from md. `pb` is that same space again, so a title has
+ * as much room under it as over it when the next section is a band of colour.
+ * Header.tsx drops its border on pages that open like this.
  */
 const PageHero = ({ title, subtitle, filterSlot, dark = false }: PageHeroProps) => (
   <section
-    className={`pt-36 pb-14 md:pt-44 md:pb-20 ${dark ? "bg-foreground" : "bg-background"}`}
+    className={`pt-36 pb-12 md:pt-44 md:pb-20 ${dark ? "bg-foreground" : "bg-background"}`}
   >
     <div className="container-luxury">
       {/* items-START, not items-end: in a column flex the cross axis is the

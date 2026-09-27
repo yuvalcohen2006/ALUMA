@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { readFileSync, readdirSync } from "node:fs";
 import { join, relative } from "node:path";
+import { RETIRED_SITE_TEXTS } from "@/lib/retired-texts";
 
 /**
  * The CMS promises more than the code can keep unless these two lists agree.
@@ -63,7 +64,8 @@ describe("editable site texts", () => {
   });
 
   it("renders every key the admin offers for editing", () => {
-    const dead = seeded.filter((k) => !consumed.has(k));
+    // Retired keys stay in the table but the admin screen no longer offers them.
+    const dead = seeded.filter((k) => !consumed.has(k) && !RETIRED_SITE_TEXTS.has(k));
     expect(dead).toEqual([]);
   });
 

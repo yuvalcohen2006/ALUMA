@@ -35,10 +35,12 @@ describe("the club page", () => {
     auth.loading = false;
   });
 
-  it("asks you to join exactly once", () => {
+  it("asks you to join exactly once, in the club section of the home page", () => {
     const { container } = renderClub();
-    const joins = container.querySelectorAll('a[href*="mode=signup"]');
+    const joins = container.querySelectorAll('a[href="/#club"]');
     expect(joins).toHaveLength(1);
+    // The account sign-up screen answered with an error; nothing goes there.
+    expect(container.querySelectorAll('a[href*="mode=signup"]')).toHaveLength(0);
   });
 
   it("offers exactly one way in for someone who already has an account", () => {
@@ -52,7 +54,7 @@ describe("the club page", () => {
     const { container } = renderClub();
     expect(container.querySelectorAll('a[href="/club/dashboard"]')).toHaveLength(1);
     // Nobody who is already a member should still be asked to sign up.
-    expect(container.querySelectorAll('a[href*="mode=signup"]')).toHaveLength(0);
+    expect(container.querySelectorAll('a[href="/#club"]')).toHaveLength(0);
   });
 
   it("is built from two sections under the hero", () => {
@@ -66,9 +68,19 @@ describe("the club page", () => {
     expect(queryByText("מה זה מועדון אלומה")).toBeNull();
   });
 
-  it("still names the benefits and the steps", () => {
+  it("still names the benefits", () => {
     const { container } = renderClub();
-    expect(within(container).getByText("הרשמה")).toBeTruthy();
-    expect(within(container).getByText("עולם שלם נפתח")).toBeTruthy();
+    expect(within(container).getByText("מעקב פרויקט חי")).toBeTruthy();
+    expect(within(container).getByText("שירות VIP אישי")).toBeTruthy();
+  });
+
+  it.each([
+    "עולם שקט של שירות, שנתפר במידה שלכם.",
+    "דקה אחת, שם, מייל וטלפון",
+    "אימות מהיר",
+    "עולם שלם נפתח",
+  ])("no longer says %s", (line) => {
+    const { container } = renderClub();
+    expect(container.textContent).not.toContain(line);
   });
 });

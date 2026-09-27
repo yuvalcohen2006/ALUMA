@@ -8,31 +8,12 @@
     "about": "About"
   },
   "statement": "Home doesn't end at the door.",
-  "lead": "Aluma isn't only outdoor furniture. It's the way a home carries on outdoors: settings that feel like a fine living room under open sky, somewhere to host, to rest, and to live the good hours properly.",
-  "terraceAlt": "A stone terrace above the sea at dusk, with a pale sofa between olive trees",
   "storyLead": "Aluma began where material meets light.",
   "story": {
     "one": "The name comes from the root of aluminium, a material that is strong, clean and durable, made to live outdoors without fearing the sun, the rain or the passing of time. And beyond the material, it carries the sound of light: the same light that defines being outside.",
     "two": "Every piece is made to order, in clean and exact lines, on an advanced aluminium frame with fabrics made for any weather."
   },
-  "craftAlt": "The corner of an aluminium frame, a wooden armrest and a pale fabric cushion",
-  "processTitle": "How a piece comes to be",
-  "process": {
-    "measure": {
-      "title": "We measure and plan",
-      "body": "Everything starts with the space itself: its size, where the sun falls, and how you actually sit outside."
-    },
-    "materials": {
-      "title": "We choose the materials",
-      "body": "Aluminium frames, Sunbrella fabrics and stone tops, in colours that suit the house and its light."
-    },
-    "install": {
-      "title": "We see it through",
-      "body": "From the first sketch until the piece is standing in place, ready for its first evening outside."
-    }
-  },
   "portraitAlt": "A line portrait of one of the Aluma team",
-  "closeTitle": "Fabric has to be touched. A sofa has to be sat on.",
   "closeBody": "Our showroom is waiting for you at {{address}}.",
   "visitCta": "Arrange a visit"
 }

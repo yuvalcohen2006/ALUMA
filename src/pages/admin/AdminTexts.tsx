@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import AdminLayout from "./AdminLayout";
+import { RETIRED_SITE_TEXTS } from "@/lib/retired-texts";
 
 type SiteText = {
   key: string;
@@ -26,6 +27,7 @@ type SiteText = {
  * with, so an empty box restores the default rather than blanking a section.
  * That is worth knowing while editing, so the page says it.
  */
+
 const AdminTexts = () => {
   const [rows, setRows] = useState<SiteText[]>([]);
   const [draft, setDraft] = useState<Record<string, string>>({});
@@ -39,7 +41,7 @@ const AdminTexts = () => {
         .select("key, value, label, hint, multiline, sort_order")
         .order("sort_order", { ascending: true });
       if (error) toast.error("לא הצלחנו לטעון את הטקסטים");
-      const list = (data as SiteText[]) ?? [];
+      const list = ((data as SiteText[]) ?? []).filter((r) => !RETIRED_SITE_TEXTS.has(r.key));
       setRows(list);
       setDraft(Object.fromEntries(list.map((r) => [r.key, r.value])));
       setLoading(false);

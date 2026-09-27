@@ -58,18 +58,34 @@ describe("the About page", () => {
     expect(portraits).toHaveLength(3);
   });
 
-  it("opens on the new line, with the paragraph under it at the reading size", () => {
-    mount();
-    expect(screen.getByRole("heading", { level: 1 }).textContent).toBe("הבית לא נגמר בדלת.");
-    const lead = screen.getByText(/היא הדרך שבה הבית ממשיך החוצה/);
-    expect(lead.className).toContain("text-lead");
-    expect(lead.className).not.toContain("text-small");
+  it.each([
+    "אלומה היא לא רק ריהוט חוץ",
+    "איך נולד פריט",
+    "מודדים ומתכננים",
+    "מתחילים במרחב עצמו",
+    "את הבד צריך לגעת",
+  ])("no longer says %s either", (line) => {
+    const { container } = mount();
+    expect(container.textContent).not.toContain(line);
   });
 
-  it("sets each sentence of the closing line on a line of its own", () => {
+  it("opens on the shared page title, with no logo over it", () => {
+    const { container } = mount();
+    expect(screen.getByRole("heading", { level: 1 }).textContent).toBe("הבית לא נגמר בדלת.");
+    // Neither the small logo over the title nor the wordmark under the button.
+    expect(container.querySelector('img[src*="aluma-logo"]')).toBeNull();
+  });
+
+  it("shows no furniture photographs, only the three drawings", () => {
+    const { container } = mount();
+    const srcs = [...container.querySelectorAll("img")].map((img) => img.getAttribute("src") ?? "");
+    expect(srcs.some((src) => /terrace|craft/.test(src))).toBe(false);
+    expect(srcs).toHaveLength(3);
+  });
+
+  it("closes on the showroom's address, as the heading", () => {
     mount();
-    const close = screen.getByText("את הבד צריך לגעת.").parentElement!;
+    const close = screen.getByText(/אולם התצוגה שלנו מחכה לכם/);
     expect(close.tagName).toBe("H2");
-    expect(close.querySelectorAll("span.block")).toHaveLength(2);
   });
 });

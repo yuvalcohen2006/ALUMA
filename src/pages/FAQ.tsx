@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Plus } from "lucide-react";
 import Layout from "@/components/Layout";
+import PageHero from "@/components/PageHero";
 import SEO from "@/components/SEO";
 import Reveal from "@/components/Reveal";
 import { useLocalizedPath } from "@/lib/useLocalizedPath";
@@ -9,7 +10,6 @@ import Contact from "@/components/Contact";
 import ShowroomBand from "@/components/contact/ShowroomBand";
 import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
-import { useSiteText } from "@/hooks/useSiteText";
 
 type Faq = { id: string; question: string; answer: string; category: string };
 
@@ -23,15 +23,48 @@ type Faq = { id: string; question: string; answer: string; category: string };
  * empty one.
  */
 const FALLBACK: Faq[] = [
-  { id: "lead", category: "רכישה ואספקה", question: "כמה זמן לוקח לקבל את ההזמנה?", answer: "זמן האספקה הממוצע נע בין 5 ל-10 שבועות, בהתאם לזמינות הקולקציה ולהיקף ההזמנה." },
-  { id: "delivery", category: "רכישה ואספקה", question: "האם יש הובלה והרכבה?", answer: "הריהוט מסופק לבית הלקוח בתיאום מראש, ומורכב על ידי צוות מקצועי ומנוסה." },
-  { id: "outdoor", category: "חומרים ועמידות", question: "האם הריהוט עמיד לתנאי חוץ?", answer: "כן. שלדת אלומיניום בצביעה בתנור, בדי Sunbrella עמידים ל-UV ולמים, ומשטחי שיש גרניט פורצלן — כל פריט מיועד לשימוש חיצוני בכל עונות השנה." },
-  { id: "care", category: "חומרים ועמידות", question: "איך מתחזקים את הריהוט?", answer: "תחזוקה מינימלית: ניקוי תקופתי במים ובחומרי ניקוי עדינים ישמור על המראה לאורך שנים." },
-  { id: "warranty", category: "אחריות ושירות", question: "מה כוללת האחריות?", answer: "אנו מעניקים אחריות בהתאם לסוג המוצר והרכיבים ממנו הוא מיוצר, וצוות השירות זמין גם לאחר האספקה." },
-  { id: "showroom", category: "אחריות ושירות", question: "האם יש אולם תצוגה?", answer: "אולם התצוגה שלנו ברחוב התמר 78 ביציץ פתוח בתיאום מראש." },
+  {
+    id: "lead",
+    category: "רכישה ואספקה",
+    question: "כמה זמן לוקח לקבל את ההזמנה?",
+    answer:
+      "זמן האספקה הממוצע נע בין 5 ל-10 שבועות, בהתאם לזמינות הקולקציה ולהיקף ההזמנה.",
+  },
+  {
+    id: "delivery",
+    category: "רכישה ואספקה",
+    question: "האם יש הובלה והרכבה?",
+    answer:
+      "הריהוט מסופק לבית הלקוח בתיאום מראש, ומורכב על ידי צוות מקצועי ומנוסה.",
+  },
+  {
+    id: "outdoor",
+    category: "חומרים ועמידות",
+    question: "האם הריהוט עמיד לתנאי חוץ?",
+    answer:
+      "כן. שלדת אלומיניום בצביעה בתנור, בדי Sunbrella עמידים ל-UV ולמים, ומשטחי שיש גרניט פורצלן — כל פריט מיועד לשימוש חיצוני בכל עונות השנה.",
+  },
+  {
+    id: "care",
+    category: "חומרים ועמידות",
+    question: "איך מתחזקים את הריהוט?",
+    answer:
+      "תחזוקה מינימלית: ניקוי תקופתי במים ובחומרי ניקוי עדינים ישמור על המראה לאורך שנים.",
+  },
+  {
+    id: "warranty",
+    category: "אחריות ושירות",
+    question: "מה כוללת האחריות?",
+    answer:
+      "אנו מעניקים אחריות בהתאם לסוג המוצר והרכיבים ממנו הוא מיוצר, וצוות השירות זמין גם לאחר האספקה.",
+  },
+  {
+    id: "showroom",
+    category: "אחריות ושירות",
+    question: "האם יש אולם תצוגה?",
+    answer: "אולם התצוגה שלנו ברחוב התמר 78 ביציץ פתוח בתיאום מראש.",
+  },
 ];
-
-
 
 /**
  * One question row. The whole row is the button; the plus sits at the leading
@@ -39,7 +72,19 @@ const FALLBACK: Faq[] = [
  * which is exactly why it beats a chevron here — a start-pointing chevron has
  * to mirror in RTL and someone always forgets.
  */
-const FaqRow = ({ q, a, id, open, onToggle }: { q: string; a: string; id: string; open: boolean; onToggle: () => void }) => (
+const FaqRow = ({
+  q,
+  a,
+  id,
+  open,
+  onToggle,
+}: {
+  q: string;
+  a: string;
+  id: string;
+  open: boolean;
+  onToggle: () => void;
+}) => (
   <div className="border-b border-foreground/10">
     <button
       type="button"
@@ -56,7 +101,10 @@ const FaqRow = ({ q, a, id, open, onToggle }: { q: string; a: string; id: string
         }`}
         strokeWidth={2}
       />
-      <span dir="auto" className="text-body font-medium leading-[1.35] text-foreground">
+      <span
+        dir="auto"
+        className="text-body font-medium leading-[1.35] text-foreground"
+      >
         {q}
       </span>
     </button>
@@ -104,7 +152,6 @@ const FAQPage = () => {
   const [faqs, setFaqs] = useState<Faq[]>(FALLBACK);
   const { to } = useLocalizedPath();
   const { t } = useTranslation("faq");
-  const text = useSiteText();
 
   useEffect(() => {
     let cancelled = false;
@@ -128,20 +175,23 @@ const FAQPage = () => {
 
   // Group in encounter order so the admin's sort_order decides both the
   // question order and the order the category headings appear in.
-  const grouped = faqs.reduce<{ category: string; items: Faq[] }[]>((acc, f) => {
-    const bucket = acc.find((g) => g.category === f.category);
-    if (bucket) bucket.items.push(f);
-    else acc.push({ category: f.category, items: [f] });
-    return acc;
-  }, []);
+  const grouped = faqs.reduce<{ category: string; items: Faq[] }[]>(
+    (acc, f) => {
+      const bucket = acc.find((g) => g.category === f.category);
+      if (bucket) bucket.items.push(f);
+      else acc.push({ category: f.category, items: [f] });
+      return acc;
+    },
+    [],
+  );
 
   // Regenerated from the catalog in the ACTIVE language, so the structured
   // data always matches what the page shows.
   const faqSchema = {
-"@context": "https://schema.org",
-"@type": "FAQPage",
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
     mainEntity: faqs.map((f) => ({
-"@type": "Question",
+      "@type": "Question",
       name: f.question,
       acceptedAnswer: { "@type": "Answer", text: f.answer },
     })),
@@ -150,7 +200,8 @@ const FAQPage = () => {
   const toggle = (id: string) =>
     setOpen((prev) => {
       const next = new Set(prev);
-      next.has(id) ? next.delete(id) : next.add(id);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
       return next;
     });
 
@@ -163,37 +214,29 @@ const FAQPage = () => {
         jsonLd={faqSchema}
       />
 
-      <section className="pt-40 pb-20 md:pt-48 md:pb-28 bg-background">
-        <div className="mx-auto max-w-[720px] px-6">
-          <Reveal>
-            {/* Apple's two-beat heading convention, not the word "FAQ". */}
-            <h1 className="font-display font-medium text-display text-foreground text-start">
-              {text("faq.title", t("title"))}
-            </h1>
-            <p className="mt-4 max-w-[46ch] text-small leading-relaxed text-foreground-soft text-start">
-              {text("faq.subtitle", t("subtitle"))}
-            </p>
-            {/* Straight to the form. Somebody who came here to ask something
-                should not have to read six answers first to find out where
-                the asking happens. A real anchor, so it works with the back
-                button and can be copied as a link. */}
-            <p className="mt-5 text-start">
-              <a
-                href="#contact"
-                className="text-small text-foreground underline underline-offset-[6px] decoration-1 hover:text-accent transition-colors"
-              >
-                {t("writeToUs")} ↓
-              </a>
-            </p>
-          </Reveal>
+      {/* The page's title sits where every other interior page puts its
+          own — the shared header — and says what the page is. It was "שאלות?
+          תשובות." in a heavier weight, with a subtitle and a "write to us ↓"
+          link under it, all set in the narrow column below instead. */}
+      <PageHero title={t("title")} />
 
-          <div className="mt-12 md:mt-16">
+      <section className="bg-background pb-20 md:pb-28">
+        {/* The questions keep their reading width, but start from the same
+            edge as the title rather than floating in the middle of the page. */}
+        <div className="container-luxury">
+          <div className="max-w-[720px]">
             {grouped.map((group, gi) => (
-              <Reveal key={group.category} className={gi > 0 ? "mt-14" : undefined}>
+              <Reveal
+                key={group.category}
+                className={gi > 0 ? "mt-14" : undefined}
+              >
                 <section aria-label={group.category}>
                   {/* A label, not a tab. Hebrew has no uppercase, so size and
-                      colour do that job instead. */}
-                  <h2 dir="auto" className="mb-4 text-label text-muted-foreground text-start">
+                        colour do that job instead. */}
+                  <h2
+                    dir="auto"
+                    className="mb-4 text-label text-muted-foreground text-start"
+                  >
                     {group.category}
                   </h2>
                   {group.items.map((f) => (
@@ -210,35 +253,6 @@ const FAQPage = () => {
               </Reveal>
             ))}
           </div>
-
-          <Reveal>
-            <p className="mt-14 text-small leading-relaxed text-foreground-soft text-start">
-              {t("notFound")}{" "}
-              <a
-                href="#contact"
-                className="text-foreground decoration-1 underline underline-offset-4 hover:text-accent transition-colors"
-              >
-                {t("talkToUs")}
-              </a>
-              {" "}{t("replyTime")}
-            </p>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* Contact sits directly under the questions rather than on a page of
-          its own: someone who read six answers and still has a question
-          shouldn't have to go looking for the way to ask it. /contact
-          redirects here.
-
-          It used to hide behind the same plus-row the questions use, which
-          read as one tidy list and worked badly — the row looked like a
-          heading, and the fields stayed in the tab order while invisible. */}
-      <section id="contact" className="scroll-mt-28 bg-background pt-2">
-        <div className="mx-auto max-w-[720px] px-6">
-          <h2 className="pt-16 text-start text-heading font-normal tracking-normal text-foreground">
-            {t("writeToUs")}
-          </h2>
         </div>
       </section>
 

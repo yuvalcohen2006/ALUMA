@@ -1,5 +1,30 @@
 # Where the site stands
 
+## Q&A, club and about — 27 September
+
+```
+████████████████████  done
+```
+
+| | |
+|---|---|
+| ✅ | Q&A, club and about titles sit exactly where collections, projects and DIY put theirs, with the same space under them as over them |
+| ✅ | Q&A: title "שאלות ותשובות", normal weight; three lines removed; "כתבו לנו" is now inside the grey area |
+| ✅ | Contact cards: shorter, lighter than the grey, one terracotta line icon each (Tabler), no extra text |
+| ✅ | The email card is one link to Gmail's compose window, addressed to outdooraluma@gmail.com. The showroom card opens Waze in the app on a phone |
+| ✅ | Form hint removed; showroom paragraph removed; "today" is now a thin terracotta bar and a small word; the hours card runs from the top of "בואו לראות מקרוב" to the bottom of the map buttons |
+| ✅ | Everything on the Q&A page now starts on one edge: title, questions, "כתבו לנו", the cards, "בואו לראות מקרוב" |
+| ✅ | Club: subtitle gone, even space under the title, both lines on one line from 1024px wide, steps gone |
+| ✅ | Club: "הצטרפו למועדון" goes to the club sign-up on the home page and lands on it, instead of the account screen that showed an error |
+| ✅ | About: logo, lead, both furniture photos, "איך נולד פריט" and the text under the drawings are gone; closes on "אולם התצוגה שלנו מחכה לכם בהתמר 78, יציץ.", no logo under the button |
+| 🔎 | Checked on desktop and phone: screenshots, measured gaps, the join jump, the Gmail and Waze links |
+
+On a phone the two club one-liners wrap, because at that width there isn't room for them.
+
+511 tests pass.
+
+---
+
 ## Product page, and the list for launch — 27 September
 
 ```

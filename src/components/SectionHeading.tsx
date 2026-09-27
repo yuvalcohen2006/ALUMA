@@ -20,6 +20,8 @@ interface SectionHeadingProps {
   align?: "center" | "start";
   as?: "h2" | "h3";
   className?: string;
+  /** Extra classes on the running text, e.g. to lift its 2xl measure. */
+  subtitleClassName?: string;
 }
 
 /**
@@ -45,6 +47,7 @@ const SectionHeading = ({
   align = "center",
   as: Tag = "h2",
   className = "",
+  subtitleClassName = "",
 }: SectionHeadingProps) => {
   const alignCls = align === "center" ? "items-center text-center" : "items-start text-start";
   const titleColor = light
@@ -79,7 +82,7 @@ const SectionHeading = ({
             // Without a rule the subtitle would sit right under the title, so it
             // carries the gap itself.
             divider ? "" : "mt-7"
-          } ${light ? "text-background/75" : "text-foreground"}`}
+          } ${light ? "text-background/75" : "text-foreground"} ${subtitleClassName}`}
         >
           {subtitle}
         </p>

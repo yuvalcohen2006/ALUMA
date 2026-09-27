@@ -11,6 +11,9 @@ import { decodeHash } from "@/lib/safe-hash";
  * their state to the URL, and yanking the reader back to the top every time
  * they tick a checkbox made filtering unusable. Only a new pathname scrolls.
  */
+/** Anything that means the visitor has taken over the scrolling. */
+const USER_INPUT = ["wheel", "touchstart", "keydown", "pointerdown"] as const;
+
 const ScrollToTop = () => {
   const { pathname, search, hash } = useLocation();
   const navType = useNavigationType();
@@ -51,12 +54,12 @@ const ScrollToTop = () => {
    * Returning true here means "handled" — the caller then leaves the page
    * alone rather than yanking it back up.
    */
-  const scrollToHash = () => {
+  const scrollToHash = (instant = false) => {
     if (!hash) return false;
     const el = document.getElementById(decodeHash(hash));
     if (!el) return false;
     const reduce = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
-    el.scrollIntoView({ behavior: reduce ? "instant" : "smooth", block: "start" });
+    el.scrollIntoView?.({ behavior: instant || reduce ? "instant" : "smooth", block: "start" });
     return true;
   };
 
@@ -87,10 +90,41 @@ const ScrollToTop = () => {
     const r1 = requestAnimationFrame(scrollTop);
     const t1 = window.setTimeout(scrollTop, 60);
     const t2 = window.setTimeout(scrollTop, 250);
+
+    /*
+     * A target far down a page that is still filling in moves as it fills.
+     * The club page's "join" goes to the club section at the foot of the home
+     * page, and by the time the collections and photographs above it had
+     * loaded, the section was 2000px below where the scroll had stopped.
+     * So for a few seconds, every time the page changes height, the target is
+     * found again — until the visitor scrolls, taps or types themselves.
+     */
+    let follow: ResizeObserver | undefined;
+    let stop: number | undefined;
+    const release = () => {
+      follow?.disconnect();
+      follow = undefined;
+      for (const type of USER_INPUT) window.removeEventListener(type, release);
+    };
+    if (hash && typeof ResizeObserver !== "undefined") {
+      // The observer reports once as soon as it is attached; that one is not
+      // a change, and acting on it would cut the smooth scroll short.
+      let first = true;
+      follow = new ResizeObserver(() => {
+        if (first) first = false;
+        else scrollToHash(true);
+      });
+      follow.observe(document.body);
+      for (const type of USER_INPUT) window.addEventListener(type, release, { passive: true });
+      stop = window.setTimeout(release, 3000);
+    }
+
     return () => {
       cancelAnimationFrame(r1);
       clearTimeout(t1);
       clearTimeout(t2);
+      clearTimeout(stop);
+      release();
     };
   }, [pathname, search, hash, navType, isNewPage]);
 
