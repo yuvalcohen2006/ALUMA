@@ -481,6 +481,22 @@ const AdminProductEdit = () => {
                       })}
                     </ul>
                   )}
+
+                  {/* A line of the owner's own, under the ticked ones. It is
+                      shown on the product page with them, as plain text: it
+                      has nothing behind it to link to. */}
+                  <div className="mt-4">
+                    <Label htmlFor="p-materials-free" className="font-normal">
+                      עוד חומרים, בכתב חופשי
+                    </Label>
+                    <Input
+                      id="p-materials-free"
+                      value={(product.materials as string[])?.[0] ?? ""}
+                      onChange={(e) =>
+                        patch({ materials: e.target.value.trim() ? [e.target.value] : [] })
+                      }
+                    />
+                  </div>
                 </div>
 
                 {/* Three boxes, in centimetres. The owner asked for boxes to

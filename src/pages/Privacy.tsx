@@ -1,4 +1,5 @@
 import Layout from "@/components/Layout";
+import { SITE as SITE_CONFIG } from "@/config/site";
 import SEO from "@/components/SEO";
 import PageHero from "@/components/PageHero";
 import { useSiteContact } from "@/hooks/useSiteContact";
@@ -83,7 +84,7 @@ const PrivacyPage = () => {
           </div>
 
           <div className="pt-4 border-t border-border text-body text-muted-foreground">
-            עודכן לאחרונה: {new Date().toLocaleDateString("he-IL")}.
+            עודכן לאחרונה: {SITE_CONFIG.legalUpdated}.
           </div>
         </div>
       </section>

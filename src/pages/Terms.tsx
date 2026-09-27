@@ -1,4 +1,5 @@
 import Layout from "@/components/Layout";
+import { SITE as SITE_CONFIG } from "@/config/site";
 import SEO from "@/components/SEO";
 import PageHero from "@/components/PageHero";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -295,7 +296,7 @@ const TermsPage = () => {
           </Tabs>
 
           <div className="pt-10 mt-12 border-t border-border text-body text-muted-foreground text-center">
-            עודכן לאחרונה: {new Date().toLocaleDateString("he-IL")}
+            עודכן לאחרונה: {SITE_CONFIG.legalUpdated}
           </div>
         </div>
       </section>

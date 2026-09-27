@@ -97,12 +97,28 @@ describe("the product page", () => {
     expect(heading.textContent).toBe("dex");
     // The lockup is marked LTR, so a Latin name sits at the left in Hebrew too.
     expect(heading.closest("[dir='ltr']")).toBeTruthy();
-    // And it comes before the photographs in its own column.
-    const column = heading.closest("div")!.parentElement!;
-    const img = column.querySelector("img");
+    // It is its own cell on the first row, in the photograph's column, and
+    // the photograph follows it on the second.
+    const cell = heading.closest("[dir='ltr']")!;
+    expect(cell.className).toContain("md:row-start-1");
+    const img = container.querySelector("img[alt*='dex']");
     expect(img).toBeTruthy();
     expect(heading.compareDocumentPosition(img!) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
     expect(container.querySelectorAll("h1").length).toBe(1);
+  });
+
+  /**
+   * The owner's request: the top of על המוצר lines up with the top of the
+   * photograph, not with the name above it. On a wide screen both start on
+   * the grid's second row.
+   */
+  it("starts the writing on the same row as the photograph", async () => {
+    mount();
+    await screen.findByText("על המוצר");
+    const about = screen.getByText("על המוצר").closest("div")!.parentElement!;
+    expect(about.className).toContain("md:row-start-2");
+    const photoColumn = document.querySelector("[class*='md:sticky']")!;
+    expect(photoColumn.className).toContain("md:row-start-2");
   });
 
   it("lists each measurement given, with its unit, and leaves out the blanks", async () => {
@@ -148,14 +164,50 @@ describe("the product page", () => {
     expect(screen.queryByText("חומרים")).toBeNull();
   });
 
-  /** The client's words: the sizes and materials boxes look like the about box. */
-  it("gives all three boxes the same frame", async () => {
+  /**
+   * על המוצר and חומרים share one frame. מידות keeps the same padding and
+   * place in the column, without the border — the owner's call, so the
+   * short list does not read as a third equal panel.
+   */
+  it("frames the about and materials boxes alike, and leaves the sizes unframed", async () => {
     mount();
     await screen.findByText("על המוצר");
-    const frames = ["על המוצר", "מידות", "חומרים"].map(
-      (title) => screen.getByText(title).closest("div")!.className,
-    );
-    expect(new Set(frames).size).toBe(1);
-    expect(frames[0]).toContain("border-border");
+    const box = (title: string) => screen.getByText(title).closest("div")!.className;
+    expect(box("על המוצר")).toBe(box("חומרים"));
+    expect(box("על המוצר")).toContain("border-border");
+    expect(box("מידות")).not.toContain("border-border");
+    // Same padding either way, so the sizes sit exactly where a framed box would.
+    for (const title of ["על המוצר", "מידות", "חומרים"]) {
+      expect(box(title)).toContain("p-6");
+      expect(box(title)).toContain("md:p-8");
+    }
+  });
+
+  it("sets the number to the right of the unit, close to its label", async () => {
+    mount();
+    const box = (await screen.findByText("מידות")).closest("div")!;
+    const row = box.querySelector("dl > div")!;
+    // Close together: no justify-between throwing the value to the far edge.
+    expect(row.className).not.toContain("justify-between");
+    // Not isolated as LTR, so in a right-to-left page the number sits right of ס״מ.
+    const value = row.querySelector("dd")!;
+    expect(value.querySelector("bdi, [dir='ltr']")).toBeNull();
+    expect(value.textContent).toBe("240 ס״מ");
+  });
+
+  it("adds the owner's free line under the materials he ticked, as plain text", async () => {
+    db.product = product({ materials: ["חבל קלוע ביד"] });
+    mount();
+    const box = (await screen.findByText("חומרים")).closest("div")!;
+    expect(box.textContent).toContain("חבל קלוע ביד");
+    // The ticked ones are links; the free line is not.
+    const links = within(box).getAllByRole("link").map((l) => l.textContent);
+    expect(links.some((t) => t?.includes("חבל קלוע ביד"))).toBe(false);
+  });
+
+  it("shows the materials box for the free line alone, with nothing ticked", async () => {
+    db.product = product({ material_ids: [], materials: ["חבל קלוע ביד"] });
+    mount();
+    expect((await screen.findByText("חומרים")).closest("div")!.textContent).toContain("חבל קלוע ביד");
   });
 });

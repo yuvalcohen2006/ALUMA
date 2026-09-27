@@ -51,6 +51,14 @@ export const SITE = {
    */
   enableAR: false,
 
+  /**
+   * The date on the privacy policy and the terms, set by hand when they
+   * change. It was `new Date()`, so both pages told every visitor they had
+   * been updated that very day — a legal page that claims to change daily
+   * is one nobody can hold the business to.
+   */
+  legalUpdated: "23.9.2026",
+
   address: {
     street: "התמר 78",
     city: "יציץ",

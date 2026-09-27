@@ -1,5 +1,27 @@
 # Where the site stands
 
+## Product page, and the list for launch — 27 September
+
+```
+████████████████████  done
+```
+
+| | |
+|---|---|
+| ✅ | Sizes: the number sits to the right of ס״מ, right next to its label — the gap is gone |
+| ✅ | על המוצר now starts exactly level with the top of the photo |
+| ✅ | מידות has no frame, same padding and place as the boxes around it |
+| ✅ | A free-text line under the materials in the admin; it shows on the product page under the ticked ones |
+| ✅ | The name now comes first for screen readers too — it was only first on screen |
+| ✅ | Privacy and terms stopped claiming they were updated "today" on every visit |
+| 🔎 | Checked the live site: it serves the latest push, the database is healthy, the client has filled in real sizes on all 47 products |
+
+What's left is yours — **[ACTION.md](ACTION.md)**, eight short items.
+
+497 tests pass.
+
+---
+
 ## Photos in the admin, and the last of the fuss — 23 September
 
 ```

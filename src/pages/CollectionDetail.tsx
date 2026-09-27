@@ -9,7 +9,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { normaliseProduct, type DBProduct } from "@/hooks/useCollectionsData";
 import { trackPixel } from "@/lib/pixel";
 import { formatPrice } from "@/lib/price";
-import Ltr from "@/components/Ltr";
 import { useProductGallery, type ProductVariant } from "@/hooks/useProductGallery";
 import { useTranslation } from "react-i18next";
 import { useLocalizedPath } from "@/lib/useLocalizedPath";
@@ -30,8 +29,20 @@ const SITE = "https://alumaoutdoor.com";
  * to guarantee with one component than with three copies that have to be kept
  * in step by hand.
  */
-const InfoCard = ({ title, children }: { title: string; children: ReactNode }) => (
-  <div className="rounded-sm border border-border bg-card p-6 md:p-8">
+const InfoCard = ({
+  title,
+  children,
+  /** Same box, no frame: the sizes are a short list and a second bordered
+   *  panel between two of them made the column read as three equal claims. */
+  plain = false,
+}: {
+  title: string;
+  children: ReactNode;
+  plain?: boolean;
+}) => (
+  <div
+    className={`rounded-sm p-6 md:p-8 ${plain ? "" : "border border-border bg-card"}`}
+  >
     <h2 className="font-display font-medium text-heading leading-snug text-foreground">{title}</h2>
     <div className="mb-6 mt-5 h-[2px] w-20 bg-foreground/15" aria-hidden="true" />
     {children}
@@ -61,6 +72,9 @@ const CollectionDetailPage = () => {
         .filter((m): m is (typeof allMaterials)[number] => Boolean(m)),
     [item?.material_ids, allMaterials],
   );
+
+  /** The owner's own line, kept in the old free-text column. */
+  const freeMaterials = (item?.materials ?? []).join(", ").trim();
 
   // Three numbers in centimetres, and only the ones filled in. The old
   // single `dimensions` line still shows, as one unlabelled row, for any
@@ -274,158 +288,11 @@ const CollectionDetailPage = () => {
 
       {/* MAIN 2-COLUMN */}
       <section className="pb-16 md:pb-24 bg-background">
-        <div className="container-luxury grid md:grid-cols-12 gap-10 md:gap-14">
-          {/* The reading-start column: everything that is written about the
-              piece. Seven of twelve, where it used to be two of five — the
-              photograph was the wider half and the words were a margin. */}
-          <div className="md:col-span-7 order-2 md:order-1 flex flex-col gap-6 md:gap-8">
-            {/* Finishes. Each swatch carries its own photograph, so choosing
-                one changes the picture rather than just tinting a square.
-                Shown only when a product actually has finishes loaded — most
-                have none, and an empty picker is worse than no picker. */}
-            {variants.length > 0 && (
-              <div>
-                <p className="text-label text-muted-foreground">
-                  {t("product.finish")}{selected ? `: ${selected.name}` : ""}
-                </p>
-                <ul className="mt-3 flex flex-wrap gap-3">
-                  {variants.map((v) => {
-                    const isActive = v.id === activeVariant;
-                    return (
-                      <li key={v.id}>
-                        <button
-                          type="button"
-                          onClick={() => selectVariant(isActive ? null : v.id)}
-                          aria-pressed={isActive}
-                          // The colour alone must not carry the state: a ring
-                          // AND the label above tell you what is selected.
-                          title={v.name}
-                          className={`h-9 w-9 rounded-full border transition-colors ${
-                            isActive
-                              ? "border-foreground ring-2 ring-foreground ring-offset-2 ring-offset-background"
-                              : "border-foreground/55 hover:border-foreground"
-                          }`}
-                          style={v.swatch ? { backgroundColor: v.swatch } : undefined}
-                        >
-                          <span className="sr-only">{v.name}</span>
-                        </button>
-                      </li>
-                    );
-                  })}
-                </ul>
-              </div>
-            )}
-
-            {item.description.length > 0 && (
-              <InfoCard title={t("sections.about")}>
-                <div className="space-y-5">
-                  {item.description.map((p, i) => (
-                    <p key={i} dir="auto" className="text-foreground text-body">
-                      {p}
-                    </p>
-                  ))}
-                </div>
-              </InfoCard>
-            )}
-
-            {item.highlights.length > 0 && (
-              <InfoCard title={t("sections.highlights")}>
-                <ul className="space-y-4">
-                  {item.highlights.map((h, i) => (
-                    <li key={i} className="flex gap-3">
-                      <Check className="w-5 h-5 text-accent mt-1 shrink-0" aria-hidden="true" />
-                      <div dir="auto" className="text-foreground font-normal text-body leading-relaxed">
-                        {typeof h === "string" ? h : h.title}
-                        {typeof h !== "string" && h.desc && (
-                          <span className="text-muted-foreground">, {h.desc}</span>
-                        )}
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              </InfoCard>
-            )}
-
-            {/* The exact sizes the owner typed, one to a row. A single line of
-                text — "אורך 240 ס״מ · עומק 92" — is what this was, and it read
-                as a sentence rather than as a specification. Each value is
-                isolated, or "320 × 260" comes out as "260 × 320" in a Hebrew
-                line. */}
-            {sizeRows.length > 0 && (
-              <InfoCard title={t("sections.dimensions")}>
-                <dl className="divide-y divide-border">
-                  {sizeRows.map((size, i) => (
-                    <div
-                      key={i}
-                      className="flex items-baseline justify-between gap-6 py-3 first:pt-0 last:pb-0"
-                    >
-                      <dt dir="auto" className="text-body text-foreground-soft">
-                        {size.label}
-                      </dt>
-                      <dd className="text-body text-foreground">
-                        <Ltr>{size.value}</Ltr>
-                      </dd>
-                    </div>
-                  ))}
-                </dl>
-              </InfoCard>
-            )}
-
-            {/* What it is made of, and a way through to what that means. Each
-                row goes to that material on /materials, which scrolls to it
-                and lights it up — the list used to be words with no way to
-                find out anything about them. */}
-            {productMaterials.length > 0 && (
-              <InfoCard title={t("sections.materials")}>
-                <ul role="list" className="divide-y divide-border">
-                  {productMaterials.map((m) => (
-                    <li key={m.id}>
-                      <Link
-                        to={`${to("/materials")}#${m.slug}`}
-                        className="group flex items-center gap-4 py-3 first:pt-0 last:pb-0 transition-colors"
-                      >
-                        {m.thumb && (
-                          <img
-                            src={m.thumb}
-                            alt=""
-                            width={96}
-                            height={96}
-                            loading="lazy"
-                            decoding="async"
-                            className="h-12 w-12 shrink-0 rounded-[2px] object-cover"
-                          />
-                        )}
-                        <span className="min-w-0 flex-1">
-                          {/* Isolated rather than dir="auto": a material named
-                              in Latin — PolyStone — would otherwise turn its
-                              own row left-aligned in a right-to-left list. */}
-                          <span className="block text-body text-foreground transition-colors group-hover:text-accent">
-                            <bdi>{materialName(m, lang)}</bdi>
-                          </span>
-                          {materialTagline(m, lang) && (
-                            <span className="block line-clamp-1 text-label text-muted-foreground">
-                              <bdi>{materialTagline(m, lang)}</bdi>
-                            </span>
-                          )}
-                        </span>
-                        <DirectionalArrow className="w-4 h-4 shrink-0 text-foreground" />
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </InfoCard>
-            )}
-
-            {item.description.length === 0 &&
-              item.highlights.length === 0 &&
-              productMaterials.length === 0 &&
-              sizeRows.length === 0 && (
-                <div className="flex min-h-[320px] items-center justify-center rounded-sm border border-border bg-card p-6 text-body text-muted-foreground md:p-8">
-                  {t("sections.more")}
-                </div>
-              )}
-          </div>
-
+        {/* Two rows on a wide screen: the name sits in the photograph's
+            column on the first row, and the photograph and the writing both
+            start on the second — so the top of על המוצר lines up with the top
+            of the photograph rather than with the name above it. */}
+        <div className="container-luxury grid gap-10 md:grid-cols-12 md:grid-rows-[auto_1fr] md:gap-x-14 md:gap-y-0">
           {/* The reading-end column: the name, then the photographs.
               The name used to be centred across the whole page above both
               columns, which left it belonging to neither. Above the photograph
@@ -438,8 +305,10 @@ const CollectionDetailPage = () => {
           {/* Sticky: the words are now the taller column, and a photograph
               that scrolls away leaves you reading about a piece you can no
               longer see. */}
-          <div className="md:col-span-5 order-1 md:order-2 md:sticky md:top-28 md:self-start">
-            <div dir="ltr" className="mb-6 text-start md:mb-8">
+          <div
+            dir="ltr"
+            className="text-start md:col-span-5 md:col-start-8 md:row-start-1 md:mb-8"
+          >
               {item.tag && (
                 <p dir="auto" className="mb-3 text-label text-muted-foreground">
                   {item.tag}
@@ -456,13 +325,17 @@ const CollectionDetailPage = () => {
               {/* Only when there is one. Most pieces are made to order and
                   carry no price at all, and an empty price line reads as an
                   error. */}
-              {formatPrice(item.price) && (
-                <p className="mt-3 text-body text-foreground" dir="ltr">
-                  {formatPrice(item.price)}
-                </p>
-              )}
-            </div>
+            {formatPrice(item.price) && (
+              <p className="mt-3 text-body text-foreground" dir="ltr">
+                {formatPrice(item.price)}
+              </p>
+            )}
+          </div>
 
+          {/* Sticky: the words are the taller column, and a photograph that
+              scrolls away leaves you reading about a piece you can no longer
+              see. */}
+          <div className="md:col-span-5 md:col-start-8 md:row-start-2 md:sticky md:top-28 md:self-start">
             {/* Mobile: horizontal carousel */}
             {/* Bleed must match container-luxury's own padding (px-5 → sm:px-6)
                 exactly, or the scroller overhangs the viewport at 375px. */}
@@ -555,6 +428,171 @@ const CollectionDetailPage = () => {
               )}
             </div>
           </div>
+          {/* The reading-start column: everything that is written about the
+              piece. Seven of twelve, where it used to be two of five — the
+              photograph was the wider half and the words were a margin. */}
+          <div className="flex flex-col gap-6 md:col-span-7 md:col-start-1 md:row-start-2 md:gap-8">
+            {/* Finishes. Each swatch carries its own photograph, so choosing
+                one changes the picture rather than just tinting a square.
+                Shown only when a product actually has finishes loaded — most
+                have none, and an empty picker is worse than no picker. */}
+            {variants.length > 0 && (
+              <div>
+                <p className="text-label text-muted-foreground">
+                  {t("product.finish")}{selected ? `: ${selected.name}` : ""}
+                </p>
+                <ul className="mt-3 flex flex-wrap gap-3">
+                  {variants.map((v) => {
+                    const isActive = v.id === activeVariant;
+                    return (
+                      <li key={v.id}>
+                        <button
+                          type="button"
+                          onClick={() => selectVariant(isActive ? null : v.id)}
+                          aria-pressed={isActive}
+                          // The colour alone must not carry the state: a ring
+                          // AND the label above tell you what is selected.
+                          title={v.name}
+                          className={`h-9 w-9 rounded-full border transition-colors ${
+                            isActive
+                              ? "border-foreground ring-2 ring-foreground ring-offset-2 ring-offset-background"
+                              : "border-foreground/55 hover:border-foreground"
+                          }`}
+                          style={v.swatch ? { backgroundColor: v.swatch } : undefined}
+                        >
+                          <span className="sr-only">{v.name}</span>
+                        </button>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            )}
+
+            {item.description.length > 0 && (
+              <InfoCard title={t("sections.about")}>
+                <div className="space-y-5">
+                  {item.description.map((p, i) => (
+                    <p key={i} dir="auto" className="text-foreground text-body">
+                      {p}
+                    </p>
+                  ))}
+                </div>
+              </InfoCard>
+            )}
+
+            {item.highlights.length > 0 && (
+              <InfoCard title={t("sections.highlights")}>
+                <ul className="space-y-4">
+                  {item.highlights.map((h, i) => (
+                    <li key={i} className="flex gap-3">
+                      <Check className="w-5 h-5 text-accent mt-1 shrink-0" aria-hidden="true" />
+                      <div dir="auto" className="text-foreground font-normal text-body leading-relaxed">
+                        {typeof h === "string" ? h : h.title}
+                        {typeof h !== "string" && h.desc && (
+                          <span className="text-muted-foreground">, {h.desc}</span>
+                        )}
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </InfoCard>
+            )}
+
+            {/* The exact sizes the owner typed, one to a row. A single line of
+                text — "אורך 240 ס״מ · עומק 92" — is what this was, and it read
+                as a sentence rather than as a specification. Each value is
+                isolated, or "320 × 260" comes out as "260 × 320" in a Hebrew
+                line. */}
+            {sizeRows.length > 0 && (
+              <InfoCard title={t("sections.dimensions")} plain>
+                <dl className="divide-y divide-border">
+                  {sizeRows.map((size, i) => (
+                    <div
+                      key={i}
+                      className="flex items-baseline gap-4 py-3 first:pt-0 last:pb-0"
+                    >
+                      {/* A narrow label column rather than justify-between: the
+                          value was thrown to the far edge of the card, half a
+                          column of nothing between "אורך" and the number. */}
+                      <dt className="w-16 shrink-0 text-body text-foreground-soft">
+                        {size.label}
+                      </dt>
+                      {/* No LTR isolation here. Isolated, the run reads
+                          "240 ס״מ" with the number on the left; left to the
+                          page's own direction the number sits to the RIGHT of
+                          the unit, which is how it is said in Hebrew. */}
+                      <dd className="text-body text-foreground">{size.value}</dd>
+                    </div>
+                  ))}
+                </dl>
+              </InfoCard>
+            )}
+
+            {/* What it is made of, and a way through to what that means. Each
+                row goes to that material on /materials, which scrolls to it
+                and lights it up — the list used to be words with no way to
+                find out anything about them. */}
+            {(productMaterials.length > 0 || freeMaterials) && (
+              <InfoCard title={t("sections.materials")}>
+                <ul role="list" className="divide-y divide-border">
+                  {productMaterials.map((m) => (
+                    <li key={m.id}>
+                      <Link
+                        to={`${to("/materials")}#${m.slug}`}
+                        className="group flex items-center gap-4 py-3 first:pt-0 last:pb-0 transition-colors"
+                      >
+                        {m.thumb && (
+                          <img
+                            src={m.thumb}
+                            alt=""
+                            width={96}
+                            height={96}
+                            loading="lazy"
+                            decoding="async"
+                            className="h-12 w-12 shrink-0 rounded-[2px] object-cover"
+                          />
+                        )}
+                        <span className="min-w-0 flex-1">
+                          {/* Isolated rather than dir="auto": a material named
+                              in Latin — PolyStone — would otherwise turn its
+                              own row left-aligned in a right-to-left list. */}
+                          <span className="block text-body text-foreground transition-colors group-hover:text-accent">
+                            <bdi>{materialName(m, lang)}</bdi>
+                          </span>
+                          {materialTagline(m, lang) && (
+                            <span className="block line-clamp-1 text-label text-muted-foreground">
+                              <bdi>{materialTagline(m, lang)}</bdi>
+                            </span>
+                          )}
+                        </span>
+                        <DirectionalArrow className="w-4 h-4 shrink-0 text-foreground" />
+                      </Link>
+                    </li>
+                  ))}
+
+                  {/* Whatever the owner typed by hand. No photograph and no
+                      link, because there is nothing behind it — it is a line
+                      of text he asked to be able to add. */}
+                  {freeMaterials && (
+                    <li className="py-3 text-body text-foreground first:pt-0 last:pb-0">
+                      <bdi>{freeMaterials}</bdi>
+                    </li>
+                  )}
+                </ul>
+              </InfoCard>
+            )}
+
+            {item.description.length === 0 &&
+              item.highlights.length === 0 &&
+              productMaterials.length === 0 &&
+              sizeRows.length === 0 && (
+                <div className="flex min-h-[320px] items-center justify-center rounded-sm border border-border bg-card p-6 text-body text-muted-foreground md:p-8">
+                  {t("sections.more")}
+                </div>
+              )}
+          </div>
+
         </div>
       </section>
 
