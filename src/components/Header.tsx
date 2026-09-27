@@ -16,6 +16,8 @@ const navItem =
 "inline-flex items-center rounded-sm px-2.5 xl:px-3.5 py-2 text-sm 2xl:text-base font-medium tracking-wide transition-colors duration-300";
 const navRest = "text-foreground-soft hover:bg-foreground/[0.07] hover:text-foreground";
 const navActive = "bg-foreground/[0.09] text-foreground";
+// Not ready yet: greyed, not a link, no hover.
+const navDisabled = "cursor-not-allowed text-foreground/35";
 
 const Header = () => {
   const { user } = useAuth();
@@ -37,11 +39,14 @@ const Header = () => {
   // Order is his, given left-to-right; in RTL the first item renders rightmost,
   // so this array is that list reversed. שווה לדעת is not here: he called it
   // "really a side-thing", so it lives in the footer.
-  const navLinks: { label: string; to: string; badge?: string }[] = useMemo(
+  //
+  // DIY is greyed out until it is ready: it keeps its place in the bar, but it
+  // is not a link and nothing happens on a click.
+  const navLinks: { label: string; to: string; badge?: string; disabled?: boolean }[] = useMemo(
     () => [
       { label: t("nav.collections"), to: localized("/collections") },
       { label: t("nav.projects"), to: localized("/projects") },
-      { label: t("nav.diy"), to: localized("/diy") },
+      { label: t("nav.diy"), to: localized("/diy"), disabled: true },
       { label: t("nav.faq"), to: localized("/faq") },
       { label: t("nav.club"), to: localized("/club") },
       { label: t("nav.story"), to: localized("/story") },
@@ -98,7 +103,17 @@ const Header = () => {
         <nav
           className="hidden lg:flex flex-1 items-center justify-center gap-0.5 xl:gap-1 2xl:gap-1.5 whitespace-nowrap"
         >
-          {navLinks.map((link) => (
+          {navLinks.map((link) =>
+            link.disabled ? (
+              <span
+                key={link.to}
+                aria-disabled="true"
+                title={t("nav.soon")}
+                className={`${navItem} ${navDisabled}`}
+              >
+                {link.label}
+              </span>
+            ) : (
             <NavLink
               key={link.to}
               to={link.to}
@@ -119,7 +134,8 @@ const Header = () => {
                 </span>
               )}
             </NavLink>
-          ))}
+            ),
+          )}
         </nav>
 
         {/* Signed-in proof sits at the inline end, beside the switcher —
@@ -129,8 +145,9 @@ const Header = () => {
           {SITE.enableEnglish && <LanguageSwitcher />}
         </div>
 
-        {/* Mobile menu button */}
-        <div className="lg:hidden relative z-50">
+        {/* Mobile menu button. Hidden while the menu is open: the menu has its
+            own close button, and this one sat on top of the menu's logo. */}
+        <div className={`lg:hidden relative z-50 ${open ? "invisible" : ""}`}>
           <Button
             variant="ghost"
             size="icon"
@@ -186,6 +203,15 @@ const Header = () => {
                   open ? "opacity-100 translate-x-0" : "opacity-0 translate-x-4"
                 }`}
               >
+                {link.disabled ? (
+                  <span
+                    aria-disabled="true"
+                    title={t("nav.soon")}
+                    className={`block border-b border-border/40 font-display text-xl text-start py-3 ${navDisabled}`}
+                  >
+                    {link.label}
+                  </span>
+                ) : (
                 <NavLink
                   to={link.to}
                   end={link.to === "/"}
@@ -203,6 +229,7 @@ const Header = () => {
                     </span>
                   )}
                 </NavLink>
+                )}
               </div>
             ))}
 

@@ -1,5 +1,24 @@
 # Where the site stands
 
+## DIY off for now, and a new projects page — 27 September
+
+```
+████████████████████  done
+```
+
+| | |
+|---|---|
+| ✅ | "עשה זאת בעצמך" is greyed out in the header and the phone menu, and goes nowhere until it's ready |
+| ✅ | Projects is now built like Collections: the title alone, then a grid of project photos with the name and place under each |
+| ✅ | Gone: the zig-zag rows, the 01/02/03 numbers, the faded last photo, the line under the title |
+| ✅ | Every published project shows. It used to stop at three |
+| ✅ | Phone menu: the header's X no longer sits on top of the logo |
+| 🔎 | Checked on desktop and phone |
+
+517 tests pass.
+
+---
+
 ## Q&A, club and about — 27 September
 
 ```
