@@ -1,5 +1,25 @@
 # Where the site stands
 
+## One button everywhere, and a login at the top — 27 September
+
+```
+████████████████████  done
+```
+
+| | |
+|---|---|
+| ✅ | Every button on every page is now the projects-page button: a flat tablet that fills terracotta on hover |
+| ✅ | Three versions by background: light (white, grey, pale photos), dark (charcoal bands), terracotta (the terracotta band) |
+| ✅ | Covered: home, Q&A form and map buttons, projects, about, collections, product pages, club, sign-in, account, password reset, questionnaire, thank-you, 404, error screen, fabric tool |
+| ✅ | The line under "המרחב הבא שנתכנן הוא שלכם" is gone |
+| ✅ | "התחברות" at the top next to the language toggle, and in the phone menu. Signed in, it becomes your name and menu as before |
+| — | Left as they were: the cookie pop-up, the round WhatsApp and accessibility buttons, colour swatches, the admin panel |
+| 🔎 | Checked on desktop and phone, including the hover |
+
+522 tests pass.
+
+---
+
 ## DIY off for now, and a new projects page — 27 September
 
 ```

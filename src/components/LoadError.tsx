@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
-import { Button } from "@/components/ui/button";
 import Layout from "@/components/Layout";
+import ShineButton from "@/components/ui/shine-button";
 
 /**
  * What a page shows when the database could not be reached.
@@ -19,9 +19,7 @@ const LoadError = ({ onRetry }: { onRetry: () => void }) => {
         <p className="max-w-md text-body leading-relaxed text-muted-foreground">
           {t("loadErrorPage")}
         </p>
-        <Button onClick={onRetry} variant="outline" className="rounded-sm px-6 text-body">
-          {t("retry")}
-        </Button>
+        <ShineButton onClick={onRetry}>{t("retry")}</ShineButton>
       </div>
     </Layout>
   );

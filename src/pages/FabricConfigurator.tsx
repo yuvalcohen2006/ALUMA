@@ -1,6 +1,5 @@
 import { useMemo, useState } from "react";
 import SEO from "@/components/SEO";
-import { Button } from "@/components/ui/button";
 import { Check, MessageCircle, Sparkles } from "lucide-react";
 import salonPhoto from "@/assets/collections/salon-monolith.jpg";
 import { useSiteContact } from "@/hooks/useSiteContact";
@@ -12,6 +11,7 @@ import {
 import { trackPixel } from "@/lib/pixel";
 import ConversionCTA from "@/components/ConversionCTA";
 import Layout from "@/components/Layout";
+import ShineButton from "@/components/ui/shine-button";
 
 const familyLabelsHe: Record<string, string> = {
   Canvas: "Canvas · צבעי בסיס",
@@ -108,23 +108,21 @@ const FabricConfigurator = () => {
                     </div>
                   </div>
 
-                  <Button asChild variant="default" className="gap-2">
-                    <a
-                      href={whatsappUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={() =>
-                        trackPixel("InitiateCheckout", {
-                          content_name: `בד Sunbrella, ${selected.nameHe}`,
-                          content_category: "Fabric Configurator",
-                          content_ids: [selected.code],
-                        })
-                      }
-                    >
-                      <MessageCircle className="h-4 w-4" aria-hidden="true" />
-                      הצעת מחיר ב-WhatsApp
-                    </a>
-                  </Button>
+                  <ShineButton
+                    href={whatsappUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() =>
+                      trackPixel("InitiateCheckout", {
+                        content_name: `בד Sunbrella, ${selected.nameHe}`,
+                        content_category: "Fabric Configurator",
+                        content_ids: [selected.code],
+                      })
+                    }
+                  >
+                    <MessageCircle aria-hidden="true" />
+                    הצעת מחיר ב-WhatsApp
+                  </ShineButton>
                 </div>
               </div>
 

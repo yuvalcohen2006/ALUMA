@@ -1,7 +1,7 @@
 import { useSiteContact } from "@/hooks/useSiteContact";
-import { Link } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import { ArrowLeft, MessageCircle, Phone, Sparkles } from "lucide-react";
+import { MessageCircle, Phone, Sparkles } from "lucide-react";
+import DirectionalArrow from "@/components/DirectionalArrow";
+import ShineButton from "@/components/ui/shine-button";
 
 interface ConversionCTAProps {
   eyebrow?: string;
@@ -55,39 +55,18 @@ const ConversionCTA = ({
           </p>
 
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Button
-              asChild
-              size="lg"
-              variant="secondary"
-              className="rounded-sm px-8  group bg-background text-primary hover:bg-background/90"
-            >
-              <Link to={primaryHref}>
-                {primaryLabel}
-                <ArrowLeft className="me-2 h-4 w-4 group-hover:-translate-x-1 rtl:group-hover:translate-x-1 transition-smooth" />
-              </Link>
-            </Button>
-            <Button
-              asChild
-              size="lg"
-              variant="outline"
-              className="rounded-sm px-8 bg-transparent border-primary-foreground/40 text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground"
-            >
-              <a href={wa} target="_blank" rel="noopener noreferrer">
-                <MessageCircle className="ms-2 h-4 w-4" />
-                בוואטסאפ עכשיו
-              </a>
-            </Button>
-            <Button
-              asChild
-              size="lg"
-              variant="outline"
-              className="rounded-sm px-8 bg-transparent border-primary-foreground/40 text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground"
-            >
-              <a href={`tel:${SITE.phone.tel}`}>
-                <Phone className="ms-2 h-4 w-4" />
-                חייגו אלינו
-              </a>
-            </Button>
+            <ShineButton to={primaryHref} on="terracotta">
+              {primaryLabel}
+              <DirectionalArrow animate={false} />
+            </ShineButton>
+            <ShineButton href={wa} target="_blank" rel="noopener noreferrer" on="terracotta">
+              <MessageCircle aria-hidden="true" />
+              בוואטסאפ עכשיו
+            </ShineButton>
+            <ShineButton href={`tel:${SITE.phone.tel}`} on="terracotta">
+              <Phone aria-hidden="true" />
+              חייגו אלינו
+            </ShineButton>
           </div>
 
           <p className="mt-8 text-label">

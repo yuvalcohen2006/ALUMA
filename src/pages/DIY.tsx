@@ -392,7 +392,7 @@ const DIYPage = () => {
                   ))}
                 </ul>
 
-                <ShineButton to={to("/faq") + "#contact"} invert>
+                <ShineButton to={to("/faq") + "#contact"} on="dark">
                   דברו איתנו
                   <ArrowLeft className="h-4 w-4" aria-hidden="true" />
                 </ShineButton>

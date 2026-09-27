@@ -39,9 +39,10 @@ describe("the account menu", () => {
     auth.signedOut = false;
   });
 
-  it("shows nothing at all when nobody is signed in", () => {
-    const { container } = renderMenu();
-    expect(container).toBeEmptyDOMElement();
+  it("offers a way to sign in when nobody is signed in", () => {
+    renderMenu();
+    const signIn = screen.getByRole("link", { name: "התחברות" });
+    expect(signIn.getAttribute("href")).toBe("/club/auth");
   });
 
   it("shows nothing while it is still working out who you are", () => {

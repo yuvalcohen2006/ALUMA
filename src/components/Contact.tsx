@@ -23,6 +23,7 @@ import { cn } from "@/lib/utils";
 import { useTranslation } from "react-i18next";
 import { useLocalizedPath } from "@/lib/useLocalizedPath";
 import DirectionalArrow from "@/components/DirectionalArrow";
+import ShineButton from "@/components/ui/shine-button";
 
 /* ---------------------------------------------------------------------------
    Direct channels — four short cards, each one link, each leaving the page:
@@ -335,22 +336,18 @@ const Contact = () => {
               the fields, more of those who do finish. Worth watching in the
               leads table rather than assuming.
             */}
-            <button
-              type="button"
+            <ShineButton
               onClick={() => setFormOpen((v) => !v)}
               aria-expanded={formOpen}
               aria-controls="contact-form-region"
-              className="mt-9 inline-flex h-12 items-center gap-2 rounded-full bg-foreground px-7 text-small font-medium text-background transition-colors duration-200 hover:bg-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+              className="mt-9"
             >
               {formOpen ? t("closeForm") : t("openForm")}
               <ChevronDown
-                className={cn(
-                  "h-4 w-4 transition-transform duration-300",
-                  formOpen && "rotate-180",
-                )}
+                className={cn("transition-transform duration-300", formOpen && "rotate-180")}
                 aria-hidden="true"
               />
-            </button>
+            </ShineButton>
 
             <div
               id="contact-form-region"
@@ -518,26 +515,26 @@ const Contact = () => {
                   than as one more field, and the privacy line sits with the
                   action it actually describes. */}
               <div className="mt-7 border-t border-border pt-7 flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
-                <button
+                <ShineButton
                   type="submit"
                   disabled={submitting}
                   aria-busy={submitting}
                   // min-w holds the width across the label swap, so the row
                   // does not jump the moment you press send.
-                  className="group inline-flex h-14 w-full sm:w-auto sm:min-w-[13rem] items-center justify-center gap-3 rounded-full bg-foreground px-10 text-body font-medium text-background transition-colors duration-300 hover:bg-accent disabled:cursor-not-allowed disabled:opacity-60"
+                  className="w-full sm:w-auto sm:min-w-[13rem]"
                 >
                   {submitting ? (
                     <>
-                      <Loader2 className="w-5 h-5 animate-spin" aria-hidden="true" />
+                      <Loader2 className="animate-spin" aria-hidden="true" />
                       {t("submitting")}
                     </>
                   ) : (
                     <>
                       {t("submit")}
-                      <DirectionalArrow className="w-5 h-5" />
+                      <DirectionalArrow animate={false} />
                     </>
                   )}
-                </button>
+                </ShineButton>
 
                 <p className="text-body leading-relaxed text-muted-foreground sm:max-w-[22rem]">
                   {t("consent.before")}{" "}

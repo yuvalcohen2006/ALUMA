@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import Reveal from "@/components/Reveal";
 import { useMaterials, materialName, materialTagline } from "@/hooks/useMaterials";
 import { useLocalizedPath } from "@/lib/useLocalizedPath";
+import { shineClass } from "@/components/ui/shine-button";
 
 /**
  * The materials, small, as a strip you slide.
@@ -70,8 +71,9 @@ const MaterialsPreview = () => {
   // In Hebrew "forward" is leftward, so the chevrons swap with the language.
   const BackIcon = lang === "he" ? ChevronRight : ChevronLeft;
   const ForwardIcon = lang === "he" ? ChevronLeft : ChevronRight;
-  const arrow =
-    "grid h-12 w-12 place-items-center rounded-full border border-foreground/30 text-foreground transition-colors duration-200 hover:border-foreground hover:bg-foreground hover:text-background disabled:pointer-events-none disabled:opacity-30";
+  // The site's button, square: the same tablet, edge and terracotta flood as
+  // every other button, with the chevron in place of a label.
+  const arrow = shineClass("light", "h-[52px] w-[52px] !p-0");
 
   return (
     <section className="bg-background" aria-labelledby="materials-preview-title">

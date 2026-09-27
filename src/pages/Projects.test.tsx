@@ -87,6 +87,13 @@ describe("the projects page", () => {
     expect(container.textContent).not.toContain("לצפייה בפרויקט");
   });
 
+  it("closes on the invitation with no paragraph under it, and the site's button", () => {
+    const { container } = mount();
+    expect(container.textContent).not.toContain("כל פרויקט כאן התחיל בשיחה אחת");
+    const cta = screen.getByRole("link", { name: /לתיאום שיחה/ });
+    expect(cta.className).toContain("btn-shine");
+  });
+
   it("keeps each project reachable by its #slug", async () => {
     db.rows = [1, 2].map(row);
     const { container } = mount();

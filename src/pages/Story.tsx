@@ -2,14 +2,13 @@ import Layout from "@/components/Layout";
 import SEO from "@/components/SEO";
 import PageHero from "@/components/PageHero";
 import Reveal from "@/components/Reveal";
-import { Link } from "react-router-dom";
-import { Button } from "@/components/ui/button";
 import { useLocalizedPath } from "@/lib/useLocalizedPath";
 import { useSiteContact } from "@/hooks/useSiteContact";
 import portraitIdan from "@/assets/about/portrait-idan.webp";
 import portraitRoy from "@/assets/about/portrait-roy.webp";
 import portraitBen from "@/assets/about/portrait.webp";
 import { useTranslation } from "react-i18next";
+import ShineButton from "@/components/ui/shine-button";
 
 const breadcrumbs = {
 "@context": "https://schema.org",
@@ -115,9 +114,9 @@ const StoryPage = () => {
                   English sentence its number and comma were reordered. */}
               {t("closeBody", { address: `\u2068${SITE.address.full}\u2069` })}
             </h2>
-            <Button asChild size="lg" className="mt-10">
-              <Link to={to("/faq") + "#contact"}>{t("visitCta")}</Link>
-            </Button>
+            <ShineButton to={to("/faq") + "#contact"} className="mt-10">
+              {t("visitCta")}
+            </ShineButton>
           </Reveal>
         </div>
       </section>

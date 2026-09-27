@@ -7,6 +7,7 @@ import { useSiteText } from "@/hooks/useSiteText";
 import clubBg from "@/assets/categories/club-morning.jpg";
 import { LANGUAGE_DIR } from "@/i18n";
 import { useLocalizedPath } from "@/lib/useLocalizedPath";
+import ShineButton from "@/components/ui/shine-button";
 
 /** Same shape the contact form's schema accepts, kept deliberately loose:
  *  this only has to stop a typo, not adjudicate RFC 5322. */
@@ -145,7 +146,7 @@ const Newsletter = () => {
                   decoration; a labelled button reads as the thing you press.
                   17px on the input because iOS Safari zooms the page on focus
                   below 16px and never zooms back. */}
-              <div className="flex flex-col sm:flex-row gap-3">
+              <div className="flex flex-col sm:flex-row sm:items-stretch gap-3">
                 <input
                   id="club-email"
                   type="email"
@@ -172,15 +173,11 @@ const Newsletter = () => {
                   // sm:flex-1, not flex-1. In the stacked phone layout the
                   // column is the main axis, and flex-1's zero basis beat
                   // h-12 — the field rendered at half the button's height.
-                  className="h-12 w-full min-w-0 rounded-full sm:w-auto sm:flex-1 border border-foreground/15 bg-white/80 px-6 text-small text-foreground text-start shadow-soft backdrop-blur-md transition-colors placeholder:text-foreground/70 focus:border-accent"
+                  className="h-[52px] sm:h-auto w-full min-w-0 rounded-[9px] sm:w-auto sm:flex-1 border border-foreground/15 bg-white/80 px-6 text-small text-foreground text-start shadow-soft backdrop-blur-md transition-colors placeholder:text-foreground/70 focus:border-accent"
                 />
-                <button
-                  type="submit"
-                  disabled={submitting}
-                  className="h-12 shrink-0 rounded-full bg-foreground px-8 text-small font-medium text-background transition-colors duration-200 hover:bg-accent disabled:opacity-60"
-                >
+                <ShineButton type="submit" disabled={submitting} className="shrink-0">
                   {t("club.submit")}
-                </button>
+                </ShineButton>
               </div>
 
               {invalid && (

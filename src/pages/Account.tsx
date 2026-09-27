@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Layout from "@/components/Layout";
 import SEO from "@/components/SEO";
 import SectionLabel from "@/components/SectionLabel";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
@@ -15,6 +14,7 @@ import { LogOut, Calendar, MapPin, ClipboardList, UserRound } from "lucide-react
 import { useLocalizedPath } from "@/lib/useLocalizedPath";
 import { formatDateOnly } from "@/lib/dates";
 import { useSearchParams } from "react-router-dom";
+import ShineButton from "@/components/ui/shine-button";
 
 type Project = {
   id: string;
@@ -118,10 +118,10 @@ const Account = () => {
               </h1>
               <p className="text-muted-foreground mt-2">{user.email}</p>
             </div>
-            <Button variant="outline" onClick={handleSignOut} className="gap-2">
-              <LogOut className="w-4 h-4" />
+            <ShineButton onClick={handleSignOut}>
+              <LogOut aria-hidden="true" />
               התנתקות
-            </Button>
+            </ShineButton>
           </div>
         </div>
       </section>
@@ -151,9 +151,7 @@ const Account = () => {
               ) : projects.length === 0 ? (
                 <div className="bg-card border border-border rounded-sm p-10 text-center">
                   <p className="text-muted-foreground mb-4">אין לך עדיין הזמנה פעילה.</p>
-                  <Button asChild>
-                    <Link to={to("/faq") + "#contact"}>צור קשר להתחלת פרויקט</Link>
-                  </Button>
+                  <ShineButton to={to("/faq") + "#contact"}>צור קשר להתחלת פרויקט</ShineButton>
                 </div>
               ) : (
                 <div className="grid gap-5">
@@ -226,9 +224,9 @@ const Account = () => {
                   <Input value={user.email ?? ""} disabled dir="ltr" />
                   <p className="text-label text-muted-foreground">לשינוי אימייל צור קשר</p>
                 </div>
-                <Button type="submit" disabled={savingProfile}>
+                <ShineButton type="submit" disabled={savingProfile}>
                   {savingProfile ? "שומר..." : "שמור שינויים"}
-                </Button>
+                </ShineButton>
               </form>
             </TabsContent>
           </Tabs>

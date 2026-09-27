@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
 import SEO from "@/components/SEO";
-import { Button } from "@/components/ui/button";
 import { Smartphone, Box, ScanLine, Info } from "lucide-react";
 import Layout from "@/components/Layout";
 import { useLocalizedPath } from "@/lib/useLocalizedPath";
-import { Link } from "react-router-dom";
+import ShineButton, { shineClass } from "@/components/ui/shine-button";
 
 // Demo products, placeholder GLB/USDZ models hosted on modelviewer.dev.
 // Replace `glb` / `usdz` URLs later with Aluma's own scanned models.
@@ -153,9 +152,9 @@ const ARPreview = () => {
                 >
                   <button
                     slot="ar-button"
-                    className="absolute bottom-5 left-1/2 -translate-x-1/2 inline-flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-sm  text-sm font-medium"
+                    className={shineClass("light", "!absolute bottom-5 left-1/2 -translate-x-1/2")}
                   >
-                    <ScanLine className="h-4 w-4" />
+                    <ScanLine aria-hidden="true" />
                     הציגו במרחב שלי
                   </button>
                 </model-viewer>
@@ -175,9 +174,7 @@ const ARPreview = () => {
                 <h2 className="font-display text-2xl text-foreground">{active.name}</h2>
                 <p className="text-muted-foreground text-sm mt-1">{active.desc}</p>
               </div>
-              <Button asChild variant="default">
-                <Link to={to("/faq") + "#contact"}>לפרטים על הפריט</Link>
-              </Button>
+              <ShineButton to={to("/faq") + "#contact"}>לפרטים על הפריט</ShineButton>
             </div>
           </div>
 

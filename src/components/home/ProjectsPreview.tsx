@@ -1,11 +1,11 @@
-import { Link } from "react-router-dom";
-import { ArrowLeft } from "lucide-react";
+import DirectionalArrow from "@/components/DirectionalArrow";
 import Reveal from "@/components/Reveal";
 import TileCard from "@/components/TileCard";
 import { useProjects } from "@/hooks/useProjectsData";
 import { useLocalizedPath } from "@/lib/useLocalizedPath";
 import { useTranslation } from "react-i18next";
 import { useSiteText } from "@/hooks/useSiteText";
+import ShineButton from "@/components/ui/shine-button";
 
 const MAX = 3;
 
@@ -82,24 +82,14 @@ const ProjectsPreview = () => {
               different heights and different shapes.
             */}
             <div className="mt-8 flex flex-wrap items-center gap-3">
-              <Link
-                to={to("/projects")}
-                className="group inline-flex h-12 items-center gap-2 rounded-full border border-foreground/30 px-7 text-small font-medium text-foreground transition-colors duration-200 hover:border-foreground hover:bg-foreground hover:text-background"
-              >
+              <ShineButton to={to("/projects")}>
                 {t("home.projects.all", tr("projects.all"))}
-                <ArrowLeft
-                  aria-hidden="true"
-                  strokeWidth={1.5}
-                  className="h-4 w-4 rotate-[var(--tile-arrow-flip)] transition-transform duration-250 ease-hover group-hover:translate-x-[var(--tile-arrow-travel)] motion-reduce:transition-none"
-                />
-              </Link>
+                <DirectionalArrow animate={false} />
+              </ShineButton>
 
-              <Link
-                to={to("/faq") + "#contact"}
-                className="inline-flex h-12 items-center rounded-full bg-foreground px-7 text-small font-medium text-background transition-colors duration-200 hover:bg-accent"
-              >
+              <ShineButton to={to("/faq") + "#contact"}>
                 {t("home.projects.cta", tr("projects.cta"))}
-              </Link>
+              </ShineButton>
             </div>
           </div>
         </Reveal>

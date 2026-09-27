@@ -164,7 +164,8 @@ describe("the home page", () => {
   it("keeps the club's email field as tall as its button on a phone", async () => {
     mount();
     const field = await screen.findByPlaceholderText("כתובת אימייל");
-    expect(field.className).toContain("h-12");
+    // 52px: the height of the site's button beside it.
+    expect(field.className).toContain("h-[52px]");
     // flex-1 in the stacked column overrides the height; only from sm up.
     expect(field.className.split(/\s+/)).not.toContain("flex-1");
     expect(field.className).toContain("sm:flex-1");

@@ -12,6 +12,7 @@ import { useSiteText } from "@/hooks/useSiteText";
 import { useTranslation } from "react-i18next";
 import { decodeHash } from "@/lib/safe-hash";
 import TileFallback from "@/components/TileFallback";
+import ShineButton from "@/components/ui/shine-button";
 
 const SITE = "https://alumaoutdoor.com";
 
@@ -158,13 +159,7 @@ const CollectionsPage = () => {
             <p className="max-w-md text-body leading-relaxed text-muted-foreground">
               {t("loadErrorPage")}
             </p>
-            <button
-              type="button"
-              onClick={reload}
-              className="rounded-sm border border-border px-6 py-2 text-body transition-colors hover:bg-secondary"
-            >
-              {t("retry")}
-            </button>
+            <ShineButton onClick={reload}>{t("retry")}</ShineButton>
           </div>
         ) : loading ? (
           <ul className="grid grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-12">

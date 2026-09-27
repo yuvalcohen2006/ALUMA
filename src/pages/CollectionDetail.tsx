@@ -2,7 +2,6 @@ import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } fro
 import { Link, useParams } from "react-router-dom";
 import Layout from "@/components/Layout";
 import SEO from "@/components/SEO";
-import { Button } from "@/components/ui/button";
 import { Check } from "lucide-react";
 import NotFound from "./NotFound";
 import { supabase } from "@/integrations/supabase/client";
@@ -17,6 +16,7 @@ import TileFallback from "@/components/TileFallback";
 import TileCard from "@/components/TileCard";
 import { productName } from "@/lib/localized-name";
 import { useMaterials, materialName, materialTagline } from "@/hooks/useMaterials";
+import ShineButton from "@/components/ui/shine-button";
 
 const SITE = "https://alumaoutdoor.com";
 
@@ -221,9 +221,7 @@ const CollectionDetailPage = () => {
           <p className="text-body leading-relaxed text-muted-foreground max-w-md">
             {t("loadError")}
           </p>
-          <Button onClick={load} variant="outline">
-            {t("retry")}
-          </Button>
+          <ShineButton onClick={load}>{t("retry")}</ShineButton>
         </div>
       </Layout>
     );
@@ -609,12 +607,10 @@ const CollectionDetailPage = () => {
           <p className="text-body font-normal leading-relaxed text-foreground max-w-xl mx-auto mb-10">
             {t("bespokeNote")}
           </p>
-          <Button asChild size="lg">
-            <Link to={to("/faq") + "#contact"} className="inline-flex items-center gap-2">
-              {t("leaveDetailsCta")}
-              <DirectionalArrow className="w-4 h-4" animate={false} />
-            </Link>
-          </Button>
+          <ShineButton to={to("/faq") + "#contact"}>
+            {t("leaveDetailsCta")}
+            <DirectionalArrow animate={false} />
+          </ShineButton>
         </div>
       </section>
 

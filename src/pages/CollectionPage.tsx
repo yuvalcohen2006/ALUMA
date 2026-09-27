@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { formatPrice } from "@/lib/price";
 import Ltr from "@/components/Ltr";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import Layout from "@/components/Layout";
 import SEO from "@/components/SEO";
 import Reveal from "@/components/Reveal";
@@ -14,6 +14,7 @@ import NotFound from "./NotFound";
 import { useTranslation } from "react-i18next";
 import LoadError from "@/components/LoadError";
 import TileFallback from "@/components/TileFallback";
+import ShineButton from "@/components/ui/shine-button";
 
 const SITE = "https://alumaoutdoor.com";
 
@@ -190,12 +191,7 @@ const CollectionPage = () => {
 
           <Reveal>
             <div className="mt-16 md:mt-20 text-center">
-              <Link
-                to={to("/collections")}
-                className="inline-flex items-center justify-center h-12 px-7 rounded-full border border-foreground/55 text-small text-foreground transition-colors duration-200 hover:border-accent hover:text-accent"
-              >
-                {t("allCollections")}
-              </Link>
+              <ShineButton to={to("/collections")}>{t("allCollections")}</ShineButton>
             </div>
           </Reveal>
         </div>

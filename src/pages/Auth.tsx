@@ -4,16 +4,16 @@ import Layout from "@/components/Layout";
 import SEO from "@/components/SEO";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { directionFor } from "@/lib/field-direction";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
 import { trackPixel } from "@/lib/pixel";
 import alumaLogo from "@/assets/aluma-logo.png";
-import { ArrowLeft } from "lucide-react";
+import DirectionalArrow from "@/components/DirectionalArrow";
 import { useLocalizedPath } from "@/lib/useLocalizedPath";
 import { authErrorMessage } from "@/lib/auth-errors";
+import ShineButton from "@/components/ui/shine-button";
 
 const GoogleIcon = () => (
   <svg width="18" height="18" viewBox="0 0 48 48" aria-hidden="true">
@@ -195,18 +195,10 @@ const AuthPage = () => {
                     : "טוב לראות אתכם שוב. התחברו כדי להמשיך."}
                 </p>
 
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={onGoogle}
-                  disabled={googleBusy}
-                  className="w-full h-11 rounded-sm flex items-center justify-center gap-3 border-foreground/15 hover:border-primary hover:bg-secondary/40"
-                >
+                <ShineButton onClick={onGoogle} disabled={googleBusy} className="w-full">
                   <GoogleIcon />
-                  <span className="text-sm">
-                    {googleBusy ? "רגע..." : isSignup ? "הרשמה מהירה עם Google" : "המשך עם Google"}
-                  </span>
-                </Button>
+                  {googleBusy ? "רגע..." : isSignup ? "הרשמה מהירה עם Google" : "המשך עם Google"}
+                </ShineButton>
 
                 <div className="flex items-center gap-3 text-label tracking-[0.2em] uppercase text-muted-foreground my-6">
                   <div className="flex-1 h-px bg-border" />
@@ -271,16 +263,10 @@ const AuthPage = () => {
                       placeholder="לפחות 8 תווים"
                     />
                   </div>
-                  <Button
-                    type="submit"
-                    disabled={busy}
-                    className="w-full h-11 rounded-sm  group"
-                  >
+                  <ShineButton type="submit" disabled={busy} className="w-full">
                     {busy ? "רגע..." : isSignup ? "להצטרפות למועדון" : "התחברות"}
-                    {!busy && (
-                      <ArrowLeft className="me-2 h-4 w-4 group-hover:-translate-x-1 transition-smooth" />
-                    )}
-                  </Button>
+                    {!busy && <DirectionalArrow animate={false} />}
+                  </ShineButton>
                 </form>
 
                 {/* There was no way back into an account. A member who signed

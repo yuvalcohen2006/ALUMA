@@ -5,6 +5,7 @@ import Reveal from "@/components/Reveal";
 import { useSiteContact } from "@/hooks/useSiteContact";
 import { cn } from "@/lib/utils";
 import { mapLinkTarget, mapLinks } from "@/lib/maps";
+import ShineButton from "@/components/ui/shine-button";
 
 /* ---------------------------------------------------------------------------
    Opening hours, minutes from midnight, indexed by JS weekday (0 = Sunday).
@@ -83,9 +84,6 @@ const readStatus = (): Status => {
 };
 
 
-const navPill =
-"inline-flex items-center gap-2.5 rounded-sm border border-background/45 px-5 py-3 text-body text-background/90 transition-all duration-300 hover:bg-background/10 hover:border-background/60 hover:-translate-y-0.5";
-
 /**
  * The one dark band on the page.
  *
@@ -141,14 +139,14 @@ const ShowroomBand = () => {
             </div>
 
             <div className="mt-7 flex flex-wrap gap-3 lg:mt-auto lg:pt-7">
-              <a href={WAZE} {...mapLinkTarget()} className={navPill}>
-                <Navigation className="w-5 h-5" aria-hidden="true" />
+              <ShineButton href={WAZE} {...mapLinkTarget()} on="dark">
+                <Navigation aria-hidden="true" />
                 ניווט ב־Waze
-              </a>
-              <a href={GOOGLE_MAPS} target="_blank" rel="noopener noreferrer" className={navPill}>
-                <MapPin className="w-5 h-5" aria-hidden="true" />
+              </ShineButton>
+              <ShineButton href={GOOGLE_MAPS} target="_blank" rel="noopener noreferrer" on="dark">
+                <MapPin aria-hidden="true" />
                 פתיחה ב־Google Maps
-              </a>
+              </ShineButton>
             </div>
           </Reveal>
 

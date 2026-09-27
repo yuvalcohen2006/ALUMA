@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, UserRound, X } from "lucide-react";
 import { NavLink, Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
@@ -20,7 +20,7 @@ const navActive = "bg-foreground/[0.09] text-foreground";
 const navDisabled = "cursor-not-allowed text-foreground/35";
 
 const Header = () => {
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const [scrolled, setScrolled] = useState(false);
   const { pathname } = useLocation();
   const { t } = useTranslation();
@@ -248,6 +248,20 @@ const Header = () => {
                   className="mt-3 block text-start font-display text-lg text-foreground hover:text-accent"
                 >
                   האזור האישי
+                </NavLink>
+              </div>
+            )}
+
+            {/* Signed out: the way in, as on the desktop bar. */}
+            {!user && !authLoading && (
+              <div className="mt-8 border-t border-border/40 pt-5">
+                <NavLink
+                  to={localized("/club/auth")}
+                  onClick={() => setOpen(false)}
+                  className="inline-flex items-center gap-2 text-start font-display text-lg text-foreground hover:text-accent"
+                >
+                  <UserRound aria-hidden="true" strokeWidth={1.5} className="h-5 w-5" />
+                  {t("nav.signIn")}
                 </NavLink>
               </div>
             )}

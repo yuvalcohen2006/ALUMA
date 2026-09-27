@@ -2,7 +2,6 @@ import { useState } from "react";
 import Layout from "@/components/Layout";
 import SEO from "@/components/SEO";
 import PageHero from "@/components/PageHero";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
@@ -13,7 +12,7 @@ import { Check } from "lucide-react";
 import { trackPixel } from "@/lib/pixel";
 import { questionnaireContactSchema } from "@/lib/contactSchema";
 import { useLocalizedPath } from "@/lib/useLocalizedPath";
-import { Link } from "react-router-dom";
+import ShineButton from "@/components/ui/shine-button";
 
 type Answers = {
   space_type: string;
@@ -148,9 +147,7 @@ const Questionnaire = () => {
               <p className="text-sm text-muted-foreground mb-6">
                 נחזור אליך תוך 24 שעות לתאם פגישת אפיון ללא עלות.
               </p>
-              <Button asChild>
-                <Link to={to("/collections")}>צפייה בקולקציות</Link>
-              </Button>
+              <ShineButton to={to("/collections")}>צפייה בקולקציות</ShineButton>
             </div>
           ) : (
             <div className="bg-background border border-border rounded-sm p-8 md:p-10 ">
@@ -270,21 +267,20 @@ const Questionnaire = () => {
               )}
 
               <div className="flex items-center justify-between gap-3 mt-10 pt-6 border-t border-border">
-                <Button
-                  variant="outline"
+                <ShineButton
                   onClick={() => setStep((s) => Math.max(0, s - 1))}
                   disabled={step === 0 || busy}
                 >
                   הקודם
-                </Button>
+                </ShineButton>
                 {step < steps.length - 1 ? (
-                  <Button onClick={() => setStep((s) => s + 1)} disabled={!canNext()}>
+                  <ShineButton onClick={() => setStep((s) => s + 1)} disabled={!canNext()}>
                     הבא
-                  </Button>
+                  </ShineButton>
                 ) : (
-                  <Button onClick={submit} disabled={!canNext() || busy}>
+                  <ShineButton onClick={submit} disabled={!canNext() || busy}>
                     {busy ? "שולח..." : "קבלת המלצה"}
-                  </Button>
+                  </ShineButton>
                 )}
               </div>
             </div>

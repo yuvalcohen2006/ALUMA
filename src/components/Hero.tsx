@@ -2,11 +2,11 @@ import { useEffect, useState } from "react";
 import heroImage from "@/assets/hero-salon.jpg";
 import alumaLogo from "@/assets/aluma-logo.png";
 import { supabase } from "@/integrations/supabase/client";
-import { Link } from "react-router-dom";
 import { ChevronDown } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useLocalizedPath } from "@/lib/useLocalizedPath";
 import { HIGH_FETCH_PRIORITY } from "@/lib/img-priority";
+import ShineButton from "@/components/ui/shine-button";
 
 type HeroSettings = {
   title_he?: string;
@@ -168,24 +168,24 @@ const Hero = () => {
           className="w-[58%] sm:w-[68%] max-w-[320px] sm:max-w-[560px] md:max-w-[760px] lg:max-w-[980px] h-auto mb-5 sm:mb-8 animate-logo-reveal drop-shadow-md"
         />
         {settings.cta_text && settings.cta_link && externalCta && (
-          <a
+          <ShineButton
             href={settings.cta_link}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-sm tracking-wider hover:bg-accent transition-smooth animate-fade-in-up"
+            className="animate-fade-in-up"
             style={{ animationDelay: "0.3s" }}
           >
             {settings.cta_text}
-          </a>
+          </ShineButton>
         )}
         {settings.cta_text && settings.cta_link && !externalCta && (
-          <Link
+          <ShineButton
             to={to(settings.cta_link)}
-            className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-sm tracking-wider hover:bg-accent transition-smooth animate-fade-in-up"
+            className="animate-fade-in-up"
             style={{ animationDelay: "0.3s" }}
           >
             {settings.cta_text}
-          </Link>
+          </ShineButton>
         )}
       </div>
 

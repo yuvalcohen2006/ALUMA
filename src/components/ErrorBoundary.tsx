@@ -1,4 +1,5 @@
 import { Component, ErrorInfo, ReactNode } from "react";
+import ShineButton from "@/components/ui/shine-button";
 
 interface Props {
   children: ReactNode;
@@ -45,18 +46,8 @@ class ErrorBoundary extends Component<Props, State> {
             אם זה חוזר על עצמו, נשמח שתיצרו קשר.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <button
-              onClick={() => window.location.reload()}
-              className="inline-flex items-center justify-center bg-primary hover:bg-accent text-primary-foreground px-6 py-3 rounded-sm tracking-wide transition-smooth"
-            >
-              רענון הדף
-            </button>
-            <button
-              onClick={this.reset}
-              className="inline-flex items-center justify-center border border-foreground/15 text-primary hover:bg-secondary px-6 py-3 rounded-sm tracking-wide transition-smooth"
-            >
-              חזרה לדף הבית
-            </button>
+            <ShineButton onClick={() => window.location.reload()}>רענון הדף</ShineButton>
+            <ShineButton onClick={this.reset}>חזרה לדף הבית</ShineButton>
           </div>
         </div>
       </div>

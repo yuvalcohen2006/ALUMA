@@ -5,6 +5,7 @@ import Layout from "@/components/Layout";
 import { useTranslation } from "react-i18next";
 import { useLocalizedPath } from "@/lib/useLocalizedPath";
 import DirectionalArrow from "@/components/DirectionalArrow";
+import ShineButton from "@/components/ui/shine-button";
 
 /** Paths are localised at render; the labels come from the catalogue. */
 const POPULAR = [
@@ -77,13 +78,10 @@ const NotFound = () => {
             ))}
           </div>
 
-          <Link
-            to={to("/")}
-            className="inline-flex items-center gap-2 bg-primary hover:bg-accent text-primary-foreground px-8 py-3 rounded-sm tracking-wide transition-smooth"
-          >
+          <ShineButton to={to("/")}>
             {t("notFound.home")}
-            <DirectionalArrow className="w-4 h-4" animate={false} />
-          </Link>
+            <DirectionalArrow animate={false} />
+          </ShineButton>
         </div>
       </section>
     </Layout>

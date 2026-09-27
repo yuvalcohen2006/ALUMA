@@ -743,11 +743,37 @@
   box-shadow: inset 0 2px 6px hsl(var(--foreground) / 0.14);
 }
 
-/* Inverted — sits on the charcoal materials rail. */
-.btn-shine-invert {
+/* On a charcoal background. */
+.btn-shine-dark {
   --btn-surface: hsl(0 0% 24%);
   --btn-ink: hsl(40 30% 92%);
   border-color: hsl(40 30% 92% / 0.42);
+}
+
+/* On a terracotta background: the flood is charcoal with white ink, because a
+   terracotta flood there would take the button's edge with it. */
+.btn-shine-terracotta {
+  --btn-fill: hsl(var(--foreground));
+  --btn-ink-hover: hsl(var(--background));
+  border-color: hsl(var(--foreground) / 0.25);
+}
+.btn-shine-terracotta::before {
+  background-color: hsl(var(--foreground) / 0.25);
+}
+
+/* Icons inside take the label's size, whatever size they were drawn at. */
+.btn-shine svg {
+  width: 1em;
+  height: 1em;
+  flex-shrink: 0;
+}
+
+/* Not now: greyed, and the flood never starts. */
+.btn-shine:disabled,
+.btn-shine[aria-disabled="true"] {
+  opacity: 0.55;
+  cursor: not-allowed;
+  pointer-events: none;
 }
 
 @media (prefers-reduced-motion: reduce) {

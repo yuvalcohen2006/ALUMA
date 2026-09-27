@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ChevronDown, LogOut, PackageSearch, UserRound } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { useAuth } from "@/hooks/useAuth";
 import { useLocalizedPath } from "@/lib/useLocalizedPath";
 
@@ -13,12 +14,13 @@ function displayName(user: { email?: string; user_metadata?: { full_name?: strin
 
 /**
  * Proof that you are signed in, and the two or three things you would want
- * next. Renders nothing at all when signed out — the club link in the nav is
- * already the way in, and a second "sign in" chip beside it is noise.
+ * next. Signed out, it is a "התחברות" button in the same shape as the language
+ * toggle beside it, at the owner's request.
  */
 const AccountMenu = () => {
   const { user, loading, signOut } = useAuth();
   const { to } = useLocalizedPath();
+  const { t } = useTranslation();
   const nav = useNavigate();
   const [open, setOpen] = useState(false);
   const wrap = useRef<HTMLDivElement>(null);
@@ -47,7 +49,19 @@ const AccountMenu = () => {
 
   // Nothing to say yet, and a name that appears then vanishes is worse than a
   // beat of nothing.
-  if (loading || !user) return null;
+  if (loading) return null;
+
+  if (!user) {
+    return (
+      <Link
+        to={to("/club/auth")}
+        className="inline-flex h-11 shrink-0 items-center gap-2 rounded-full border border-foreground/20 px-3.5 text-small text-foreground/80 transition-colors duration-200 hover:border-foreground/45 hover:text-foreground"
+      >
+        <UserRound aria-hidden="true" strokeWidth={1.5} className="h-4 w-4" />
+        {t("nav.signIn")}
+      </Link>
+    );
+  }
 
   const name = displayName(user);
 

@@ -8,6 +8,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import type { FilterValue } from "@/hooks/useFilterParams";
+import { shineClass } from "@/components/ui/shine-button";
 
 export interface FilterOption {
   value: string;
@@ -64,11 +65,11 @@ const FilterSidebar = ({
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
-      <SheetTrigger className="inline-flex items-center gap-2 h-11 px-5 rounded-sm border border-foreground/15 text-primary hover:bg-primary hover:text-primary-foreground transition-smooth text-body">
-        <SlidersHorizontal className="w-4 h-4" />
+      <SheetTrigger className={shineClass()}>
+        <SlidersHorizontal aria-hidden="true" />
         <span>סינון</span>
         {activeCount > 0 && (
-          <span className="inline-flex items-center justify-center min-w-6 h-6 px-2 rounded-full bg-primary text-primary-foreground text-body">
+          <span className="inline-flex items-center justify-center min-w-6 h-6 px-2 rounded-sm bg-foreground text-background text-label">
             {activeCount}
           </span>
         )}

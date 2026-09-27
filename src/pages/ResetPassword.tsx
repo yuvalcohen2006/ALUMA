@@ -3,13 +3,13 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import Layout from "@/components/Layout";
 import SEO from "@/components/SEO";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 import { authErrorMessage } from "@/lib/auth-errors";
 import { useLocalizedPath } from "@/lib/useLocalizedPath";
 import { directionFor } from "@/lib/field-direction";
+import ShineButton from "@/components/ui/shine-button";
 
 /**
  * Where the "forgot password" email lands.
@@ -79,9 +79,9 @@ const ResetPassword = () => {
               <p className="mt-6 text-body leading-relaxed text-muted-foreground">
                 הקישור לאיפוס הסיסמה פג או כבר נוצל. בקשו קישור חדש ממסך ההתחברות.
               </p>
-              <Button asChild variant="outline" className="mt-6 rounded-sm">
-                <a href={to("/club/auth")}>למסך ההתחברות</a>
-              </Button>
+              <ShineButton href={to("/club/auth")} className="mt-6">
+                למסך ההתחברות
+              </ShineButton>
             </>
           ) : (
             <form onSubmit={submit} className="mt-8 space-y-4">
@@ -99,9 +99,9 @@ const ResetPassword = () => {
                   placeholder="לפחות 8 תווים"
                 />
               </div>
-              <Button type="submit" disabled={busy} className="h-11 w-full rounded-sm">
+              <ShineButton type="submit" disabled={busy} className="w-full">
                 {busy ? "שומרים…" : "שמירת הסיסמה"}
-              </Button>
+              </ShineButton>
             </form>
           )}
         </div>

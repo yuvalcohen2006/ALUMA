@@ -111,16 +111,14 @@ const ProjectsPage = () => {
       <section className="py-20 md:py-28 bg-foreground">
         <div className="container-luxury">
           <Reveal className="flex flex-col items-center text-center">
-            <SectionHeading light subtitle={t("cta.subtitle")}>
-              {t("cta.title")}
-            </SectionHeading>
+            <SectionHeading light>{t("cta.title")}</SectionHeading>
             {/* Label kept short on purpose. ShineButton is one fixed size with
                 3.2em of side padding at 17px — roughly 110px of chrome before a
                 single glyph — so a 21-character label overran the 335px of
                 content width a 375px phone has. Every other CTA on the site
                 sits at 10–16 characters; this now matches. */}
             <div className="mt-9">
-              <ShineButton to={to("/faq") + "#contact"} invert>
+              <ShineButton to={to("/faq") + "#contact"} on="dark">
                 {t("cta.button")}
                 <DirectionalArrow className="w-4 h-4" animate={false} />
               </ShineButton>
